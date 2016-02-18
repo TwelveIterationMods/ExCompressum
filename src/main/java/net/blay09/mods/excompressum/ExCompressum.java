@@ -12,14 +12,18 @@ import exnihilo.registries.helpers.Smashable;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.regex.Pattern;
 
 @Mod(modid = ExCompressum.MOD_ID, name = "ExCompressum", dependencies = "required-after:exnihilo")
 public class ExCompressum {
@@ -61,22 +65,54 @@ public class ExCompressum {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         boolean easyMode = config.getBoolean("Easy Mode", "general", false, "Set this to true to enable easy-mode, which disables the compressed hammers and makes compressed smashables work for normal hammers instead.");
-        if (easyMode) {
-            Block compressed = GameRegistry.findBlock("ExtraUtilities", "cobblestone_compressed");
-            if (compressed != null) {
-                for (int i = 0; i < 9; i++) {
-                    HammerRegistry.register(compressed, 0, Item.getItemFromBlock(Blocks.gravel), 0, 1f, 0f);
-                    HammerRegistry.register(compressed, 12, Item.getItemFromBlock(Blocks.sand), 0, 1f, 0f);
-                    HammerRegistry.register(compressed, 14, Item.getItemFromBlock(ENBlocks.Dust), 0, 1f, 0f);
+        String[] smashables = config.getStringList("Smashables", "general", new String[] {
+                "ExtraUtilities:cobblestone_compressed:0=9:minecraft:gravel:0:1:0",
+                "ExtraUtilities:cobblestone_compressed:12=9:minecraft:sand:0:1:0",
+                "ExtraUtilities:cobblestone_compressed:14=9:exnihilo:dust:0:1:0"
+        }, "Here you can add additional smashables for the compressed hammers. Format: modid:name:meta=stackSize:modid:name:meta:chance:luckMultiplier");
+        for(String smashable : smashables) {
+            String[] s = smashable.split("=");
+            if(s.length < 2) {
+                logger.error("Skipping smashable " + smashable + " due to invalid format");
+                continue;
+            }
+            String[] source = s[0].split(":");
+            if(source[0].equals("ore") && source.length >= 2) {
+                String oreName = source[1];
+                List<ItemStack> ores = OreDictionary.getOres(oreName, false);
+                if(!ores.isEmpty()) {
+                    for (ItemStack ore : ores) {
+                        if (ore.getItem() instanceof ItemBlock) {
+                            loadSmashable(((ItemBlock) ore.getItem()).field_150939_a, ore.getItem().getMetadata(ore.getItemDamage()), s[1], easyMode);
+                        } else {
+                            logger.error("Skipping smashable " + smashable + " because the source block is not a block");
+                        }
+                    }
+                } else {
+                    logger.error("Skipping smashable " + smashable + " because no ore dictionary entries found");
                 }
+            } else {
+                Block sourceBlock;
+                if (source.length == 1) {
+                    sourceBlock = GameRegistry.findBlock("minecraft", source[0]);
+                } else {
+                    sourceBlock = GameRegistry.findBlock(source[0], source[1]);
+                }
+                if(sourceBlock == null) {
+                    logger.error("Skipping smashable " + smashable + " because the source block was not found");
+                }
+                int sourceMeta = 0;
+                if (source.length >= 3) {
+                    if (source[2].equals("*")) {
+                        sourceMeta = OreDictionary.WILDCARD_VALUE;
+                    } else {
+                        sourceMeta = Integer.parseInt(source[2]);
+                    }
+                }
+                loadSmashable(sourceBlock, sourceMeta, s[1], easyMode);
             }
-        } else {
-            Block compressed = GameRegistry.findBlock("ExtraUtilities", "cobblestone_compressed");
-            if (compressed != null) {
-                CompressedHammerRegistry.register(compressed, 0, new ItemStack(Item.getItemFromBlock(Blocks.gravel), 9));
-                CompressedHammerRegistry.register(compressed, 12, new ItemStack(Item.getItemFromBlock(Blocks.sand), 9));
-                CompressedHammerRegistry.register(compressed, 14, new ItemStack(Item.getItemFromBlock(ENBlocks.Dust), 9));
-            }
+        }
+        if (!easyMode) {
             if (config.getBoolean("Compressed Wooden Hammer", "general", true, "If set to false, the recipe for the compressed wooden hammer will be disabled.")) {
                 Item itemHammerWood = GameRegistry.findItem("exnihilo", "hammer_wood");
                 if (itemHammerWood != null) {
@@ -114,6 +150,23 @@ public class ExCompressum {
         }
 
         config.save();
+    }
+
+    private void loadSmashable(Block sourceBlock, int sourceMeta, String reward, boolean easyMode) {
+        String[] s = reward.split(":");
+        if(s.length < 6) {
+            logger.error("Skipping smashable " + reward + " due to invalid format");
+            return;
+        }
+        ItemStack rewardStack = GameRegistry.findItemStack(s[1], s[2], Integer.parseInt(s[0]));
+        rewardStack.setItemDamage(Integer.parseInt(s[3]));
+        if(!easyMode) {
+            CompressedHammerRegistry.register(sourceBlock, sourceMeta, rewardStack, Float.parseFloat(s[4]), Float.parseFloat(s[5]));
+        } else {
+            for(int i = 0; i < rewardStack.stackSize; i++) {
+                HammerRegistry.register(sourceBlock, sourceMeta, rewardStack.getItem(), rewardStack.getItemDamage(), Float.parseFloat(s[4]), Float.parseFloat(s[5]));
+            }
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

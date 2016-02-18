@@ -28,9 +28,9 @@ public class CompressedHammerRegistry {
         return rewards.containsKey(new ItemInfo(block, meta));
     }
 
-    public static void register(Block source, int sourceMeta, ItemStack reward) {
+    public static void register(Block source, int sourceMeta, ItemStack reward, float chance, float luckMultiplier) {
         for(int i = 0; i < reward.stackSize; i++) {
-            register(source, sourceMeta, reward.getItem(), reward.getItemDamage(), 1f, 0f);
+            register(source, sourceMeta, reward.getItem(), reward.getItemDamage(), chance, luckMultiplier);
         }
     }
 
