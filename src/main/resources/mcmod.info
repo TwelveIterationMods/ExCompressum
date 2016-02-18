@@ -1,0 +1,16 @@
+[
+{
+  "modid": "adaqua",
+  "name": "Ad Aqua",
+  "description": "Ex Nihilo Addon. Adds a wooden crucible for creating water out of plants and fruits.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["BlayTheNinth"],
+  "credits": "BlayTheNinth",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["required-after:exnihilo"]
+}
+]
