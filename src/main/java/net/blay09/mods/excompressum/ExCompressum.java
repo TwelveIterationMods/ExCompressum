@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.world.BlockEvent;
@@ -44,10 +45,14 @@ public class ExCompressum {
     public static ItemCompressedHammer compressedHammerIron;
     public static ItemCompressedHammer compressedHammerGold;
     public static ItemCompressedHammer compressedHammerDiamond;
+    public static BlockCompressedDust compressedDust;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
+
+        compressedDust = new BlockCompressedDust();
+        GameRegistry.registerBlock(compressedDust, "compressed_dust");
 
         chickenStick = new ItemChickenStick();
         GameRegistry.registerItem(chickenStick, "chickenStick");
@@ -176,6 +181,11 @@ public class ExCompressum {
             ChickenStickRegistry.addValidBlock(block, meta);
         }
 
+        if(config.getBoolean("Enable Compressed Dust", "general", true, "Set this to false to disable the recipe for the compressed dust.")) {
+            GameRegistry.addRecipe(new ItemStack(compressedDust), "###", "###", "###", '#', GameRegistry.findBlock("exnihilo", "dust"));
+            GameRegistry.addShapelessRecipe(new ItemStack(GameRegistry.findBlock("exnihilo", "dust"), 9), compressedDust);
+        }
+
         config.save();
     }
 
@@ -201,6 +211,7 @@ public class ExCompressum {
         if (event.world.isRemote || event.harvester == null || event.isSilkTouching) {
             return;
         }
+        event.harvester.addChatComponentMessage(new ChatComponentText("Resistance: " + event.block.getExplosionResistance(event.harvester, event.world, event.x, event.y, event.z, 0, 0, 0)));
         ItemStack heldItem = event.harvester.getHeldItem();
         if (heldItem != null && heldItem.getItem() == chickenStick) {
             if(!ChickenStickRegistry.isValidBlock(event.block, event.blockMetadata)) {

@@ -8,7 +8,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         if(Minecraft.getMinecraft().getSession().getUsername().equals("Wyld")) {
-            ExCompressum.chickenStick.setUnlocalizedName("chicken_stick_wyld");
+            ExCompressum.chickenStick.setUnlocalizedName(ExCompressum.MOD_ID + ":chicken_stick_wyld");
         }
     }
 

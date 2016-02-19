@@ -4,7 +4,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
@@ -18,7 +17,8 @@ public class ItemChickenStick extends ItemTool {
 
     protected ItemChickenStick() {
         super(0f, ToolMaterial.EMERALD, blocksEffectiveAgainst);
-        setUnlocalizedName("chicken_stick");
+        setUnlocalizedName(ExCompressum.MOD_ID + ":chicken_stick");
+        setTextureName(ExCompressum.MOD_ID + ":chicken_stick");
         setMaxDamage(0);
     }
 
@@ -41,11 +41,6 @@ public class ItemChickenStick extends ItemTool {
             return efficiencyOnProperMaterial * 0.75f;
         }
         return 0.8f;
-    }
-
-    @Override
-    public void registerIcons(IIconRegister register) {
-        itemIcon = register.registerIcon("excompressum:chicken_stick");
     }
 
     @Override
