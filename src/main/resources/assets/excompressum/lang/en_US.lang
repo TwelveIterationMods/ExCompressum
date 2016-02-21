@@ -3,6 +3,7 @@ item.excompressum:compressed_hammer_stone.name=Compressed Stone Hammer
 item.excompressum:compressed_hammer_iron.name=Compressed Iron Hammer
 item.excompressum:compressed_hammer_gold.name=Compressed Gold Hammer
 item.excompressum:compressed_hammer_diamond.name=Compressed Diamond Hammer
+item.excompressum:compressed_crook.name=Compressed Crook
 item.excompressum:chicken_stick.name=Chicken Stick
 item.excompressum:chicken_stick_wyld.name=The Cluckington
 tile.excompressum:compressed_dust.name=Compressed Dust

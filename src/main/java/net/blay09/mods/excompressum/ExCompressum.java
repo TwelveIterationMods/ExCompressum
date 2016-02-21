@@ -37,6 +37,8 @@ public class ExCompressum {
     public static CommonProxy proxy;
 
     private Configuration config;
+    public static float compressedCrookDurabilityMultiplier;
+    public static float compressedCrookSpeedMultiplier;
     public static float chickenStickSoundChance;
 
     public static ItemChickenStick chickenStick;
@@ -45,11 +47,18 @@ public class ExCompressum {
     public static ItemCompressedHammer compressedHammerIron;
     public static ItemCompressedHammer compressedHammerGold;
     public static ItemCompressedHammer compressedHammerDiamond;
+    public static ItemCompressedCrook compressedCrook;
     public static BlockCompressedDust compressedDust;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
+
+        config = new Configuration(event.getSuggestedConfigurationFile());
+        config.load();
+        chickenStickSoundChance = config.getFloat("Chicken Stick Sound Chance", "general", 0.15f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
+        compressedCrookDurabilityMultiplier = config.getFloat("Compressed Crook Durability Multiplier", "general", 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
+        compressedCrookSpeedMultiplier = config.getFloat("Compressed Crook Speed Multiplier", "general", 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
 
         compressedDust = new BlockCompressedDust();
         GameRegistry.registerBlock(compressedDust, "compressed_dust");
@@ -66,11 +75,8 @@ public class ExCompressum {
         GameRegistry.registerItem(compressedHammerGold, "compressedHammerGold");
         compressedHammerDiamond = new ItemCompressedHammer(Item.ToolMaterial.EMERALD, "diamond");
         GameRegistry.registerItem(compressedHammerDiamond, "compressedHammerDiamond");
-
-        config = new Configuration(event.getSuggestedConfigurationFile());
-        config.load();
-
-        chickenStickSoundChance = config.getFloat("Chicken Stick Sound Chance", "general", 0.15f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
+        compressedCrook = new ItemCompressedCrook();
+        GameRegistry.registerItem(compressedCrook, "compressedCrook");
 
         proxy.preInit(event);
     }
@@ -160,6 +166,13 @@ public class ExCompressum {
                     GameRegistry.addRecipe(new ItemStack(compressedHammerDiamond), "###", "###", "###", '#', itemHammerDiamond);
                 }
             }
+
+            if(config.getBoolean("Compressed Crook", "general", true, "If set to false, the recipe for the compressed crook will be disabled.")) {
+                Item itemCrook = GameRegistry.findItem("exnihilo", "crook");
+                if(itemCrook != null) {
+                    GameRegistry.addRecipe(new ItemStack(compressedCrook), "##", "##", '#', itemCrook);
+                }
+            }
         }
 
         String[] validChickenStickBlocks = config.getStringList("Valid Chicken Stick Blocks", "general", new String[]{
@@ -211,7 +224,6 @@ public class ExCompressum {
         if (event.world.isRemote || event.harvester == null || event.isSilkTouching) {
             return;
         }
-        event.harvester.addChatComponentMessage(new ChatComponentText("Resistance: " + event.block.getExplosionResistance(event.harvester, event.world, event.x, event.y, event.z, 0, 0, 0)));
         ItemStack heldItem = event.harvester.getHeldItem();
         if (heldItem != null && heldItem.getItem() == chickenStick) {
             if(!ChickenStickRegistry.isValidBlock(event.block, event.blockMetadata)) {
