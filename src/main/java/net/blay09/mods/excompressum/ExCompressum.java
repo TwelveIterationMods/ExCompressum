@@ -166,12 +166,12 @@ public class ExCompressum {
                     GameRegistry.addRecipe(new ItemStack(compressedHammerDiamond), "###", "###", "###", '#', itemHammerDiamond);
                 }
             }
+        }
 
-            if(config.getBoolean("Compressed Crook", "general", true, "If set to false, the recipe for the compressed crook will be disabled.")) {
-                Item itemCrook = GameRegistry.findItem("exnihilo", "crook");
-                if(itemCrook != null) {
-                    GameRegistry.addRecipe(new ItemStack(compressedCrook), "##", "##", '#', itemCrook);
-                }
+        if(config.getBoolean("Compressed Crook", "general", true, "If set to false, the recipe for the compressed crook will be disabled.")) {
+            Item itemCrook = GameRegistry.findItem("exnihilo", "crook");
+            if(itemCrook != null) {
+                GameRegistry.addRecipe(new ItemStack(compressedCrook), "## ", " # ", " # ", '#', itemCrook);
             }
         }
 
