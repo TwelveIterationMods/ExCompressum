@@ -51,7 +51,10 @@ public class WoodenCrucibleRegistry {
 
     public static void load(Configuration config) {
         String[] meltables = config.getStringList("Wooden Meltables", "registries", new String[] {
-                "ore:treeSapling=250:water:minecraft:leaves:0"
+                "ore:treeSapling=100:water:minecraft:leaves:0",
+                "ore:treeLeaves=250:water:minecraft:leaves:0",
+                "minecraft:apple=50:water:minecraft:leaves:0",
+                "ore:listAllfruit=50:water:minecraft:leaves:0" // Pam's Harvestcraft Fruits
         }, "Here you can specify additional blocks and items that will melt into water in a wooden crucible. Format: modid:name:meta=amount:fluidName:appearanceModID:appareanceBlock:appearanceMeta, modid can be ore for OreDictionary");
         for(String meltable : meltables) {
             String[] s = meltable.split("=");
