@@ -54,6 +54,7 @@ public class WoodenCrucibleRegistry {
                 "ore:treeSapling=100:water:minecraft:leaves:0",
                 "ore:treeLeaves=250:water:minecraft:leaves:0",
                 "minecraft:apple=50:water:minecraft:leaves:0",
+                "minecraft:cactus=250:water:minecraft:cactus:0",
                 "ore:listAllfruit=50:water:minecraft:leaves:0" // Pam's Harvestcraft Fruits
         }, "Here you can specify additional blocks and items that will melt into water in a wooden crucible. Format: modid:name:meta=amount:fluidName:appearanceModID:appareanceBlock:appearanceMeta, modid can be ore for OreDictionary");
         for(String meltable : meltables) {
@@ -83,7 +84,7 @@ public class WoodenCrucibleRegistry {
                     ExCompressum.logger.error("Skipping wooden meltable " + meltable + " because the source block was not found");
                     continue;
                 }
-                sourceStack.setItemDamage(Integer.parseInt(source[2]));
+                sourceStack.setItemDamage(source.length > 2 ? Integer.parseInt(source[2]) : OreDictionary.WILDCARD_VALUE);
                 loadMeltable(sourceStack, s[1]);
             }
         }
