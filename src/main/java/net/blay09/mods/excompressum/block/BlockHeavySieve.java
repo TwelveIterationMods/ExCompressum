@@ -40,6 +40,7 @@ public class BlockHeavySieve extends BlockContainer {
 
     @Override
     public void registerBlockIcons(IIconRegister iconRegister) {
+        blockIcon = Blocks.log.getIcon(0, 0);
         meshIcon = iconRegister.registerIcon(ExCompressum.MOD_ID + ":heavy_sieve_mesh");
     }
 
