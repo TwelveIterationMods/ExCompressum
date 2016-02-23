@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.tile;
 
+import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityOcelot;
@@ -59,8 +60,8 @@ public class TileEntityBait extends TileEntity {
 
     private float getBaitChance(int metadata) {
         switch(metadata) {
-            case 0: return 0.0005f;
-            case 1: return 0.0005f;
+            case 0: return ExCompressum.baitWolfChance;
+            case 1: return ExCompressum.baitOcelotChance;
         }
         return 0;
     }
