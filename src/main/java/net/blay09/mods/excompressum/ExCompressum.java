@@ -16,6 +16,7 @@ import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.WoodenCrucibleRegistry;
 import net.blay09.mods.excompressum.tile.TileEntityBait;
+import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
@@ -100,6 +101,7 @@ public class ExCompressum {
         GameRegistry.registerItem(heavySilkMesh, "heavySilkMesh");
 
         GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible");
+        GameRegistry.registerTileEntity(TileEntityHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
         GameRegistry.registerTileEntity(TileEntityBait.class, "bait");
 
         proxy.preInit(event);

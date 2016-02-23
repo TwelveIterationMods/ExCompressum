@@ -35,7 +35,6 @@ public class BlockHeavySieve extends BlockContainer {
         setCreativeTab(CreativeTabs.tabDecorations);
         setHardness(2f);
         setBlockName(ExCompressum.MOD_ID + ":heavy_sieve");
-        GameRegistry.registerTileEntity(TileEntityHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
     }
 
     @Override
