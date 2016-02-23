@@ -14,8 +14,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class CompressedHammerRegistry {
 
@@ -31,12 +33,24 @@ public class CompressedHammerRegistry {
         return rewards.get(new ItemInfo(block, meta));
     }
 
-    public static boolean registered(Block block, int meta) {
+    public static Collection<Smashable> getRewards(ItemInfo itemInfo) {
+        return rewards.get(itemInfo);
+    }
+
+    public static boolean isRegistered(ItemStack itemStack) {
+        return rewards.containsKey(new ItemInfo(itemStack));
+    }
+
+    public static boolean isRegistered(Block block, int meta) {
         return rewards.containsKey(new ItemInfo(block, meta));
     }
 
+    public static Multimap<ItemInfo, Smashable> getRewards() {
+        return rewards;
+    }
+
     public static void register(Block source, int sourceMeta, ItemStack reward, float chance, float luckMultiplier) {
-        for(int i = 0; i < reward.stackSize; i++) {
+        for (int i = 0; i < reward.stackSize; i++) {
             register(source, sourceMeta, reward.getItem(), reward.getItemDamage(), chance, luckMultiplier);
         }
     }
@@ -107,5 +121,16 @@ public class CompressedHammerRegistry {
                 HammerRegistry.register(sourceBlock, sourceMeta, rewardStack.getItem(), rewardStack.getItemDamage(), Float.parseFloat(s[4]), Float.parseFloat(s[5]));
             }
         }
+    }
+
+    public static Collection<ItemInfo> getSources(ItemStack reward) {
+        ArrayList<ItemInfo> results = new ArrayList<ItemInfo>();
+        ItemInfo rewardInfo = new ItemInfo(reward);
+        for(Map.Entry<ItemInfo, Smashable> entry : rewards.entries()) {
+            if (new ItemInfo(entry.getValue().item, entry.getValue().meta).equals(rewardInfo)) {
+                results.add(entry.getKey());
+            }
+        }
+        return results;
     }
 }

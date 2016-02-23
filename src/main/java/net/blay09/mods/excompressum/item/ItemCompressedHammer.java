@@ -34,7 +34,7 @@ public class ItemCompressedHammer extends ItemTool implements ICompressedHammer 
 
     @Override
     public float getDigSpeed(ItemStack item, Block block, int meta) {
-        if ((CompressedHammerRegistry.registered(block, meta) || HammerRegistry.registered(new ItemStack(block, 1, meta))) && block.getHarvestLevel(meta) <= toolMaterial.getHarvestLevel()) {
+        if ((CompressedHammerRegistry.isRegistered(block, meta) || HammerRegistry.registered(new ItemStack(block, 1, meta))) && block.getHarvestLevel(meta) <= toolMaterial.getHarvestLevel()) {
             return efficiencyOnProperMaterial * 0.75f;
         }
         return 0.8f;

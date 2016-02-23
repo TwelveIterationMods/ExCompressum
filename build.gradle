@@ -31,14 +31,32 @@ minecraft {
     runDir = "run"
 }
 
+configurations {
+    provided
+}
+
+sourceSets.main.compileClasspath += [configurations.provided]
+
+idea {
+    module {
+        scopes.PROVIDED.plus += [configurations.provided]
+    }
+}
+
+
 repositories {
     maven {
         url 'http://maven.tterrag.com/'
+    }
+    maven {
+        url 'http://chickenbones.net/maven/'
     }
 }
 
 dependencies {
     compile "exnihilo:Ex-Nihilo:1.38-49:deobf"
+    provided "codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev"
+    provided "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
 }
 
 processResources

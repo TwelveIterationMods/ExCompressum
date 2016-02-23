@@ -14,8 +14,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class HeavySieveRegistry {
 
@@ -30,8 +32,16 @@ public class HeavySieveRegistry {
         }
     }
 
+    public static Collection<SiftingResult> getSiftingOutput(Block inBlock, int meta) {
+        return siftables.get(new ItemInfo(inBlock, meta));
+    }
+
     public static Collection<SiftingResult> getSiftingOutput(ItemStack itemStack) {
         return siftables.get(new ItemInfo(itemStack));
+    }
+
+    public static Collection<SiftingResult> getSiftingOutput(ItemInfo itemInfo) {
+        return siftables.get(itemInfo);
     }
 
     public static boolean isRegistered(Block block, int metadata) {
@@ -39,15 +49,15 @@ public class HeavySieveRegistry {
     }
 
     public static void load(Configuration config) {
-        String[] generatedSiftables = config.getStringList("Generate Heavy Siftables", "registries", new String[] {
+        String[] generatedSiftables = config.getStringList("Generate Heavy Siftables", "registries", new String[]{
                 "ExtraUtilities:cobblestone_compressed:8=minecraft:dirt:0:1:5",
                 "ExtraUtilities:cobblestone_compressed:12=minecraft:gravel:0:1:5",
                 "ExtraUtilities:cobblestone_compressed:14=minecraft:sand:0:1:5",
                 "excompressum:compressed_dust=exnihilo:dust:0:1:5"
         }, "Here you can map normal siftables to heavy siftable blocks to automatically generate rewards for them based on ExNihilo's registry. Format: modid:name:meta=modid:name:meta:rarityMultiplier:amountMultiplier");
-        for(String siftable : generatedSiftables) {
+        for (String siftable : generatedSiftables) {
             String[] s = siftable.split("=");
-            if(s.length < 2) {
+            if (s.length < 2) {
                 ExCompressum.logger.error("Skipping heavy siftable mapping " + siftable + " due to invalid format");
                 continue;
             }
@@ -141,7 +151,7 @@ public class HeavySieveRegistry {
             return;
         }
         Item rewardItem = GameRegistry.findItem(s[0], s[1]);
-        if(rewardItem == null) {
+        if (rewardItem == null) {
             ExCompressum.logger.error("Skipping siftable " + reward + " due to reward item not found");
             return;
         }
@@ -156,22 +166,37 @@ public class HeavySieveRegistry {
             return;
         }
         Block mappedBlock = GameRegistry.findBlock(s[0], s[1]);
-        if(mappedBlock == null) {
+        if (mappedBlock == null) {
             ExCompressum.logger.error("Skipping heavy siftable mapping " + mapping + " due to mapped block not found");
             return;
         }
         int mappedMeta = Integer.parseInt(s[2]);
         List<SiftingResult> results = SieveRegistry.getSiftingOutput(mappedBlock, mappedMeta);
-        if(results == null || results.isEmpty()) {
+        if (results == null || results.isEmpty()) {
             ExCompressum.logger.error("Skipping heavy siftable mapping " + mapping + " due to not being registered in Ex Nihilo");
             return;
         }
         float rarityMultiplier = Float.parseFloat(s[3]);
         int amountMultiplier = Integer.parseInt(s[4]);
-        for(SiftingResult result : results) {
-            for(int i = 0; i < amountMultiplier; i++) {
+        for (SiftingResult result : results) {
+            for (int i = 0; i < amountMultiplier; i++) {
                 register(sourceBlock, sourceMeta, result.item, result.meta, Math.round(Math.max(1, result.rarity / rarityMultiplier)));
             }
         }
+    }
+
+    public static Multimap<ItemInfo, SiftingResult> getSiftables() {
+        return siftables;
+    }
+
+    public static Collection<ItemInfo> getSources(ItemStack reward) {
+        ArrayList<ItemInfo> result = new ArrayList<ItemInfo>();
+        ItemInfo rewardInfo = new ItemInfo(reward);
+        for(Map.Entry<ItemInfo, SiftingResult> entry : siftables.entries()) {
+            if (new ItemInfo(entry.getValue().item, entry.getValue().meta).equals(rewardInfo)) {
+                result.add(entry.getKey());
+            }
+        }
+        return result;
     }
 }

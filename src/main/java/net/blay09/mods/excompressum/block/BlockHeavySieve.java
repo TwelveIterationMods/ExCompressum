@@ -118,10 +118,10 @@ public class BlockHeavySieve extends BlockContainer {
                 GameRegistry.addRecipe(new ItemStack(ExCompressum.heavySilkMesh), "##", "##", '#', itemSilkMesh);
             }
             for (int i = 0; i < 4; i++) {
-                GameRegistry.addRecipe(new ShapedOreRecipe(ExCompressum.heavySieve, "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.log, 1, i), 'm', ExCompressum.heavySilkMesh, 's', "stickWood"));
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ExCompressum.heavySieve, 1, i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.log, 1, i), 'm', ExCompressum.heavySilkMesh, 's', "stickWood"));
             }
             for (int i = 0; i < 2; i++) {
-                GameRegistry.addRecipe(new ShapedOreRecipe(ExCompressum.heavySieve, "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.log2, 1, i), 'm', ExCompressum.heavySilkMesh, 's', "stickWood"));
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ExCompressum.heavySieve, 1, 4 + i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.log2, 1, i), 'm', ExCompressum.heavySilkMesh, 's', "stickWood"));
             }
         }
     }

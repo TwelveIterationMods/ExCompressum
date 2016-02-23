@@ -73,10 +73,10 @@ public class BlockBait extends BlockContainer {
     }
 
     public static void registerRecipes(Configuration config) {
-        if (config.getBoolean("Wolf Bait", "blocks", false, "If set to false, the recipe for the wolf bait will be disabled.")) {
+        if (config.getBoolean("Wolf Bait", "blocks", true, "If set to false, the recipe for the wolf bait will be disabled.")) {
             GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 0), Items.bone, Items.beef);
         }
-        if (config.getBoolean("Ocelot Bait", "blocks", false, "If set to false, the recipe for the ocelot bait will be disabled.")) {
+        if (config.getBoolean("Ocelot Bait", "blocks", true, "If set to false, the recipe for the ocelot bait will be disabled.")) {
             GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 1), Items.gunpowder, new ItemStack(Items.fish, 1, OreDictionary.WILDCARD_VALUE));
             GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ExCompressum.bait, 1, 1), Items.gunpowder, "listAllfishraw")); // Pam's Fishies
         }
