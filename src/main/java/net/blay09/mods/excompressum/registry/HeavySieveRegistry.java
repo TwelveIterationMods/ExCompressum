@@ -30,8 +30,8 @@ public class HeavySieveRegistry {
         }
     }
 
-    public static Collection<SiftingResult> getSiftingOutput(Block content, int contentMeta) {
-        return siftables.get(new ItemInfo(content, contentMeta));
+    public static Collection<SiftingResult> getSiftingOutput(ItemStack itemStack) {
+        return siftables.get(new ItemInfo(itemStack));
     }
 
     public static boolean isRegistered(Block block, int metadata) {
@@ -39,7 +39,7 @@ public class HeavySieveRegistry {
     }
 
     public static void load(Configuration config) {
-        String[] generatedSiftables = config.getStringList("Generate Heavy Siftables", "general", new String[] {
+        String[] generatedSiftables = config.getStringList("Generate Heavy Siftables", "registries", new String[] {
                 "ExtraUtilities:cobblestone_compressed:8=minecraft:dirt:0:1:5",
                 "ExtraUtilities:cobblestone_compressed:12=minecraft:gravel:0:1:5",
                 "ExtraUtilities:cobblestone_compressed:14=minecraft:sand:0:1:5",
@@ -88,7 +88,7 @@ public class HeavySieveRegistry {
             }
         }
 
-        String[] siftables = config.getStringList("Heavy Siftables", "general", new String[0], "Here you can add additional siftables for the heavy sieve. Format: modid:name:meta=modid:name:meta:rarity");
+        String[] siftables = config.getStringList("Heavy Siftables", "registries", new String[0], "Here you can add additional siftables for the heavy sieve. Format: modid:name:meta=modid:name:meta:rarity");
         for (String siftable : siftables) {
             String[] s = siftable.split("=");
             if (s.length < 2) {
@@ -119,6 +119,7 @@ public class HeavySieveRegistry {
                 }
                 if (sourceBlock == null) {
                     ExCompressum.logger.error("Skipping siftable " + siftable + " because the source block was not found");
+                    continue;
                 }
                 int sourceMeta = 0;
                 if (source.length >= 3) {

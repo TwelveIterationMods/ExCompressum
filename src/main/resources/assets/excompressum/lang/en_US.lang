@@ -14,6 +14,12 @@ tile.excompressum:heavy_sieve_2.name=Heavy Birch Sieve
 tile.excompressum:heavy_sieve_3.name=Heavy Jungle Sieve
 tile.excompressum:heavy_sieve_4.name=Heavy Acacia Sieve
 tile.excompressum:heavy_sieve_5.name=Heavy Dark Oak Sieve
+tile.excompressum:wooden_crucible_0.name=Oak Crucible
+tile.excompressum:wooden_crucible_1.name=Spruce Crucible
+tile.excompressum:wooden_crucible_2.name=Birch Crucible
+tile.excompressum:wooden_crucible_3.name=Jungle Crucible
+tile.excompressum:wooden_crucible_4.name=Acacia Crucible
+tile.excompressum:wooden_crucible_5.name=Dark Oak Crucible
 
 item.excompressum:chicken_stick_wyld.name=The Cluckington
 item.excompressum:chicken_stick_jake.name=Cock Stick

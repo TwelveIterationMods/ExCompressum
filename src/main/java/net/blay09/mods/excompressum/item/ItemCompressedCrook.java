@@ -36,7 +36,7 @@ public class ItemCompressedCrook extends ItemCrook {
     }
 
     public static void registerRecipes(Configuration config) {
-        if(config.getBoolean("Compressed Crook", "general", true, "If set to false, the recipe for the compressed crook will be disabled.")) {
+        if(config.getBoolean("Compressed Crook", "items", true, "If set to false, the recipe for the compressed crook will be disabled.")) {
             Item itemCrook = GameRegistry.findItem("exnihilo", "crook");
             if(itemCrook != null) {
                 GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedCrook), "## ", " # ", " # ", '#', itemCrook);

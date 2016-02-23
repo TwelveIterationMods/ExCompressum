@@ -9,22 +9,31 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import exnihilo.ENBlocks;
 import exnihilo.ENItems;
+import exnihilo.blocks.tileentities.TileEntityCrucible;
+import exnihilo.registries.CrucibleRegistry;
 import exnihilo.registries.HammerRegistry;
 import exnihilo.registries.helpers.Smashable;
 import net.blay09.mods.excompressum.block.BlockCompressedDust;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
+import net.blay09.mods.excompressum.block.BlockWoodenCrucible;
+import net.blay09.mods.excompressum.handler.CompressedHammerHandler;
 import net.blay09.mods.excompressum.item.*;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.WoodenCrucibleRegistry;
+import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.LogManager;
@@ -50,6 +59,7 @@ public class ExCompressum {
     public static float compressedCrookSpeedMultiplier;
     public static float chickenStickSoundChance;
     public static boolean allowHeavySieveAutomation;
+    public static int woodenCrucibleSpeed;
 
     public static ItemChickenStick chickenStick;
     public static ItemCompressedHammer compressedHammerWood;
@@ -62,10 +72,12 @@ public class ExCompressum {
 
     public static BlockCompressedDust compressedDust;
     public static BlockHeavySieve heavySieve;
+    public static BlockWoodenCrucible woodenCrucible;
 
     @Mod.EventHandler
+    @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new CompressedHammerHandler());
 
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
@@ -73,11 +85,14 @@ public class ExCompressum {
         compressedCrookDurabilityMultiplier = config.getFloat("Compressed Crook Durability Multiplier", "general", 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
         compressedCrookSpeedMultiplier = config.getFloat("Compressed Crook Speed Multiplier", "general", 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
         allowHeavySieveAutomation = config.getBoolean("Allow Heavy Sieve Automation", "general", false, "Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)");
+        woodenCrucibleSpeed = config.getInt("Wooden Crucible Speed", "general", 1, 1, 10, "The speed at which the wooden crucible extracts water. 0.1 is equivalent to a torch below a crucible, 0.3 is equivalent to fire below a crucible.");
 
         compressedDust = new BlockCompressedDust();
-        GameRegistry.registerBlock(compressedDust, "compressed_dust");
+        GameRegistry.registerBlock(compressedDust, "compressed_dust"); // god damn it Blay. can't rename because already released
         heavySieve = new BlockHeavySieve();
         GameRegistry.registerBlock(heavySieve, ItemBlockHeavySieve.class, "heavySieve");
+        woodenCrucible = new BlockWoodenCrucible();
+        GameRegistry.registerBlock(woodenCrucible, ItemBlockWoodenCrucible.class, "woodenCrucible");
 
         chickenStick = new ItemChickenStick();
         GameRegistry.registerItem(chickenStick, "chickenStick");
@@ -96,75 +111,29 @@ public class ExCompressum {
         heavySilkMesh = new ItemHeavySilkMesh();
         GameRegistry.registerItem(heavySilkMesh, "heavySilkMesh");
 
+        GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible");
+
         proxy.preInit(event);
     }
 
     @Mod.EventHandler
+    @SuppressWarnings("unused")
     public void postInit(FMLPostInitializationEvent event) {
         boolean easyMode = config.getBoolean("Easy Mode", "general", false, "Set this to true to enable easy-mode, which disables the compressed hammers and makes compressed smashables work for normal hammers instead.");
         CompressedHammerRegistry.load(config, easyMode);
         ChickenStickRegistry.load(config);
         HeavySieveRegistry.load(config);
+        WoodenCrucibleRegistry.load(config);
 
         if (!easyMode) {
             ItemCompressedHammer.registerRecipes(config);
         }
         ItemCompressedCrook.registerRecipes(config);
         BlockHeavySieve.registerRecipes(config);
-
-        if (config.getBoolean("Enable Compressed Dust", "general", true, "Set this to false to disable the recipe for the compressed dust.")) {
-            GameRegistry.addRecipe(new ItemStack(compressedDust), "###", "###", "###", '#', GameRegistry.findBlock("exnihilo", "dust"));
-            GameRegistry.addShapelessRecipe(new ItemStack(GameRegistry.findBlock("exnihilo", "dust"), 9), compressedDust);
-        }
+        BlockWoodenCrucible.registerRecipes(config);
+        BlockCompressedDust.registerRecipes(config);
 
         config.save();
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onHarvestBlock(BlockEvent.HarvestDropsEvent event) {
-        if (event.world.isRemote || event.harvester == null || event.isSilkTouching) {
-            return;
-        }
-        ItemStack heldItem = event.harvester.getHeldItem();
-        if (heldItem != null && heldItem.getItem() == chickenStick) {
-            if (!ChickenStickRegistry.isValidBlock(event.block, event.blockMetadata)) {
-                return;
-            }
-            Collection<Smashable> rewards = HammerRegistry.getRewards(event.block, event.blockMetadata);
-            if (rewards == null || rewards.isEmpty()) {
-                return;
-            }
-            event.drops.clear();
-            event.dropChance = 1f;
-            for (Smashable reward : rewards) {
-                if (event.world.rand.nextFloat() <= reward.chance + (reward.luckMultiplier * event.fortuneLevel)) {
-                    event.drops.add(new ItemStack(reward.item, 1, reward.meta));
-                }
-            }
-            return;
-        }
-        Collection<Smashable> rewards = CompressedHammerRegistry.getRewards(event.block, event.blockMetadata);
-        if (rewards == null || rewards.isEmpty()) {
-            return;
-        }
-        if (isCompressedHammer(heldItem)) {
-            event.drops.clear();
-            event.dropChance = 1f;
-            for (Smashable reward : rewards) {
-                if (event.world.rand.nextFloat() <= reward.chance + (reward.luckMultiplier * event.fortuneLevel)) {
-                    event.drops.add(new ItemStack(reward.item, 1, reward.meta));
-                }
-            }
-        }
-    }
-
-    public boolean isCompressedHammer(ItemStack itemStack) {
-        if (itemStack == null) {
-            return false;
-        }
-        if (itemStack.getItem() instanceof ICompressedHammer && ((ICompressedHammer) itemStack.getItem()).isCompressedHammer(itemStack)) {
-            return true;
-        }
-        return itemStack.hasTagCompound() && itemStack.stackTagCompound.getBoolean("CompressedHammered");
-    }
 }

@@ -42,7 +42,7 @@ public class CompressedHammerRegistry {
     }
 
     public static void load(Configuration config, boolean easyMode) {
-        String[] smashables = config.getStringList("Smashables", "general", new String[]{
+        String[] smashables = config.getStringList("Smashables", "registries", new String[]{
                 "ExtraUtilities:cobblestone_compressed:0=9:minecraft:gravel:0:1:0",
                 "ExtraUtilities:cobblestone_compressed:12=9:minecraft:sand:0:1:0",
                 "ExtraUtilities:cobblestone_compressed:14=9:exnihilo:dust:0:1:0"
@@ -77,6 +77,7 @@ public class CompressedHammerRegistry {
                 }
                 if (sourceBlock == null) {
                     ExCompressum.logger.error("Skipping smashable " + smashable + " because the source block was not found");
+                    continue;
                 }
                 int sourceMeta = 0;
                 if (source.length >= 3) {

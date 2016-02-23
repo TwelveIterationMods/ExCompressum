@@ -50,7 +50,7 @@ public class ChickenStickRegistry {
     }
 
     public static void load(Configuration config) {
-        String[] validChickenStickBlocks = config.getStringList("Valid Chicken Stick Blocks", "general", new String[]{
+        String[] validChickenStickBlocks = config.getStringList("Valid Chicken Stick Blocks", "registries", new String[]{
                 "minecraft:cobblestone",
                 "minecraft:gravel",
                 "minecraft:sand"
@@ -62,6 +62,10 @@ public class ChickenStickRegistry {
                 continue;
             }
             Block block = GameRegistry.findBlock(s[0], s[1]);
+            if(block == null) {
+                ExCompressum.logger.error("Skipping chicken stick block " + blockString + " due to block not found");
+                continue;
+            }
             int meta = 0;
             if (s.length > 2) {
                 meta = Integer.parseInt(s[2]);

@@ -62,7 +62,7 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer {
     private void renderContents(TileEntity tileEntity, double x, double y, double z, float f) {
         TileEntityHeavySieve tileEntitySieve = (TileEntityHeavySieve) tileEntity;
         if (tileEntitySieve.getMode() == TileEntitySieve.SieveMode.FILLED) {
-            IIcon icon = tileEntitySieve.getContentBlock().getIcon(0, tileEntitySieve.getContentMeta());
+            IIcon icon = tileEntitySieve.getContent().getIconIndex();
             bindTexture(TextureMap.locationBlocksTexture);
 
             GL11.glPushMatrix();

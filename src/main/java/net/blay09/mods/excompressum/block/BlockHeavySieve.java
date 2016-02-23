@@ -91,7 +91,7 @@ public class BlockHeavySieve extends BlockContainer {
         ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
         if (tileEntity.getMode() == TileEntitySieve.SieveMode.EMPTY && heldItem != null) {
             if (HeavySieveRegistry.isRegistered(Block.getBlockFromItem(heldItem.getItem()), heldItem.getItemDamage())) {
-                tileEntity.addSievable(Block.getBlockFromItem(heldItem.getItem()), heldItem.getItemDamage());
+                tileEntity.addSievable(heldItem);
                 if (!entityPlayer.capabilities.isCreativeMode) {
                     heldItem.stackSize--;
                 }
@@ -112,7 +112,7 @@ public class BlockHeavySieve extends BlockContainer {
     }
 
     public static void registerRecipes(Configuration config) {
-        if (config.getBoolean("Heavy Sieve", "general", true, "If set to false, the recipe for the heavy sieve will be disabled.")) {
+        if (config.getBoolean("Heavy Sieve", "blocks", true, "If set to false, the recipe for the heavy sieve will be disabled.")) {
             Item itemSilkMesh = GameRegistry.findItem("exnihilo", "mesh");
             if (itemSilkMesh != null) {
                 GameRegistry.addRecipe(new ItemStack(ExCompressum.heavySilkMesh), "##", "##", '#', itemSilkMesh);
