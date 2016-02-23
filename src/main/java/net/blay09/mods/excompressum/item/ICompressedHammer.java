@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum;
+package net.blay09.mods.excompressum.item;
 
 import exnihilo.items.hammers.IHammer;
 import net.minecraft.item.ItemStack;

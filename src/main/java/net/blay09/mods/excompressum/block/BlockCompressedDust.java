@@ -1,5 +1,6 @@
-package net.blay09.mods.excompressum;
+package net.blay09.mods.excompressum.block;
 
+import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;

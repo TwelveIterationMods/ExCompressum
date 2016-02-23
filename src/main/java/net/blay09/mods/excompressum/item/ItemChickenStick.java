@@ -1,8 +1,10 @@
-package net.blay09.mods.excompressum;
+package net.blay09.mods.excompressum.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
+import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -15,7 +17,7 @@ public class ItemChickenStick extends ItemTool {
 
     public static final Set<Block> blocksEffectiveAgainst = Sets.newHashSet();
 
-    protected ItemChickenStick() {
+    public ItemChickenStick() {
         super(0f, ToolMaterial.EMERALD, blocksEffectiveAgainst);
         setUnlocalizedName(ExCompressum.MOD_ID + ":chicken_stick");
         setTextureName(ExCompressum.MOD_ID + ":chicken_stick");

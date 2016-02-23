@@ -5,5 +5,16 @@ item.excompressum:compressed_hammer_gold.name=Compressed Gold Hammer
 item.excompressum:compressed_hammer_diamond.name=Compressed Diamond Hammer
 item.excompressum:compressed_crook.name=Compressed Crook
 item.excompressum:chicken_stick.name=Chicken Stick
-item.excompressum:chicken_stick_wyld.name=The Cluckington
+item.excompressum:heavy_silk_mesh.name=Heavy Silk Mesh
+
 tile.excompressum:compressed_dust.name=Compressed Dust
+tile.excompressum:heavy_sieve_0.name=Heavy Oak Sieve
+tile.excompressum:heavy_sieve_1.name=Heavy Spruce Sieve
+tile.excompressum:heavy_sieve_2.name=Heavy Birch Sieve
+tile.excompressum:heavy_sieve_3.name=Heavy Jungle Sieve
+tile.excompressum:heavy_sieve_4.name=Heavy Acacia Sieve
+tile.excompressum:heavy_sieve_5.name=Heavy Dark Oak Sieve
+
+item.excompressum:chicken_stick_wyld.name=The Cluckington
+item.excompressum:chicken_stick_jake.name=Cock Stick
+item.excompressum:chicken_stick_slow.name=Dark Matter Hammer
