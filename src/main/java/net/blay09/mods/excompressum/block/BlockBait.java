@@ -5,6 +5,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -22,7 +23,8 @@ import java.util.Random;
 public class BlockBait extends BlockContainer {
 
     public BlockBait() {
-        super(Material.rock);
+        super(Material.circuits);
+        setHardness(0.1f);
         setCreativeTab(CreativeTabs.tabMisc);
         setBlockBounds(0f, 0f, 0f, 1f, 0.1f, 1f);
     }
@@ -70,6 +72,11 @@ public class BlockBait extends BlockContainer {
         if(random.nextFloat() <= 0.2f) {
             world.spawnParticle("smoke", x + random.nextFloat(), y + random.nextFloat() * 0.5f, z + random.nextFloat(), 0.0, 0.0, 0.0);
         }
+    }
+
+    @Override
+    public void registerBlockIcons(IIconRegister iconRegister) {
+        blockIcon = Items.beef.getIconFromDamage(0);
     }
 
     public static void registerRecipes(Configuration config) {

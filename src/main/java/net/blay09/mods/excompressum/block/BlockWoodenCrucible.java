@@ -45,7 +45,9 @@ public class BlockWoodenCrucible extends BlockContainer {
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {}
+    public void registerBlockIcons(IIconRegister iconRegister) {
+        blockIcon = Blocks.log.getIcon(0, 0);
+    }
 
     @Override
     public int getRenderType() {
