@@ -4,15 +4,8 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import exnihilo.ENBlocks;
-import exnihilo.ENItems;
-import exnihilo.blocks.tileentities.TileEntityCrucible;
-import exnihilo.registries.CrucibleRegistry;
-import exnihilo.registries.HammerRegistry;
-import exnihilo.registries.helpers.Smashable;
+import net.blay09.mods.excompressum.block.BlockBait;
 import net.blay09.mods.excompressum.block.BlockCompressedDust;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.blay09.mods.excompressum.block.BlockWoodenCrucible;
@@ -22,25 +15,13 @@ import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.WoodenCrucibleRegistry;
+import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Collection;
-import java.util.List;
 
 @Mod(modid = ExCompressum.MOD_ID, name = "ExCompressum", dependencies = "required-after:exnihilo")
 public class ExCompressum {
@@ -73,6 +54,7 @@ public class ExCompressum {
     public static BlockCompressedDust compressedDust;
     public static BlockHeavySieve heavySieve;
     public static BlockWoodenCrucible woodenCrucible;
+    public static BlockBait bait;
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
@@ -93,6 +75,8 @@ public class ExCompressum {
         GameRegistry.registerBlock(heavySieve, ItemBlockHeavySieve.class, "heavySieve");
         woodenCrucible = new BlockWoodenCrucible();
         GameRegistry.registerBlock(woodenCrucible, ItemBlockWoodenCrucible.class, "woodenCrucible");
+        bait = new BlockBait();
+        GameRegistry.registerBlock(bait, ItemBlockBait.class, "bait");
 
         chickenStick = new ItemChickenStick();
         GameRegistry.registerItem(chickenStick, "chickenStick");
@@ -112,6 +96,7 @@ public class ExCompressum {
         GameRegistry.registerItem(heavySilkMesh, "heavySilkMesh");
 
         GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible");
+        GameRegistry.registerTileEntity(TileEntityBait.class, "bait");
 
         proxy.preInit(event);
     }
@@ -132,6 +117,7 @@ public class ExCompressum {
         BlockHeavySieve.registerRecipes(config);
         BlockWoodenCrucible.registerRecipes(config);
         BlockCompressedDust.registerRecipes(config);
+        BlockBait.registerRecipes(config);
 
         config.save();
     }

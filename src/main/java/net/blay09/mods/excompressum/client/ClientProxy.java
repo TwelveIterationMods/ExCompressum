@@ -8,6 +8,7 @@ import exnihilo.blocks.models.ModelSieveMesh;
 import exnihilo.blocks.tileentities.TileEntityCrucible;
 import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
 import net.minecraft.client.Minecraft;
@@ -32,6 +33,8 @@ public class ClientProxy extends CommonProxy {
         ModelCrucible model = new ModelCrucible();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodenCrucible.class, new RenderWoodenCrucible(model));
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ExCompressum.woodenCrucible), new ItemRenderWoodenCrucible(model));
+
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBait.class, new RenderBait());
     }
 
     private String getCustomName(Session session) {
