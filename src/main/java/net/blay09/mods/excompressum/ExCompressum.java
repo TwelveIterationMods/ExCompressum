@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum;
 
+import com.google.common.collect.Maps;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -24,6 +25,8 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Map;
+
 @Mod(modid = ExCompressum.MOD_ID, name = "ExCompressum", dependencies = "required-after:exnihilo")
 public class ExCompressum {
 
@@ -44,6 +47,7 @@ public class ExCompressum {
     public static int woodenCrucibleSpeed;
     public static float baitWolfChance;
     public static float baitOcelotChance;
+    public static final Map<String, String> chickenStickNames = Maps.newHashMap();
 
     public static ItemChickenStick chickenStick;
     public static ItemCompressedHammer compressedHammerWood;
@@ -73,6 +77,16 @@ public class ExCompressum {
         woodenCrucibleSpeed = config.getInt("Wooden Crucible Speed", "general", 1, 1, 10, "The speed at which the wooden crucible extracts water. 0.1 is equivalent to a torch below a crucible, 0.3 is equivalent to fire below a crucible.");
         baitWolfChance = config.getFloat("Wolf Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a wolf bait will result in a wolf spawn.");
         baitOcelotChance = config.getFloat("Ocelot Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that an ocelot bait will result in an ocelot spawn.");
+        String[] chickenStickNameList = config.getStringList("Custom Chicken Stick Names", "general", new String[] {}, "Format: Username=ItemName, Username can be * to affect all users");
+        chickenStickNames.put("wyld", "The Cluckington");
+        chickenStickNames.put("slowpoke101", "Dark Matter Hammer");
+        chickenStickNames.put("jake_evans", "Cock Stick");
+        for(String name : chickenStickNameList) {
+            String[] s = name.split("=");
+            if(s.length >= 2) {
+                chickenStickNames.put(s[0].toLowerCase(), s[1]);
+            }
+        }
 
         compressedDust = new BlockCompressedDust();
         GameRegistry.registerBlock(compressedDust, "compressed_dust"); // god damn it Blay. can't rename because already released

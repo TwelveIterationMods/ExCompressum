@@ -22,7 +22,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         String customName = getCustomName(Minecraft.getMinecraft().getSession());
         if(customName != null) {
-            ExCompressum.chickenStick.setUnlocalizedName(ExCompressum.MOD_ID + ":" + customName);
+            ExCompressum.chickenStick.setUnlocalizedName(customName);
         }
 
         ModelSieve sieve = new ModelSieve();
@@ -38,15 +38,11 @@ public class ClientProxy extends CommonProxy {
     }
 
     private String getCustomName(Session session) {
-        String username = session.getUsername().toLowerCase();
-        if(username.equals("wyld")) {
-            return "chicken_stick_wyld";
-        } else if(username.equals("jake_evans")) {
-            return "chicken_stick_jake";
-        } else if(username.equals("slowpoke101")) {
-            return "chicken_stick_slow";
+        String customName = ExCompressum.chickenStickNames.get(session.getUsername().toLowerCase());
+        if(customName == null) {
+            customName = ExCompressum.chickenStickNames.get("*");
         }
-        return null;
+        return customName;
     }
 
 }
