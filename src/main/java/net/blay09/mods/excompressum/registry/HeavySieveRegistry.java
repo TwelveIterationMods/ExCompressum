@@ -22,6 +22,7 @@ import java.util.Map;
 public class HeavySieveRegistry {
 
     private static Multimap<ItemInfo, SiftingResult> siftables = ArrayListMultimap.create();
+    private static Configuration config;
 
     public static void register(Block source, int sourceMeta, Item output, int outputMeta, int rarity) {
         if (source == null || output == null) {
@@ -49,6 +50,12 @@ public class HeavySieveRegistry {
     }
 
     public static void load(Configuration config) {
+        HeavySieveRegistry.config = config;
+        reload();
+    }
+
+    public static void reload() {
+        siftables.clear();
         String[] generatedSiftables = config.getStringList("Generate Heavy Siftables", "registries", new String[]{
                 "ExtraUtilities:cobblestone_compressed:8=minecraft:dirt:0:1:5",
                 "ExtraUtilities:cobblestone_compressed:12=minecraft:gravel:0:1:5",

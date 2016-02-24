@@ -1,10 +1,12 @@
 package net.blay09.mods.excompressum;
 
 import com.google.common.collect.Maps;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.block.BlockBait;
 import net.blay09.mods.excompressum.block.BlockCompressedDust;
@@ -39,6 +41,7 @@ public class ExCompressum {
     @SidedProxy(serverSide = "net.blay09.mods.excompressum.CommonProxy", clientSide = "net.blay09.mods.excompressum.client.ClientProxy")
     public static CommonProxy proxy;
 
+    private boolean mineTweakerHasPostReload;
     private Configuration config;
     public static float compressedCrookDurabilityMultiplier;
     public static float compressedCrookSpeedMultiplier;
@@ -140,6 +143,22 @@ public class ExCompressum {
         BlockBait.registerRecipes(config);
 
         config.save();
+
+        try {
+            Class mtClass = Class.forName("minetweaker.MineTweakerImplementationAPI");
+            mtClass.getMethod("onPostReload", Class.forName("minetweaker.util.IEventHandler"));
+            event.buildSoftDependProxy("MineTweaker3", "net.blay09.mods.excompressum.compat.MineTweakerPostReload");
+            mineTweakerHasPostReload = true;
+        } catch (ClassNotFoundException ignored) {
+        } catch (NoSuchMethodException ignored) {}
+    }
+
+    @Mod.EventHandler
+    @SuppressWarnings("unused")
+    public void serverStarted(FMLServerStartedEvent event) {
+        if(!mineTweakerHasPostReload && Loader.isModLoaded("MineTweaker3")) {
+            HeavySieveRegistry.reload();
+        }
     }
 
 }
