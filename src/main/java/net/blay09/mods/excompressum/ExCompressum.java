@@ -75,8 +75,8 @@ public class ExCompressum {
 
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
-        chickenStickSpawnChance = config.getFloat("Chicken Stick Spawn Chance", "general", 0.01f, 0f, 1f, "The chance for the chicken stick to spawn a chicken. Set to 0 to disable.");
-        chickenStickSoundChance = config.getFloat("Chicken Stick Sound Chance", "general", 0.15f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
+        chickenStickSpawnChance = config.getFloat("Chicken Stick Spawn Chance", "general", 0.008f, 0f, 1f, "The chance for the chicken stick to spawn a chicken. Set to 0 to disable.");
+        chickenStickSoundChance = config.getFloat("Chicken Stick Sound Chance", "general", 0.2f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
         chickenStickSounds = config.getStringList("Chicken Stick Sounds", "general", new String[] {
                 "mob.chicken.say",
                 "mob.chicken.hurt",

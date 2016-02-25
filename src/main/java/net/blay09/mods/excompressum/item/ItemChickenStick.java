@@ -35,13 +35,14 @@ public class ItemChickenStick extends ItemTool {
     @Override
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
         playChickenSound(world, (int) entityPlayer.posX, (int) entityPlayer.posY, (int) entityPlayer.posZ);
+        entityPlayer.swingItem();
         return super.onItemRightClick(itemStack, world, entityPlayer);
     }
 
     @Override
     public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase entityLiving) {
         playChickenSound(world, x, y, z);
-        if(world.rand.nextFloat() <= ExCompressum.chickenStickSpawnChance) {
+        if(!world.isRemote && world.rand.nextFloat() <= ExCompressum.chickenStickSpawnChance) {
             EntityChicken entityChicken = new EntityChicken(world);
             entityChicken.setPosition(x, y, z);
             world.spawnEntityInWorld(entityChicken);
