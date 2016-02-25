@@ -43,11 +43,13 @@ public class ClientProxy extends CommonProxy {
             ExCompressum.chickenStick.setUnlocalizedName(customName);
         }
 
-        String userName = Minecraft.getMinecraft().getSession().getUsername();
-        if(userName.toLowerCase().equals("soaryn") || userName.toLowerCase().equals("slowpoke101")) {
-            SlowSoarynHandler handler = new SlowSoarynHandler();
-            MinecraftForge.EVENT_BUS.register(handler);
-            FMLCommonHandler.instance().bus().register(handler);
+        if(!ExCompressum.chickenOut) {
+            String userName = Minecraft.getMinecraft().getSession().getUsername();
+            if (userName.toLowerCase().equals("soaryn") || userName.toLowerCase().equals("slowpoke101")) {
+                SlowSoarynHandler handler = new SlowSoarynHandler();
+                MinecraftForge.EVENT_BUS.register(handler);
+                FMLCommonHandler.instance().bus().register(handler);
+            }
         }
     }
 
