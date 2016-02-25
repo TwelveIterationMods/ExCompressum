@@ -46,9 +46,11 @@ idea {
 
 repositories {
     maven {
+        name 'tterrag'
         url 'http://maven.tterrag.com/'
     }
     maven {
+        name 'Chickenbones'
         url 'http://chickenbones.net/maven/'
     }
     ivy {
