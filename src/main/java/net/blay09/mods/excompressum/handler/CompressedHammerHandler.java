@@ -9,6 +9,7 @@ import net.blay09.mods.excompressum.item.ICompressedHammer;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.Collection;
@@ -24,6 +25,9 @@ public class CompressedHammerHandler {
         ItemStack heldItem = event.harvester.getHeldItem();
         if (heldItem != null && heldItem.getItem() == ExCompressum.chickenStick) {
             if (!ChickenStickRegistry.isValidBlock(event.block, event.blockMetadata)) {
+                return;
+            }
+            if (event.harvester instanceof FakePlayer) {
                 return;
             }
             Collection<Smashable> rewards = HammerRegistry.getRewards(event.block, event.blockMetadata);

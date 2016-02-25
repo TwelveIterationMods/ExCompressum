@@ -46,6 +46,8 @@ public class ExCompressum {
     public static float compressedCrookDurabilityMultiplier;
     public static float compressedCrookSpeedMultiplier;
     public static float chickenStickSoundChance;
+    public static float chickenStickSpawnChance;
+    public static String[] chickenStickSounds;
     public static boolean allowHeavySieveAutomation;
     public static int woodenCrucibleSpeed;
     public static float baitWolfChance;
@@ -73,7 +75,14 @@ public class ExCompressum {
 
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
+        chickenStickSpawnChance = config.getFloat("Chicken Stick Spawn Chance", "general", 0.01f, 0f, 1f, "The chance for the chicken stick to spawn a chicken. Set to 0 to disable.");
         chickenStickSoundChance = config.getFloat("Chicken Stick Sound Chance", "general", 0.15f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
+        chickenStickSounds = config.getStringList("Chicken Stick Sounds", "general", new String[] {
+                "mob.chicken.say",
+                "mob.chicken.hurt",
+                "mob.chicken.plop",
+                "mob.chicken.step"
+        }, "The sound names the chicken stick will randomly play.");
         compressedCrookDurabilityMultiplier = config.getFloat("Compressed Crook Durability Multiplier", "general", 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
         compressedCrookSpeedMultiplier = config.getFloat("Compressed Crook Speed Multiplier", "general", 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
         allowHeavySieveAutomation = config.getBoolean("Allow Heavy Sieve Automation", "general", false, "Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)");

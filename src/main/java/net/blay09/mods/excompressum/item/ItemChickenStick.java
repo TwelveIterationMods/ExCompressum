@@ -7,6 +7,8 @@ import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
@@ -25,9 +27,24 @@ public class ItemChickenStick extends ItemTool {
     }
 
     @Override
+    public boolean hitEntity(ItemStack itemStack, EntityLivingBase attacker, EntityLivingBase target) {
+        playChickenSound(attacker.worldObj, (int) attacker.posX, (int) attacker.posY, (int) attacker.posZ);
+        return super.hitEntity(itemStack, attacker, target);
+    }
+
+    @Override
+    public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
+        playChickenSound(world, (int) entityPlayer.posX, (int) entityPlayer.posY, (int) entityPlayer.posZ);
+        return super.onItemRightClick(itemStack, world, entityPlayer);
+    }
+
+    @Override
     public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase entityLiving) {
-        if(world.rand.nextFloat() <= ExCompressum.chickenStickSoundChance) {
-            world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, "mob.chicken.say", 1f, world.rand.nextFloat() * 0.1f + 0.9f);
+        playChickenSound(world, x, y, z);
+        if(world.rand.nextFloat() <= ExCompressum.chickenStickSpawnChance) {
+            EntityChicken entityChicken = new EntityChicken(world);
+            entityChicken.setPosition(x, y, z);
+            world.spawnEntityInWorld(entityChicken);
         }
         return super.onBlockDestroyed(itemStack, world, block, x, y, z, entityLiving);
     }
@@ -53,5 +70,17 @@ public class ItemChickenStick extends ItemTool {
     @Override
     public Multimap getItemAttributeModifiers() {
         return HashMultimap.create(); // reset damage value as set from tool
+    }
+
+    private void playChickenSound(World world, int x, int y, int z) {
+        if(world.rand.nextFloat() <= ExCompressum.chickenStickSoundChance) {
+            String soundName = null;
+            if(ExCompressum.chickenStickSounds.length > 0) {
+                soundName = ExCompressum.chickenStickSounds[world.rand.nextInt(ExCompressum.chickenStickSounds.length)];
+            }
+            if(soundName != null) {
+                world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, soundName, 1f, world.rand.nextFloat() * 0.1f + 0.9f);
+            }
+        }
     }
 }
