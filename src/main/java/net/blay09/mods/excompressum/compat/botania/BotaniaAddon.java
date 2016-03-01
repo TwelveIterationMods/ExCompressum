@@ -29,43 +29,49 @@ public class BotaniaAddon {
 
     @SuppressWarnings("unchecked")
     public BotaniaAddon() {
-        BotaniaAPI.registerSubTile(SUBTILE_ORECHID_EVOLVED, SubTileOrechidEvolved.class);
-        BotaniaAPI.registerSubTileSignature(SubTileOrechidEvolved.class, new SubTileOrechidEvolvedSignature());
-        ItemStack orechidEvolved = ItemBlockSpecialFlower.ofType(SUBTILE_ORECHID_EVOLVED);
-        ExCompressum.creativeTab.addAdditionalItem(orechidEvolved);
-        RecipePetals recipeOrechidEvolved = BotaniaAPI.registerPetalRecipe(orechidEvolved, "petalGray", "petalGray", "petalYellow", "petalYellow", "petalGreen", "petalGreen", "petalRed", "petalRed");
-        lexiconOrechidEvolved = new LexiconEntry(LEXICON_ORECHID_EVOLVED, BotaniaAPI.categoryFunctionalFlowers) {
-            @Override
-            public String getWebLink() {
-                return "http://balyware.com/index.php/ex-compressum/evolved-orechid/";
-            }
-            @Override
-            public String getTagline() {
-                return "botania.tagline.excompressum.orechidEvolved";
-            }
-        };
-        lexiconOrechidEvolved.setLexiconPages(new PageText(LEXICON_ORECHID_EVOLVED_PAGE + "0"), new PagePetalRecipe(LEXICON_ORECHID_EVOLVED_PAGE + "1", recipeOrechidEvolved));
-        lexiconOrechidEvolved.setPriority();
-        BotaniaAPI.addEntry(lexiconOrechidEvolved, lexiconOrechidEvolved.category);
+        if(ExCompressum.botaniaEvolvedOrechid) {
+            BotaniaAPI.registerSubTile(SUBTILE_ORECHID_EVOLVED, SubTileOrechidEvolved.class);
+            BotaniaAPI.registerSubTileSignature(SubTileOrechidEvolved.class, new SubTileOrechidEvolvedSignature());
+            ItemStack orechidEvolved = ItemBlockSpecialFlower.ofType(SUBTILE_ORECHID_EVOLVED);
+            ExCompressum.creativeTab.addAdditionalItem(orechidEvolved);
+            RecipePetals recipeOrechidEvolved = BotaniaAPI.registerPetalRecipe(orechidEvolved, "petalGray", "petalGray", "petalYellow", "petalYellow", "petalGreen", "petalGreen", "petalRed", "petalRed");
+            lexiconOrechidEvolved = new LexiconEntry(LEXICON_ORECHID_EVOLVED, BotaniaAPI.categoryFunctionalFlowers) {
+                @Override
+                public String getWebLink() {
+                    return "http://balyware.com/index.php/ex-compressum/evolved-orechid/";
+                }
 
-        BotaniaAPI.registerSubTile(SUBTILE_BROKEN_COMPRILLA, SubTileBrokenComprilla.class);
-        BotaniaAPI.registerSubTileSignature(SubTileBrokenComprilla.class, new SubTileBrokenComprillaSignature());
-        ItemStack brokenComprilla = ItemBlockSpecialFlower.ofType(SUBTILE_BROKEN_COMPRILLA);
-        ExCompressum.creativeTab.addAdditionalItem(brokenComprilla);
-        RecipePetals recipeBrokenComprilla = BotaniaAPI.registerPetalRecipe(brokenComprilla, "petalLightBlue", "petalLightBlue", "petalWhite", "petalWhite", "petalBlack", "petalBlack", new ItemStack(Items.flint), new ItemStack(Items.flint));
-        lexiconBrokenComprilla = new LexiconEntry(LEXICON_BROKEN_COMPRILLA, BotaniaAPI.categoryFunctionalFlowers) {
-            @Override
-            public String getWebLink() {
-                return "http://balyware.com/index.php/ex-compressum/broken-comprilla/";
-            }
-            @Override
-            public String getTagline() {
-                return "botania.tagline.excompressum.brokenComprilla";
-            }
-        };
-        lexiconBrokenComprilla.setLexiconPages(new PageText(LEXICON_BROKEN_COMPRILLA_PAGE + "0"), new PagePetalRecipe(LEXICON_BROKEN_COMPRILLA_PAGE + "1", recipeBrokenComprilla));
-        lexiconBrokenComprilla.setPriority();
-        BotaniaAPI.addEntry(lexiconBrokenComprilla, lexiconBrokenComprilla.category);
+                @Override
+                public String getTagline() {
+                    return "botania.tagline.excompressum.orechidEvolved";
+                }
+            };
+            lexiconOrechidEvolved.setLexiconPages(new PageText(LEXICON_ORECHID_EVOLVED_PAGE + "0"), new PagePetalRecipe(LEXICON_ORECHID_EVOLVED_PAGE + "1", recipeOrechidEvolved));
+            lexiconOrechidEvolved.setPriority();
+            BotaniaAPI.addEntry(lexiconOrechidEvolved, lexiconOrechidEvolved.category);
+        }
+
+        if(ExCompressum.botaniaBrokenComprilla) {
+            BotaniaAPI.registerSubTile(SUBTILE_BROKEN_COMPRILLA, SubTileBrokenComprilla.class);
+            BotaniaAPI.registerSubTileSignature(SubTileBrokenComprilla.class, new SubTileBrokenComprillaSignature());
+            ItemStack brokenComprilla = ItemBlockSpecialFlower.ofType(SUBTILE_BROKEN_COMPRILLA);
+            ExCompressum.creativeTab.addAdditionalItem(brokenComprilla);
+            RecipePetals recipeBrokenComprilla = BotaniaAPI.registerPetalRecipe(brokenComprilla, "petalLightBlue", "petalLightBlue", "petalWhite", "petalWhite", "petalBlack", "petalBlack", new ItemStack(Items.flint), new ItemStack(Items.flint));
+            lexiconBrokenComprilla = new LexiconEntry(LEXICON_BROKEN_COMPRILLA, BotaniaAPI.categoryFunctionalFlowers) {
+                @Override
+                public String getWebLink() {
+                    return "http://balyware.com/index.php/ex-compressum/broken-comprilla/";
+                }
+
+                @Override
+                public String getTagline() {
+                    return "botania.tagline.excompressum.brokenComprilla";
+                }
+            };
+            lexiconBrokenComprilla.setLexiconPages(new PageText(LEXICON_BROKEN_COMPRILLA_PAGE + "0"), new PagePetalRecipe(LEXICON_BROKEN_COMPRILLA_PAGE + "1", recipeBrokenComprilla));
+            lexiconBrokenComprilla.setPriority();
+            BotaniaAPI.addEntry(lexiconBrokenComprilla, lexiconBrokenComprilla.category);
+        }
 
         if(ExCompressum.botaniaDisableVanillaOrechid) {
             Iterator<LexiconEntry> it = BotaniaAPI.getAllEntries().iterator();
