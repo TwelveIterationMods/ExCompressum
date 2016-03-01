@@ -30,3 +30,10 @@ item.excompressum:bait_0.name=Wolf Bait
 item.excompressum:bait_1.name=Ocelot Bait
 
 itemGroup.excompressum=Ex Compressum
+
+botania.entry.excompressum.orechidEvolved=Evolved Orechid
+botania.tagline.excompressum.orechidEvolved=Creates ores from stone
+botania.page.excompressum.orechidEvolved0=You probably noticed by now that you won't be mining any ores in this world. The &1Evolved Orechid&0 will use &4Mana&0 to generate &4ores&0 in nearby &1Stone&0 blocks at a faster and cheaper rate than the &1Orechid&0.<br>The ores it generates are random, but seem to be biased towards more common ores rather than rarer ones.
+botania.page.excompressum.orechidEvolved1=&oStill not dragon poop though&r.
+tile.botania:flower.excompressum.orechidEvolved.name=Evolved Orechid
+tile.botania:flower.excompressum.orechidEvolved.reference=Orechid: Evolved: Skyblock: The Movie

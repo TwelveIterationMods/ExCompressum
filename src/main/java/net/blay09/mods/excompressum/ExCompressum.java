@@ -30,7 +30,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
-@Mod(modid = ExCompressum.MOD_ID, name = "ExCompressum", dependencies = "required-after:exnihilo")
+@Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "required-after:exnihilo")
 public class ExCompressum {
 
     public static final Logger logger = LogManager.getLogger();
@@ -55,6 +55,10 @@ public class ExCompressum {
     public static float baitWolfChance;
     public static float baitOcelotChance;
     public static final Map<String, String> chickenStickNames = Maps.newHashMap();
+
+    public static boolean botaniaDisableVanillaOrechid;
+    public static int botaniaOrechidCost;
+    public static int botaniaOrechidDelay;
 
     public static ItemChickenStick chickenStick;
     public static ItemCompressedHammer compressedHammerWood;
@@ -112,6 +116,10 @@ public class ExCompressum {
             }
         }
 
+        botaniaDisableVanillaOrechid = config.getBoolean("Disable Vanilla Orechid", "compat.botania", false, "If set to true, Botania's Orechid will not show up in the lexicon and be uncraftable.");
+        botaniaOrechidCost = config.getInt("Evolved Orechid Mana Cost", "compat.botania", 700, 0, 175000, "The mana cost of the Evolved Orechid. GoG Orechid is 700, vanilla Orechid is 17500.");
+        botaniaOrechidDelay = config.getInt("Evolved Orechid Delay", "compat.botania", 2, 1, 12000, "The ore generation delay for the Evolved Orechid in ticks. GoG Orechid is 2, vanilla Orechid is 100.");
+
         compressedBlock = new BlockCompressed();
         GameRegistry.registerBlock(compressedBlock, ItemBlockCompressed.class, "compressed_dust"); // god damn it Blay. can't rename because already released
         heavySieve = new BlockHeavySieve();
@@ -146,7 +154,7 @@ public class ExCompressum {
     }
 
     @Mod.EventHandler
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused unchecked")
     public void postInit(FMLPostInitializationEvent event) {
         boolean easyMode = config.getBoolean("Easy Mode", "general", false, "Set this to true to enable easy-mode, which disables the compressed hammers and makes compressed smashables work for normal hammers instead.");
         CompressedHammerRegistry.load(config, easyMode);
@@ -172,6 +180,8 @@ public class ExCompressum {
             mineTweakerHasPostReload = true;
         } catch (ClassNotFoundException ignored) {
         } catch (NoSuchMethodException ignored) {}
+
+        event.buildSoftDependProxy("Botania", "net.blay09.mods.excompressum.compat.BotaniaAddon");
     }
 
     @Mod.EventHandler
