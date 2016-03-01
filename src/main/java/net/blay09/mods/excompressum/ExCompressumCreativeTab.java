@@ -17,7 +17,7 @@ public class ExCompressumCreativeTab extends CreativeTabs {
 
     @Override
     public Item getTabIconItem() {
-        return ExCompressum.compressedHammerIron;
+        return ModItems.compressedHammerIron;
     }
 
     @Override

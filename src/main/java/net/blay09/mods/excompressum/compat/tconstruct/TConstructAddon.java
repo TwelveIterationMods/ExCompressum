@@ -1,19 +1,33 @@
 package net.blay09.mods.excompressum.compat.tconstruct;
 
-import net.blay09.mods.excompressum.ExCompressum;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.compat.IAddon;
+import net.blay09.mods.excompressum.item.ItemDoubleCompressedDiamondHammer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
 import tconstruct.library.TConstructRegistry;
-import tconstruct.library.client.TConstructClientRegistry;
 import tconstruct.library.crafting.ModifyBuilder;
 
 @SuppressWarnings("unused")
-public class TConstructAddon {
+public class TConstructAddon implements IAddon {
 
-    public TConstructAddon() {
-        if(ExCompressum.tconstructModifier) {
-            ModifyBuilder.registerModifier(new ModSmashingII(new ItemStack[]{new ItemStack(ExCompressum.doubleCompressedDiamondHammer, 1, 0)}, 0));
+    private boolean enableModifiers;
+
+    @Override
+    public void loadConfig(Configuration config) {
+        enableModifiers = config.getBoolean("Enable Smashing II Modifier", "compat.tconstruct", false, "If set to true, adding a double compressed diamond hammer will add the Smashing II modifier to a Tinkers Construct tool, which allows smashing of compressed blocks.");
+    }
+
+    @Override
+    public void postInit() {
+        if(enableModifiers) {
+            ItemDoubleCompressedDiamondHammer.registerRecipes();
+            ModifyBuilder.registerModifier(new ModSmashingII(new ItemStack[]{new ItemStack(ModItems.doubleCompressedDiamondHammer, 1, 0)}));
             TConstructRegistry.registerActiveToolMod(new ActiveSmashingMod());
         }
     }
 
+    @Override
+    public void serverStarted(FMLServerStartedEvent event) {}
 }

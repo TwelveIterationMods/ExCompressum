@@ -4,6 +4,8 @@ import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.registry.GameRegistry;
 import exnihilo.blocks.tileentities.TileEntitySieve;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ModBlocks;
+import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
 import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
 import net.minecraft.block.Block;
@@ -115,13 +117,13 @@ public class BlockHeavySieve extends BlockContainer {
         if (config.getBoolean("Heavy Sieve", "blocks", true, "If set to false, the recipe for the heavy sieve will be disabled.")) {
             Item itemSilkMesh = GameRegistry.findItem("exnihilo", "mesh");
             if (itemSilkMesh != null) {
-                GameRegistry.addRecipe(new ItemStack(ExCompressum.heavySilkMesh), "##", "##", '#', itemSilkMesh);
+                GameRegistry.addRecipe(new ItemStack(ModItems.heavySilkMesh), "##", "##", '#', itemSilkMesh);
             }
             for (int i = 0; i < 4; i++) {
-                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ExCompressum.heavySieve, 1, i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.log, 1, i), 'm', ExCompressum.heavySilkMesh, 's', "stickWood"));
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.log, 1, i), 'm', ModItems.heavySilkMesh, 's', "stickWood"));
             }
             for (int i = 0; i < 2; i++) {
-                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ExCompressum.heavySieve, 1, 4 + i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.log2, 1, i), 'm', ExCompressum.heavySilkMesh, 's', "stickWood"));
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, 4 + i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.log2, 1, i), 'm', ModItems.heavySilkMesh, 's', "stickWood"));
             }
         }
     }

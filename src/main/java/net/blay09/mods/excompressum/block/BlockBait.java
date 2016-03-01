@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -82,20 +83,20 @@ public class BlockBait extends BlockContainer {
 
     public static void registerRecipes(Configuration config) {
         if (config.getBoolean("Wolf Bait", "blocks", true, "If set to false, the recipe for the wolf bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 0), Items.bone, Items.beef);
+            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 0), Items.bone, Items.beef);
         }
         if (config.getBoolean("Ocelot Bait", "blocks", true, "If set to false, the recipe for the ocelot bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 1), Items.gunpowder, new ItemStack(Items.fish, 1, OreDictionary.WILDCARD_VALUE));
-            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ExCompressum.bait, 1, 1), Items.gunpowder, "listAllfishraw")); // Pam's Fishies
+            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 1), Items.gunpowder, new ItemStack(Items.fish, 1, OreDictionary.WILDCARD_VALUE));
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, 1), Items.gunpowder, "listAllfishraw")); // Pam's Fishies
         }
         if (config.getBoolean("Cow Bait", "blocks", true, "If set to false, the recipe for the cow bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 2), Items.wheat, Items.wheat);
+            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 2), Items.wheat, Items.wheat);
         }
         if (config.getBoolean("Pig Bait", "blocks", true, "If set to false, the recipe for the pig bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 3), Items.carrot, Items.carrot);
+            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 3), Items.carrot, Items.carrot);
         }
         if (config.getBoolean("Chicken Bait", "blocks", true, "If set to false, the recipe for the chicken bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 4), Items.wheat_seeds, Items.wheat_seeds);
+            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 4), Items.wheat_seeds, Items.wheat_seeds);
         }
     }
 

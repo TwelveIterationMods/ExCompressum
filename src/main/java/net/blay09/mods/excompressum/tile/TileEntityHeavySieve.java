@@ -1,13 +1,11 @@
 package net.blay09.mods.excompressum.tile;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import exnihilo.blocks.tileentities.TileEntitySieve;
 import exnihilo.particles.ParticleSieve;
 import exnihilo.registries.helpers.SiftingResult;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;

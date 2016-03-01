@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.block;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class BlockCompressed extends Block {
 
-    private IIcon[] icons = new IIcon[6];
+    private final IIcon[] icons = new IIcon[6];
 
     public BlockCompressed() {
         super(Material.sand);
@@ -60,28 +61,28 @@ public class BlockCompressed extends Block {
     public static void registerRecipes(Configuration config) {
         boolean exUtilsLoaded = Loader.isModLoaded("ExtraUtilities");
         if (config.getBoolean("Compressed Dust", "blocks", true, "Set this to false to disable the recipe for the compressed dust.")) {
-            GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedBlock, 1, 0), "###", "###", "###", '#', GameRegistry.findBlock("exnihilo", "dust"));
-            GameRegistry.addShapelessRecipe(new ItemStack(GameRegistry.findBlock("exnihilo", "dust"), 9), new ItemStack(ExCompressum.compressedBlock, 1, 0));
+            GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 0), "###", "###", "###", '#', GameRegistry.findBlock("exnihilo", "dust"));
+            GameRegistry.addShapelessRecipe(new ItemStack(GameRegistry.findBlock("exnihilo", "dust"), 9), new ItemStack(ModBlocks.compressedBlock, 1, 0));
         }
         if (config.getBoolean("Compressed Cobblestone", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed cobblestone.")) {
-            GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedBlock, 1, 1), "###", "###", "###", '#', Blocks.cobblestone);
-            GameRegistry.addShapelessRecipe(new ItemStack(Blocks.cobblestone, 9), new ItemStack(ExCompressum.compressedBlock, 1, 1));
+            GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 1), "###", "###", "###", '#', Blocks.cobblestone);
+            GameRegistry.addShapelessRecipe(new ItemStack(Blocks.cobblestone, 9), new ItemStack(ModBlocks.compressedBlock, 1, 1));
         }
         if (config.getBoolean("Compressed Gravel", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed gravel.")) {
-            GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedBlock, 1, 2), "###", "###", "###", '#', Blocks.gravel);
-            GameRegistry.addShapelessRecipe(new ItemStack(Blocks.gravel, 9), new ItemStack(ExCompressum.compressedBlock, 1, 2));
+            GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 2), "###", "###", "###", '#', Blocks.gravel);
+            GameRegistry.addShapelessRecipe(new ItemStack(Blocks.gravel, 9), new ItemStack(ModBlocks.compressedBlock, 1, 2));
         }
         if (config.getBoolean("Compressed Sand", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed sand.")) {
-            GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedBlock, 1, 3), "###", "###", "###", '#', Blocks.sand);
-            GameRegistry.addShapelessRecipe(new ItemStack(Blocks.sand, 9), new ItemStack(ExCompressum.compressedBlock, 1, 3));
+            GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 3), "###", "###", "###", '#', Blocks.sand);
+            GameRegistry.addShapelessRecipe(new ItemStack(Blocks.sand, 9), new ItemStack(ModBlocks.compressedBlock, 1, 3));
         }
         if (config.getBoolean("Compressed Dirt", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed dirt.")) {
-            GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedBlock, 1, 4), "###", "###", "###", '#', Blocks.dirt);
-            GameRegistry.addShapelessRecipe(new ItemStack(Blocks.dirt, 9), new ItemStack(ExCompressum.compressedBlock, 1, 4));
+            GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 4), "###", "###", "###", '#', Blocks.dirt);
+            GameRegistry.addShapelessRecipe(new ItemStack(Blocks.dirt, 9), new ItemStack(ModBlocks.compressedBlock, 1, 4));
         }
         if (config.getBoolean("Compressed Flint", "blocks", true, "Set this to false to disable the recipe for the compressed flint.")) {
-            GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedBlock, 1, 5), "###", "###", "###", '#', Items.flint);
-            GameRegistry.addShapelessRecipe(new ItemStack(Items.flint, 9), new ItemStack(ExCompressum.compressedBlock, 1, 5));
+            GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 5), "###", "###", "###", '#', Items.flint);
+            GameRegistry.addShapelessRecipe(new ItemStack(Items.flint, 9), new ItemStack(ModBlocks.compressedBlock, 1, 5));
         }
     }
 }

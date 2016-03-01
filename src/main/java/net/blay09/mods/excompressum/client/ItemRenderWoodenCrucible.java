@@ -1,16 +1,14 @@
 package net.blay09.mods.excompressum.client;
 
 import exnihilo.blocks.models.ModelCrucible;
-import exnihilo.blocks.renderers.blockItems.ItemRenderCrucible;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 public class ItemRenderWoodenCrucible implements IItemRenderer {
 
-    private ModelCrucible model;
+    private final ModelCrucible model;
 
     public ItemRenderWoodenCrucible(ModelCrucible model) {
         this.model = model;

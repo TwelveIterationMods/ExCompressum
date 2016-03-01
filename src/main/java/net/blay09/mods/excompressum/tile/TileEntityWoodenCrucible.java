@@ -65,7 +65,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
         }
     }
 
-    public float getCapacityLeft() {
+    private float getCapacityLeft() {
         return MAX_FLUID - (solidVolume - fluidStack.amount);
     }
 

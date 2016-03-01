@@ -21,10 +21,10 @@ import java.util.Map;
 
 public class HeavySieveRegistry {
 
-    private static Multimap<ItemInfo, SiftingResult> siftables = ArrayListMultimap.create();
+    private static final Multimap<ItemInfo, SiftingResult> siftables = ArrayListMultimap.create();
     private static Configuration config;
 
-    public static void register(Block source, int sourceMeta, Item output, int outputMeta, int rarity) {
+    private static void register(Block source, int sourceMeta, Item output, int outputMeta, int rarity) {
         if (source == null || output == null) {
             return;
         }

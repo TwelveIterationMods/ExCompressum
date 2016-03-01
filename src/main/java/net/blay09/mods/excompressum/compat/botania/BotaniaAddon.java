@@ -1,10 +1,13 @@
 package net.blay09.mods.excompressum.compat.botania;
 
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.compat.IAddon;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconEntry;
 import vazkii.botania.api.recipe.RecipePetals;
@@ -14,7 +17,7 @@ import vazkii.botania.common.lexicon.page.PageText;
 
 import java.util.Iterator;
 
-public class BotaniaAddon {
+public class BotaniaAddon implements IAddon {
 
     private static final String SUBTILE_ORECHID_EVOLVED = ExCompressum.MOD_ID + ".orechidEvolved";
     private static final String LEXICON_ORECHID_EVOLVED = "botania.entry." + ExCompressum.MOD_ID + ".orechidEvolved";
@@ -27,9 +30,31 @@ public class BotaniaAddon {
     public static LexiconEntry lexiconBrokenComprilla;
     public static Block runicAltar;
 
+    private static boolean enableEvolvedOrechid;
+    private static boolean disableVanillaOrechid;
+    public static int evolvedOrechidCost;
+    public static int evolvedOrechidDelay;
+    private static boolean enableBrokenComprilla;
+    public static int brokenComprillaCost;
+    public static int brokenComprillaDelay;
+
+    @Override
+    public void loadConfig(Configuration config) {
+        enableEvolvedOrechid = config.getBoolean("Enable Evolved Orechid", "compat.botania", true, "Setting this to false will disable the Evolved Orechid.");
+        disableVanillaOrechid = config.getBoolean("Disable Vanilla Orechid", "compat.botania", false, "If set to true, Botania's Orechid will not show up in the lexicon and be uncraftable.");
+        evolvedOrechidCost = config.getInt("Evolved Orechid Mana Cost", "compat.botania", 700, 0, 175000, "The mana cost of the Evolved Orechid. GoG Orechid is 700, vanilla Orechid is 17500.");
+        evolvedOrechidDelay = config.getInt("Evolved Orechid Delay", "compat.botania", 2, 1, 1200, "The ore generation delay for the Evolved Orechid in ticks. GoG Orechid is 2, vanilla Orechid is 100.");
+        enableBrokenComprilla = config.getBoolean("Enable Broken Comprilla", "compat.botania", true, "Setting this to false will disable the Broken Comprilla.");
+        brokenComprillaCost = config.getInt("Broken Comprilla Mana Cost", "compat.botania", 100, 0, 1000, "The mana cost of the Broken Comprilla (per operation).");
+        brokenComprillaDelay = config.getInt("Broken Comprilla Delay", "compat.botania", 40, 1, 1200, "The compression delay for the Broken Comprilla in ticks.");
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
-    public BotaniaAddon() {
-        if(ExCompressum.botaniaEvolvedOrechid) {
+    public void postInit() {
+        runicAltar = GameRegistry.findBlock("Botania", "runeAltar");
+
+        if(enableEvolvedOrechid) {
             BotaniaAPI.registerSubTile(SUBTILE_ORECHID_EVOLVED, SubTileOrechidEvolved.class);
             BotaniaAPI.registerSubTileSignature(SubTileOrechidEvolved.class, new SubTileOrechidEvolvedSignature());
             ItemStack orechidEvolved = ItemBlockSpecialFlower.ofType(SUBTILE_ORECHID_EVOLVED);
@@ -51,7 +76,7 @@ public class BotaniaAddon {
             BotaniaAPI.addEntry(lexiconOrechidEvolved, lexiconOrechidEvolved.category);
         }
 
-        if(ExCompressum.botaniaBrokenComprilla) {
+        if(enableBrokenComprilla) {
             BotaniaAPI.registerSubTile(SUBTILE_BROKEN_COMPRILLA, SubTileBrokenComprilla.class);
             BotaniaAPI.registerSubTileSignature(SubTileBrokenComprilla.class, new SubTileBrokenComprillaSignature());
             ItemStack brokenComprilla = ItemBlockSpecialFlower.ofType(SUBTILE_BROKEN_COMPRILLA);
@@ -73,7 +98,7 @@ public class BotaniaAddon {
             BotaniaAPI.addEntry(lexiconBrokenComprilla, lexiconBrokenComprilla.category);
         }
 
-        if(ExCompressum.botaniaDisableVanillaOrechid) {
+        if(disableVanillaOrechid) {
             Iterator<LexiconEntry> it = BotaniaAPI.getAllEntries().iterator();
             while(it.hasNext()) {
                 if(it.next().getUnlocalizedName().equals("botania.entry.orechid")) {
@@ -98,7 +123,8 @@ public class BotaniaAddon {
                 }
             }
         }
-
-        runicAltar = GameRegistry.findBlock("Botania", "runeAltar");
     }
+
+    @Override
+    public void serverStarted(FMLServerStartedEvent event) {}
 }

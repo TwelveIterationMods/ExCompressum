@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.compat.botania;
 
-import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.util.IIcon;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconEntry;
@@ -11,12 +10,12 @@ public class SubTileOrechidEvolved extends SubTileOrechid {
 
     @Override
     public int getCost() {
-        return ExCompressum.botaniaOrechidCost;
+        return BotaniaAddon.evolvedOrechidCost;
     }
 
     @Override
     public int getDelay() {
-        return ExCompressum.botaniaOrechidDelay;
+        return BotaniaAddon.evolvedOrechidDelay;
     }
 
     @Override

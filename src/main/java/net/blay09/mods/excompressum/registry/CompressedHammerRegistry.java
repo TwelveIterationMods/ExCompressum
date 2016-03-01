@@ -21,9 +21,9 @@ import java.util.Map;
 
 public class CompressedHammerRegistry {
 
-    private static Multimap<ItemInfo, Smashable> rewards = ArrayListMultimap.create();
+    private static final Multimap<ItemInfo, Smashable> rewards = ArrayListMultimap.create();
 
-    public static void register(Block source, int sourceMeta, Item output, int outputMeta, float chance, float luckMultiplier) {
+    private static void register(Block source, int sourceMeta, Item output, int outputMeta, float chance, float luckMultiplier) {
         Smashable entry = new Smashable(source, sourceMeta, output, outputMeta, chance, luckMultiplier);
         ItemInfo itemInfo = new ItemInfo(source, sourceMeta);
         rewards.put(itemInfo, entry);
@@ -49,7 +49,7 @@ public class CompressedHammerRegistry {
         return rewards;
     }
 
-    public static void register(Block source, int sourceMeta, ItemStack reward, float chance, float luckMultiplier) {
+    private static void register(Block source, int sourceMeta, ItemStack reward, float chance, float luckMultiplier) {
         for (int i = 0; i < reward.stackSize; i++) {
             register(source, sourceMeta, reward.getItem(), reward.getItemDamage(), chance, luckMultiplier);
         }

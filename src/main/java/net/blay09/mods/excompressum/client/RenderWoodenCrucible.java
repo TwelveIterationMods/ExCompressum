@@ -2,29 +2,20 @@ package net.blay09.mods.excompressum.client;
 
 import exnihilo.blocks.models.ModelCrucible;
 import exnihilo.blocks.models.ModelCrucibleInternal;
-import exnihilo.blocks.tileentities.TileEntityCrucible;
-import exnihilo.registries.ColorRegistry;
-import exnihilo.registries.CrucibleRegistry;
 import exnihilo.registries.helpers.Color;
-import exnihilo.registries.helpers.Meltable;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
-import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.opengl.GL11;
-
-import java.lang.reflect.Field;
 
 public class RenderWoodenCrucible extends TileEntitySpecialRenderer {
 
-    public static ResourceLocation[] texture = new ResourceLocation[] {
+    public static final ResourceLocation[] texture = new ResourceLocation[] {
             new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/crucible_oak.png"),
             new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/crucible_spruce.png"),
             new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/crucible_birch.png"),
@@ -33,8 +24,8 @@ public class RenderWoodenCrucible extends TileEntitySpecialRenderer {
             new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/crucible_darkoak.png")
     };
 
-    private ModelCrucible model;
-    private ModelCrucibleInternal internal;
+    private final ModelCrucible model;
+    private final ModelCrucibleInternal internal;
 
     public RenderWoodenCrucible(ModelCrucible model) {
         this.model = model;

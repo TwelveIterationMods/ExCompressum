@@ -1,28 +1,24 @@
 package net.blay09.mods.excompressum;
 
-import com.google.common.collect.Maps;
-import cpw.mods.fml.common.Loader;
+import com.google.common.collect.Lists;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.block.BlockBait;
 import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.blay09.mods.excompressum.block.BlockWoodenCrucible;
-import net.blay09.mods.excompressum.item.*;
+import net.blay09.mods.excompressum.compat.IAddon;
+import net.blay09.mods.excompressum.item.ItemCompressedCrook;
+import net.blay09.mods.excompressum.item.ItemCompressedHammer;
 import net.blay09.mods.excompressum.registry.*;
-import net.blay09.mods.excompressum.tile.TileEntityBait;
-import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
-import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
-import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
+import java.util.List;
 
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "required-after:exnihilo")
 public class ExCompressum {
@@ -36,17 +32,10 @@ public class ExCompressum {
     @SidedProxy(serverSide = "net.blay09.mods.excompressum.CommonProxy", clientSide = "net.blay09.mods.excompressum.client.ClientProxy")
     public static CommonProxy proxy;
 
-    private boolean mineTweakerHasPostReload;
     private Configuration config;
 
     public static float compressedCrookDurabilityMultiplier;
     public static float compressedCrookSpeedMultiplier;
-
-    public static float chickenStickSoundChance;
-    public static float chickenStickSpawnChance;
-    public static boolean chickenOut;
-    public static String[] chickenStickSounds;
-    public static final Map<String, String> chickenStickNames = Maps.newHashMap();
 
     public static boolean allowHeavySieveAutomation;
     public static int woodenCrucibleSpeed;
@@ -57,60 +46,15 @@ public class ExCompressum {
     public static float baitPigChance;
     public static float baitChickenChance;
 
-    public static boolean botaniaEvolvedOrechid;
-    public static boolean botaniaBrokenComprilla;
-    public static boolean botaniaDisableVanillaOrechid;
-    public static int botaniaOrechidCost;
-    public static int botaniaOrechidDelay;
-    public static int botaniaComprillaCost;
-    public static int botaniaComprillaDelay;
+    public static final ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
 
-    public static boolean tconstructModifier;
-
-    public static ItemChickenStick chickenStick;
-    public static ItemCompressedHammer compressedHammerWood;
-    public static ItemCompressedHammer compressedHammerStone;
-    public static ItemCompressedHammer compressedHammerIron;
-    public static ItemCompressedHammer compressedHammerGold;
-    public static ItemCompressedHammer compressedHammerDiamond;
-    public static ItemDoubleCompressedDiamondHammer doubleCompressedDiamondHammer;
-    public static ItemCompressedCrook compressedCrook;
-    public static ItemHeavySilkMesh heavySilkMesh;
-
-    public static BlockCompressed compressedBlock;
-    public static BlockHeavySieve heavySieve;
-    public static BlockWoodenCrucible woodenCrucible;
-    public static BlockBait bait;
-
-    public static ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
+    private final List<IAddon> addons = Lists.newArrayList();
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
-
-        chickenStickSpawnChance = config.getFloat("Chicken Stick Spawn Chance", "general", 0.008f, 0f, 1f, "The chance for the chicken stick to spawn a chicken. Set to 0 to disable.");
-        chickenStickSoundChance = config.getFloat("Chicken Stick Sound Chance", "general", 0.2f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
-        chickenStickSounds = config.getStringList("Chicken Stick Sounds", "general", new String[] {
-                "mob.chicken.say",
-                "mob.chicken.hurt",
-                "mob.chicken.plop",
-                "mob.chicken.step"
-        }, "The sound names the chicken stick will randomly play.");
-        if(config.hasKey("general", "chickenOut")) {
-            chickenOut = true;
-        }
-        String[] chickenStickNameList = config.getStringList("Custom Chicken Stick Names", "general", new String[] {}, "Format: Username=ItemName, Username can be * to affect all users");
-        chickenStickNames.put("wyld", "The Cluckington");
-        chickenStickNames.put("slowpoke101", "Dark Matter Hammer");
-        chickenStickNames.put("jake_evans", "Cock Stick");
-        for(String name : chickenStickNameList) {
-            String[] s = name.split("=");
-            if(s.length >= 2) {
-                chickenStickNames.put(s[0].toLowerCase(), s[1]);
-            }
-        }
 
         compressedCrookDurabilityMultiplier = config.getFloat("Compressed Crook Durability Multiplier", "general", 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
         compressedCrookSpeedMultiplier = config.getFloat("Compressed Crook Speed Multiplier", "general", 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
@@ -123,47 +67,8 @@ public class ExCompressum {
         baitPigChance = config.getFloat("Pig Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a pig bait will result in a pig spawn.");
         baitChickenChance = config.getFloat("Chicken Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a chicken bait will result in a chicken spawn.");
 
-        botaniaEvolvedOrechid = config.getBoolean("Enable Evolved Orechid", "compat.botania", true, "Setting this to false will disable the Evolved Orechid.");
-        botaniaDisableVanillaOrechid = config.getBoolean("Disable Vanilla Orechid", "compat.botania", false, "If set to true, Botania's Orechid will not show up in the lexicon and be uncraftable.");
-        botaniaOrechidCost = config.getInt("Evolved Orechid Mana Cost", "compat.botania", 700, 0, 175000, "The mana cost of the Evolved Orechid. GoG Orechid is 700, vanilla Orechid is 17500.");
-        botaniaOrechidDelay = config.getInt("Evolved Orechid Delay", "compat.botania", 2, 1, 1200, "The ore generation delay for the Evolved Orechid in ticks. GoG Orechid is 2, vanilla Orechid is 100.");
-        botaniaBrokenComprilla = config.getBoolean("Enable Broken Comprilla", "compat.botania", true, "Setting this to false will disable the Broken Comprilla.");
-        botaniaComprillaCost = config.getInt("Broken Comprilla Mana Cost", "compat.botania", 100, 0, 1000, "The mana cost of the Broken Comprilla (per operation).");
-        botaniaComprillaDelay = config.getInt("Broken Comprilla Delay", "compat.botania", 40, 1, 1200, "The compression delay for the Broken Comprilla in ticks.");
-
-        tconstructModifier = config.getBoolean("Enable Smashing II Modifier", "compat.tconstruct", false, "If set to true, adding a double compressed diamond hammer will add the Smashing II modifier to a Tinkers Construct tool, which allows smashing of compressed blocks.");
-
-        compressedBlock = new BlockCompressed();
-        GameRegistry.registerBlock(compressedBlock, ItemBlockCompressed.class, "compressed_dust"); // god damn it Blay. can't rename because already released
-        heavySieve = new BlockHeavySieve();
-        GameRegistry.registerBlock(heavySieve, ItemBlockHeavySieve.class, "heavySieve");
-        woodenCrucible = new BlockWoodenCrucible();
-        GameRegistry.registerBlock(woodenCrucible, ItemBlockWoodenCrucible.class, "woodenCrucible");
-        bait = new BlockBait();
-        GameRegistry.registerBlock(bait, ItemBlockBait.class, "bait");
-
-        chickenStick = new ItemChickenStick();
-        GameRegistry.registerItem(chickenStick, "chickenStick");
-        compressedHammerWood = new ItemCompressedHammer(Item.ToolMaterial.WOOD, "wood");
-        GameRegistry.registerItem(compressedHammerWood, "compressedHammerWood");
-        compressedHammerStone = new ItemCompressedHammer(Item.ToolMaterial.STONE, "stone");
-        GameRegistry.registerItem(compressedHammerStone, "compressedHammerStone");
-        compressedHammerIron = new ItemCompressedHammer(Item.ToolMaterial.IRON, "iron");
-        GameRegistry.registerItem(compressedHammerIron, "compressedHammerIron");
-        compressedHammerGold = new ItemCompressedHammer(Item.ToolMaterial.GOLD, "gold");
-        GameRegistry.registerItem(compressedHammerGold, "compressedHammerGold");
-        compressedHammerDiamond = new ItemCompressedHammer(Item.ToolMaterial.EMERALD, "diamond");
-        GameRegistry.registerItem(compressedHammerDiamond, "compressedHammerDiamond");
-        doubleCompressedDiamondHammer = new ItemDoubleCompressedDiamondHammer();
-        GameRegistry.registerItem(doubleCompressedDiamondHammer, "doubleCompressedDiamondHammer");
-        compressedCrook = new ItemCompressedCrook();
-        GameRegistry.registerItem(compressedCrook, "compressedCrook");
-        heavySilkMesh = new ItemHeavySilkMesh();
-        GameRegistry.registerItem(heavySilkMesh, "heavySilkMesh");
-
-        GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible");
-        GameRegistry.registerTileEntity(TileEntityHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
-        GameRegistry.registerTileEntity(TileEntityBait.class, "bait");
+        ModItems.init();
+        ModBlocks.init();
 
         proxy.preInit(event);
     }
@@ -181,35 +86,48 @@ public class ExCompressum {
         if (!easyMode) {
             ItemCompressedHammer.registerRecipes(config);
         }
-        if(tconstructModifier) {
-            ItemDoubleCompressedDiamondHammer.registerRecipes();
-        }
         ItemCompressedCrook.registerRecipes(config);
         BlockHeavySieve.registerRecipes(config);
         BlockWoodenCrucible.registerRecipes(config);
         BlockCompressed.registerRecipes(config);
         BlockBait.registerRecipes(config);
 
-        config.save();
-
+        boolean isLegacyMineTweaker = true;
         try {
             Class mtClass = Class.forName("minetweaker.MineTweakerImplementationAPI");
             mtClass.getMethod("onPostReload", Class.forName("minetweaker.util.IEventHandler"));
-            event.buildSoftDependProxy("MineTweaker3", "net.blay09.mods.excompressum.compat.MineTweakerPostReload");
-            mineTweakerHasPostReload = true;
+            isLegacyMineTweaker = false;
         } catch (ClassNotFoundException ignored) {
         } catch (NoSuchMethodException ignored) {}
 
-        event.buildSoftDependProxy("Botania", "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
-        event.buildSoftDependProxy("TConstruct", "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
+        if(isLegacyMineTweaker) {
+            registerAddon(event, "MineTweaker3", "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddonLegacy");
+        } else {
+            registerAddon(event, "MineTweaker3", "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
+        }
+        registerAddon(event, "Botania", "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
+        registerAddon(event, "TConstruct", "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
+
+        for(IAddon addon : addons) {
+            addon.loadConfig(config);
+            addon.postInit();
+        }
+
+        config.save();
+    }
+
+    private void registerAddon(FMLPostInitializationEvent event, String modid, String className) {
+        IAddon addon = (IAddon) event.buildSoftDependProxy(modid, className);
+        if(addon != null) {
+            addons.add(addon);
+        }
     }
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void serverStarted(FMLServerStartedEvent event) {
-        if(!mineTweakerHasPostReload && Loader.isModLoaded("MineTweaker3")) {
-            HeavySieveRegistry.reload();
-            CompressedRecipeRegistry.reload();
+        for(IAddon addon : addons) {
+            addon.serverStarted(event);
         }
     }
 

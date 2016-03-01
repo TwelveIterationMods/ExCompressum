@@ -1,12 +1,9 @@
 package net.blay09.mods.excompressum.client;
 
-import exnihilo.blocks.BlockSieve;
 import exnihilo.blocks.models.ModelSieve;
 import exnihilo.blocks.models.ModelSieveMesh;
-import exnihilo.blocks.renderers.blockItems.ItemRenderSieve;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;

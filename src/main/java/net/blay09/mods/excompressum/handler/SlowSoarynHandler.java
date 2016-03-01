@@ -9,6 +9,7 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 /**
  * They asked for it. No, they literally did.
  */
+@SuppressWarnings("unused")
 public class SlowSoarynHandler {
 
     private int scheduledHiss;

@@ -25,9 +25,9 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer {
             new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/heavy_sieve_darkoak.png")
     };
 
-    private ModelSieve model;
-    private ModelSieveMesh mesh;
-    private ModelSieveContents contents;
+    private final ModelSieve model;
+    private final ModelSieveMesh mesh;
+    private final ModelSieveContents contents;
 
     public RenderHeavySieve(ModelSieve model, ModelSieveMesh mesh) {
         this.model = model;

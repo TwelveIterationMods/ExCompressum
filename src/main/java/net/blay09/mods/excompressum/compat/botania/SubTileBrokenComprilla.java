@@ -1,7 +1,8 @@
 package net.blay09.mods.excompressum.compat.botania;
 
-import com.google.common.collect.*;
-import net.blay09.mods.excompressum.ExCompressum;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multiset;
 import net.blay09.mods.excompressum.registry.CompressedRecipeRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
@@ -18,8 +19,8 @@ import java.util.List;
 
 public class SubTileBrokenComprilla extends SubTileFunctional {
 
-    public static final int RANGE = 5;
-    public static final int RANGE_Y = 3;
+    private static final int RANGE = 5;
+    private static final int RANGE_Y = 3;
 
     private final Multiset<CompressedRecipeRegistry.CompressedRecipe> altarItems = HashMultiset.create();
     private final List<ItemStack> restItems = Lists.newArrayList();
@@ -116,12 +117,12 @@ public class SubTileBrokenComprilla extends SubTileFunctional {
         return BotaniaAddon.lexiconBrokenComprilla;
     }
 
-    public int getCost() {
-        return ExCompressum.botaniaComprillaCost;
+    private int getCost() {
+        return BotaniaAddon.brokenComprillaCost;
     }
 
-    public int getDelay() {
-        return ExCompressum.botaniaComprillaDelay;
+    private int getDelay() {
+        return BotaniaAddon.brokenComprillaDelay;
     }
 
 }

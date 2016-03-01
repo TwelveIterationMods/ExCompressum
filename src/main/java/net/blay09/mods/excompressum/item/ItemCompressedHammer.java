@@ -6,8 +6,9 @@ import exnihilo.items.hammers.IHammer;
 import exnihilo.items.hammers.ItemHammerBase;
 import exnihilo.registries.HammerRegistry;
 import exnihilo.registries.helpers.Smashable;
-import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -24,7 +25,7 @@ import java.util.Set;
 
 public class ItemCompressedHammer extends ItemTool implements IHammer {
 
-    public static Set blocksEffectiveAgainst = Sets.newHashSet(ItemHammerBase.blocksEffectiveAgainst);
+    private static final Set blocksEffectiveAgainst = Sets.newHashSet(ItemHammerBase.blocksEffectiveAgainst);
 
     private final String name;
 
@@ -89,35 +90,35 @@ public class ItemCompressedHammer extends ItemTool implements IHammer {
         if (config.getBoolean("Compressed Wooden Hammer", "items", true, "If set to false, the recipe for the compressed wooden hammer will be disabled.")) {
             Item itemHammerWood = GameRegistry.findItem("exnihilo", "hammer_wood");
             if (itemHammerWood != null) {
-                GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedHammerWood), "###", "###", "###", '#', itemHammerWood);
+                GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerWood), "###", "###", "###", '#', itemHammerWood);
             }
         }
 
         if (config.getBoolean("Compressed Stone Hammer", "items", true, "If set to false, the recipe for the compressed stone hammer will be disabled.")) {
             Item itemHammerStone = GameRegistry.findItem("exnihilo", "hammer_stone");
             if (itemHammerStone != null) {
-                GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedHammerStone), "###", "###", "###", '#', itemHammerStone);
+                GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerStone), "###", "###", "###", '#', itemHammerStone);
             }
         }
 
         if (config.getBoolean("Compressed Iron Hammer", "items", true, "If set to false, the recipe for the compressed iron hammer will be disabled.")) {
             Item itemHammerIron = GameRegistry.findItem("exnihilo", "hammer_iron");
             if (itemHammerIron != null) {
-                GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedHammerIron), "###", "###", "###", '#', itemHammerIron);
+                GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerIron), "###", "###", "###", '#', itemHammerIron);
             }
         }
 
         if (config.getBoolean("Compressed Gold Hammer", "items", true, "If set to false, the recipe for the compressed gold hammer will be disabled.")) {
             Item itemHammerGold = GameRegistry.findItem("exnihilo", "hammer_gold");
             if (itemHammerGold != null) {
-                GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedHammerGold), "###", "###", "###", '#', itemHammerGold);
+                GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerGold), "###", "###", "###", '#', itemHammerGold);
             }
         }
 
         if (config.getBoolean("Compressed Diamond Hammer", "items", true, "If set to false, the recipe for the compressed diamond hammer will be disabled.")) {
             Item itemHammerDiamond = GameRegistry.findItem("exnihilo", "hammer_diamond");
             if (itemHammerDiamond != null) {
-                GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedHammerDiamond), "###", "###", "###", '#', itemHammerDiamond);
+                GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerDiamond), "###", "###", "###", '#', itemHammerDiamond);
             }
         }
     }

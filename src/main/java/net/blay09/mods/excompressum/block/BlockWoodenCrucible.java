@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -138,10 +139,10 @@ public class BlockWoodenCrucible extends BlockContainer {
     public static void registerRecipes(Configuration config) {
         if (config.getBoolean("Wooden Crucible", "blocks", true, "If set to false, the recipe for the wooden crucible will be disabled.")) {
             for (int i = 0; i < 4; i++) {
-                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ExCompressum.woodenCrucible, 1, i), "p p", "p p", "psp", 'p', new ItemStack(Blocks.log, 1, i), 's', "slabWood"));
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.woodenCrucible, 1, i), "p p", "p p", "psp", 'p', new ItemStack(Blocks.log, 1, i), 's', "slabWood"));
             }
             for (int i = 0; i < 2; i++) {
-                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ExCompressum.woodenCrucible, 1, 4 + i), "p p", "p p", "psp", 'p', new ItemStack(Blocks.log2, 1, i), 's', "slabWood"));
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.woodenCrucible, 1, 4 + i), "p p", "p p", "psp", 'p', new ItemStack(Blocks.log2, 1, i), 's', "slabWood"));
             }
         }
     }

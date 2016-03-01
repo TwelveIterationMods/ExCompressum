@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import exnihilo.items.ItemCrook;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ModItems;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,7 +41,7 @@ public class ItemCompressedCrook extends ItemCrook {
         if(config.getBoolean("Compressed Crook", "items", true, "If set to false, the recipe for the compressed crook will be disabled.")) {
             Item itemCrook = GameRegistry.findItem("exnihilo", "crook");
             if(itemCrook != null) {
-                GameRegistry.addRecipe(new ItemStack(ExCompressum.compressedCrook), "## ", " # ", " # ", '#', itemCrook);
+                GameRegistry.addRecipe(new ItemStack(ModItems.compressedCrook), "## ", " # ", " # ", '#', itemCrook);
             }
         }
     }

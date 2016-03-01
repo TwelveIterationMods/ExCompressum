@@ -6,10 +6,11 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import exnihilo.blocks.models.ModelCrucible;
 import exnihilo.blocks.models.ModelSieve;
 import exnihilo.blocks.models.ModelSieveMesh;
-import exnihilo.blocks.tileentities.TileEntityCrucible;
 import net.blay09.mods.excompressum.CommonProxy;
-import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ModBlocks;
+import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.handler.SlowSoarynHandler;
+import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
 import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
@@ -19,6 +20,7 @@ import net.minecraft.util.Session;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
+@SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
 
     @Override
@@ -28,11 +30,11 @@ public class ClientProxy extends CommonProxy {
         ModelSieve sieve = new ModelSieve();
         ModelSieveMesh mesh = new ModelSieveMesh();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeavySieve.class, new RenderHeavySieve(sieve, mesh));
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ExCompressum.heavySieve), new ItemRenderHeavySieve(sieve, mesh));
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.heavySieve), new ItemRenderHeavySieve(sieve, mesh));
 
         ModelCrucible model = new ModelCrucible();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodenCrucible.class, new RenderWoodenCrucible(model));
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ExCompressum.woodenCrucible), new ItemRenderWoodenCrucible(model));
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.woodenCrucible), new ItemRenderWoodenCrucible(model));
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBait.class, new RenderBait());
     }
@@ -40,10 +42,10 @@ public class ClientProxy extends CommonProxy {
     private void setupSillyThings() {
         String customName = getCustomName(Minecraft.getMinecraft().getSession());
         if(customName != null) {
-            ExCompressum.chickenStick.setUnlocalizedName(customName);
+            ModItems.chickenStick.setUnlocalizedName(customName);
         }
 
-        if(!ExCompressum.chickenOut) {
+        if(!ChickenStickRegistry.chickenOut) {
             String userName = Minecraft.getMinecraft().getSession().getUsername();
             if (userName.toLowerCase().equals("soaryn") || userName.toLowerCase().equals("slowpoke101")) {
                 SlowSoarynHandler handler = new SlowSoarynHandler();
@@ -54,9 +56,9 @@ public class ClientProxy extends CommonProxy {
     }
 
     private String getCustomName(Session session) {
-        String customName = ExCompressum.chickenStickNames.get(session.getUsername().toLowerCase());
+        String customName = ChickenStickRegistry.chickenStickNames.get(session.getUsername().toLowerCase());
         if(customName == null) {
-            customName = ExCompressum.chickenStickNames.get("*");
+            customName = ChickenStickRegistry.chickenStickNames.get("*");
         }
         return customName;
     }

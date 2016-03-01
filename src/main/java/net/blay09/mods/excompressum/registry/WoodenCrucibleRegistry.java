@@ -31,9 +31,9 @@ public class WoodenCrucibleRegistry {
         }
     }
 
-    private static Hashtable<ItemInfo, WoodenMeltable> entries = new Hashtable<ItemInfo, WoodenMeltable>();
+    private static final Hashtable<ItemInfo, WoodenMeltable> entries = new Hashtable<ItemInfo, WoodenMeltable>();
 
-    public static void register(ItemStack itemStack, FluidStack fluidStack, Block appearance, int appearanceMeta) {
+    private static void register(ItemStack itemStack, FluidStack fluidStack, Block appearance, int appearanceMeta) {
         entries.put(new ItemInfo(itemStack), new WoodenMeltable(itemStack, fluidStack, appearance, appearanceMeta));
     }
 

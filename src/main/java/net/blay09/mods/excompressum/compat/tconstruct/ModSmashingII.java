@@ -9,8 +9,8 @@ public class ModSmashingII extends ModBoolean {
 
     public static final String NAME = "Smashing II";
 
-    public ModSmashingII(ItemStack[] items, int effect) {
-        super(items, effect, NAME, "\u00a79", NAME);
+    public ModSmashingII(ItemStack[] items) {
+        super(items, 0, NAME, "\u00a79", NAME);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ModSmashingII extends ModBoolean {
         addToolTip(tool, "\u00a79" + NAME, "\u00a79" + key);
     }
 
-    public boolean validType(ToolCore tool) {
+    private boolean validType(ToolCore tool) {
         return tool.getToolName().equals("Mattock") ||
                 tool.getToolName().equals("Hatchet") ||
                 tool.getToolName().equals("Broadsword") ||

@@ -25,8 +25,8 @@ public class RecipeHandlerHeavySieve extends TemplateRecipeHandler {
 
     public class CachedSieveRecipe extends CachedRecipe {
 
-        private List<PositionedStack> input = new ArrayList<PositionedStack>();
-        private List<PositionedStack> outputs = new ArrayList<PositionedStack>();
+        private final List<PositionedStack> input = new ArrayList<PositionedStack>();
+        private final List<PositionedStack> outputs = new ArrayList<PositionedStack>();
         public Point focus;
 
         public CachedSieveRecipe(List<ItemStack> variations, ItemStack base, ItemStack focus)
@@ -51,11 +51,6 @@ public class RecipeHandlerHeavySieve extends TemplateRecipeHandler {
                     row++;
                 }
             }
-        }
-
-        public CachedSieveRecipe(List<ItemStack> variations)
-        {
-            this(variations, null, null);
         }
 
         @Override
@@ -131,7 +126,7 @@ public class RecipeHandlerHeavySieve extends TemplateRecipeHandler {
 
     @Override
     public void loadTransferRects() {
-        this.transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(75, 22, 15, 13), "exnihilo.sieve", new Object[0]));
+        this.transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(75, 22, 15, 13), "exnihilo.sieve"));
     }
 
     @Override

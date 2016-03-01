@@ -5,11 +5,9 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import exnihilo.registries.HammerRegistry;
 import exnihilo.registries.helpers.Smashable;
-import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityChicken;
@@ -74,7 +72,7 @@ public class ItemChickenStick extends ItemTool {
         }
         world.setBlockToAir(x, y, z);
         playChickenSound(world, x, y, z);
-        if(!world.isRemote && world.rand.nextFloat() <= ExCompressum.chickenStickSpawnChance) {
+        if(!world.isRemote && world.rand.nextFloat() <= ChickenStickRegistry.chickenStickSpawnChance) {
             EntityChicken entityChicken = new EntityChicken(world);
             entityChicken.setPosition(x, y, z);
             world.spawnEntityInWorld(entityChicken);
@@ -106,10 +104,10 @@ public class ItemChickenStick extends ItemTool {
     }
 
     private void playChickenSound(World world, int x, int y, int z) {
-        if(world.rand.nextFloat() <= ExCompressum.chickenStickSoundChance) {
+        if(world.rand.nextFloat() <= ChickenStickRegistry.chickenStickSoundChance) {
             String soundName = null;
-            if(ExCompressum.chickenStickSounds.length > 0) {
-                soundName = ExCompressum.chickenStickSounds[world.rand.nextInt(ExCompressum.chickenStickSounds.length)];
+            if(ChickenStickRegistry.chickenStickSounds.length > 0) {
+                soundName = ChickenStickRegistry.chickenStickSounds[world.rand.nextInt(ChickenStickRegistry.chickenStickSounds.length)];
             }
             if(soundName != null) {
                 world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, soundName, 1f, world.rand.nextFloat() * 0.1f + 0.9f);
