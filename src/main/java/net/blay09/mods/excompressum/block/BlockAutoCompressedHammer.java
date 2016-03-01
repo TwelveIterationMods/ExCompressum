@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class BlockAutoCompressedHammer extends BlockContainer implements IDismantleable {
 
-    protected BlockAutoCompressedHammer() {
+    public BlockAutoCompressedHammer() {
         super(Material.iron);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);

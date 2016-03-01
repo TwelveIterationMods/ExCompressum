@@ -6,11 +6,13 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import net.blay09.mods.excompressum.block.BlockBait;
 import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.blay09.mods.excompressum.block.BlockWoodenCrucible;
 import net.blay09.mods.excompressum.compat.IAddon;
+import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.item.ItemCompressedCrook;
 import net.blay09.mods.excompressum.item.ItemCompressedHammer;
 import net.blay09.mods.excompressum.registry.*;
@@ -46,6 +48,9 @@ public class ExCompressum {
     public static float baitPigChance;
     public static float baitChickenChance;
 
+    public static int autoCompressedHammerEnergy;
+    public static float autoCompressedHammerSpeed;
+
     public static final ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
 
     private final List<IAddon> addons = Lists.newArrayList();
@@ -67,8 +72,13 @@ public class ExCompressum {
         baitPigChance = config.getFloat("Pig Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a pig bait will result in a pig spawn.");
         baitChickenChance = config.getFloat("Chicken Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a chicken bait will result in a chicken spawn.");
 
+        autoCompressedHammerSpeed = config.getFloat("Auto Compressed Hammer Speed", "general", 0.005f, 0.0001f, 0.1f, "The speed at which the auto compressed hammer will smash stuff.");
+        autoCompressedHammerEnergy = config.getInt("Auto Compressed Hammer Cost", "general", 40, 0, 100000, "The energy cost of the auto compressed hammer per tick.");
+
         ModItems.init();
         ModBlocks.init();
+
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 
         proxy.preInit(event);
     }

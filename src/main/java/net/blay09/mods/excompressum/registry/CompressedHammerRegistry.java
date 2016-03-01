@@ -33,6 +33,10 @@ public class CompressedHammerRegistry {
         return rewards.get(new ItemInfo(block, meta));
     }
 
+    public static Collection<Smashable> getRewards(ItemStack itemStack) {
+        return rewards.get(new ItemInfo(itemStack));
+    }
+
     public static Collection<Smashable> getRewards(ItemInfo itemInfo) {
         return rewards.get(itemInfo);
     }
