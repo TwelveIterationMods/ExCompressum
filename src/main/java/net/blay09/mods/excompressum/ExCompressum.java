@@ -38,17 +38,24 @@ public class ExCompressum {
 
     private boolean mineTweakerHasPostReload;
     private Configuration config;
+
     public static float compressedCrookDurabilityMultiplier;
     public static float compressedCrookSpeedMultiplier;
+
     public static float chickenStickSoundChance;
     public static float chickenStickSpawnChance;
     public static boolean chickenOut;
     public static String[] chickenStickSounds;
+    public static final Map<String, String> chickenStickNames = Maps.newHashMap();
+
     public static boolean allowHeavySieveAutomation;
     public static int woodenCrucibleSpeed;
+
     public static float baitWolfChance;
     public static float baitOcelotChance;
-    public static final Map<String, String> chickenStickNames = Maps.newHashMap();
+    public static float baitCowChance;
+    public static float baitPigChance;
+    public static float baitChickenChance;
 
     public static boolean botaniaEvolvedOrechid;
     public static boolean botaniaBrokenComprilla;
@@ -82,6 +89,7 @@ public class ExCompressum {
     public void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
+
         chickenStickSpawnChance = config.getFloat("Chicken Stick Spawn Chance", "general", 0.008f, 0f, 1f, "The chance for the chicken stick to spawn a chicken. Set to 0 to disable.");
         chickenStickSoundChance = config.getFloat("Chicken Stick Sound Chance", "general", 0.2f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
         chickenStickSounds = config.getStringList("Chicken Stick Sounds", "general", new String[] {
@@ -93,12 +101,6 @@ public class ExCompressum {
         if(config.hasKey("general", "chickenOut")) {
             chickenOut = true;
         }
-        compressedCrookDurabilityMultiplier = config.getFloat("Compressed Crook Durability Multiplier", "general", 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
-        compressedCrookSpeedMultiplier = config.getFloat("Compressed Crook Speed Multiplier", "general", 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
-        allowHeavySieveAutomation = config.getBoolean("Allow Heavy Sieve Automation", "general", false, "Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)");
-        woodenCrucibleSpeed = config.getInt("Wooden Crucible Speed", "general", 1, 1, 10, "The speed at which the wooden crucible extracts water. 0.1 is equivalent to a torch below a crucible, 0.3 is equivalent to fire below a crucible.");
-        baitWolfChance = config.getFloat("Wolf Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a wolf bait will result in a wolf spawn.");
-        baitOcelotChance = config.getFloat("Ocelot Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that an ocelot bait will result in an ocelot spawn.");
         String[] chickenStickNameList = config.getStringList("Custom Chicken Stick Names", "general", new String[] {}, "Format: Username=ItemName, Username can be * to affect all users");
         chickenStickNames.put("wyld", "The Cluckington");
         chickenStickNames.put("slowpoke101", "Dark Matter Hammer");
@@ -109,6 +111,17 @@ public class ExCompressum {
                 chickenStickNames.put(s[0].toLowerCase(), s[1]);
             }
         }
+
+        compressedCrookDurabilityMultiplier = config.getFloat("Compressed Crook Durability Multiplier", "general", 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
+        compressedCrookSpeedMultiplier = config.getFloat("Compressed Crook Speed Multiplier", "general", 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
+        allowHeavySieveAutomation = config.getBoolean("Allow Heavy Sieve Automation", "general", false, "Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)");
+        woodenCrucibleSpeed = config.getInt("Wooden Crucible Speed", "general", 1, 1, 10, "The speed at which the wooden crucible extracts water. 0.1 is equivalent to a torch below a crucible, 0.3 is equivalent to fire below a crucible.");
+
+        baitWolfChance = config.getFloat("Wolf Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a wolf bait will result in a wolf spawn.");
+        baitOcelotChance = config.getFloat("Ocelot Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that an ocelot bait will result in an ocelot spawn.");
+        baitCowChance = config.getFloat("Cow Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a cow bait will result in a cow spawn.");
+        baitPigChance = config.getFloat("Pig Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a pig bait will result in a pig spawn.");
+        baitChickenChance = config.getFloat("Chicken Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a chicken bait will result in a chicken spawn.");
 
         botaniaEvolvedOrechid = config.getBoolean("Enable Evolved Orechid", "compat.botania", true, "Setting this to false will disable the Evolved Orechid.");
         botaniaDisableVanillaOrechid = config.getBoolean("Disable Vanilla Orechid", "compat.botania", false, "If set to true, Botania's Orechid will not show up in the lexicon and be uncraftable.");

@@ -58,7 +58,7 @@ public class BlockBait extends BlockContainer {
     @Override
     @SuppressWarnings("unchecked")
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 5; i++) {
             list.add(new ItemStack(item, 1, i));
         }
     }
@@ -87,6 +87,15 @@ public class BlockBait extends BlockContainer {
         if (config.getBoolean("Ocelot Bait", "blocks", true, "If set to false, the recipe for the ocelot bait will be disabled.")) {
             GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 1), Items.gunpowder, new ItemStack(Items.fish, 1, OreDictionary.WILDCARD_VALUE));
             GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ExCompressum.bait, 1, 1), Items.gunpowder, "listAllfishraw")); // Pam's Fishies
+        }
+        if (config.getBoolean("Cow Bait", "blocks", true, "If set to false, the recipe for the cow bait will be disabled.")) {
+            GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 2), Items.wheat, Items.wheat);
+        }
+        if (config.getBoolean("Pig Bait", "blocks", true, "If set to false, the recipe for the pig bait will be disabled.")) {
+            GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 3), Items.carrot, Items.carrot);
+        }
+        if (config.getBoolean("Chicken Bait", "blocks", true, "If set to false, the recipe for the chicken bait will be disabled.")) {
+            GameRegistry.addShapelessRecipe(new ItemStack(ExCompressum.bait, 1, 4), Items.wheat_seeds, Items.wheat_seeds);
         }
     }
 

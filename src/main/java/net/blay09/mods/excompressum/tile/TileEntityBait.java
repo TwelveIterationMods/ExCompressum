@@ -3,8 +3,7 @@ package net.blay09.mods.excompressum.tile;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -46,6 +45,9 @@ public class TileEntityBait extends TileEntity {
         switch(metadata) {
             case 0: return i == 0 ? new ItemStack(Items.beef) : new ItemStack(Items.bone);
             case 1: return i == 0 ? new ItemStack(Items.gunpowder) : new ItemStack(Items.fish);
+            case 2: return new ItemStack(Items.wheat);
+            case 3: return new ItemStack(Items.carrot);
+            case 4: return new ItemStack(Items.wheat_seeds);
         }
         return null;
     }
@@ -54,6 +56,9 @@ public class TileEntityBait extends TileEntity {
         switch(metadata) {
             case 0: return new EntityWolf(world);
             case 1: return new EntityOcelot(world);
+            case 2: return new EntityCow(world);
+            case 3: return new EntityPig(world);
+            case 4: return new EntityChicken(world);
         }
         return null;
     }
@@ -62,6 +67,9 @@ public class TileEntityBait extends TileEntity {
         switch(metadata) {
             case 0: return ExCompressum.baitWolfChance;
             case 1: return ExCompressum.baitOcelotChance;
+            case 2: return ExCompressum.baitCowChance;
+            case 3: return ExCompressum.baitPigChance;
+            case 4: return ExCompressum.baitChickenChance;
         }
         return 0;
     }
