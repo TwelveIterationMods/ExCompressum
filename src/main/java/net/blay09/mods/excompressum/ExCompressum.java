@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -14,20 +15,19 @@ import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.blay09.mods.excompressum.block.BlockWoodenCrucible;
 import net.blay09.mods.excompressum.handler.CompressedHammerHandler;
 import net.blay09.mods.excompressum.item.*;
-import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
-import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
-import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
-import net.blay09.mods.excompressum.registry.WoodenCrucibleRegistry;
+import net.blay09.mods.excompressum.registry.*;
 import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.Map;
 
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "required-after:exnihilo")
@@ -59,6 +59,8 @@ public class ExCompressum {
     public static boolean botaniaDisableVanillaOrechid;
     public static int botaniaOrechidCost;
     public static int botaniaOrechidDelay;
+    public static int botaniaComprillaCost;
+    public static int botaniaComprillaDelay;
 
     public static ItemChickenStick chickenStick;
     public static ItemCompressedHammer compressedHammerWood;
@@ -74,12 +76,7 @@ public class ExCompressum {
     public static BlockWoodenCrucible woodenCrucible;
     public static BlockBait bait;
 
-    public static CreativeTabs creativeTab = new CreativeTabs("excompressum") {
-        @Override
-        public Item getTabIconItem() {
-            return ExCompressum.compressedHammerIron;
-        }
-    };
+    public static ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
@@ -118,7 +115,9 @@ public class ExCompressum {
 
         botaniaDisableVanillaOrechid = config.getBoolean("Disable Vanilla Orechid", "compat.botania", false, "If set to true, Botania's Orechid will not show up in the lexicon and be uncraftable.");
         botaniaOrechidCost = config.getInt("Evolved Orechid Mana Cost", "compat.botania", 700, 0, 175000, "The mana cost of the Evolved Orechid. GoG Orechid is 700, vanilla Orechid is 17500.");
-        botaniaOrechidDelay = config.getInt("Evolved Orechid Delay", "compat.botania", 2, 1, 12000, "The ore generation delay for the Evolved Orechid in ticks. GoG Orechid is 2, vanilla Orechid is 100.");
+        botaniaOrechidDelay = config.getInt("Evolved Orechid Delay", "compat.botania", 2, 1, 1200, "The ore generation delay for the Evolved Orechid in ticks. GoG Orechid is 2, vanilla Orechid is 100.");
+        botaniaComprillaCost = config.getInt("Broken Comprilla Mana Cost", "compat.botania", 100, 0, 1000, "The mana cost of the Broken Comprilla (per operation).");
+        botaniaComprillaDelay = config.getInt("Broken Comprilla Delay", "compat.botania", 40, 1, 1200, "The compression delay for the Broken Comprilla in ticks.");
 
         compressedBlock = new BlockCompressed();
         GameRegistry.registerBlock(compressedBlock, ItemBlockCompressed.class, "compressed_dust"); // god damn it Blay. can't rename because already released
@@ -160,6 +159,7 @@ public class ExCompressum {
         CompressedHammerRegistry.load(config, easyMode);
         ChickenStickRegistry.load(config);
         HeavySieveRegistry.load(config);
+        CompressedRecipeRegistry.reload();
         WoodenCrucibleRegistry.load(config);
 
         if (!easyMode) {
@@ -181,7 +181,7 @@ public class ExCompressum {
         } catch (ClassNotFoundException ignored) {
         } catch (NoSuchMethodException ignored) {}
 
-        event.buildSoftDependProxy("Botania", "net.blay09.mods.excompressum.compat.BotaniaAddon");
+        event.buildSoftDependProxy("Botania", "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
     }
 
     @Mod.EventHandler
@@ -189,6 +189,7 @@ public class ExCompressum {
     public void serverStarted(FMLServerStartedEvent event) {
         if(!mineTweakerHasPostReload && Loader.isModLoaded("MineTweaker3")) {
             HeavySieveRegistry.reload();
+            CompressedRecipeRegistry.reload();
         }
     }
 

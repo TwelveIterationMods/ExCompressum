@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.compat;
+package net.blay09.mods.excompressum.compat.botania;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.util.IIcon;

@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.compat;
+package net.blay09.mods.excompressum.compat.nei;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;

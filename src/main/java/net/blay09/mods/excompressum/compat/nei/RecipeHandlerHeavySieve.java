@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.compat;
+package net.blay09.mods.excompressum.compat.nei;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.nei.NEIServerUtils;

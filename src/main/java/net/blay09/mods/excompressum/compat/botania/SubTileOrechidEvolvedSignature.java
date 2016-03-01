@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.compat;
+package net.blay09.mods.excompressum.compat.botania;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;

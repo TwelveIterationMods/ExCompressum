@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.compat;
 import cpw.mods.fml.common.Optional;
 import minetweaker.MineTweakerImplementationAPI;
 import minetweaker.util.IEventHandler;
+import net.blay09.mods.excompressum.registry.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
 
 @Optional.Interface(modid = "MineTweaker3", iface = "minetweaker.util.IEventHandler", striprefs = true)
@@ -15,6 +16,7 @@ public class MineTweakerPostReload implements IEventHandler<MineTweakerImplement
     @Override
     public void handle(MineTweakerImplementationAPI.ReloadEvent reloadEvent) {
         HeavySieveRegistry.reload();
+        CompressedRecipeRegistry.reload();
     }
 
 }
