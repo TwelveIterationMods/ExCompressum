@@ -35,6 +35,7 @@ public class CompressedRecipeRegistry {
         }
     }
 
+    private static final List<CompressedRecipe> recipesSmall = Lists.newArrayList();
     private static final List<CompressedRecipe> recipes = Lists.newArrayList();
     private static final InventoryCompressedMatcher matcherSmall = new InventoryCompressedMatcher(2, 2);
     private static final InventoryCompressedMatcher matcher = new InventoryCompressedMatcher(3, 3);
@@ -66,7 +67,7 @@ public class CompressedRecipeRegistry {
                 matcherSmall.fill(sourceStack);
                 if(recipe.matches(matcherSmall, null)) {
                     sourceStack.stackSize = 4;
-                    recipes.add(new CompressedRecipe(sourceStack, recipe.getCraftingResult(matcherSmall).copy()));
+                    recipesSmall.add(new CompressedRecipe(sourceStack, recipe.getCraftingResult(matcherSmall).copy()));
                 }
             } else if(recipe.getRecipeSize() == 9) {
                 matcher.fill(sourceStack);
@@ -96,11 +97,12 @@ public class CompressedRecipeRegistry {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     private static List<ItemStack> getRecipeSources(ShapedOreRecipe recipe) {
         for(Object obj : recipe.getInput()) {
             if(obj != null) {
-                if(obj instanceof String) {
-                    return OreDictionary.getOres((String) obj, false);
+                if(obj instanceof List) {
+                    return (List<ItemStack>) obj;
                 } else if(obj instanceof ItemStack) {
                     return Collections.singletonList((ItemStack) obj);
                 } else if(obj instanceof Block) {
@@ -113,11 +115,12 @@ public class CompressedRecipeRegistry {
         return Collections.emptyList();
     }
 
+    @SuppressWarnings("unchecked")
     private static List<ItemStack> getRecipeSources(ShapelessOreRecipe recipe) {
         for(Object obj : recipe.getInput()) {
             if(obj != null) {
-                if(obj instanceof String) {
-                    return OreDictionary.getOres((String) obj, false);
+                if(obj instanceof List) {
+                    return (List<ItemStack>) obj;
                 } else if(obj instanceof ItemStack) {
                     return Collections.singletonList((ItemStack) obj);
                 } else if(obj instanceof Block) {
@@ -135,6 +138,11 @@ public class CompressedRecipeRegistry {
             return null;
         }
         for(CompressedRecipe recipe : recipes) {
+            if(itemStack.isItemEqual(recipe.getSourceStack()) && ItemStack.areItemStackTagsEqual(itemStack, recipe.getSourceStack())) {
+                return recipe;
+            }
+        }
+        for(CompressedRecipe recipe : recipesSmall) {
             if(itemStack.isItemEqual(recipe.getSourceStack()) && ItemStack.areItemStackTagsEqual(itemStack, recipe.getSourceStack())) {
                 return recipe;
             }
