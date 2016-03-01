@@ -32,7 +32,7 @@ public class BlockHeavySieve extends BlockContainer {
 
     public BlockHeavySieve() {
         super(Material.wood);
-        setCreativeTab(CreativeTabs.tabDecorations);
+        setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
         setBlockName(ExCompressum.MOD_ID + ":heavy_sieve");
     }

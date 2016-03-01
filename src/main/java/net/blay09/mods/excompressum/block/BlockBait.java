@@ -26,7 +26,7 @@ public class BlockBait extends BlockContainer {
     public BlockBait() {
         super(Material.circuits);
         setHardness(0.1f);
-        setCreativeTab(CreativeTabs.tabMisc);
+        setCreativeTab(ExCompressum.creativeTab);
         setBlockBounds(0f, 0f, 0f, 1f, 0.1f, 1f);
     }
 

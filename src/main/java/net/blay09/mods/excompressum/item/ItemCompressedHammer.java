@@ -24,6 +24,7 @@ public class ItemCompressedHammer extends ItemTool implements ICompressedHammer 
     public ItemCompressedHammer(ToolMaterial material, String name) {
         super(5f, material, blocksEffectiveAgainst);
         this.name = name;
+        setCreativeTab(ExCompressum.creativeTab);
         setUnlocalizedName(ExCompressum.MOD_ID + ":compressed_hammer_" + name);
     }
 

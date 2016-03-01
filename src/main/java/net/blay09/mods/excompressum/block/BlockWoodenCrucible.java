@@ -26,7 +26,7 @@ public class BlockWoodenCrucible extends BlockContainer {
 
     public BlockWoodenCrucible() {
         super(Material.wood);
-        setCreativeTab(CreativeTabs.tabDecorations);
+        setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
         setBlockName(ExCompressum.MOD_ID + ":woodenCrucible");
     }

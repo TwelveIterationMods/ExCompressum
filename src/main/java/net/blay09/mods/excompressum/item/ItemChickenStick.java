@@ -23,6 +23,7 @@ public class ItemChickenStick extends ItemTool {
         super(0f, ToolMaterial.EMERALD, blocksEffectiveAgainst);
         setUnlocalizedName(ExCompressum.MOD_ID + ":chicken_stick");
         setTextureName(ExCompressum.MOD_ID + ":chicken_stick");
+        setCreativeTab(ExCompressum.creativeTab);
         setMaxDamage(0);
     }
 

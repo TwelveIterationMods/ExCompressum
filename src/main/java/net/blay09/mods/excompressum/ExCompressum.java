@@ -9,7 +9,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.block.BlockBait;
-import net.blay09.mods.excompressum.block.BlockCompressedDust;
+import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.blay09.mods.excompressum.block.BlockWoodenCrucible;
 import net.blay09.mods.excompressum.handler.CompressedHammerHandler;
@@ -21,6 +21,7 @@ import net.blay09.mods.excompressum.registry.WoodenCrucibleRegistry;
 import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -64,10 +65,17 @@ public class ExCompressum {
     public static ItemCompressedCrook compressedCrook;
     public static ItemHeavySilkMesh heavySilkMesh;
 
-    public static BlockCompressedDust compressedDust;
+    public static BlockCompressed compressedBlock;
     public static BlockHeavySieve heavySieve;
     public static BlockWoodenCrucible woodenCrucible;
     public static BlockBait bait;
+
+    public static CreativeTabs creativeTab = new CreativeTabs("excompressum") {
+        @Override
+        public Item getTabIconItem() {
+            return ExCompressum.compressedHammerIron;
+        }
+    };
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
@@ -104,8 +112,8 @@ public class ExCompressum {
             }
         }
 
-        compressedDust = new BlockCompressedDust();
-        GameRegistry.registerBlock(compressedDust, "compressed_dust"); // god damn it Blay. can't rename because already released
+        compressedBlock = new BlockCompressed();
+        GameRegistry.registerBlock(compressedBlock, ItemBlockCompressed.class, "compressed_dust"); // god damn it Blay. can't rename because already released
         heavySieve = new BlockHeavySieve();
         GameRegistry.registerBlock(heavySieve, ItemBlockHeavySieve.class, "heavySieve");
         woodenCrucible = new BlockWoodenCrucible();
@@ -152,7 +160,7 @@ public class ExCompressum {
         ItemCompressedCrook.registerRecipes(config);
         BlockHeavySieve.registerRecipes(config);
         BlockWoodenCrucible.registerRecipes(config);
-        BlockCompressedDust.registerRecipes(config);
+        BlockCompressed.registerRecipes(config);
         BlockBait.registerRecipes(config);
 
         config.save();

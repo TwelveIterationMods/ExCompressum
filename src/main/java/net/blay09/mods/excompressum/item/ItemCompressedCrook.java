@@ -16,6 +16,7 @@ public class ItemCompressedCrook extends ItemCrook {
         super(ToolMaterial.WOOD);
         setTextureName(ExCompressum.MOD_ID + ":compressed_crook");
         setMaxDamage((int) (ToolMaterial.WOOD.getMaxUses() * ExCompressum.compressedCrookDurabilityMultiplier));
+        setCreativeTab(ExCompressum.creativeTab);
         efficiencyOnProperMaterial *= ExCompressum.compressedCrookSpeedMultiplier;
     }
 

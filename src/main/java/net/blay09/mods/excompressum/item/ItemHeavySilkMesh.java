@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 public class ItemHeavySilkMesh extends Item {
 
     public ItemHeavySilkMesh() {
-        setCreativeTab(CreativeTabs.tabMisc);
+        setCreativeTab(ExCompressum.creativeTab);
         setUnlocalizedName(ExCompressum.MOD_ID + ":heavy_silk_mesh");
         setTextureName(ExCompressum.MOD_ID + ":heavy_silk_mesh");
     }

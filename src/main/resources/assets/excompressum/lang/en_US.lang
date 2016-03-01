@@ -8,6 +8,11 @@ item.excompressum:chicken_stick.name=Chicken Stick
 item.excompressum:heavy_silk_mesh.name=Heavy Silk Mesh
 
 tile.excompressum:compressed_dust.name=Compressed Dust
+tile.excompressum:compressed_cobblestone.name=Compressed Cobblestone
+tile.excompressum:compressed_sand.name=Compressed Sand
+tile.excompressum:compressed_dirt.name=Compressed Dirt
+tile.excompressum:compressed_gravel.name=Compressed Gravel
+tile.excompressum:compressed_flint.name=Compressed Flint
 tile.excompressum:heavy_sieve_0.name=Heavy Oak Sieve
 tile.excompressum:heavy_sieve_1.name=Heavy Spruce Sieve
 tile.excompressum:heavy_sieve_2.name=Heavy Birch Sieve
@@ -23,3 +28,5 @@ tile.excompressum:wooden_crucible_5.name=Dark Oak Crucible
 
 item.excompressum:bait_0.name=Wolf Bait
 item.excompressum:bait_1.name=Ocelot Bait
+
+itemGroup.excompressum=Ex Compressum
