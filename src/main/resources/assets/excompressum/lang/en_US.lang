@@ -31,6 +31,9 @@ tile.excompressum:wooden_crucible_5.name=Dark Oak Crucible
 
 item.excompressum:bait_0.name=Wolf Bait
 item.excompressum:bait_1.name=Ocelot Bait
+item.excompressum:bait_2.name=Cow Bait
+item.excompressum:bait_3.name=Pig Bait
+item.excompressum:bait_4.name=Chicken Bait
 
 itemGroup.excompressum=Ex Compressum
 
