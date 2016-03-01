@@ -57,9 +57,9 @@ public class CompressedHammerRegistry {
 
     public static void load(Configuration config, boolean easyMode) {
         String[] smashables = config.getStringList("Smashables", "registries", new String[]{
-                "ExtraUtilities:cobblestone_compressed:0=9:minecraft:gravel:0:1:0",
-                "ExtraUtilities:cobblestone_compressed:12=9:minecraft:sand:0:1:0",
-                "ExtraUtilities:cobblestone_compressed:14=9:exnihilo:dust:0:1:0"
+                "ExtraUtilities:cobblestone_compressed:0=9:minecraft:gravel:0:1:0", "excompressum:compressed_dust:1=9:minecraft:gravel:0:1:0",
+                "ExtraUtilities:cobblestone_compressed:12=9:minecraft:sand:0:1:0", "excompressum:compressed_dust:2=9:minecraft:sand:0:1:0",
+                "ExtraUtilities:cobblestone_compressed:14=9:exnihilo:dust:0:1:0", "excompressum:compressed_dust:3=9:exnihilo:dust:0:1:0",
         }, "Here you can add additional smashables for the compressed hammers. Format: modid:name:meta=stackSize:modid:name:meta:chance:luckMultiplier");
         for (String smashable : smashables) {
             String[] s = smashable.split("=");

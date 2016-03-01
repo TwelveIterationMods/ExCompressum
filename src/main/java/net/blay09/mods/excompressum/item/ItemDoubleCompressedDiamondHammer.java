@@ -20,6 +20,7 @@ public class ItemDoubleCompressedDiamondHammer extends Item {
         setCreativeTab(ExCompressum.creativeTab);
         setTextureName(ExCompressum.MOD_ID + ":double_compressed_diamond_hammer");
         setUnlocalizedName(ExCompressum.MOD_ID + ":double_compressed_diamond_hammer");
+        setMaxStackSize(1);
     }
 
     @Override

@@ -57,9 +57,9 @@ public class HeavySieveRegistry {
     public static void reload() {
         siftables.clear();
         String[] generatedSiftables = config.getStringList("Generate Heavy Siftables", "registries", new String[]{
-                "ExtraUtilities:cobblestone_compressed:8=minecraft:dirt:0:1:5",
-                "ExtraUtilities:cobblestone_compressed:12=minecraft:gravel:0:1:5",
-                "ExtraUtilities:cobblestone_compressed:14=minecraft:sand:0:1:5",
+                "ExtraUtilities:cobblestone_compressed:8=minecraft:dirt:0:1:5", "excompressum:compressed_dust:4=minecraft:dirt:0:1:5",
+                "ExtraUtilities:cobblestone_compressed:12=minecraft:gravel:0:1:5", "excompressum:compressed_dust:2=minecraft:dirt:0:1:5",
+                "ExtraUtilities:cobblestone_compressed:14=minecraft:sand:0:1:5", "excompressum:compressed_dust:3=minecraft:dirt:0:1:2",
                 "excompressum:compressed_dust=exnihilo:dust:0:1:5"
         }, "Here you can map normal siftables to heavy siftable blocks to automatically generate rewards for them based on ExNihilo's registry. Format: modid:name:meta=modid:name:meta:rarityMultiplier:amountMultiplier");
         for (String siftable : generatedSiftables) {
