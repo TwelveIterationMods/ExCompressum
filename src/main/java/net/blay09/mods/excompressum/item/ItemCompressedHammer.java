@@ -2,20 +2,27 @@ package net.blay09.mods.excompressum.item;
 
 import com.google.common.collect.Sets;
 import cpw.mods.fml.common.registry.GameRegistry;
+import exnihilo.items.hammers.IHammer;
 import exnihilo.items.hammers.ItemHammerBase;
 import exnihilo.registries.HammerRegistry;
+import exnihilo.registries.helpers.Smashable;
 import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 
+import java.util.Collection;
 import java.util.Set;
 
-public class ItemCompressedHammer extends ItemTool implements ICompressedHammer {
+public class ItemCompressedHammer extends ItemTool implements IHammer {
 
     public static Set blocksEffectiveAgainst = Sets.newHashSet(ItemHammerBase.blocksEffectiveAgainst);
 
@@ -42,12 +49,34 @@ public class ItemCompressedHammer extends ItemTool implements ICompressedHammer 
     }
 
     @Override
-    public boolean isHammer(ItemStack itemStack) {
+    public boolean onBlockStartBreak(ItemStack itemStack, int x, int y, int z, EntityPlayer entityPlayer) {
+        World world = entityPlayer.worldObj;
+        if(world.isRemote || EnchantmentHelper.getSilkTouchModifier(entityPlayer)) {
+            return false;
+        }
+        Block block = world.getBlock(x, y, z);
+        int metadata = world.getBlockMetadata(x, y, z);
+        Collection<Smashable> rewards = CompressedHammerRegistry.getRewards(block, metadata);
+        if (rewards == null || rewards.isEmpty()) {
+            return false;
+        }
+        int fortune = EnchantmentHelper.getFortuneModifier(entityPlayer);
+        for (Smashable reward : rewards) {
+            if (world.rand.nextFloat() <= reward.chance + (reward.luckMultiplier * fortune)) {
+                EntityItem entityItem = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(reward.item, 1, reward.meta));
+                double motion = 0.05;
+                entityItem.motionX = world.rand.nextGaussian() * motion;
+                entityItem.motionY = 0.2;
+                entityItem.motionZ = world.rand.nextGaussian() * motion;
+                world.spawnEntityInWorld(entityItem);
+            }
+        }
+        world.setBlockToAir(x, y, z);
         return true;
     }
 
     @Override
-    public boolean isCompressedHammer(ItemStack itemStack) {
+    public boolean isHammer(ItemStack itemStack) {
         return true;
     }
 

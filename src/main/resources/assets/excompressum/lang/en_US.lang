@@ -3,9 +3,12 @@ item.excompressum:compressed_hammer_stone.name=Compressed Stone Hammer
 item.excompressum:compressed_hammer_iron.name=Compressed Iron Hammer
 item.excompressum:compressed_hammer_gold.name=Compressed Gold Hammer
 item.excompressum:compressed_hammer_diamond.name=Compressed Diamond Hammer
+item.excompressum:double_compressed_diamond_hammer.name=Double Compressed Diamond Hammer
 item.excompressum:compressed_crook.name=Compressed Crook
 item.excompressum:chicken_stick.name=Chicken Stick
 item.excompressum:heavy_silk_mesh.name=Heavy Silk Mesh
+
+tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
 
 tile.excompressum:compressed_dust.name=Compressed Dust
 tile.excompressum:compressed_cobblestone.name=Compressed Cobblestone

@@ -3,16 +3,23 @@ package net.blay09.mods.excompressum.item;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import exnihilo.registries.HammerRegistry;
+import exnihilo.registries.helpers.Smashable;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 
+import java.util.Collection;
 import java.util.Set;
 
 public class ItemChickenStick extends ItemTool {
@@ -41,14 +48,38 @@ public class ItemChickenStick extends ItemTool {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase entityLiving) {
+    public boolean onBlockStartBreak(ItemStack itemStack, int x, int y, int z, EntityPlayer entityPlayer) {
+        World world = entityPlayer.worldObj;
+        if(world.isRemote || entityPlayer instanceof FakePlayer) {
+            return false;
+        }
+        Block block = world.getBlock(x, y, z);
+        int metadata = world.getBlockMetadata(x, y, z);
+        if (!ChickenStickRegistry.isValidBlock(block, metadata)) {
+            return false;
+        }
+        Collection<Smashable> rewards = HammerRegistry.getRewards(block, metadata);
+        if (rewards == null || rewards.isEmpty()) {
+            return false;
+        }
+        for (Smashable reward : rewards) {
+            if (world.rand.nextFloat() <= reward.chance) {
+                EntityItem entityItem = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(reward.item, 1, reward.meta));
+                double motion = 0.05;
+                entityItem.motionX = world.rand.nextGaussian() * motion;
+                entityItem.motionY = 0.2;
+                entityItem.motionZ = world.rand.nextGaussian() * motion;
+                world.spawnEntityInWorld(entityItem);
+            }
+        }
+        world.setBlockToAir(x, y, z);
         playChickenSound(world, x, y, z);
         if(!world.isRemote && world.rand.nextFloat() <= ExCompressum.chickenStickSpawnChance) {
             EntityChicken entityChicken = new EntityChicken(world);
             entityChicken.setPosition(x, y, z);
             world.spawnEntityInWorld(entityChicken);
         }
-        return super.onBlockDestroyed(itemStack, world, block, x, y, z, entityLiving);
+        return true;
     }
 
     @Override

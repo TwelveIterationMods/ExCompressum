@@ -56,6 +56,10 @@ repositories {
         name 'RX14'
         url 'http://mvn.rx14.co.uk/repo'
     }
+    maven {
+        name 'TiConMantle'
+        url "http://dvs1.progwml6.com/files/maven/"
+    }
     ivy {
         name "MineTweaker"
         artifactPattern "http://minetweaker3.powerofbytes.com/download/[module](-[classifier])-[revision].[ext]"
@@ -72,6 +76,7 @@ repositories {
 
 dependencies {
     compile "exnihilo:Ex-Nihilo:1.38-49:deobf"
+    compile "tconstruct:TConstruct:1.7.10-1.8.8.build1003:deobf"
     compile "com.azanor.baubles:Baubles:1.7.10-1.0.1.9.3"
     compile "vazkii.botania:Botania:r1.8-250.681"
     compile name: "CoFHCore", version: "[1.7.10]3.1.2-325", ext: "jar"
@@ -79,6 +84,7 @@ dependencies {
     compile name: "MineTweaker3", version: "1.7.10-3.0.10B", classifier: "Dev", ext: "jar"
     provided "codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev"
     provided "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
+    compile "codechicken:ForgeMultipart:1.7.10-1.2.0.345:dev"
 }
 
 processResources

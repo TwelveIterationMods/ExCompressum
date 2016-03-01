@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -13,21 +12,16 @@ import net.blay09.mods.excompressum.block.BlockBait;
 import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.blay09.mods.excompressum.block.BlockWoodenCrucible;
-import net.blay09.mods.excompressum.handler.CompressedHammerHandler;
 import net.blay09.mods.excompressum.item.*;
 import net.blay09.mods.excompressum.registry.*;
 import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
 import java.util.Map;
 
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "required-after:exnihilo")
@@ -62,12 +56,15 @@ public class ExCompressum {
     public static int botaniaComprillaCost;
     public static int botaniaComprillaDelay;
 
+    public static boolean tconstructModifier;
+
     public static ItemChickenStick chickenStick;
     public static ItemCompressedHammer compressedHammerWood;
     public static ItemCompressedHammer compressedHammerStone;
     public static ItemCompressedHammer compressedHammerIron;
     public static ItemCompressedHammer compressedHammerGold;
     public static ItemCompressedHammer compressedHammerDiamond;
+    public static ItemDoubleCompressedDiamondHammer doubleCompressedDiamondHammer;
     public static ItemCompressedCrook compressedCrook;
     public static ItemHeavySilkMesh heavySilkMesh;
 
@@ -81,8 +78,6 @@ public class ExCompressum {
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(new CompressedHammerHandler());
-
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
         chickenStickSpawnChance = config.getFloat("Chicken Stick Spawn Chance", "general", 0.008f, 0f, 1f, "The chance for the chicken stick to spawn a chicken. Set to 0 to disable.");
@@ -119,6 +114,8 @@ public class ExCompressum {
         botaniaComprillaCost = config.getInt("Broken Comprilla Mana Cost", "compat.botania", 100, 0, 1000, "The mana cost of the Broken Comprilla (per operation).");
         botaniaComprillaDelay = config.getInt("Broken Comprilla Delay", "compat.botania", 40, 1, 1200, "The compression delay for the Broken Comprilla in ticks.");
 
+        tconstructModifier = config.getBoolean("Enable Smashing II Modifier", "compat.tconstruct", false, "If set to true, adding a double compressed diamond hammer will add the Smashing II modifier to a Tinkers Construct tool, which allows smashing of compressed blocks.");
+
         compressedBlock = new BlockCompressed();
         GameRegistry.registerBlock(compressedBlock, ItemBlockCompressed.class, "compressed_dust"); // god damn it Blay. can't rename because already released
         heavySieve = new BlockHeavySieve();
@@ -140,6 +137,8 @@ public class ExCompressum {
         GameRegistry.registerItem(compressedHammerGold, "compressedHammerGold");
         compressedHammerDiamond = new ItemCompressedHammer(Item.ToolMaterial.EMERALD, "diamond");
         GameRegistry.registerItem(compressedHammerDiamond, "compressedHammerDiamond");
+        doubleCompressedDiamondHammer = new ItemDoubleCompressedDiamondHammer();
+        GameRegistry.registerItem(doubleCompressedDiamondHammer, "doubleCompressedDiamondHammer");
         compressedCrook = new ItemCompressedCrook();
         GameRegistry.registerItem(compressedCrook, "compressedCrook");
         heavySilkMesh = new ItemHeavySilkMesh();
@@ -165,6 +164,9 @@ public class ExCompressum {
         if (!easyMode) {
             ItemCompressedHammer.registerRecipes(config);
         }
+        if(tconstructModifier) {
+            ItemDoubleCompressedDiamondHammer.registerRecipes();
+        }
         ItemCompressedCrook.registerRecipes(config);
         BlockHeavySieve.registerRecipes(config);
         BlockWoodenCrucible.registerRecipes(config);
@@ -182,6 +184,7 @@ public class ExCompressum {
         } catch (NoSuchMethodException ignored) {}
 
         event.buildSoftDependProxy("Botania", "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
+        event.buildSoftDependProxy("TConstruct", "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
     }
 
     @Mod.EventHandler
