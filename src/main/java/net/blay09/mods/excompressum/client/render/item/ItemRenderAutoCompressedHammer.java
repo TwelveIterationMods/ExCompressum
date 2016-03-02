@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.client.render.item;
 
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;

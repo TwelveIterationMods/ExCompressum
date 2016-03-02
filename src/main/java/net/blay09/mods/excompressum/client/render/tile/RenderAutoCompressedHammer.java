@@ -7,7 +7,11 @@ import net.blay09.mods.excompressum.client.render.model.ModelAutoCompressedHamme
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderBlaze;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -58,7 +62,9 @@ public class RenderAutoCompressedHammer extends TileEntitySpecialRenderer {
         GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         model.renderSolid();
+        GL11.glEnable(GL11.GL_BLEND);
         model.renderGlass();
+        GL11.glDisable(GL11.GL_BLEND);
 
         if(tileEntityHammer.getCurrentStack() != null) {
             GL11.glPushMatrix();
@@ -69,16 +75,19 @@ public class RenderAutoCompressedHammer extends TileEntitySpecialRenderer {
             GL11.glPopMatrix();
         }
 
-        RenderItem.renderInFrame = true;
-        GL11.glRotatef((float) Math.sin(tileEntityHammer.getProgress() * 100) * 15, 0, 0, 1);
-        RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0, 0f, 0f);
-        RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, -0.3, 0f, 0f);
-        RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0.3, 0f, 0f);
-        RenderItem.renderInFrame = false;
+        if(tileEntity.hasWorldObj()) {
+            RenderItem.renderInFrame = true;
+            GL11.glRotatef((float) Math.sin(tileEntityHammer.getProgress() * 100) * 15, 0, 0, 1);
+            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0, 0f, 0f);
+            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, -0.3, 0f, 0f);
+            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0.3, 0f, 0f);
+            RenderItem.renderInFrame = false;
+        }
         if(!oldRescaleNormal) {
             GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         }
         GL11.glPopMatrix();
+        GL11.glColor4f(1f, 1f, 1f, 1f);
     }
 
     private void renderContent(Block block, int metadata, float progress) {

@@ -7,13 +7,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import exnihilo.particles.ParticleSieve;
 import exnihilo.registries.helpers.SiftingResult;
-import exnihilo.registries.helpers.Smashable;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -124,11 +120,11 @@ public class TileEntityAutoHeavySieve extends TileEntity implements ISidedInvent
     }
 
     public int getEffectiveEnergy() {
-        return ExCompressum.autoCompressedHammerEnergy;
+        return ExCompressum.autoHeavySieveEnergy;
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressum.autoCompressedHammerSpeed;
+        return ExCompressum.autoHeavySieveSpeed;
     }
 
     public float getEffectiveLuck() {

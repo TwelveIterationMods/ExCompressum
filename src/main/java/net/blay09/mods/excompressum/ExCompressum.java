@@ -49,6 +49,8 @@ public class ExCompressum {
     public static float autoCompressedHammerSpeed;
     public static int autoCompressorEnergy;
     public static float autoCompressorSpeed;
+    public static int autoHeavySieveEnergy;
+    public static float autoHeavySieveSpeed;
 
     public static final ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
 
@@ -73,6 +75,8 @@ public class ExCompressum {
 
         autoCompressedHammerSpeed = config.getFloat("Auto Compressed Hammer Speed", "general", 0.005f, 0.0001f, 0.1f, "The speed at which the auto compressed hammer will smash stuff.");
         autoCompressedHammerEnergy = config.getInt("Auto Compressed Hammer Cost", "general", 40, 0, 100000, "The energy cost of the auto compressed hammer per tick.");
+        autoHeavySieveSpeed = config.getFloat("Auto Heavy Sieve Speed", "general", 0.005f, 0.0001f, 0.1f, "The speed at which the auto heavy sieve will sift stuff.");
+        autoHeavySieveEnergy = config.getInt("Auto Heavy Sieve Cost", "general", 40, 0, 100000, "The energy cost of the auto heavy sieve per tick.");
         autoCompressorSpeed = config.getFloat("Auto Compressor Speed", "general", 0.1f, 0.0001f, 1f, "The speed at which the auto compressor will compress stuff.");
         autoCompressorEnergy = config.getInt("Auto Compressor Cost", "general", 5, 0, 100000, "The energy cost of the auto compressor per tick.");
 

@@ -20,6 +20,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 
@@ -32,6 +33,11 @@ public class BlockAutoHeavySieve extends BlockContainer implements IDismantleabl
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
         setBlockName(ExCompressum.MOD_ID + ":auto_heavy_sieve");
+    }
+
+    @Override
+    public IIcon getIcon(int side, int metadata) {
+        return BlockHeavySieve.meshIcon;
     }
 
     @Override

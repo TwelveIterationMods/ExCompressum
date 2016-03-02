@@ -16,7 +16,7 @@ public class TConstructAddon implements IAddon {
 
     @Override
     public void loadConfig(Configuration config) {
-        enableModifiers = config.getBoolean("Enable Smashing II Modifier", "compat.tconstruct", false, "If set to true, adding a double compressed diamond hammer will add the Smashing II modifier to a Tinkers Construct tool, which allows smashing of compressed blocks.");
+        enableModifiers = config.getBoolean("Enable Smashing II Modifier", "compat.tconstruct", true, "If set to true, adding a double compressed diamond hammer will add the Smashing II modifier to a Tinkers Construct tool, which allows smashing of compressed blocks.");
     }
 
     @Override

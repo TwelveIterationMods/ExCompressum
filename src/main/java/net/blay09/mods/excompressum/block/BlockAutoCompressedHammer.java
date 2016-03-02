@@ -6,6 +6,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.client.render.item.ItemRenderAutoCompressedHammer;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
 import net.minecraft.block.Block;
