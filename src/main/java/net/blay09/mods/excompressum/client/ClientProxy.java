@@ -9,19 +9,14 @@ import exnihilo.blocks.models.ModelSieveMesh;
 import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.client.render.item.ItemRenderAutoCompressedHammer;
 import net.blay09.mods.excompressum.client.render.item.ItemRenderAutoHeavySieve;
 import net.blay09.mods.excompressum.client.render.item.ItemRenderHeavySieve;
 import net.blay09.mods.excompressum.client.render.item.ItemRenderWoodenCrucible;
-import net.blay09.mods.excompressum.client.render.tile.RenderAutoHeavySieve;
-import net.blay09.mods.excompressum.client.render.tile.RenderBait;
-import net.blay09.mods.excompressum.client.render.tile.RenderHeavySieve;
-import net.blay09.mods.excompressum.client.render.tile.RenderWoodenCrucible;
+import net.blay09.mods.excompressum.client.render.tile.*;
 import net.blay09.mods.excompressum.handler.SlowSoarynHandler;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
-import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
-import net.blay09.mods.excompressum.tile.TileEntityBait;
-import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
-import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
+import net.blay09.mods.excompressum.tile.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.util.Session;
@@ -45,6 +40,9 @@ public class ClientProxy extends CommonProxy {
         ModelCrucible model = new ModelCrucible();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodenCrucible.class, new RenderWoodenCrucible(model));
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.woodenCrucible), new ItemRenderWoodenCrucible(model));
+
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoCompressedHammer.class, new RenderAutoCompressedHammer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoCompressedHammer), new ItemRenderAutoCompressedHammer());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBait.class, new RenderBait());
     }

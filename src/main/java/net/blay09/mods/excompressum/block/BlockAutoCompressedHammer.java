@@ -11,6 +11,7 @@ import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +20,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 
@@ -26,11 +28,35 @@ import java.util.ArrayList;
 
 public class BlockAutoCompressedHammer extends BlockContainer implements IDismantleable {
 
+    public static final IIcon[] destroyStages = new IIcon[10];
+
     public BlockAutoCompressedHammer() {
         super(Material.iron);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
         setBlockName(ExCompressum.MOD_ID + ":auto_compressed_hammer");
+    }
+
+    @Override
+    public void registerBlockIcons(IIconRegister iconRegister) {
+        for (int i = 0; i < destroyStages.length; i++) {
+            destroyStages[i] = iconRegister.registerIcon("destroy_stage_" + i);
+        }
+    }
+
+    @Override
+    public int getRenderType() {
+        return -1;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
     }
 
     @Override
@@ -57,7 +83,7 @@ public class BlockAutoCompressedHammer extends BlockContainer implements IDisman
                 world.spawnEntityInWorld(entityItem);
             }
         }
-        if(((TileEntityAutoCompressedHammer) tileEntity).getCurrentStack() != null) {
+        if (((TileEntityAutoCompressedHammer) tileEntity).getCurrentStack() != null) {
             EntityItem entityItem = new EntityItem(world, x, y, z, ((TileEntityAutoCompressedHammer) tileEntity).getCurrentStack());
             double motion = 0.05;
             entityItem.motionX = world.rand.nextGaussian() * motion;
@@ -101,7 +127,7 @@ public class BlockAutoCompressedHammer extends BlockContainer implements IDisman
     }
 
     public static void registerRecipes(Configuration config) {
-        if(Loader.isModLoaded("CoFHCore")) {
+        if (Loader.isModLoaded("CoFHCore")) {
             if (config.getBoolean("Auto Compressed Hammer", "blocks", true, "Set this to false to disable the recipe for the auto compressed hammer.")) {
                 GameRegistry.addRecipe(new ItemStack(ModBlocks.autoCompressedHammer), "BPB", "HHH", "BPB", 'P', Blocks.heavy_weighted_pressure_plate, 'H', ModItems.compressedHammerDiamond, 'B', Blocks.iron_block);
             }
