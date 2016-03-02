@@ -28,6 +28,7 @@ tile.excompressum:wooden_crucible_2.name=Birch Crucible
 tile.excompressum:wooden_crucible_3.name=Jungle Crucible
 tile.excompressum:wooden_crucible_4.name=Acacia Crucible
 tile.excompressum:wooden_crucible_5.name=Dark Oak Crucible
+tile.excompressum:auto_compressor.name=Auto Compressor
 
 item.excompressum:bait_0.name=Wolf Bait
 item.excompressum:bait_1.name=Ocelot Bait

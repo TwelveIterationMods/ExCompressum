@@ -6,10 +6,7 @@ import net.blay09.mods.excompressum.item.ItemBlockBait;
 import net.blay09.mods.excompressum.item.ItemBlockCompressed;
 import net.blay09.mods.excompressum.item.ItemBlockHeavySieve;
 import net.blay09.mods.excompressum.item.ItemBlockWoodenCrucible;
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
-import net.blay09.mods.excompressum.tile.TileEntityBait;
-import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
-import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
+import net.blay09.mods.excompressum.tile.*;
 
 public class ModBlocks {
     public static BlockCompressed compressedBlock;
@@ -17,6 +14,7 @@ public class ModBlocks {
     public static BlockWoodenCrucible woodenCrucible;
     public static BlockBait bait;
     public static BlockAutoCompressedHammer autoCompressedHammer;
+    public static BlockAutoCompressor autoCompressor;
 
     public static void init() {
         compressedBlock = new BlockCompressed();
@@ -29,10 +27,13 @@ public class ModBlocks {
         GameRegistry.registerBlock(bait, ItemBlockBait.class, "bait");
         autoCompressedHammer = new BlockAutoCompressedHammer();
         GameRegistry.registerBlock(autoCompressedHammer, "autoCompressedHammer");
+        autoCompressor = new BlockAutoCompressor();
+        GameRegistry.registerBlock(autoCompressor, "autoCompressor");
 
         GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible");
         GameRegistry.registerTileEntity(TileEntityHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
         GameRegistry.registerTileEntity(TileEntityBait.class, "bait");
         GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, "autoCompressedHammer");
+        GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, "autoCompressor");
     }
 }
