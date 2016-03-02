@@ -1,6 +1,7 @@
-package net.blay09.mods.excompressum.client;
+package net.blay09.mods.excompressum.client.render.item;
 
 import exnihilo.blocks.models.ModelCrucible;
+import net.blay09.mods.excompressum.client.render.tile.RenderWoodenCrucible;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;

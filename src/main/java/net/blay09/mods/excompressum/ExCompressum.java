@@ -87,22 +87,15 @@ public class ExCompressum {
     @Mod.EventHandler
     @SuppressWarnings("unused unchecked")
     public void postInit(FMLPostInitializationEvent event) {
-        boolean easyMode = config.getBoolean("Easy Mode", "general", false, "Set this to true to enable easy-mode, which disables the compressed hammers and makes compressed smashables work for normal hammers instead.");
+        boolean easyMode = config.getBoolean("Easy Mode", "general", false, "Set this to true to enable easy-mode, which makes compressed smashables work for normal hammers instead.");
         CompressedHammerRegistry.load(config, easyMode);
         ChickenStickRegistry.load(config);
         HeavySieveRegistry.load(config);
         CompressedRecipeRegistry.reload();
         WoodenCrucibleRegistry.load(config);
 
-        if (!easyMode) {
-            ItemCompressedHammer.registerRecipes(config);
-        }
-        ItemCompressedCrook.registerRecipes(config);
-        BlockHeavySieve.registerRecipes(config);
-        BlockWoodenCrucible.registerRecipes(config);
-        BlockCompressed.registerRecipes(config);
-        BlockBait.registerRecipes(config);
-        BlockAutoCompressor.registerRecipes(config);
+        ModItems.registerRecipes(config);
+        ModBlocks.registerRecipes(config);
 
         boolean isLegacyMineTweaker = true;
         try {
@@ -111,12 +104,12 @@ public class ExCompressum {
             isLegacyMineTweaker = false;
         } catch (ClassNotFoundException ignored) {
         } catch (NoSuchMethodException ignored) {}
-
         if(isLegacyMineTweaker) {
             registerAddon(event, "MineTweaker3", "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddonLegacy");
         } else {
             registerAddon(event, "MineTweaker3", "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
         }
+
         registerAddon(event, "Botania", "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
         registerAddon(event, "TConstruct", "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
 

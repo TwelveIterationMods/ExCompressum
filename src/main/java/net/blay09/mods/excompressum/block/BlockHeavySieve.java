@@ -115,10 +115,6 @@ public class BlockHeavySieve extends BlockContainer {
 
     public static void registerRecipes(Configuration config) {
         if (config.getBoolean("Heavy Sieve", "blocks", true, "If set to false, the recipe for the heavy sieve will be disabled.")) {
-            Item itemSilkMesh = GameRegistry.findItem("exnihilo", "mesh");
-            if (itemSilkMesh != null) {
-                GameRegistry.addRecipe(new ItemStack(ModItems.heavySilkMesh), "##", "##", '#', itemSilkMesh);
-            }
             for (int i = 0; i < 4; i++) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.log, 1, i), 'm', ModItems.heavySilkMesh, 's', "stickWood"));
             }

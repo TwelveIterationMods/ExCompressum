@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.client;
+package net.blay09.mods.excompressum.client.render.tile;
 
 import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.minecraft.client.renderer.entity.RenderItem;

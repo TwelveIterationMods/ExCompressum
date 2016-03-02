@@ -3,7 +3,9 @@ package net.blay09.mods.excompressum.client.gui;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.ContainerAutoCompressedHammer;
+import net.blay09.mods.excompressum.container.ContainerAutoHeavySieve;
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
+import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -11,13 +13,13 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
-public class GuiAutoCompressedHammer extends GuiContainer {
+public class GuiAutoHeavySieve extends GuiContainer {
 
-    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoCompressedHammer.png");
-    private TileEntityAutoCompressedHammer tileEntity;
+    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoHeavySieve.png");
+    private TileEntityAutoHeavySieve tileEntity;
 
-    public GuiAutoCompressedHammer(InventoryPlayer inventoryPlayer, TileEntityAutoCompressedHammer tileEntity) {
-        super(new ContainerAutoCompressedHammer(inventoryPlayer, tileEntity));
+    public GuiAutoHeavySieve(InventoryPlayer inventoryPlayer, TileEntityAutoHeavySieve tileEntity) {
+        super(new ContainerAutoHeavySieve(inventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
         xSize = 176;
         ySize = 166;

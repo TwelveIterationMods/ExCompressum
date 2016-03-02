@@ -3,10 +3,13 @@ package net.blay09.mods.excompressum.handler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.blay09.mods.excompressum.client.gui.GuiAutoCompressedHammer;
 import net.blay09.mods.excompressum.client.gui.GuiAutoCompressor;
+import net.blay09.mods.excompressum.client.gui.GuiAutoHeavySieve;
 import net.blay09.mods.excompressum.container.ContainerAutoCompressedHammer;
 import net.blay09.mods.excompressum.container.ContainerAutoCompressor;
+import net.blay09.mods.excompressum.container.ContainerAutoHeavySieve;
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
+import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -14,6 +17,7 @@ import net.minecraft.world.World;
 public class GuiHandler implements IGuiHandler {
     public static final int GUI_AUTO_COMPRESSED_HAMMER = 0;
     public static final int GUI_AUTO_COMPRESSOR = 1;
+    public static final int GUI_AUTO_HEAVY_SIEVE = 2;
 
     @Override
     public Object getServerGuiElement(int id, EntityPlayer entityPlayer, World world, int x, int y, int z) {
@@ -27,6 +31,11 @@ public class GuiHandler implements IGuiHandler {
             case GUI_AUTO_COMPRESSOR:
                 if(tileEntity instanceof TileEntityAutoCompressor) {
                     return new ContainerAutoCompressor(entityPlayer.inventory, (TileEntityAutoCompressor) tileEntity);
+                }
+                break;
+            case GUI_AUTO_HEAVY_SIEVE:
+                if(tileEntity instanceof TileEntityAutoHeavySieve) {
+                    return new ContainerAutoHeavySieve(entityPlayer.inventory, (TileEntityAutoHeavySieve) tileEntity);
                 }
                 break;
         }
@@ -45,6 +54,11 @@ public class GuiHandler implements IGuiHandler {
             case GUI_AUTO_COMPRESSOR:
                 if(tileEntity instanceof TileEntityAutoCompressor) {
                     return new GuiAutoCompressor(entityPlayer.inventory, (TileEntityAutoCompressor) tileEntity);
+                }
+                break;
+            case GUI_AUTO_HEAVY_SIEVE:
+                if(tileEntity instanceof TileEntityAutoHeavySieve) {
+                    return new GuiAutoHeavySieve(entityPlayer.inventory, (TileEntityAutoHeavySieve) tileEntity);
                 }
                 break;
         }

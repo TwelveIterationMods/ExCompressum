@@ -9,8 +9,16 @@ import exnihilo.blocks.models.ModelSieveMesh;
 import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.client.render.item.ItemRenderAutoHeavySieve;
+import net.blay09.mods.excompressum.client.render.item.ItemRenderHeavySieve;
+import net.blay09.mods.excompressum.client.render.item.ItemRenderWoodenCrucible;
+import net.blay09.mods.excompressum.client.render.tile.RenderAutoHeavySieve;
+import net.blay09.mods.excompressum.client.render.tile.RenderBait;
+import net.blay09.mods.excompressum.client.render.tile.RenderHeavySieve;
+import net.blay09.mods.excompressum.client.render.tile.RenderWoodenCrucible;
 import net.blay09.mods.excompressum.handler.SlowSoarynHandler;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
+import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
 import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
@@ -31,6 +39,8 @@ public class ClientProxy extends CommonProxy {
         ModelSieveMesh mesh = new ModelSieveMesh();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeavySieve.class, new RenderHeavySieve(sieve, mesh));
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.heavySieve), new ItemRenderHeavySieve(sieve, mesh));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHeavySieve.class, new RenderAutoHeavySieve(sieve, mesh));
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoHeavySieve), new ItemRenderAutoHeavySieve(sieve, mesh));
 
         ModelCrucible model = new ModelCrucible();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodenCrucible.class, new RenderWoodenCrucible(model));

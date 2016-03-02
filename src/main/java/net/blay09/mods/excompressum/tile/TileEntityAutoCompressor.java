@@ -208,9 +208,10 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[]{
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
-        };
+        if(side == ForgeDirection.UP.ordinal()) {
+            return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+        }
+        return new int[] { 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
     }
 
     @Override
@@ -220,7 +221,7 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
 
     @Override
     public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-        return slot > 0;
+        return slot >= 12;
     }
 
     @Override

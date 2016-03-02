@@ -7,6 +7,11 @@ item.excompressum:double_compressed_diamond_hammer.name=Double Compressed Diamon
 item.excompressum:compressed_crook.name=Compressed Crook
 item.excompressum:chicken_stick.name=Chicken Stick
 item.excompressum:heavy_silk_mesh.name=Heavy Silk Mesh
+item.excompressum:bait_0.name=Wolf Bait
+item.excompressum:bait_1.name=Ocelot Bait
+item.excompressum:bait_2.name=Cow Bait
+item.excompressum:bait_3.name=Pig Bait
+item.excompressum:bait_4.name=Chicken Bait
 
 tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
 
@@ -29,12 +34,8 @@ tile.excompressum:wooden_crucible_3.name=Jungle Crucible
 tile.excompressum:wooden_crucible_4.name=Acacia Crucible
 tile.excompressum:wooden_crucible_5.name=Dark Oak Crucible
 tile.excompressum:auto_compressor.name=Auto Compressor
-
-item.excompressum:bait_0.name=Wolf Bait
-item.excompressum:bait_1.name=Ocelot Bait
-item.excompressum:bait_2.name=Cow Bait
-item.excompressum:bait_3.name=Pig Bait
-item.excompressum:bait_4.name=Chicken Bait
+tile.excompressum:auto_compressed_hammer.name=Auto Compressed Hammer
+tile.excompressum:auto_heavy_sieve.name=Auto Heavy Sieve
 
 itemGroup.excompressum=Ex Compressum
 

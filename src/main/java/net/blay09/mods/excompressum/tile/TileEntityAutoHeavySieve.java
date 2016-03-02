@@ -5,9 +5,12 @@ import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import exnihilo.particles.ParticleSieve;
+import exnihilo.registries.helpers.SiftingResult;
 import exnihilo.registries.helpers.Smashable;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityDiggingFX;
@@ -21,13 +24,14 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Collection;
 
 @Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
-public class TileEntityAutoCompressedHammer extends TileEntity implements ISidedInventory, IEnergyHandler {
+public class TileEntityAutoHeavySieve extends TileEntity implements ISidedInventory, IEnergyHandler {
 
     private static final int UPDATE_INTERVAL = 20;
 
@@ -35,14 +39,20 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
     private ItemStack[] inventory = new ItemStack[getSizeInventory()];
     private ItemStack currentStack;
 
+    private boolean spawnParticles;
     private int ticksSinceUpdate;
     private boolean isDirty;
     private float progress;
 
     @Override
     public void updateEntity() {
+        if (worldObj.isRemote && spawnParticles) {
+            spawnFX();
+        }
+
         ticksSinceUpdate++;
         if (ticksSinceUpdate > UPDATE_INTERVAL) {
+            spawnParticles = false;
             if (isDirty) {
                 worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                 isDirty = false;
@@ -52,7 +62,7 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
         int effectiveEnergy = getEffectiveEnergy();
         if (storage.getEnergyStored() > effectiveEnergy) {
             if (currentStack == null) {
-                if (inventory[0] != null && CompressedHammerRegistry.isRegistered(inventory[0])) {
+                if (inventory[0] != null && HeavySieveRegistry.isRegistered(inventory[0])) {
                     currentStack = inventory[0].splitStack(1);
                     if (inventory[0].stackSize == 0) {
                         inventory[0] = null;
@@ -66,10 +76,10 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
                 progress += getEffectiveSpeed();
                 if (progress >= 1) {
                     if (!worldObj.isRemote) {
-                        Collection<Smashable> rewards = CompressedHammerRegistry.getRewards(currentStack);
+                        Collection<SiftingResult> rewards = HeavySieveRegistry.getSiftingOutput(currentStack);
                         if (rewards != null && !rewards.isEmpty()) {
-                            for (Smashable reward : rewards) {
-                                if (worldObj.rand.nextFloat() <= reward.chance + (reward.luckMultiplier * getEffectiveLuck())) {
+                            for (SiftingResult reward : rewards) {
+                                if (worldObj.rand.nextInt(reward.rarity) == 0) {
                                     ItemStack rewardStack = new ItemStack(reward.item, 1, reward.meta);
                                     if (!addItemToOutput(rewardStack)) {
                                         EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 1.5, zCoord + 0.5, rewardStack);
@@ -82,11 +92,11 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
                                 }
                             }
                         }
-                    } else {
-                        spawnCrushParticles();
                     }
                     progress = 0f;
                     currentStack = null;
+                } else {
+                    spawnParticles = true;
                 }
             }
         }
@@ -130,6 +140,7 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
         super.readFromNBT(tagCompound);
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
+        spawnParticles = tagCompound.getBoolean("Particles");
         storage.readFromNBT(tagCompound);
         NBTTagList items = tagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < items.tagCount(); i++) {
@@ -148,6 +159,7 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
             tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         }
         tagCompound.setFloat("Progress", progress);
+        tagCompound.setBoolean("Particles", spawnParticles);
         storage.writeToNBT(tagCompound);
         NBTTagList items = new NBTTagList();
         for (int i = 0; i < inventory.length; i++) {
@@ -174,11 +186,15 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
     }
 
     @SideOnly(Side.CLIENT)
-    private void spawnCrushParticles() {
+    private void spawnFX() {
         if (currentStack != null) {
-            for (int i = 0; i < 10; i++) {
-                EntityDiggingFX particle = new EntityDiggingFX(getWorldObj(), xCoord + 0.5, yCoord + 5d / 16d, zCoord + 0.5, 0, 0, 0, Block.getBlockFromItem(currentStack.getItem()), currentStack.getItemDamage());
-                particle.setVelocity((worldObj.rand.nextDouble() / 2) - 0.25, 0, (worldObj.rand.nextDouble() / 2) - 0.25);
+            IIcon icon = currentStack.getIconIndex();
+            for (int i = 0; i < 4; i++) {
+                ParticleSieve particle = new ParticleSieve(worldObj,
+                        xCoord + 0.8 * worldObj.rand.nextFloat() + 0.15,
+                        yCoord + 0.69,
+                        zCoord + 0.8 * worldObj.rand.nextFloat() + 0.15,
+                        0, 0, 0, icon);
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle);
             }
         }
@@ -229,7 +245,7 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
-        return slot == 0 && CompressedHammerRegistry.isRegistered(itemStack);
+        return slot == 0 && HeavySieveRegistry.isRegistered(itemStack);
     }
 
     @Override

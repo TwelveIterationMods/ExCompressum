@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.client;
+package net.blay09.mods.excompressum.client.render.tile;
 
 import exnihilo.blocks.models.ModelCrucible;
 import exnihilo.blocks.models.ModelCrucibleInternal;

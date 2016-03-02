@@ -45,6 +45,10 @@ public class HeavySieveRegistry {
         return siftables.get(itemInfo);
     }
 
+    public static boolean isRegistered(ItemStack itemStack) {
+        return siftables.containsKey(new ItemInfo(itemStack));
+    }
+
     public static boolean isRegistered(Block block, int metadata) {
         return siftables.containsKey(new ItemInfo(block, metadata));
     }

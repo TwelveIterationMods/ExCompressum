@@ -1,8 +1,9 @@
-package net.blay09.mods.excompressum.client;
+package net.blay09.mods.excompressum.client.render.item;
 
 import exnihilo.blocks.models.ModelSieve;
 import exnihilo.blocks.models.ModelSieveMesh;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
+import net.blay09.mods.excompressum.client.render.tile.RenderHeavySieve;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
@@ -90,7 +91,7 @@ public class ItemRenderHeavySieve implements IItemRenderer {
         GL11.glPopMatrix();
     }
 
-    private void bindTexture(int metadata) {
+    protected void bindTexture(int metadata) {
         if (metadata >= 0) {
             Minecraft.getMinecraft().getTextureManager().bindTexture(RenderHeavySieve.textures[metadata]);
         }

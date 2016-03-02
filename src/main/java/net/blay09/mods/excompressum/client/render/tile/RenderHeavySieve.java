@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.client;
+package net.blay09.mods.excompressum.client.render.tile;
 
 import exnihilo.blocks.models.ModelSieve;
 import exnihilo.blocks.models.ModelSieveContents;
@@ -77,7 +77,7 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer {
         }
     }
 
-    private void bindSieveTexture(int metadata) {
+    protected void bindSieveTexture(int metadata) {
         if (metadata >= 0) {
             bindTexture(textures[metadata]);
         }

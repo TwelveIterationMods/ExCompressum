@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.item.*;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.config.Configuration;
 
 public class ModItems {
 
@@ -36,5 +37,11 @@ public class ModItems {
         GameRegistry.registerItem(compressedCrook, "compressedCrook");
         heavySilkMesh = new ItemHeavySilkMesh();
         GameRegistry.registerItem(heavySilkMesh, "heavySilkMesh");
+    }
+
+    public static void registerRecipes(Configuration config) {
+        ItemHeavySilkMesh.registerRecipes(config);
+        ItemCompressedHammer.registerRecipes(config);
+        ItemCompressedCrook.registerRecipes(config);
     }
 }
