@@ -79,7 +79,6 @@ dependencies {
     compile "tconstruct:TConstruct:1.7.10-1.8.8.build1003:deobf"
     compile "com.azanor.baubles:Baubles:1.7.10-1.0.1.9.3"
     compile "vazkii.botania:Botania:r1.8-250.681"
-    compile name: "Ex-Astris-Rebirth-MC1.7.10", version: "1.01-45", ext: "jar"
     compile name: "CoFHCore", version: "[1.7.10]3.1.2-325", ext: "jar"
     compile name: "ThermalFoundation", version: "[1.7.10]1.2.3-112", ext: "jar"
     compile name: "MineTweaker3", version: "1.7.10-3.0.10B", classifier: "Dev", ext: "jar"
