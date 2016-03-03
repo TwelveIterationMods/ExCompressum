@@ -60,7 +60,7 @@ public class CompressedRecipeRegistry {
     }
 
     private static void addCompressedRecipe(IRecipe recipe, ItemStack sourceStack) {
-        if(sourceStack != null) {
+        if(sourceStack != null && sourceStack.getItem() != null) { // .getItem() != null is needed because some mod is registering a broken recipe
             sourceStack = sourceStack.copy();
             if(recipe.getRecipeSize() == 4) {
                 matcherSmall.fill(sourceStack);
