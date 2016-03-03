@@ -1,8 +1,11 @@
 package net.blay09.mods.excompressum.tile;
 
 import exnihilo.blocks.tileentities.TileEntityCrucible;
+import exnihilo.registries.BarrelRecipeRegistry;
+import exnihilo.utils.ItemInfo;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.WoodenCrucibleRegistry;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -27,6 +30,17 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     private int solidVolume;
 
     public boolean addItem(ItemStack itemStack) {
+        if (ExCompressum.allowCrucibleBarrelRecipes && fluidStack.amount > 1000) {
+            ItemInfo itemInfo = BarrelRecipeRegistry.getOutput(fluidStack, itemStack);
+            if (itemInfo != null) {
+                fluidStack.amount -= 1000;
+                EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 1, zCoord + 0.5, itemInfo.getStack());
+                entityItem.motionY = 0.2;
+                worldObj.spawnEntityInWorld(entityItem);
+                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                return true;
+            }
+        }
         WoodenCrucibleRegistry.WoodenMeltable meltable = WoodenCrucibleRegistry.getMeltable(itemStack);
         if (meltable != null && getCapacityLeft() >= meltable.fluidStack.amount && (mode == TileEntityCrucible.CrucibleMode.EMPTY || meltable.fluidStack.isFluidEqual(fluidStack))) {
             content = meltable;
@@ -236,7 +250,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
         super.readFromNBT(tagCompound);
         mode = tagCompound.getInteger("Mode") == 1 ? TileEntityCrucible.CrucibleMode.USED : TileEntityCrucible.CrucibleMode.EMPTY;
         solidVolume = tagCompound.getInteger("solidVolume");
-        if(tagCompound.hasKey("Content")) {
+        if (tagCompound.hasKey("Content")) {
             content = WoodenCrucibleRegistry.getMeltable(ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content")));
         }
         fluidStack = FluidStack.loadFluidStackFromNBT(tagCompound);
@@ -246,7 +260,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     public void writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         tagCompound.setInteger("Mode", mode.value);
-        if(content != null) {
+        if (content != null) {
             tagCompound.setTag("Content", content.itemStack.writeToNBT(new NBTTagCompound()));
         }
         tagCompound.setInteger("solidVolume", solidVolume);

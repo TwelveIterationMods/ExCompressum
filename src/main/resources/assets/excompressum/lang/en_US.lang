@@ -12,6 +12,7 @@ item.excompressum:bait_1.name=Ocelot Bait
 item.excompressum:bait_2.name=Cow Bait
 item.excompressum:bait_3.name=Pig Bait
 item.excompressum:bait_4.name=Chicken Bait
+item.excompressum:wood_chippings.name=Wood Chippings
 
 tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
 

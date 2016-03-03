@@ -16,7 +16,7 @@ public class ModItems {
     public static ItemDoubleCompressedDiamondHammer doubleCompressedDiamondHammer;
     public static ItemCompressedCrook compressedCrook;
     public static ItemHeavySilkMesh heavySilkMesh;
-
+    public static ItemWoodChipping woodChipping;
 
     public static void init() {
         chickenStick = new ItemChickenStick();
@@ -37,11 +37,14 @@ public class ModItems {
         GameRegistry.registerItem(compressedCrook, "compressedCrook");
         heavySilkMesh = new ItemHeavySilkMesh();
         GameRegistry.registerItem(heavySilkMesh, "heavySilkMesh");
+        woodChipping = new ItemWoodChipping();
+        GameRegistry.registerItem(woodChipping, "woodChipping");
     }
 
     public static void registerRecipes(Configuration config) {
         ItemHeavySilkMesh.registerRecipes(config);
         ItemCompressedHammer.registerRecipes(config);
         ItemCompressedCrook.registerRecipes(config);
+        ItemWoodChipping.registerRecipes(config);
     }
 }
