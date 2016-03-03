@@ -51,7 +51,7 @@ public class ItemWoodChipping extends Item {
                 HammerRegistry.register(Blocks.log2, i | 8, ModItems.woodChipping, 0, 0.25f, 0f);
             }
 
-            CompostRegistry.register(Item.getItemFromBlock(Blocks.brown_mushroom), 0, 0.125f, new Color("CFBFB6"));
+            CompostRegistry.register(ModItems.woodChipping, 0, 0.125f, new Color("C77826"));
         }
     }
 
