@@ -52,7 +52,7 @@ public class ItemCompressedHammer extends ItemTool implements IHammer {
     @Override
     public boolean onBlockStartBreak(ItemStack itemStack, int x, int y, int z, EntityPlayer entityPlayer) {
         World world = entityPlayer.worldObj;
-        if(world.isRemote || EnchantmentHelper.getSilkTouchModifier(entityPlayer)) {
+        if (world.isRemote || EnchantmentHelper.getSilkTouchModifier(entityPlayer)) {
             return false;
         }
         Block block = world.getBlock(x, y, z);
@@ -73,6 +73,10 @@ public class ItemCompressedHammer extends ItemTool implements IHammer {
             }
         }
         world.setBlockToAir(x, y, z);
+        itemStack.damageItem(1, entityPlayer);
+        if (itemStack.stackSize == 0) {
+            entityPlayer.destroyCurrentEquippedItem();
+        }
         return true;
     }
 

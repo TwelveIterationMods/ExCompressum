@@ -5,6 +5,7 @@ import exnihilo.blocks.models.ModelSieveContents;
 import exnihilo.blocks.models.ModelSieveMesh;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
+import net.blay09.mods.excompressum.client.render.model.ModelAutoFrame;
 import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -17,15 +18,10 @@ public class RenderAutoHeavySieve extends TileEntitySpecialRenderer {
 
     public static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/auto_heavy_sieve.png");
 
-    private final ModelSieve model;
-    private final ModelSieveMesh mesh;
-    private final ModelSieveContents contents;
-
-    public RenderAutoHeavySieve(ModelSieve model, ModelSieveMesh mesh) {
-        this.model = model;
-        this.mesh = mesh;
-        this.contents = new ModelSieveContents();
-    }
+    private final ModelAutoFrame frame = new ModelAutoFrame();
+    private final ModelSieve model = new ModelSieve();
+    private final ModelSieveMesh mesh = new ModelSieveMesh();
+    private final ModelSieveContents contents = new ModelSieveContents();
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {

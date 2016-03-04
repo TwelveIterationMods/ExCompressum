@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelAutoCompressedHammer extends ModelBase {
+public class ModelAutoFrame extends ModelBase {
     public ModelRenderer Bottom;
     public ModelRenderer Top;
     public ModelRenderer Corner1;
@@ -13,7 +13,7 @@ public class ModelAutoCompressedHammer extends ModelBase {
     public ModelRenderer Corner4;
     public ModelRenderer Glass;
 
-    public ModelAutoCompressedHammer() {
+    public ModelAutoFrame() {
         this.textureWidth = 64;
         this.textureHeight = 64;
         this.Corner1 = new ModelRenderer(this, 0, 0);

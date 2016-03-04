@@ -3,15 +3,11 @@ package net.blay09.mods.excompressum.client.render.tile;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.block.BlockAutoCompressedHammer;
-import net.blay09.mods.excompressum.client.render.model.ModelAutoCompressedHammer;
+import net.blay09.mods.excompressum.client.render.model.ModelAutoFrame;
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderBlaze;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -40,7 +36,7 @@ public class RenderAutoCompressedHammer extends TileEntitySpecialRenderer {
         new ResourceLocation("minecraft", "textures/blocks/destroy_stage_8"),
         new ResourceLocation("minecraft", "textures/blocks/destroy_stage_9")
     };
-    private final ModelAutoCompressedHammer model = new ModelAutoCompressedHammer();
+    private final ModelAutoFrame model = new ModelAutoFrame();
 
     private EntityItem renderItem;
 

@@ -35,7 +35,7 @@ public class ClientProxy extends CommonProxy {
         ModelSieveMesh mesh = new ModelSieveMesh();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeavySieve.class, new RenderHeavySieve(sieve, mesh));
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.heavySieve), new ItemRenderHeavySieve(sieve, mesh));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHeavySieve.class, new RenderAutoHeavySieve(sieve, mesh));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHeavySieve.class, new RenderAutoHeavySieve());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoHeavySieve), new ItemRenderAutoHeavySieve(sieve, mesh));
 
         ModelCrucible model = new ModelCrucible();
