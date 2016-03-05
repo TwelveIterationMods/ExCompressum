@@ -30,7 +30,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     private int solidVolume;
 
     public boolean addItem(ItemStack itemStack) {
-        if (ExCompressum.allowCrucibleBarrelRecipes && fluidStack.amount > 1000) {
+        if (ExCompressum.woodenCrucibleBarrelRecipes && fluidStack.amount > 1000) {
             ItemInfo itemInfo = BarrelRecipeRegistry.getOutput(fluidStack, itemStack);
             if (itemInfo != null) {
                 fluidStack.amount -= 1000;
@@ -58,6 +58,11 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     @Override
     public void updateEntity() {
         if (!worldObj.isRemote) {
+            if ((fluidStack.amount == 0 || fluidStack.getFluid() == FluidRegistry.WATER) && worldObj.isRaining() && yCoord >= worldObj.getTopSolidOrLiquidBlock(xCoord, zCoord) - 1 && worldObj.getBiomeGenForCoords(xCoord, zCoord).rainfall > 0f && ExCompressum.woodenCrucibleFillFromRain) {
+                fluidStack.amount = Math.min(MAX_FLUID, fluidStack.amount + 1); // (int) (worldObj.getBiomeGenForCoords(xCoord, zCoord).rainfall / 1000));
+                isDirty = true;
+            }
+
             int speed = ExCompressum.woodenCrucibleSpeed;
             if (solidVolume > 0) {
                 fluidStack.amount += Math.min(speed, solidVolume);
