@@ -23,7 +23,7 @@ public class BlockCompressed extends Block {
     private final IIcon[] icons = new IIcon[6];
 
     public BlockCompressed() {
-        super(Material.sand);
+        super(Material.rock);
         setHardness(4f);
         setResistance(6f);
         setStepSound(soundTypeSnow);

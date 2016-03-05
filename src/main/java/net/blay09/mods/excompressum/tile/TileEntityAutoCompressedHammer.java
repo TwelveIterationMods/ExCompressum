@@ -53,6 +53,15 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
         if (storage.getEnergyStored() > effectiveEnergy) {
             if (currentStack == null) {
                 if (inventory[0] != null && CompressedHammerRegistry.isRegistered(inventory[0])) {
+                    boolean foundSpace = false;
+                    for(int i = 1; i < inventory.length; i++) {
+                        if(inventory[i] == null) {
+                            foundSpace = true;
+                        }
+                    }
+                    if(!foundSpace) {
+                        return;
+                    }
                     currentStack = inventory[0].splitStack(1);
                     if (inventory[0].stackSize == 0) {
                         inventory[0] = null;

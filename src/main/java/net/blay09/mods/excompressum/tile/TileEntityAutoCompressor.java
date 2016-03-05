@@ -56,8 +56,22 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                 for (CompressedRecipeRegistry.CompressedRecipe compressedRecipe : inputItems.elementSet()) {
                     ItemStack sourceStack = compressedRecipe.getSourceStack();
                     if (inputItems.count(compressedRecipe) >= sourceStack.stackSize) {
+                        int space = 0;
+                        for(int i = 12; i < inventory.length; i++) {
+                            if(inventory[i] == null) {
+                                space = 64;
+                            } else if(inventory[i].isItemEqual(compressedRecipe.getResultStack()) && ItemStack.areItemStackTagsEqual(inventory[i], compressedRecipe.getResultStack())) {
+                                space += inventory[i].getMaxStackSize() - inventory[i].stackSize;
+                            }
+                            if(space >= compressedRecipe.getResultStack().stackSize) {
+                                break;
+                            }
+                        }
+                        if(space < compressedRecipe.getResultStack().stackSize) {
+                            continue;
+                        }
                         int count = sourceStack.stackSize;
-                        for (int i = 0; i < inventory.length; i++) {
+                        for (int i = 0; i < 12; i++) {
                             if (inventory[i] != null && inventory[i].isItemEqual(sourceStack) && ItemStack.areItemStackTagsEqual(inventory[i], sourceStack)) {
                                 if (inventory[i].stackSize >= count) {
                                     inventory[i].stackSize -= count;
