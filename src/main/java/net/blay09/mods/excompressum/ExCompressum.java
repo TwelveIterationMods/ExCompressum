@@ -9,14 +9,17 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import net.blay09.mods.excompressum.block.*;
 import net.blay09.mods.excompressum.compat.IAddon;
+import net.blay09.mods.excompressum.handler.CompressedEnemyHandler;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.item.ItemCompressedCrook;
 import net.blay09.mods.excompressum.item.ItemCompressedHammer;
 import net.blay09.mods.excompressum.registry.*;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collections;
 import java.util.List;
 
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "required-after:exnihilo")
@@ -45,6 +48,10 @@ public class ExCompressum {
     public static float baitCowChance;
     public static float baitPigChance;
     public static float baitChickenChance;
+
+    public static float compressedMobChance;
+    public static int compressedMobSize;
+    public static List<String> compressedMobs = Lists.newArrayList();
 
     public static int autoCompressedHammerEnergy;
     public static float autoCompressedHammerSpeed;
@@ -82,10 +89,30 @@ public class ExCompressum {
         autoCompressorSpeed = config.getFloat("Auto Compressor Speed", "general", 0.1f, 0.0001f, 1f, "The speed at which the auto compressor will compress stuff.");
         autoCompressorEnergy = config.getInt("Auto Compressor Cost", "general", 5, 0, 100000, "The energy cost of the auto compressor per tick.");
 
+        compressedMobChance = config.getFloat("Compressed Mob Chance", "general", 0.01f, 0f, 1f, "The chance for mobs to spawn as Compressed Mobs. Set to 0 to disable.");
+        compressedMobSize = config.getInt("Compressed Mob Size", "general", 9, 1, 9, "The amount of mobs that will spawn upon death of a compressed enemy.");
+        Collections.addAll(compressedMobs, config.getStringList("Compressed Mobs", "general", new String[] {
+                "Zombie",
+                "Creeper",
+                "Skeleton",
+                "Spider",
+                "CaveSpider",
+                "Silverfish",
+                "Witch",
+                "Enderman",
+                "PigZombie",
+                "Blaze",
+                "Chicken",
+                "Sheep",
+                "Cow",
+                "Pig"
+        }, "A list of entity names that can spawn as compressed entities."));
+
         ModItems.init();
         ModBlocks.init();
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+        MinecraftForge.EVENT_BUS.register(new CompressedEnemyHandler());
 
         proxy.preInit(event);
     }
@@ -99,6 +126,7 @@ public class ExCompressum {
         HeavySieveRegistry.load(config);
         CompressedRecipeRegistry.reload();
         WoodenCrucibleRegistry.load(config);
+        AutoSieveSkinRegistry.load();
 
         ModItems.registerRecipes(config);
         ModBlocks.registerRecipes(config);

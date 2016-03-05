@@ -15,6 +15,7 @@ item.excompressum:bait_4.name=Chicken Bait
 item.excompressum:wood_chippings.name=Wood Chippings
 
 tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
+tooltip.excompressum:auto_heavy_sieve=%s in a Box™
 
 tile.excompressum:compressed_dust.name=Compressed Dust
 tile.excompressum:compressed_cobblestone.name=Compressed Cobblestone

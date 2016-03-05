@@ -8,6 +8,7 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 
 /**
  * They asked for it. No, they literally did.
+ * It was a joke on stream and they're both aware of it. ;)
  */
 @SuppressWarnings("unused")
 public class SlowSoarynHandler {

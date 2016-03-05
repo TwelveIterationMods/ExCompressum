@@ -2,10 +2,7 @@ package net.blay09.mods.excompressum;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.block.*;
-import net.blay09.mods.excompressum.item.ItemBlockBait;
-import net.blay09.mods.excompressum.item.ItemBlockCompressed;
-import net.blay09.mods.excompressum.item.ItemBlockHeavySieve;
-import net.blay09.mods.excompressum.item.ItemBlockWoodenCrucible;
+import net.blay09.mods.excompressum.item.*;
 import net.blay09.mods.excompressum.tile.*;
 import net.minecraftforge.common.config.Configuration;
 
@@ -30,7 +27,7 @@ public class ModBlocks {
         autoCompressedHammer = new BlockAutoCompressedHammer();
         GameRegistry.registerBlock(autoCompressedHammer, "autoCompressedHammer");
         autoHeavySieve = new BlockAutoHeavySieve();
-        GameRegistry.registerBlock(autoHeavySieve, "autoHeavySieve");
+        GameRegistry.registerBlock(autoHeavySieve, ItemBlockAutoHeavySieve.class, "autoHeavySieve");
         autoCompressor = new BlockAutoCompressor();
         GameRegistry.registerBlock(autoCompressor, "autoCompressor");
 

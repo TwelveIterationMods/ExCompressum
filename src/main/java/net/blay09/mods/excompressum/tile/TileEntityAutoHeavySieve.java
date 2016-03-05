@@ -2,6 +2,9 @@ package net.blay09.mods.excompressum.tile;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import com.google.common.collect.Iterables;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -16,11 +19,14 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StringUtils;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -35,6 +41,7 @@ public class TileEntityAutoHeavySieve extends TileEntity implements ISidedInvent
     private ItemStack[] inventory = new ItemStack[getSizeInventory()];
     private ItemStack currentStack;
 
+    private GameProfile customSkin;
     private boolean spawnParticles;
     private int ticksSinceUpdate;
     private boolean isDirty;
@@ -102,7 +109,7 @@ public class TileEntityAutoHeavySieve extends TileEntity implements ISidedInvent
         int firstEmptySlot = -1;
         for (int i = 1; i < getSizeInventory(); i++) {
             if (inventory[i] == null) {
-                if(firstEmptySlot == -1){
+                if (firstEmptySlot == -1) {
                     firstEmptySlot = i;
                 }
             } else {
@@ -138,6 +145,10 @@ public class TileEntityAutoHeavySieve extends TileEntity implements ISidedInvent
         progress = tagCompound.getFloat("Progress");
         spawnParticles = tagCompound.getBoolean("Particles");
         storage.readFromNBT(tagCompound);
+        if (tagCompound.hasKey("CustomSkin")) {
+            customSkin = NBTUtil.func_152459_a(tagCompound.getCompoundTag("CustomSkin"));
+            ExCompressum.proxy.preloadSkin(customSkin);
+        }
         NBTTagList items = tagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < items.tagCount(); i++) {
             NBTTagCompound itemCompound = items.getCompoundTagAt(i);
@@ -156,6 +167,11 @@ public class TileEntityAutoHeavySieve extends TileEntity implements ISidedInvent
         }
         tagCompound.setFloat("Progress", progress);
         tagCompound.setBoolean("Particles", spawnParticles);
+        if (customSkin != null) {
+            NBTTagCompound customSkinTag = new NBTTagCompound();
+            NBTUtil.func_152460_a(customSkinTag, customSkin);
+            tagCompound.setTag("CustomSkin", customSkinTag);
+        }
         storage.writeToNBT(tagCompound);
         NBTTagList items = new NBTTagList();
         for (int i = 0; i < inventory.length; i++) {
@@ -328,4 +344,33 @@ public class TileEntityAutoHeavySieve extends TileEntity implements ISidedInvent
     public ItemStack getCurrentStack() {
         return currentStack;
     }
+
+    public void setCustomSkin(GameProfile customSkin) {
+        this.customSkin = customSkin;
+        grabProfile();
+        isDirty = true;
+        markDirty();
+    }
+
+    public GameProfile getCustomSkin() {
+        return customSkin;
+    }
+
+    private void grabProfile() {
+        if (!worldObj.isRemote && customSkin != null && !StringUtils.isNullOrEmpty(customSkin.getName())) {
+            if (!customSkin.isComplete() || !customSkin.getProperties().containsKey("textures")) {
+                GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(customSkin.getName());
+                if (gameProfile != null) {
+                    Property property = Iterables.getFirst(gameProfile.getProperties().get("textures"), null);
+                    if (property == null) {
+                        gameProfile = MinecraftServer.getServer().func_147130_as().fillProfileProperties(gameProfile, true);
+                    }
+                    customSkin = gameProfile;
+                    isDirty = true;
+                    markDirty();
+                }
+            }
+        }
+    }
+
 }

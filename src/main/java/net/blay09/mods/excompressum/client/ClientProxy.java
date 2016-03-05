@@ -1,5 +1,7 @@
 package net.blay09.mods.excompressum.client;
 
+import com.google.common.collect.Sets;
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -24,8 +26,12 @@ import net.minecraft.util.Session;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.Set;
+
 @SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
+
+    private final Set<GameProfile> skinRequested = Sets.newHashSet();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
@@ -36,7 +42,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeavySieve.class, new RenderHeavySieve(sieve, mesh));
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.heavySieve), new ItemRenderHeavySieve(sieve, mesh));
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHeavySieve.class, new RenderAutoHeavySieve());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoHeavySieve), new ItemRenderAutoHeavySieve(sieve, mesh));
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoHeavySieve), new ItemRenderAutoHeavySieve());
 
         ModelCrucible model = new ModelCrucible();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodenCrucible.class, new RenderWoodenCrucible(model));
@@ -72,4 +78,11 @@ public class ClientProxy extends CommonProxy {
         return customName;
     }
 
+    @Override
+    public void preloadSkin(GameProfile customSkin) {
+        if(!skinRequested.contains(customSkin)) {
+            Minecraft.getMinecraft().func_152342_ad().func_152790_a(customSkin, null, true);
+            skinRequested.add(customSkin);
+        }
+    }
 }

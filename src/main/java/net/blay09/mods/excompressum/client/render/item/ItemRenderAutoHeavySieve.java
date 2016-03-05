@@ -1,21 +1,29 @@
 package net.blay09.mods.excompressum.client.render.item;
 
-import exnihilo.blocks.models.ModelSieve;
-import exnihilo.blocks.models.ModelSieveMesh;
-import net.blay09.mods.excompressum.client.render.tile.RenderAutoHeavySieve;
-import net.minecraft.client.Minecraft;
+import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
+import org.lwjgl.opengl.GL11;
 
-public class ItemRenderAutoHeavySieve extends ItemRenderHeavySieve {
+public class ItemRenderAutoHeavySieve implements IItemRenderer {
 
-    public ItemRenderAutoHeavySieve(ModelSieve model, ModelSieveMesh mesh) {
-        super(model, mesh);
+    private static final TileEntityAutoHeavySieve tileEntity = new TileEntityAutoHeavySieve();
+
+    @Override
+    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+        return type != ItemRenderType.FIRST_PERSON_MAP;
     }
 
     @Override
-    protected void bindTexture(int metadata) {
-        if (metadata >= 0) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(RenderAutoHeavySieve.texture);
-        }
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+        return type != ItemRenderType.FIRST_PERSON_MAP;
+    }
+
+    @Override
+    public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        GL11.glTranslatef(0, -0.1f, 0);
+        TileEntityRendererDispatcher.instance.renderTileEntityAt(tileEntity, 0, 0, 0, 0);
     }
 
 }

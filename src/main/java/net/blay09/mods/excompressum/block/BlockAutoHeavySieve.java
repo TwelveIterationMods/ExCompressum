@@ -1,12 +1,14 @@
 package net.blay09.mods.excompressum.block;
 
 import cofh.api.block.IDismantleable;
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.handler.GuiHandler;
+import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -19,6 +21,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -62,6 +65,15 @@ public class BlockAutoHeavySieve extends BlockContainer implements IDismantleabl
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = entityPlayer.getHeldItem();
+        if (heldItem != null && heldItem.getItem() == Items.name_tag && heldItem.hasDisplayName()) {
+            TileEntityAutoHeavySieve tileEntity = (TileEntityAutoHeavySieve) world.getTileEntity(x, y, z);
+            tileEntity.setCustomSkin(new GameProfile(null, heldItem.getDisplayName()));
+            if(!entityPlayer.capabilities.isCreativeMode) {
+                heldItem.stackSize--;
+            }
+            return true;
+        }
         entityPlayer.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_HEAVY_SIEVE, world, x, y, z);
         return true;
     }
@@ -79,7 +91,7 @@ public class BlockAutoHeavySieve extends BlockContainer implements IDismantleabl
                 world.spawnEntityInWorld(entityItem);
             }
         }
-        if(((TileEntityAutoHeavySieve) tileEntity).getCurrentStack() != null) {
+        if (((TileEntityAutoHeavySieve) tileEntity).getCurrentStack() != null) {
             EntityItem entityItem = new EntityItem(world, x, y, z, ((TileEntityAutoHeavySieve) tileEntity).getCurrentStack());
             double motion = 0.05;
             entityItem.motionX = world.rand.nextGaussian() * motion;
@@ -91,12 +103,22 @@ public class BlockAutoHeavySieve extends BlockContainer implements IDismantleabl
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
-        if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey("EnergyStored")) {
-            TileEntityAutoHeavySieve tileEntity = (TileEntityAutoHeavySieve) world.getTileEntity(x, y, z);
-            tileEntity.setEnergyStored(stack.stackTagCompound.getInteger("EnergyStored"));
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack itemStack) {
+        TileEntityAutoHeavySieve tileEntity = (TileEntityAutoHeavySieve) world.getTileEntity(x, y, z);
+        boolean useRandomSkin = true;
+        if (itemStack.stackTagCompound != null) {
+            if (itemStack.stackTagCompound.hasKey("EnergyStored")) {
+                tileEntity.setEnergyStored(itemStack.stackTagCompound.getInteger("EnergyStored"));
+            }
+            if (itemStack.stackTagCompound.hasKey("CustomSkin")) {
+                tileEntity.setCustomSkin(NBTUtil.func_152459_a(itemStack.stackTagCompound.getCompoundTag("CustomSkin")));
+                useRandomSkin = false;
+            }
         }
-        super.onBlockPlacedBy(world, x, y, z, player, stack);
+        if(!world.isRemote && useRandomSkin) {
+            tileEntity.setCustomSkin(new GameProfile(null, AutoSieveSkinRegistry.getRandomSkin()));
+        }
+        super.onBlockPlacedBy(world, x, y, z, player, itemStack);
     }
 
     @Override
@@ -107,6 +129,9 @@ public class BlockAutoHeavySieve extends BlockContainer implements IDismantleabl
             itemStack.stackTagCompound = new NBTTagCompound();
         }
         itemStack.stackTagCompound.setInteger("EnergyStored", tileEntity.getEnergyStored(null));
+        NBTTagCompound customSkinTag = new NBTTagCompound();
+        NBTUtil.func_152460_a(customSkinTag, tileEntity.getCustomSkin());
+        itemStack.stackTagCompound.setTag("CustomSkin", customSkinTag);
 
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
         drops.add(itemStack);
@@ -123,7 +148,7 @@ public class BlockAutoHeavySieve extends BlockContainer implements IDismantleabl
     }
 
     public static void registerRecipes(Configuration config) {
-        if(Loader.isModLoaded("CoFHCore")) {
+        if (Loader.isModLoaded("CoFHCore")) {
             if (config.getBoolean("Auto Heavy Sieve", "blocks", true, "Set this to false to disable the recipe for the auto heavy sieve.")) {
                 GameRegistry.addRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BMB", "BMB", "I I", 'B', Blocks.iron_block, 'M', ModItems.heavySilkMesh, 'I', Items.iron_ingot);
             }

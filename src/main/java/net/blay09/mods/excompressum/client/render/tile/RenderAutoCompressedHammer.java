@@ -42,18 +42,19 @@ public class RenderAutoCompressedHammer extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
-        if(renderItem == null && tileEntity.hasWorldObj()) {
-            renderItem = new EntityItem(tileEntity.getWorldObj());
+        if(renderItem == null) {
+            if(tileEntity.hasWorldObj()) {
+                renderItem = new EntityItem(tileEntity.getWorldObj());
+            } else {
+                renderItem = new EntityItem(Minecraft.getMinecraft().theWorld);
+            }
             renderItem.setEntityItemStack(new ItemStack(ModItems.compressedHammerDiamond));
         }
 
         TileEntityAutoCompressedHammer tileEntityHammer = (TileEntityAutoCompressedHammer) tileEntity;
 
         GL11.glPushMatrix();
-        boolean oldRescaleNormal = GL11.glIsEnabled(GL12.GL_RESCALE_NORMAL);
-        if(!oldRescaleNormal) {
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        }
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glColor4f(1f, 1f, 1f, 1f);
         GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
@@ -71,7 +72,7 @@ public class RenderAutoCompressedHammer extends TileEntitySpecialRenderer {
             GL11.glPopMatrix();
         }
 
-        if(tileEntity.hasWorldObj()) {
+        if(renderItem != null) {
             RenderItem.renderInFrame = true;
             GL11.glRotatef((float) Math.sin(tileEntityHammer.getProgress() * 100) * 15, 0, 0, 1);
             RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0, 0f, 0f);
@@ -79,9 +80,7 @@ public class RenderAutoCompressedHammer extends TileEntitySpecialRenderer {
             RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0.3, 0f, 0f);
             RenderItem.renderInFrame = false;
         }
-        if(!oldRescaleNormal) {
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        }
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glPopMatrix();
         GL11.glColor4f(1f, 1f, 1f, 1f);
     }
