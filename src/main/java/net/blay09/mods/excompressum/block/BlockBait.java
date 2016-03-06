@@ -59,7 +59,7 @@ public class BlockBait extends BlockContainer {
     @Override
     @SuppressWarnings("unchecked")
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             list.add(new ItemStack(item, 1, i));
         }
     }
@@ -97,6 +97,9 @@ public class BlockBait extends BlockContainer {
         }
         if (config.getBoolean("Chicken Bait", "blocks", true, "If set to false, the recipe for the chicken bait will be disabled.")) {
             GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 4), Items.wheat_seeds, Items.wheat_seeds);
+        }
+        if (config.getBoolean("Sheep Bait", "blocks", true, "If set to false, the recipe for the sheep bait will be disabled.")) {
+            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 5), GameRegistry.findItem("exnihilo", "seed_grass"), Items.wheat);
         }
     }
 

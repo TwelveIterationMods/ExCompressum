@@ -46,6 +46,7 @@ public class ExCompressum {
     public static float baitCowChance;
     public static float baitPigChance;
     public static float baitChickenChance;
+    public static float baitSheepChance;
 
     public static float compressedMobChance;
     public static int compressedMobSize;
@@ -80,6 +81,7 @@ public class ExCompressum {
         baitCowChance = config.getFloat("Cow Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a cow bait will result in a cow spawn.");
         baitPigChance = config.getFloat("Pig Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a pig bait will result in a pig spawn.");
         baitChickenChance = config.getFloat("Chicken Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a chicken bait will result in a chicken spawn.");
+        baitSheepChance = config.getFloat("Sheep Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a sheep bait will result in a sheep spawn.");
 
         autoCompressedHammerSpeed = config.getFloat("Auto Compressed Hammer Speed", "general", 0.005f, 0.0001f, 0.1f, "The speed at which the auto compressed hammer will smash stuff.");
         autoCompressedHammerEnergy = config.getInt("Auto Compressed Hammer Cost", "general", 120, 0, 100000, "The energy cost of the auto compressed hammer per tick.");

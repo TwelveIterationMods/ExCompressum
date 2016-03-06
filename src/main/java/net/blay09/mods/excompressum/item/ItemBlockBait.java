@@ -9,7 +9,7 @@ import net.minecraft.util.IIcon;
 
 public class ItemBlockBait extends ItemBlock {
 
-    private final IIcon[] icons = new IIcon[5];
+    private final IIcon[] icons = new IIcon[6];
 
     public ItemBlockBait(Block block) {
         super(block);
@@ -24,6 +24,7 @@ public class ItemBlockBait extends ItemBlock {
         icons[2] = iconRegister.registerIcon(ExCompressum.MOD_ID + ":bait_cow");
         icons[3] = iconRegister.registerIcon(ExCompressum.MOD_ID + ":bait_pig");
         icons[4] = iconRegister.registerIcon(ExCompressum.MOD_ID + ":bait_chicken");
+        icons[5] = iconRegister.registerIcon(ExCompressum.MOD_ID + ":bait_sheep");
     }
 
     @Override
