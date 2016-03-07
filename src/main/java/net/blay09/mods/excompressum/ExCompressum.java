@@ -121,6 +121,9 @@ public class ExCompressum {
     @Mod.EventHandler
     @SuppressWarnings("unused unchecked")
     public void postInit(FMLPostInitializationEvent event) {
+        ModItems.registerRecipes(config);
+        ModBlocks.registerRecipes(config);
+
         boolean easyMode = config.getBoolean("Easy Mode", "general", false, "Set this to true to enable easy-mode, which makes compressed smashables work for normal hammers instead.");
         CompressedHammerRegistry.load(config, easyMode);
         ChickenStickRegistry.load(config);
@@ -128,9 +131,6 @@ public class ExCompressum {
         CompressedRecipeRegistry.reload();
         WoodenCrucibleRegistry.load(config);
         AutoSieveSkinRegistry.load();
-
-        ModItems.registerRecipes(config);
-        ModBlocks.registerRecipes(config);
 
         boolean isLegacyMineTweaker = true;
         try {
