@@ -28,7 +28,7 @@ public class ActiveSmashingMod extends ActiveToolMod {
             }
             Block block = world.getBlock(x, y, z);
             int metadata = world.getBlockMetadata(x, y, z);
-            Collection<Smashable> rewards = CompressedHammerRegistry.getRewards(block, metadata);
+            Collection<Smashable> rewards = CompressedHammerRegistry.getSmashables(block, metadata);
             if (rewards == null || rewards.isEmpty()) {
                 rewards = HammerRegistry.getRewards(block, metadata);
                 if(rewards == null || rewards.isEmpty()) {

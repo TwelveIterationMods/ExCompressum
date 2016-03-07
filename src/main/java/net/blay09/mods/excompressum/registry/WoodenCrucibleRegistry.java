@@ -1,8 +1,9 @@
 package net.blay09.mods.excompressum.registry;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import exnihilo.utils.ItemInfo;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
+import net.blay09.mods.excompressum.registry.data.WoodenMeltable;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -17,36 +18,22 @@ import java.util.List;
 
 public class WoodenCrucibleRegistry {
 
-    public static class WoodenMeltable {
-        public final ItemStack itemStack;
-        public final FluidStack fluidStack;
-        public final Block appearance;
-        public final int appearanceMeta;
-
-        public WoodenMeltable(ItemStack itemStack, FluidStack fluidStack, Block appearance, int appearanceMeta) {
-            this.itemStack = itemStack;
-            this.fluidStack = fluidStack;
-            this.appearance = appearance;
-            this.appearanceMeta = appearanceMeta;
-        }
-    }
-
-    private static final Hashtable<ItemInfo, WoodenMeltable> entries = new Hashtable<ItemInfo, WoodenMeltable>();
+    private static final Hashtable<ItemAndMetadata, WoodenMeltable> entries = new Hashtable<ItemAndMetadata, WoodenMeltable>();
 
     private static void register(ItemStack itemStack, FluidStack fluidStack, Block appearance, int appearanceMeta) {
-        entries.put(new ItemInfo(itemStack), new WoodenMeltable(itemStack, fluidStack, appearance, appearanceMeta));
+        entries.put(new ItemAndMetadata(itemStack), new WoodenMeltable(itemStack, fluidStack, appearance, appearanceMeta));
     }
 
     public static WoodenMeltable getMeltable(ItemStack itemStack) {
-        WoodenMeltable meltable = entries.get(new ItemInfo(itemStack));
+        WoodenMeltable meltable = entries.get(new ItemAndMetadata(itemStack));
         if(meltable != null) {
             return meltable;
         }
-        return entries.get(new ItemInfo(itemStack.getItem(), OreDictionary.WILDCARD_VALUE));
+        return entries.get(new ItemAndMetadata(itemStack.getItem(), OreDictionary.WILDCARD_VALUE));
     }
 
     public static boolean isRegistered(ItemStack itemStack) {
-        return entries.containsKey(new ItemInfo(itemStack));
+        return entries.containsKey(new ItemAndMetadata(itemStack));
     }
 
     public static void load(Configuration config) {
@@ -56,7 +43,7 @@ public class WoodenCrucibleRegistry {
                 "minecraft:apple=50:water:minecraft:leaves:0",
                 "minecraft:cactus=250:water:minecraft:cactus:0",
                 "ore:listAllfruit=50:water:minecraft:leaves:0" // Pam's Harvestcraft Fruits
-        }, "Here you can specify additional blocks and items that will melt into water in a wooden crucible. Format: modid:name:meta=amount:fluidName:appearanceModID:appareanceBlock:appearanceMeta, modid can be ore for OreDictionary");
+        }, "Here you can specify additional blocks and items that will melt into water in a wooden crucible. Format: modid:name:meta=amount:fluidName:appearanceModID:appearanceBlock:appearanceMeta, modid can be ore for OreDictionary");
         for(String meltable : meltables) {
             String[] s = meltable.split("=");
             if (s.length < 2) {
@@ -90,7 +77,7 @@ public class WoodenCrucibleRegistry {
         }
     }
 
-    private static void loadMeltable(ItemStack source, String result) {
+    private static void loadMeltable(ItemStack sourceStack, String result) {
         String[] s = result.split(":");
         if(s.length < 5) {
             ExCompressum.logger.error("Skipping wooden meltable " + result + " due to invalid format");
@@ -107,6 +94,6 @@ public class WoodenCrucibleRegistry {
             ExCompressum.logger.error("Skipping wooden meltable " + result + " due to appearance block not found");
             return;
         }
-        register(source, fluidStack, appearance, Integer.parseInt(s[4]));
+        register(sourceStack, fluidStack, appearance, Integer.parseInt(s[4]));
     }
 }

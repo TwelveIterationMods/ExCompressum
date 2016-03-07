@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.compat.botania;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
+import net.blay09.mods.excompressum.registry.data.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.CompressedRecipeRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
@@ -22,7 +23,7 @@ public class SubTileBrokenComprilla extends SubTileFunctional {
     private static final int RANGE = 5;
     private static final int RANGE_Y = 3;
 
-    private final Multiset<CompressedRecipeRegistry.CompressedRecipe> altarItems = HashMultiset.create();
+    private final Multiset<CompressedRecipe> altarItems = HashMultiset.create();
     private final List<ItemStack> restItems = Lists.newArrayList();
 
     @Override
@@ -49,12 +50,12 @@ public class SubTileBrokenComprilla extends SubTileFunctional {
                             if (inventory != null) {
                                 for (int l = 0; l < inventory.getSizeInventory(); l++) {
                                     ItemStack itemStack = inventory.getStackInSlot(l);
-                                    CompressedRecipeRegistry.CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(itemStack);
+                                    CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(itemStack);
                                     if (compressedRecipe != null) {
                                         altarItems.add(compressedRecipe);
                                     }
                                 }
-                                for (CompressedRecipeRegistry.CompressedRecipe compressedRecipe : altarItems.elementSet()) {
+                                for (CompressedRecipe compressedRecipe : altarItems.elementSet()) {
                                     if (altarItems.count(compressedRecipe) >= compressedRecipe.getSourceStack().stackSize) {
                                         EntityItem entityItem = new EntityItem(supertile.getWorldObj(), supertile.xCoord + 0.5, supertile.yCoord + 0.5, supertile.zCoord + 0.5, compressedRecipe.getResultStack().copy());
                                         double motion = 0.1f;

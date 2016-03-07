@@ -5,8 +5,8 @@ import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.registry.GameRegistry;
 import exnihilo.registries.HammerRegistry;
 import exnihilo.registries.helpers.Smashable;
-import exnihilo.utils.ItemInfo;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -21,36 +21,35 @@ import java.util.Map;
 
 public class CompressedHammerRegistry {
 
-    private static final Multimap<ItemInfo, Smashable> rewards = ArrayListMultimap.create();
+    private static final Multimap<ItemAndMetadata, Smashable> smashables = ArrayListMultimap.create();
 
     private static void register(Block source, int sourceMeta, Item output, int outputMeta, float chance, float luckMultiplier) {
         Smashable entry = new Smashable(source, sourceMeta, output, outputMeta, chance, luckMultiplier);
-        ItemInfo itemInfo = new ItemInfo(source, sourceMeta);
-        rewards.put(itemInfo, entry);
+        smashables.put(new ItemAndMetadata(source, sourceMeta), entry);
     }
 
-    public static Collection<Smashable> getRewards(Block block, int meta) {
-        return rewards.get(new ItemInfo(block, meta));
+    public static Collection<Smashable> getSmashables(Block block, int metadata) {
+        return getSmashables(new ItemAndMetadata(block, metadata));
     }
 
-    public static Collection<Smashable> getRewards(ItemStack itemStack) {
-        return rewards.get(new ItemInfo(itemStack));
+    public static Collection<Smashable> getSmashables(ItemStack itemStack) {
+        return getSmashables(new ItemAndMetadata(itemStack));
     }
 
-    public static Collection<Smashable> getRewards(ItemInfo itemInfo) {
-        return rewards.get(itemInfo);
+    public static Collection<Smashable> getSmashables(ItemAndMetadata itemInfo) {
+        return smashables.get(itemInfo);
+    }
+
+    public static boolean isRegistered(Block block, int metadata) {
+        return smashables.containsKey(new ItemAndMetadata(block, metadata));
     }
 
     public static boolean isRegistered(ItemStack itemStack) {
-        return rewards.containsKey(new ItemInfo(itemStack));
+        return smashables.containsKey(new ItemAndMetadata(itemStack));
     }
 
-    public static boolean isRegistered(Block block, int meta) {
-        return rewards.containsKey(new ItemInfo(block, meta));
-    }
-
-    public static Multimap<ItemInfo, Smashable> getRewards() {
-        return rewards;
+    public static Multimap<ItemAndMetadata, Smashable> getSmashables() {
+        return smashables;
     }
 
     private static void register(Block source, int sourceMeta, ItemStack reward, float chance, float luckMultiplier) {
@@ -127,11 +126,10 @@ public class CompressedHammerRegistry {
         }
     }
 
-    public static Collection<ItemInfo> getSources(ItemStack reward) {
-        ArrayList<ItemInfo> results = new ArrayList<ItemInfo>();
-        ItemInfo rewardInfo = new ItemInfo(reward);
-        for(Map.Entry<ItemInfo, Smashable> entry : rewards.entries()) {
-            if (new ItemInfo(entry.getValue().item, entry.getValue().meta).equals(rewardInfo)) {
+    public static Collection<ItemAndMetadata> getSources(ItemStack reward) {
+        ArrayList<ItemAndMetadata> results = new ArrayList<ItemAndMetadata>();
+        for(Map.Entry<ItemAndMetadata, Smashable> entry : smashables.entries()) {
+            if(entry.getValue().item == reward.getItem() && entry.getValue().meta == reward.getItemDamage()) {
                 results.add(entry.getKey());
             }
         }

@@ -5,19 +5,20 @@ import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multiset;
 import exnihilo.registries.helpers.Smashable;
-import exnihilo.utils.ItemInfo;
 import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
 
 public class RecipeHandlerCompressedHammer extends TemplateRecipeHandler {
@@ -26,21 +27,21 @@ public class RecipeHandlerCompressedHammer extends TemplateRecipeHandler {
 
     public class CachedHammerRecipe extends CachedRecipe {
 
-        private final List<PositionedStack> input = new ArrayList<PositionedStack>();
-        private final List<PositionedStack> outputs = new ArrayList<PositionedStack>();
-        private Point focus;
+        private final List<PositionedStack> input = Lists.newArrayList();
+        private final List<PositionedStack> outputs = Lists.newArrayList();
+        private Point highlightPoint;
 
-        public CachedHammerRecipe(List<ItemStack> variations, ItemStack baseStack, ItemStack focusStack) {
-            PositionedStack itemStack = new PositionedStack(baseStack != null ? baseStack : variations, 74, 4);
-            itemStack.setMaxSize(1);
-            input.add(itemStack);
+        public CachedHammerRecipe(List<ItemStack> resultStacks, ItemStack inputStack, ItemStack highlightStack) {
+            PositionedStack positionedStack = new PositionedStack(inputStack != null ? inputStack : resultStacks, 74, 4);
+            positionedStack.setMaxSize(1);
+            input.add(positionedStack);
 
             int row = 0;
             int column = 0;
-            for (ItemStack v : variations) {
-                outputs.add(new PositionedStack(v, 3 + 18 * column, 37 + 18 * row));
-                if (focusStack != null && NEIServerUtils.areStacksSameTypeCrafting(focusStack, v)) {
-                    focus = new Point(2 + 18 * column, 36 + 18 * row);
+            for (ItemStack resultStack : resultStacks) {
+                outputs.add(new PositionedStack(resultStack, 3 + 18 * column, 37 + 18 * row));
+                if (highlightStack != null && NEIServerUtils.areStacksSameTypeCrafting(highlightStack, resultStack)) {
+                    highlightPoint = new Point(2 + 18 * column, 36 + 18 * row);
                 }
                 column++;
                 if (column > 8) {
@@ -68,40 +69,46 @@ public class RecipeHandlerCompressedHammer extends TemplateRecipeHandler {
     }
 
     @Override
-    public String getRecipeName() {
-        return "Compressed Hammer";
-    }
-
-    @Override
-    public String getGuiTexture() {
-        return "exnihilo:textures/hammerNEI.png";
-    }
-
-    private void addCached(List<ItemStack> variations, ItemStack base, ItemStack focus) {
-        if (variations.size() > SLOTS_PER_PAGE) {
-            List<List<ItemStack>> parts = new ArrayList<List<ItemStack>>();
-            int size = variations.size();
-            for (int i = 0; i < size; i += SLOTS_PER_PAGE) {
-                parts.add(new ArrayList<ItemStack>(variations.subList(i, Math.min(size, i + SLOTS_PER_PAGE))));
-            }
-            for (List<ItemStack> part : parts) {
-                arecipes.add(new CachedHammerRecipe(part, base, focus));
-            }
-        } else {
-            arecipes.add(new CachedHammerRecipe(variations, base, focus));
-        }
-    }
-
-    @Override
     public void drawBackground(int recipeIndex) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glColor4f(1f, 1f, 1f, 1f);
         GuiDraw.changeTexture(getGuiTexture());
         GuiDraw.drawTexturedModalRect(0, 0, 0, 0, 166, 58);
 
-        Point focus = ((CachedHammerRecipe) this.arecipes.get(recipeIndex)).focus;
-        if (focus != null) {
-            GuiDraw.drawTexturedModalRect(focus.x, focus.y, 166, 0, 18, 18);
+        Point highlightPoint = ((CachedHammerRecipe) arecipes.get(recipeIndex)).highlightPoint;
+        if (highlightPoint != null) {
+            GuiDraw.drawTexturedModalRect(highlightPoint.x, highlightPoint.y, 166, 0, 18, 18);
         }
+    }
+
+    private final Multiset<String> condensedTooltip = HashMultiset.create();
+    @Override
+    public List<String> handleItemTooltip(GuiRecipe gui, ItemStack itemStack, List<String> list, int recipeIdx) {
+        CachedHammerRecipe recipe = (CachedHammerRecipe) arecipes.get(recipeIdx);
+        ItemStack sourceStack = recipe.input.get(0).item;
+        if (itemStack != null && itemStack != sourceStack) {
+            list.add("Drop Chance:");
+            condensedTooltip.clear();
+            for (Smashable smashable : CompressedHammerRegistry.getSmashables(Block.getBlockFromItem(sourceStack.getItem()), sourceStack.getItemDamage())) {
+                if (NEIServerUtils.areStacksSameTypeCrafting(itemStack, new ItemStack(smashable.item, 1, smashable.meta))) {
+                    int chance = (int) (100 * smashable.chance);
+                    int fortune = (int) (100 * smashable.luckMultiplier);
+                    if (fortune > 0) {
+                        condensedTooltip.add(Integer.toString(chance) + "%" + EnumChatFormatting.BLUE + " (+" + Integer.toString(fortune) + "% luck bonus)" + EnumChatFormatting.RESET);
+                    } else {
+                        condensedTooltip.add(Integer.toString(chance) + "%");
+                    }
+                }
+            }
+            for(String line : condensedTooltip.elementSet()) {
+                list.add("  * " + condensedTooltip.count(line) + "x " + line);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public void loadTransferRects() {
+        transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(75, 22, 15, 13), "excompressum.compressedHammer"));
     }
 
     @Override
@@ -110,124 +117,81 @@ public class RecipeHandlerCompressedHammer extends TemplateRecipeHandler {
     }
 
     @Override
-    public void loadTransferRects() {
-        transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(75, 22, 15, 13), "excompressum.hammer"));
+    public String getGuiTexture() {
+        return "exnihilo:textures/hammerNEI.png";
     }
 
     @Override
-    public void loadCraftingRecipes(String outputID, Object... results) {
-        if (outputID.equals("excompressum.hammer")) {
-            for (ItemInfo itemInfo : CompressedHammerRegistry.getRewards().keySet()) {
-                ItemStack inputStack = itemInfo.getStack();
-                ArrayList<ItemStack> resultStack = new ArrayList<ItemStack>();
-                HashMap<ItemInfo, Integer> cache = new HashMap<ItemInfo, Integer>();
-                for (Smashable s : CompressedHammerRegistry.getRewards(itemInfo)) {
-                    ItemInfo currInfo = new ItemInfo(s.item, s.meta);
-                    if (cache.containsKey(currInfo))
-                        cache.put(currInfo, cache.get(currInfo) + 1);
-                    else
-                        cache.put(currInfo, 1);
-
-                }
-                for (ItemInfo outputInfos : cache.keySet()) {
-                    ItemStack stack = outputInfos.getStack();
-                    stack.stackSize = cache.get(outputInfos);
-                    resultStack.add(stack);
-                }
-                addCached(resultStack, inputStack, null);
-            }
-        } else
-            super.loadCraftingRecipes(outputID, results);
+    public String getRecipeName() {
+        return "Compressed Hammer";
     }
 
     @Override
-    public void loadCraftingRecipes(ItemStack result) {
-        HashSet<ItemInfo> completed = new HashSet<ItemInfo>();
-        for (ItemInfo ii : CompressedHammerRegistry.getSources(result)) {
-            if (!completed.contains(ii)) {
-                HashMap<ItemInfo, Integer> stored = new HashMap<ItemInfo, Integer>();
-                for (Smashable results : CompressedHammerRegistry.getRewards(Block.getBlockFromItem(ii.getItem()), ii.getMeta())) {
-                    ItemInfo current = new ItemInfo(results.item, results.meta);
-                    if (stored.containsKey(current))
-                        stored.put(current, stored.get(current) + 1);
-                    else
-                        stored.put(current, 1);
-                }
-                ArrayList<ItemStack> resultVars = new ArrayList<ItemStack>();
-                for (ItemInfo info : stored.keySet()) {
-                    ItemStack stack = info.getStack();
-                    stack.stackSize = stored.get(info);
-                    resultVars.add(stack);
-                }
-                addCached(resultVars, ii.getStack(), result);
-                completed.add(ii);
-            }
-        }
-
-    }
-
-    @Override
-    public void loadUsageRecipes(ItemStack ingredient) {
-        HashMap<ItemInfo, Integer> stored = new HashMap<ItemInfo, Integer>();
-
-        if (Block.getBlockFromItem(ingredient.getItem()) == Blocks.air) {
+    public void loadCraftingRecipes(String outputID, Object... wat) {
+        if (!outputID.equals("excompressum.hammer")) {
+            super.loadCraftingRecipes(outputID, wat);
             return;
         }
-
-        if (!CompressedHammerRegistry.isRegistered(ingredient)) {
-            return;
-        }
-
-        for (Smashable results : CompressedHammerRegistry.getRewards(Block.getBlockFromItem(ingredient.getItem()), ingredient.getItemDamage())) {
-            ItemInfo current = new ItemInfo(results.item, results.meta);
-            if (stored.containsKey(current)) {
-                stored.put(current, stored.get(current) + 1);
-            } else {
-                stored.put(current, 1);
+        Multimap<ItemAndMetadata, Smashable> smashables = CompressedHammerRegistry.getSmashables();
+        for(ItemAndMetadata sourceInfo : smashables.keySet()) {
+            Collection<Smashable> results = smashables.get(sourceInfo);
+            Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
+            for(Smashable result : results) {
+                countedSet.add(new ItemAndMetadata(result.item, result.meta));
             }
+            List<ItemStack> resultStacks = Lists.newArrayList();
+            for(ItemAndMetadata resultInfo : countedSet.elementSet()) {
+                resultStacks.add(resultInfo.createStack(countedSet.count(resultInfo)));
+            }
+            addCached(resultStacks, sourceInfo.createStack(1), null);
         }
-        ArrayList<ItemStack> resultVars = new ArrayList<ItemStack>();
-        for (ItemInfo itemInfo : stored.keySet()) {
-            ItemStack stack = itemInfo.getStack();
-            stack.stackSize = stored.get(itemInfo);
-            resultVars.add(stack);
-        }
-        addCached(resultVars, ingredient, ingredient);
-    }
-
-    @SuppressWarnings("unused")
-    private void addCached(List<ItemStack> variations) {
-        addCached(variations, null, null);
     }
 
     @Override
-    public List<String> handleItemTooltip(GuiRecipe guiRecipe, ItemStack itemStack, List<String> tooltip, int recipe) {
-        super.handleItemTooltip(guiRecipe, itemStack, tooltip, recipe);
-        CachedHammerRecipe cachedRecipe = (CachedHammerRecipe) this.arecipes.get(recipe);
-        Point mouse = GuiDraw.getMousePosition();
-        Point offset = guiRecipe.getRecipePosition(recipe);
-        Point relMouse = new Point(mouse.x - (guiRecipe.width - 176) / 2 - offset.x, mouse.y - (guiRecipe.height - 166) / 2 - offset.y);
-
-        if (itemStack != null && (relMouse.y > 34 && relMouse.y < 55)) {
-            tooltip.add("Drop Chance:");
-            ItemStack sourceStack = cachedRecipe.input.get(0).item;
-            Block inBlock = Block.getBlockFromItem(sourceStack.getItem());
-            int meta = sourceStack.getItemDamage();
-            for (Smashable smash : CompressedHammerRegistry.getRewards(inBlock, meta)) {
-                if (NEIServerUtils.areStacksSameTypeCrafting(itemStack, new ItemStack(smash.item, 1, smash.meta))) {
-                    int chance = (int) (100 * smash.chance);
-                    int fortune = (int) (100 * smash.luckMultiplier);
-                    if (fortune > 0)
-                        tooltip.add("  * " + Integer.toString(chance) + "%"
-                                + EnumChatFormatting.BLUE + " (+" + Integer.toString(fortune) + "% luck bonus)" + EnumChatFormatting.RESET);
-                    else
-                        tooltip.add("  * " + Integer.toString(chance) + "%");
-
-                }
-
+    public void loadCraftingRecipes(ItemStack itemStack) {
+        Multimap<ItemAndMetadata, Smashable> smashables = CompressedHammerRegistry.getSmashables();
+        for (ItemAndMetadata sourceInfo : smashables.keySet()) {
+            Collection<Smashable> results = smashables.get(sourceInfo);
+            Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
+            for(Smashable result : results) {
+                countedSet.add(new ItemAndMetadata(result.item, result.meta));
             }
-
+            if (!countedSet.contains(new ItemAndMetadata(itemStack))) {
+                continue;
+            }
+            List<ItemStack> resultStacks = Lists.newArrayList();
+            for(ItemAndMetadata resultInfo : countedSet.elementSet()) {
+                resultStacks.add(resultInfo.createStack(countedSet.count(resultInfo)));
+            }
+            addCached(resultStacks, sourceInfo.createStack(1), itemStack);
         }
-        return tooltip;
     }
+
+    @Override
+    public void loadUsageRecipes(ItemStack itemStack) {
+        Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
+        if (!CompressedHammerRegistry.isRegistered(itemStack)) {
+            return;
+        }
+        for (Smashable result : CompressedHammerRegistry.getSmashables(itemStack)) {
+            countedSet.add(new ItemAndMetadata(result.item, result.meta));
+        }
+        List<ItemStack> resultStacks = Lists.newArrayList();
+        for (ItemAndMetadata itemInfo : countedSet.elementSet()) {
+            resultStacks.add(itemInfo.createStack(countedSet.count(itemInfo)));
+        }
+        addCached(resultStacks, itemStack, itemStack);
+    }
+
+    private void addCached(List<ItemStack> resultStacks, ItemStack inputStack, ItemStack highlightStack) {
+        int resultCount = resultStacks.size();
+        if (resultCount > SLOTS_PER_PAGE) {
+            for(int i = 0; i < resultCount; i += SLOTS_PER_PAGE) {
+                arecipes.add(new CachedHammerRecipe(resultStacks.subList(i, Math.min(resultCount, i + SLOTS_PER_PAGE)), inputStack, highlightStack));
+            }
+        } else {
+            arecipes.add(new CachedHammerRecipe(resultStacks, inputStack, highlightStack));
+        }
+    }
+
 }

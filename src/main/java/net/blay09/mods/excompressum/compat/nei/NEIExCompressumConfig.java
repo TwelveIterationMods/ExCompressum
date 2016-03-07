@@ -9,14 +9,23 @@ public class NEIExCompressumConfig implements IConfigureNEI {
         RecipeHandlerCompressedHammer handlerHammer = new RecipeHandlerCompressedHammer();
         API.registerRecipeHandler(handlerHammer);
         API.registerUsageHandler(handlerHammer);
+
         RecipeHandlerHeavySieve handlerSieve = new RecipeHandlerHeavySieve();
         API.registerRecipeHandler(handlerSieve);
         API.registerUsageHandler(handlerSieve);
+
+        RecipeHandlerComposting handlerComposting = new RecipeHandlerComposting();
+        API.registerRecipeHandler(handlerComposting);
+        API.registerUsageHandler(handlerComposting);
+
+        RecipeHandlerBarrelProcess handlerBarrel = new RecipeHandlerBarrelProcess();
+        API.registerRecipeHandler(handlerBarrel);
+        API.registerUsageHandler(handlerBarrel);
     }
 
     @Override
     public String getName() {
-        return "EX Compressum";
+        return "Ex Compressum";
     }
 
     @Override

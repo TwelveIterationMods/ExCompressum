@@ -5,8 +5,8 @@ import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.registry.GameRegistry;
 import exnihilo.registries.SieveRegistry;
 import exnihilo.registries.helpers.SiftingResult;
-import exnihilo.utils.ItemInfo;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -21,36 +21,34 @@ import java.util.Map;
 
 public class HeavySieveRegistry {
 
-    private static final Multimap<ItemInfo, SiftingResult> siftables = ArrayListMultimap.create();
+    private static final Multimap<ItemAndMetadata, SiftingResult> siftables = ArrayListMultimap.create();
     private static Configuration config;
 
     private static void register(Block source, int sourceMeta, Item output, int outputMeta, int rarity) {
-        if (source == null || output == null) {
+        if (source == null || output == null || rarity <= 0) {
             return;
         }
-        if (rarity > 0) {
-            siftables.put(new ItemInfo(source, sourceMeta), new SiftingResult(output, outputMeta, rarity));
-        }
+        siftables.put(new ItemAndMetadata(source, sourceMeta), new SiftingResult(output, outputMeta, rarity));
     }
 
-    public static Collection<SiftingResult> getSiftingOutput(Block inBlock, int meta) {
-        return siftables.get(new ItemInfo(inBlock, meta));
+    public static Collection<SiftingResult> getSiftingOutput(Block block, int metadata) {
+        return getSiftingOutput(new ItemAndMetadata(block, metadata));
     }
 
     public static Collection<SiftingResult> getSiftingOutput(ItemStack itemStack) {
-        return siftables.get(new ItemInfo(itemStack));
+        return getSiftingOutput(new ItemAndMetadata(itemStack));
     }
 
-    public static Collection<SiftingResult> getSiftingOutput(ItemInfo itemInfo) {
+    public static Collection<SiftingResult> getSiftingOutput(ItemAndMetadata itemInfo) {
         return siftables.get(itemInfo);
     }
 
     public static boolean isRegistered(ItemStack itemStack) {
-        return siftables.containsKey(new ItemInfo(itemStack));
+        return siftables.containsKey(new ItemAndMetadata(itemStack));
     }
 
     public static boolean isRegistered(Block block, int metadata) {
-        return siftables.containsKey(new ItemInfo(block, metadata));
+        return siftables.containsKey(new ItemAndMetadata(block, metadata));
     }
 
     public static void load(Configuration config) {
@@ -196,18 +194,8 @@ public class HeavySieveRegistry {
         }
     }
 
-    public static Multimap<ItemInfo, SiftingResult> getSiftables() {
+    public static Multimap<ItemAndMetadata, SiftingResult> getSiftables() {
         return siftables;
     }
 
-    public static Collection<ItemInfo> getSources(ItemStack reward) {
-        ArrayList<ItemInfo> result = new ArrayList<ItemInfo>();
-        ItemInfo rewardInfo = new ItemInfo(reward);
-        for(Map.Entry<ItemInfo, SiftingResult> entry : siftables.entries()) {
-            if (new ItemInfo(entry.getValue().item, entry.getValue().meta).equals(rewardInfo)) {
-                result.add(entry.getKey());
-            }
-        }
-        return result;
-    }
 }

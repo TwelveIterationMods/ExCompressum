@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.item.ItemChickenStick;
+import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 import net.minecraft.block.Block;
 import net.minecraftforge.common.config.Configuration;
 
@@ -13,47 +14,20 @@ import java.util.Map;
 
 public class ChickenStickRegistry {
 
-    private static class BlockInfo {
-        public final Block block;
-        public final int meta;
-
-        public BlockInfo(Block block, int meta) {
-            this.block = block;
-            this.meta = meta;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            BlockInfo blockInfo = (BlockInfo) o;
-
-            return meta == blockInfo.meta && block.equals(blockInfo.block);
-        }
-
-        @Override
-        public int hashCode() {
-            int result = block.hashCode();
-            result = 31 * result + meta;
-            return result;
-        }
-    }
-
     public static float chickenStickSoundChance;
     public static float chickenStickSpawnChance;
     public static boolean chickenOut;
     public static String[] chickenStickSounds;
     public static final Map<String, String> chickenStickNames = Maps.newHashMap();
-    private static final List<BlockInfo> validBlocks = Lists.newArrayList();
+    private static final List<ItemAndMetadata> validBlocks = Lists.newArrayList();
 
-    private static void addValidBlock(Block block, int meta) {
-        validBlocks.add(new BlockInfo(block, meta));
+    private static void addValidBlock(Block block, int metadata) {
+        validBlocks.add(new ItemAndMetadata(block, metadata));
         ItemChickenStick.blocksEffectiveAgainst.add(block);
     }
 
-    public static boolean isValidBlock(Block block, int meta) {
-        return validBlocks.contains(new BlockInfo(block, meta));
+    public static boolean isValidBlock(Block block, int metadata) {
+        return validBlocks.contains(new ItemAndMetadata(block, metadata));
     }
 
     public static void load(Configuration config) {

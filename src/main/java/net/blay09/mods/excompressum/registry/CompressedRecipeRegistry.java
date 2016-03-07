@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.registry;
 
 import com.google.common.collect.Lists;
+import net.blay09.mods.excompressum.registry.data.CompressedRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,24 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class CompressedRecipeRegistry {
-
-    public static class CompressedRecipe {
-        private final ItemStack sourceStack;
-        private final ItemStack resultStack;
-
-        public CompressedRecipe(ItemStack sourceStack, ItemStack resultStack) {
-            this.sourceStack = sourceStack;
-            this.resultStack = resultStack;
-        }
-
-        public ItemStack getSourceStack() {
-            return sourceStack;
-        }
-
-        public ItemStack getResultStack() {
-            return resultStack;
-        }
-    }
 
     private static final List<CompressedRecipe> recipesSmall = Lists.newArrayList();
     private static final List<CompressedRecipe> recipes = Lists.newArrayList();

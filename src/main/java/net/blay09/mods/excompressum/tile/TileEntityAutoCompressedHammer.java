@@ -75,7 +75,7 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
                 progress += getEffectiveSpeed();
                 if (progress >= 1) {
                     if (!worldObj.isRemote) {
-                        Collection<Smashable> rewards = CompressedHammerRegistry.getRewards(currentStack);
+                        Collection<Smashable> rewards = CompressedHammerRegistry.getSmashables(currentStack);
                         if (rewards != null && !rewards.isEmpty()) {
                             for (Smashable reward : rewards) {
                                 if (worldObj.rand.nextFloat() <= reward.chance + (reward.luckMultiplier * getEffectiveLuck())) {

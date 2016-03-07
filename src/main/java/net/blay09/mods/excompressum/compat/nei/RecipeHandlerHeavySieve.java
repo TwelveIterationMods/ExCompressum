@@ -5,118 +5,101 @@ import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiRecipe;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import com.google.common.collect.*;
 import exnihilo.registries.helpers.SiftingResult;
-import exnihilo.utils.ItemInfo;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
 
 public class RecipeHandlerHeavySieve extends TemplateRecipeHandler {
 
     private static final int SLOTS_PER_PAGE = 45;
 
-    public class CachedSieveRecipe extends CachedRecipe {
+    public class CachedHeavySieveRecipe extends CachedRecipe {
 
-        private final List<PositionedStack> input = new ArrayList<PositionedStack>();
-        private final List<PositionedStack> outputs = new ArrayList<PositionedStack>();
-        public Point focus;
+        private final List<PositionedStack> input = Lists.newArrayList();
+        private final List<PositionedStack> outputs = Lists.newArrayList();
+        private Point highlightPoint;
 
-        public CachedSieveRecipe(List<ItemStack> variations, ItemStack base, ItemStack focus)
-        {
-            PositionedStack pstack = new PositionedStack(base != null ? base : variations, 74, 4);
-            pstack.setMaxSize(1);
-            this.input.add(pstack);
+        public CachedHeavySieveRecipe(List<ItemStack> resultStacks, ItemStack inputStack, ItemStack highlightStack) {
+            PositionedStack positionedStack = new PositionedStack(inputStack != null ? inputStack : resultStacks, 74, 4);
+            positionedStack.setMaxSize(1);
+            input.add(positionedStack);
 
             int row = 0;
-            int col = 0;
-            for (ItemStack v : variations)
-            {
-                this.outputs.add(new PositionedStack(v, 3 + 18 * col, 37 + 18 * row));
+            int column = 0;
+            for (ItemStack resultStack : resultStacks) {
+                outputs.add(new PositionedStack(resultStack, 3 + 18 * column, 37 + 18 * row));
 
-                if (focus != null && NEIServerUtils.areStacksSameTypeCrafting(focus, v)) {
-                    this.focus = new Point(2 + 18 * col, 36 + 18 * row);
+                if (highlightStack != null && NEIServerUtils.areStacksSameTypeCrafting(highlightStack, resultStack)) {
+                    highlightPoint = new Point(2 + 18 * column, 36 + 18 * row);
                 }
 
-                col++;
-                if (col > 8) {
-                    col = 0;
+                column++;
+                if (column > 8) {
+                    column = 0;
                     row++;
                 }
             }
         }
 
         @Override
-        public List<PositionedStack> getIngredients()
-        {
-            return this.getCycledIngredients(cycleticks / 20, this.input);
+        public List<PositionedStack> getIngredients() {
+            return getCycledIngredients(cycleticks / 20, input);
         }
 
         @Override
-        public List<PositionedStack> getOtherStacks()
-        {
-            return this.outputs;
+        public List<PositionedStack> getOtherStacks() {
+            return outputs;
         }
 
         @Override
-        public PositionedStack getResult()
-        {
+        public PositionedStack getResult() {
             return null;
-        }
-
-    }
-
-    @Override
-    public String getRecipeName()
-    {
-        return "Heavy Sieve";
-    }
-
-    @Override
-    public String getGuiTexture()
-    {
-        return "exnihilo:textures/sieveNEI.png";
-    }
-
-    private void addCached(List<ItemStack> variations, ItemStack base, ItemStack focus)
-    {
-        if (variations.size() > SLOTS_PER_PAGE)
-        {
-            List<List<ItemStack>> parts = new ArrayList<List<ItemStack>>();
-            int size = variations.size();
-            for (int i = 0; i < size; i += SLOTS_PER_PAGE)
-            {
-                parts.add(new ArrayList<ItemStack>(variations.subList(i, Math.min(size, i + SLOTS_PER_PAGE))));
-            }
-            for (List<ItemStack> part : parts)
-            {
-                this.arecipes.add(new CachedSieveRecipe(part, base, focus));
-            }
-        }
-        else
-        {
-            this.arecipes.add(new CachedSieveRecipe(variations, base, focus));
         }
     }
 
     @Override
     public void drawBackground(int recipeIndex) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glColor4f(1f, 1f, 1f, 1f);
         GuiDraw.changeTexture(getGuiTexture());
         GuiDraw.drawTexturedModalRect(0, 0, 0, 0, 166, 130);
 
-        Point focus = ((CachedSieveRecipe) this.arecipes.get(recipeIndex)).focus;
-        if (focus != null)
-        {
-            GuiDraw.drawTexturedModalRect(focus.x, focus.y, 166, 0, 18, 18);
+        Point highlightPoint = ((CachedHeavySieveRecipe) arecipes.get(recipeIndex)).highlightPoint;
+        if (highlightPoint != null) {
+            GuiDraw.drawTexturedModalRect(highlightPoint.x, highlightPoint.y, 166, 0, 18, 18);
         }
+    }
+
+    private final Multiset<String> condensedTooltip = HashMultiset.create();
+    @Override
+    public List<String> handleItemTooltip(GuiRecipe gui, ItemStack itemStack, List<String> list, int recipeIdx) {
+        CachedHeavySieveRecipe recipe = (CachedHeavySieveRecipe) arecipes.get(recipeIdx);
+        ItemStack sourceStack = recipe.input.get(0).item;
+        if (itemStack != null && itemStack != sourceStack) {
+            list.add("Drop Chance:");
+            condensedTooltip.clear();
+            for (SiftingResult result : HeavySieveRegistry.getSiftingOutput(Block.getBlockFromItem(sourceStack.getItem()), sourceStack.getItemDamage())) {
+                if (NEIServerUtils.areStacksSameTypeCrafting(itemStack, new ItemStack(result.item, 1, result.meta))) {
+                    condensedTooltip.add(Integer.toString((int) Math.round(100 * (1.0 / result.rarity))) + "%");
+                }
+            }
+            for(String line : condensedTooltip.elementSet()) {
+                list.add("  * " + condensedTooltip.count(line) + "x " + line);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public void loadTransferRects() {
+        transferRects.add(new RecipeTransferRect(new Rectangle(75, 22, 15, 13), "excompressum.heavySieve"));
     }
 
     @Override
@@ -125,126 +108,80 @@ public class RecipeHandlerHeavySieve extends TemplateRecipeHandler {
     }
 
     @Override
-    public void loadTransferRects() {
-        this.transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(75, 22, 15, 13), "exnihilo.sieve"));
+    public String getGuiTexture() {
+        return "exnihilo:textures/sieveNEI.png";
     }
 
     @Override
-    public void loadCraftingRecipes(String outputID, Object... results)
-    {
-        if (outputID.equals("exnihilo.sieve"))
-        {
-            for (ItemInfo itemInfo : HeavySieveRegistry.getSiftables().keySet())
-            {
-                ItemStack inputStack = itemInfo.getStack();
-                ArrayList<ItemStack> resultStack = new ArrayList<ItemStack>();
-                for (SiftingResult s : HeavySieveRegistry.getSiftingOutput(itemInfo))
-                {
-                    resultStack.add(new ItemStack(s.item, 1, s.meta));
-                }
-                addCached(resultStack, inputStack, null);
-            }
-        }
-        else
-            super.loadCraftingRecipes(outputID, results);
+    public String getRecipeName() {
+        return "Heavy Sieve";
     }
 
     @Override
-    public void loadCraftingRecipes(ItemStack result)
-    {
-        HashSet<ItemInfo> completed = new HashSet<ItemInfo>();
-        for (ItemInfo ii : HeavySieveRegistry.getSources(result))
-        {
-            if (!completed.contains(ii))
-            {
-                HashMap<ItemInfo, Integer> stored = new HashMap<ItemInfo, Integer>();
-                for (SiftingResult results : HeavySieveRegistry.getSiftingOutput(Block.getBlockFromItem(ii.getItem()), ii.getMeta()))
-                {
-                    ItemInfo current = new ItemInfo(results.item, results.meta);
-                    if (stored.containsKey(current))
-                        stored.put(current, stored.get(current)+1);
-                    else
-                        stored.put(current, 1);
-                }
-                ArrayList<ItemStack> resultVars = new ArrayList<ItemStack>();
-                for (ItemInfo info : stored.keySet())
-                {
-                    ItemStack stack = info.getStack();
-                    stack.stackSize = stored.get(info);
-                    resultVars.add(stack);
-                }
-                addCached(resultVars, ii.getStack(), result);
-                completed.add(ii);
-            }
-        }
-
-    }
-
-    @Override
-    public void loadUsageRecipes(ItemStack ingredient)
-    {
-        HashMap<ItemInfo, Integer> stored = new HashMap<ItemInfo, Integer>();
-
-        if (Block.getBlockFromItem(ingredient.getItem()) == Blocks.air)
-            return;
-
-        if (!HeavySieveRegistry.isRegistered(Block.getBlockFromItem(ingredient.getItem()), ingredient.getItemDamage()))
-        {
+    public void loadCraftingRecipes(String outputId, Object... wat) {
+        if (!outputId.equals("excompressum.heavySieve")) {
+            super.loadCraftingRecipes(outputId, wat);
             return;
         }
-
-        for (SiftingResult results : HeavySieveRegistry.getSiftingOutput(Block.getBlockFromItem(ingredient.getItem()), ingredient.getItemDamage()))
-        {
-            ItemInfo current = new ItemInfo(results.item, results.meta);
-            if (stored.containsKey(current))
-                stored.put(current, stored.get(current)+1);
-            else
-                stored.put(current, 1);
+        Multimap<ItemAndMetadata, SiftingResult> siftables = HeavySieveRegistry.getSiftables();
+        for (ItemAndMetadata sourceInfo : siftables.keySet()) {
+            Collection<SiftingResult> results = siftables.get(sourceInfo);
+            Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
+            for(SiftingResult result : results) {
+                countedSet.add(new ItemAndMetadata(result.item, result.meta));
+            }
+            List<ItemStack> resultStacks = Lists.newArrayList();
+            for(ItemAndMetadata resultInfo : countedSet.elementSet()) {
+                resultStacks.add(resultInfo.createStack(countedSet.count(resultInfo)));
+            }
+            addCached(resultStacks, sourceInfo.createStack(1), null);
         }
-        ArrayList<ItemStack> resultVars = new ArrayList<ItemStack>();
-        for (ItemInfo info : stored.keySet())
-        {
-            ItemStack stack = info.getStack();
-            stack.stackSize = stored.get(info);
-            resultVars.add(stack);
-        }
-        addCached(resultVars, ingredient, ingredient);
-        //completed.add(ii);
-    }
-
-    @SuppressWarnings("unused")
-    private void addCached(List<ItemStack> variations)
-    {
-        addCached(variations, null, null);
     }
 
     @Override
-    public List<String> handleItemTooltip(GuiRecipe guiRecipe, ItemStack itemStack, List<String> currenttip, int recipe) {
-        super.handleItemTooltip(guiRecipe, itemStack, currenttip, recipe);
-        CachedSieveRecipe crecipe = (CachedSieveRecipe) this.arecipes.get(recipe);
-        Point mouse = GuiDraw.getMousePosition();
-        Point offset = guiRecipe.getRecipePosition(recipe);
-        Point relMouse = new Point(mouse.x - (guiRecipe.width - 176) / 2 - offset.x, mouse.y - (guiRecipe.height - 166) / 2 - offset.y);
-
-        if (itemStack != null && relMouse.y > 34)
-        {
-            currenttip.add("Drop Chance:");
-            ItemStack sourceStack = crecipe.input.get(0).item;
-            Block inBlock = Block.getBlockFromItem(sourceStack.getItem());
-            int meta = sourceStack.getItemDamage();
-            for (SiftingResult smash : HeavySieveRegistry.getSiftingOutput(inBlock, meta))
-            {
-                if (NEIServerUtils.areStacksSameTypeCrafting(itemStack, new ItemStack(smash.item, 1, smash.meta)))
-                {
-                    int chance = (int) Math.round(100 * (1.0/smash.rarity));
-                    currenttip.add("  * "+Integer.toString(chance)+"%");
-
-                }
-
+    public void loadCraftingRecipes(ItemStack itemStack) {
+        Multimap<ItemAndMetadata, SiftingResult> siftables = HeavySieveRegistry.getSiftables();
+        for (ItemAndMetadata sourceInfo : siftables.keySet()) {
+            Collection<SiftingResult> results = siftables.get(sourceInfo);
+            Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
+            for(SiftingResult result : results) {
+                countedSet.add(new ItemAndMetadata(result.item, result.meta));
             }
-
+            if (!countedSet.contains(new ItemAndMetadata(itemStack))) {
+                continue;
+            }
+            List<ItemStack> resultStacks = Lists.newArrayList();
+            for(ItemAndMetadata resultInfo : countedSet.elementSet()) {
+                resultStacks.add(resultInfo.createStack(countedSet.count(resultInfo)));
+            }
+            addCached(resultStacks, sourceInfo.createStack(1), itemStack);
         }
-        return currenttip;
     }
 
+    @Override
+    public void loadUsageRecipes(ItemStack itemStack) {
+        Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
+        if (!HeavySieveRegistry.isRegistered(itemStack)) {
+            return;
+        }
+        for (SiftingResult result : HeavySieveRegistry.getSiftingOutput(itemStack)) {
+            countedSet.add(new ItemAndMetadata(result.item, result.meta));
+        }
+        List<ItemStack> resultStacks = Lists.newArrayList();
+        for (ItemAndMetadata itemInfo : countedSet.elementSet()) {
+            resultStacks.add(itemInfo.createStack(countedSet.count(itemInfo)));
+        }
+        addCached(resultStacks, itemStack, itemStack);
+    }
+
+    private void addCached(List<ItemStack> resultStacks, ItemStack inputStack, ItemStack highlightStack) {
+        int resultCount = resultStacks.size();
+        if (resultCount > SLOTS_PER_PAGE) {
+            for(int i = 0; i < resultCount; i += SLOTS_PER_PAGE) {
+                arecipes.add(new CachedHeavySieveRecipe(resultStacks.subList(i, Math.min(resultCount, i + SLOTS_PER_PAGE)), inputStack, highlightStack));
+            }
+        } else {
+            arecipes.add(new CachedHeavySieveRecipe(resultStacks, inputStack, highlightStack));
+        }
+    }
 }

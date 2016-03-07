@@ -9,11 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 public class ItemRenderWoodenCrucible implements IItemRenderer {
 
-    private final ModelCrucible model;
-
-    public ItemRenderWoodenCrucible(ModelCrucible model) {
-        this.model = model;
-    }
+    private final ModelCrucible model = new ModelCrucible();
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {

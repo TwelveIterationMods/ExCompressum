@@ -5,15 +5,9 @@ import cofh.api.energy.IEnergyHandler;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import exnihilo.registries.helpers.Smashable;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.data.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.CompressedRecipeRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -27,13 +21,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.util.Collection;
-
 @Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
 public class TileEntityAutoCompressor extends TileEntity implements ISidedInventory, IEnergyHandler {
 
     private final EnergyStorage storage = new EnergyStorage(64000);
-    private final Multiset<CompressedRecipeRegistry.CompressedRecipe> inputItems = HashMultiset.create();
+    private final Multiset<CompressedRecipe> inputItems = HashMultiset.create();
     private final ItemStack[] inventory = new ItemStack[getSizeInventory()];
     private ItemStack currentStack;
 
@@ -47,13 +39,13 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                 inputItems.clear();
                 for (int i = 0; i < 12; i++) {
                     if (inventory[i] != null) {
-                        CompressedRecipeRegistry.CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(inventory[i]);
+                        CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(inventory[i]);
                         if (compressedRecipe != null) {
                             inputItems.add(compressedRecipe, inventory[i].stackSize);
                         }
                     }
                 }
-                for (CompressedRecipeRegistry.CompressedRecipe compressedRecipe : inputItems.elementSet()) {
+                for (CompressedRecipe compressedRecipe : inputItems.elementSet()) {
                     ItemStack sourceStack = compressedRecipe.getSourceStack();
                     if (inputItems.count(compressedRecipe) >= sourceStack.stackSize) {
                         int space = 0;
@@ -98,7 +90,7 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                 progress = Math.min(1f, progress + getEffectiveSpeed());
                 if (progress >= 1) {
                     if (!worldObj.isRemote) {
-                        CompressedRecipeRegistry.CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(currentStack);
+                        CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(currentStack);
                         if (compressedRecipe != null) {
                             ItemStack resultStack = compressedRecipe.getResultStack().copy();
                             if (!addItemToOutput(resultStack)) {
