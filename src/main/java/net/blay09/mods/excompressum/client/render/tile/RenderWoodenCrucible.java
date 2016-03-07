@@ -54,9 +54,8 @@ public class RenderWoodenCrucible extends TileEntitySpecialRenderer {
             GL11.glPushMatrix();
             float fluidRenderVolume = Math.max(0.2f, Math.min(0.95f, (tileCrucible.getFluidVolume() / TileEntityWoodenCrucible.MAX_FLUID)));
             GL11.glTranslatef((float) x + 0.5f, (float) y + fluidRenderVolume, (float) z + 0.5f);
-            if (tileCrucible.getFluidVolume() > 0) {
-                internal.render(new Color(tileCrucible.getFluid().getColor()), tileCrucible.getFluid().getIcon(), true);
-            }
+            bindTexture(TextureMap.locationBlocksTexture);
+            internal.render(new Color(tileCrucible.getFluid().getColor()), tileCrucible.getFluid().getIcon(), true);
             GL11.glPopMatrix();
         }
     }

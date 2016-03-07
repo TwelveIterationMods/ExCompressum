@@ -83,7 +83,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     }
 
     private float getCapacityLeft() {
-        return MAX_FLUID - (solidVolume - fluidVolume);
+        return MAX_FLUID - (solidVolume + fluidVolume);
     }
 
     public WoodenMeltable getCurrentMeltable() {
