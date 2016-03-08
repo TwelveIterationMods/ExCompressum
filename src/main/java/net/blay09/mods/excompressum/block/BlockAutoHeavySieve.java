@@ -51,9 +51,9 @@ public class BlockAutoHeavySieve extends BlockAutoSieve implements IDismantleabl
         if (Loader.isModLoaded("CoFHCore")) {
             if (config.getBoolean("Auto Heavy Sieve", "blocks", true, "Set this to false to disable the recipe for the auto heavy sieve.")) {
                 if(OreDictionary.getOres("blockSteel", false).isEmpty()) {
-                    GameRegistry.addRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "BGB", 'B', "blockIron", 'M', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'I', "ingotIron");
+                    GameRegistry.addRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "BGB", 'B', "blockIron", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlass");
                 } else {
-                    GameRegistry.addRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "BGB", 'B', "blockSteel", 'M', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'I', "ingotIron");
+                    GameRegistry.addRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "BGB", 'B', "blockSteel", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlass");
                 }
             }
         }

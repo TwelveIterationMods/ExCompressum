@@ -169,7 +169,7 @@ public class BlockAutoSieve extends BlockContainer implements IDismantleable {
         if (Loader.isModLoaded("CoFHCore")) {
             if (config.getBoolean("Auto Sieve", "blocks", true, "Set this to false to disable the recipe for the auto sieve.")) {
                 ItemStack sieve = new ItemStack(GameRegistry.findBlock("exnihilo", "sifting_table"), 1, OreDictionary.WILDCARD_VALUE);
-                GameRegistry.addRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "BHB", 'B', "blockIron", 'S', sieve, 'G', "paneGlass");
+                GameRegistry.addRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "BGB", 'B', "blockIron", 'S', sieve, 'G', "paneGlass");
             }
         }
     }
