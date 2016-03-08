@@ -29,6 +29,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 
@@ -167,7 +168,8 @@ public class BlockAutoSieve extends BlockContainer implements IDismantleable {
     public static void registerRecipes(Configuration config) {
         if (Loader.isModLoaded("CoFHCore")) {
             if (config.getBoolean("Auto Sieve", "blocks", true, "Set this to false to disable the recipe for the auto sieve.")) {
-                GameRegistry.addRecipe(new ItemStack(ModBlocks.autoSieve), "BMB", "BMB", "I I", 'B', Blocks.iron_block, 'M', ModItems.heavySilkMesh, 'I', Items.iron_ingot);
+                ItemStack sieve = new ItemStack(GameRegistry.findBlock("exnihilo", "sifting_table"), 1, OreDictionary.WILDCARD_VALUE);
+                GameRegistry.addRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "BHB", 'B', "blockIron", 'S', sieve, 'G', "paneGlass");
             }
         }
     }

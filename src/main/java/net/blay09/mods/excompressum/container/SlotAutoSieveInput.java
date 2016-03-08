@@ -5,8 +5,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class SlotAutoSieve extends Slot {
-    public SlotAutoSieve(IInventory inventory, int id, int x, int y) {
+public class SlotAutoSieveInput extends Slot {
+    public SlotAutoSieveInput(IInventory inventory, int id, int x, int y) {
         super(inventory, id, x, y);
     }
 

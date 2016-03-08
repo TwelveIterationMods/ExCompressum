@@ -15,8 +15,11 @@ import exnihilo.utils.ItemInfo;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -58,9 +61,9 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
             spawnFX();
         }
 
-        if(speedBoostTicks > 0) {
+        if (speedBoostTicks > 0) {
             speedBoostTicks--;
-            if(speedBoostTicks <= 0) {
+            if (speedBoostTicks <= 0) {
                 speedBoost = 1f;
             }
         }
@@ -79,12 +82,12 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
             if (currentStack == null) {
                 if (inventory[0] != null && isRegistered(inventory[0])) {
                     boolean foundSpace = false;
-                    for(int i = 1; i < inventory.length; i++) {
-                        if(inventory[i] == null) {
+                    for (int i = 1; i < inventory.length; i++) {
+                        if (inventory[i] == null) {
                             foundSpace = true;
                         }
                     }
-                    if(!foundSpace) {
+                    if (!foundSpace) {
                         return;
                     }
                     currentStack = inventory[0].splitStack(1);
@@ -104,7 +107,7 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
                         Collection<SiftingResult> rewards = getSiftingOutput(currentStack);
                         if (rewards != null && !rewards.isEmpty()) {
                             for (SiftingResult reward : rewards) {
-                                if (worldObj.rand.nextInt(reward.rarity) == 0) {
+                                if (worldObj.rand.nextInt((int) Math.max(1f, reward.rarity / getEffectiveLuck())) == 0) {
                                     ItemStack rewardStack = new ItemStack(reward.item, 1, reward.meta);
                                     if (!addItemToOutput(rewardStack)) {
                                         EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 1.5, zCoord + 0.5, rewardStack);
@@ -116,6 +119,7 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
                                     }
                                 }
                             }
+                            degradeBook();
                         }
                     }
                     progress = 0f;
@@ -148,20 +152,51 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
         return false;
     }
 
+    public void degradeBook() {
+        if (inventory[21] != null && worldObj.rand.nextFloat() <= ExCompressum.autoSieveBookDecay) {
+            NBTTagList tagList = inventory[21].getEnchantmentTagList();
+            if (tagList != null) {
+                for (int i = 0; i < tagList.tagCount(); ++i) {
+                    short id = tagList.getCompoundTagAt(i).getShort("id");
+                    if(id != Enchantment.fortune.effectId && id != Enchantment.efficiency.effectId) {
+                        continue;
+                    }
+                    int level = tagList.getCompoundTagAt(i).getShort("lvl") - 1;
+                    if(level <= 0) {
+                        tagList.removeTag(i);
+                    } else {
+                        tagList.getCompoundTagAt(i).setShort("lvl", (short) level);
+                    }
+                    break;
+                }
+                if(tagList.tagCount() == 0) {
+                    inventory[21] = new ItemStack(Items.book);
+                }
+            }
+        }
+    }
+
     public int getEffectiveEnergy() {
         return ExCompressum.autoSieveEnergy;
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressum.autoSieveSpeed * speedBoost;
+        return ExCompressum.autoSieveSpeed * getSpeedBoost();
     }
 
     public float getEffectiveLuck() {
-        return 0f;
+        if (inventory[21] != null) {
+            return 1f + EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, inventory[21]);
+        }
+        return 1f;
     }
 
     public boolean isRegistered(ItemStack itemStack) {
         return SieveRegistry.registered(Block.getBlockFromItem(itemStack.getItem()), itemStack.getItemDamage());
+    }
+
+    public boolean isValidBook(ItemStack itemStack) {
+        return itemStack.getItem() == Items.enchanted_book && (EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, inventory[21]) > 0 || EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, inventory[21]) > 0);
     }
 
     public Collection<SiftingResult> getSiftingOutput(ItemStack itemStack) {
@@ -269,7 +304,7 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
     }
 
     @Override
@@ -279,12 +314,12 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
 
     @Override
     public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-        return slot >= 1;
+        return slot >= 1 && slot <= 20;
     }
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
-        return slot == 0 && isRegistered(itemStack);
+        return (slot == 0 && isRegistered(itemStack)) || (slot == 21 && isValidBook(itemStack));
     }
 
     @Override
@@ -302,7 +337,7 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
 
     @Override
     public int getSizeInventory() {
-        return 21;
+        return 22;
     }
 
     @Override
@@ -405,11 +440,14 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
     }
 
     public float getSpeedBoost() {
-        return speedBoost;
+        float activeSpeedBost = speedBoost;
+        if (inventory[21] != null) {
+            activeSpeedBost += EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, inventory[21]);
+        }
+        return activeSpeedBost;
     }
 
     public void setSpeedBoost(int speedBoostTicks, float speedBoost) {
-        System.out.println("Speed x" + speedBoost + " for " + speedBoostTicks + " ticks");
         this.speedBoostTicks = speedBoostTicks;
         this.speedBoost = speedBoost;
     }

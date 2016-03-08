@@ -34,6 +34,9 @@ public class AutoSieveDataProvider implements IWailaDataProvider {
             if(tileEntity.getSpeedBoost() > 1f) {
                 list.add("Speed Boost: " + tileEntity.getSpeedBoost());
             }
+            if(tileEntity.getEffectiveLuck() > 1) {
+                list.add("Luck Bonus: " + (tileEntity.getEffectiveLuck() - 1));
+            }
         }
         return list;
     }

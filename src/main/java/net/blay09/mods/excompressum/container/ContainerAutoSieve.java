@@ -17,7 +17,8 @@ public class ContainerAutoSieve extends Container {
 
     public ContainerAutoSieve(InventoryPlayer inventoryPlayer, TileEntityAutoSieve tileEntity) {
         this.tileEntity = tileEntity;
-        addSlotToContainer(new SlotAutoSieve(tileEntity, 0, 8, 35));
+        addSlotToContainer(new SlotAutoSieveInput(tileEntity, 0, 8, 35));
+        addSlotToContainer(new SlotAutoSieveBook(tileEntity, 21, 8, 62));
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
@@ -40,7 +41,7 @@ public class ContainerAutoSieve extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
         int energyStored = tileEntity.getEnergyStored(null);
-        if(lastEnergy != energyStored) {
+        if (lastEnergy != energyStored) {
             for (Object obj : crafters) {
                 ((ICrafting) obj).sendProgressBarUpdate(this, 0, energyStored);
             }
@@ -63,24 +64,28 @@ public class ContainerAutoSieve extends Container {
     public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int slotNumber) {
         ItemStack itemStack = null;
         Slot slot = getSlot(slotNumber);
-        if(slot != null && slot.getHasStack()) {
+        if (slot != null && slot.getHasStack()) {
             ItemStack slotStack = slot.getStack();
             itemStack = slotStack.copy();
-            if(slotNumber <= 20) {
-                if(!mergeItemStack(slotStack, 21, 57, true)) {
+            if (slotNumber <= 21) {
+                if (!mergeItemStack(slotStack, 21, 57, true)) {
                     return null;
                 }
-            } else if(tileEntity.isItemValidForSlot(0, slotStack)) {
+            } else if (tileEntity.isItemValidForSlot(0, slotStack)) {
                 if (!mergeItemStack(slotStack, 0, 1, false)) {
                     return null;
                 }
+            } else if (tileEntity.isItemValidForSlot(21, slotStack)) {
+                if (!mergeItemStack(slotStack, 21, 22, false)) {
+                    return null;
+                }
             }
-            if(slotStack.stackSize == 0) {
+            if (slotStack.stackSize == 0) {
                 slot.putStack(null);
             } else {
                 slot.onSlotChanged();
             }
-            if(slotStack.stackSize == itemStack.stackSize) {
+            if (slotStack.stackSize == itemStack.stackSize) {
                 return null;
             }
             slot.onPickupFromSlot(entityPlayer, slotStack);

@@ -59,6 +59,7 @@ public class ExCompressum {
     public static float autoHeavySieveSpeed;
     public static int autoSieveEnergy;
     public static float autoSieveSpeed;
+    public static float autoSieveBookDecay;
 
     public static final ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
 
@@ -93,6 +94,7 @@ public class ExCompressum {
         autoSieveEnergy = config.getInt("Auto Sieve Cost", "general", 40, 0, 100000, "The energy cost of the auto sieve per tick.");
         autoCompressorSpeed = config.getFloat("Auto Compressor Speed", "general", 0.1f, 0.0001f, 1f, "The speed at which the auto compressor will compress stuff.");
         autoCompressorEnergy = config.getInt("Auto Compressor Cost", "general", 5, 0, 100000, "The energy cost of the auto compressor per tick.");
+        autoSieveBookDecay = config.getFloat("Auto Sieve Book Decay", "general", 0.003f, 0.0001f, 0.1f, "The chance for the enchantment on books in a sieve to lose a level (per operation)");
 
         compressedMobChance = config.getFloat("Compressed Mob Chance", "general", 0.01f, 0f, 1f, "The chance for mobs to spawn as Compressed Mobs. Set to 0 to disable.");
         compressedMobSize = config.getInt("Compressed Mob Size", "general", 9, 1, 9, "The amount of mobs that will spawn upon death of a compressed enemy.");

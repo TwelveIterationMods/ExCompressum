@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GuiAutoSieve extends GuiContainer {
 
-    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoHeavySieve.png");
+    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoSieve.png");
     private TileEntityAutoSieve tileEntity;
 
     public GuiAutoSieve(InventoryPlayer inventoryPlayer, TileEntityAutoSieve tileEntity) {
