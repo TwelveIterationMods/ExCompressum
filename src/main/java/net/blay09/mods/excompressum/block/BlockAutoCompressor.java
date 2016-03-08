@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import cofh.api.block.IDismantleable;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModBlocks;
@@ -27,6 +28,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 
+@Optional.Interface(modid = "CoFHCore", iface = "cofh.api.block.IDismantleable", striprefs = true)
 public class BlockAutoCompressor extends BlockContainer implements IDismantleable {
 
     private IIcon iconTop;

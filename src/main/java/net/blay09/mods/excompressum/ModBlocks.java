@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.block.*;
 import net.blay09.mods.excompressum.item.*;
@@ -24,19 +25,25 @@ public class ModBlocks {
         GameRegistry.registerBlock(woodenCrucible, ItemBlockWoodenCrucible.class, "woodenCrucible");
         bait = new BlockBait();
         GameRegistry.registerBlock(bait, ItemBlockBait.class, "bait");
+
         autoCompressedHammer = new BlockAutoCompressedHammer();
-        GameRegistry.registerBlock(autoCompressedHammer, "autoCompressedHammer");
         autoHeavySieve = new BlockAutoHeavySieve();
-        GameRegistry.registerBlock(autoHeavySieve, ItemBlockAutoHeavySieve.class, "autoHeavySieve");
         autoCompressor = new BlockAutoCompressor();
-        GameRegistry.registerBlock(autoCompressor, "autoCompressor");
+        if(Loader.isModLoaded("CoFHCore")) {
+            GameRegistry.registerBlock(autoCompressedHammer, "autoCompressedHammer");
+            GameRegistry.registerBlock(autoHeavySieve, ItemBlockAutoHeavySieve.class, "autoHeavySieve");
+            GameRegistry.registerBlock(autoCompressor, "autoCompressor");
+        }
 
         GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible");
         GameRegistry.registerTileEntity(TileEntityHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
         GameRegistry.registerTileEntity(TileEntityBait.class, "bait");
-        GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, "autoCompressedHammer");
-        GameRegistry.registerTileEntity(TileEntityAutoHeavySieve.class, "autoHeavySieve");
-        GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, "autoCompressor");
+
+        if(Loader.isModLoaded("CoFHCore")) {
+            GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, "autoCompressedHammer");
+            GameRegistry.registerTileEntity(TileEntityAutoHeavySieve.class, "autoHeavySieve");
+            GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, "autoCompressor");
+        }
     }
 
     public static void registerRecipes(Configuration config) {
