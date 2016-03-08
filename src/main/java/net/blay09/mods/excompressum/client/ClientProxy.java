@@ -10,10 +10,7 @@ import exnihilo.blocks.models.ModelSieveMesh;
 import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.ModItems;
-import net.blay09.mods.excompressum.client.render.item.ItemRenderAutoCompressedHammer;
-import net.blay09.mods.excompressum.client.render.item.ItemRenderAutoHeavySieve;
-import net.blay09.mods.excompressum.client.render.item.ItemRenderHeavySieve;
-import net.blay09.mods.excompressum.client.render.item.ItemRenderWoodenCrucible;
+import net.blay09.mods.excompressum.client.render.item.*;
 import net.blay09.mods.excompressum.client.render.tile.*;
 import net.blay09.mods.excompressum.handler.SlowSoarynHandler;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
@@ -39,6 +36,10 @@ public class ClientProxy extends CommonProxy {
         ModelSieveMesh mesh = new ModelSieveMesh();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeavySieve.class, new RenderHeavySieve(sieve, mesh));
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.heavySieve), new ItemRenderHeavySieve(sieve, mesh));
+
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoSieve.class, new RenderAutoSieve());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoSieve), new ItemRenderAutoSieve());
+
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHeavySieve.class, new RenderAutoHeavySieve());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoHeavySieve), new ItemRenderAutoHeavySieve());
 

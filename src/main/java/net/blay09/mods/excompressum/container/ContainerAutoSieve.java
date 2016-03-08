@@ -2,8 +2,7 @@ package net.blay09.mods.excompressum.container;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
-import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
+import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,14 +10,14 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerAutoHeavySieve extends Container {
+public class ContainerAutoSieve extends Container {
 
-    private final TileEntityAutoHeavySieve tileEntity;
+    private final TileEntityAutoSieve tileEntity;
     private int lastEnergy;
 
-    public ContainerAutoHeavySieve(InventoryPlayer inventoryPlayer, TileEntityAutoHeavySieve tileEntity) {
+    public ContainerAutoSieve(InventoryPlayer inventoryPlayer, TileEntityAutoSieve tileEntity) {
         this.tileEntity = tileEntity;
-        addSlotToContainer(new SlotAutoHeavySieve(tileEntity, 0, 8, 35));
+        addSlotToContainer(new SlotAutoSieve(tileEntity, 0, 8, 35));
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {

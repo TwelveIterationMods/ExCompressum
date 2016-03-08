@@ -23,19 +23,7 @@ import org.lwjgl.opengl.GL12;
 
 public class RenderAutoCompressedHammer extends TileEntitySpecialRenderer {
 
-    private final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/auto_compressed_hammer.png");
-    private final ResourceLocation[] destroyStages = new ResourceLocation[] {
-        new ResourceLocation("minecraft", "textures/blocks/destroy_stage_0"),
-        new ResourceLocation("minecraft", "textures/blocks/destroy_stage_1"),
-        new ResourceLocation("minecraft", "textures/blocks/destroy_stage_2"),
-        new ResourceLocation("minecraft", "textures/blocks/destroy_stage_3"),
-        new ResourceLocation("minecraft", "textures/blocks/destroy_stage_4"),
-        new ResourceLocation("minecraft", "textures/blocks/destroy_stage_5"),
-        new ResourceLocation("minecraft", "textures/blocks/destroy_stage_6"),
-        new ResourceLocation("minecraft", "textures/blocks/destroy_stage_7"),
-        new ResourceLocation("minecraft", "textures/blocks/destroy_stage_8"),
-        new ResourceLocation("minecraft", "textures/blocks/destroy_stage_9")
-    };
+    private final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/auto_heavy_frame.png");
     private final ModelAutoFrame model = new ModelAutoFrame();
 
     private EntityItem renderItem;

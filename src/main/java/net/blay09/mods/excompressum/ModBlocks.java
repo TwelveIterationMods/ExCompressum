@@ -14,6 +14,7 @@ public class ModBlocks {
     public static BlockBait bait;
     public static BlockAutoCompressedHammer autoCompressedHammer;
     public static BlockAutoHeavySieve autoHeavySieve;
+    public static BlockAutoSieve autoSieve;
     public static BlockAutoCompressor autoCompressor;
 
     public static void init() {
@@ -27,10 +28,12 @@ public class ModBlocks {
         GameRegistry.registerBlock(bait, ItemBlockBait.class, "bait");
 
         autoCompressedHammer = new BlockAutoCompressedHammer();
+        autoSieve = new BlockAutoSieve();
         autoHeavySieve = new BlockAutoHeavySieve();
         autoCompressor = new BlockAutoCompressor();
         if(Loader.isModLoaded("CoFHCore")) {
             GameRegistry.registerBlock(autoCompressedHammer, "autoCompressedHammer");
+            GameRegistry.registerBlock(autoSieve, ItemBlockAutoSieve.class, "autoSieve");
             GameRegistry.registerBlock(autoHeavySieve, ItemBlockAutoHeavySieve.class, "autoHeavySieve");
             GameRegistry.registerBlock(autoCompressor, "autoCompressor");
         }
@@ -41,6 +44,7 @@ public class ModBlocks {
 
         if(Loader.isModLoaded("CoFHCore")) {
             GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, "autoCompressedHammer");
+            GameRegistry.registerTileEntity(TileEntityAutoSieve.class, "autoSieve");
             GameRegistry.registerTileEntity(TileEntityAutoHeavySieve.class, "autoHeavySieve");
             GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, "autoCompressor");
         }
@@ -53,6 +57,7 @@ public class ModBlocks {
         BlockBait.registerRecipes(config);
         BlockAutoCompressor.registerRecipes(config);
         BlockAutoCompressedHammer.registerRecipes(config);
+        BlockAutoSieve.registerRecipes(config);
         BlockAutoHeavySieve.registerRecipes(config);
     }
 }

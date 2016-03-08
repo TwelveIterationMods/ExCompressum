@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.compat.waila;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
-import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
+import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class AutoHeavySieveDataProvider implements IWailaDataProvider {
+public class AutoSieveDataProvider implements IWailaDataProvider {
 
     @Override
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
@@ -26,10 +26,13 @@ public class AutoHeavySieveDataProvider implements IWailaDataProvider {
 
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> list, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        if(accessor.getTileEntity() instanceof TileEntityAutoHeavySieve) {
-            TileEntityAutoHeavySieve tileEntity = (TileEntityAutoHeavySieve) accessor.getTileEntity();
+        if(accessor.getTileEntity() instanceof TileEntityAutoSieve) {
+            TileEntityAutoSieve tileEntity = (TileEntityAutoSieve) accessor.getTileEntity();
             if(tileEntity.getCustomSkin() != null) {
                 list.add("Skin: " + tileEntity.getCustomSkin().getName());
+            }
+            if(tileEntity.getSpeedBoost() > 1f) {
+                list.add("Speed Boost: " + tileEntity.getSpeedBoost());
             }
         }
         return list;

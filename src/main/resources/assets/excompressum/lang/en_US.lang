@@ -15,6 +15,7 @@ item.excompressum:bait_4.name=Chicken Bait
 item.excompressum:wood_chippings.name=Wood Chippings
 
 tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
+tooltip.excompressum:auto_sieve=%s in a Box™
 tooltip.excompressum:auto_heavy_sieve=%s in a Box™
 
 waila.excompressum:baitTooClose=You are too close.
@@ -46,6 +47,7 @@ tile.excompressum:wooden_crucible_4.name=Acacia Crucible
 tile.excompressum:wooden_crucible_5.name=Dark Oak Crucible
 tile.excompressum:auto_compressor.name=Auto Compressor
 tile.excompressum:auto_compressed_hammer.name=Auto Compressed Hammer
+tile.excompressum:auto_sieve.name=Auto Sieve
 tile.excompressum:auto_heavy_sieve.name=Auto Heavy Sieve
 
 itemGroup.excompressum=Ex Compressum

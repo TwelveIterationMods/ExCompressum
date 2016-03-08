@@ -11,9 +11,9 @@ public class ModelTinyHuman extends ModelBiped {
         isChild = true;
     }
 
-    public void renderAll(boolean active) {
+    public void renderAll(boolean active, float speedBoost) {
         if(active) {
-            swingTimer += 0.05f;
+            swingTimer += 0.05f * (Math.max(1f, speedBoost / 2f));
             bipedRightArm.rotateAngleX = swingTimer * (int) (Math.PI * 2);
         }
         float f = 0.0625f;
