@@ -25,6 +25,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.ArrayList;
 
@@ -132,7 +134,11 @@ public class BlockAutoCompressedHammer extends BlockContainer implements IDisman
     public static void registerRecipes(Configuration config) {
         if (Loader.isModLoaded("CoFHCore")) {
             if (config.getBoolean("Auto Compressed Hammer", "blocks", true, "Set this to false to disable the recipe for the auto compressed hammer.")) {
-                GameRegistry.addRecipe(new ItemStack(ModBlocks.autoCompressedHammer), "BPB", "HHH", "BPB", 'P', Blocks.heavy_weighted_pressure_plate, 'H', ModItems.compressedHammerDiamond, 'B', Blocks.iron_block);
+                if(OreDictionary.getOres("blockSteel", false).isEmpty()) {
+                    GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoCompressedHammer), "BPB", "HHH", "BPB", 'P', Blocks.heavy_weighted_pressure_plate, 'H', ModItems.compressedHammerDiamond, 'B', "blockIron"));
+                } else {
+                    GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoCompressedHammer), "BPB", "HHH", "BPB", 'P', Blocks.heavy_weighted_pressure_plate, 'H', ModItems.compressedHammerDiamond, 'B', "blockSteel"));
+                }
             }
         }
     }

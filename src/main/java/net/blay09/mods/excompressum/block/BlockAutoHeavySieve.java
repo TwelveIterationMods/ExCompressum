@@ -28,6 +28,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.ArrayList;
 
@@ -50,10 +51,10 @@ public class BlockAutoHeavySieve extends BlockAutoSieve implements IDismantleabl
     public static void registerRecipes(Configuration config) {
         if (Loader.isModLoaded("CoFHCore")) {
             if (config.getBoolean("Auto Heavy Sieve", "blocks", true, "Set this to false to disable the recipe for the auto heavy sieve.")) {
-                if(OreDictionary.getOres("blockSteel", false).isEmpty()) {
-                    GameRegistry.addRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "BGB", 'B', "blockIron", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlass");
+                if(OreDictionary.getOres("blockSteel", false).isEmpty() || OreDictionary.getOres("ingotSteel", false).isEmpty()) {
+                    GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlass", 'I', "ingotSteel"));
                 } else {
-                    GameRegistry.addRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "BGB", 'B', "blockSteel", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlass");
+                    GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "IGI", 'B', "blockSteel", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlass", 'I', "ingotSteel"));
                 }
             }
         }
