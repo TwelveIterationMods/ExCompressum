@@ -8,7 +8,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import exnihilo.blocks.BlockSieve;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModBlocks;
-import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
@@ -18,7 +17,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemFood;
@@ -170,7 +168,7 @@ public class BlockAutoSieve extends BlockContainer implements IDismantleable {
         if (Loader.isModLoaded("CoFHCore")) {
             if (config.getBoolean("Auto Sieve", "blocks", true, "Set this to false to disable the recipe for the auto sieve.")) {
                 ItemStack sieve = new ItemStack(GameRegistry.findBlock("exnihilo", "sifting_table"), 1, OreDictionary.WILDCARD_VALUE);
-                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieve, 'G', "paneGlass", 'I', "ingotIron"));
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieve, 'G', "paneGlassColorless", 'I', "ingotIron"));
             }
         }
     }
