@@ -8,12 +8,16 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
@@ -70,9 +74,23 @@ public class BlockBait extends BlockContainer {
     }
 
     @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
+        TileEntityBait.EnvironmentalCondition environmentStatus = ((TileEntityBait) world.getTileEntity(x, y, z)).checkSpawnConditions(true);
+        if(entityPlayer != null && world.isRemote) {
+            IChatComponent chatComponent = new ChatComponentTranslation(environmentStatus.langKey);
+            chatComponent.getChatStyle().setColor(environmentStatus != TileEntityBait.EnvironmentalCondition.CanSpawn ? EnumChatFormatting.RED : EnumChatFormatting.GREEN);
+            entityPlayer.addChatComponentMessage(chatComponent);
+        }
+        return true;
+    }
+
+    @Override
     public void randomDisplayTick(World world, int x, int y, int z, Random random) {
-        if(random.nextFloat() <= 0.2f) {
-            world.spawnParticle("smoke", x + random.nextFloat(), y + random.nextFloat() * 0.5f, z + random.nextFloat(), 0.0, 0.0, 0.0);
+        TileEntityBait tileEntity = (TileEntityBait) world.getTileEntity(x, y, z);
+        if(tileEntity.checkSpawnConditions(false) == TileEntityBait.EnvironmentalCondition.CanSpawn) {
+            if (random.nextFloat() <= 0.2f) {
+                world.spawnParticle("smoke", x + random.nextFloat(), y + random.nextFloat() * 0.5f, z + random.nextFloat(), 0.0, 0.0, 0.0);
+            }
         }
     }
 

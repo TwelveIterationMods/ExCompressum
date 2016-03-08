@@ -28,15 +28,13 @@ public class ItemAndMetadata {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         ItemAndMetadata that = (ItemAndMetadata) o;
-
-        return metadata == that.metadata && item.equals(that.item);
+        return metadata == that.metadata && (item != null ? item.equals(that.item) : that.item == null);
     }
 
     @Override
     public int hashCode() {
-        int result = item.hashCode();
+        int result = item != null ? item.hashCode() : 0;
         result = 31 * result + metadata;
         return result;
     }

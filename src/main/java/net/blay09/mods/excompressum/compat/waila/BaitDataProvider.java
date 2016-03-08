@@ -4,10 +4,12 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
+import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
@@ -27,8 +29,16 @@ public class BaitDataProvider implements IWailaDataProvider {
 
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> list, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        list.add(StatCollector.translateToLocal("waila.excompressum:baitTooClose"));
-        list.add(StatCollector.translateToLocal("waila.excompressum:baitTooClose2"));
+        if(accessor.getTileEntity() instanceof TileEntityBait) {
+            TileEntityBait tileEntityBait = (TileEntityBait) accessor.getTileEntity();
+            TileEntityBait.EnvironmentalCondition environmentalStatus = tileEntityBait.checkSpawnConditions(true);
+            if(environmentalStatus == TileEntityBait.EnvironmentalCondition.CanSpawn) {
+                list.add(StatCollector.translateToLocal("waila.excompressum:baitTooClose"));
+                list.add(StatCollector.translateToLocal("waila.excompressum:baitTooClose2"));
+            } else {
+                list.add("\u00a7c" + StatCollector.translateToLocal(environmentalStatus.langKey));
+            }
+        }
         return list;
     }
 

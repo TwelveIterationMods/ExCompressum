@@ -20,6 +20,12 @@ tooltip.excompressum:auto_heavy_sieve=%s in a Box™
 waila.excompressum:baitTooClose=You are too close.
 waila.excompressum:baitTooClose2=The animals are scared away.
 
+info.excompressum:baitCanSpawn=This bait will work in this environment. Move out of range so you don't scare the animals away!
+info.excompressum:baitNearbyBait=There's too many baits in this area. Way too suspicious.
+info.excompressum:baitWrongEnv=Place more blocks from the animals' home biome here.
+info.excompressum:baitNearbyAnimal=Animals are shy. There's too many of them here.
+info.excompressum:baitNoWater=There's no water in this area.
+
 tile.excompressum:compressed_dust.name=Compressed Dust
 tile.excompressum:compressed_cobblestone.name=Compressed Cobblestone
 tile.excompressum:compressed_sand.name=Compressed Sand
