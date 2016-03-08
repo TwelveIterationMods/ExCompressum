@@ -17,6 +17,9 @@ item.excompressum:wood_chippings.name=Wood Chippings
 tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
 tooltip.excompressum:auto_heavy_sieve=%s in a Box™
 
+waila.excompressum:baitTooClose=You are too close.
+waila.excompressum:baitTooClose2=The animals are scared away.
+
 tile.excompressum:compressed_dust.name=Compressed Dust
 tile.excompressum:compressed_cobblestone.name=Compressed Cobblestone
 tile.excompressum:compressed_sand.name=Compressed Sand

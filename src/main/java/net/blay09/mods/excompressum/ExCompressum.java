@@ -3,9 +3,7 @@ package net.blay09.mods.excompressum;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.handler.CompressedEnemyHandler;
@@ -116,6 +114,11 @@ public class ExCompressum {
         MinecraftForge.EVENT_BUS.register(new CompressedEnemyHandler());
 
         proxy.preInit(event);
+    }
+
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) {
+        FMLInterModComms.sendMessage("Waila", "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
     }
 
     @Mod.EventHandler

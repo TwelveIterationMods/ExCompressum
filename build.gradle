@@ -58,7 +58,11 @@ repositories {
     }
     maven {
         name 'TiConMantle'
-        url "http://dvs1.progwml6.com/files/maven/"
+        url 'http://dvs1.progwml6.com/files/maven/'
+    }
+    maven {
+        name 'Mobius Repo'
+        url 'http://mobiusstrip.eu/maven'
     }
     ivy {
         name "MineTweaker"
@@ -85,6 +89,7 @@ dependencies {
     provided "codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev"
     provided "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
     compile "codechicken:ForgeMultipart:1.7.10-1.2.0.345:dev"
+    compile "mcp.mobius.waila:Waila:1.5.10_1.7.10"
 }
 
 processResources
