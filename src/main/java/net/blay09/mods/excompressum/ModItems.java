@@ -3,7 +3,9 @@ package net.blay09.mods.excompressum;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.item.*;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ModItems {
 
@@ -39,6 +41,7 @@ public class ModItems {
         GameRegistry.registerItem(heavySilkMesh, "heavySilkMesh");
         woodChipping = new ItemWoodChipping();
         GameRegistry.registerItem(woodChipping, "woodChipping");
+        OreDictionary.registerOre("dustWood", new ItemStack(woodChipping));
     }
 
     public static void registerRecipes(Configuration config) {
