@@ -64,17 +64,19 @@ public class TileEntityBait extends TileEntity {
             renderItemSub.setEntityItemStack(getBaitDisplayItem(metadata, 1));
         }
         if(!worldObj.isRemote && worldObj.rand.nextFloat() <= getBaitChance(metadata)) {
-            float range = 24f;
-            if(worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(xCoord - range, yCoord - range, zCoord - range, xCoord + range, yCoord + range, zCoord + range)).isEmpty()) {
-                EntityLiving entityLiving = getBaitEntityLiving(worldObj, metadata);
-                if (entityLiving != null) {
-                    if(entityLiving instanceof EntityAgeable && worldObj.rand.nextFloat() <= ExCompressum.baitChildChance) {
-                        ((EntityAgeable) entityLiving).setGrowingAge(-24000);
+            if(checkSpawnConditions(true) == EnvironmentalCondition.CanSpawn) {
+                float range = 24f;
+                if (worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(xCoord - range, yCoord - range, zCoord - range, xCoord + range, yCoord + range, zCoord + range)).isEmpty()) {
+                    EntityLiving entityLiving = getBaitEntityLiving(worldObj, metadata);
+                    if (entityLiving != null) {
+                        if (entityLiving instanceof EntityAgeable && worldObj.rand.nextFloat() <= ExCompressum.baitChildChance) {
+                            ((EntityAgeable) entityLiving).setGrowingAge(-24000);
+                        }
+                        entityLiving.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
+                        worldObj.spawnEntityInWorld(entityLiving);
                     }
-                    entityLiving.setPosition(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5);
-                    worldObj.spawnEntityInWorld(entityLiving);
+                    worldObj.setBlockToAir(xCoord, yCoord, zCoord);
                 }
-                worldObj.setBlockToAir(xCoord, yCoord, zCoord);
             }
         }
     }
