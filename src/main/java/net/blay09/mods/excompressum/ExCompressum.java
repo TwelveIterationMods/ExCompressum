@@ -59,7 +59,7 @@ public class ExCompressum {
 
     public static final ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
 
-    private final List<IAddon> addons = Lists.newArrayList();
+    public final List<IAddon> addons = Lists.newArrayList();
 
     @Mod.EventHandler
     @SuppressWarnings("unused")

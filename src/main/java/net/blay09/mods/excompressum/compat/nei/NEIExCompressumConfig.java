@@ -2,6 +2,12 @@ package net.blay09.mods.excompressum.compat.nei;
 
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
+import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.compat.IAddon;
+import net.blay09.mods.excompressum.compat.INEIAddon;
+import net.blay09.mods.excompressum.compat.botania.BotaniaAddon;
+import net.minecraft.item.ItemStack;
+import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
 public class NEIExCompressumConfig implements IConfigureNEI {
     @Override
@@ -21,6 +27,12 @@ public class NEIExCompressumConfig implements IConfigureNEI {
         RecipeHandlerBarrelProcess handlerBarrel = new RecipeHandlerBarrelProcess();
         API.registerRecipeHandler(handlerBarrel);
         API.registerUsageHandler(handlerBarrel);
+
+        for(IAddon addon : ExCompressum.instance.addons) {
+            if(addon instanceof INEIAddon) {
+                ((INEIAddon) addon).loadNEIConfig();
+            }
+        }
     }
 
     @Override
