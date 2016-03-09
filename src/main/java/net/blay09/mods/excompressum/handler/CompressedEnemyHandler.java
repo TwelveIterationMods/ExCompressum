@@ -46,7 +46,9 @@ public class CompressedEnemyHandler {
                         entity.getEntityData().setTag("ExCompressum", tagCompound);
                         entity.setPositionAndUpdate(event.entity.posX, event.entity.posY + 1, event.entity.posZ);
                         double motion = 0.01;
-                        entity.setVelocity((event.entity.worldObj.rand.nextGaussian() - 0.5) * motion, 0, (event.entity.worldObj.rand.nextGaussian() - 0.5) * motion);
+                        entity.motionX = (event.entity.worldObj.rand.nextGaussian() - 0.5) * motion;
+                        entity.motionY = 0;
+                        entity.motionZ = (event.entity.worldObj.rand.nextGaussian() - 0.5) * motion;
                         event.entity.worldObj.spawnEntityInWorld(entity);
                     }
                 }

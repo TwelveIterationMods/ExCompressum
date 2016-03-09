@@ -158,6 +158,7 @@ public class ExCompressum {
 
         registerAddon(event, "Botania", "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
         registerAddon(event, "TConstruct", "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
+        registerAddon(event, "IguanaTweaksTConstruct", "net.blay09.mods.excompressum.compat.iguanatweakstconstruct.IguanaTweaksTConstructAddon");
 
         for(IAddon addon : addons) {
             addon.loadConfig(config);
