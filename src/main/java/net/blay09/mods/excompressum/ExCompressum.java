@@ -165,7 +165,9 @@ public class ExCompressum {
             addon.postInit();
         }
 
-        config.save();
+        if(config.hasChanged()) {
+            config.save();
+        }
     }
 
     private void registerAddon(FMLPostInitializationEvent event, String modid, String className) {
