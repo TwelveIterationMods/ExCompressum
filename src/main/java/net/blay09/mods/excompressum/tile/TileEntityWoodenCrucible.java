@@ -45,10 +45,10 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
         }
         WoodenMeltable meltable = WoodenCrucibleRegistry.getMeltable(itemStack);
         float capacityLeft = getCapacityLeft();
-        if (meltable != null && capacityLeft > 0 && (fluid == null || meltable.fluidStack.getFluid() == fluid)) {
+        if (meltable != null && capacityLeft > meltable.fluidStack.amount && (fluid == null || meltable.fluidStack.getFluid() == fluid)) {
             currentMeltable = meltable;
             fluid = meltable.fluidStack.getFluid();
-            solidVolume = Math.min(capacityLeft, solidVolume + meltable.fluidStack.amount);
+            solidVolume = solidVolume + meltable.fluidStack.amount;
             worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
             return true;
         }
@@ -85,7 +85,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     }
 
     private float getCapacityLeft() {
-        return MAX_FLUID - (solidVolume + fluidVolume);
+        return MAX_FLUID - solidVolume;
     }
 
     public WoodenMeltable getCurrentMeltable() {
