@@ -11,19 +11,24 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 
 public class CompressedEnemyHandler {
 
     @SubscribeEvent
     public void onSpawnEntity(EntityJoinWorldEvent event) {
-        if(event.entity instanceof EntityCreature && event.entity.worldObj.rand.nextFloat() <= ExCompressum.compressedMobChance) {
+        if(!event.world.isRemote && event.entity instanceof EntityCreature) {
             String entityName = EntityList.getEntityString(event.entity);
             if(ExCompressum.compressedMobs.contains(entityName)) {
-                if (!event.entity.getEntityData().getCompoundTag("ExCompressum").hasKey("NoCompress") && !event.entity.getEntityData().getCompoundTag("ExCompressum").hasKey("Compressed")) {
+                if (event.entity.worldObj.rand.nextFloat() <= ExCompressum.compressedMobChance && !event.entity.getEntityData().getCompoundTag("ExCompressum").hasKey("NoCompress") && !event.entity.getEntityData().getCompoundTag("ExCompressum").hasKey("Compressed")) {
                     ((EntityCreature) event.entity).setAlwaysRenderNameTag(true);
                     ((EntityCreature) event.entity).setCustomNameTag("Compressed " + event.entity.getCommandSenderName());
                     NBTTagCompound tagCompound = new NBTTagCompound();
                     tagCompound.setBoolean("Compressed", true);
+                    event.entity.getEntityData().setTag("ExCompressum", tagCompound);
+                } else {
+                    NBTTagCompound tagCompound = new NBTTagCompound();
+                    tagCompound.setBoolean("NoCompress", true);
                     event.entity.getEntityData().setTag("ExCompressum", tagCompound);
                 }
             }
