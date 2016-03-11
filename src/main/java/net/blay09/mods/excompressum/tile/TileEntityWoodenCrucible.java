@@ -33,11 +33,13 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
         if (ExCompressum.woodenCrucibleBarrelRecipes && fluidVolume >= 1000) {
             ItemInfo itemInfo = BarrelRecipeRegistry.getOutput(new FluidStack(fluid, (int) fluidVolume), itemStack);
             if (itemInfo != null) {
-                fluidVolume -= 1000;
-                EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 1, zCoord + 0.5, itemInfo.getStack());
-                entityItem.motionY = 0.2;
-                worldObj.spawnEntityInWorld(entityItem);
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                if(!worldObj.isRemote) {
+                    fluidVolume -= 1000;
+                    EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 1, zCoord + 0.5, itemInfo.getStack());
+                    entityItem.motionY = 0.2;
+                    worldObj.spawnEntityInWorld(entityItem);
+                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                }
                 return true;
             }
         }
