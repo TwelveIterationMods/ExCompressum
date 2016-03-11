@@ -14,6 +14,7 @@ item.excompressum:bait_3.name=Pig Bait
 item.excompressum:bait_4.name=Chicken Bait
 item.excompressum:bait_5.name=Sheep Bait
 item.excompressum:wood_chippings.name=Wood Chippings
+item.excompressum:uncompressed_coal.name=Uncompressed Coal
 
 tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
 tooltip.excompressum:auto_sieve=%s in a Box™
