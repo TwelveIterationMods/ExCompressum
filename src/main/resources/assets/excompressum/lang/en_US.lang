@@ -22,6 +22,12 @@ tooltip.excompressum:auto_heavy_sieve=%s in a Box™
 
 waila.excompressum:baitTooClose=You are too close.
 waila.excompressum:baitTooClose2=The animals are scared away.
+waila.excompressum:speedBoost=Speed Boost: %s
+waila.excompressum:luckBonus=Luck Bonus: %s
+waila.excompressum:sieveSkin=Skin: %s
+waila.excompressum:sieveLeft=%s left
+waila.excompressum:solidVolume=Solid Volume: %s
+waila.excompressum:fluidVolume=Fluid Volume: %s
 
 info.excompressum:baitCanSpawn=This bait will work in this environment. Move out of range so you don't scare the animals away!
 info.excompressum:baitNearbyBait=There's too many baits in this area. Way too suspicious.

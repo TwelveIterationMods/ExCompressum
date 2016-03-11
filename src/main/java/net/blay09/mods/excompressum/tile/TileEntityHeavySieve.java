@@ -153,4 +153,8 @@ public class TileEntityHeavySieve extends TileEntity {
     public ItemStack getContent() {
         return content;
     }
+
+    public float getVolumeLeft() {
+        return volume;
+    }
 }
