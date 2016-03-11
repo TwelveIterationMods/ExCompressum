@@ -78,6 +78,7 @@ public class BotaniaAddon implements IAddon, INEIAddon {
             lexiconOrechidEvolved.setLexiconPages(new PageText(LEXICON_ORECHID_EVOLVED_PAGE + "0"), new PagePetalRecipe(LEXICON_ORECHID_EVOLVED_PAGE + "1", recipeOrechidEvolved));
             lexiconOrechidEvolved.setPriority();
             BotaniaAPI.addEntry(lexiconOrechidEvolved, lexiconOrechidEvolved.category);
+            BotaniaAPI.addSubTileToCreativeMenu(SUBTILE_ORECHID_EVOLVED);
         }
 
         if(enableBrokenComprilla) {
@@ -100,6 +101,7 @@ public class BotaniaAddon implements IAddon, INEIAddon {
             lexiconBrokenComprilla.setLexiconPages(new PageText(LEXICON_BROKEN_COMPRILLA_PAGE + "0"), new PagePetalRecipe(LEXICON_BROKEN_COMPRILLA_PAGE + "1", recipeBrokenComprilla));
             lexiconBrokenComprilla.setPriority();
             BotaniaAPI.addEntry(lexiconBrokenComprilla, lexiconBrokenComprilla.category);
+            BotaniaAPI.addSubTileToCreativeMenu(SUBTILE_BROKEN_COMPRILLA);
         }
 
         if(disableVanillaOrechid) {
@@ -134,7 +136,7 @@ public class BotaniaAddon implements IAddon, INEIAddon {
 
     @Override
     public void loadNEIConfig() {
-        API.addItemListEntry(ItemBlockSpecialFlower.ofType(BotaniaAddon.SUBTILE_ORECHID_EVOLVED));
-        API.addItemListEntry(ItemBlockSpecialFlower.ofType(BotaniaAddon.SUBTILE_BROKEN_COMPRILLA));
+//        API.addItemListEntry(ItemBlockSpecialFlower.ofType(BotaniaAddon.SUBTILE_ORECHID_EVOLVED));
+//        API.addItemListEntry(ItemBlockSpecialFlower.ofType(BotaniaAddon.SUBTILE_BROKEN_COMPRILLA));
     }
 }
