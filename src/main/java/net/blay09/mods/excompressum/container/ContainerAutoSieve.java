@@ -1,19 +1,15 @@
 package net.blay09.mods.excompressum.container;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerAutoSieve extends Container {
 
     private final TileEntityAutoSieve tileEntity;
-    private int lastEnergy;
 
     public ContainerAutoSieve(InventoryPlayer inventoryPlayer, TileEntityAutoSieve tileEntity) {
         this.tileEntity = tileEntity;
@@ -35,24 +31,6 @@ public class ContainerAutoSieve extends Container {
         for (int i = 0; i < 9; i++) {
             addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
         }
-    }
-
-    @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
-        int energyStored = tileEntity.getEnergyStored(null);
-        if (lastEnergy != energyStored) {
-            for (Object obj : crafters) {
-                ((ICrafting) obj).sendProgressBarUpdate(this, 0, energyStored);
-            }
-            lastEnergy = energyStored;
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int index, int value) {
-        tileEntity.setEnergyStored(value);
     }
 
     @Override
