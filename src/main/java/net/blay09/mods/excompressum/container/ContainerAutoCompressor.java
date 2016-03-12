@@ -1,21 +1,16 @@
 package net.blay09.mods.excompressum.container;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.blay09.mods.excompressum.registry.CompressedRecipeRegistry;
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerAutoCompressor extends Container {
 
     private final TileEntityAutoCompressor tileEntity;
-    private int lastEnergy;
 
     public ContainerAutoCompressor(InventoryPlayer inventoryPlayer, TileEntityAutoCompressor tileEntity) {
         this.tileEntity = tileEntity;
@@ -41,24 +36,6 @@ public class ContainerAutoCompressor extends Container {
         for (int i = 0; i < 9; i++) {
             addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
         }
-    }
-
-    @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
-        int energyStored = tileEntity.getEnergyStored(null);
-        if(lastEnergy != energyStored) {
-            for (Object obj : crafters) {
-                ((ICrafting) obj).sendProgressBarUpdate(this, 0, energyStored);
-            }
-            lastEnergy = energyStored;
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int index, int value) {
-        tileEntity.setEnergyStored(value);
     }
 
     @Override

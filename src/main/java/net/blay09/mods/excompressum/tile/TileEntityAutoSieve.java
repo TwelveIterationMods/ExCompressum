@@ -196,7 +196,7 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
     }
 
     public boolean isValidBook(ItemStack itemStack) {
-        return itemStack.getItem() == Items.enchanted_book && (EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, inventory[21]) > 0 || EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, inventory[21]) > 0);
+        return itemStack.getItem() == Items.enchanted_book && (EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, itemStack) > 0 || EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, itemStack) > 0);
     }
 
     public Collection<SiftingResult> getSiftingOutput(ItemStack itemStack) {

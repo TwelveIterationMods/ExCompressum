@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 public class ContainerAutoCompressedHammer extends Container {
 
     private final TileEntityAutoCompressedHammer tileEntity;
-    private int lastEnergy;
 
     public ContainerAutoCompressedHammer(InventoryPlayer inventoryPlayer, TileEntityAutoCompressedHammer tileEntity) {
         this.tileEntity = tileEntity;
@@ -34,24 +33,6 @@ public class ContainerAutoCompressedHammer extends Container {
         for (int i = 0; i < 9; i++) {
             addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
         }
-    }
-
-    @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
-        int energyStored = tileEntity.getEnergyStored(null);
-        if(lastEnergy != energyStored) {
-            for (Object obj : crafters) {
-                ((ICrafting) obj).sendProgressBarUpdate(this, 0, energyStored);
-            }
-            lastEnergy = energyStored;
-        }
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int index, int value) {
-        tileEntity.setEnergyStored(value);
     }
 
     @Override
