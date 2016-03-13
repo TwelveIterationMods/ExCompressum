@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.tile;
 import exnihilo.registries.BarrelRecipeRegistry;
 import exnihilo.utils.ItemInfo;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.WoodenCrucibleRegistry;
 import net.blay09.mods.excompressum.registry.data.WoodenMeltable;
 import net.minecraft.entity.item.EntityItem;
@@ -38,7 +39,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
                     EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 1, zCoord + 0.5, itemInfo.getStack());
                     entityItem.motionY = 0.2;
                     worldObj.spawnEntityInWorld(entityItem);
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    VanillaPacketHandler.sendTileEntityUpdate(this);
                 }
                 return true;
             }
@@ -49,7 +50,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
             currentMeltable = meltable;
             fluid = meltable.fluidStack.getFluid();
             solidVolume = solidVolume + meltable.fluidStack.amount;
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            VanillaPacketHandler.sendTileEntityUpdate(this);
             return true;
         }
         return false;
@@ -77,7 +78,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
             if (ticksSinceUpdate >= UPDATE_INTERVAL) {
                 ticksSinceUpdate = 0;
                 if (isDirty) {
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    VanillaPacketHandler.sendTileEntityUpdate(this);
                     isDirty = false;
                 }
             }

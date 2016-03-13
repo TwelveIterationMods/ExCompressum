@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import exnihilo.blocks.tileentities.TileEntitySieve;
 import exnihilo.particles.ParticleSieve;
 import exnihilo.registries.helpers.SiftingResult;
+import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
@@ -41,7 +42,7 @@ public class TileEntityHeavySieve extends TileEntity {
         this.content = content;
         mode = TileEntitySieve.SieveMode.FILLED;
         volume = 1f;
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        VanillaPacketHandler.sendTileEntityUpdate(this);
     }
 
     @Override
@@ -58,7 +59,7 @@ public class TileEntityHeavySieve extends TileEntity {
             spawnParticles = false;
 
             if (isDirty) {
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                VanillaPacketHandler.sendTileEntityUpdate(this);
                 isDirty = false;
             }
         }

@@ -13,6 +13,7 @@ import exnihilo.registries.SieveRegistry;
 import exnihilo.registries.helpers.SiftingResult;
 import exnihilo.utils.ItemInfo;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
@@ -72,7 +73,7 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
         if (ticksSinceUpdate > UPDATE_INTERVAL) {
             spawnParticles = false;
             if (isDirty) {
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                VanillaPacketHandler.sendTileEntityUpdate(this);
                 isDirty = false;
             }
             ticksSinceUpdate = 0;
@@ -95,7 +96,7 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
                         inventory[0] = null;
                     }
                     storage.extractEnergy(effectiveEnergy, false);
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    VanillaPacketHandler.sendTileEntityUpdate(this);
                     progress = 0f;
                 }
             } else {

@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import exnihilo.registries.helpers.Smashable;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -44,7 +45,7 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
         ticksSinceUpdate++;
         if (ticksSinceUpdate > UPDATE_INTERVAL) {
             if (isDirty) {
-                worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                VanillaPacketHandler.sendTileEntityUpdate(this);
                 isDirty = false;
             }
             ticksSinceUpdate = 0;
@@ -67,7 +68,7 @@ public class TileEntityAutoCompressedHammer extends TileEntity implements ISided
                         inventory[0] = null;
                     }
                     storage.extractEnergy(effectiveEnergy, false);
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                    VanillaPacketHandler.sendTileEntityUpdate(this);
                     progress = 0f;
                 }
             } else {
