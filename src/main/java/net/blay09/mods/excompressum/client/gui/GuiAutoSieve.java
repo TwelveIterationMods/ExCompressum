@@ -42,7 +42,7 @@ public class GuiAutoSieve extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
             tmpLines.clear();
-            tmpLines.add(tileEntity.getEnergyStored(null) + " RF");
+            tmpLines.add(tileEntity.getEnergyStored() + " RF");
             tmpLines.add("Consuming " + tileEntity.getEffectiveEnergy() + " RF/t");
             func_146283_a(tmpLines, mouseX - guiLeft, mouseY - guiTop);
         }

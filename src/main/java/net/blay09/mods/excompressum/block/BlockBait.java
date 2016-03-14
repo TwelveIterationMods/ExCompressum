@@ -8,6 +8,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -76,12 +77,24 @@ public class BlockBait extends BlockContainer {
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
         TileEntityBait.EnvironmentalCondition environmentStatus = ((TileEntityBait) world.getTileEntity(x, y, z)).checkSpawnConditions(true);
-        if(entityPlayer != null && world.isRemote) {
+        if(entityPlayer != null && !world.isRemote) {
             IChatComponent chatComponent = new ChatComponentTranslation(environmentStatus.langKey);
             chatComponent.getChatStyle().setColor(environmentStatus != TileEntityBait.EnvironmentalCondition.CanSpawn ? EnumChatFormatting.RED : EnumChatFormatting.GREEN);
             entityPlayer.addChatComponentMessage(chatComponent);
         }
         return true;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityPlayer, ItemStack itemStack) {
+        if(entityPlayer instanceof EntityPlayer) {
+            TileEntityBait.EnvironmentalCondition environmentStatus = ((TileEntityBait) world.getTileEntity(x, y, z)).checkSpawnConditions(true);
+            if (!world.isRemote) {
+                IChatComponent chatComponent = new ChatComponentTranslation(environmentStatus.langKey);
+                chatComponent.getChatStyle().setColor(environmentStatus != TileEntityBait.EnvironmentalCondition.CanSpawn ? EnumChatFormatting.RED : EnumChatFormatting.GREEN);
+                ((EntityPlayer) entityPlayer).addChatComponentMessage(chatComponent);
+            }
+        }
     }
 
     @Override

@@ -13,8 +13,9 @@ public class ModBlocks {
     public static BlockWoodenCrucible woodenCrucible;
     public static BlockBait bait;
     public static BlockAutoCompressedHammer autoCompressedHammer;
-    public static BlockAutoHeavySieve autoHeavySieve;
-    public static BlockAutoSieve autoSieve;
+    public static BlockAutoHeavySieveRF autoHeavySieve;
+    public static BlockAutoSieveRF autoSieve;
+    public static BlockAutoSieveMana manaSieve;
     public static BlockAutoCompressor autoCompressor;
 
     public static void init() {
@@ -28,8 +29,8 @@ public class ModBlocks {
         GameRegistry.registerBlock(bait, ItemBlockBait.class, "bait");
 
         autoCompressedHammer = new BlockAutoCompressedHammer();
-        autoSieve = new BlockAutoSieve();
-        autoHeavySieve = new BlockAutoHeavySieve();
+        autoSieve = new BlockAutoSieveRF();
+        autoHeavySieve = new BlockAutoHeavySieveRF();
         autoCompressor = new BlockAutoCompressor();
         if(Loader.isModLoaded("CoFHCore")) {
             GameRegistry.registerBlock(autoCompressedHammer, "autoCompressedHammer");
@@ -38,15 +39,24 @@ public class ModBlocks {
             GameRegistry.registerBlock(autoCompressor, "autoCompressor");
         }
 
+        manaSieve = new BlockAutoSieveMana();
+        if(Loader.isModLoaded("Botania")) {
+            GameRegistry.registerBlock(manaSieve, "manaSieve");
+        }
+
         GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible");
         GameRegistry.registerTileEntity(TileEntityHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
         GameRegistry.registerTileEntity(TileEntityBait.class, "bait");
 
         if(Loader.isModLoaded("CoFHCore")) {
             GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, "autoCompressedHammer");
-            GameRegistry.registerTileEntity(TileEntityAutoSieve.class, "autoSieve");
-            GameRegistry.registerTileEntity(TileEntityAutoHeavySieve.class, "autoHeavySieve");
+            GameRegistry.registerTileEntity(TileEntityAutoSieveRF.class, "autoSieve");
+            GameRegistry.registerTileEntity(TileEntityAutoHeavySieveRF.class, "autoHeavySieve");
             GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, "autoCompressor");
+        }
+
+        if(Loader.isModLoaded("Botania")) {
+            GameRegistry.registerTileEntity(TileEntityAutoSieveMana.class, "manaSieve");
         }
     }
 
@@ -57,7 +67,8 @@ public class ModBlocks {
         BlockBait.registerRecipes(config);
         BlockAutoCompressor.registerRecipes(config);
         BlockAutoCompressedHammer.registerRecipes(config);
-        BlockAutoSieve.registerRecipes(config);
-        BlockAutoHeavySieve.registerRecipes(config);
+        BlockAutoSieveMana.registerRecipes(config);
+        BlockAutoSieveRF.registerRecipes(config);
+        BlockAutoHeavySieveRF.registerRecipes(config);
     }
 }

@@ -56,6 +56,7 @@ tile.excompressum:wooden_crucible_5.name=Dark Oak Crucible
 tile.excompressum:auto_compressor.name=Auto Compressor
 tile.excompressum:auto_compressed_hammer.name=Auto Compressed Hammer
 tile.excompressum:auto_sieve.name=Auto Sieve
+tile.excompressum:auto_sieve_mana.name=Mana Sieve
 tile.excompressum:auto_heavy_sieve.name=Auto Heavy Sieve
 
 itemGroup.excompressum=Ex Compressum

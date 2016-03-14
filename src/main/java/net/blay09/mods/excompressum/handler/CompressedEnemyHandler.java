@@ -3,9 +3,13 @@ package net.blay09.mods.excompressum.handler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.FakePlayer;
@@ -45,6 +49,13 @@ public class CompressedEnemyHandler {
                     int entityId = EntityList.getEntityID(event.entity);
                     for(int i = 0; i < ExCompressum.compressedMobSize; i++) {
                         EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByID(entityId, event.entity.worldObj);
+                        if(((EntityLivingBase) event.entity).isChild()) {
+                            if(entity instanceof EntityZombie) {
+                                ((EntityZombie) entity).setChild(true);
+                            } else if(entity instanceof EntityAgeable) {
+                                ((EntityAgeable) entity).setGrowingAge(((EntityAgeable) event.entity).getGrowingAge());
+                            }
+                        }
                         NBTTagCompound tagCompound = new NBTTagCompound();
                         tagCompound.setBoolean("NoCompress", true);
                         entity.getEntityData().setTag("ExCompressum", tagCompound);

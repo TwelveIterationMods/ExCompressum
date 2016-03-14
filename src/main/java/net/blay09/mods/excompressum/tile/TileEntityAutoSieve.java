@@ -1,11 +1,8 @@
 package net.blay09.mods.excompressum.tile;
 
-import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import exnihilo.particles.ParticleSieve;
@@ -34,16 +31,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Collection;
 
-@Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
-public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, IEnergyHandler {
+public abstract class TileEntityAutoSieve extends TileEntity implements ISidedInventory {
 
     private static final int UPDATE_INTERVAL = 20;
 
-    private final EnergyStorage storage = new EnergyStorage(64000);
     private ItemStack[] inventory = new ItemStack[getSizeInventory()];
     private ItemStack currentStack;
 
@@ -79,7 +73,7 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
             ticksSinceUpdate = 0;
         }
         int effectiveEnergy = getEffectiveEnergy();
-        if (storage.getEnergyStored() >= effectiveEnergy) {
+        if (getEnergyStored() >= effectiveEnergy) {
             if (currentStack == null) {
                 if (inventory[0] != null && isRegistered(inventory[0])) {
                     boolean foundSpace = false;
@@ -95,12 +89,12 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
                     if (inventory[0].stackSize == 0) {
                         inventory[0] = null;
                     }
-                    storage.extractEnergy(effectiveEnergy, false);
+                    setEnergyStored(getEnergyStored() - effectiveEnergy);
                     VanillaPacketHandler.sendTileEntityUpdate(this);
                     progress = 0f;
                 }
             } else {
-                storage.extractEnergy(effectiveEnergy, false);
+                setEnergyStored(getEnergyStored() - effectiveEnergy);
                 progress += getEffectiveSpeed();
                 isDirty = true;
                 if (progress >= 1) {
@@ -210,7 +204,6 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
         spawnParticles = tagCompound.getBoolean("Particles");
-        storage.readFromNBT(tagCompound);
         if (tagCompound.hasKey("CustomSkin")) {
             customSkin = NBTUtil.func_152459_a(tagCompound.getCompoundTag("CustomSkin"));
             ExCompressum.proxy.preloadSkin(customSkin);
@@ -238,7 +231,6 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
             NBTUtil.func_152460_a(customSkinTag, customSkin);
             tagCompound.setTag("CustomSkin", customSkinTag);
         }
-        storage.writeToNBT(tagCompound);
         NBTTagList items = new NBTTagList();
         for (int i = 0; i < inventory.length; i++) {
             if (inventory[i] != null) {
@@ -276,31 +268,6 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
                 Minecraft.getMinecraft().effectRenderer.addEffect(particle);
             }
         }
-    }
-
-    @Override
-    public int receiveEnergy(ForgeDirection side, int maxReceive, boolean simulate) {
-        return storage.receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public int extractEnergy(ForgeDirection side, int maxExtract, boolean simulate) {
-        return storage.extractEnergy(maxExtract, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(ForgeDirection side) {
-        return storage.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(ForgeDirection side) {
-        return storage.getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canConnectEnergy(ForgeDirection side) {
-        return true;
     }
 
     @Override
@@ -388,8 +355,14 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
         return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && entityPlayer.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) <= 64;
     }
 
-    public void setEnergyStored(int energyStored) {
-        storage.setEnergyStored(energyStored);
+    public abstract void setEnergyStored(int energyStored);
+
+    public abstract int getMaxEnergyStored();
+
+    public abstract int getEnergyStored();
+
+    public float getEnergyPercentage() {
+        return (float) getEnergyStored() / (float) getMaxEnergyStored();
     }
 
     public boolean isProcessing() {
@@ -398,10 +371,6 @@ public class TileEntityAutoSieve extends TileEntity implements ISidedInventory, 
 
     public float getProgress() {
         return progress;
-    }
-
-    public float getEnergyPercentage() {
-        return (float) storage.getEnergyStored() / (float) storage.getMaxEnergyStored();
     }
 
     public ItemStack getCurrentStack() {

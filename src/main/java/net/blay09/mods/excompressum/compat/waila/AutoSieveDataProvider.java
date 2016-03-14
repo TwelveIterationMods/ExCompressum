@@ -4,6 +4,7 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
+import net.blay09.mods.excompressum.tile.TileEntityAutoSieveRF;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,7 +34,7 @@ public class AutoSieveDataProvider implements IWailaDataProvider {
                 list.add(StatCollector.translateToLocalFormatted("waila.excompressum:sieveSkin", tileEntity.getCustomSkin().getName()));
             }
             if(tileEntity.getSpeedBoost() > 1f) {
-                list.add(StatCollector.translateToLocalFormatted("waila.excompressum:speedBoost", tileEntity.getEffectiveLuck() - 1));
+                list.add(StatCollector.translateToLocalFormatted("waila.excompressum:speedBoost", tileEntity.getSpeedBoost()));
             }
             if(tileEntity.getEffectiveLuck() > 1) {
                 list.add(StatCollector.translateToLocalFormatted("waila.excompressum:luckBonus", tileEntity.getEffectiveLuck() - 1));

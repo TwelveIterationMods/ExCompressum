@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum.compat.waila;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;

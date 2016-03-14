@@ -69,7 +69,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer {
         mesh.render(BlockHeavySieve.meshIcon);
         if (tileEntitySieve.getCurrentStack() != null) {
             IIcon icon = tileEntitySieve.getCurrentStack().getIconIndex();
-            float contentY = ((1f - ((TileEntityAutoSieve) tileEntity).getProgress()) * (0.9f - 0.7f)) + 0.7f;
+            float contentY = ((1f - tileEntitySieve.getProgress()) * (0.9f - 0.7f)) + 0.7f;
             GL11.glTranslatef(0, -contentY + 0.7f, 0);
             contents.renderTop(icon);
             contents.renderBottom(icon);

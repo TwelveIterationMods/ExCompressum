@@ -2,20 +2,12 @@ package net.blay09.mods.excompressum.item;
 
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-import exnihilo.registries.CompostRegistry;
-import exnihilo.registries.HammerRegistry;
-import exnihilo.registries.helpers.Color;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModItems;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.List;
 
 public class ItemUncompressedCoal extends Item {
 

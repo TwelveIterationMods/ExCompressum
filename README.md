@@ -1,2 +1,2 @@
 # ExCompressum
-Minecraft Mod. Ex Nihilo Addon. Adds a compressed hammer that can be used on compressed blocks from Extra Utilities.
+Minecraft Mod. Ex Nihilo Addon. Provides tools to reduce the initial grind in skyblocks in a balanced way.

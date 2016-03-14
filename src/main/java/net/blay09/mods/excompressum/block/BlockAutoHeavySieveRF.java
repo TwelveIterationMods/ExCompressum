@@ -5,7 +5,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModBlocks;
-import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieve;
+import net.blay09.mods.excompressum.tile.TileEntityAutoHeavySieveRF;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -14,9 +14,9 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class BlockAutoHeavySieve extends BlockAutoSieve implements IDismantleable {
+public class BlockAutoHeavySieveRF extends BlockAutoSieveRF implements IDismantleable {
 
-    public BlockAutoHeavySieve() {
+    public BlockAutoHeavySieveRF() {
         setBlockName(ExCompressum.MOD_ID + ":auto_heavy_sieve");
     }
 
@@ -27,7 +27,7 @@ public class BlockAutoHeavySieve extends BlockAutoSieve implements IDismantleabl
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-        return new TileEntityAutoHeavySieve();
+        return new TileEntityAutoHeavySieveRF();
     }
 
     public static void registerRecipes(Configuration config) {

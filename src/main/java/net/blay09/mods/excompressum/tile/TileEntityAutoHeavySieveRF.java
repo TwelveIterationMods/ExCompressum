@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
 
-public class TileEntityAutoHeavySieve extends TileEntityAutoSieve {
+public class TileEntityAutoHeavySieveRF extends TileEntityAutoSieveRF {
 
     @Override
     public boolean isRegistered(ItemStack itemStack) {
@@ -19,6 +19,7 @@ public class TileEntityAutoHeavySieve extends TileEntityAutoSieve {
         return HeavySieveRegistry.getSiftingOutput(itemStack);
     }
 
+    @Override
     public int getEffectiveEnergy() {
         return ExCompressum.autoHeavySieveEnergy;
     }

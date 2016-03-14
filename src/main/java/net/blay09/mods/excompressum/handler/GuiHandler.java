@@ -4,12 +4,11 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import net.blay09.mods.excompressum.client.gui.GuiAutoCompressedHammer;
 import net.blay09.mods.excompressum.client.gui.GuiAutoCompressor;
 import net.blay09.mods.excompressum.client.gui.GuiAutoSieve;
+import net.blay09.mods.excompressum.client.gui.GuiManaSieve;
 import net.blay09.mods.excompressum.container.ContainerAutoCompressedHammer;
 import net.blay09.mods.excompressum.container.ContainerAutoCompressor;
 import net.blay09.mods.excompressum.container.ContainerAutoSieve;
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
+import net.blay09.mods.excompressum.tile.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -57,8 +56,10 @@ public class GuiHandler implements IGuiHandler {
                 }
                 break;
             case GUI_AUTO_SIEVE:
-                if(tileEntity instanceof TileEntityAutoSieve) {
+                if(tileEntity instanceof TileEntityAutoSieveRF) {
                     return new GuiAutoSieve(entityPlayer.inventory, (TileEntityAutoSieve) tileEntity);
+                } else if(tileEntity instanceof TileEntityAutoSieveMana) {
+                    return new GuiManaSieve(entityPlayer.inventory, (TileEntityAutoSieveMana) tileEntity);
                 }
                 break;
         }
