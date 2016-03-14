@@ -15,7 +15,7 @@ public class ModBlocks {
     public static BlockAutoCompressedHammer autoCompressedHammer;
     public static BlockAutoHeavySieveRF autoHeavySieve;
     public static BlockAutoSieveRF autoSieve;
-    public static BlockAutoSieveMana manaSieve;
+    public static BlockManaSieve manaSieve;
     public static BlockAutoCompressor autoCompressor;
 
     public static void init() {
@@ -39,7 +39,7 @@ public class ModBlocks {
             GameRegistry.registerBlock(autoCompressor, "autoCompressor");
         }
 
-        manaSieve = new BlockAutoSieveMana();
+        manaSieve = new BlockManaSieve();
         if(Loader.isModLoaded("Botania")) {
             GameRegistry.registerBlock(manaSieve, "manaSieve");
         }
@@ -67,7 +67,7 @@ public class ModBlocks {
         BlockBait.registerRecipes(config);
         BlockAutoCompressor.registerRecipes(config);
         BlockAutoCompressedHammer.registerRecipes(config);
-        BlockAutoSieveMana.registerRecipes(config);
+        BlockManaSieve.registerRecipes(config);
         BlockAutoSieveRF.registerRecipes(config);
         BlockAutoHeavySieveRF.registerRecipes(config);
     }

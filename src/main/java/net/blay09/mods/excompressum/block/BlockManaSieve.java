@@ -13,9 +13,9 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class BlockAutoSieveMana extends BlockAutoSieve {
+public class BlockManaSieve extends BlockAutoSieve {
 
-    public BlockAutoSieveMana() {
+    public BlockManaSieve() {
         super(Material.iron);
         setBlockName(ExCompressum.MOD_ID + ":auto_sieve_mana");
     }
@@ -28,8 +28,9 @@ public class BlockAutoSieveMana extends BlockAutoSieve {
     public static void registerRecipes(Configuration config) {
         if (Loader.isModLoaded("Botania")) {
             if (config.getBoolean("Mana Sieve", "blocks", true, "Set this to false to disable the recipe for the mana sieve.")) {
+                ItemStack manaSteelBlock = new ItemStack(GameRegistry.findBlock("Botania", "storage"), 1, 0);
                 ItemStack sieve = new ItemStack(GameRegistry.findBlock("exnihilo", "sifting_table"), 1, OreDictionary.WILDCARD_VALUE);
-                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieve, 'G', "paneGlassColorless", 'I', "ingotIron"));
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.manaSieve), "BGB", "GSG", "IGI", 'B', manaSteelBlock, 'S', sieve, 'G', "paneGlassColorless", 'I', "ingotManasteel"));
             }
         }
     }
