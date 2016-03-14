@@ -33,7 +33,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import java.util.ArrayList;
 
 @Optional.Interface(modid = "CoFHCore", iface = "cofh.api.block.IDismantleable", striprefs = true)
-public class BlockAutoSieveRF extends BlockContainer implements IDismantleable {
+public class BlockAutoSieveRF extends BlockAutoSieve implements IDismantleable {
 
     public BlockAutoSieveRF() {
         super(Material.iron);
