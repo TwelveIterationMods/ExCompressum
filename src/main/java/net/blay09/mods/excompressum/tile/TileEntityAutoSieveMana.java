@@ -1,9 +1,11 @@
 package net.blay09.mods.excompressum.tile;
 
+import cpw.mods.fml.common.Optional;
 import net.blay09.mods.excompressum.compat.botania.BotaniaAddon;
 import net.minecraft.nbt.NBTTagCompound;
 import vazkii.botania.api.mana.IManaReceiver;
 
+@Optional.Interface(modid = "Botania", iface = "vazkii.botania.api.mana.IManaReceiver", striprefs = true)
 public class TileEntityAutoSieveMana extends TileEntityAutoSieve implements IManaReceiver {
 
     private int manaStored;
