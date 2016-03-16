@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import cofh.api.block.IDismantleable;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModBlocks;
@@ -14,6 +15,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+@Optional.Interface(modid = "CoFHCore", iface = "cofh.api.block.IDismantleable", striprefs = true)
 public class BlockAutoHeavySieveRF extends BlockAutoSieveRF implements IDismantleable {
 
     public BlockAutoHeavySieveRF() {
