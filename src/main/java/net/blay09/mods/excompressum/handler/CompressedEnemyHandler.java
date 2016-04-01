@@ -8,9 +8,12 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -54,6 +57,15 @@ public class CompressedEnemyHandler {
                                 ((EntityZombie) entity).setChild(true);
                             } else if(entity instanceof EntityAgeable) {
                                 ((EntityAgeable) entity).setGrowingAge(((EntityAgeable) event.entity).getGrowingAge());
+                            }
+                        }
+                        if(entity instanceof EntityPigZombie) {
+                            entity.setCurrentItemOrArmor(0, new ItemStack(Items.golden_sword));
+                        } else if(entity instanceof EntitySkeleton) {
+                            if(((EntitySkeleton) entity).getSkeletonType() == 0) {
+                                entity.setCurrentItemOrArmor(0, new ItemStack(Items.bow));
+                            } else {
+                                entity.setCurrentItemOrArmor(0, new ItemStack(Items.iron_sword));
                             }
                         }
                         NBTTagCompound tagCompound = new NBTTagCompound();

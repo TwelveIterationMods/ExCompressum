@@ -16,6 +16,7 @@ item.excompressum:bait_5.name=Sheep Bait
 item.excompressum:wood_chippings.name=Wood Chippings
 item.excompressum:uncompressed_coal.name=Uncompressed Coal
 item.excompressum:bat_zapper.name=Bat Zapper
+item.excompressum:ore_smasher.name=Ore Smasher
 
 tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
 tooltip.excompressum:auto_sieve=%s in a Box™
@@ -71,7 +72,7 @@ tile.botania:flower.excompressum.orechidEvolved.reference=Orechid: Evolved: Skyb
 
 botania.entry.excompressum.brokenComprilla=Broken Comprilla
 botania.tagline.excompressum.brokenComprilla=Compresses items into blocks
-botania.page.excompressum.brokenComprilla0=You sieved yourself a good amount of &4Broken Ores&0 by now, haven't you? The &1Ex Comprilla&0 will use &4Mana&0 to compress items into their block forms, so they can be stored in a compact way or smelted down for ingots.<br>The items to compress need to put onto a &1Runic Altar&0 in range. It will work for any items that can be crafted into a two-by-two or three-by-three cube.
+botania.page.excompressum.brokenComprilla0=You sieved yourself a good amount of &4Broken Ores&0 by now, haven't you? The &1Broken Comprilla&0 will use &4Mana&0 to compress items into their block forms, so they can be stored in a compact way or smelted down for ingots.<br>The items to compress need to put onto a &1Runic Altar&0 in range. It will work for any items that can be crafted into a two-by-two or three-by-three cube.
 botania.page.excompressum.brokenComprilla1=Keeping the tradition.
 tile.botania:flower.excompressum.brokenComprilla.name=Broken Comprilla
 tile.botania:flower.excompressum.brokenComprilla.reference=It's not actually broken

@@ -21,6 +21,7 @@ public class ModItems {
     public static ItemWoodChipping woodChipping;
     public static ItemUncompressedCoal uncompressedCoal;
     public static ItemBatZapper batZapper;
+    public static ItemOreSmasher oreSmasher;
 
     public static void init() {
         chickenStick = new ItemChickenStick();
@@ -48,6 +49,8 @@ public class ModItems {
         GameRegistry.registerItem(uncompressedCoal, "uncompressedCoal");
         batZapper = new ItemBatZapper();
         GameRegistry.registerItem(batZapper, "batZapper");
+        oreSmasher = new ItemOreSmasher();
+        GameRegistry.registerItem(oreSmasher, "oreSmasher");
     }
 
     public static void registerRecipes(Configuration config) {
@@ -57,5 +60,6 @@ public class ModItems {
         ItemWoodChipping.registerRecipes(config);
         ItemUncompressedCoal.registerRecipes(config);
         ItemBatZapper.registerRecipes(config);
+        ItemOreSmasher.registerRecipes(config);
     }
 }
