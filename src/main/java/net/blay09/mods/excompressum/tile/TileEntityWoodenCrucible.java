@@ -160,7 +160,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        return new FluidTankInfo[]{new FluidTankInfo(new FluidStack(fluid, (int) fluidVolume), MAX_FLUID)};
+        return new FluidTankInfo[]{new FluidTankInfo(new FluidStack(fluid != null ? fluid : FluidRegistry.WATER, (int) fluidVolume), MAX_FLUID)};
     }
 
     @Override
