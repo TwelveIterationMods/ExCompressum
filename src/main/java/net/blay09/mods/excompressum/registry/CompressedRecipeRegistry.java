@@ -9,6 +9,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
@@ -120,12 +121,12 @@ public class CompressedRecipeRegistry {
             return null;
         }
         for(CompressedRecipe recipe : recipes) {
-            if(itemStack.isItemEqual(recipe.getSourceStack()) && ItemStack.areItemStackTagsEqual(itemStack, recipe.getSourceStack())) {
+            if(itemStack.getItem() == recipe.getSourceStack().getItem() && (recipe.getSourceStack().getItemDamage() == OreDictionary.WILDCARD_VALUE || recipe.getSourceStack().getItemDamage() == itemStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(itemStack, recipe.getSourceStack())) {
                 return recipe;
             }
         }
         for(CompressedRecipe recipe : recipesSmall) {
-            if(itemStack.isItemEqual(recipe.getSourceStack()) && ItemStack.areItemStackTagsEqual(itemStack, recipe.getSourceStack())) {
+            if(itemStack.getItem() == recipe.getSourceStack().getItem() && (recipe.getSourceStack().getItemDamage() == OreDictionary.WILDCARD_VALUE || recipe.getSourceStack().getItemDamage() == itemStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(itemStack, recipe.getSourceStack())) {
                 return recipe;
             }
         }
