@@ -34,7 +34,7 @@ public class ItemOreSmasher extends ItemTool implements IHammer {
 			"oreBroken",
 			"oreNetherBroken",
 			"oreCrushed",
-			"orePowdered"
+//			"orePowdered"
 	};
 
     public ItemOreSmasher() {
@@ -94,7 +94,7 @@ public class ItemOreSmasher extends ItemTool implements IHammer {
 
 	private boolean isOreItem(ItemStack itemStack) {
 		Item item = itemStack.getItem();
-		if(item instanceof ItemOre) {
+		if(item instanceof ItemOre && !item.getUnlocalizedName().endsWith("_powdered")) {
 			return true;
 		}
 		int[] oreIDs = OreDictionary.getOreIDs(itemStack);
@@ -111,7 +111,7 @@ public class ItemOreSmasher extends ItemTool implements IHammer {
 
 	private boolean isOreBlock(ItemStack itemStack) {
 		Block block = Block.getBlockFromItem(itemStack.getItem());
-		if(block instanceof BlockOre) {
+		if(block instanceof BlockOre && !((BlockOre) block).getName().endsWith("dust")) {
 			return true;
 		}
 		int[] oreIDs = OreDictionary.getOreIDs(itemStack);
