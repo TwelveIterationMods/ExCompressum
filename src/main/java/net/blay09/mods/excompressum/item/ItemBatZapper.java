@@ -21,6 +21,7 @@ public class ItemBatZapper extends Item {
         setTextureName(ExCompressum.MOD_ID + ":bat_zapper");
         setCreativeTab(ExCompressum.creativeTab);
         setMaxDamage(ToolMaterial.STONE.getMaxUses());
+        setMaxStackSize(1);
     }
 
     @Override

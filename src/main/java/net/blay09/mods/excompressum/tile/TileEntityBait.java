@@ -174,7 +174,7 @@ public class TileEntityBait extends TileEntity {
                 continue;
             }
             envBlockMap.put(i, new ItemAndMetadata(Blocks.grass, 0));
-            for (int j = 1; j <= 2; j++) envBlockMap.put(i, new ItemAndMetadata(Blocks.sapling, j));
+            for (int j = 0; j <= 2; j++) envBlockMap.put(i, new ItemAndMetadata(Blocks.sapling, j));
             for (int j = 1; j <= 2; j++) envBlockMap.put(i, new ItemAndMetadata(Blocks.tallgrass, j));
             for (int j = 0; j <= 2; j++) envBlockMap.put(i, new ItemAndMetadata(Blocks.log, j));
             for (int j = 0; j <= 1; j++) envBlockMap.put(i, new ItemAndMetadata(Blocks.log2, j));
