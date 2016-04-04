@@ -21,7 +21,8 @@ item.excompressum:ore_smasher.name=Ore Smasher
 
 tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
 tooltip.excompressum:auto_sieve=%s in a Box™
-tooltip.excompressum:auto_heavy_sieve=%s in a Box™
+tooltip.excompressum:auto_heavy_sieve=%s in a Heavy Box™
+tooltip.excompressum:mana_sieve=%s in a Magical Box™
 
 waila.excompressum:baitTooClose=You are too close.
 waila.excompressum:baitTooClose2=The animals are scared away.

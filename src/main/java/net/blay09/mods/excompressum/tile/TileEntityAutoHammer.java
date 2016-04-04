@@ -134,11 +134,11 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
     }
 
     public int getEffectiveEnergy() {
-        return ExCompressum.autoCompressedHammerEnergy;
+        return ExCompressum.autoHammerEnergy;
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressum.autoCompressedHammerSpeed;
+        return ExCompressum.autoHammerSpeed;
     }
 
     public float getEffectiveLuck() {

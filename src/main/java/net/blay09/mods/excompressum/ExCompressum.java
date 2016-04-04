@@ -52,6 +52,8 @@ public class ExCompressum {
     public static int compressedMobSize;
     public static List<String> compressedMobs = Lists.newArrayList();
 
+    public static int autoHammerEnergy;
+    public static float autoHammerSpeed;
     public static int autoCompressedHammerEnergy;
     public static float autoCompressedHammerSpeed;
     public static int autoCompressorEnergy;
@@ -88,6 +90,8 @@ public class ExCompressum {
         baitSquidChance = config.getFloat("Squid Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a squid bait will result in a squid spawn.");
         baitChildChance = config.getFloat("Bait Child Chance", "baits", 0.5f, 0.0001f, 1f, "The chance that an animal spawned from a bait will result in a child.");
 
+        autoHammerSpeed = config.getFloat("Auto Hammer Speed", "general", 0.01f, 0.0001f, 0.1f, "The speed at which the auto hammer will smash stuff.");
+        autoHammerEnergy = config.getInt("Auto Hammer Cost", "general", 40, 0, 100000, "The energy cost of the auto hammer per tick.");
         autoCompressedHammerSpeed = config.getFloat("Auto Compressed Hammer Speed", "general", 0.005f, 0.0001f, 0.1f, "The speed at which the auto compressed hammer will smash stuff.");
         autoCompressedHammerEnergy = config.getInt("Auto Compressed Hammer Cost", "general", 120, 0, 100000, "The energy cost of the auto compressed hammer per tick.");
         autoHeavySieveSpeed = config.getFloat("Auto Heavy Sieve Speed", "general", 0.005f, 0.0001f, 0.1f, "The speed at which the auto heavy sieve will sift stuff.");
