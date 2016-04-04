@@ -147,7 +147,7 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 		return false;
 	}
 
-	public void degradeBook() {
+	private void degradeBook() {
 		if (inventory[21] != null && worldObj.rand.nextFloat() <= ExCompressum.autoSieveBookDecay) {
 			NBTTagList tagList = getEnchantmentList(inventory[21]);
 			if (tagList != null) {
@@ -181,7 +181,7 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 
 	public float getEffectiveLuck() {
 		if (inventory[21] != null) {
-			return 1f + EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, inventory[21]);
+			return 1f + getEnchantmentLevel(Enchantment.fortune, inventory[21]);
 		}
 		return 1f;
 	}
