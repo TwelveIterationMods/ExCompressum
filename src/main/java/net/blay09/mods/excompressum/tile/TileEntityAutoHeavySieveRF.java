@@ -25,7 +25,7 @@ public class TileEntityAutoHeavySieveRF extends TileEntityAutoSieveRF {
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressum.autoHeavySieveSpeed;
+        return ExCompressum.autoHeavySieveSpeed * getSpeedBoost();
     }
 
 }

@@ -26,15 +26,13 @@ public class ItemOreSmasher extends ItemTool implements IHammer {
 	private static final String[] ORE_BLOCKS = new String[] {
 			"oreGravel",
 			"oreNetherGravel",
-			"oreSand",
-			//"oreDust" // We don't want to place oreDust because it can't be broken further.
+			"oreSand"
 	};
 
 	private static final String[] ORE_ITEMS = new String[] {
 			"oreBroken",
 			"oreNetherBroken",
-			"oreCrushed",
-//			"orePowdered"
+			"oreCrushed"
 	};
 
     public ItemOreSmasher() {
@@ -68,6 +66,7 @@ public class ItemOreSmasher extends ItemTool implements IHammer {
 						if(inventoryStack.stackSize >= recipe.getSourceStack().stackSize) {
 							ItemStack resultStack = recipe.getResultStack().copy();
 							resultStack.getItem().onItemUse(resultStack, entityPlayer, world, x, y, z, side, hitX, hitY, hitZ);
+							world.markBlockForUpdate(x, y, z);
 							if(resultStack.stackSize <= 0) {
 								inventoryStack.stackSize -= recipe.getSourceStack().stackSize;
 								if (inventoryStack.stackSize <= 0) {
@@ -81,6 +80,7 @@ public class ItemOreSmasher extends ItemTool implements IHammer {
                 }
 				if (isOreBlock(inventoryStack)) {
 					inventoryStack.getItem().onItemUse(inventoryStack, entityPlayer, world, x, y, z, side, hitX, hitY, hitZ);
+					world.markBlockForUpdate(x, y, z);
 					if (inventoryStack.stackSize <= 0) {
 						entityPlayer.inventory.mainInventory[i] = null;
 					}
