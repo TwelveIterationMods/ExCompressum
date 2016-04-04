@@ -12,13 +12,11 @@ import java.util.List;
 
 public class ItemBlockAutoSieve extends ItemBlock {
 
-    private static final int RANDOM_NAME_CHANGE = 40;
-
     public ItemBlockAutoSieve(Block block) {
         super(block);
     }
 
-    private int ticksSinceTooltip;
+    private ItemStack lastHoverStack;
     private String currentRandomName;
 
     @Override
@@ -32,10 +30,9 @@ public class ItemBlockAutoSieve extends ItemBlock {
             }
             list.add("\u00a77" + I18n.format("tooltip.excompressum:auto_sieve", currentRandomName));
         }
-        ticksSinceTooltip++;
-        if(ticksSinceTooltip >= RANDOM_NAME_CHANGE) {
+        if(lastHoverStack != itemStack) {
             currentRandomName = AutoSieveSkinRegistry.getRandomSkin();
-            ticksSinceTooltip = 0;
+            lastHoverStack = itemStack;
         }
     }
 }

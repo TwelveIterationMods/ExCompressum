@@ -23,7 +23,7 @@ def MAVEN_USERNAME = System.getenv("MAVEN_USERNAME") ?: ""
 def MAVEN_PASSWORD = System.getenv("MAVEN_PASSWORD") ?: ""
 
 version = "1.1." + BUILD_NUMBER
-group= "net.blay09.mods"
+group = "net.blay09.mods"
 archivesBaseName = "excompressum"
 
 minecraft {
@@ -111,6 +111,7 @@ processResources
 
 jar {
     appendix "mc" + minecraft.version
+    from sourceSets.external.output
 }
 
 task jarDev(type: Jar) {
