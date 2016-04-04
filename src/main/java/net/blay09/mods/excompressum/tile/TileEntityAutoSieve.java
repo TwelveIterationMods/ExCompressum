@@ -149,7 +149,7 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 
 	public void degradeBook() {
 		if (inventory[21] != null && worldObj.rand.nextFloat() <= ExCompressum.autoSieveBookDecay) {
-			NBTTagList tagList = inventory[21].getEnchantmentTagList();
+			NBTTagList tagList = getEnchantmentList(inventory[21]);
 			if (tagList != null) {
 				for (int i = 0; i < tagList.tagCount(); ++i) {
 					short id = tagList.getCompoundTagAt(i).getShort("id");
@@ -194,11 +194,24 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 		return itemStack.getItem() == Items.enchanted_book && (getEnchantmentLevel(Enchantment.fortune, itemStack) > 0 || getEnchantmentLevel(Enchantment.efficiency, itemStack) > 0);
 	}
 
+	private static NBTTagList getEnchantmentList(ItemStack itemStack) {
+		if(itemStack.stackTagCompound == null) {
+			return null;
+		}
+		if(itemStack.stackTagCompound.hasKey("StoredEnchantments")) {
+			return itemStack.stackTagCompound.getTagList("StoredEnchantments", Constants.NBT.TAG_COMPOUND);
+		}
+		if(itemStack.stackTagCompound.hasKey("ench")) {
+			return itemStack.stackTagCompound.getTagList("ench", Constants.NBT.TAG_COMPOUND);
+		}
+		return null;
+	}
+
 	private static int getEnchantmentLevel(Enchantment enchantment, ItemStack itemStack) {
 		if (itemStack == null) {
 			return 0;
 		}
-		NBTTagList tagList = itemStack.stackTagCompound != null ? itemStack.stackTagCompound.getTagList("StoredEnchantments", Constants.NBT.TAG_COMPOUND) : null;
+		NBTTagList tagList = getEnchantmentList(itemStack);
 		if (tagList == null) {
 			return 0;
 		}
