@@ -443,7 +443,7 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 	public float getSpeedBoost() {
 		float activeSpeedBost = speedBoost;
 		if (inventory[21] != null) {
-			activeSpeedBost += EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, inventory[21]);
+			activeSpeedBost += getEnchantmentLevel(Enchantment.efficiency, inventory[21]);
 		}
 		return activeSpeedBost;
 	}
