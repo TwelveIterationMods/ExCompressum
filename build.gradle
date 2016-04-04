@@ -35,6 +35,10 @@ configurations {
     provided
 }
 
+sourceSets {
+    external
+}
+
 sourceSets.main.compileClasspath += [configurations.provided]
 
 idea {
