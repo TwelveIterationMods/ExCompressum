@@ -143,8 +143,10 @@ public class TileEntityBait extends TileEntity {
                             countBait++;
                         } else if(block == Blocks.water || block == Blocks.flowing_water) {
                             foundWater = true;
-                        } else if(envBlocks.contains(new ItemAndMetadata(block, worldObj.getBlockMetadata(x, y, z)))) {
-                            countEnvBlocks++; } else if (envBlocks.contains(new ItemAndMetadata(block, OreDictionary.WILDCARD_VALUE))) {
+                        }
+                        if(envBlocks.contains(new ItemAndMetadata(block, worldObj.getBlockMetadata(x, y, z)))) {
+                            countEnvBlocks++;
+                        } else if (envBlocks.contains(new ItemAndMetadata(block, OreDictionary.WILDCARD_VALUE))) {
                             countEnvBlocks++;
                         }
                     }
