@@ -11,7 +11,7 @@ import java.util.Collection;
 public class TileEntityAutoCompressedHammer extends TileEntityAutoHammer {
 
     @Override
-    protected boolean isRegistered(ItemStack itemStack) {
+    public boolean isRegistered(ItemStack itemStack) {
         return CompressedHammerRegistry.isRegistered(itemStack);
     }
 

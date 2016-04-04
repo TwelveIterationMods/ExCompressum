@@ -10,9 +10,9 @@ import net.minecraft.nbt.NBTUtil;
 
 import java.util.List;
 
-public class ItemBlockAutoHeavySieve extends ItemBlock {
+public class ItemBlockManaSieve extends ItemBlock {
 
-    public ItemBlockAutoHeavySieve(Block block) {
+    public ItemBlockManaSieve(Block block) {
         super(block);
     }
 
@@ -23,12 +23,12 @@ public class ItemBlockAutoHeavySieve extends ItemBlock {
     @SuppressWarnings("unchecked")
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean flag) {
         if(itemStack.stackTagCompound != null && itemStack.stackTagCompound.hasKey("CustomSkin")) {
-            list.add("\u00a77" + I18n.format("tooltip.excompressum:auto_heavy_sieve", NBTUtil.func_152459_a(itemStack.stackTagCompound.getCompoundTag("CustomSkin")).getName()));
+            list.add("\u00a77" + I18n.format("tooltip.excompressum:mana_sieve", NBTUtil.func_152459_a(itemStack.stackTagCompound.getCompoundTag("CustomSkin")).getName()));
         } else {
             if(currentRandomName == null) {
                 currentRandomName = AutoSieveSkinRegistry.getRandomSkin();
             }
-            list.add("\u00a77" + I18n.format("tooltip.excompressum:auto_heavy_sieve", currentRandomName));
+            list.add("\u00a77" + I18n.format("tooltip.excompressum:mana_sieve", currentRandomName));
         }
         if(lastHoverStack != itemStack) {
             currentRandomName = AutoSieveSkinRegistry.getRandomSkin();

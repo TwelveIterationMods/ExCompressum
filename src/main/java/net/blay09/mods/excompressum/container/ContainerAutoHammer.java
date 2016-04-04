@@ -1,22 +1,19 @@
 package net.blay09.mods.excompressum.container;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
+import net.blay09.mods.excompressum.tile.TileEntityAutoHammer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerAutoCompressedHammer extends Container {
+public class ContainerAutoHammer extends Container {
 
-    private final TileEntityAutoCompressedHammer tileEntity;
+    private final TileEntityAutoHammer tileEntity;
 
-    public ContainerAutoCompressedHammer(InventoryPlayer inventoryPlayer, TileEntityAutoCompressedHammer tileEntity) {
+    public ContainerAutoHammer(InventoryPlayer inventoryPlayer, TileEntityAutoHammer tileEntity) {
         this.tileEntity = tileEntity;
-        addSlotToContainer(new SlotAutoCompressedHammer(tileEntity, 0, 8, 35));
+        addSlotToContainer(new SlotAutoHammer(tileEntity, 0, 8, 35));
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {

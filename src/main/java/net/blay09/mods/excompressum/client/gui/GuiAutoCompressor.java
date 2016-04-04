@@ -2,9 +2,7 @@ package net.blay09.mods.excompressum.client.gui;
 
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.container.ContainerAutoCompressedHammer;
 import net.blay09.mods.excompressum.container.ContainerAutoCompressor;
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;

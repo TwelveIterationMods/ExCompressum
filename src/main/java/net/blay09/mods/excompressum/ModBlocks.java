@@ -44,7 +44,7 @@ public class ModBlocks {
 
         manaSieve = new BlockManaSieve();
         if(Loader.isModLoaded("Botania")) {
-            GameRegistry.registerBlock(manaSieve, "manaSieve");
+            GameRegistry.registerBlock(manaSieve, ItemBlockManaSieve.class, "manaSieve");
         }
 
         GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible"); // TODO oops. I forgot the modid... fix if there's a 1.9 port

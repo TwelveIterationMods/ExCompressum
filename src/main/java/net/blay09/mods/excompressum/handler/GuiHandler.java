@@ -1,11 +1,11 @@
 package net.blay09.mods.excompressum.handler;
 
 import cpw.mods.fml.common.network.IGuiHandler;
-import net.blay09.mods.excompressum.client.gui.GuiAutoCompressedHammer;
+import net.blay09.mods.excompressum.client.gui.GuiAutoHammer;
 import net.blay09.mods.excompressum.client.gui.GuiAutoCompressor;
 import net.blay09.mods.excompressum.client.gui.GuiAutoSieve;
 import net.blay09.mods.excompressum.client.gui.GuiManaSieve;
-import net.blay09.mods.excompressum.container.ContainerAutoCompressedHammer;
+import net.blay09.mods.excompressum.container.ContainerAutoHammer;
 import net.blay09.mods.excompressum.container.ContainerAutoCompressor;
 import net.blay09.mods.excompressum.container.ContainerAutoSieve;
 import net.blay09.mods.excompressum.tile.*;
@@ -23,8 +23,8 @@ public class GuiHandler implements IGuiHandler {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         switch(id) {
             case GUI_AUTO_HAMMER:
-                if(tileEntity instanceof TileEntityAutoCompressedHammer) {
-                    return new ContainerAutoCompressedHammer(entityPlayer.inventory, (TileEntityAutoCompressedHammer) tileEntity);
+                if(tileEntity instanceof TileEntityAutoHammer) {
+                    return new ContainerAutoHammer(entityPlayer.inventory, (TileEntityAutoHammer) tileEntity);
                 }
                 break;
             case GUI_AUTO_COMPRESSOR:
@@ -46,8 +46,8 @@ public class GuiHandler implements IGuiHandler {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         switch(id) {
             case GUI_AUTO_HAMMER:
-                if(tileEntity instanceof TileEntityAutoCompressedHammer) {
-                    return new GuiAutoCompressedHammer(entityPlayer.inventory, (TileEntityAutoCompressedHammer) tileEntity);
+                if(tileEntity instanceof TileEntityAutoHammer) {
+                    return new GuiAutoHammer(entityPlayer.inventory, (TileEntityAutoHammer) tileEntity);
                 }
                 break;
             case GUI_AUTO_COMPRESSOR:

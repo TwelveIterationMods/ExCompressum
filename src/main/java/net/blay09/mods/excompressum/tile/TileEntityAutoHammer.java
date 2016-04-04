@@ -108,7 +108,7 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
         return HammerRegistry.getRewards(new ItemInfo(itemStack));
     }
 
-    protected boolean isRegistered(ItemStack itemStack) {
+    public boolean isRegistered(ItemStack itemStack) {
         return HammerRegistry.registered(itemStack);
     }
 
@@ -206,6 +206,9 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
 
     @Override
     public int receiveEnergy(ForgeDirection side, int maxReceive, boolean simulate) {
+        if(!simulate) {
+            isDirty = true;
+        }
         return storage.receiveEnergy(maxReceive, simulate);
     }
 
