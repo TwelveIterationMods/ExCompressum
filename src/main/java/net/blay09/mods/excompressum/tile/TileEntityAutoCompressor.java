@@ -6,6 +6,7 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import cpw.mods.fml.common.Optional;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.data.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.CompressedRecipeRegistry;
 import net.minecraft.entity.item.EntityItem;
@@ -24,15 +25,27 @@ import net.minecraftforge.common.util.ForgeDirection;
 @Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
 public class TileEntityAutoCompressor extends TileEntity implements ISidedInventory, IEnergyHandler {
 
+    private static final int UPDATE_INTERVAL = 20;
+
     private final EnergyStorage storage = new EnergyStorage(64000);
     private final Multiset<CompressedRecipe> inputItems = HashMultiset.create();
     private final ItemStack[] inventory = new ItemStack[getSizeInventory()];
     private ItemStack currentStack;
+    private int ticksSinceUpdate;
+    private boolean isDirty;
 
     private float progress;
 
     @Override
     public void updateEntity() {
+        ticksSinceUpdate++;
+        if (ticksSinceUpdate > UPDATE_INTERVAL) {
+            if (isDirty) {
+                VanillaPacketHandler.sendTileEntityUpdate(this);
+                isDirty = false;
+            }
+            ticksSinceUpdate = 0;
+        }
         int effectiveEnergy = getEffectiveEnergy();
         if (storage.getEnergyStored() > effectiveEnergy) {
             if (currentStack == null) {
@@ -86,6 +99,7 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                     }
                 }
             } else {
+                isDirty = true;
                 storage.extractEnergy(effectiveEnergy, false);
                 progress = Math.min(1f, progress + getEffectiveSpeed());
                 if (progress >= 1) {
