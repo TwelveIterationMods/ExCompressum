@@ -203,6 +203,9 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
 
     @Override
     public int receiveEnergy(ForgeDirection side, int maxReceive, boolean simulate) {
+        if(!simulate) {
+            isDirty = true;
+        }
         return storage.receiveEnergy(maxReceive, simulate);
     }
 

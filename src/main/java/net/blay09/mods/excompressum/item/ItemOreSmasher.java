@@ -16,6 +16,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
@@ -57,6 +58,9 @@ public class ItemOreSmasher extends ItemTool implements IHammer {
 
     @Override
     public boolean onItemUse(ItemStack itemStack, EntityPlayer entityPlayer, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+		if(!world.checkNoEntityCollision(AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 2, z + 1))) {
+			return false;
+		}
         for(int i = 0; i < entityPlayer.inventory.mainInventory.length; i++) {
             ItemStack inventoryStack = entityPlayer.inventory.mainInventory[i];
             if(inventoryStack != null) {

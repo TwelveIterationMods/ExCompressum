@@ -7,6 +7,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
@@ -89,6 +90,7 @@ public class TileEntityBait extends TileEntity {
             case 3: return new ItemStack(Items.carrot);
             case 4: return new ItemStack(Items.wheat_seeds);
             case 5: return i == 0 ? GameRegistry.findItemStack("exnihilo" ,"seed_grass", 1) : new ItemStack(Items.wheat);
+            case 6: return new ItemStack(Items.fish);
         }
         return null;
     }
@@ -101,6 +103,7 @@ public class TileEntityBait extends TileEntity {
             case 3: return new EntityPig(world);
             case 4: return new EntityChicken(world);
             case 5: return new EntitySheep(world);
+            case 6: return new EntitySquid(world);
         }
         return null;
     }
@@ -113,6 +116,7 @@ public class TileEntityBait extends TileEntity {
             case 3: return ExCompressum.baitPigChance;
             case 4: return ExCompressum.baitChickenChance;
             case 5: return ExCompressum.baitSheepChance;
+            case 6: return ExCompressum.baitSquidChance;
         }
         return 0;
     }
@@ -185,5 +189,13 @@ public class TileEntityBait extends TileEntity {
         envBlockMap.put(1, new ItemAndMetadata(Blocks.vine, OreDictionary.WILDCARD_VALUE));
         envBlockMap.put(1, new ItemAndMetadata(Blocks.waterlily, 0));
         envBlockMap.put(1, new ItemAndMetadata(Blocks.sapling, 3));
+
+        // Squid
+        envBlockMap.put(6, new ItemAndMetadata(Blocks.water, OreDictionary.WILDCARD_VALUE));
+        envBlockMap.put(6, new ItemAndMetadata(Blocks.flowing_water, OreDictionary.WILDCARD_VALUE));
+    }
+
+    public boolean isWaterBait() {
+        return getBlockMetadata() == 6;
     }
 }

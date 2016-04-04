@@ -13,6 +13,7 @@ item.excompressum:bait_2.name=Cow Bait
 item.excompressum:bait_3.name=Pig Bait
 item.excompressum:bait_4.name=Chicken Bait
 item.excompressum:bait_5.name=Sheep Bait
+item.excompressum:bait_6.name=Squid Bait
 item.excompressum:wood_chippings.name=Wood Chippings
 item.excompressum:uncompressed_coal.name=Uncompressed Coal
 item.excompressum:bat_zapper.name=Bat Zapper
@@ -36,6 +37,7 @@ info.excompressum:baitNearbyBait=There's too many baits in this area. Way too su
 info.excompressum:baitWrongEnv=Place more blocks from the animals' home biome here.
 info.excompressum:baitNearbyAnimal=Animals are shy. There's too many of them here.
 info.excompressum:baitNoWater=There's no water in this area.
+info.excompressum:baitPlaceInWater=Must be placed in water.
 
 tile.excompressum:compressed_dust.name=Compressed Dust
 tile.excompressum:compressed_cobblestone.name=Compressed Cobblestone

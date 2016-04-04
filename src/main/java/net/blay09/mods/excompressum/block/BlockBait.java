@@ -30,7 +30,7 @@ import java.util.Random;
 public class BlockBait extends BlockContainer {
 
     public BlockBait() {
-        super(Material.circuits);
+        super(Material.ground);
         setHardness(0.1f);
         setCreativeTab(ExCompressum.creativeTab);
         setBlockBounds(0f, 0f, 0f, 1f, 0.1f, 1f);
@@ -64,7 +64,7 @@ public class BlockBait extends BlockContainer {
     @Override
     @SuppressWarnings("unchecked")
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i <= 6; i++) {
             list.add(new ItemStack(item, 1, i));
         }
     }
@@ -83,6 +83,11 @@ public class BlockBait extends BlockContainer {
             entityPlayer.addChatComponentMessage(chatComponent);
         }
         return true;
+    }
+
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+        return world.getBlock(x, y, z).getMaterial() == Material.water;
     }
 
     @Override
@@ -131,6 +136,10 @@ public class BlockBait extends BlockContainer {
         }
         if (config.getBoolean("Sheep Bait", "blocks", true, "If set to false, the recipe for the sheep bait will be disabled.")) {
             GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 5), GameRegistry.findItem("exnihilo", "seed_grass"), Items.wheat);
+        }
+        if (config.getBoolean("Squid Bait", "blocks", true, "If set to false, the recipe for the squid bait will be disabled.")) {
+            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 6), Items.fish, Items.fish);
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, 6), "listAllfishraw", "listAllfishraw")); // Pam's Fishies
         }
     }
 

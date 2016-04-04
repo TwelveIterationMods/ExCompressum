@@ -44,7 +44,7 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 	private GameProfile customSkin;
 	private boolean spawnParticles;
 	private int ticksSinceUpdate;
-	private boolean isDirty;
+	protected boolean isDirty;
 	private float progress;
 
 	private float speedBoost = 1f;
