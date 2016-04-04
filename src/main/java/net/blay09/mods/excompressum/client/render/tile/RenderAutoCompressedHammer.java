@@ -21,105 +21,17 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-public class RenderAutoCompressedHammer extends TileEntitySpecialRenderer {
+public class RenderAutoCompressedHammer extends RenderAutoHammer {
 
-    private final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/auto_heavy_frame.png");
-    private final ModelAutoFrame model = new ModelAutoFrame();
-
-    private EntityItem renderItem;
+    private final ResourceLocation textureFrame = new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/auto_heavy_frame.png");
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
-        if(renderItem == null) {
-            if(tileEntity.hasWorldObj()) {
-                renderItem = new EntityItem(tileEntity.getWorldObj());
-            } else {
-                renderItem = new EntityItem(Minecraft.getMinecraft().theWorld);
-            }
-            renderItem.setEntityItemStack(new ItemStack(ModItems.compressedHammerDiamond));
-        }
-
-        TileEntityAutoCompressedHammer tileEntityHammer = (TileEntityAutoCompressedHammer) tileEntity;
-
-        GL11.glPushMatrix();
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glColor4f(1f, 1f, 1f, 1f);
-        GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-        model.renderSolid();
-        GL11.glEnable(GL11.GL_BLEND);
-        model.renderGlass();
-        GL11.glDisable(GL11.GL_BLEND);
-
-        if(tileEntityHammer.getCurrentStack() != null) {
-            GL11.glPushMatrix();
-            GL11.glScalef(0.5f, 0.5f, 0.5f);
-            GL11.glTranslatef(-0.2f, 0.2f, -0.5f);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
-            renderContent(Block.getBlockFromItem(tileEntityHammer.getCurrentStack().getItem()), tileEntityHammer.getCurrentStack().getItemDamage(), tileEntityHammer.getProgress());
-            GL11.glPopMatrix();
-        }
-
-        if(renderItem != null) {
-            RenderItem.renderInFrame = true;
-            GL11.glRotatef((float) Math.sin(tileEntityHammer.getProgress() * 100) * 15, 0, 0, 1);
-            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0, 0f, 0f);
-            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, -0.3, 0f, 0f);
-            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0.3, 0f, 0f);
-            RenderItem.renderInFrame = false;
-        }
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glPopMatrix();
-        GL11.glColor4f(1f, 1f, 1f, 1f);
+    protected void bindFrameTexture() {
+        bindTexture(textureFrame);
     }
 
-    private void renderContent(Block block, int metadata, float progress) {
-        Tessellator.instance.startDrawingQuads();
-        Tessellator.instance.setColorRGBA_F(1f, 1f, 1f, 1f);
-
-        renderBlock(block, metadata, null);
-        if(progress > 0f) {
-            renderBlock(block, metadata, BlockAutoCompressedHammer.destroyStages[(int) (progress * 9f)]);
-        }
-
-        Tessellator.instance.draw();
-    }
-
-    private void renderBlock(Block block, int metadata, IIcon override) {
-        IIcon icon = override != null ? override : block.getIcon(ForgeDirection.UP.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(1, 1, 1, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(1, 1, 0, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(0, 1, 0, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(0, 1, 1, icon.getMaxU(), icon.getMinV());
-
-        icon = override != null ? override : block.getIcon(ForgeDirection.DOWN.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(0, 0, 1, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(0, 0, 0, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 0, 0, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 0, 1, icon.getMaxU(), icon.getMinV());
-
-        icon = override != null ? override : block.getIcon(ForgeDirection.WEST.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(0, 1, 1, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(0, 1, 0, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(0, 0, 0, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(0, 0, 1, icon.getMaxU(), icon.getMinV());
-
-        icon = override != null ? override : block.getIcon(ForgeDirection.EAST.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(1, 0, 1, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(1, 0, 0, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 1, 0, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 1, 1, icon.getMaxU(), icon.getMinV());
-
-        icon = override != null ? override : block.getIcon(ForgeDirection.SOUTH.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(0, 1, 1, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(0, 0, 1, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 0, 1, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 1, 1, icon.getMaxU(), icon.getMinV());
-
-        icon = override != null ? override : block.getIcon(ForgeDirection.NORTH.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(0, 1, 0, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(1, 1, 0, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 0, 0, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(0, 0, 0, icon.getMaxU(), icon.getMinV());
+    @Override
+    protected ItemStack createHammerItemStack() {
+        return new ItemStack(ModItems.compressedHammerDiamond);
     }
 }

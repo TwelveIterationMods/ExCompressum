@@ -12,6 +12,7 @@ public class ModBlocks {
     public static BlockHeavySieve heavySieve;
     public static BlockWoodenCrucible woodenCrucible;
     public static BlockBait bait;
+    public static BlockAutoHammer autoHammer;
     public static BlockAutoCompressedHammer autoCompressedHammer;
     public static BlockAutoHeavySieveRF autoHeavySieve;
     public static BlockAutoSieveRF autoSieve;
@@ -28,11 +29,13 @@ public class ModBlocks {
         bait = new BlockBait();
         GameRegistry.registerBlock(bait, ItemBlockBait.class, "bait");
 
+        autoHammer = new BlockAutoHammer();
         autoCompressedHammer = new BlockAutoCompressedHammer();
         autoSieve = new BlockAutoSieveRF();
         autoHeavySieve = new BlockAutoHeavySieveRF();
         autoCompressor = new BlockAutoCompressor();
-        if(Loader.isModLoaded("CoFHCore")) {
+            if(Loader.isModLoaded("CoFHCore")) {
+            GameRegistry.registerBlock(autoHammer, "autoHammer");
             GameRegistry.registerBlock(autoCompressedHammer, "autoCompressedHammer");
             GameRegistry.registerBlock(autoSieve, ItemBlockAutoSieve.class, "autoSieve");
             GameRegistry.registerBlock(autoHeavySieve, ItemBlockAutoHeavySieve.class, "autoHeavySieve");
@@ -44,19 +47,20 @@ public class ModBlocks {
             GameRegistry.registerBlock(manaSieve, "manaSieve");
         }
 
-        GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible");
+        GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
         GameRegistry.registerTileEntity(TileEntityHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
-        GameRegistry.registerTileEntity(TileEntityBait.class, "bait");
+        GameRegistry.registerTileEntity(TileEntityBait.class, "bait"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
 
         if(Loader.isModLoaded("CoFHCore")) {
-            GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, "autoCompressedHammer");
-            GameRegistry.registerTileEntity(TileEntityAutoSieveRF.class, "autoSieve");
-            GameRegistry.registerTileEntity(TileEntityAutoHeavySieveRF.class, "autoHeavySieve");
-            GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, "autoCompressor");
+            GameRegistry.registerTileEntity(TileEntityAutoHammer.class, ExCompressum.MOD_ID + "autoHammer");
+            GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, "autoCompressedHammer"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
+            GameRegistry.registerTileEntity(TileEntityAutoSieveRF.class, "autoSieve"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
+            GameRegistry.registerTileEntity(TileEntityAutoHeavySieveRF.class, "autoHeavySieve"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
+            GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, "autoCompressor"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
         }
 
         if(Loader.isModLoaded("Botania")) {
-            GameRegistry.registerTileEntity(TileEntityAutoSieveMana.class, "manaSieve");
+            GameRegistry.registerTileEntity(TileEntityAutoSieveMana.class, "manaSieve"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
         }
     }
 
@@ -66,6 +70,7 @@ public class ModBlocks {
         BlockCompressed.registerRecipes(config);
         BlockBait.registerRecipes(config);
         BlockAutoCompressor.registerRecipes(config);
+        BlockAutoHammer.registerRecipes(config);
         BlockAutoCompressedHammer.registerRecipes(config);
         BlockManaSieve.registerRecipes(config);
         BlockAutoSieveRF.registerRecipes(config);

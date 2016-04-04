@@ -53,6 +53,9 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodenCrucible.class, new RenderWoodenCrucible());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.woodenCrucible), new ItemRenderWoodenCrucible());
 
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHammer.class, new RenderAutoHammer());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoHammer), new ItemRenderAutoHammer());
+
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoCompressedHammer.class, new RenderAutoCompressedHammer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoCompressedHammer), new ItemRenderAutoCompressedHammer());
 

@@ -14,7 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class GuiHandler implements IGuiHandler {
-    public static final int GUI_AUTO_COMPRESSED_HAMMER = 0;
+    public static final int GUI_AUTO_HAMMER = 0;
     public static final int GUI_AUTO_COMPRESSOR = 1;
     public static final int GUI_AUTO_SIEVE = 2;
 
@@ -22,7 +22,7 @@ public class GuiHandler implements IGuiHandler {
     public Object getServerGuiElement(int id, EntityPlayer entityPlayer, World world, int x, int y, int z) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         switch(id) {
-            case GUI_AUTO_COMPRESSED_HAMMER:
+            case GUI_AUTO_HAMMER:
                 if(tileEntity instanceof TileEntityAutoCompressedHammer) {
                     return new ContainerAutoCompressedHammer(entityPlayer.inventory, (TileEntityAutoCompressedHammer) tileEntity);
                 }
@@ -45,7 +45,7 @@ public class GuiHandler implements IGuiHandler {
     public Object getClientGuiElement(int id, EntityPlayer entityPlayer, World world, int x, int y, int z) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         switch(id) {
-            case GUI_AUTO_COMPRESSED_HAMMER:
+            case GUI_AUTO_HAMMER:
                 if(tileEntity instanceof TileEntityAutoCompressedHammer) {
                     return new GuiAutoCompressedHammer(entityPlayer.inventory, (TileEntityAutoCompressedHammer) tileEntity);
                 }
