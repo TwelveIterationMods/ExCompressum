@@ -143,7 +143,7 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                     firstEmptySlot = i;
                 }
             } else {
-                if (inventory[i].stackSize + itemStack.stackSize < inventory[i].getMaxStackSize() && isItemEqualWildcard(inventory[i], itemStack)) {
+                if (inventory[i].stackSize + itemStack.stackSize <= inventory[i].getMaxStackSize() && isItemEqualWildcard(inventory[i], itemStack)) {
                     inventory[i].stackSize += itemStack.stackSize;
                     return true;
                 }
