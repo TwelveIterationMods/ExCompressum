@@ -31,6 +31,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Collection;
 
@@ -313,7 +314,8 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-		return slot >= 1 && slot <= 20;
+		return (side != ForgeDirection.UP.ordinal() && side != ForgeDirection.DOWN.ordinal() && side != ForgeDirection.UNKNOWN.ordinal() && slot == 21) ||
+				(slot >= 1 && slot <= 20);
 	}
 
 	@Override
