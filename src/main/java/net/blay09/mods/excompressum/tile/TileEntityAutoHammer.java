@@ -120,7 +120,7 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
                     firstEmptySlot = i;
                 }
             } else {
-                if (inventory[i].stackSize + itemStack.stackSize < inventory[i].getMaxStackSize() && inventory[i].isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(inventory[i], itemStack)) {
+                if (inventory[i].stackSize + itemStack.stackSize <= inventory[i].getMaxStackSize() && inventory[i].isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(inventory[i], itemStack)) {
                     inventory[i].stackSize += itemStack.stackSize;
                     return true;
                 }

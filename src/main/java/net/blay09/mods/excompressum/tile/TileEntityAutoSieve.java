@@ -135,7 +135,7 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 					firstEmptySlot = i;
 				}
 			} else {
-				if (inventory[i].stackSize + itemStack.stackSize < inventory[i].getMaxStackSize() && inventory[i].isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(inventory[i], itemStack)) {
+				if (inventory[i].stackSize + itemStack.stackSize <= inventory[i].getMaxStackSize() && inventory[i].isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(inventory[i], itemStack)) {
 					inventory[i].stackSize += itemStack.stackSize;
 					return true;
 				}
