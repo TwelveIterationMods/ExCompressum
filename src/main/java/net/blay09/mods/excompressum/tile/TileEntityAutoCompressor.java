@@ -21,6 +21,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.oredict.OreDictionary;
 
 @Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
 public class TileEntityAutoCompressor extends TileEntity implements ISidedInventory, IEnergyHandler {
@@ -65,7 +66,7 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                         for(int i = 12; i < inventory.length; i++) {
                             if(inventory[i] == null) {
                                 space = 64;
-                            } else if(inventory[i].isItemEqual(compressedRecipe.getResultStack()) && ItemStack.areItemStackTagsEqual(inventory[i], compressedRecipe.getResultStack())) {
+                            } else if(isItemEqualWildcard(inventory[i], compressedRecipe.getResultStack())) {
                                 space += inventory[i].getMaxStackSize() - inventory[i].stackSize;
                             }
                             if(space >= compressedRecipe.getResultStack().stackSize) {
@@ -77,7 +78,7 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                         }
                         int count = sourceStack.stackSize;
                         for (int i = 0; i < 12; i++) {
-                            if (inventory[i] != null && inventory[i].isItemEqual(sourceStack) && ItemStack.areItemStackTagsEqual(inventory[i], sourceStack)) {
+                            if (inventory[i] != null && isItemEqualWildcard(inventory[i], sourceStack)) {
                                 if (inventory[i].stackSize >= count) {
                                     inventory[i].stackSize -= count;
                                     if (inventory[i].stackSize == 0) {
@@ -124,6 +125,16 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
         }
     }
 
+    private boolean isItemEqualWildcard(ItemStack itemStack, ItemStack otherStack) {
+        if(!ItemStack.areItemStackTagsEqual(itemStack, otherStack)) {
+            return false;
+        }
+        if(itemStack.isItemEqual(otherStack) || itemStack.getItem() == otherStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || otherStack.getItemDamage() == OreDictionary.WILDCARD_VALUE)) {
+            return true;
+        }
+        return false;
+    }
+
     private boolean addItemToOutput(ItemStack itemStack) {
         int firstEmptySlot = -1;
         for (int i = 12; i < getSizeInventory(); i++) {
@@ -132,7 +143,7 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                     firstEmptySlot = i;
                 }
             } else {
-                if (inventory[i].stackSize + itemStack.stackSize < inventory[i].getMaxStackSize() && inventory[i].isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(inventory[i], itemStack)) {
+                if (inventory[i].stackSize + itemStack.stackSize < inventory[i].getMaxStackSize() && isItemEqualWildcard(inventory[i], itemStack)) {
                     inventory[i].stackSize += itemStack.stackSize;
                     return true;
                 }
