@@ -129,7 +129,7 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 
 	private boolean addItemToOutput(ItemStack itemStack) {
 		int firstEmptySlot = -1;
-		for (int i = 1; i < getSizeInventory(); i++) {
+		for (int i = 1; i < getSizeInventory() - 1; i++) { // -1 because last slot is the book slot
 			if (inventory[i] == null) {
 				if (firstEmptySlot == -1) {
 					firstEmptySlot = i;
