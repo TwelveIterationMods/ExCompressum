@@ -1,0 +1,78 @@
+item.excompressum:compressed_hammer_wood.name=压缩木槌
+item.excompressum:compressed_hammer_stone.name=压缩石锤
+item.excompressum:compressed_hammer_iron.name=压缩铁锤
+item.excompressum:compressed_hammer_gold.name=压缩金锤
+item.excompressum:compressed_hammer_diamond.name=压缩钻石锤
+item.excompressum:double_compressed_diamond_hammer.name=双重压缩钻锤
+item.excompressum:compressed_crook.name=压缩钩子
+item.excompressum:chicken_stick.name=小鸡锤
+item.excompressum:heavy_silk_mesh.name=重型丝网
+item.excompressum:bait_0.name=狼诱饵
+item.excompressum:bait_1.name=豹猫诱饵
+item.excompressum:bait_2.name=牛诱饵
+item.excompressum:bait_3.name=猪诱饵
+item.excompressum:bait_4.name=鸡诱饵
+item.excompressum:bait_5.name=羊诱饵
+item.excompressum:wood_chippings.name=木屑
+item.excompressum:uncompressed_coal.name=1/8煤
+item.excompressum:bat_zapper.name=蝙蝠杀手
+item.excompressum:ore_smasher.name=矿物粉碎者
+
+tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
+tooltip.excompressum:auto_sieve=%s in a Box™
+tooltip.excompressum:auto_heavy_sieve=%s in a Box™
+
+waila.excompressum:baitTooClose=你靠得太近了。
+waila.excompressum:baitTooClose2=动物们都吓跑了。
+waila.excompressum:speedBoost=速度提升： %s
+waila.excompressum:luckBonus=幸运提升： %s
+waila.excompressum:sieveSkin=皮肤： %s
+waila.excompressum:sieveLeft=%s 左
+waila.excompressum:solidVolume=固体体积： %s
+waila.excompressum:fluidVolume=液体体积： %s
+
+info.excompressum:baitCanSpawn=个诱饵将在这种环境下工作。移动超出范围，所以你不要吓动物了！
+info.excompressum:baitNearbyBait=这里有太多的诱饵，太可疑了。
+info.excompressum:baitWrongEnv=放置更多来自动物的生物群戏的方块到这里
+info.excompressum:baitNearbyAnimal=动物是害羞。有太多的人在这里。
+info.excompressum:baitNoWater=这里缺少水
+
+tile.excompressum:compressed_dust.name=压缩尘土
+tile.excompressum:compressed_cobblestone.name=压缩圆石
+tile.excompressum:compressed_sand.name=压缩沙子
+tile.excompressum:compressed_dirt.name=压缩泥土
+tile.excompressum:compressed_gravel.name=压缩砂砾
+tile.excompressum:compressed_flint.name=压缩燧石
+tile.excompressum:heavy_sieve_0.name=重型橡木筛子
+tile.excompressum:heavy_sieve_1.name=重型云杉筛子
+tile.excompressum:heavy_sieve_2.name=重型白桦木筛子
+tile.excompressum:heavy_sieve_3.name=重型从林木筛子
+tile.excompressum:heavy_sieve_4.name=重型金合欢木筛子
+tile.excompressum:heavy_sieve_5.name=重型深色橡木筛子
+tile.excompressum:wooden_crucible_0.name=橡木坩埚
+tile.excompressum:wooden_crucible_1.name=云杉坩埚
+tile.excompressum:wooden_crucible_2.name=白桦木坩埚
+tile.excompressum:wooden_crucible_3.name=从林木坩埚
+tile.excompressum:wooden_crucible_4.name=合金欢木坩埚
+tile.excompressum:wooden_crucible_5.name=深色橡木坩埚
+tile.excompressum:auto_compressor.name=自动压缩机
+tile.excompressum:auto_compressed_hammer.name=自动压缩锤
+tile.excompressum:auto_sieve.name=自动筛子
+tile.excompressum:auto_sieve_mana.name=Mana筛子
+tile.excompressum:auto_heavy_sieve.name=重型自动筛子
+
+itemGroup.excompressum=Ex Compressum
+
+botania.entry.excompressum.orechidEvolved=Evolved Orechid
+botania.tagline.excompressum.orechidEvolved=Creates ores from stone
+botania.page.excompressum.orechidEvolved0=You probably noticed by now that you won't be mining any ores in this world. The &1Evolved Orechid&0 will use &4Mana&0 to generate &4ores&0 in nearby &1Stone&0 blocks at a faster and cheaper rate than the &1Orechid&0.<br>The ores it generates are random, but seem to be biased towards more common ores rather than rarer ones.
+botania.page.excompressum.orechidEvolved1=&oStill not dragon poop though&r.
+tile.botania:flower.excompressum.orechidEvolved.name=Evolved Orechid
+tile.botania:flower.excompressum.orechidEvolved.reference=Orechid: Evolved: Skyblock: The Movie
+
+botania.entry.excompressum.brokenComprilla=Broken Comprilla
+botania.tagline.excompressum.brokenComprilla=Compresses items into blocks
+botania.page.excompressum.brokenComprilla0=You sieved yourself a good amount of &4Broken Ores&0 by now, haven't you? The &1Broken Comprilla&0 will use &4Mana&0 to compress items into their block forms, so they can be stored in a compact way or smelted down for ingots.<br>The items to compress need to put onto a &1Runic Altar&0 in range. It will work for any items that can be crafted into a two-by-two or three-by-three cube.
+botania.page.excompressum.brokenComprilla1=Keeping the tradition.
+tile.botania:flower.excompressum.brokenComprilla.name=Broken Comprilla
+tile.botania:flower.excompressum.brokenComprilla.reference=It's not actually broken
