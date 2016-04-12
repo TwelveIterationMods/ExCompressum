@@ -86,11 +86,6 @@ public class BlockBait extends BlockContainer {
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-        return world.getBlock(x, y, z).getMaterial() == Material.water;
-    }
-
-    @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityPlayer, ItemStack itemStack) {
         if(entityPlayer instanceof EntityPlayer) {
             TileEntityBait.EnvironmentalCondition environmentStatus = ((TileEntityBait) world.getTileEntity(x, y, z)).checkSpawnConditions(true);
@@ -137,7 +132,7 @@ public class BlockBait extends BlockContainer {
         if (config.getBoolean("Sheep Bait", "blocks", true, "If set to false, the recipe for the sheep bait will be disabled.")) {
             GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 5), GameRegistry.findItem("exnihilo", "seed_grass"), Items.wheat);
         }
-        if (config.getBoolean("Squid Bait", "blocks", true, "If set to false, the recipe for the squid bait will be disabled.")) {
+        if (config.getBoolean("Squid Bait", "blocks", false, "If set to false, the recipe for the squid bait will be disabled.")) {
             GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 6), Items.fish, Items.fish);
             GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, 6), "listAllfishraw", "listAllfishraw")); // Pam's Fishies
         }
