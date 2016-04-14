@@ -5,12 +5,18 @@ import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 public class ContainerAutoCompressor extends Container {
 
     private final TileEntityAutoCompressor tileEntity;
+
+    private float lastProgress;
+    private int lastEnergy;
 
     public ContainerAutoCompressor(InventoryPlayer inventoryPlayer, TileEntityAutoCompressor tileEntity) {
         this.tileEntity = tileEntity;
@@ -35,6 +41,28 @@ public class ContainerAutoCompressor extends Container {
 
         for (int i = 0; i < 9; i++) {
             addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
+        }
+    }
+
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+
+        if(tileEntity.getProgress() != lastProgress || tileEntity.getEnergyStored(null) != lastEnergy) {
+            for (ICrafting crafting : (List<ICrafting>) crafters) {
+                crafting.sendProgressBarUpdate(this, 0, (int) (100 * tileEntity.getProgress()));
+                crafting.sendProgressBarUpdate(this, 1, tileEntity.getEnergyStored(null));
+            }
+        }
+        lastProgress = tileEntity.getProgress();
+        lastEnergy = tileEntity.getEnergyStored(null);
+    }
+
+    @Override
+    public void updateProgressBar(int var, int val) {
+        switch(var) {
+            case 0: tileEntity.setProgress((float) val / 100f);
+            case 1: tileEntity.setEnergyStored(val);
         }
     }
 

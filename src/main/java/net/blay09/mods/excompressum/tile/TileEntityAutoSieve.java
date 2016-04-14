@@ -233,13 +233,7 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
-		progress = tagCompound.getFloat("Progress");
-		spawnParticles = tagCompound.getBoolean("Particles");
-		if (tagCompound.hasKey("CustomSkin")) {
-			customSkin = NBTUtil.func_152459_a(tagCompound.getCompoundTag("CustomSkin"));
-			ExCompressum.proxy.preloadSkin(customSkin);
-		}
+		readFromNBTSynced(tagCompound);
 		NBTTagList items = tagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < items.tagCount(); i++) {
 			NBTTagCompound itemCompound = items.getCompoundTagAt(i);
@@ -250,19 +244,20 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 		}
 	}
 
+	private void readFromNBTSynced(NBTTagCompound tagCompound) {
+		currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
+		progress = tagCompound.getFloat("Progress");
+		spawnParticles = tagCompound.getBoolean("Particles");
+		if (tagCompound.hasKey("CustomSkin")) {
+			customSkin = NBTUtil.func_152459_a(tagCompound.getCompoundTag("CustomSkin"));
+			ExCompressum.proxy.preloadSkin(customSkin);
+		}
+	}
+
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		if (currentStack != null) {
-			tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
-		}
-		tagCompound.setFloat("Progress", progress);
-		tagCompound.setBoolean("Particles", spawnParticles);
-		if (customSkin != null) {
-			NBTTagCompound customSkinTag = new NBTTagCompound();
-			NBTUtil.func_152460_a(customSkinTag, customSkin);
-			tagCompound.setTag("CustomSkin", customSkinTag);
-		}
+		writeToNBTSynced(tagCompound);
 		NBTTagList items = new NBTTagList();
 		for (int i = 0; i < inventory.length; i++) {
 			if (inventory[i] != null) {
@@ -275,16 +270,29 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 		tagCompound.setTag("Items", items);
 	}
 
+	private void writeToNBTSynced(NBTTagCompound tagCompound) {
+		if (currentStack != null) {
+			tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
+		}
+		tagCompound.setFloat("Progress", progress);
+		tagCompound.setBoolean("Particles", spawnParticles);
+		if (customSkin != null) {
+			NBTTagCompound customSkinTag = new NBTTagCompound();
+			NBTUtil.func_152460_a(customSkinTag, customSkin);
+			tagCompound.setTag("CustomSkin", customSkinTag);
+		}
+	}
+
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound tagCompound = new NBTTagCompound();
-		writeToNBT(tagCompound);
+		writeToNBTSynced(tagCompound);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, blockMetadata, tagCompound);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.func_148857_g());
+		readFromNBTSynced(pkt.func_148857_g());
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -453,5 +461,9 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 	public void setSpeedBoost(int speedBoostTicks, float speedBoost) {
 		this.speedBoostTicks = speedBoostTicks;
 		this.speedBoost = speedBoost;
+	}
+
+	public void setProgress(float progress) {
+		this.progress = progress;
 	}
 }

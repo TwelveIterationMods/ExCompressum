@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 @Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
 public class TileEntityAutoSieveRF extends TileEntityAutoSieve implements IEnergyHandler {
 
-    private final EnergyStorage storage = new EnergyStorage(64000);
+    private final EnergyStorage storage = new EnergyStorage(32000);
 
     @Override
     public void writeToNBT(NBTTagCompound tagCompound) {

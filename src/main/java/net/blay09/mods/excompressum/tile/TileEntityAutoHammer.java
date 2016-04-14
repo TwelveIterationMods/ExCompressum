@@ -33,7 +33,7 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
 
     private static final int UPDATE_INTERVAL = 20;
 
-    private final EnergyStorage storage = new EnergyStorage(64000);
+    private final EnergyStorage storage = new EnergyStorage(32000);
     private ItemStack[] inventory = new ItemStack[getSizeInventory()];
     private ItemStack currentStack;
 
@@ -148,8 +148,6 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
-        currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
-        progress = tagCompound.getFloat("Progress");
         storage.readFromNBT(tagCompound);
         NBTTagList items = tagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < items.tagCount(); i++) {
@@ -161,13 +159,15 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
         }
     }
 
+    private void readFromNBTSynced(NBTTagCompound tagCompound) {
+        currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
+        progress = tagCompound.getFloat("Progress");
+    }
+
     @Override
     public void writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
-        if (currentStack != null) {
-            tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
-        }
-        tagCompound.setFloat("Progress", progress);
+        writeToNBTSynced(tagCompound);
         storage.writeToNBT(tagCompound);
         NBTTagList items = new NBTTagList();
         for (int i = 0; i < inventory.length; i++) {
@@ -181,16 +181,23 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
         tagCompound.setTag("Items", items);
     }
 
+    private void writeToNBTSynced(NBTTagCompound tagCompound) {
+        if (currentStack != null) {
+            tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
+        }
+        tagCompound.setFloat("Progress", progress);
+    }
+
     @Override
     public Packet getDescriptionPacket() {
         NBTTagCompound tagCompound = new NBTTagCompound();
-        writeToNBT(tagCompound);
+        writeToNBTSynced(tagCompound);
         return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, blockMetadata, tagCompound);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        readFromNBT(pkt.func_148857_g());
+        readFromNBTSynced(pkt.func_148857_g());
     }
 
     @SideOnly(Side.CLIENT)
@@ -335,5 +342,9 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
 
     public ItemStack getCurrentStack() {
         return currentStack;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
     }
 }

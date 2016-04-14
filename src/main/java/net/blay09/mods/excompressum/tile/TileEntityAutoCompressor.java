@@ -6,7 +6,6 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import cpw.mods.fml.common.Optional;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.data.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.CompressedRecipeRegistry;
 import net.minecraft.entity.item.EntityItem;
@@ -15,9 +14,6 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -26,27 +22,15 @@ import net.minecraftforge.oredict.OreDictionary;
 @Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
 public class TileEntityAutoCompressor extends TileEntity implements ISidedInventory, IEnergyHandler {
 
-    private static final int UPDATE_INTERVAL = 20;
-
-    private final EnergyStorage storage = new EnergyStorage(64000);
+    private final EnergyStorage storage = new EnergyStorage(32000);
     private final Multiset<CompressedRecipe> inputItems = HashMultiset.create();
     private final ItemStack[] inventory = new ItemStack[getSizeInventory()];
     private ItemStack currentStack;
-    private int ticksSinceUpdate;
-    private boolean isDirty;
 
     private float progress;
 
     @Override
     public void updateEntity() {
-        ticksSinceUpdate++;
-        if (ticksSinceUpdate > UPDATE_INTERVAL) {
-            if (isDirty) {
-                VanillaPacketHandler.sendTileEntityUpdate(this);
-                isDirty = false;
-            }
-            ticksSinceUpdate = 0;
-        }
         int effectiveEnergy = getEffectiveEnergy();
         if (storage.getEnergyStored() > effectiveEnergy) {
             if (currentStack == null) {
@@ -100,7 +84,6 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                     }
                 }
             } else {
-                isDirty = true;
                 storage.extractEnergy(effectiveEnergy, false);
                 progress = Math.min(1f, progress + getEffectiveSpeed());
                 if (progress >= 1) {
@@ -201,22 +184,7 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
     }
 
     @Override
-    public Packet getDescriptionPacket() {
-        NBTTagCompound tagCompound = new NBTTagCompound();
-        writeToNBT(tagCompound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, blockMetadata, tagCompound);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        readFromNBT(pkt.func_148857_g());
-    }
-
-    @Override
     public int receiveEnergy(ForgeDirection side, int maxReceive, boolean simulate) {
-        if(!simulate) {
-            isDirty = true;
-        }
         return storage.receiveEnergy(maxReceive, simulate);
     }
 
@@ -335,6 +303,10 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
 
     public float getProgress() {
         return progress;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
     }
 
     public float getEnergyPercentage() {
