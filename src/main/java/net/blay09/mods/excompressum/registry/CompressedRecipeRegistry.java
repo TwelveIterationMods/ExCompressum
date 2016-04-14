@@ -20,8 +20,9 @@ public class CompressedRecipeRegistry {
 
     private static final List<CompressedRecipe> recipesSmall = Lists.newArrayList();
     private static final List<CompressedRecipe> recipes = Lists.newArrayList();
-    private static final InventoryCompressedMatcher matcherSmall = new InventoryCompressedMatcher(2, 2);
-    private static final InventoryCompressedMatcher matcher = new InventoryCompressedMatcher(3, 3);
+    private static final InventoryCompressedMatcher matcherSmall = new InventoryCompressedMatcher(2, 2, false);
+    private static final InventoryCompressedMatcher matcherSmallStupid = new InventoryCompressedMatcher(3, 3, true);
+    private static final InventoryCompressedMatcher matcher = new InventoryCompressedMatcher(3, 3, false);
 
     public static void reload() {
         recipesSmall.clear();
@@ -58,6 +59,12 @@ public class CompressedRecipeRegistry {
                 if(recipe.matches(matcher, null)) {
                     sourceStack.stackSize = 9;
                     recipes.add(new CompressedRecipe(sourceStack, recipe.getCraftingResult(matcher).copy()));
+                } else { // Fallback for stupid mods that register 2x2 recipes in a 3x3 shaped grid
+                    matcherSmallStupid.fill(sourceStack);
+                    if(recipe.matches(matcherSmallStupid, null)) {
+                        sourceStack.stackSize = 4;
+                        recipes.add(new CompressedRecipe(sourceStack, recipe.getCraftingResult(matcherSmallStupid).copy()));
+                    }
                 }
             }
         }

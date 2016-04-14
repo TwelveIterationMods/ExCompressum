@@ -35,14 +35,6 @@ configurations {
     provided
 }
 
-sourceSets {
-    external {
-        java {
-            srcDir "src/external/java"
-        }
-    }
-}
-
 sourceSets.main.compileClasspath += [configurations.provided]
 
 idea {
@@ -118,7 +110,6 @@ processResources
 
 jar {
     appendix "mc" + minecraft.version
-    from sourceSets.external.output
 }
 
 task jarDev(type: Jar) {
