@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import cofh.api.block.IDismantleable;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModBlocks;
@@ -29,7 +29,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 
-@Optional.Interface(modid = "CoFHCore", iface = "cofh.api.block.IDismantleable", striprefs = true)
 public class BlockAutoCompressor extends BlockContainer implements IDismantleable {
 
     private IIcon iconTop;
@@ -126,7 +125,7 @@ public class BlockAutoCompressor extends BlockContainer implements IDismantleabl
     }
 
     public static void registerRecipes(Configuration config) {
-        if(Loader.isModLoaded("CoFHCore")) {
+        if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) {
             if (config.getBoolean("Auto Compressor", "blocks", true, "Set this to false to disable the recipe for the auto compressor.")) {
                 GameRegistry.addRecipe(new ItemStack(ModBlocks.autoCompressor), "#I#", "IBI", "#I#", '#', Blocks.crafting_table, 'B', Blocks.iron_block, 'I', Items.iron_ingot);
             }

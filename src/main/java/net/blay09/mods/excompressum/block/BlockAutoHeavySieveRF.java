@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import cofh.api.block.IDismantleable;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
@@ -15,7 +16,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-@Optional.Interface(modid = "CoFHCore", iface = "cofh.api.block.IDismantleable", striprefs = true)
 public class BlockAutoHeavySieveRF extends BlockAutoSieveRF implements IDismantleable {
 
     public BlockAutoHeavySieveRF() {
@@ -33,7 +33,7 @@ public class BlockAutoHeavySieveRF extends BlockAutoSieveRF implements IDismantl
     }
 
     public static void registerRecipes(Configuration config) {
-        if (Loader.isModLoaded("CoFHCore")) {
+        if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) {
             if (config.getBoolean("Auto Heavy Sieve", "blocks", true, "Set this to false to disable the recipe for the auto heavy sieve.")) {
                 if(OreDictionary.getOres("blockSteel", false).isEmpty() || OreDictionary.getOres("ingotSteel", false).isEmpty()) {
                     GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlassColorless", 'I', "ingotSteel"));

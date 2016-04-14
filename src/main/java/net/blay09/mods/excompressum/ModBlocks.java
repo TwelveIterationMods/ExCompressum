@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum;
 
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.block.*;
 import net.blay09.mods.excompressum.item.*;
@@ -34,7 +35,7 @@ public class ModBlocks {
         autoSieve = new BlockAutoSieveRF();
         autoHeavySieve = new BlockAutoHeavySieveRF();
         autoCompressor = new BlockAutoCompressor();
-            if(Loader.isModLoaded("CoFHCore")) {
+        if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) {
             GameRegistry.registerBlock(autoHammer, "autoHammer");
             GameRegistry.registerBlock(autoCompressedHammer, "autoCompressedHammer");
             GameRegistry.registerBlock(autoSieve, ItemBlockAutoSieve.class, "autoSieve");
@@ -51,7 +52,7 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(TileEntityHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
         GameRegistry.registerTileEntity(TileEntityBait.class, "bait"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
 
-        if(Loader.isModLoaded("CoFHCore")) {
+        if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) {
             GameRegistry.registerTileEntity(TileEntityAutoHammer.class, ExCompressum.MOD_ID + "autoHammer");
             GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, "autoCompressedHammer"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
             GameRegistry.registerTileEntity(TileEntityAutoSieveRF.class, "autoSieve"); // TODO oops. I forgot the modid... fix if there's a 1.9 port

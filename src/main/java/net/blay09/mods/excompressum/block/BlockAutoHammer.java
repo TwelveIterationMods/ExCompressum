@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.block;
 import cofh.api.block.IDismantleable;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
@@ -33,7 +34,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.ArrayList;
 
-@Optional.Interface(modid = "CoFHCore", iface = "cofh.api.block.IDismantleable", striprefs = true)
 public class BlockAutoHammer extends BlockContainer implements IDismantleable {
 
     public static final IIcon[] destroyStages = new IIcon[10];
@@ -150,7 +150,7 @@ public class BlockAutoHammer extends BlockContainer implements IDismantleable {
     }
 
     public static void registerRecipes(Configuration config) {
-        if (Loader.isModLoaded("CoFHCore")) {
+        if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) {
             if (config.getBoolean("Auto Hammer", "blocks", true, "Set this to false to disable the recipe for the auto hammer.")) {
                 Item hammerDiamond = GameRegistry.findItem("exnihilo", "hammer_diamond");
                 GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHammer), "IPI", "IHI", "IPI", 'P', Blocks.heavy_weighted_pressure_plate, 'H', hammerDiamond, 'I', "ingotIron"));

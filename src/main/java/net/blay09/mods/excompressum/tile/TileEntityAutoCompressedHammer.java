@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
 
-@Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
 public class TileEntityAutoCompressedHammer extends TileEntityAutoHammer {
 
     @Override

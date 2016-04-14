@@ -29,7 +29,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Collection;
 
-@Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
 public class TileEntityAutoHammer extends TileEntity implements ISidedInventory, IEnergyHandler {
 
     private static final int UPDATE_INTERVAL = 20;

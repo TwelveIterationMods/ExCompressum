@@ -19,7 +19,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
-@Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
 public class TileEntityAutoCompressor extends TileEntity implements ISidedInventory, IEnergyHandler {
 
     private final EnergyStorage storage = new EnergyStorage(32000);

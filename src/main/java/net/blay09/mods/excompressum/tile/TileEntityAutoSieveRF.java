@@ -6,7 +6,6 @@ import cpw.mods.fml.common.Optional;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-@Optional.Interface(modid = "CoFHCore", iface = "cofh.api.energy.IEnergyHandler", striprefs = true)
 public class TileEntityAutoSieveRF extends TileEntityAutoSieve implements IEnergyHandler {
 
     private final EnergyStorage storage = new EnergyStorage(32000);
