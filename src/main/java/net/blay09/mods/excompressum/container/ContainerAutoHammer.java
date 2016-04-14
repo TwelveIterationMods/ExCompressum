@@ -36,6 +36,9 @@ public class ContainerAutoHammer extends Container {
         for (int i = 0; i < 9; i++) {
             addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
         }
+
+        addSlotToContainer(new SlotAutoHammerUpgrade(tileEntity, 21, 8, 62));
+        addSlotToContainer(new SlotAutoHammerUpgrade(tileEntity, 22, 32, 62));
     }
 
     @Override
@@ -72,12 +75,16 @@ public class ContainerAutoHammer extends Container {
         if(slot != null && slot.getHasStack()) {
             ItemStack slotStack = slot.getStack();
             itemStack = slotStack.copy();
-            if(slotNumber <= 20) {
+            if(slotNumber <= 20 || slotNumber >= 57) {
                 if(!mergeItemStack(slotStack, 21, 57, true)) {
                     return null;
                 }
             } else if(tileEntity.isItemValidForSlot(0, slotStack)) {
                 if (!mergeItemStack(slotStack, 0, 1, false)) {
+                    return null;
+                }
+            } else if(tileEntity.isItemValidForSlot(21, slotStack)) {
+                if (!mergeItemStack(slotStack, 57, 59, false)) {
                     return null;
                 }
             }

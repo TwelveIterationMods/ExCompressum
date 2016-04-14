@@ -30,6 +30,8 @@ public class ClientProxy extends CommonProxy {
 
     private final Set<GameProfile> skinRequested = Sets.newHashSet();
     public static IIcon iconEmptyBookSlot;
+    public static IIcon iconEmptyHammerSlot;
+    public static IIcon iconEmptyCompressedHammerSlot;
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
@@ -89,6 +91,8 @@ public class ClientProxy extends CommonProxy {
     public void onTextureStitch(TextureStitchEvent.Pre event) {
         if(event.map.getTextureType() == 1) {
             iconEmptyBookSlot = event.map.registerIcon(ExCompressum.MOD_ID + ":empty_enchanted_book_slot");
+            iconEmptyHammerSlot = event.map.registerIcon(ExCompressum.MOD_ID + ":empty_hammer_slot");
+            iconEmptyCompressedHammerSlot = event.map.registerIcon(ExCompressum.MOD_ID + ":empty_compressed_hammer_slot");
         }
     }
 }

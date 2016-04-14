@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.tile;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import cpw.mods.fml.common.Optional;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import exnihilo.registries.HammerRegistry;
@@ -77,6 +78,14 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
                 progress += getEffectiveSpeed();
                 isDirty = true;
                 if (progress >= 1) {
+                    if(worldObj.rand.nextFloat() <= ExCompressum.autoHammerDecay) {
+                        if (inventory[21] != null) {
+                            inventory[21].attemptDamageItem(1, worldObj.rand);
+                        }
+                        if (inventory[22] != null) {
+                            inventory[22].attemptDamageItem(1, worldObj.rand);
+                        }
+                    }
                     if (!worldObj.isRemote) {
                         Collection<Smashable> rewards = getSmashables(currentStack);
                         if (rewards != null && !rewards.isEmpty()) {
@@ -114,7 +123,7 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
 
     private boolean addItemToOutput(ItemStack itemStack) {
         int firstEmptySlot = -1;
-        for (int i = 1; i < getSizeInventory(); i++) {
+        for (int i = 1; i < getSizeInventory() - 2; i++) {
             if (inventory[i] == null) {
                 if(firstEmptySlot == -1){
                     firstEmptySlot = i;
@@ -137,8 +146,19 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
         return ExCompressum.autoHammerEnergy;
     }
 
+    public float getSpeedBoost() {
+        float boost = 1f;
+        if(inventory[21] != null && isHammerUpgrade(inventory[21])) {
+            boost += 1f;
+        }
+        if(inventory[22] != null && isHammerUpgrade(inventory[22])) {
+            boost += 1f;
+        }
+        return boost;
+    }
+
     public float getEffectiveSpeed() {
-        return ExCompressum.autoHammerSpeed;
+        return ExCompressum.autoHammerSpeed * getSpeedBoost();
     }
 
     public float getEffectiveLuck() {
@@ -256,7 +276,13 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
-        return slot == 0 && isRegistered(itemStack);
+        return
+                (slot == 0 && isRegistered(itemStack))
+                || ((slot == 21 || slot == 22) && isHammerUpgrade(itemStack));
+    }
+
+    public boolean isHammerUpgrade(ItemStack itemStack) {
+        return itemStack.getItem() == GameRegistry.findItem("exnihilo", "hammer_diamond");
     }
 
     @Override
@@ -274,7 +300,7 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
 
     @Override
     public int getSizeInventory() {
-        return 21;
+        return 23;
     }
 
     @Override

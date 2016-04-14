@@ -84,10 +84,20 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer {
 
         if(renderItem != null) {
             RenderItem.renderInFrame = true;
-            GL11.glRotatef((float) Math.sin(tileEntityHammer.getProgress() * 100) * 15, 0, 0, 1);
+            GL11.glRotatef((float) Math.sin(tileEntityHammer.getProgress() / tileEntityHammer.getSpeedBoost() * 100) * 15, 0, 0, 1);
             RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0, 0f, 0f);
-//            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, -0.3, 0f, 0f);
-//            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0.3, 0f, 0f);
+            if(tileEntityHammer.getStackInSlot(21) != null) {
+                GL11.glPushMatrix();
+                GL11.glRotatef(-15, 0f, 1f, 0f);
+                RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, -0.3, 0f, 0f);
+                GL11.glPopMatrix();
+            }
+            if(tileEntityHammer.getStackInSlot(21) != null) {
+                GL11.glPushMatrix();
+                GL11.glRotatef(15, 0f, 1f, 0f);
+                RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0.3, 0f, 0f);
+                GL11.glPopMatrix();
+            }
             RenderItem.renderInFrame = false;
         }
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
