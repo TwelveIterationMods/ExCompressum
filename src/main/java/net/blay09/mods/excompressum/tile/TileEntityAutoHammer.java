@@ -79,10 +79,14 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
                 if (progress >= 1) {
                     if(worldObj.rand.nextFloat() <= ExCompressum.autoHammerDecay) {
                         if (inventory[21] != null) {
-                            inventory[21].attemptDamageItem(1, worldObj.rand);
+                            if(inventory[21].attemptDamageItem(1, worldObj.rand)) {
+                                inventory[21] = null;
+                            }
                         }
                         if (inventory[22] != null) {
-                            inventory[22].attemptDamageItem(1, worldObj.rand);
+                            if(inventory[22].attemptDamageItem(1, worldObj.rand)) {
+                                inventory[22] = null;
+                            }
                         }
                     }
                     if (!worldObj.isRemote) {
