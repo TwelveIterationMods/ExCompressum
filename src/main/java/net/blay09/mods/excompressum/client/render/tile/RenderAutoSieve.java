@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -36,6 +37,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
         TileEntityAutoSieve tileEntitySieve = (TileEntityAutoSieve) tileEntity;
+        int metadata = tileEntity.hasWorldObj() ? tileEntity.getBlockMetadata() : 0;
         GL11.glPushMatrix();
         boolean oldRescaleNormal = GL11.glIsEnabled(GL12.GL_RESCALE_NORMAL);
         if (!oldRescaleNormal) {
@@ -43,6 +45,26 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer {
         }
         GL11.glColor4f(1f, 1f, 1f, 1f);
         GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
+
+        float angle;
+        switch(ForgeDirection.getOrientation(metadata)) {
+            case NORTH:
+                angle = 0;
+                break;
+            case EAST:
+                angle = -90;
+                break;
+            case SOUTH:
+                angle = 180;
+                break;
+            case WEST:
+                angle = 90;
+                break;
+            default:
+                angle = -90;
+        }
+        GL11.glRotatef(angle, 0f, 1f, 0f);
+
         bindFrameTexture();
         frame.renderSolid();
         GL11.glEnable(GL11.GL_BLEND);

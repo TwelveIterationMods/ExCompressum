@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
@@ -105,6 +106,19 @@ public class BlockAutoHammer extends BlockContainer implements IDismantleable {
         if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey("EnergyStored")) {
             TileEntityAutoHammer tileEntity = (TileEntityAutoHammer) world.getTileEntity(x, y, z);
             tileEntity.setEnergyStored(stack.stackTagCompound.getInteger("EnergyStored"));
+        }
+        int facing = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        if (facing == 0) {
+            world.setBlockMetadataWithNotify(x, y, z, 2, 2);
+        }
+        if (facing == 1) {
+            world.setBlockMetadataWithNotify(x, y, z, 5, 2);
+        }
+        if (facing == 2) {
+            world.setBlockMetadataWithNotify(x, y, z, 3, 2);
+        }
+        if (facing == 3) {
+            world.setBlockMetadataWithNotify(x, y, z, 4, 2);
         }
         super.onBlockPlacedBy(world, x, y, z, player, stack);
     }

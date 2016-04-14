@@ -18,6 +18,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public abstract class BlockAutoSieve extends BlockContainer {
@@ -112,6 +113,19 @@ public abstract class BlockAutoSieve extends BlockContainer {
         }
         if(!world.isRemote && useRandomSkin) {
             tileEntity.setCustomSkin(new GameProfile(null, AutoSieveSkinRegistry.getRandomSkin()));
+        }
+        int facing = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        if (facing == 0) {
+            world.setBlockMetadataWithNotify(x, y, z, 2, 2);
+        }
+        if (facing == 1) {
+            world.setBlockMetadataWithNotify(x, y, z, 5, 2);
+        }
+        if (facing == 2) {
+            world.setBlockMetadataWithNotify(x, y, z, 3, 2);
+        }
+        if (facing == 3) {
+            world.setBlockMetadataWithNotify(x, y, z, 4, 2);
         }
         super.onBlockPlacedBy(world, x, y, z, player, itemStack);
     }

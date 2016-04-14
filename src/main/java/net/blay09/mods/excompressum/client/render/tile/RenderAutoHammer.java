@@ -41,11 +41,32 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer {
         }
 
         TileEntityAutoHammer tileEntityHammer = (TileEntityAutoHammer) tileEntity;
+        int metadata = tileEntity.hasWorldObj() ? tileEntity.getBlockMetadata() : 0;
 
         GL11.glPushMatrix();
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glColor4f(1f, 1f, 1f, 1f);
         GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
+
+        float angle;
+        switch(ForgeDirection.getOrientation(metadata)) {
+            case NORTH:
+                angle = 0;
+                break;
+            case EAST:
+                angle = -90;
+                break;
+            case SOUTH:
+                angle = 180;
+                break;
+            case WEST:
+                angle = 90;
+                break;
+            default:
+                angle = -90;
+        }
+        GL11.glRotatef(angle, 0f, 1f, 0f);
+
         bindFrameTexture();
         model.renderSolid();
         GL11.glEnable(GL11.GL_BLEND);
