@@ -24,6 +24,7 @@ public class CompressedRecipeRegistry {
     private static final InventoryCompressedMatcher matcher = new InventoryCompressedMatcher(3, 3);
 
     public static void reload() {
+        recipesSmall.clear();
         recipes.clear();
         for(Object obj : CraftingManager.getInstance().getRecipeList()) {
             IRecipe recipe = (IRecipe) obj;
