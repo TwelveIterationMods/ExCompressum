@@ -63,7 +63,7 @@ public class CompressedRecipeRegistry {
                     matcherSmallStupid.fill(sourceStack);
                     if(recipe.matches(matcherSmallStupid, null)) {
                         sourceStack.stackSize = 4;
-                        recipes.add(new CompressedRecipe(sourceStack, recipe.getCraftingResult(matcherSmallStupid).copy()));
+                        recipesSmall.add(new CompressedRecipe(sourceStack, recipe.getCraftingResult(matcherSmallStupid).copy()));
                     }
                 }
             }
