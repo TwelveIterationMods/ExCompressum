@@ -103,7 +103,10 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
 
     @Override
     public int fill(ForgeDirection from, FluidStack fillStack, boolean doFill) {
-        int capacityLeft = (int) getCapacityLeft();
+        if(fillStack.getFluid().getTemperature() > 500) {
+            return 0;
+        }
+        int capacityLeft = (int) (getCapacityLeft() - fluidVolume);
         if (!doFill) {
             if (fluid == null) {
                 return fillStack.amount;
