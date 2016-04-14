@@ -74,7 +74,9 @@ public abstract class BlockAutoSieve extends BlockContainer {
 				return true;
 			}
 		}
-		entityPlayer.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_SIEVE, world, x, y, z);
+		if(!entityPlayer.isSneaking()) {
+			entityPlayer.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_SIEVE, world, x, y, z);
+		}
 		return true;
 	}
 

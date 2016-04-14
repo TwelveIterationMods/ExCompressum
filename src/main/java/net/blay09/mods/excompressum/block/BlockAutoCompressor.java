@@ -63,7 +63,9 @@ public class BlockAutoCompressor extends BlockContainer implements IDismantleabl
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
-        entityPlayer.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_COMPRESSOR, world, x, y, z);
+        if(!entityPlayer.isSneaking()) {
+            entityPlayer.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_COMPRESSOR, world, x, y, z);
+        }
         return true;
     }
 
