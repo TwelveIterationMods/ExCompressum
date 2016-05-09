@@ -78,7 +78,7 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 			if (currentStack == null) {
 				if (inventory[0] != null && isRegistered(inventory[0])) {
 					boolean foundSpace = false;
-					for (int i = 1; i < inventory.length; i++) {
+					for (int i = 1; i < inventory.length - 1; i++) {
 						if (inventory[i] == null) {
 							foundSpace = true;
 						}
