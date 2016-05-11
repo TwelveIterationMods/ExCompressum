@@ -3,10 +3,8 @@ package net.blay09.mods.excompressum.handler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.*;
+import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
@@ -23,12 +21,12 @@ public class CompressedEnemyHandler {
 
     @SubscribeEvent
     public void onSpawnEntity(EntityJoinWorldEvent event) {
-        if(!event.world.isRemote && event.entity instanceof EntityCreature) {
+        if(!event.world.isRemote && (event.entity instanceof EntityCreature || event.entity instanceof EntityGhast)) {
             String entityName = EntityList.getEntityString(event.entity);
             if(ExCompressum.compressedMobs.contains(entityName)) {
                 if (event.entity.worldObj.rand.nextFloat() <= ExCompressum.compressedMobChance && !event.entity.getEntityData().getCompoundTag("ExCompressum").hasKey("NoCompress") && !event.entity.getEntityData().getCompoundTag("ExCompressum").hasKey("Compressed")) {
-                    ((EntityCreature) event.entity).setAlwaysRenderNameTag(true);
-                    ((EntityCreature) event.entity).setCustomNameTag("Compressed " + event.entity.getCommandSenderName());
+                    ((EntityLiving) event.entity).setAlwaysRenderNameTag(true);
+                    ((EntityLiving) event.entity).setCustomNameTag("Compressed " + event.entity.getCommandSenderName());
                     NBTTagCompound tagCompound = new NBTTagCompound();
                     tagCompound.setBoolean("Compressed", true);
                     event.entity.getEntityData().setTag("ExCompressum", tagCompound);
@@ -44,7 +42,7 @@ public class CompressedEnemyHandler {
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
         if(!event.entity.worldObj.isRemote && event.entity.getEntityData().getCompoundTag("ExCompressum").hasKey("Compressed")) {
-            if(event.entity instanceof EntityCreature) {
+            if(event.entity instanceof EntityCreature || event.entity instanceof EntityGhast) {
                 if(event.source.getEntity() instanceof EntityPlayer && !(event.source.getEntity() instanceof FakePlayer)) {
                     if(EnchantmentHelper.getSilkTouchModifier((EntityLivingBase) event.source.getEntity())) {
                         return;
@@ -55,7 +53,7 @@ public class CompressedEnemyHandler {
                         if(((EntityLivingBase) event.entity).isChild()) {
                             if(entity instanceof EntityZombie) {
                                 ((EntityZombie) entity).setChild(true);
-                            } else if(entity instanceof EntityAgeable) {
+                            } else if(entity instanceof EntityAgeable && event.entity instanceof EntityAgeable) {
                                 ((EntityAgeable) entity).setGrowingAge(((EntityAgeable) event.entity).getGrowingAge());
                             }
                         }

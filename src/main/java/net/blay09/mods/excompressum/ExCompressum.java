@@ -130,7 +130,7 @@ public class ExCompressum {
                 "Cow",
                 "Pig",
                 "Ghast",
-                "Wither"
+//                "Wither" okay, calm down Blay
         }, "A list of entity names that can spawn as compressed entities."));
 
         ModItems.init();
