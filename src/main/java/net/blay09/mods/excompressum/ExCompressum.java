@@ -89,7 +89,7 @@ public class ExCompressum {
         baitChickenChance = config.getFloat("Chicken Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a chicken bait will result in a chicken spawn.");
         baitSheepChance = config.getFloat("Sheep Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a sheep bait will result in a sheep spawn.");
         baitSquidChance = config.getFloat("Squid Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a squid bait will result in a squid spawn.");
-        baitChildChance = config.getFloat("Bait Child Chance", "baits", 0.5f, 0.0001f, 1f, "The chance that an animal spawned from a bait will result in a child.");
+        baitChildChance = config.getFloat("Bait Child Chance", "baits", 0.5f, 0f, 1f, "The chance that an animal spawned from a bait will result in a child.");
 
         autoHammerSpeed = config.getFloat("Auto Hammer Speed", "general", 0.01f, 0.0001f, 0.1f, "The speed at which the auto hammer will smash stuff.");
         autoHammerEnergy = config.getInt("Auto Hammer Cost", "general", 40, 0, 100000, "The energy cost of the auto hammer per tick.");
@@ -101,8 +101,8 @@ public class ExCompressum {
         autoSieveEnergy = config.getInt("Auto Sieve Cost", "general", 40, 0, 100000, "The energy cost of the auto sieve per tick.");
         autoCompressorSpeed = config.getFloat("Auto Compressor Speed", "general", 0.1f, 0.0001f, 1f, "The speed at which the auto compressor will compress stuff.");
         autoCompressorEnergy = config.getInt("Auto Compressor Cost", "general", 5, 0, 100000, "The energy cost of the auto compressor per tick.");
-        autoSieveBookDecay = config.getFloat("Auto Sieve Book Decay", "general", 0.003f, 0.0001f, 0.1f, "The chance for the enchantment on books in a sieve to lose a level (per operation)");
-        autoHammerDecay = config.getFloat("Auto Hammer Decay", "general", 0.5f, 0.0001f, 0.1f, "The chance for the upgrade hammers in an auto hammer to lose durability (per operation)");
+        autoSieveBookDecay = config.getFloat("Auto Sieve Book Decay", "general", 0.003f, 0f, 0.1f, "The chance for the enchantment on books in a sieve to lose a level (per operation)");
+        autoHammerDecay = config.getFloat("Auto Hammer Decay", "general", 0.5f, 0f, 0.1f, "The chance for the upgrade hammers in an auto hammer to lose durability (per operation)");
 
         compressedMobChance = config.getFloat("Compressed Mob Chance", "general", 0.01f, 0f, 1f, "The chance for mobs to spawn as Compressed Mobs. Set to 0 to disable.");
         compressedMobSize = config.getInt("Compressed Mob Size", "general", 9, 1, 9, "The amount of mobs that will spawn upon death of a compressed enemy.");
@@ -120,7 +120,9 @@ public class ExCompressum {
                 "Chicken",
                 "Sheep",
                 "Cow",
-                "Pig"
+                "Pig",
+                "Ghast",
+                "Wither"
         }, "A list of entity names that can spawn as compressed entities."));
 
         ModItems.init();
