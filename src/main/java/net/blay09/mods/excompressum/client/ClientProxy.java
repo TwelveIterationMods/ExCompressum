@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.client;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import exnihilo.blocks.models.ModelSieve;
@@ -11,11 +12,15 @@ import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.client.render.entity.RenderAngryChicken;
 import net.blay09.mods.excompressum.client.render.item.*;
 import net.blay09.mods.excompressum.client.render.tile.*;
+import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
 import net.blay09.mods.excompressum.tile.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelChicken;
+import net.minecraft.client.renderer.entity.RenderChicken;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.Session;
@@ -62,6 +67,8 @@ public class ClientProxy extends CommonProxy {
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoCompressedHammer), new ItemRenderAutoCompressedHammer());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBait.class, new RenderBait());
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityAngryChicken.class, new RenderAngryChicken(new ModelChicken(), 0.3f));
     }
 
     private void setupSillyThings() {

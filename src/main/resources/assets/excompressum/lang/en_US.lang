@@ -67,6 +67,8 @@ tile.excompressum:auto_sieve.name=Auto Sieve
 tile.excompressum:auto_sieve_mana.name=Mana Sieve
 tile.excompressum:auto_heavy_sieve.name=Auto Heavy Sieve
 
+entity.excompressum.AngryChicken.name=Angry Chicken
+
 itemGroup.excompressum=Ex Compressum
 
 botania.entry.excompressum.orechidEvolved=Evolved Orechid

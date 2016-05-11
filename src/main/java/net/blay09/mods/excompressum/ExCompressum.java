@@ -5,7 +5,11 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.compat.IAddon;
+import net.blay09.mods.excompressum.entity.EntityAngryChicken;
+import net.blay09.mods.excompressum.handler.ChickenStickHandler;
 import net.blay09.mods.excompressum.handler.CompressedEnemyHandler;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.*;
@@ -47,6 +51,8 @@ public class ExCompressum {
     public static float baitSheepChance;
     public static float baitSquidChance;
     public static float baitChildChance;
+
+    public static float createChickenStickChance;
 
     public static float compressedMobChance;
     public static int compressedMobSize;
@@ -91,6 +97,8 @@ public class ExCompressum {
         baitSquidChance = config.getFloat("Squid Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a squid bait will result in a squid spawn.");
         baitChildChance = config.getFloat("Bait Child Chance", "baits", 0.5f, 0f, 1f, "The chance that an animal spawned from a bait will result in a child.");
 
+        createChickenStickChance = config.getFloat("Create Chicken Stick Chance", "general", 0f, 0f, 1f, "The chance that hitting a chicken with a stick will create a chicken stick. 0 means disabled.");
+
         autoHammerSpeed = config.getFloat("Auto Hammer Speed", "general", 0.01f, 0.0001f, 0.1f, "The speed at which the auto hammer will smash stuff.");
         autoHammerEnergy = config.getInt("Auto Hammer Cost", "general", 40, 0, 100000, "The energy cost of the auto hammer per tick.");
         autoCompressedHammerSpeed = config.getFloat("Auto Compressed Hammer Speed", "general", 0.005f, 0.0001f, 0.1f, "The speed at which the auto compressed hammer will smash stuff.");
@@ -128,8 +136,11 @@ public class ExCompressum {
         ModItems.init();
         ModBlocks.init();
 
+        EntityRegistry.registerModEntity(EntityAngryChicken.class, "AngryChicken", 0, this, 64, 5, true);
+
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         MinecraftForge.EVENT_BUS.register(new CompressedEnemyHandler());
+        MinecraftForge.EVENT_BUS.register(new ChickenStickHandler());
 
         proxy.preInit(event);
     }
