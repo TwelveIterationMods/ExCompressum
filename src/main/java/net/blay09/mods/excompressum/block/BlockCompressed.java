@@ -20,13 +20,13 @@ import java.util.List;
 
 public class BlockCompressed extends Block {
 
-    private final IIcon[] icons = new IIcon[6];
+    private final IIcon[] icons = new IIcon[8];
 
     public BlockCompressed() {
         super(Material.rock);
         setHardness(4f);
         setResistance(6f);
-        setStepSound(soundTypeSnow);
+        setStepSound(soundTypeStone);
         setCreativeTab(ExCompressum.creativeTab);
         setBlockName(ExCompressum.MOD_ID + ":compressed_dust");
     }
@@ -52,6 +52,8 @@ public class BlockCompressed extends Block {
         icons[3] = iconRegister.registerIcon(ExCompressum.MOD_ID + ":compressed_sand");
         icons[4] = iconRegister.registerIcon(ExCompressum.MOD_ID + ":compressed_dirt");
         icons[5] = iconRegister.registerIcon(ExCompressum.MOD_ID + ":compressed_flint");
+        icons[6] = iconRegister.registerIcon(ExCompressum.MOD_ID + ":compressed_stone");
+        icons[7] = iconRegister.registerIcon(ExCompressum.MOD_ID + ":compressed_netherrack");
     }
 
     @Override
@@ -84,6 +86,14 @@ public class BlockCompressed extends Block {
         if (config.getBoolean("Compressed Flint", "blocks", true, "Set this to false to disable the recipe for the compressed flint.")) {
             GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 5), "###", "###", "###", '#', Items.flint);
             GameRegistry.addShapelessRecipe(new ItemStack(Items.flint, 9), new ItemStack(ModBlocks.compressedBlock, 1, 5));
+        }
+        if (config.getBoolean("Compressed Stone", "blocks", true, "Set this to false to disable the recipe for the compressed stone.")) {
+            GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 6), "###", "###", "###", '#', Blocks.stone);
+            GameRegistry.addShapelessRecipe(new ItemStack(Blocks.stone, 9), new ItemStack(ModBlocks.compressedBlock, 1, 6));
+        }
+        if (config.getBoolean("Compressed Netherrack", "blocks", true, "Set this to false to disable the recipe for the compressed netherrack.")) {
+            GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 7), "###", "###", "###", '#', Blocks.netherrack);
+            GameRegistry.addShapelessRecipe(new ItemStack(Blocks.netherrack, 9), new ItemStack(ModBlocks.compressedBlock, 1, 7));
         }
     }
 }
