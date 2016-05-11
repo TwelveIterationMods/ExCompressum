@@ -461,6 +461,7 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 	public void setSpeedBoost(int speedBoostTicks, float speedBoost) {
 		this.speedBoostTicks = speedBoostTicks;
 		this.speedBoost = speedBoost;
+		this.isDirty = true;
 	}
 
 	public void setProgress(float progress) {
