@@ -57,6 +57,9 @@ public class CompressedEnemyHandler {
                                 ((EntityAgeable) entity).setGrowingAge(((EntityAgeable) event.entity).getGrowingAge());
                             }
                         }
+                        if(event.entity instanceof EntitySkeleton && entity instanceof EntitySkeleton) {
+                            ((EntitySkeleton) entity).setSkeletonType(((EntitySkeleton) event.entity).getSkeletonType());
+                        }
                         if(entity instanceof EntityPigZombie) {
                             entity.setCurrentItemOrArmor(0, new ItemStack(Items.golden_sword));
                         } else if(entity instanceof EntitySkeleton) {
