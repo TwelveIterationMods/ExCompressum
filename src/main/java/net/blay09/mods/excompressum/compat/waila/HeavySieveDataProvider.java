@@ -30,7 +30,7 @@ public class HeavySieveDataProvider implements IWailaDataProvider {
         if(accessor.getTileEntity() instanceof TileEntityHeavySieve) {
             TileEntityHeavySieve tileEntity = (TileEntityHeavySieve) accessor.getTileEntity();
             if(tileEntity.getVolumeLeft() > 0f) {
-                list.add(StatCollector.translateToLocalFormatted("waila.excompressum:sieveLeft", (int) (tileEntity.getVolumeLeft() * 100) + "% left"));
+                list.add(StatCollector.translateToLocalFormatted("waila.excompressum:sieveLeft", (int) (tileEntity.getVolumeLeft() * 100) + "%"));
             }
         }
         return list;

@@ -97,7 +97,7 @@ public class ExCompressum {
         baitSquidChance = config.getFloat("Squid Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a squid bait will result in a squid spawn.");
         baitChildChance = config.getFloat("Bait Child Chance", "baits", 0.5f, 0f, 1f, "The chance that an animal spawned from a bait will result in a child.");
 
-        createChickenStickChance = config.getFloat("Create Chicken Stick Chance", "general", 0f, 0f, 1f, "The chance that hitting a chicken with a stick will create a chicken stick. 0 means disabled.");
+        createChickenStickChance = config.getFloat("Create Chicken Stick Chance", "general", 0.2f, 0f, 1f, "The chance that hitting a chicken with a stick will create a chicken stick. 0 means disabled.");
 
         autoHammerSpeed = config.getFloat("Auto Hammer Speed", "general", 0.01f, 0.0001f, 0.1f, "The speed at which the auto hammer will smash stuff.");
         autoHammerEnergy = config.getInt("Auto Hammer Cost", "general", 40, 0, 100000, "The energy cost of the auto hammer per tick.");
