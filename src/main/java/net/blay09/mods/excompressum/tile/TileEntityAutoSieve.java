@@ -430,19 +430,25 @@ public abstract class TileEntityAutoSieve extends TileEntity implements ISidedIn
 	}
 
 	private void grabProfile() {
-		if (!worldObj.isRemote && customSkin != null && !StringUtils.isNullOrEmpty(customSkin.getName())) {
-			if (!customSkin.isComplete() || !customSkin.getProperties().containsKey("textures")) {
-				GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(customSkin.getName());
-				if (gameProfile != null) {
-					Property property = Iterables.getFirst(gameProfile.getProperties().get("textures"), null);
-					if (property == null) {
-						gameProfile = MinecraftServer.getServer().func_147130_as().fillProfileProperties(gameProfile, true);
+		try {
+			if (!worldObj.isRemote && customSkin != null && !StringUtils.isNullOrEmpty(customSkin.getName())) {
+				if (!customSkin.isComplete() || !customSkin.getProperties().containsKey("textures")) {
+					GameProfile gameProfile = MinecraftServer.getServer().func_152358_ax().func_152655_a(customSkin.getName());
+					if (gameProfile != null) {
+						Property property = Iterables.getFirst(gameProfile.getProperties().get("textures"), null);
+						if (property == null) {
+							gameProfile = MinecraftServer.getServer().func_147130_as().fillProfileProperties(gameProfile, true);
+						}
+						customSkin = gameProfile;
+						isDirty = true;
+						markDirty();
 					}
-					customSkin = gameProfile;
-					isDirty = true;
-					markDirty();
 				}
 			}
+		} catch (ClassCastException ignored) {
+			// This is really dumb
+			// Vanilla's Yggdrasil can fail with a "com.google.gson.JsonPrimitive cannot be cast to com.google.gson.JsonObject" exception, likely their server was derping or whatever. I have no idea
+			// And there doesn't seem to be safety checks for that in Vanilla code so I have to do it here.
 		}
 	}
 
