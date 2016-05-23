@@ -14,10 +14,12 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public class ItemChickenStick extends ItemTool {
@@ -30,6 +32,19 @@ public class ItemChickenStick extends ItemTool {
         setTextureName(ExCompressum.MOD_ID + ":chicken_stick");
         setCreativeTab(ExCompressum.creativeTab);
         setMaxDamage(0);
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack itemStack) {
+        return ChickenStickRegistry.getChickenStickName() != null ? ChickenStickRegistry.getChickenStickName() : super.getItemStackDisplayName(itemStack);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean flag) {
+        if(ChickenStickRegistry.getChickenStickName() != null) {
+            list.add(EnumChatFormatting.GRAY + "(Chicken Stick)");
+        }
     }
 
     @Override

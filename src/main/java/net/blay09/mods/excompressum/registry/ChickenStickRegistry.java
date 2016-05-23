@@ -20,6 +20,7 @@ public class ChickenStickRegistry {
     public static String[] chickenStickSounds;
     public static final Map<String, String> chickenStickNames = Maps.newHashMap();
     private static final List<ItemAndMetadata> validBlocks = Lists.newArrayList();
+    private static String chickenStickName;
 
     private static void addValidBlock(Block block, int metadata) {
         validBlocks.add(new ItemAndMetadata(block, metadata));
@@ -77,4 +78,11 @@ public class ChickenStickRegistry {
         }
     }
 
+    public static String getChickenStickName() {
+        return chickenStickName;
+    }
+
+    public static void setChickenStickName(String chickenStickName) {
+        ChickenStickRegistry.chickenStickName = chickenStickName;
+    }
 }

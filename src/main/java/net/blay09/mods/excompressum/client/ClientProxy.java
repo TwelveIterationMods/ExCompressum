@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import exnihilo.blocks.models.ModelSieve;
@@ -41,7 +42,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
-        setupSillyThings();
 
         ModelSieve sieve = new ModelSieve();
         ModelSieveMesh mesh = new ModelSieveMesh();
@@ -71,19 +71,15 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityAngryChicken.class, new RenderAngryChicken(new ModelChicken(), 0.3f));
     }
 
-    private void setupSillyThings() {
-        String customName = getCustomName(Minecraft.getMinecraft().getSession());
-        if(customName != null) {
-            ModItems.chickenStick.setUnlocalizedName(customName);
-        }
-    }
-
-    private String getCustomName(Session session) {
-        String customName = ChickenStickRegistry.chickenStickNames.get(session.getUsername().toLowerCase());
+    @Override
+    public void postInit(FMLPostInitializationEvent event) {
+        String customName = ChickenStickRegistry.chickenStickNames.get(Minecraft.getMinecraft().getSession().getUsername().toLowerCase());
         if(customName == null) {
             customName = ChickenStickRegistry.chickenStickNames.get("*");
         }
-        return customName;
+        if(customName != null) {
+            ChickenStickRegistry.setChickenStickName(customName);
+        }
     }
 
     @Override

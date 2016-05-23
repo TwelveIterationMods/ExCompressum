@@ -189,6 +189,8 @@ public class ExCompressum {
         if(config.hasChanged()) {
             config.save();
         }
+
+        proxy.postInit(event);
     }
 
     private void registerAddon(FMLPostInitializationEvent event, String modid, String className) {
