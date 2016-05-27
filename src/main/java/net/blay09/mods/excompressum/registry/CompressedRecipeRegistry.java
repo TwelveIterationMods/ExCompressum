@@ -1,7 +1,9 @@
 package net.blay09.mods.excompressum.registry;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.blay09.mods.excompressum.registry.data.CompressedRecipe;
+import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class CompressedRecipeRegistry {
 
@@ -24,7 +27,10 @@ public class CompressedRecipeRegistry {
     private static final InventoryCompressedMatcher matcherSmallStupid = new InventoryCompressedMatcher(3, 3, true);
     private static final InventoryCompressedMatcher matcher = new InventoryCompressedMatcher(3, 3, false);
 
+    private static final Map<ItemAndMetadata, CompressedRecipe> cachedResults = Maps.newHashMap();
+
     public static void reload() {
+        cachedResults.clear();
         recipesSmall.clear();
         recipes.clear();
         for(Object obj : CraftingManager.getInstance().getRecipeList()) {
@@ -125,19 +131,26 @@ public class CompressedRecipeRegistry {
     }
 
     public static CompressedRecipe getRecipe(ItemStack itemStack) {
-        if(itemStack == null) {
+        if(itemStack == null || itemStack.getTagCompound() != null) {
             return null;
         }
+        ItemAndMetadata itemAndMetadata = new ItemAndMetadata(itemStack);
+        if(cachedResults.containsKey(itemAndMetadata)) {
+            return cachedResults.get(new ItemAndMetadata(itemStack));
+        }
         for(CompressedRecipe recipe : recipes) {
-            if(itemStack.getItem() == recipe.getSourceStack().getItem() && (recipe.getSourceStack().getItemDamage() == OreDictionary.WILDCARD_VALUE || recipe.getSourceStack().getItemDamage() == itemStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(itemStack, recipe.getSourceStack())) {
+            if(itemStack.getItem() == recipe.getSourceStack().getItem() && (recipe.getSourceStack().getItemDamage() == OreDictionary.WILDCARD_VALUE || recipe.getSourceStack().getItemDamage() == itemStack.getItemDamage())) {
+                cachedResults.put(itemAndMetadata, recipe);
                 return recipe;
             }
         }
         for(CompressedRecipe recipe : recipesSmall) {
-            if(itemStack.getItem() == recipe.getSourceStack().getItem() && (recipe.getSourceStack().getItemDamage() == OreDictionary.WILDCARD_VALUE || recipe.getSourceStack().getItemDamage() == itemStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(itemStack, recipe.getSourceStack())) {
+            if(itemStack.getItem() == recipe.getSourceStack().getItem() && (recipe.getSourceStack().getItemDamage() == OreDictionary.WILDCARD_VALUE || recipe.getSourceStack().getItemDamage() == itemStack.getItemDamage())) {
+                cachedResults.put(itemAndMetadata, recipe);
                 return recipe;
             }
         }
+        cachedResults.put(itemAndMetadata, null);
         return null;
     }
 
