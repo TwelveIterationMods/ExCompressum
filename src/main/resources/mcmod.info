@@ -1,8 +1,8 @@
 [
 {
-  "modid": "adaqua",
-  "name": "Ad Aqua",
-  "description": "Ex Nihilo Addon. Adds a wooden crucible for creating water out of plants and fruits.",
+  "modid": "excompressum",
+  "name": "Ex Compressum",
+  "description": "Ex Nihilo Addon. Adds compressed hammers, automatic sieves and hammerers, wooden crucibles, ...",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
