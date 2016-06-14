@@ -5,6 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import net.blay09.mods.excompressum.ExCompressum;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,30 +18,38 @@ import java.util.Random;
 
 public class AutoSieveSkinRegistry {
 
+    private static final Logger logger = LogManager.getLogger();
+
     private static final Random random = new Random();
     private static final List<String> availableSkins = Lists.newArrayList();
 
     public static void load() {
         availableSkins.clear();
         availableSkins.add("Runew0lf"); // Rune in a Box™
-        try {
-            URL remoteURL = new URL("http://blay09.net/eiranet/api/skins.php");
-            InputStream in = remoteURL.openStream();
-            Gson gson = new Gson();
-            JsonReader reader = new JsonReader(new InputStreamReader(in));
-            JsonObject root = gson.fromJson(reader, JsonObject.class);
-            if(root.has("error")) {
-                System.out.println("Could not load remote skins for auto sieve: " + root.get("error").getAsString());
-                return;
+        if(!ExCompressum.skipAutoSieveSkins) {
+            try {
+                URL remoteURL = new URL("http://balyware.com/control-panel/api/skins.php");
+                InputStream in = remoteURL.openStream();
+                Gson gson = new Gson();
+                JsonReader reader = new JsonReader(new InputStreamReader(in));
+                JsonObject root = gson.fromJson(reader, JsonObject.class);
+                if (root.has("error")) {
+                    logger.error("Could not load remote skins for auto sieve: {}", root.get("error").getAsString());
+                    return;
+                }
+                if(root.has("skins")) {
+                    JsonArray skins = root.getAsJsonArray("skins");
+                    for (int i = 0; i < skins.size(); i++) {
+                        JsonObject skin = skins.get(i).getAsJsonObject();
+                        availableSkins.add(skin.get("name").getAsString());
+                    }
+                }
+                reader.close();
+            } catch (ClassCastException e) {
+                logger.error("Could not load remote skins for auto sieve: ", e);
+            } catch (IOException e) {
+                logger.error("Could not load remote skins for auto sieve: ", e);
             }
-            JsonArray skins = root.getAsJsonArray("skins");
-            for(int i = 0; i < skins.size(); i++) {
-                JsonObject skin = skins.get(i).getAsJsonObject();
-                availableSkins.add(skin.get("name").getAsString());
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
