@@ -65,14 +65,14 @@ itemGroup.excompressum=Ex Compressum
 
 botania.entry.excompressum.orechidEvolved=进化版凝矿兰
 botania.tagline.excompressum.orechidEvolved=以石头造就矿石
-botania.page.excompressum.orechidEvolved0=你也许已经发现，你根本不能 在这个空无一物的世界中挖矿。 &1进化版凝矿兰&0可通过消耗 &4Mana&0来在附近的&1石头&0中生成&4矿 石&0，与&1凝矿兰&0相比速度更快，消耗 更低。<br>矿石生成过程完全随机，但相比 较来说，它似乎更偏向于生成 那些常见的矿石。
+botania.page.excompressum.orechidEvolved0=你也许已经发现，你根本不能 在这个空无一物的世界中挖矿。 &1进化版凝矿兰&0可通过消耗 &4魔力&0来在附近的&1石头&0中生成&4矿 石&0，与&1凝矿兰&0相比速度更快，消耗 更低。<br>矿石生成过程完全随机，但相比 较来说，它似乎更偏向于生成 那些常见的矿石。
 botania.page.excompressum.orechidEvolved1=&o然而并不是龙的便便&r。
 tile.botania:flower.excompressum.orechidEvolved.name=进化版凝矿兰
 tile.botania:flower.excompressum.orechidEvolved.reference=空岛大电影:凝矿兰进化
 
 botania.entry.excompressum.brokenComprilla=破碎的聚缩兰
 botania.tagline.excompressum.brokenComprilla=把物品压缩成方块
-botania.page.excompressum.brokenComprilla0=现在你筛出了成堆的&4破碎矿石&0， 对吧？然后&1破碎的聚缩兰&0就可以 消耗&4Mana&0来把物品压缩成方块 形式，以方便储存和烧炼。<br>待压缩物品须放置于范围内的 &1符文祭坛&0中。另外，只有那些拥 有2x2或3x3样式的合成表的物品 才可以压缩。
+botania.page.excompressum.brokenComprilla0=现在你筛出了成堆的&4破碎矿石&0， 对吧？然后&1破碎的聚缩兰&0就可以 消耗&4魔力&0来把物品压缩成方块 形式，以方便储存和烧炼。<br>待压缩物品须放置于范围内的 &1符文祭坛&0中。另外，只有那些拥 有2x2或3x3样式的合成表的物品 才可以压缩。
 botania.page.excompressum.brokenComprilla1=保留传统
 tile.botania:flower.excompressum.brokenComprilla.name=破碎的聚缩兰
 tile.botania:flower.excompressum.brokenComprilla.reference=其实不是破碎的花
