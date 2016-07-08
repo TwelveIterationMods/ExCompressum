@@ -63,12 +63,12 @@ tile.excompressum:auto_heavy_sieve.name=重型自动筛子
 
 itemGroup.excompressum=Ex Compressum
 
-botania.entry.excompressum.orechidEvolved=Evolved Orechid
+botania.entry.excompressum.orechidEvolved=进化版凝矿兰
 botania.tagline.excompressum.orechidEvolved=以石头造就矿石
-botania.page.excompressum.orechidEvolved0=你也许已经发现，你根本不能 在这个空无一物的世界中挖矿。 &1Evolved Orechid&0可通过消耗 &4Mana&0来在附近的&1石头&0中生成&4矿 石&0，与&1凝矿兰&0相比速度更快，消耗 更低。<br>矿石生成过程完全随机，但相比 较来说，它似乎更偏向于生成 那些常见的矿石。
+botania.page.excompressum.orechidEvolved0=你也许已经发现，你根本不能 在这个空无一物的世界中挖矿。 &1进化版凝矿兰&0可通过消耗 &4Mana&0来在附近的&1石头&0中生成&4矿 石&0，与&1凝矿兰&0相比速度更快，消耗 更低。<br>矿石生成过程完全随机，但相比 较来说，它似乎更偏向于生成 那些常见的矿石。
 botania.page.excompressum.orechidEvolved1=&o然而并不是龙的便便&r。
-tile.botania:flower.excompressum.orechidEvolved.name=Evolved Orechid
-tile.botania:flower.excompressum.orechidEvolved.reference=Orechid: Evolved: Skyblock: The Movie
+tile.botania:flower.excompressum.orechidEvolved.name=进化版凝矿兰
+tile.botania:flower.excompressum.orechidEvolved.reference=空岛大电影:凝矿兰进化
 
 botania.entry.excompressum.brokenComprilla=破碎的聚缩兰
 botania.tagline.excompressum.brokenComprilla=把物品压缩成方块
