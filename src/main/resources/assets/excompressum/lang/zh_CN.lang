@@ -21,7 +21,7 @@ item.excompressum:ore_smasher.name=矿物粉碎机
 tooltip.excompressum:double_compressed_diamond_hammer=匠魂锤子
 tooltip.excompressum:auto_sieve=%s 盒装版™
 tooltip.excompressum:auto_heavy_sieve=%s 重型盒装版™ 
-25 tooltip.excompressum:mana_sieve=%s 魔盒包装版™ 
+tooltip.excompressum:mana_sieve=%s 魔盒包装版™ 
 
 
 waila.excompressum:baitTooClose=你靠得太近了。
