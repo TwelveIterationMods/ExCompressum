@@ -5,11 +5,11 @@ import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerAutoCompressor extends Container {
 
@@ -21,15 +21,17 @@ public class ContainerAutoCompressor extends Container {
     public ContainerAutoCompressor(InventoryPlayer inventoryPlayer, TileEntityAutoCompressor tileEntity) {
         this.tileEntity = tileEntity;
 
+        ItemStackHandler itemHandler = tileEntity.getItemHandler();
+
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
-                addSlotToContainer(new SlotAutoCompressor(tileEntity, i * 3 + j, 8 + (j * 18), 8 + (i * 18)));
+                addSlotToContainer(new SlotItemHandler(itemHandler, i * 3 + j, 8 + (j * 18), 8 + (i * 18)));
             }
         }
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
-                addSlotToContainer(new SlotOutput(tileEntity, 12 + i * 3 + j, 93 + (j * 18), 8 + (i * 18)));
+                addSlotToContainer(new SlotOutput(itemHandler, 12 + i * 3 + j, 93 + (j * 18), 8 + (i * 18)));
             }
         }
 
@@ -49,9 +51,9 @@ public class ContainerAutoCompressor extends Container {
         super.detectAndSendChanges();
 
         if(tileEntity.getProgress() != lastProgress || tileEntity.getEnergyStored(null) != lastEnergy) {
-            for (ICrafting crafting : (List<ICrafting>) crafters) {
-                crafting.sendProgressBarUpdate(this, 0, (int) (100 * tileEntity.getProgress()));
-                crafting.sendProgressBarUpdate(this, 1, tileEntity.getEnergyStored(null));
+            for (IContainerListener listener : listeners) {
+                listener.sendProgressBarUpdate(this, 0, (int) (100 * tileEntity.getProgress()));
+                listener.sendProgressBarUpdate(this, 1, tileEntity.getEnergyStored(null));
             }
         }
         lastProgress = tileEntity.getProgress();
@@ -74,15 +76,15 @@ public class ContainerAutoCompressor extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int slotNumber) {
         ItemStack itemStack = null;
-        Slot slot = getSlot(slotNumber);
-        if(slot != null && slot.getHasStack()) {
-            ItemStack slotStack = slot.getStack();
+        Slot slot = inventorySlots.get(slotNumber);
+        ItemStack slotStack = slot != null ? slot.getStack() : null;
+        if(slotStack != null) {
             itemStack = slotStack.copy();
             if(slotNumber < 24) {
                 if (!mergeItemStack(slotStack, 24, 60, true)) {
                     return null;
                 }
-            } else if(CompressedRecipeRegistry.getRecipe(slotStack) != null) {
+            } else if(CompressedRecipeRegistry.getRecipe(slotStack) != null) { // TODO cleanup: could use itemhandler to remove duplicate logic
                 if (!mergeItemStack(slotStack, 0, 12, false)) {
                     return null;
                 }

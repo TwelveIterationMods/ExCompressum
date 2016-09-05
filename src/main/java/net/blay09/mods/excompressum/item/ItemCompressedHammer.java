@@ -23,7 +23,7 @@ import net.minecraftforge.common.config.Configuration;
 import java.util.Collection;
 import java.util.Set;
 
-public class ItemCompressedHammer extends ItemTool implements IHammer {
+public class ItemCompressedHammer extends ItemTool {
 
     private static final Set blocksEffectiveAgainst = Sets.newHashSet(ItemHammerBase.blocksEffectiveAgainst);
 

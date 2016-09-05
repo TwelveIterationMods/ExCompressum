@@ -2,9 +2,10 @@ package net.blay09.mods.excompressum.tile;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
+import net.blay09.mods.excompressum.DefaultItemHandler;
 import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.ItemHandlerAutomation;
-import net.blay09.mods.excompressum.client.render.ParticleSieve;
+import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.HammerRegistry;
 import net.blay09.mods.excompressum.registry.data.SmashableReward;
@@ -16,41 +17,37 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-public class TileEntityAutoHammer extends TileEntity implements ITickable, IEnergyReceiver {
+public class TileEntityAutoHammer extends TileEntityBase implements ITickable, IEnergyReceiver {
 
     private static final int UPDATE_INTERVAL = 20;
 
     private final EnergyStorage storage = new EnergyStorage(32000);
-    private ItemStackHandler itemHandler = new ItemStackHandler(23) {
+    private DefaultItemHandler itemHandler = new DefaultItemHandler(this, 23) {
         @Override
-        protected void onContentsChanged(int slot) {
-            markDirty();
+        public boolean isItemValid(int slot, ItemStack itemStack) {
+            if(slot == 0) {
+                return isRegistered(itemStack);
+            } else if(slot == 21 || slot == 22) {
+                return isHammerUpgrade(itemStack);
+            }
+            return true;
         }
     };
     private RangedWrapper itemHandlerInput = new RangedWrapper(itemHandler, 0, 1);
     private RangedWrapper itemHandlerOutput = new RangedWrapper(itemHandler, 1, 21);
     private RangedWrapper itemHandlerUpgrades = new RangedWrapper(itemHandler, 21, 23);
     private ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
-        @Override
-        public boolean canInsertItem(int slot, ItemStack itemStack) {
-            return (slot == 0 && isRegistered(itemStack))
-                || ((slot == 21 || slot == 22) && isHammerUpgrade(itemStack))
-                || super.canInsertItem(slot, itemStack);
-        }
-
         @Override
         public boolean canExtractItem(int slot, int amount) {
             return slot >= 1 && slot <= 20;
@@ -246,7 +243,7 @@ public class TileEntityAutoHammer extends TileEntity implements ITickable, IEner
         IBlockState currentBlock = getCurrentBlock();
         if (currentBlock != null) {
             for (int i = 0; i < 10; i++) {
-                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(worldObj, pos.getX() + 0.5, pos.getY() + 0.3125, pos.getZ() + 0.5, (worldObj.rand.nextDouble() / 2) - 0.25, 0, (worldObj.rand.nextDouble() / 2) - 0.25, currentBlock));
+                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleAutoHammer(worldObj, pos.getX() + 0.5, pos.getY() + 0.3125, pos.getZ() + 0.5, (worldObj.rand.nextDouble() / 2) - 0.25, 0, (worldObj.rand.nextDouble() / 2) - 0.25, currentBlock));
             }
         }
     }
@@ -260,7 +257,7 @@ public class TileEntityAutoHammer extends TileEntity implements ITickable, IEner
     }
 
     @Override
-    public int getEnergyStored(EnumFacing side) {
+    public int getEnergyStored(@Nullable EnumFacing side) {
         return storage.getEnergyStored();
     }
 
@@ -307,6 +304,7 @@ public class TileEntityAutoHammer extends TileEntity implements ITickable, IEner
         Block block = Block.getBlockFromItem(currentStack.getItem());
         //noinspection ConstantConditions /// NO IT'S NOT. getBlockFromItem not marked @Nullable
         if(block != null) {
+            //noinspection deprecation /// mojang pls
             return block.getStateFromMeta(currentStack.getMetadata());
         }
         return null;
@@ -330,4 +328,9 @@ public class TileEntityAutoHammer extends TileEntity implements ITickable, IEner
         }
         return super.getCapability(capability, facing);
     }
+
+    public DefaultItemHandler getItemHandler() {
+        return itemHandler;
+    }
+
 }

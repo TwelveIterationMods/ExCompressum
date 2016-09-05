@@ -1,64 +1,69 @@
 package net.blay09.mods.excompressum.block;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.tile.TileEntityBait;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
 public class BlockBait extends BlockContainer {
+
+    private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 0.1, 1);
 
     public BlockBait() {
         super(Material.GROUND);
         setHardness(0.1f);
         setCreativeTab(ExCompressum.creativeTab);
         setRegistryName("bait");
-        setBlockBounds(0f, 0f, 0f, 1f, 0.1f, 1f);
     }
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return BOUNDING_BOX;
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
         return null;
     }
 
     @Override
-    public int damageDropped(int metadata) {
-        return metadata;
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
     }
 
     @Override
-    public int getRenderType() {
-        return -1;
-    }
-
-    @Override
-    public boolean isOpaqueCube() {
+    @SuppressWarnings("deprecation")
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    @SuppressWarnings("deprecation")
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
@@ -76,66 +81,41 @@ public class BlockBait extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
-        TileEntityBait.EnvironmentalCondition environmentStatus = ((TileEntityBait) world.getTileEntity(x, y, z)).checkSpawnConditions(true);
-        if(entityPlayer != null && !world.isRemote) {
-            IChatComponent chatComponent = new ChatComponentTranslation(environmentStatus.langKey);
-            chatComponent.getChatStyle().setColor(environmentStatus != TileEntityBait.EnvironmentalCondition.CanSpawn ? EnumChatFormatting.RED : EnumChatFormatting.GREEN);
-            entityPlayer.addChatComponentMessage(chatComponent);
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        TileEntityBait tileEntity = (TileEntityBait) world.getTileEntity(pos);
+        if(tileEntity != null) {
+            TileEntityBait.EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
+            if (!world.isRemote) {
+                ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
+                chatComponent.getStyle().setColor(environmentStatus != TileEntityBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
+                player.addChatComponentMessage(chatComponent);
+            }
         }
         return true;
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityPlayer, ItemStack itemStack) {
-        if(entityPlayer instanceof EntityPlayer) {
-            TileEntityBait.EnvironmentalCondition environmentStatus = ((TileEntityBait) world.getTileEntity(x, y, z)).checkSpawnConditions(true);
-            if (!world.isRemote) {
-                IChatComponent chatComponent = new ChatComponentTranslation(environmentStatus.langKey);
-                chatComponent.getChatStyle().setColor(environmentStatus != TileEntityBait.EnvironmentalCondition.CanSpawn ? EnumChatFormatting.RED : EnumChatFormatting.GREEN);
-                ((EntityPlayer) entityPlayer).addChatComponentMessage(chatComponent);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        if(placer instanceof EntityPlayer) {
+            TileEntityBait tileEntity = (TileEntityBait) world.getTileEntity(pos);
+            if(tileEntity != null) {
+                TileEntityBait.EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
+                if (!world.isRemote) {
+                    ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
+                    chatComponent.getStyle().setColor(environmentStatus != TileEntityBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
+                    ((EntityPlayer) placer).addChatComponentMessage(chatComponent);
+                }
             }
         }
     }
 
     @Override
-    public void randomDisplayTick(World world, int x, int y, int z, Random random) {
-        TileEntityBait tileEntity = (TileEntityBait) world.getTileEntity(x, y, z);
-        if(tileEntity.checkSpawnConditions(false) == TileEntityBait.EnvironmentalCondition.CanSpawn) {
-            if (random.nextFloat() <= 0.2f) {
-                world.spawnParticle("smoke", x + random.nextFloat(), y + random.nextFloat() * 0.5f, z + random.nextFloat(), 0.0, 0.0, 0.0);
+    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+        TileEntityBait tileEntity = (TileEntityBait) world.getTileEntity(pos);
+        if(tileEntity != null && tileEntity.checkSpawnConditions(false) == TileEntityBait.EnvironmentalCondition.CanSpawn) {
+            if (rand.nextFloat() <= 0.2f) {
+                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + rand.nextFloat(), pos.getY() + rand.nextFloat() * 0.5f, pos.getZ() + rand.nextFloat(), 0.0, 0.0, 0.0);
             }
-        }
-    }
-
-    @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        blockIcon = Blocks.quartz_block.getIcon(0, 0);
-    }
-
-    public static void registerRecipes(Configuration config) {
-        if (config.getBoolean("Wolf Bait", "blocks", true, "If set to false, the recipe for the wolf bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 0), Items.bone, Items.beef);
-        }
-        if (config.getBoolean("Ocelot Bait", "blocks", true, "If set to false, the recipe for the ocelot bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 1), Items.gunpowder, new ItemStack(Items.fish, 1, OreDictionary.WILDCARD_VALUE));
-            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, 1), Items.gunpowder, "listAllfishraw")); // Pam's Fishies
-        }
-        if (config.getBoolean("Cow Bait", "blocks", true, "If set to false, the recipe for the cow bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 2), Items.wheat, Items.wheat);
-        }
-        if (config.getBoolean("Pig Bait", "blocks", true, "If set to false, the recipe for the pig bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 3), Items.carrot, Items.carrot);
-        }
-        if (config.getBoolean("Chicken Bait", "blocks", true, "If set to false, the recipe for the chicken bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 4), Items.wheat_seeds, Items.wheat_seeds);
-        }
-        if (config.getBoolean("Sheep Bait", "blocks", true, "If set to false, the recipe for the sheep bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 5), GameRegistry.findItem("exnihilo", "seed_grass"), Items.wheat);
-        }
-        if (config.getBoolean("Squid Bait", "blocks", false, "If set to false, the recipe for the squid bait will be disabled.")) {
-            GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 6), Items.fish, Items.fish);
-            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, 6), "listAllfishraw", "listAllfishraw")); // Pam's Fishies
         }
     }
 

@@ -1,11 +1,12 @@
 package net.blay09.mods.excompressum.tile;
 
-import cpw.mods.fml.common.Optional;
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.botania.BotaniaAddon;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.Optional;
 import vazkii.botania.api.mana.IManaReceiver;
 
-@Optional.Interface(modid = "Botania", iface = "vazkii.botania.api.mana.IManaReceiver", striprefs = true)
+@Optional.Interface(modid = Compat.BOTANIA, iface = "vazkii.botania.api.mana.IManaReceiver", striprefs = true)
 public class TileEntityAutoSieveMana extends TileEntityAutoSieveBase implements IManaReceiver {
 
     private int manaStored;
@@ -31,9 +32,10 @@ public class TileEntityAutoSieveMana extends TileEntityAutoSieveBase implements 
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         tagCompound.setInteger("ManaStored", manaStored);
+        return tagCompound;
     }
 
     @Override

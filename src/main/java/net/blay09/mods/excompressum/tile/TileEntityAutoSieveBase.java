@@ -3,13 +3,14 @@ package net.blay09.mods.excompressum.tile;
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.blay09.mods.excompressum.DefaultItemHandler;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ExCompressumConfig;
+import net.blay09.mods.excompressum.ItemHandlerAutomation;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.SieveRegistry;
 import net.blay09.mods.excompressum.registry.data.SiftingResult;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Enchantments;
@@ -20,24 +21,47 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.StringUtils;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-public abstract class TileEntityAutoSieveBase extends TileEntity implements ITickable {
+public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable {
 
 	private static final int UPDATE_INTERVAL = 20;
 
-	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
-	private ItemStack currentStack;
+	private DefaultItemHandler itemHandler = new DefaultItemHandler(this, 22) {
+		@Override
+		public boolean isItemValid(int slot, ItemStack itemStack) {
+			if(slot == 0) {
+				return isRegistered(itemStack);
+			} else if(slot == 21) {
+				return isValidBook(itemStack);
+			}
+			return true;
+		}
+	};
+	private RangedWrapper itemHandlerInput = new RangedWrapper(itemHandler, 0, 1);
+	private RangedWrapper itemHandlerOutput = new RangedWrapper(itemHandler, 1, 21);
+	private RangedWrapper itemHandlerUpgrade = new RangedWrapper(itemHandler, 21, 22);
 
+	private ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
+		@Override
+		public boolean canExtractItem(int slot, int amount) {
+			return slot >= 1 && slot <= 20;
+		}
+	};
+
+	private ItemStack currentStack;
 	private GameProfile customSkin;
 	private boolean spawnParticles;
 	private int ticksSinceUpdate;
@@ -72,19 +96,20 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 		int effectiveEnergy = getEffectiveEnergy();
 		if (getEnergyStored() >= effectiveEnergy) {
 			if (currentStack == null) {
-				if (inventory[0] != null && isRegistered(inventory[0])) {
+				ItemStack inputStack = itemHandlerInput.getStackInSlot(0);
+				if (inputStack != null && isRegistered(inputStack)) {
 					boolean foundSpace = false;
-					for (int i = 1; i < inventory.length - 1; i++) {
-						if (inventory[i] == null) {
+					for (int i = 0; i < itemHandlerOutput.getSlots(); i++) {
+						if (itemHandlerOutput.getStackInSlot(i) == null) {
 							foundSpace = true;
 						}
 					}
 					if (!foundSpace) {
 						return;
 					}
-					currentStack = inventory[0].splitStack(1);
-					if (inventory[0].stackSize == 0) {
-						inventory[0] = null;
+					currentStack = inputStack.splitStack(1);
+					if (inputStack.stackSize == 0) {
+						itemHandlerInput.setStackInSlot(0, null);
 					}
 					setEnergyStored(getEnergyStored() - effectiveEnergy);
 					VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -125,28 +150,30 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 
 	private boolean addItemToOutput(ItemStack itemStack) {
 		int firstEmptySlot = -1;
-		for (int i = 1; i < getSizeInventory() - 1; i++) { // -1 because last slot is the book slot
-			if (inventory[i] == null) {
+		for (int i = 0; i < itemHandlerOutput.getSlots(); i++) {
+			ItemStack slotStack = itemHandlerOutput.getStackInSlot(i);
+			if (slotStack == null) {
 				if (firstEmptySlot == -1) {
 					firstEmptySlot = i;
 				}
 			} else {
-				if (inventory[i].stackSize + itemStack.stackSize <= inventory[i].getMaxStackSize() && inventory[i].isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(inventory[i], itemStack)) {
-					inventory[i].stackSize += itemStack.stackSize;
+				if (slotStack.stackSize + itemStack.stackSize <= slotStack.getMaxStackSize() && slotStack.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(slotStack, itemStack)) {
+					slotStack.stackSize += itemStack.stackSize;
 					return true;
 				}
 			}
 		}
 		if (firstEmptySlot != -1) {
-			inventory[firstEmptySlot] = itemStack;
+			itemHandlerOutput.setStackInSlot(firstEmptySlot, itemStack);
 			return true;
 		}
 		return false;
 	}
 
 	private void degradeBook() {
-		if (inventory[21] != null && worldObj.rand.nextFloat() <= ExCompressumConfig.autoSieveBookDecay) {
-			NBTTagList tagList = getEnchantmentList(inventory[21]);
+		ItemStack upgradeStack = itemHandlerUpgrade.getStackInSlot(0);
+		if (upgradeStack != null && worldObj.rand.nextFloat() <= ExCompressumConfig.autoSieveBookDecay) {
+			NBTTagList tagList = getEnchantmentList(upgradeStack);
 			if (tagList != null) {
 				for (int i = 0; i < tagList.tagCount(); ++i) {
 					short id = tagList.getCompoundTagAt(i).getShort("id");
@@ -162,7 +189,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 					break;
 				}
 				if (tagList.tagCount() == 0) {
-					inventory[21] = new ItemStack(Items.BOOK);
+					itemHandlerUpgrade.setStackInSlot(0, new ItemStack(Items.BOOK));
 				}
 			}
 		}
@@ -177,8 +204,9 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 	}
 
 	public float getEffectiveLuck() {
-		if (inventory[21] != null) {
-			return 1f + getEnchantmentLevel(Enchantments.FORTUNE, inventory[21]);
+		ItemStack upgradeStack = itemHandlerUpgrade.getStackInSlot(0);
+		if (upgradeStack != null) {
+			return 1f + getEnchantmentLevel(Enchantments.FORTUNE, upgradeStack);
 		}
 		return 1f;
 	}
@@ -205,10 +233,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 		return null;
 	}
 
-	private static int getEnchantmentLevel(Enchantment enchantment, @Nullable ItemStack itemStack) { // TODO Nullable needed?
-		if (itemStack == null) {
-			return 0;
-		}
+	private static int getEnchantmentLevel(Enchantment enchantment, ItemStack itemStack) {
 		NBTTagList tagList = getEnchantmentList(itemStack);
 		if (tagList == null) {
 			return 0;
@@ -231,14 +256,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		readFromNBTSynced(tagCompound);
-		NBTTagList items = tagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < items.tagCount(); i++) {
-			NBTTagCompound itemCompound = items.getCompoundTagAt(i);
-			int slot = itemCompound.getByte("Slot");
-			if (slot >= 0 && slot < inventory.length) {
-				inventory[slot] = ItemStack.loadItemStackFromNBT(itemCompound);
-			}
-		}
+		itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
 	}
 
 	private void readFromNBTSynced(NBTTagCompound tagCompound) {
@@ -257,16 +275,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		writeToNBTSynced(tagCompound);
-		NBTTagList items = new NBTTagList();
-		for (int i = 0; i < inventory.length; i++) {
-			if (inventory[i] != null) {
-				NBTTagCompound itemCompound = new NBTTagCompound();
-				itemCompound.setByte("Slot", (byte) i);
-				inventory[i].writeToNBT(itemCompound);
-				items.appendTag(itemCompound);
-			}
-		}
-		tagCompound.setTag("Items", items);
+		tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
 		return tagCompound;
 	}
 
@@ -283,7 +292,10 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 		}
 	}
 
-	// TODO fix te syncing
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return writeToNBT(new NBTTagCompound());
+	}
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
@@ -300,107 +312,17 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 	@SideOnly(Side.CLIENT)
 	private void spawnFX() {
 		if (currentStack != null) {
-			IIcon icon = currentStack.getIconIndex();
 			for (int i = 0; i < 4; i++) {
-				ParticleSieve particle = new ParticleSieve(worldObj,
-						xCoord + 0.8 * worldObj.rand.nextFloat() + 0.15,
-						yCoord + 0.69,
-						zCoord + 0.8 * worldObj.rand.nextFloat() + 0.15,
+				// TODO fix particle here
+				/*ParticleSieve particle = new ParticleSieve(worldObj,
+						pos.getX() + 0.8 * worldObj.rand.nextFloat() + 0.15,
+						pos.getY() + 0.69,
+						pos.getZ() + 0.8 * worldObj.rand.nextFloat() + 0.15,
 						0, 0, 0, icon);
-				Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+				Minecraft.getMinecraft().effectRenderer.addEffect(particle);*/
 			}
 		}
 	}
-
-	// TODO ItemHandler cap
-
-	/*
-	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21};
-	}
-
-	@Override
-	public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-		return isItemValidForSlot(slot, itemStack);
-	}
-
-	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-		return (side != ForgeDirection.UP.ordinal() && side != ForgeDirection.DOWN.ordinal() && side != ForgeDirection.UNKNOWN.ordinal() && slot == 21) ||
-				(slot >= 1 && slot <= 20);
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
-		return (slot == 0 && isRegistered(itemStack)) || (slot == 21 && isValidBook(itemStack));
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
-	public void openInventory() {
-	}
-
-	@Override
-	public void closeInventory() {
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return 22;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return inventory[slot];
-	}
-
-	@Override
-	public ItemStack decrStackSize(int slot, int amount) {
-		if (inventory[slot] != null) {
-			if (inventory[slot].stackSize <= amount) {
-				ItemStack itemStack = inventory[slot];
-				inventory[slot] = null;
-				return itemStack;
-			}
-			ItemStack itemStack = inventory[slot].splitStack(amount);
-			if (inventory[slot].stackSize == 0) {
-				inventory[slot] = null;
-			}
-			return itemStack;
-		}
-		return null;
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		return null;
-	}
-
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack itemStack) {
-		inventory[slot] = itemStack;
-	}
-
-	@Override
-	public String getInventoryName() {
-		return null;
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-		return false;
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && entityPlayer.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) <= 64;
-	}
-	*/
 
 	public abstract void setEnergyStored(int energyStored);
 
@@ -420,6 +342,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 		return progress;
 	}
 
+	@Nullable
 	public ItemStack getCurrentStack() {
 		return currentStack;
 	}
@@ -464,11 +387,12 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 	}
 
 	public float getSpeedBoost() {
-		float activeSpeedBost = speedBoost;
-		if (inventory[21] != null) {
-			activeSpeedBost += getEnchantmentLevel(Enchantments.EFFICIENCY, inventory[21]);
+		float activeSpeedBoost = speedBoost;
+		ItemStack upgradeStack = itemHandlerUpgrade.getStackInSlot(0);
+		if (upgradeStack != null) {
+			activeSpeedBoost += getEnchantmentLevel(Enchantments.EFFICIENCY, upgradeStack);
 		}
-		return activeSpeedBost;
+		return activeSpeedBoost;
 	}
 
 	public void setSpeedBoost(int speedBoostTicks, float speedBoost) {
@@ -479,5 +403,24 @@ public abstract class TileEntityAutoSieveBase extends TileEntity implements ITic
 
 	public void setProgress(float progress) {
 		this.progress = progress;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+				|| super.hasCapability(capability, facing);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return (T) itemHandlerAutomation;
+		}
+		return super.getCapability(capability, facing);
+	}
+
+	public DefaultItemHandler getItemHandler() {
+		return itemHandler;
 	}
 }

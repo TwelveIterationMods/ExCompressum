@@ -136,13 +136,14 @@ public class TileEntityHeavySieve extends TileEntity implements ITickable {
         return tagCompound;
     }
 
-    // TODO fix te syncing
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        return writeToNBT(new NBTTagCompound());
+    }
 
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tagCompound = new NBTTagCompound();
-        writeToNBT(tagCompound);
-        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), tagCompound);
+        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), getUpdateTag());
     }
 
     @Override

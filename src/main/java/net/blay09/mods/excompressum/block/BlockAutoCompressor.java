@@ -1,38 +1,28 @@
 package net.blay09.mods.excompressum.block;
 
-import cofh.api.block.IDismantleable;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModAPIManager;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ModBlocks;
+import net.blay09.mods.excompressum.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 
-public class BlockAutoCompressor extends BlockContainer implements IDismantleable {
-
-    private IIcon iconTop;
-    private IIcon iconSide;
+public class BlockAutoCompressor extends BlockContainer {
 
     public BlockAutoCompressor() {
         super(Material.IRON);
@@ -42,38 +32,38 @@ public class BlockAutoCompressor extends BlockContainer implements IDismantleabl
     }
 
     @Override
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        iconTop = iconRegister.registerIcon(ExCompressum.MOD_ID + ":auto_compressor_top");
-        iconSide = iconRegister.registerIcon(ExCompressum.MOD_ID + ":auto_compressor_side");
-    }
-
-    @Override
-    public IIcon getIcon(int side, int metadata) {
-        if(side == ForgeDirection.UP.ordinal()) {
-            return iconTop;
-        }
-        return iconSide;
-    }
-
-    @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
         return new TileEntityAutoCompressor();
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
-        if(!entityPlayer.isSneaking()) {
-            entityPlayer.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_COMPRESSOR, world, x, y, z);
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(!player.isSneaking()) {
+            player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_COMPRESSOR, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }
 
     @Override
-    public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
-        IInventory tileEntity = (IInventory) world.getTileEntity(x, y, z);
-        for (int i = 0; i < tileEntity.getSizeInventory(); i++) {
-            if (tileEntity.getStackInSlot(i) != null) {
-                EntityItem entityItem = new EntityItem(world, x, y, z, tileEntity.getStackInSlot(i));
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if(tileEntity != null) {
+            //noinspection ConstantConditions /// getCapability needs @Nullable
+            IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+            for (int i = 0; i < itemHandler.getSlots(); i++) {
+                ItemStack itemStack = itemHandler.getStackInSlot(i);
+                if (itemStack != null) {
+                    EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemStack);
+                    double motion = 0.05;
+                    entityItem.motionX = world.rand.nextGaussian() * motion;
+                    entityItem.motionY = 0.2;
+                    entityItem.motionZ = world.rand.nextGaussian() * motion;
+                    world.spawnEntityInWorld(entityItem);
+                }
+            }
+            ItemStack currentStack = ((TileEntityAutoCompressor) tileEntity).getCurrentStack();
+            if (currentStack != null) {
+                EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack);
                 double motion = 0.05;
                 entityItem.motionX = world.rand.nextGaussian() * motion;
                 entityItem.motionY = 0.2;
@@ -81,27 +71,23 @@ public class BlockAutoCompressor extends BlockContainer implements IDismantleabl
                 world.spawnEntityInWorld(entityItem);
             }
         }
-        if(((TileEntityAutoCompressor) tileEntity).getCurrentStack() != null) {
-            EntityItem entityItem = new EntityItem(world, x, y, z, ((TileEntityAutoCompressor) tileEntity).getCurrentStack());
-            double motion = 0.05;
-            entityItem.motionX = world.rand.nextGaussian() * motion;
-            entityItem.motionY = 0.2;
-            entityItem.motionZ = world.rand.nextGaussian() * motion;
-            world.spawnEntityInWorld(entityItem);
-        }
-        super.breakBlock(world, x, y, z, block, metadata);
+        super.breakBlock(world, pos, state);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack) {
-        if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey("EnergyStored")) {
-            TileEntityAutoCompressor tileEntity = (TileEntityAutoCompressor) world.getTileEntity(x, y, z);
-            tileEntity.setEnergyStored(stack.stackTagCompound.getInteger("EnergyStored"));
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        NBTTagCompound tagCompound = stack.getTagCompound();
+        if (tagCompound != null && tagCompound.hasKey("EnergyStored")) {
+            TileEntity tileEntity = world.getTileEntity(pos);
+            if(tileEntity instanceof TileEntityAutoCompressor) {
+                ((TileEntityAutoCompressor) tileEntity).setEnergyStored(tagCompound.getInteger("EnergyStored"));
+            }
         }
-        super.onBlockPlacedBy(world, x, y, z, player, stack);
     }
 
-    @Override
+    // TODO IDismantleable?
+
+    /*@Override
     public ArrayList<ItemStack> dismantleBlock(EntityPlayer entityPlayer, World world, int x, int y, int z, boolean returnDrops) {
         TileEntityAutoCompressor tileEntity = (TileEntityAutoCompressor) world.getTileEntity(x, y, z);
         ItemStack itemStack = new ItemStack(this);
@@ -122,23 +108,23 @@ public class BlockAutoCompressor extends BlockContainer implements IDismantleabl
     @Override
     public boolean canDismantle(EntityPlayer entityPlayer, World world, int x, int y, int z) {
         return true;
-    }
-
-    public static void registerRecipes(Configuration config) {
-        if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) {
-            if (config.getBoolean("Auto Compressor", "blocks", true, "Set this to false to disable the recipe for the auto compressor.")) {
-                GameRegistry.addRecipe(new ItemStack(ModBlocks.autoCompressor), "#I#", "IBI", "#I#", '#', Blocks.crafting_table, 'B', Blocks.iron_block, 'I', Items.iron_ingot);
-            }
-        }
-    }
+    }*/
 
     @Override
-    public boolean hasComparatorInputOverride() {
+    @SuppressWarnings("deprecation")
+    public boolean hasComparatorInputOverride(IBlockState state) {
         return true;
     }
 
     @Override
-    public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
-        return Container.calcRedstoneFromInventory((IInventory) world.getTileEntity(x, y, z));
+    @SuppressWarnings("deprecation")
+    public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if(tileEntity != null) {
+            //noinspection ConstantConditions /// @Nullable missing in getCapability
+            return StupidUtils.getComparatorOutput64(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
+        }
+        return 0;
     }
+
 }

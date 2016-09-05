@@ -6,6 +6,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
 
@@ -22,10 +23,7 @@ public class ItemDoubleCompressedDiamondHammer extends Item {
     @SuppressWarnings("unchecked")
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean flag) {
         super.addInformation(itemStack, entityPlayer, list, flag);
-        list.add("\u00a73" + I18n.format("tooltip.excompressum:double_compressed_diamond_hammer"));
+        list.add(TextFormatting.DARK_AQUA + I18n.format("tooltip.excompressum:double_compressed_diamond_hammer"));
     }
 
-    public static void registerRecipes() {
-        GameRegistry.addRecipe(new ItemStack(ModItems.doubleCompressedDiamondHammer), "##", "##", '#', ModItems.compressedHammerDiamond);
-    }
 }

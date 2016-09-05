@@ -1,19 +1,19 @@
 package net.blay09.mods.excompressum.tile;
 
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
-import cpw.mods.fml.common.Optional;
+import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
-public class TileEntityAutoSieve extends TileEntityAutoSieveBase implements IEnergyHandler {
+public class TileEntityAutoSieve extends TileEntityAutoSieveBase implements IEnergyReceiver {
 
     private final EnergyStorage storage = new EnergyStorage(32000);
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         storage.writeToNBT(tagCompound);
+        return tagCompound;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class TileEntityAutoSieve extends TileEntityAutoSieveBase implements IEne
     }
 
     @Override
-    public int receiveEnergy(ForgeDirection side, int maxReceive, boolean simulate) {
+    public int receiveEnergy(EnumFacing side, int maxReceive, boolean simulate) {
         if(!simulate) {
             isDirty = true;
         }
@@ -46,22 +46,17 @@ public class TileEntityAutoSieve extends TileEntityAutoSieveBase implements IEne
     }
 
     @Override
-    public int extractEnergy(ForgeDirection side, int maxExtract, boolean simulate) {
-        return storage.extractEnergy(maxExtract, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(ForgeDirection side) {
+    public int getEnergyStored(EnumFacing side) {
         return storage.getEnergyStored();
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection side) {
+    public int getMaxEnergyStored(EnumFacing side) {
         return storage.getMaxEnergyStored();
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection side) {
+    public boolean canConnectEnergy(EnumFacing side) {
         return true;
     }
 

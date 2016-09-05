@@ -198,7 +198,4 @@ public class TileEntityBait extends TileEntity implements ITickable {
         envBlockMap.put(6, new ItemAndMetadata(Blocks.FLOWING_WATER, OreDictionary.WILDCARD_VALUE));
     }
 
-    public boolean isWaterBait() {
-        return getBlockMetadata() == 6;
-    }
 }

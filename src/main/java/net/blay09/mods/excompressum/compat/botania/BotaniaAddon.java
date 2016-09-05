@@ -1,12 +1,13 @@
 package net.blay09.mods.excompressum.compat.botania;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconEntry;
@@ -17,7 +18,6 @@ import vazkii.botania.common.lexicon.page.PageText;
 
 import java.util.Iterator;
 
-@Optional.Interface(modid = "NotEnoughItems", iface = "net.blay09.mods.excompressum.compat.INEIAddon", striprefs = true)
 public class BotaniaAddon implements IAddon {
 
     public static final String SUBTILE_ORECHID_EVOLVED = ExCompressum.MOD_ID + ".orechidEvolved";
@@ -55,7 +55,7 @@ public class BotaniaAddon implements IAddon {
     @Override
     @SuppressWarnings("unchecked")
     public void postInit() {
-        runicAltar = GameRegistry.findBlock("Botania", "runeAltar");
+        runicAltar = Block.REGISTRY.getObject(new ResourceLocation(Compat.BOTANIA, "runeAltar"));
 
         if(enableEvolvedOrechid) {
             BotaniaAPI.registerSubTile(SUBTILE_ORECHID_EVOLVED, SubTileOrechidEvolved.class);
@@ -85,7 +85,7 @@ public class BotaniaAddon implements IAddon {
             BotaniaAPI.registerSubTileSignature(SubTileBrokenComprilla.class, new SubTileBrokenComprillaSignature());
             ItemStack brokenComprilla = ItemBlockSpecialFlower.ofType(SUBTILE_BROKEN_COMPRILLA);
             ExCompressum.creativeTab.addAdditionalItem(brokenComprilla);
-            RecipePetals recipeBrokenComprilla = BotaniaAPI.registerPetalRecipe(brokenComprilla, "petalLightBlue", "petalLightBlue", "petalWhite", "petalWhite", "petalBlack", "petalBlack", new ItemStack(Items.flint), new ItemStack(Items.flint));
+            RecipePetals recipeBrokenComprilla = BotaniaAPI.registerPetalRecipe(brokenComprilla, "petalLightBlue", "petalLightBlue", "petalWhite", "petalWhite", "petalBlack", "petalBlack", new ItemStack(Items.FLINT), new ItemStack(Items.FLINT));
             lexiconBrokenComprilla = new LexiconEntry(LEXICON_BROKEN_COMPRILLA, BotaniaAPI.categoryFunctionalFlowers) {
                 @Override
                 public String getWebLink() {

@@ -22,7 +22,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class ItemOreSmasher extends ItemTool implements IHammer {
+public class ItemOreSmasher extends ItemTool {
 
 	private static final String[] ORE_BLOCKS = new String[] {
 			"oreGravel",

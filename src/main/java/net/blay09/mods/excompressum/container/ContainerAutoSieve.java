@@ -4,11 +4,11 @@ import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import java.util.List;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerAutoSieve extends Container {
 
@@ -19,12 +19,15 @@ public class ContainerAutoSieve extends Container {
 
     public ContainerAutoSieve(InventoryPlayer inventoryPlayer, TileEntityAutoSieveBase tileEntity) {
         this.tileEntity = tileEntity;
-        addSlotToContainer(new SlotAutoSieveInput(tileEntity, 0, 8, 35));
-        addSlotToContainer(new SlotAutoSieveBook(tileEntity, 21, 8, 62));
+
+        ItemStackHandler itemHandler = tileEntity.getItemHandler();
+
+        addSlotToContainer(new SlotItemHandler(itemHandler, 0, 8, 35));
+        addSlotToContainer(new SlotAutoSieveBook(itemHandler, 21, 8, 62));
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
-                addSlotToContainer(new SlotOutput(tileEntity, 1 + (i * 5) + j, 57 + (j * 18), 8 + (i * 18)));
+                addSlotToContainer(new SlotOutput(itemHandler, 1 + (i * 5) + j, 57 + (j * 18), 8 + (i * 18)));
             }
         }
 
@@ -44,9 +47,9 @@ public class ContainerAutoSieve extends Container {
         super.detectAndSendChanges();
 
         if(lastProgress != tileEntity.getProgress() || lastEnergy != tileEntity.getEnergyStored()) {
-            for (ICrafting crafting : (List<ICrafting>) crafters) {
-                crafting.sendProgressBarUpdate(this, 0, (int) (100 * tileEntity.getProgress()));
-                crafting.sendProgressBarUpdate(this, 1, tileEntity.getEnergyStored());
+            for (IContainerListener listener : listeners) {
+                listener.sendProgressBarUpdate(this, 0, (int) (100 * tileEntity.getProgress()));
+                listener.sendProgressBarUpdate(this, 1, tileEntity.getEnergyStored());
             }
         }
         lastProgress = tileEntity.getProgress();
@@ -69,19 +72,19 @@ public class ContainerAutoSieve extends Container {
     @Override
     public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int slotNumber) {
         ItemStack itemStack = null;
-        Slot slot = getSlot(slotNumber);
-        if (slot != null && slot.getHasStack()) {
-            ItemStack slotStack = slot.getStack();
+        Slot slot = inventorySlots.get(slotNumber);
+        ItemStack slotStack = slot != null ? slot.getStack() : null;
+        if (slotStack != null) {
             itemStack = slotStack.copy();
             if (slotNumber <= 21) {
                 if (!mergeItemStack(slotStack, 21, 57, true)) {
                     return null;
                 }
-            } else if (tileEntity.isItemValidForSlot(0, slotStack)) {
+            } else if (tileEntity.getItemHandler().isItemValid(0, slotStack)) {
                 if (!mergeItemStack(slotStack, 0, 1, false)) {
                     return null;
                 }
-            } else if (tileEntity.isItemValidForSlot(21, slotStack)) {
+            } else if (tileEntity.getItemHandler().isItemValid(21, slotStack)) {
                 if (!mergeItemStack(slotStack, 21, 22, false)) {
                     return null;
                 }
