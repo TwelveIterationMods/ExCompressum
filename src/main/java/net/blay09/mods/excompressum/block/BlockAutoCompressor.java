@@ -35,10 +35,10 @@ public class BlockAutoCompressor extends BlockContainer implements IDismantleabl
     private IIcon iconSide;
 
     public BlockAutoCompressor() {
-        super(Material.iron);
+        super(Material.IRON);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
-        setBlockName(ExCompressum.MOD_ID + ":auto_compressor");
+        setRegistryName("auto_compressor");
     }
 
     @Override

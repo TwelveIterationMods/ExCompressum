@@ -2,11 +2,9 @@ package net.blay09.mods.excompressum.registry;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import cpw.mods.fml.common.registry.GameRegistry;
-import exnihilo.registries.SieveRegistry;
-import exnihilo.registries.helpers.SiftingResult;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
+import net.blay09.mods.excompressum.registry.data.SiftingResult;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -14,11 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
+// TODO Split option in "Additional Generated Siftables" and "Disable Generated Siftables" lists, so we can update the default list without requiring people to reset their configs
 public class HeavySieveRegistry {
 
     private static final Multimap<ItemAndMetadata, SiftingResult> siftables = ArrayListMultimap.create();

@@ -1,145 +1,79 @@
 package net.blay09.mods.excompressum.block;
 
-import com.mojang.authlib.GameProfile;
-import exnihilo.blocks.BlockSieve;
-import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.handler.GuiHandler;
-import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
+import cofh.api.block.IDismantleable;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public abstract class BlockAutoSieve extends BlockContainer {
+import java.util.ArrayList;
 
-	protected BlockAutoSieve(Material material) {
-		super(material);
-		setCreativeTab(ExCompressum.creativeTab);
-		setHardness(2f);
-	}
+public class BlockAutoSieve extends BlockAutoSieveBase implements IDismantleable {
 
-	@Override
-	public IIcon getIcon(int side, int metadata) {
-		return BlockSieve.meshIcon;
-	}
+    public BlockAutoSieve() {
+        super(Material.IRON);
+        setRegistryName("auto_sieve");
+    }
 
-	@Override
-	public int getRenderType() {
-		return -1;
-	}
+    @Override
+    public TileEntity createNewTileEntity(World world, int metadata) {
+        return new TileEntityAutoSieve();
+    }
 
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack itemStack) {
+        TileEntityAutoSieve tileEntity = (TileEntityAutoSieve) world.getTileEntity(x, y, z);
+        if (itemStack.stackTagCompound != null) {
+            if (itemStack.stackTagCompound.hasKey("EnergyStored")) {
+                tileEntity.setEnergyStored(itemStack.stackTagCompound.getInteger("EnergyStored"));
+            }
+        }
+        super.onBlockPlacedBy(world, x, y, z, player, itemStack);
+    }
 
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
+    @Override
+    public ArrayList<ItemStack> dismantleBlock(EntityPlayer entityPlayer, World world, int x, int y, int z, boolean returnDrops) {
+        TileEntityAutoSieve tileEntity = (TileEntityAutoSieve) world.getTileEntity(x, y, z);
+        ItemStack itemStack = new ItemStack(this);
+        if (itemStack.stackTagCompound == null) {
+            itemStack.stackTagCompound = new NBTTagCompound();
+        }
+        itemStack.stackTagCompound.setInteger("EnergyStored", tileEntity.getEnergyStored(null));
+        NBTTagCompound customSkinTag = new NBTTagCompound();
+        NBTUtil.func_152460_a(customSkinTag, tileEntity.getCustomSkin());
+        itemStack.stackTagCompound.setTag("CustomSkin", customSkinTag);
 
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityPlayer, int side, float hitX, float hitY, float hitZ) {
-		ItemStack heldItem = entityPlayer.getHeldItem();
-		if (heldItem != null) {
-			TileEntityAutoSieve tileEntity = (TileEntityAutoSieve) world.getTileEntity(x, y, z);
-			if (heldItem.getItem() instanceof ItemFood) {
-				if (tileEntity.getSpeedBoost() <= 1f) {
-					tileEntity.setSpeedBoost((int) (((ItemFood) heldItem.getItem()).func_150906_h(heldItem) * 640), Math.max(1f, ((ItemFood) heldItem.getItem()).func_150905_g(heldItem) * 0.75f));
-					if (!entityPlayer.capabilities.isCreativeMode) {
-						heldItem.stackSize--;
-					}
-					if (!world.isRemote) {
-						world.playAuxSFX(2005, x, y, z, 0);
-					}
-				}
-				return true;
-			} else if (heldItem.getItem() == Items.name_tag && heldItem.hasDisplayName()) {
-				tileEntity.setCustomSkin(new GameProfile(null, heldItem.getDisplayName()));
-				if (!entityPlayer.capabilities.isCreativeMode) {
-					heldItem.stackSize--;
-				}
-				return true;
-			}
-		}
-		if(!entityPlayer.isSneaking()) {
-			entityPlayer.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_SIEVE, world, x, y, z);
-		}
-		return true;
-	}
+        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        drops.add(itemStack);
+        world.setBlockToAir(x, y, z);
+        if (!returnDrops) {
+            dropBlockAsItem(world, x, y, z, itemStack);
+        }
+        return drops;
+    }
 
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
-		IInventory tileEntity = (IInventory) world.getTileEntity(x, y, z);
-		for (int i = 0; i < tileEntity.getSizeInventory(); i++) {
-			if (tileEntity.getStackInSlot(i) != null) {
-				EntityItem entityItem = new EntityItem(world, x, y, z, tileEntity.getStackInSlot(i));
-				double motion = 0.05;
-				entityItem.motionX = world.rand.nextGaussian() * motion;
-				entityItem.motionY = 0.2;
-				entityItem.motionZ = world.rand.nextGaussian() * motion;
-				world.spawnEntityInWorld(entityItem);
-			}
-		}
-		if (((TileEntityAutoSieve) tileEntity).getCurrentStack() != null) {
-			EntityItem entityItem = new EntityItem(world, x, y, z, ((TileEntityAutoSieve) tileEntity).getCurrentStack());
-			double motion = 0.05;
-			entityItem.motionX = world.rand.nextGaussian() * motion;
-			entityItem.motionY = 0.2;
-			entityItem.motionZ = world.rand.nextGaussian() * motion;
-			world.spawnEntityInWorld(entityItem);
-		}
-		super.breakBlock(world, x, y, z, block, metadata);
-	}
+    @Override
+    public boolean canDismantle(EntityPlayer entityPlayer, World world, int x, int y, int z) {
+        return true;
+    }
 
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack itemStack) {
-		TileEntityAutoSieve tileEntity = (TileEntityAutoSieve) world.getTileEntity(x, y, z);
-		boolean useRandomSkin = true;
-		if (itemStack.stackTagCompound != null) {
-			if (itemStack.stackTagCompound.hasKey("CustomSkin")) {
-				tileEntity.setCustomSkin(NBTUtil.func_152459_a(itemStack.stackTagCompound.getCompoundTag("CustomSkin")));
-				useRandomSkin = false;
-			}
-		}
-		if (!world.isRemote && useRandomSkin) {
-			tileEntity.setCustomSkin(new GameProfile(null, AutoSieveSkinRegistry.getRandomSkin()));
-		}
-		int facing = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		if (facing == 0) {
-			world.setBlockMetadataWithNotify(x, y, z, 2, 2);
-		}
-		if (facing == 1) {
-			world.setBlockMetadataWithNotify(x, y, z, 5, 2);
-		}
-		if (facing == 2) {
-			world.setBlockMetadataWithNotify(x, y, z, 3, 2);
-		}
-		if (facing == 3) {
-			world.setBlockMetadataWithNotify(x, y, z, 4, 2);
-		}
-		super.onBlockPlacedBy(world, x, y, z, player, itemStack);
-	}
-
-	@Override
-	public boolean hasComparatorInputOverride() {
-		return true;
-	}
-
-	@Override
-	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
-		return Container.calcRedstoneFromInventory((IInventory) world.getTileEntity(x, y, z));
-	}
+    public static void registerRecipes(Configuration config) {
+        if (Loader.isModLoaded("CoFHCore")) {
+            if (config.getBoolean("Auto Sieve", "blocks", true, "Set this to false to disable the recipe for the auto sieve.")) {
+                ItemStack sieve = new ItemStack(GameRegistry.findBlock("exnihilo", "sifting_table"), 1, OreDictionary.WILDCARD_VALUE);
+                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieve, 'G', "paneGlassColorless", 'I', "ingotIron"));
+            }
+        }
+    }
 }

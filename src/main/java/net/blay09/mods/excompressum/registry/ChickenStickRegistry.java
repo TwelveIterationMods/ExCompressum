@@ -2,16 +2,19 @@ package net.blay09.mods.excompressum.registry;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.item.ItemChickenStick;
-import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
+// TODO Split option in "Additional Chicken Stick Smashables" and "Disable Chicken Stick Smashables" lists, so we can update the default list without requiring people to reset their configs
 public class ChickenStickRegistry {
 
     public static float chickenStickSoundChance;
@@ -19,16 +22,16 @@ public class ChickenStickRegistry {
     public static boolean chickenOut;
     public static String[] chickenStickSounds;
     public static final Map<String, String> chickenStickNames = Maps.newHashMap();
-    private static final List<ItemAndMetadata> validBlocks = Lists.newArrayList();
+    private static final List<IBlockState> validBlocks = Lists.newArrayList(); // TODO I'm not sure if IBlockState implements equals correctly for this to work, test it
     private static String chickenStickName;
 
-    private static void addValidBlock(Block block, int metadata) {
-        validBlocks.add(new ItemAndMetadata(block, metadata));
-        ItemChickenStick.blocksEffectiveAgainst.add(block);
+    private static void addValidBlock(IBlockState state) {
+        validBlocks.add(state);
+        ItemChickenStick.blocksEffectiveAgainst.add(state.getBlock());
     }
 
-    public static boolean isValidBlock(Block block, int metadata) {
-        return validBlocks.contains(new ItemAndMetadata(block, metadata));
+    public static boolean isValidBlock(IBlockState state) {
+        return validBlocks.contains(state);
     }
 
     public static void load(Configuration config) {
@@ -65,19 +68,21 @@ public class ChickenStickRegistry {
                 ExCompressum.logger.error("Skipping chicken stick block " + blockString + " due to invalid format");
                 continue;
             }
-            Block block = GameRegistry.findBlock(s[0], s[1]);
-            if(block == null) {
+            Block block = Block.REGISTRY.getObject(new ResourceLocation(s[0], s[1]));
+            if(block == Blocks.AIR) {
                 ExCompressum.logger.error("Skipping chicken stick block " + blockString + " due to block not found");
                 continue;
             }
+            // TODO parse block properties instead
             int meta = 0;
             if (s.length > 2) {
                 meta = Integer.parseInt(s[2]);
             }
-            addValidBlock(block, meta);
+            addValidBlock(block.getStateFromMeta(meta));
         }
     }
 
+    @Nullable
     public static String getChickenStickName() {
         return chickenStickName;
     }

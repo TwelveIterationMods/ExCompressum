@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import vazkii.botania.api.mana.IManaReceiver;
 
 @Optional.Interface(modid = "Botania", iface = "vazkii.botania.api.mana.IManaReceiver", striprefs = true)
-public class TileEntityAutoSieveMana extends TileEntityAutoSieve implements IManaReceiver {
+public class TileEntityAutoSieveMana extends TileEntityAutoSieveBase implements IManaReceiver {
 
     private int manaStored;
 

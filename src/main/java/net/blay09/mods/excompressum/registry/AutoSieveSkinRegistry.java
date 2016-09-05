@@ -5,11 +5,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ExCompressumConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -25,8 +24,7 @@ public class AutoSieveSkinRegistry {
 
     public static void load() {
         availableSkins.clear();
-        availableSkins.add("Runew0lf"); // Rune in a Box™
-        if(!ExCompressum.skipAutoSieveSkins) {
+        if(!ExCompressumConfig.skipAutoSieveSkins) {
             try {
                 URL remoteURL = new URL("http://balyware.com/control-panel/api/skins.php");
                 InputStream in = remoteURL.openStream();
@@ -45,10 +43,6 @@ public class AutoSieveSkinRegistry {
                     }
                 }
                 reader.close();
-            } catch (ClassCastException e) {
-                logger.error("Could not load remote skins for auto sieve: ", e);
-            } catch (IOException e) {
-                logger.error("Could not load remote skins for auto sieve: ", e);
             } catch (Throwable e) { // Screw it, let's just be overprotective.
                 logger.error("Could not load remote skins for auto sieve: ", e);
             }

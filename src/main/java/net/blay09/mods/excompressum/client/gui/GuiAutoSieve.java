@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.client.gui;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.ContainerAutoSieve;
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
+import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -14,9 +14,9 @@ import java.util.List;
 public class GuiAutoSieve extends GuiContainer {
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoSieve.png");
-    private TileEntityAutoSieve tileEntity;
+    private TileEntityAutoSieveBase tileEntity;
 
-    public GuiAutoSieve(InventoryPlayer inventoryPlayer, TileEntityAutoSieve tileEntity) {
+    public GuiAutoSieve(InventoryPlayer inventoryPlayer, TileEntityAutoSieveBase tileEntity) {
         super(new ContainerAutoSieve(inventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
         xSize = 176;
@@ -33,8 +33,8 @@ public class GuiAutoSieve extends GuiContainer {
             drawTexturedModalRect(guiLeft + 32, guiTop + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 15);
         }
 
-        float energyPerc = tileEntity.getEnergyPercentage();
-        drawTexturedModalRect(guiLeft + 152, guiTop + 8 + (70 - (int) (energyPerc * 70)), 176 + 15, 0, 16, (int) (energyPerc * 70));
+        float energyPercentage = tileEntity.getEnergyPercentage();
+        drawTexturedModalRect(guiLeft + 152, guiTop + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70));
     }
 
     private static final List<String> tmpLines = Lists.newArrayList();
@@ -42,9 +42,9 @@ public class GuiAutoSieve extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
             tmpLines.clear();
-            tmpLines.add(tileEntity.getEnergyStored() + " RF");
-            tmpLines.add("Consuming " + tileEntity.getEffectiveEnergy() + " RF/t");
-            func_146283_a(tmpLines, mouseX - guiLeft, mouseY - guiTop);
+            tmpLines.add(tileEntity.getEnergyStored() + " RF"); // TODO "RF"
+            tmpLines.add("Consuming " + tileEntity.getEffectiveEnergy() + " RF/t"); // TODO i18n
+            drawHoveringText(tmpLines, mouseX - guiLeft, mouseY - guiTop);
         }
     }
 

@@ -39,10 +39,10 @@ public class BlockAutoHammer extends BlockContainer implements IDismantleable {
     public static final IIcon[] destroyStages = new IIcon[10];
 
     public BlockAutoHammer() {
-        super(Material.iron);
+        super(Material.IRON);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
-        setBlockName(ExCompressum.MOD_ID + ":auto_hammer");
+        setRegistryName("auto_hammer");
     }
 
     @Override

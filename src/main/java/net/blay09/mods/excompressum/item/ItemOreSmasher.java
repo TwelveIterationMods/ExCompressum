@@ -37,9 +37,9 @@ public class ItemOreSmasher extends ItemTool implements IHammer {
 	};
 
     public ItemOreSmasher() {
-        super(0f, ToolMaterial.EMERALD, Sets.newHashSet());
-        setUnlocalizedName(ExCompressum.MOD_ID + ":ore_smasher");
-        setTextureName(ExCompressum.MOD_ID + ":ore_smasher");
+        super(0f, ToolMaterial.DIAMOND, Sets.newHashSet());
+		setRegistryName("ore_smasher");
+        setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(ExCompressum.creativeTab);
     }
 

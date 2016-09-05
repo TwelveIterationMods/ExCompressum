@@ -3,18 +3,28 @@ package net.blay09.mods.excompressum.item;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
-import exnihilo.registries.HammerRegistry;
-import exnihilo.registries.helpers.Smashable;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
+import net.blay09.mods.excompressum.registry.HammerRegistry;
+import net.blay09.mods.excompressum.registry.data.SmashableReward;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 
@@ -27,57 +37,57 @@ public class ItemChickenStick extends ItemTool {
     public static final Set<Block> blocksEffectiveAgainst = Sets.newHashSet();
 
     public ItemChickenStick() {
-        super(0f, ToolMaterial.EMERALD, blocksEffectiveAgainst);
-        setUnlocalizedName(ExCompressum.MOD_ID + ":chicken_stick");
-        setTextureName(ExCompressum.MOD_ID + ":chicken_stick");
+        super(0f, 0f, ToolMaterial.DIAMOND, blocksEffectiveAgainst);
+        setRegistryName("chicken_stick");
+        setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(ExCompressum.creativeTab);
         setMaxDamage(0);
     }
 
     @Override
     public String getItemStackDisplayName(ItemStack itemStack) {
-        return ChickenStickRegistry.getChickenStickName() != null ? ChickenStickRegistry.getChickenStickName() : super.getItemStackDisplayName(itemStack);
+        String chickenStickName = ChickenStickRegistry.getChickenStickName();
+        return chickenStickName != null ? chickenStickName : super.getItemStackDisplayName(itemStack);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean flag) {
         if(ChickenStickRegistry.getChickenStickName() != null) {
-            list.add(EnumChatFormatting.GRAY + "(Chicken Stick)");
+            list.add(TextFormatting.GRAY + "(Chicken Stick)"); // TODO i18n
         }
     }
 
     @Override
     public boolean hitEntity(ItemStack itemStack, EntityLivingBase attacker, EntityLivingBase target) {
-        playChickenSound(attacker.worldObj, (int) attacker.posX, (int) attacker.posY, (int) attacker.posZ);
+        playChickenSound(attacker.worldObj, new BlockPos(attacker.posX, attacker.posY, attacker.posZ));
         return super.hitEntity(itemStack, attacker, target);
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
-        playChickenSound(world, (int) entityPlayer.posX, (int) entityPlayer.posY, (int) entityPlayer.posZ);
-        entityPlayer.swingItem();
-        return super.onItemRightClick(itemStack, world, entityPlayer);
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+        playChickenSound(world, new BlockPos(player.posX, player.posY, player.posZ));
+        player.swingArm(hand);
+        return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemStack, int x, int y, int z, EntityPlayer entityPlayer) {
-        World world = entityPlayer.worldObj;
-        if(world.isRemote || entityPlayer instanceof FakePlayer) {
+    public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, EntityPlayer player) {
+        World world = player.worldObj;
+        if(world.isRemote || player instanceof FakePlayer) {
             return false;
         }
-        Block block = world.getBlock(x, y, z);
-        int metadata = world.getBlockMetadata(x, y, z);
-        if (!ChickenStickRegistry.isValidBlock(block, metadata)) {
+        IBlockState state = world.getBlockState(pos);
+        if (!ChickenStickRegistry.isValidBlock(state)) {
             return false;
         }
-        Collection<Smashable> rewards = HammerRegistry.getRewards(block, metadata);
-        if (rewards == null || rewards.isEmpty()) {
+        Collection<SmashableReward> rewards = HammerRegistry.getRewards(state); // generify
+        if (rewards.isEmpty()) {
             return false;
         }
-        for (Smashable reward : rewards) {
-            if (world.rand.nextFloat() <= reward.chance) {
-                EntityItem entityItem = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(reward.item, 1, reward.meta));
+        for (SmashableReward reward : rewards) {
+            if (world.rand.nextFloat() <= reward.getChance()) {
+                EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(reward.getItem(), 1, reward.getMetadata()));
                 double motion = 0.05;
                 entityItem.motionX = world.rand.nextGaussian() * motion;
                 entityItem.motionY = 0.2;
@@ -85,28 +95,30 @@ public class ItemChickenStick extends ItemTool {
                 world.spawnEntityInWorld(entityItem);
             }
         }
-        world.setBlockToAir(x, y, z);
-        playChickenSound(world, x, y, z);
-        if(!world.isRemote && world.rand.nextFloat() <= ChickenStickRegistry.chickenStickSpawnChance) {
+        world.setBlockToAir(pos);
+        playChickenSound(world, pos);
+        if(world.rand.nextFloat() <= ChickenStickRegistry.chickenStickSpawnChance) {
             EntityChicken entityChicken = new EntityChicken(world);
-            entityChicken.setPosition(x, y, z);
+            entityChicken.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
             world.spawnEntityInWorld(entityChicken);
         }
         return true;
     }
 
     @Override
-    public boolean canHarvestBlock(Block block, ItemStack itemStack) {
-        return ChickenStickRegistry.isValidBlock(block, 0);
+    public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
+        return ChickenStickRegistry.isValidBlock(state);
     }
 
-    @Override
+
+    // TODO what is the new getDigSpeed?
+    /*@Override
     public float getDigSpeed(ItemStack item, Block block, int meta) {
         if ((ChickenStickRegistry.isValidBlock(block, meta)) && block.getHarvestLevel(meta) <= toolMaterial.getHarvestLevel()) {
             return efficiencyOnProperMaterial * 0.75f;
         }
         return 0.8f;
-    }
+    }*/
 
     @Override
     public int getItemEnchantability() {
@@ -114,18 +126,19 @@ public class ItemChickenStick extends ItemTool {
     }
 
     @Override
-    public Multimap getItemAttributeModifiers() {
-        return HashMultimap.create(); // reset damage value as set from tool
+    public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
+        return HashMultimap.create();
     }
 
-    private void playChickenSound(World world, int x, int y, int z) {
+    private void playChickenSound(World world, BlockPos pos) {
         if(world.rand.nextFloat() <= ChickenStickRegistry.chickenStickSoundChance) {
             String soundName = null;
             if(ChickenStickRegistry.chickenStickSounds.length > 0) {
                 soundName = ChickenStickRegistry.chickenStickSounds[world.rand.nextInt(ChickenStickRegistry.chickenStickSounds.length)];
             }
             if(soundName != null) {
-                world.playSoundEffect(x + 0.5, y + 0.5, z + 0.5, soundName, 1f, world.rand.nextFloat() * 0.1f + 0.9f);
+                SoundEvent soundEvent = SoundEvent.REGISTRY.getObject(new ResourceLocation(soundName));
+                world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundEvent, SoundCategory.PLAYERS, 1f, world.rand.nextFloat() * 0.1f + 0.9f, false);
             }
         }
     }

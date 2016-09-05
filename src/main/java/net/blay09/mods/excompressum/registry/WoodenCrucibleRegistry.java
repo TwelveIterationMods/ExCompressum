@@ -1,29 +1,34 @@
 package net.blay09.mods.excompressum.registry;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 import net.blay09.mods.excompressum.registry.data.WoodenMeltable;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.Hashtable;
 import java.util.List;
 
+// TODO Split option in "Additional Wooden Meltables" and "Disable Wooden Meltables" lists, so we can update the default list without requiring people to reset their configs
 public class WoodenCrucibleRegistry {
 
-    private static final Hashtable<ItemAndMetadata, WoodenMeltable> entries = new Hashtable<ItemAndMetadata, WoodenMeltable>();
+    private static final Hashtable<ItemAndMetadata, WoodenMeltable> entries = new Hashtable<>();
 
     private static void register(ItemStack itemStack, FluidStack fluidStack, Block appearance, int appearanceMeta) {
         entries.put(new ItemAndMetadata(itemStack), new WoodenMeltable(itemStack, fluidStack, appearance, appearanceMeta));
     }
 
+    @Nullable
     public static WoodenMeltable getMeltable(ItemStack itemStack) {
         WoodenMeltable meltable = entries.get(new ItemAndMetadata(itemStack));
         if(meltable != null) {
@@ -68,11 +73,12 @@ public class WoodenCrucibleRegistry {
                     ExCompressum.logger.error("Skipping wooden meltable " + meltable + " because no ore dictionary entries found");
                 }
             } else {
-                ItemStack sourceStack = GameRegistry.findItemStack(source[0], source[1], 1);
-                if (sourceStack == null) {
+                Item sourceItem = Item.REGISTRY.getObject(new ResourceLocation(source[0], source[1]));
+                if(sourceItem == null) {
                     ExCompressum.logger.error("Skipping wooden meltable " + meltable + " because the source block was not found");
                     continue;
                 }
+                ItemStack sourceStack = new ItemStack(sourceItem);
                 sourceStack.setItemDamage(source.length > 2 ? Integer.parseInt(source[2]) : OreDictionary.WILDCARD_VALUE);
                 loadMeltable(sourceStack, s[1]);
             }
@@ -91,8 +97,8 @@ public class WoodenCrucibleRegistry {
             return;
         }
         FluidStack fluidStack = new FluidStack(fluid, Integer.parseInt(s[0]));
-        Block appearance = GameRegistry.findBlock(s[2], s[3]);
-        if(appearance == null) {
+        Block appearance = Block.REGISTRY.getObject(new ResourceLocation(s[2], s[3]));
+        if(appearance == Blocks.AIR) { // Imagine we could do Block.REGISTRY.getDefaultObject(), wouldn't that be sick API design?
             ExCompressum.logger.error("Skipping wooden meltable " + result + " due to appearance block not found");
             return;
         }

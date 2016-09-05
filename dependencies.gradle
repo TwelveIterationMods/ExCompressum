@@ -1,3 +1,9 @@
 dependencies {
-
+    deobfCompile "hosted-api:exnihiloomnia:1.0.0"
+    deobfCompile "hosted-api:Botania-unofficial:r1.8-320"
+    deobfCompile "hosted-api:CraftTweaker:1.10.2"
+    deobfCompile "slimeknights:TConstruct:1.10.2-2.4.1.jenkins339"
+    deobfCompile "com.azanor.baubles:Baubles:1.9.4-1.2.1.0.22" // for Botania
+    deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
+    deobfCompile "mezz.jei:jei_1.10.2:3.9.0.246"
 }

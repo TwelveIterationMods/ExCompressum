@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.container;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.blay09.mods.excompressum.client.ClientProxy;
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
+import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,7 @@ public class SlotAutoSieveBook extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack itemStack) {
-        return ((TileEntityAutoSieve) inventory).isValidBook(itemStack);
+        return ((TileEntityAutoSieveBase) inventory).isValidBook(itemStack);
     }
 
     @Override

@@ -1,12 +1,9 @@
 package net.blay09.mods.excompressum.block;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -15,21 +12,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.List;
 
 public class BlockWoodenCrucible extends BlockContainer {
 
     public BlockWoodenCrucible() {
-        super(Material.wood);
+        super(Material.WOOD);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
-        setBlockName(ExCompressum.MOD_ID + ":woodenCrucible");
+        setRegistryName("wooden_crucible");
     }
 
     @Override
@@ -136,14 +130,4 @@ public class BlockWoodenCrucible extends BlockContainer {
         }
     }
 
-    public static void registerRecipes(Configuration config) {
-        if (config.getBoolean("Wooden Crucible", "blocks", true, "If set to false, the recipe for the wooden crucible will be disabled.")) {
-            for (int i = 0; i < 4; i++) {
-                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.woodenCrucible, 1, i), "p p", "p p", "psp", 'p', new ItemStack(Blocks.log, 1, i), 's', "slabWood"));
-            }
-            for (int i = 0; i < 2; i++) {
-                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.woodenCrucible, 1, 4 + i), "p p", "p p", "psp", 'p', new ItemStack(Blocks.log2, 1, i), 's', "slabWood"));
-            }
-        }
-    }
 }

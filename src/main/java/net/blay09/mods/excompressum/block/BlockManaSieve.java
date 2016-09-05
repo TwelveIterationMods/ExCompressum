@@ -13,11 +13,11 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class BlockManaSieve extends BlockAutoSieve {
+public class BlockManaSieve extends BlockAutoSieveBase {
 
     public BlockManaSieve() {
-        super(Material.iron);
-        setBlockName(ExCompressum.MOD_ID + ":auto_sieve_mana");
+        super(Material.IRON);
+        setRegistryName("mana_sieve");
     }
 
     @Override

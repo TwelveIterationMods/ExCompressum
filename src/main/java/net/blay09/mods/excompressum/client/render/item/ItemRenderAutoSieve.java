@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.client.render.item;
 
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieveRF;
+import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 public class ItemRenderAutoSieve implements IItemRenderer {
 
-    private static final TileEntityAutoSieveRF tileEntity = new TileEntityAutoSieveRF();
+    private static final TileEntityAutoSieve tileEntity = new TileEntityAutoSieve();
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {

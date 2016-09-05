@@ -1,13 +1,13 @@
 package net.blay09.mods.excompressum.compat.minetweaker;
 
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import minetweaker.MineTweakerImplementationAPI;
 import minetweaker.util.IEventHandler;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.registry.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 
 @SuppressWarnings("unused")
 @Optional.Interface(modid = "MineTweaker3", iface = "minetweaker.util.IEventHandler", striprefs = true)

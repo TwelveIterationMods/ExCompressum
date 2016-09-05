@@ -10,7 +10,6 @@
   "authorList": ["BlayTheNinth"],
   "credits": "BlayTheNinth",
   "logoFile": "",
-  "screenshots": [],
-  "dependencies": ["required-after:exnihilo"]
+  "screenshots": []
 }
 ]

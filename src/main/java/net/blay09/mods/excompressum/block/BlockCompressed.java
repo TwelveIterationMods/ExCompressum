@@ -23,12 +23,12 @@ public class BlockCompressed extends Block {
     private final IIcon[] icons = new IIcon[8];
 
     public BlockCompressed() {
-        super(Material.rock);
+        super(Material.ROCK);
         setHardness(4f);
         setResistance(6f);
         setStepSound(soundTypeStone);
         setCreativeTab(ExCompressum.creativeTab);
-        setBlockName(ExCompressum.MOD_ID + ":compressed_dust");
+        setRegistryName("compressed_dust");
     }
 
     @Override

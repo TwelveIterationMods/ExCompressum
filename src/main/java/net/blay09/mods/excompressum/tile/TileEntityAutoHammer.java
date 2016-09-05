@@ -1,40 +1,61 @@
 package net.blay09.mods.excompressum.tile;
 
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import exnihilo.registries.HammerRegistry;
-import exnihilo.registries.helpers.Smashable;
-import exnihilo.utils.ItemInfo;
-import net.blay09.mods.excompressum.ExCompressum;
+import cofh.api.energy.IEnergyReceiver;
+import net.blay09.mods.excompressum.ExCompressumConfig;
+import net.blay09.mods.excompressum.ItemHandlerAutomation;
+import net.blay09.mods.excompressum.client.render.ParticleSieve;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
+import net.blay09.mods.excompressum.registry.HammerRegistry;
+import net.blay09.mods.excompressum.registry.data.SmashableReward;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityDiggingFX;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RangedWrapper;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
-public class TileEntityAutoHammer extends TileEntity implements ISidedInventory, IEnergyHandler {
+public class TileEntityAutoHammer extends TileEntity implements ITickable, IEnergyReceiver {
 
     private static final int UPDATE_INTERVAL = 20;
 
     private final EnergyStorage storage = new EnergyStorage(32000);
-    private ItemStack[] inventory = new ItemStack[getSizeInventory()];
+    private ItemStackHandler itemHandler = new ItemStackHandler(23) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            markDirty();
+        }
+    };
+    private RangedWrapper itemHandlerInput = new RangedWrapper(itemHandler, 0, 1);
+    private RangedWrapper itemHandlerOutput = new RangedWrapper(itemHandler, 1, 21);
+    private RangedWrapper itemHandlerUpgrades = new RangedWrapper(itemHandler, 21, 23);
+    private ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
+        @Override
+        public boolean canInsertItem(int slot, ItemStack itemStack) {
+            return (slot == 0 && isRegistered(itemStack))
+                || ((slot == 21 || slot == 22) && isHammerUpgrade(itemStack))
+                || super.canInsertItem(slot, itemStack);
+        }
+
+        @Override
+        public boolean canExtractItem(int slot, int amount) {
+            return slot >= 1 && slot <= 20;
+        }
+    };
     private ItemStack currentStack;
 
     private int ticksSinceUpdate;
@@ -42,7 +63,7 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
     private float progress;
 
     @Override
-    public void updateEntity() {
+    public void update() {
         ticksSinceUpdate++;
         if (ticksSinceUpdate > UPDATE_INTERVAL) {
             if (isDirty) {
@@ -54,19 +75,20 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
         int effectiveEnergy = getEffectiveEnergy();
         if (storage.getEnergyStored() >= effectiveEnergy) {
             if (currentStack == null) {
-                if (inventory[0] != null && isRegistered(inventory[0])) {
+                ItemStack inputStack = itemHandlerInput.getStackInSlot(0);
+                if (inputStack != null && isRegistered(inputStack)) {
                     boolean foundSpace = false;
-                    for(int i = 1; i < inventory.length - 2; i++) {
-                        if(inventory[i] == null) {
+                    for(int i = 0; i < itemHandlerOutput.getSlots(); i++) {
+                        if(itemHandlerOutput.getStackInSlot(i) == null) {
                             foundSpace = true;
                         }
                     }
                     if(!foundSpace) {
                         return;
                     }
-                    currentStack = inventory[0].splitStack(1);
-                    if (inventory[0].stackSize == 0) {
-                        inventory[0] = null;
+                    currentStack = inputStack.splitStack(1);
+                    if (inputStack.stackSize == 0) {
+                        itemHandlerInput.setStackInSlot(0, null);
                     }
                     storage.extractEnergy(effectiveEnergy, false);
                     VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -77,26 +99,28 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
                 progress += getEffectiveSpeed();
                 isDirty = true;
                 if (progress >= 1) {
-                    if(worldObj.rand.nextFloat() <= ExCompressum.autoHammerDecay) {
-                        if (inventory[21] != null) {
-                            if(inventory[21].attemptDamageItem(1, worldObj.rand)) {
-                                inventory[21] = null;
+                    if(worldObj.rand.nextFloat() <= ExCompressumConfig.autoHammerDecay) {
+                        ItemStack firstHammer = itemHandlerUpgrades.getStackInSlot(0);
+                        if (firstHammer != null) {
+                            if(firstHammer.attemptDamageItem(1, worldObj.rand)) {
+                                itemHandlerUpgrades.setStackInSlot(0, null);
                             }
                         }
-                        if (inventory[22] != null) {
-                            if(inventory[22].attemptDamageItem(1, worldObj.rand)) {
-                                inventory[22] = null;
+                        ItemStack secondHammer = itemHandlerUpgrades.getStackInSlot(1);
+                        if (secondHammer != null) {
+                            if(secondHammer.attemptDamageItem(1, worldObj.rand)) {
+                                itemHandlerUpgrades.setStackInSlot(1, null);
                             }
                         }
                     }
                     if (!worldObj.isRemote) {
-                        Collection<Smashable> rewards = getSmashables(currentStack);
-                        if (rewards != null && !rewards.isEmpty()) {
-                            for (Smashable reward : rewards) {
-                                if (worldObj.rand.nextFloat() <= reward.chance + (reward.luckMultiplier * getEffectiveLuck())) {
-                                    ItemStack rewardStack = new ItemStack(reward.item, 1, reward.meta);
+                        Collection<SmashableReward> rewards = getSmashableRewards(currentStack);
+                        if (!rewards.isEmpty()) {
+                            for (SmashableReward reward : rewards) {
+                                if (worldObj.rand.nextFloat() <= reward.getChance() + (reward.getLuckMultiplier() * getEffectiveLuck())) {
+                                    ItemStack rewardStack = new ItemStack(reward.getItem(), 1, reward.getMetadata());
                                     if (!addItemToOutput(rewardStack)) {
-                                        EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 1.5, zCoord + 0.5, rewardStack);
+                                        EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, rewardStack);
                                         double motion = 0.05;
                                         entityItem.motionX = worldObj.rand.nextGaussian() * motion;
                                         entityItem.motionY = 0.2;
@@ -116,52 +140,55 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
         }
     }
 
-    protected Collection<Smashable> getSmashables(ItemStack itemStack) {
-        return HammerRegistry.getRewards(new ItemInfo(itemStack));
+    protected Collection<SmashableReward> getSmashableRewards(ItemStack itemStack) {
+        return HammerRegistry.getRewards(itemStack);
     }
 
     public boolean isRegistered(ItemStack itemStack) {
-        return HammerRegistry.registered(itemStack);
+        return HammerRegistry.isRegistered(itemStack);
     }
 
     private boolean addItemToOutput(ItemStack itemStack) {
         int firstEmptySlot = -1;
-        for (int i = 1; i < getSizeInventory() - 2; i++) {
-            if (inventory[i] == null) {
+        for (int i = 0; i < itemHandlerOutput.getSlots(); i++) {
+            ItemStack slotStack = itemHandlerOutput.getStackInSlot(i);
+            if (slotStack == null) {
                 if(firstEmptySlot == -1){
                     firstEmptySlot = i;
                 }
             } else {
-                if (inventory[i].stackSize + itemStack.stackSize <= inventory[i].getMaxStackSize() && inventory[i].isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(inventory[i], itemStack)) {
-                    inventory[i].stackSize += itemStack.stackSize;
+                if (slotStack.stackSize + itemStack.stackSize <= slotStack.getMaxStackSize() && slotStack.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(slotStack, itemStack)) {
+                    slotStack.stackSize += itemStack.stackSize;
                     return true;
                 }
             }
         }
         if (firstEmptySlot != -1) {
-            inventory[firstEmptySlot] = itemStack;
+            itemHandlerOutput.setStackInSlot(firstEmptySlot, itemStack);
             return true;
         }
         return false;
     }
 
     public int getEffectiveEnergy() {
-        return ExCompressum.autoHammerEnergy;
+        return ExCompressumConfig.autoHammerEnergy;
     }
 
     public float getSpeedBoost() {
         float boost = 1f;
-        if(inventory[21] != null && isHammerUpgrade(inventory[21])) {
+        ItemStack firstHammer = itemHandlerUpgrades.getStackInSlot(0);
+        if(firstHammer != null && isHammerUpgrade(firstHammer)) {
             boost += 1f;
         }
-        if(inventory[22] != null && isHammerUpgrade(inventory[22])) {
+        ItemStack secondHammer = itemHandlerUpgrades.getStackInSlot(1);
+        if(secondHammer != null && isHammerUpgrade(secondHammer)) {
             boost += 1f;
         }
         return boost;
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressum.autoHammerSpeed * getSpeedBoost();
+        return ExCompressumConfig.autoHammerSpeed * getSpeedBoost();
     }
 
     public float getEffectiveLuck() {
@@ -171,15 +198,9 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
+        readFromNBTSynced(tagCompound);
         storage.readFromNBT(tagCompound);
-        NBTTagList items = tagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-        for (int i = 0; i < items.tagCount(); i++) {
-            NBTTagCompound itemCompound = items.getCompoundTagAt(i);
-            int slot = itemCompound.getByte("Slot");
-            if (slot >= 0 && slot < inventory.length) {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(itemCompound);
-            }
-        }
+        itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
     }
 
     private void readFromNBTSynced(NBTTagCompound tagCompound) {
@@ -188,20 +209,12 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         writeToNBTSynced(tagCompound);
         storage.writeToNBT(tagCompound);
-        NBTTagList items = new NBTTagList();
-        for (int i = 0; i < inventory.length; i++) {
-            if (inventory[i] != null) {
-                NBTTagCompound itemCompound = new NBTTagCompound();
-                itemCompound.setByte("Slot", (byte) i);
-                inventory[i].writeToNBT(itemCompound);
-                items.appendTag(itemCompound);
-            }
-        }
-        tagCompound.setTag("Items", items);
+        tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
+        return tagCompound;
     }
 
     private void writeToNBTSynced(NBTTagCompound tagCompound) {
@@ -212,30 +225,34 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
     }
 
     @Override
-    public Packet getDescriptionPacket() {
-        NBTTagCompound tagCompound = new NBTTagCompound();
-        writeToNBTSynced(tagCompound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, blockMetadata, tagCompound);
+    public NBTTagCompound getUpdateTag() {
+        return writeToNBT(new NBTTagCompound());
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        readFromNBTSynced(pkt.func_148857_g());
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        NBTTagCompound tagCompound = new NBTTagCompound();
+        writeToNBTSynced(tagCompound);
+        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), tagCompound);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        readFromNBTSynced(pkt.getNbtCompound());
     }
 
     @SideOnly(Side.CLIENT)
     private void spawnCrushParticles() {
-        if (currentStack != null) {
+        IBlockState currentBlock = getCurrentBlock();
+        if (currentBlock != null) {
             for (int i = 0; i < 10; i++) {
-                EntityDiggingFX particle = new EntityDiggingFX(getWorldObj(), xCoord + 0.5, yCoord + 5d / 16d, zCoord + 0.5, 0, 0, 0, Block.getBlockFromItem(currentStack.getItem()), currentStack.getItemDamage());
-                particle.setVelocity((worldObj.rand.nextDouble() / 2) - 0.25, 0, (worldObj.rand.nextDouble() / 2) - 0.25);
-                Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(worldObj, pos.getX() + 0.5, pos.getY() + 0.3125, pos.getZ() + 0.5, (worldObj.rand.nextDouble() / 2) - 0.25, 0, (worldObj.rand.nextDouble() / 2) - 0.25, currentBlock));
             }
         }
     }
 
     @Override
-    public int receiveEnergy(ForgeDirection side, int maxReceive, boolean simulate) {
+    public int receiveEnergy(EnumFacing side, int maxReceive, boolean simulate) {
         if(!simulate) {
             isDirty = true;
         }
@@ -243,114 +260,22 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
     }
 
     @Override
-    public int extractEnergy(ForgeDirection side, int maxExtract, boolean simulate) {
-        return storage.extractEnergy(maxExtract, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(ForgeDirection side) {
+    public int getEnergyStored(EnumFacing side) {
         return storage.getEnergyStored();
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection side) {
+    public int getMaxEnergyStored(EnumFacing side) {
         return storage.getMaxEnergyStored();
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection side) {
+    public boolean canConnectEnergy(EnumFacing side) {
         return true;
     }
 
-    @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-    }
-
-    @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-        return isItemValidForSlot(slot, itemStack);
-    }
-
-    @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-        return slot >= 1;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
-        return
-                (slot == 0 && isRegistered(itemStack))
-                || ((slot == 21 || slot == 22) && isHammerUpgrade(itemStack));
-    }
-
     public boolean isHammerUpgrade(ItemStack itemStack) {
-        return itemStack.getItem() == GameRegistry.findItem("exnihilo", "hammer_diamond");
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    @Override
-    public void openInventory() {
-    }
-
-    @Override
-    public void closeInventory() {
-    }
-
-    @Override
-    public int getSizeInventory() {
-        return 23;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-        return inventory[slot];
-    }
-
-    @Override
-    public ItemStack decrStackSize(int slot, int amount) {
-        if (inventory[slot] != null) {
-            if (inventory[slot].stackSize <= amount) {
-                ItemStack itemStack = inventory[slot];
-                inventory[slot] = null;
-                return itemStack;
-            }
-            ItemStack itemStack = inventory[slot].splitStack(amount);
-            if (inventory[slot].stackSize == 0) {
-                inventory[slot] = null;
-            }
-            return itemStack;
-        }
-        return null;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-        return null;
-    }
-
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack itemStack) {
-        inventory[slot] = itemStack;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return null;
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && entityPlayer.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) <= 64;
+        return HammerRegistry.isHammerUpgrade(itemStack);
     }
 
     public void setEnergyStored(int energyStored) {
@@ -369,11 +294,40 @@ public class TileEntityAutoHammer extends TileEntity implements ISidedInventory,
         return (float) storage.getEnergyStored() / (float) storage.getMaxEnergyStored();
     }
 
+    @Nullable
     public ItemStack getCurrentStack() {
         return currentStack;
     }
 
+    @Nullable
+    public IBlockState getCurrentBlock() {
+        if(currentStack == null) {
+            return null;
+        }
+        Block block = Block.getBlockFromItem(currentStack.getItem());
+        //noinspection ConstantConditions /// NO IT'S NOT. getBlockFromItem not marked @Nullable
+        if(block != null) {
+            return block.getStateFromMeta(currentStack.getMetadata());
+        }
+        return null;
+    }
+
     public void setProgress(float progress) {
         this.progress = progress;
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+            || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) itemHandlerAutomation;
+        }
+        return super.getCapability(capability, facing);
     }
 }

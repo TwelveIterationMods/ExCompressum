@@ -1,24 +1,20 @@
 package net.blay09.mods.excompressum.tile;
 
-import exnihilo.registries.BarrelRecipeRegistry;
-import exnihilo.utils.ItemInfo;
-import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
+import net.blay09.mods.excompressum.registry.BarrelRecipeRegistry;
 import net.blay09.mods.excompressum.registry.WoodenCrucibleRegistry;
 import net.blay09.mods.excompressum.registry.data.WoodenMeltable;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.*;
 
-public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandler, ISidedInventory {
+public class TileEntityWoodenCrucible extends TileEntity implements ITickable {
 
     public static final int MAX_FLUID = 1000;
     private static final int UPDATE_INTERVAL = 10;
@@ -31,12 +27,12 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     private float fluidVolume;
 
     public boolean addItem(ItemStack itemStack) {
-        if (ExCompressum.woodenCrucibleBarrelRecipes && fluidVolume >= 1000) {
-            ItemInfo itemInfo = BarrelRecipeRegistry.getOutput(new FluidStack(fluid, (int) fluidVolume), itemStack);
-            if (itemInfo != null) {
+        if (ExCompressumConfig.woodenCrucibleBarrelRecipes && fluidVolume >= 1000) {
+            ItemStack outputStack = BarrelRecipeRegistry.getOutput(new FluidStack(fluid, (int) fluidVolume), itemStack);
+            if (outputStack != null) {
                 if(!worldObj.isRemote) {
                     fluidVolume -= 1000;
-                    EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 1, zCoord + 0.5, itemInfo.getStack());
+                    EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, outputStack);
                     entityItem.motionY = 0.2;
                     worldObj.spawnEntityInWorld(entityItem);
                     VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -57,15 +53,15 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (!worldObj.isRemote) {
-            float rainFall = worldObj.getBiomeGenForCoords(xCoord, zCoord).rainfall;
-            if ((fluidVolume == 0 || fluid == FluidRegistry.WATER) && worldObj.isRaining() && yCoord >= worldObj.getTopSolidOrLiquidBlock(xCoord, zCoord) - 1 && rainFall > 0f && ExCompressum.woodenCrucibleFillFromRain) {
+            float rainFall = worldObj.getBiomeGenForCoords(pos).getRainfall();
+            if ((fluidVolume == 0 || fluid == FluidRegistry.WATER) && worldObj.isRaining() && pos.getY() >= worldObj.getTopSolidOrLiquidBlock(pos).getY() - 1 && rainFall > 0f && ExCompressumConfig.woodenCrucibleFillFromRain) {
                 fluidVolume = Math.min(MAX_FLUID, fluidVolume + rainFall);
                 isDirty = true;
             }
 
-            float speed = ExCompressum.woodenCrucibleSpeed;
+            float speed = ExCompressumConfig.woodenCrucibleSpeed;
             if (solidVolume > 0 && fluidVolume < MAX_FLUID) {
                 fluidVolume = Math.min(MAX_FLUID, fluidVolume + Math.min(speed, solidVolume));
                 solidVolume = Math.max(0, solidVolume - speed);
@@ -101,7 +97,9 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
         return fluidVolume;
     }
 
-    @Override
+    // TODO Fluid Capability
+
+    /*@Override
     public int fill(ForgeDirection from, FluidStack fillStack, boolean doFill) {
         if(fillStack.getFluid().getTemperature() > 500) {
             return 0;
@@ -164,9 +162,11 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from) {
         return new FluidTankInfo[]{new FluidTankInfo(new FluidStack(fluid != null ? fluid : FluidRegistry.WATER, (int) fluidVolume), MAX_FLUID)};
-    }
+    }*/
 
-    @Override
+    // TODO ItemHandler Capability
+
+    /*@Override
     public int[] getAccessibleSlotsFromSide(int side) {
         if (side == ForgeDirection.UP.ordinal()) {
             return new int[]{0};
@@ -246,7 +246,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
         return WoodenCrucibleRegistry.isRegistered(itemStack);
-    }
+    }*/
 
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
@@ -260,7 +260,7 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         if (currentMeltable != null) {
             tagCompound.setTag("Content", currentMeltable.itemStack.writeToNBT(new NBTTagCompound()));
@@ -270,18 +270,21 @@ public class TileEntityWoodenCrucible extends TileEntity implements IFluidHandle
             tagCompound.setString("FluidName", fluid.getName());
         }
         tagCompound.setFloat("FluidVolume", fluidVolume);
+        return tagCompound;
     }
 
+    // TODO fix te syncing
+
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound tagCompound = new NBTTagCompound();
         writeToNBT(tagCompound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, blockMetadata, tagCompound);
+        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), tagCompound);
     }
 
     @Override
-    public void onDataPacket(NetworkManager networkManager, S35PacketUpdateTileEntity packet) {
-        readFromNBT(packet.func_148857_g());
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        readFromNBT(pkt.getNbtCompound());
     }
 
     public float getSolidVolume() {

@@ -1,25 +1,23 @@
 package net.blay09.mods.excompressum.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import exnihilo.blocks.tileentities.TileEntitySieve;
-import exnihilo.particles.ParticleSieve;
-import exnihilo.registries.helpers.SiftingResult;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.data.SiftingResult;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collection;
 
-public class TileEntityHeavySieve extends TileEntity {
+public class TileEntityHeavySieve extends TileEntity implements ITickable {
 
     private static final float MIN_RENDER_CAPACITY = 0.70f;
     private static final float MAX_RENDER_CAPACITY = 0.9f;
@@ -46,7 +44,7 @@ public class TileEntityHeavySieve extends TileEntity {
     }
 
     @Override
-    public void updateEntity() {
+    public void update() {
         if (worldObj.isRemote && spawnParticles) {
             spawnFX();
         }
@@ -78,16 +76,14 @@ public class TileEntityHeavySieve extends TileEntity {
             mode = TileEntitySieve.SieveMode.EMPTY;
             if (!worldObj.isRemote) {
                 Collection<SiftingResult> rewards = HeavySieveRegistry.getSiftingOutput(content);
-                if (rewards != null) {
-                    for (SiftingResult reward : rewards) {
-                        if (worldObj.rand.nextInt(reward.rarity) == 0) {
-                            EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 1.5, zCoord + 0.5, new ItemStack(reward.item, 1, reward.meta));
-                            double motionScale = 0.05;
-                            entityItem.motionX = worldObj.rand.nextGaussian() * motionScale;
-                            entityItem.motionY = 0.2;
-                            entityItem.motionZ = worldObj.rand.nextGaussian() * motionScale;
-                            worldObj.spawnEntityInWorld(entityItem);
-                        }
+                for (SiftingResult reward : rewards) {
+                    if (worldObj.rand.nextInt(reward.getRarity()) == 0) {
+                        EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, new ItemStack(reward.getItem(), 1, reward.getMetadata()));
+                        double motionScale = 0.05;
+                        entityItem.motionX = worldObj.rand.nextGaussian() * motionScale;
+                        entityItem.motionY = 0.2;
+                        entityItem.motionZ = worldObj.rand.nextGaussian() * motionScale;
+                        worldObj.spawnEntityInWorld(entityItem);
                     }
                 }
             }
@@ -129,7 +125,7 @@ public class TileEntityHeavySieve extends TileEntity {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         tagCompound.setInteger("Mode", mode.value);
         if(content != null) {
@@ -137,18 +133,21 @@ public class TileEntityHeavySieve extends TileEntity {
         }
         tagCompound.setFloat("Volume", volume);
         tagCompound.setBoolean("Particles", spawnParticles);
+        return tagCompound;
     }
 
+    // TODO fix te syncing
+
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound tagCompound = new NBTTagCompound();
         writeToNBT(tagCompound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, blockMetadata, tagCompound);
+        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), tagCompound);
     }
 
     @Override
-    public void onDataPacket(NetworkManager networkManager, S35PacketUpdateTileEntity packet) {
-        readFromNBT(packet.func_148857_g());
+    public void onDataPacket(NetworkManager networkManager, SPacketUpdateTileEntity packet) {
+        readFromNBT(packet.getNbtCompound());
     }
 
     public ItemStack getContent() {

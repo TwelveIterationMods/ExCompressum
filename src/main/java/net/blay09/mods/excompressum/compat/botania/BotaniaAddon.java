@@ -1,16 +1,13 @@
 package net.blay09.mods.excompressum.compat.botania;
 
-import codechicken.nei.api.API;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.IAddon;
-import net.blay09.mods.excompressum.compat.INEIAddon;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconEntry;
 import vazkii.botania.api.recipe.RecipePetals;
@@ -21,7 +18,7 @@ import vazkii.botania.common.lexicon.page.PageText;
 import java.util.Iterator;
 
 @Optional.Interface(modid = "NotEnoughItems", iface = "net.blay09.mods.excompressum.compat.INEIAddon", striprefs = true)
-public class BotaniaAddon implements IAddon, INEIAddon {
+public class BotaniaAddon implements IAddon {
 
     public static final String SUBTILE_ORECHID_EVOLVED = ExCompressum.MOD_ID + ".orechidEvolved";
     private static final String LEXICON_ORECHID_EVOLVED = "botania.entry." + ExCompressum.MOD_ID + ".orechidEvolved";
@@ -136,9 +133,4 @@ public class BotaniaAddon implements IAddon, INEIAddon {
     @Override
     public void serverStarted(FMLServerStartedEvent event) {}
 
-    @Override
-    public void loadNEIConfig() {
-//        API.addItemListEntry(ItemBlockSpecialFlower.ofType(BotaniaAddon.SUBTILE_ORECHID_EVOLVED));
-//        API.addItemListEntry(ItemBlockSpecialFlower.ofType(BotaniaAddon.SUBTILE_BROKEN_COMPRILLA));
-    }
 }

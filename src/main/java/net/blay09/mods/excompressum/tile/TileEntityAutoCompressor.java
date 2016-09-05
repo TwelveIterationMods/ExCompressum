@@ -1,44 +1,68 @@
 package net.blay09.mods.excompressum.tile;
 
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import cpw.mods.fml.common.Optional;
-import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ExCompressumConfig;
+import net.blay09.mods.excompressum.ItemHandlerAutomation;
 import net.blay09.mods.excompressum.registry.data.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.CompressedRecipeRegistry;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class TileEntityAutoCompressor extends TileEntity implements ISidedInventory, IEnergyHandler {
+public class TileEntityAutoCompressor extends TileEntity implements ITickable, IEnergyReceiver {
 
     private final EnergyStorage storage = new EnergyStorage(32000);
     private final Multiset<CompressedRecipe> inputItems = HashMultiset.create();
-    private final ItemStack[] inventory = new ItemStack[getSizeInventory()];
+    private final ItemStackHandler itemHandler = new ItemStackHandler(24) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            markDirty();
+        }
+
+        @Override
+        public ItemStack insertItem(int slot, ItemStack itemStack, boolean simulate) {
+
+            return super.insertItem(slot, itemStack, simulate);
+        }
+    };
+    private final ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
+        @Override
+        public boolean canInsertItem(int slot, ItemStack itemStack) {
+            return slot >= 12 || CompressedRecipeRegistry.getRecipe(itemStack) != null;
+        }
+
+        @Override
+        public boolean canExtractItem(int slot, int amount) {
+            return slot >= 12;
+        }
+    };
+
     private ItemStack currentStack;
 
     private float progress;
 
     @Override
-    public void updateEntity() {
+    public void update() {
         int effectiveEnergy = getEffectiveEnergy();
         if (storage.getEnergyStored() > effectiveEnergy) {
             if (currentStack == null) {
                 inputItems.clear();
                 for (int i = 0; i < 12; i++) {
-                    if (inventory[i] != null) {
-                        CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(inventory[i]);
+                    ItemStack slotStack = itemHandler.getStackInSlot(i);
+                    if (slotStack != null) {
+                        CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(slotStack);
                         if (compressedRecipe != null) {
-                            inputItems.add(compressedRecipe, inventory[i].stackSize);
+                            inputItems.add(compressedRecipe, slotStack.stackSize);
                         }
                     }
                 }
@@ -46,11 +70,12 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                     ItemStack sourceStack = compressedRecipe.getSourceStack();
                     if (inputItems.count(compressedRecipe) >= sourceStack.stackSize) {
                         int space = 0;
-                        for(int i = 12; i < inventory.length; i++) {
-                            if(inventory[i] == null) {
+                        for(int i = 12; i < itemHandler.getSlots(); i++) {
+                            ItemStack slotStack = itemHandler.getStackInSlot(i);
+                            if(slotStack == null) {
                                 space = 64;
-                            } else if(isItemEqualWildcard(inventory[i], compressedRecipe.getResultStack())) {
-                                space += inventory[i].getMaxStackSize() - inventory[i].stackSize;
+                            } else if(isItemEqualWildcard(slotStack, compressedRecipe.getResultStack())) {
+                                space += slotStack.getMaxStackSize() - slotStack.stackSize;
                             }
                             if(space >= compressedRecipe.getResultStack().stackSize) {
                                 break;
@@ -61,17 +86,18 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                         }
                         int count = sourceStack.stackSize;
                         for (int i = 0; i < 12; i++) {
-                            if (inventory[i] != null && isItemEqualWildcard(inventory[i], sourceStack)) {
-                                if (inventory[i].stackSize >= count) {
-                                    inventory[i].stackSize -= count;
-                                    if (inventory[i].stackSize == 0) {
-                                        inventory[i] = null;
+                            ItemStack slotStack = itemHandler.getStackInSlot(i);
+                            if (slotStack != null && isItemEqualWildcard(slotStack, sourceStack)) {
+                                if (slotStack.stackSize >= count) {
+                                    slotStack.stackSize -= count;
+                                    if (slotStack.stackSize == 0) {
+                                        itemHandler.setStackInSlot(i, null);
                                     }
                                     count = 0;
                                     break;
                                 } else {
-                                    count -= inventory[i].stackSize;
-                                    inventory[i] = null;
+                                    count -= slotStack.stackSize;
+                                    itemHandler.setStackInSlot(i, null);
                                 }
                             }
                         }
@@ -91,7 +117,7 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
                         if (compressedRecipe != null) {
                             ItemStack resultStack = compressedRecipe.getResultStack().copy();
                             if (!addItemToOutput(resultStack)) {
-                                EntityItem entityItem = new EntityItem(worldObj, xCoord + 0.5, yCoord + 1.5, zCoord + 0.5, resultStack);
+                                EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, resultStack);
                                 double motion = 0.05;
                                 entityItem.motionX = worldObj.rand.nextGaussian() * motion;
                                 entityItem.motionY = 0.2;
@@ -108,42 +134,39 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
     }
 
     private boolean isItemEqualWildcard(ItemStack itemStack, ItemStack otherStack) {
-        if(!ItemStack.areItemStackTagsEqual(itemStack, otherStack)) {
-            return false;
-        }
-        if(itemStack.isItemEqual(otherStack) || itemStack.getItem() == otherStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || otherStack.getItemDamage() == OreDictionary.WILDCARD_VALUE)) {
-            return true;
-        }
-        return false;
+        return ItemStack.areItemStackTagsEqual(itemStack, otherStack) && (itemStack.isItemEqual(otherStack)
+                || itemStack.getItem() == otherStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE
+                || otherStack.getItemDamage() == OreDictionary.WILDCARD_VALUE));
     }
 
     private boolean addItemToOutput(ItemStack itemStack) {
         int firstEmptySlot = -1;
-        for (int i = 12; i < getSizeInventory(); i++) {
-            if (inventory[i] == null) {
+        for (int i = 12; i < itemHandler.getSlots(); i++) {
+            ItemStack slotStack = itemHandler.getStackInSlot(i);
+            if (slotStack == null) {
                 if (firstEmptySlot == -1) {
                     firstEmptySlot = i;
                 }
             } else {
-                if (inventory[i].stackSize + itemStack.stackSize <= inventory[i].getMaxStackSize() && isItemEqualWildcard(inventory[i], itemStack)) {
-                    inventory[i].stackSize += itemStack.stackSize;
+                if (slotStack.stackSize + itemStack.stackSize <= slotStack.getMaxStackSize() && isItemEqualWildcard(slotStack, itemStack)) {
+                    slotStack.stackSize += itemStack.stackSize;
                     return true;
                 }
             }
         }
         if (firstEmptySlot != -1) {
-            inventory[firstEmptySlot] = itemStack;
+            itemHandler.setStackInSlot(firstEmptySlot, itemStack);
             return true;
         }
         return false;
     }
 
     public int getEffectiveEnergy() {
-        return ExCompressum.autoCompressorEnergy;
+        return ExCompressumConfig.autoCompressorEnergy;
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressum.autoCompressorSpeed;
+        return ExCompressumConfig.autoCompressorSpeed;
     }
 
     @Override
@@ -151,145 +174,40 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
         super.readFromNBT(tagCompound);
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
+        itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
         storage.readFromNBT(tagCompound);
-        NBTTagList items = tagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-        for (int i = 0; i < items.tagCount(); i++) {
-            NBTTagCompound itemCompound = items.getCompoundTagAt(i);
-            int slot = itemCompound.getByte("Slot");
-            if (slot >= 0 && slot < inventory.length) {
-                inventory[slot] = ItemStack.loadItemStackFromNBT(itemCompound);
-            }
-        }
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound tagCompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         if (currentStack != null) {
             tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         }
         tagCompound.setFloat("Progress", progress);
+        tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
         storage.writeToNBT(tagCompound);
-        NBTTagList items = new NBTTagList();
-        for (int i = 0; i < inventory.length; i++) {
-            if (inventory[i] != null) {
-                NBTTagCompound itemCompound = new NBTTagCompound();
-                itemCompound.setByte("Slot", (byte) i);
-                inventory[i].writeToNBT(itemCompound);
-                items.appendTag(itemCompound);
-            }
-        }
-        tagCompound.setTag("Items", items);
+        return tagCompound;
     }
 
     @Override
-    public int receiveEnergy(ForgeDirection side, int maxReceive, boolean simulate) {
+    public int receiveEnergy(EnumFacing side, int maxReceive, boolean simulate) {
         return storage.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
-    public int extractEnergy(ForgeDirection side, int maxExtract, boolean simulate) {
-        return storage.extractEnergy(maxExtract, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(ForgeDirection side) {
+    public int getEnergyStored(EnumFacing side) {
         return storage.getEnergyStored();
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection side) {
+    public int getMaxEnergyStored(EnumFacing side) {
         return storage.getMaxEnergyStored();
     }
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection side) {
+    public boolean canConnectEnergy(EnumFacing side) {
         return true;
-    }
-
-    @Override
-    public int[] getAccessibleSlotsFromSide(int side) {
-        return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
-    }
-
-    @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-        return isItemValidForSlot(slot, itemStack);
-    }
-
-    @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-        return slot >= 12;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
-        return slot < 12 && CompressedRecipeRegistry.getRecipe(itemStack) != null;
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    @Override
-    public void openInventory() {
-    }
-
-    @Override
-    public void closeInventory() {
-    }
-
-    @Override
-    public int getSizeInventory() {
-        return 24;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-        return inventory[slot];
-    }
-
-    @Override
-    public ItemStack decrStackSize(int slot, int amount) {
-        if (inventory[slot] != null) {
-            if (inventory[slot].stackSize <= amount) {
-                ItemStack itemStack = inventory[slot];
-                inventory[slot] = null;
-                return itemStack;
-            }
-            ItemStack itemStack = inventory[slot].splitStack(amount);
-            if (inventory[slot].stackSize == 0) {
-                inventory[slot] = null;
-            }
-            return itemStack;
-        }
-        return null;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-        return null;
-    }
-
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack itemStack) {
-        inventory[slot] = itemStack;
-    }
-
-    @Override
-    public String getInventoryName() {
-        return null;
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
-        return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && entityPlayer.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) <= 64;
     }
 
     public void setEnergyStored(int energyStored) {
@@ -314,5 +232,20 @@ public class TileEntityAutoCompressor extends TileEntity implements ISidedInvent
 
     public ItemStack getCurrentStack() {
         return currentStack;
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+                || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) itemHandlerAutomation;
+        }
+        return super.getCapability(capability, facing);
     }
 }

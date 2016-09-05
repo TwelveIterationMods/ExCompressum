@@ -4,11 +4,13 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import net.blay09.mods.excompressum.tile.TileEntityBait;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -31,10 +33,10 @@ public class BaitDataProvider implements IWailaDataProvider {
             TileEntityBait tileEntityBait = (TileEntityBait) accessor.getTileEntity();
             TileEntityBait.EnvironmentalCondition environmentalStatus = tileEntityBait.checkSpawnConditions(true);
             if(environmentalStatus == TileEntityBait.EnvironmentalCondition.CanSpawn) {
-                list.add(StatCollector.translateToLocal("waila.excompressum:baitTooClose"));
-                list.add(StatCollector.translateToLocal("waila.excompressum:baitTooClose2"));
+                list.add(I18n.format("waila.excompressum:baitTooClose"));
+                list.add(I18n.format("waila.excompressum:baitTooClose2"));
             } else {
-                list.add("\u00a7c" + StatCollector.translateToLocal(environmentalStatus.langKey));
+                list.add(TextFormatting.RED + I18n.format(environmentalStatus.langKey));
             }
         }
         return list;
@@ -46,7 +48,7 @@ public class BaitDataProvider implements IWailaDataProvider {
     }
 
     @Override
-    public NBTTagCompound getNBTData(EntityPlayerMP entityPlayer, TileEntity tileEntity, NBTTagCompound tagCompound, World world, int x, int y, int z) {
+    public NBTTagCompound getNBTData(EntityPlayerMP player, TileEntity tileEntity, NBTTagCompound tagCompound, World world, BlockPos pos) {
         if(tileEntity != null) {
             tileEntity.writeToNBT(tagCompound);
         }

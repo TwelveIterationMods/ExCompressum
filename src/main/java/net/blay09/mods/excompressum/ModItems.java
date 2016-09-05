@@ -1,10 +1,9 @@
 package net.blay09.mods.excompressum;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.item.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ModItems {
@@ -25,41 +24,40 @@ public class ModItems {
 
     public static void init() {
         chickenStick = new ItemChickenStick();
-        GameRegistry.registerItem(chickenStick, "chickenStick");
+        GameRegistry.register(chickenStick);
+
         compressedHammerWood = new ItemCompressedHammer(Item.ToolMaterial.WOOD, "wood");
-        GameRegistry.registerItem(compressedHammerWood, "compressedHammerWood");
+        GameRegistry.register(compressedHammerWood);
         compressedHammerStone = new ItemCompressedHammer(Item.ToolMaterial.STONE, "stone");
-        GameRegistry.registerItem(compressedHammerStone, "compressedHammerStone");
+        GameRegistry.register(compressedHammerStone);
         compressedHammerIron = new ItemCompressedHammer(Item.ToolMaterial.IRON, "iron");
-        GameRegistry.registerItem(compressedHammerIron, "compressedHammerIron");
+        GameRegistry.register(compressedHammerIron);
         compressedHammerGold = new ItemCompressedHammer(Item.ToolMaterial.GOLD, "gold");
-        GameRegistry.registerItem(compressedHammerGold, "compressedHammerGold");
-        compressedHammerDiamond = new ItemCompressedHammer(Item.ToolMaterial.EMERALD, "diamond");
-        GameRegistry.registerItem(compressedHammerDiamond, "compressedHammerDiamond");
+        GameRegistry.register(compressedHammerGold);
+        compressedHammerDiamond = new ItemCompressedHammer(Item.ToolMaterial.DIAMOND, "diamond");
+        GameRegistry.register(compressedHammerDiamond);
+
         doubleCompressedDiamondHammer = new ItemDoubleCompressedDiamondHammer();
-        GameRegistry.registerItem(doubleCompressedDiamondHammer, "doubleCompressedDiamondHammer");
+        GameRegistry.register(doubleCompressedDiamondHammer);
+
         compressedCrook = new ItemCompressedCrook();
-        GameRegistry.registerItem(compressedCrook, "compressedCrook");
+        GameRegistry.register(compressedCrook);
+
         heavySilkMesh = new ItemHeavySilkMesh();
-        GameRegistry.registerItem(heavySilkMesh, "heavySilkMesh");
+        GameRegistry.register(heavySilkMesh);
+
         woodChipping = new ItemWoodChipping();
-        GameRegistry.registerItem(woodChipping, "woodChipping");
+        GameRegistry.register(woodChipping);
         OreDictionary.registerOre("dustWood", new ItemStack(woodChipping));
+
         uncompressedCoal = new ItemUncompressedCoal();
-        GameRegistry.registerItem(uncompressedCoal, "uncompressedCoal");
+        GameRegistry.register(uncompressedCoal);
+
         batZapper = new ItemBatZapper();
-        GameRegistry.registerItem(batZapper, "batZapper");
+        GameRegistry.register(batZapper);
+
         oreSmasher = new ItemOreSmasher();
-        GameRegistry.registerItem(oreSmasher, "oreSmasher");
+        GameRegistry.register(oreSmasher);
     }
 
-    public static void registerRecipes(Configuration config) {
-        ItemHeavySilkMesh.registerRecipes(config);
-        ItemCompressedHammer.registerRecipes(config);
-        ItemCompressedCrook.registerRecipes(config);
-        ItemWoodChipping.registerRecipes(config);
-        ItemUncompressedCoal.registerRecipes(config);
-        ItemBatZapper.registerRecipes(config);
-        ItemOreSmasher.registerRecipes(config);
-    }
 }

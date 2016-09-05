@@ -9,7 +9,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.blay09.mods.excompressum.client.render.model.ModelAutoFrame;
 import net.blay09.mods.excompressum.client.render.model.ModelTinyHuman;
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
+import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -36,7 +36,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
-        TileEntityAutoSieve tileEntitySieve = (TileEntityAutoSieve) tileEntity;
+        TileEntityAutoSieveBase tileEntitySieve = (TileEntityAutoSieveBase) tileEntity;
         int metadata = tileEntity.hasWorldObj() ? tileEntity.getBlockMetadata() : 0;
         GL11.glPushMatrix();
         boolean oldRescaleNormal = GL11.glIsEnabled(GL12.GL_RESCALE_NORMAL);

@@ -30,9 +30,10 @@ import java.util.Random;
 public class BlockBait extends BlockContainer {
 
     public BlockBait() {
-        super(Material.ground);
+        super(Material.GROUND);
         setHardness(0.1f);
         setCreativeTab(ExCompressum.creativeTab);
+        setRegistryName("bait");
         setBlockBounds(0f, 0f, 0f, 1f, 0.1f, 1f);
     }
 

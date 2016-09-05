@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.item;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModItems;
 import net.minecraft.client.resources.I18n;
@@ -13,9 +12,9 @@ import java.util.List;
 public class ItemDoubleCompressedDiamondHammer extends Item {
 
     public ItemDoubleCompressedDiamondHammer() {
+        setRegistryName("double_compressed_diamond_hammer");
+        setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(ExCompressum.creativeTab);
-        setTextureName(ExCompressum.MOD_ID + ":double_compressed_diamond_hammer");
-        setUnlocalizedName(ExCompressum.MOD_ID + ":double_compressed_diamond_hammer");
         setMaxStackSize(1);
     }
 

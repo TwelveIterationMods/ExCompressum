@@ -33,10 +33,10 @@ public class BlockHeavySieve extends BlockContainer {
     public static IIcon meshIcon;
 
     public BlockHeavySieve() {
-        super(Material.wood);
+        super(Material.WOOD);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
-        setBlockName(ExCompressum.MOD_ID + ":heavy_sieve");
+        setRegistryName("heavy_sieve");
     }
 
     @Override

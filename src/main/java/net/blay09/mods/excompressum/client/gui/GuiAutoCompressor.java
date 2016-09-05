@@ -34,8 +34,8 @@ public class GuiAutoCompressor extends GuiContainer {
             drawTexturedModalRect(guiLeft + 69, guiTop + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 15);
             drawTexturedModalRect(guiLeft + 69, guiTop + 63, 176, 0, (int) (tileEntity.getProgress() * 15f), 15);
         }
-        float energyPerc = tileEntity.getEnergyPercentage();
-        drawTexturedModalRect(guiLeft + 152, guiTop + 8 + (70 - (int) (energyPerc * 70)), 176 + 15, 0, 16, (int) (energyPerc * 70));
+        float energyPercentage = tileEntity.getEnergyPercentage();
+        drawTexturedModalRect(guiLeft + 152, guiTop + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70));
     }
 
     private static final List<String> tmpLines = Lists.newArrayList();
@@ -43,9 +43,9 @@ public class GuiAutoCompressor extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
             tmpLines.clear();
-            tmpLines.add(tileEntity.getEnergyStored(null) + " RF");
-            tmpLines.add("Consuming " + tileEntity.getEffectiveEnergy() + " RF/t");
-            func_146283_a(tmpLines, mouseX - guiLeft, mouseY - guiTop);
+            tmpLines.add(tileEntity.getEnergyStored(null) + " RF"); // TODO "RF"
+            tmpLines.add("Consuming " + tileEntity.getEffectiveEnergy() + " RF/t"); // TODO i18n
+            drawHoveringText(tmpLines, mouseX - guiLeft, mouseY - guiTop);
         }
     }
 

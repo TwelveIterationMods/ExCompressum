@@ -1,14 +1,10 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
-import exnihilo.blocks.models.ModelCrucible;
-import exnihilo.blocks.models.ModelCrucibleInternal;
-import exnihilo.registries.helpers.Color;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 

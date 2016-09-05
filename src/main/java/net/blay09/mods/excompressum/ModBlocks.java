@@ -1,12 +1,14 @@
 package net.blay09.mods.excompressum;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModAPIManager;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.block.*;
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.item.*;
 import net.blay09.mods.excompressum.tile.*;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModAPIManager;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModBlocks {
     public static BlockCompressed compressedBlock;
@@ -15,66 +17,69 @@ public class ModBlocks {
     public static BlockBait bait;
     public static BlockAutoHammer autoHammer;
     public static BlockAutoCompressedHammer autoCompressedHammer;
-    public static BlockAutoHeavySieveRF autoHeavySieve;
-    public static BlockAutoSieveRF autoSieve;
+    public static BlockAutoHeavySieve autoHeavySieve;
+    public static BlockAutoSieve autoSieve;
     public static BlockManaSieve manaSieve;
     public static BlockAutoCompressor autoCompressor;
 
     public static void init() {
-        compressedBlock = new BlockCompressed();
-        GameRegistry.registerBlock(compressedBlock, ItemBlockCompressed.class, "compressed_dust"); // god damn it Blay. can't rename because already released
-        heavySieve = new BlockHeavySieve();
-        GameRegistry.registerBlock(heavySieve, ItemBlockHeavySieve.class, "heavySieve");
+        compressedBlock = new BlockCompressed(); // TODO omniafy
+        GameRegistry.register(compressedBlock);
+        GameRegistry.register(new ItemBlockCompressed(compressedBlock).setRegistryName(compressedBlock.getRegistryName()));
+
+        heavySieve = new BlockHeavySieve(); // TODO omniafy
+        GameRegistry.register(heavySieve);
+        GameRegistry.register(new ItemBlockHeavySieve(heavySieve).setRegistryName(heavySieve.getRegistryName()));
+
         woodenCrucible = new BlockWoodenCrucible();
-        GameRegistry.registerBlock(woodenCrucible, ItemBlockWoodenCrucible.class, "woodenCrucible");
+        GameRegistry.register(woodenCrucible);
+        GameRegistry.register(new ItemBlockWoodenCrucible(woodenCrucible).setRegistryName(woodenCrucible.getRegistryName()));
+
         bait = new BlockBait();
-        GameRegistry.registerBlock(bait, ItemBlockBait.class, "bait");
+        GameRegistry.register(bait);
+        GameRegistry.register(new ItemBlockBait(bait).setRegistryName(bait.getRegistryName()));
 
         autoHammer = new BlockAutoHammer();
         autoCompressedHammer = new BlockAutoCompressedHammer();
-        autoSieve = new BlockAutoSieveRF();
-        autoHeavySieve = new BlockAutoHeavySieveRF();
+        autoSieve = new BlockAutoSieve(); // TODO omniafy
+        autoHeavySieve = new BlockAutoHeavySieve(); // TODO omniafy
         autoCompressor = new BlockAutoCompressor();
-        if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) {
-            GameRegistry.registerBlock(autoHammer, "autoHammer");
-            GameRegistry.registerBlock(autoCompressedHammer, "autoCompressedHammer");
-            GameRegistry.registerBlock(autoSieve, ItemBlockAutoSieve.class, "autoSieve");
-            GameRegistry.registerBlock(autoHeavySieve, ItemBlockAutoHeavySieve.class, "autoHeavySieve");
-            GameRegistry.registerBlock(autoCompressor, "autoCompressor");
+        if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) { // TODO Tesla? Or what's the cool new thing for power now?
+            registerDefaultBlock(autoHammer);
+            registerDefaultBlock(autoCompressedHammer);
+            GameRegistry.register(autoSieve);
+            GameRegistry.register(new ItemBlockAutoSieve(autoSieve).setRegistryName(autoSieve.getRegistryName()));
+            GameRegistry.register(autoHeavySieve);
+            GameRegistry.register(new ItemBlockAutoHeavySieve(autoHeavySieve).setRegistryName(autoHeavySieve.getRegistryName()));
+            registerDefaultBlock(autoCompressor);
         }
 
         manaSieve = new BlockManaSieve();
-        if(Loader.isModLoaded("Botania")) {
-            GameRegistry.registerBlock(manaSieve, ItemBlockManaSieve.class, "manaSieve");
+        if(Loader.isModLoaded(Compat.BOTANIA)) {
+            GameRegistry.register(manaSieve);
+            GameRegistry.register(new ItemBlockManaSieve(manaSieve));
         }
 
-        GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, "woodenCrucible"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
+        GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, ExCompressum.MOD_ID + ":wooden_crucible");
         GameRegistry.registerTileEntity(TileEntityHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
-        GameRegistry.registerTileEntity(TileEntityBait.class, "bait"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
+        GameRegistry.registerTileEntity(TileEntityBait.class, ExCompressum.MOD_ID + ":bait");
 
-        if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) {
-            GameRegistry.registerTileEntity(TileEntityAutoHammer.class, ExCompressum.MOD_ID + "autoHammer");
-            GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, "autoCompressedHammer"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
-            GameRegistry.registerTileEntity(TileEntityAutoSieveRF.class, "autoSieve"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
-            GameRegistry.registerTileEntity(TileEntityAutoHeavySieveRF.class, "autoHeavySieve"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
-            GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, "autoCompressor"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
+        if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) { // TODO Tesla? Or what's the cool new thing for power now?
+            GameRegistry.registerTileEntity(TileEntityAutoHammer.class, ExCompressum.MOD_ID + "auto_hammer");
+            GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, ExCompressum.MOD_ID + "auto_compressed_hammer");
+            GameRegistry.registerTileEntity(TileEntityAutoSieve.class, ExCompressum.MOD_ID + "auto_sieve");
+            GameRegistry.registerTileEntity(TileEntityAutoHeavySieve.class, ExCompressum.MOD_ID + "auto_heavy_sieve");
+            GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, ExCompressum.MOD_ID + "auto_compressor");
         }
 
-        if(Loader.isModLoaded("Botania")) {
-            GameRegistry.registerTileEntity(TileEntityAutoSieveMana.class, "manaSieve"); // TODO oops. I forgot the modid... fix if there's a 1.9 port
+        if(Loader.isModLoaded(Compat.BOTANIA)) {
+            GameRegistry.registerTileEntity(TileEntityAutoSieveMana.class, ExCompressum.MOD_ID + "mana_sieve");
         }
     }
 
-    public static void registerRecipes(Configuration config) {
-        BlockHeavySieve.registerRecipes(config);
-        BlockWoodenCrucible.registerRecipes(config);
-        BlockCompressed.registerRecipes(config);
-        BlockBait.registerRecipes(config);
-        BlockAutoCompressor.registerRecipes(config);
-        BlockAutoHammer.registerRecipes(config);
-        BlockAutoCompressedHammer.registerRecipes(config);
-        BlockManaSieve.registerRecipes(config);
-        BlockAutoSieveRF.registerRecipes(config);
-        BlockAutoHeavySieveRF.registerRecipes(config);
+    private static void registerDefaultBlock(Block block) {
+        GameRegistry.register(block);
+        GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
     }
+
 }

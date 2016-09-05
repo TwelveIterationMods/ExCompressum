@@ -16,8 +16,8 @@ import java.util.List;
 public class ItemWoodChipping extends Item {
 
     public ItemWoodChipping() {
-        setUnlocalizedName(ExCompressum.MOD_ID + ":wood_chippings");
-        setTextureName(ExCompressum.MOD_ID + ":wood_chippings");
+        setRegistryName("wood_chipping");
+        setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(ExCompressum.creativeTab);
     }
 

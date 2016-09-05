@@ -2,32 +2,19 @@ package net.blay09.mods.excompressum.client;
 
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import exnihilo.blocks.models.ModelSieve;
-import exnihilo.blocks.models.ModelSieveMesh;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ModBlocks;
-import net.blay09.mods.excompressum.ModItems;
-import net.blay09.mods.excompressum.client.render.entity.RenderAngryChicken;
-import net.blay09.mods.excompressum.client.render.item.*;
-import net.blay09.mods.excompressum.client.render.tile.*;
-import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
-import net.blay09.mods.excompressum.tile.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelChicken;
-import net.minecraft.client.renderer.entity.RenderChicken;
-import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.Session;
-import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.SkinManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Set;
 
@@ -35,26 +22,27 @@ import java.util.Set;
 public class ClientProxy extends CommonProxy {
 
     private final Set<GameProfile> skinRequested = Sets.newHashSet();
-    public static IIcon iconEmptyBookSlot;
-    public static IIcon iconEmptyHammerSlot;
-    public static IIcon iconEmptyCompressedHammerSlot;
+    public static TextureAtlasSprite iconEmptyBookSlot;
+    public static TextureAtlasSprite iconEmptyHammerSlot;
+    public static TextureAtlasSprite iconEmptyCompressedHammerSlot;
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
 
-        ModelSieve sieve = new ModelSieve();
+        // TODO JSON FUN:
+        /*ModelSieve sieve = new ModelSieve();
         ModelSieveMesh mesh = new ModelSieveMesh();
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeavySieve.class, new RenderHeavySieve(sieve, mesh));
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.heavySieve), new ItemRenderHeavySieve(sieve, mesh));
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoSieveRF.class, new RenderAutoSieve());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoSieve.class, new RenderAutoSieve());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoSieve), new ItemRenderAutoSieve());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoSieveMana.class, new RenderManaSieve());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.manaSieve), new ItemRenderManaSieve());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHeavySieveRF.class, new RenderAutoHeavySieve());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHeavySieve.class, new RenderAutoHeavySieve());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoHeavySieve), new ItemRenderAutoHeavySieve());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodenCrucible.class, new RenderWoodenCrucible());
@@ -66,9 +54,10 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoCompressedHammer.class, new RenderAutoCompressedHammer());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoCompressedHammer), new ItemRenderAutoCompressedHammer());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBait.class, new RenderBait());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBait.class, new RenderBait());*/
 
-        RenderingRegistry.registerEntityRenderingHandler(EntityAngryChicken.class, new RenderAngryChicken(new ModelChicken(), 0.3f));
+        // TODO "use the factory version", thanks, very helpful!
+        //RenderingRegistry.registerEntityRenderingHandler(EntityAngryChicken.class, new RenderAngryChicken(new ModelChicken(), 0.3f));
     }
 
     @Override
@@ -85,17 +74,22 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preloadSkin(GameProfile customSkin) {
         if(!skinRequested.contains(customSkin)) {
-            Minecraft.getMinecraft().func_152342_ad().func_152790_a(customSkin, null, true);
+            Minecraft.getMinecraft().getSkinManager().loadProfileTextures(customSkin, new SkinManager.SkinAvailableCallback() {
+                @Override
+                public void skinAvailable(MinecraftProfileTexture.Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture) {
+                    // NOP
+                }
+            }, true);
             skinRequested.add(customSkin);
         }
     }
 
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
-        if(event.map.getTextureType() == 1) {
-            iconEmptyBookSlot = event.map.registerIcon(ExCompressum.MOD_ID + ":empty_enchanted_book_slot");
-            iconEmptyHammerSlot = event.map.registerIcon(ExCompressum.MOD_ID + ":empty_hammer_slot");
-            iconEmptyCompressedHammerSlot = event.map.registerIcon(ExCompressum.MOD_ID + ":empty_compressed_hammer_slot");
+        if(event.getMap() == Minecraft.getMinecraft().getTextureMapBlocks()) {
+            iconEmptyBookSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "empty_enchanted_book_slot"));
+            iconEmptyHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "empty_hammer_slot"));
+            iconEmptyCompressedHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "empty_compressed_hammer_slot"));
         }
     }
 }

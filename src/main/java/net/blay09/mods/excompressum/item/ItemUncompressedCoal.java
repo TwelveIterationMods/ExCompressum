@@ -1,7 +1,5 @@
 package net.blay09.mods.excompressum.item;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModItems;
 import net.minecraft.init.Items;
@@ -12,8 +10,8 @@ import net.minecraftforge.common.config.Configuration;
 public class ItemUncompressedCoal extends Item {
 
     public ItemUncompressedCoal() {
-        setUnlocalizedName(ExCompressum.MOD_ID + ":uncompressed_coal");
-        setTextureName(ExCompressum.MOD_ID + ":uncompressed_coal");
+        setRegistryName("uncompressed_coal");
+        setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(ExCompressum.creativeTab);
     }
 

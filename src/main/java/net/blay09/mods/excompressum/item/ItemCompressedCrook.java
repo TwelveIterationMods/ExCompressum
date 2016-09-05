@@ -1,40 +1,20 @@
 package net.blay09.mods.excompressum.item;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import exnihilo.items.ItemCrook;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModItems;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 
-public class ItemCompressedCrook extends ItemCrook {
+public class ItemCompressedCrook extends Item { // TODO ItemCrook
 
     public ItemCompressedCrook() {
         super(ToolMaterial.WOOD);
-        setTextureName(ExCompressum.MOD_ID + ":compressed_crook");
+        setRegistryName("compressed_crook");
+        setUnlocalizedName(getRegistryName().toString());
         setMaxDamage((int) (ToolMaterial.WOOD.getMaxUses() * 2 * ExCompressum.compressedCrookDurabilityMultiplier));
         setCreativeTab(ExCompressum.creativeTab);
         efficiencyOnProperMaterial *= ExCompressum.compressedCrookSpeedMultiplier;
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-        return "item." + ExCompressum.MOD_ID + ":compressed_crook";
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack item) {
-        return "item." + ExCompressum.MOD_ID + ":compressed_crook";
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister register) {
-        this.itemIcon = register.registerIcon(iconString);
     }
 
     public static void registerRecipes(Configuration config) {

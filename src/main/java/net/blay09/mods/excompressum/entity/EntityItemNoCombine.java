@@ -5,12 +5,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class EntityItemNoCombine extends EntityItem {
-	public EntityItemNoCombine(World p_i1710_1_, double p_i1710_2_, double p_i1710_4_, double p_i1710_6_, ItemStack p_i1710_8_) {
-		super(p_i1710_1_, p_i1710_2_, p_i1710_4_, p_i1710_6_, p_i1710_8_);
+	public EntityItemNoCombine(World world, double x, double y, double z, ItemStack itemStack) {
+		super(world, x, y, z, itemStack);
 	}
 
-	@Override
-	public boolean combineItems(EntityItem p_70289_1_) {
-		return false;
-	}
+	// TODO combineItems is private now ... AT on searchForOtherItemsNearby and override that
 }

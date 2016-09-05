@@ -1,7 +1,11 @@
 package net.blay09.mods.excompressum.registry;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nullable;
 
 public class InventoryCompressedMatcher extends InventoryCrafting {
 
@@ -9,7 +13,12 @@ public class InventoryCompressedMatcher extends InventoryCrafting {
     private final boolean isStupid;
 
     public InventoryCompressedMatcher(int width, int height, boolean isStupid) {
-        super(null, width, height);
+        super(new Container() {
+            @Override
+            public boolean canInteractWith(EntityPlayer player) {
+                return false;
+            }
+        }, width, height);
         this.itemStacks = new ItemStack[getSizeInventory()];
         this.isStupid = isStupid;
     }
@@ -20,7 +29,7 @@ public class InventoryCompressedMatcher extends InventoryCrafting {
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemStack) {
+    public void setInventorySlotContents(int i, @Nullable ItemStack itemStack) {
         itemStacks[i] = itemStack;
     }
 
