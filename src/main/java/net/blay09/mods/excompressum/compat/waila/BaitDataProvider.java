@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.compat.waila;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
-import net.blay09.mods.excompressum.tile.TileEntityBait;
+import net.blay09.mods.excompressum.tile.TileBait;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -29,10 +29,10 @@ public class BaitDataProvider implements IWailaDataProvider {
 
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> list, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        if(accessor.getTileEntity() instanceof TileEntityBait) {
-            TileEntityBait tileEntityBait = (TileEntityBait) accessor.getTileEntity();
-            TileEntityBait.EnvironmentalCondition environmentalStatus = tileEntityBait.checkSpawnConditions(true);
-            if(environmentalStatus == TileEntityBait.EnvironmentalCondition.CanSpawn) {
+        if(accessor.getTileEntity() instanceof TileBait) {
+            TileBait tileEntityBait = (TileBait) accessor.getTileEntity();
+            TileBait.EnvironmentalCondition environmentalStatus = tileEntityBait.checkSpawnConditions(true);
+            if(environmentalStatus == TileBait.EnvironmentalCondition.CanSpawn) {
                 list.add(I18n.format("waila.excompressum:baitTooClose"));
                 list.add(I18n.format("waila.excompressum:baitTooClose2"));
             } else {

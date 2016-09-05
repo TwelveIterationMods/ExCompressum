@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.client.gui;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.ContainerAutoHammer;
-import net.blay09.mods.excompressum.tile.TileEntityAutoHammer;
+import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -14,9 +14,9 @@ import java.util.List;
 public class GuiAutoHammer extends GuiContainer {
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoHammer.png");
-    private TileEntityAutoHammer tileEntity;
+    private TileAutoHammer tileEntity;
 
-    public GuiAutoHammer(InventoryPlayer inventoryPlayer, TileEntityAutoHammer tileEntity) {
+    public GuiAutoHammer(InventoryPlayer inventoryPlayer, TileAutoHammer tileEntity) {
         super(new ContainerAutoHammer(inventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
         xSize = 176;

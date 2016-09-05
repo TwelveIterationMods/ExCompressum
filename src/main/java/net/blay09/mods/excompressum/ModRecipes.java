@@ -97,8 +97,9 @@ public class ModRecipes {
 			GameRegistry.addRecipe(new ItemStack(ModItems.heavySilkMesh), "##", "##", '#', itemSilkMesh);
 		}
 
-		ItemCompressedHammer.registerRecipes(config);
+		registerCompressedHammers(config);
 
+		// TODO is tconstruct loaded: also check config modifgeirenabled yeah that one
 		GameRegistry.addRecipe(new ItemStack(ModItems.doubleCompressedDiamondHammer), "##", "##", '#', ModItems.compressedHammerDiamond);
 
 		if(config.getBoolean("Compressed Crook", "items", true, "If set to false, the recipe for the compressed crook will be disabled.")) {
@@ -127,6 +128,43 @@ public class ModRecipes {
 		}
 
 		ItemOreSmasher.registerRecipes(config);
+	}
+
+	private static void registerCompressedHammers(Configuration config) {
+		if (config.getBoolean("Compressed Wooden Hammer", "items", true, "If set to false, the recipe for the compressed wooden hammer will be disabled.")) {
+			Item itemHammerWood = GameRegistry.findItem("exnihilo", "hammer_wood");
+			if (itemHammerWood != null) {
+				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerWood), "###", "###", "###", '#', itemHammerWood);
+			}
+		}
+
+		if (config.getBoolean("Compressed Stone Hammer", "items", true, "If set to false, the recipe for the compressed stone hammer will be disabled.")) {
+			Item itemHammerStone = GameRegistry.findItem("exnihilo", "hammer_stone");
+			if (itemHammerStone != null) {
+				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerStone), "###", "###", "###", '#', itemHammerStone);
+			}
+		}
+
+		if (config.getBoolean("Compressed Iron Hammer", "items", true, "If set to false, the recipe for the compressed iron hammer will be disabled.")) {
+			Item itemHammerIron = GameRegistry.findItem("exnihilo", "hammer_iron");
+			if (itemHammerIron != null) {
+				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerIron), "###", "###", "###", '#', itemHammerIron);
+			}
+		}
+
+		if (config.getBoolean("Compressed Gold Hammer", "items", true, "If set to false, the recipe for the compressed gold hammer will be disabled.")) {
+			Item itemHammerGold = GameRegistry.findItem("exnihilo", "hammer_gold");
+			if (itemHammerGold != null) {
+				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerGold), "###", "###", "###", '#', itemHammerGold);
+			}
+		}
+
+		if (config.getBoolean("Compressed Diamond Hammer", "items", true, "If set to false, the recipe for the compressed diamond hammer will be disabled.")) {
+			Item itemHammerDiamond = GameRegistry.findItem("exnihilo", "hammer_diamond");
+			if (itemHammerDiamond != null) {
+				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerDiamond), "###", "###", "###", '#', itemHammerDiamond);
+			}
+		}
 	}
 
 	private static void registerWoodChippings(Configuration config) {

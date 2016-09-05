@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.container;
 
 import net.blay09.mods.excompressum.client.ClientProxy;
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
+import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,7 +17,7 @@ public class SlotAutoHammerUpgrade extends SlotItemHandler {
     @Override
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getBackgroundSprite() {
-        return inventory instanceof TileEntityAutoCompressedHammer ? ClientProxy.iconEmptyCompressedHammerSlot : ClientProxy.iconEmptyHammerSlot;
+        return inventory instanceof TileAutoCompressedHammer ? ClientProxy.iconEmptyCompressedHammerSlot : ClientProxy.iconEmptyHammerSlot;
     }
 
 }

@@ -2,14 +2,16 @@ package net.blay09.mods.excompressum.handler;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ExCompressumConfig;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.blay09.mods.excompressum.StupidUtils;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.SkeletonType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.FakePlayer;
@@ -17,6 +19,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@SuppressWarnings("unused")
 public class CompressedEnemyHandler {
 
     private static final String COMPRESSED = "Compressed";
@@ -47,12 +50,15 @@ public class CompressedEnemyHandler {
         if(!event.getEntity().worldObj.isRemote && event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
             if(event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast) {
                 if(event.getSource().getEntity() instanceof EntityPlayer && !(event.getSource().getEntity() instanceof FakePlayer)) {
-                    if(EnchantmentHelper.getSilkTouchModifier((EntityLivingBase) event.getSource().getEntity())) {
+                    if(StupidUtils.hasSilkTouchModifier((EntityLivingBase) event.getSource().getEntity())) {
                         return;
                     }
                     int entityId = EntityList.getEntityID(event.getEntity());
                     for(int i = 0; i < ExCompressumConfig.compressedMobSize; i++) {
                         EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByID(entityId, event.getEntity().worldObj);
+                        if(entity == null) {
+                            return;
+                        }
                         if(((EntityLivingBase) event.getEntity()).isChild()) {
                             if(entity instanceof EntityZombie) {
                                 ((EntityZombie) entity).setChild(true);
@@ -64,12 +70,12 @@ public class CompressedEnemyHandler {
                             ((EntitySkeleton) entity).setSkeletonType(((EntitySkeleton) event.getEntity()).getSkeletonType());
                         }
                         if(entity instanceof EntityPigZombie) {
-                            entity.setCurrentItemOrArmor(0, new ItemStack(Items.GOLDEN_SWORD));
+                            entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
                         } else if(entity instanceof EntitySkeleton) {
-                            if(((EntitySkeleton) entity).getSkeletonType() == 0) {
-                                entity.setCurrentItemOrArmor(0, new ItemStack(Items.BOW));
+                            if(((EntitySkeleton) entity).getSkeletonType() == SkeletonType.NORMAL) {
+                                entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
                             } else {
-                                entity.setCurrentItemOrArmor(0, new ItemStack(Items.IRON_SWORD));
+                                entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
                             }
                         }
                         NBTTagCompound tagCompound = new NBTTagCompound();

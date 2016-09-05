@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.compat.waila;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
-import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
+import net.blay09.mods.excompressum.tile.TileHeavySieve;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -28,8 +28,8 @@ public class HeavySieveDataProvider implements IWailaDataProvider {
 
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> list, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        if(accessor.getTileEntity() instanceof TileEntityHeavySieve) {
-            TileEntityHeavySieve tileEntity = (TileEntityHeavySieve) accessor.getTileEntity();
+        if(accessor.getTileEntity() instanceof TileHeavySieve) {
+            TileHeavySieve tileEntity = (TileHeavySieve) accessor.getTileEntity();
             if(tileEntity.getVolumeLeft() > 0f) {
                 list.add(I18n.format("waila.excompressum:sieveLeft", (int) (tileEntity.getVolumeLeft() * 100) + "%"));
             }

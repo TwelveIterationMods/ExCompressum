@@ -1,13 +1,10 @@
 package net.blay09.mods.excompressum.compat.tconstruct;
 
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.compat.IAddon;
-import net.blay09.mods.excompressum.item.ItemDoubleCompressedDiamondHammer;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import tconstruct.library.TConstructRegistry;
-import tconstruct.library.crafting.ModifyBuilder;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import slimeknights.tconstruct.library.TinkerRegistry;
 
 @SuppressWarnings("unused")
 public class TConstructAddon implements IAddon {
@@ -22,9 +19,9 @@ public class TConstructAddon implements IAddon {
     @Override
     public void postInit() {
         if(enableModifiers) {
-            ItemDoubleCompressedDiamondHammer.registerRecipes();
-            ModifyBuilder.registerModifier(new ModSmashingII(new ItemStack[]{new ItemStack(ModItems.doubleCompressedDiamondHammer, 1, 0)}));
-            TConstructRegistry.registerActiveToolMod(new ActiveSmashingMod());
+            ModSmashingII smashingII = new ModSmashingII();
+            smashingII.addItem(ModItems.doubleCompressedDiamondHammer);
+            TinkerRegistry.registerModifier(smashingII);
         }
     }
 

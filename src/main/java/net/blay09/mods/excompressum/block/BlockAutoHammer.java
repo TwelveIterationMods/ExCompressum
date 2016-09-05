@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
-import net.blay09.mods.excompressum.tile.TileEntityAutoHammer;
+import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -45,7 +45,7 @@ public class BlockAutoHammer extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-        return new TileEntityAutoHammer();
+        return new TileAutoHammer();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class BlockAutoHammer extends BlockContainer {
                     world.spawnEntityInWorld(entityItem);
                 }
             }
-            ItemStack currentStack = ((TileEntityAutoHammer) tileEntity).getCurrentStack();
+            ItemStack currentStack = ((TileAutoHammer) tileEntity).getCurrentStack();
             if (currentStack != null) {
                 EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack);
                 double motion = 0.05;
@@ -89,7 +89,7 @@ public class BlockAutoHammer extends BlockContainer {
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         NBTTagCompound tagCompound = stack.getTagCompound();
         if (tagCompound != null && tagCompound.hasKey("EnergyStored")) {
-            TileEntityAutoHammer tileEntity = (TileEntityAutoHammer) world.getTileEntity(pos);
+            TileAutoHammer tileEntity = (TileAutoHammer) world.getTileEntity(pos);
             if(tileEntity != null) {
                 tileEntity.setEnergyStored(tagCompound.getInteger("EnergyStored"));
             }
@@ -115,7 +115,7 @@ public class BlockAutoHammer extends BlockContainer {
 
     /*@Override
     public ArrayList<ItemStack> dismantleBlock(EntityPlayer entityPlayer, World world, int x, int y, int z, boolean returnDrops) {
-        TileEntityAutoHammer tileEntity = (TileEntityAutoHammer) world.getTileEntity(x, y, z);
+        TileAutoHammer tileEntity = (TileAutoHammer) world.getTileEntity(x, y, z);
         ItemStack itemStack = new ItemStack(this);
         if (itemStack.stackTagCompound == null) {
             itemStack.stackTagCompound = new NBTTagCompound();

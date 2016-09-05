@@ -1,71 +1,61 @@
 package net.blay09.mods.excompressum.item;
 
-import com.google.common.collect.Sets;
-import cpw.mods.fml.common.registry.GameRegistry;
-import exnihilo.items.hammers.IHammer;
-import exnihilo.items.hammers.ItemHammerBase;
-import exnihilo.registries.HammerRegistry;
-import exnihilo.registries.helpers.Smashable;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.StupidUtils;
 import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.HammerRegistry;
+import net.blay09.mods.excompressum.registry.data.SmashableReward;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.config.Configuration;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.HashSet;
 
 public class ItemCompressedHammer extends ItemTool {
 
-    private static final Set blocksEffectiveAgainst = Sets.newHashSet(ItemHammerBase.blocksEffectiveAgainst);
-
-    private final String name;
-
     public ItemCompressedHammer(ToolMaterial material, String name) {
-        super(5f, material, blocksEffectiveAgainst);
-        this.name = name;
+        super(5f, 0f, material, new HashSet<Block>()); // TODO check attack speed, should be slow
         setRegistryName("compressed_hammer_" + name);
         setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(ExCompressum.creativeTab);
     }
 
     @Override
-    public boolean canHarvestBlock(Block block, ItemStack itemStack) {
-        return HammerRegistry.registered(new ItemStack(block));
+    public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
+        return HammerRegistry.isRegistered(state);
     }
 
-    @Override
+    /*@Override // TODO still need to find out what happened to getDigSpeed
     public float getDigSpeed(ItemStack item, Block block, int meta) {
         if ((CompressedHammerRegistry.isRegistered(block, meta) || HammerRegistry.registered(new ItemStack(block, 1, meta))) && block.getHarvestLevel(meta) <= toolMaterial.getHarvestLevel()) {
             return efficiencyOnProperMaterial * 0.75f;
         }
         return 0.8f;
-    }
+    }*/
 
-    @Override
-    public boolean onBlockStartBreak(ItemStack itemStack, int x, int y, int z, EntityPlayer entityPlayer) {
-        World world = entityPlayer.worldObj;
-        if (world.isRemote || EnchantmentHelper.getSilkTouchModifier(entityPlayer)) {
+    @Override // TODO omnia uses onBlockDestroyed, can we use that too? well of course we can, but go find out what's the big difference (and then switch because onBlockDestroyed is probably better and onBlockStartBreak was only taken over from old Ex Nihilo)
+    public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, EntityPlayer player) {
+        World world = player.worldObj;
+        if (world.isRemote || StupidUtils.hasSilkTouchModifier(player)) {
             return false;
         }
-        Block block = world.getBlock(x, y, z);
-        int metadata = world.getBlockMetadata(x, y, z);
-        Collection<Smashable> rewards = CompressedHammerRegistry.getSmashables(block, metadata);
-        if (rewards == null || rewards.isEmpty()) {
+        IBlockState state = world.getBlockState(pos);
+        Collection<SmashableReward> rewards = CompressedHammerRegistry.getSmashables(state);
+        if (rewards.isEmpty()) {
             return false;
         }
-        int fortune = EnchantmentHelper.getFortuneModifier(entityPlayer);
-        for (Smashable reward : rewards) {
-            if (world.rand.nextFloat() <= reward.chance + (reward.luckMultiplier * fortune)) {
-                EntityItem entityItem = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(reward.item, 1, reward.meta));
+        int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack);
+        for (SmashableReward reward : rewards) {
+            if (world.rand.nextFloat() <= reward.getChance() + (reward.getLuckMultiplier() * fortune)) {
+                EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, reward.createItemStack());
                 double motion = 0.05;
                 entityItem.motionX = world.rand.nextGaussian() * motion;
                 entityItem.motionY = 0.2;
@@ -73,58 +63,12 @@ public class ItemCompressedHammer extends ItemTool {
                 world.spawnEntityInWorld(entityItem);
             }
         }
-        world.setBlockToAir(x, y, z);
-        itemStack.damageItem(1, entityPlayer);
+        world.setBlockToAir(pos);
+        itemStack.damageItem(1, player);
         if (itemStack.stackSize == 0) {
-            entityPlayer.destroyCurrentEquippedItem();
+            player.renderBrokenItemStack(itemStack); // TODO is this enough? or do I have to do more
         }
         return true;
     }
 
-    @Override
-    public boolean isHammer(ItemStack itemStack) {
-        return true;
-    }
-
-    @Override
-    public void registerIcons(IIconRegister register) {
-        itemIcon = register.registerIcon("excompressum:compressed_hammer_" + name);
-    }
-
-    public static void registerRecipes(Configuration config) {
-        if (config.getBoolean("Compressed Wooden Hammer", "items", true, "If set to false, the recipe for the compressed wooden hammer will be disabled.")) {
-            Item itemHammerWood = GameRegistry.findItem("exnihilo", "hammer_wood");
-            if (itemHammerWood != null) {
-                GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerWood), "###", "###", "###", '#', itemHammerWood);
-            }
-        }
-
-        if (config.getBoolean("Compressed Stone Hammer", "items", true, "If set to false, the recipe for the compressed stone hammer will be disabled.")) {
-            Item itemHammerStone = GameRegistry.findItem("exnihilo", "hammer_stone");
-            if (itemHammerStone != null) {
-                GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerStone), "###", "###", "###", '#', itemHammerStone);
-            }
-        }
-
-        if (config.getBoolean("Compressed Iron Hammer", "items", true, "If set to false, the recipe for the compressed iron hammer will be disabled.")) {
-            Item itemHammerIron = GameRegistry.findItem("exnihilo", "hammer_iron");
-            if (itemHammerIron != null) {
-                GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerIron), "###", "###", "###", '#', itemHammerIron);
-            }
-        }
-
-        if (config.getBoolean("Compressed Gold Hammer", "items", true, "If set to false, the recipe for the compressed gold hammer will be disabled.")) {
-            Item itemHammerGold = GameRegistry.findItem("exnihilo", "hammer_gold");
-            if (itemHammerGold != null) {
-                GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerGold), "###", "###", "###", '#', itemHammerGold);
-            }
-        }
-
-        if (config.getBoolean("Compressed Diamond Hammer", "items", true, "If set to false, the recipe for the compressed diamond hammer will be disabled.")) {
-            Item itemHammerDiamond = GameRegistry.findItem("exnihilo", "hammer_diamond");
-            if (itemHammerDiamond != null) {
-                GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerDiamond), "###", "###", "###", '#', itemHammerDiamond);
-            }
-        }
-    }
 }

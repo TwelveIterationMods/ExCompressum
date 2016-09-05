@@ -1,13 +1,12 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.tile.TileEntityWoodenCrucible;
+import net.blay09.mods.excompressum.tile.TileWoodenCrucible;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -51,12 +50,12 @@ public class BlockWoodenCrucible extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return new TileEntityWoodenCrucible();
+        return new TileWoodenCrucible();
     }
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        TileEntityWoodenCrucible tileEntity = (TileEntityWoodenCrucible) world.getTileEntity(pos);
+        TileWoodenCrucible tileEntity = (TileWoodenCrucible) world.getTileEntity(pos);
         if(tileEntity != null) {
             if (heldItem != null) {
                 if (tileEntity.addItem(heldItem) && !player.capabilities.isCreativeMode) {

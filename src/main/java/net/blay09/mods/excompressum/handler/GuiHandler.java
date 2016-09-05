@@ -24,8 +24,8 @@ public class GuiHandler implements IGuiHandler {
         TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
         switch(id) {
             case GUI_AUTO_HAMMER:
-                if(tileEntity instanceof TileEntityAutoHammer) {
-                    return new ContainerAutoHammer(entityPlayer.inventory, (TileEntityAutoHammer) tileEntity);
+                if(tileEntity instanceof TileAutoHammer) {
+                    return new ContainerAutoHammer(entityPlayer.inventory, (TileAutoHammer) tileEntity);
                 }
                 break;
             case GUI_AUTO_COMPRESSOR:
@@ -47,8 +47,8 @@ public class GuiHandler implements IGuiHandler {
         TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
         switch(id) {
             case GUI_AUTO_HAMMER:
-                if(tileEntity instanceof TileEntityAutoHammer) {
-                    return new GuiAutoHammer(entityPlayer.inventory, (TileEntityAutoHammer) tileEntity);
+                if(tileEntity instanceof TileAutoHammer) {
+                    return new GuiAutoHammer(entityPlayer.inventory, (TileAutoHammer) tileEntity);
                 }
                 break;
             case GUI_AUTO_COMPRESSOR:
@@ -57,10 +57,10 @@ public class GuiHandler implements IGuiHandler {
                 }
                 break;
             case GUI_AUTO_SIEVE:
-                if(tileEntity instanceof TileEntityAutoSieve) {
+                if(tileEntity instanceof TileAutoSieve) {
                     return new GuiAutoSieve(entityPlayer.inventory, (TileEntityAutoSieveBase) tileEntity);
-                } else if(tileEntity instanceof TileEntityAutoSieveMana) {
-                    return new GuiManaSieve(entityPlayer.inventory, (TileEntityAutoSieveMana) tileEntity);
+                } else if(tileEntity instanceof TileAutoSieveMana) {
+                    return new GuiManaSieve(entityPlayer.inventory, (TileAutoSieveMana) tileEntity);
                 }
                 break;
         }

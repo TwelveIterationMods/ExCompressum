@@ -1,70 +1,65 @@
 package net.blay09.mods.excompressum.compat.tconstruct;
 
+import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.HammerRegistry;
+import net.blay09.mods.excompressum.registry.data.SmashableReward;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import tconstruct.library.tools.ToolCore;
-import tconstruct.modifiers.tools.ModBoolean;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.BlockEvent;
+import slimeknights.tconstruct.library.modifiers.ModifierTrait;
+import slimeknights.tconstruct.library.utils.ToolHelper;
 
-public class ModSmashingII extends ModBoolean {
+import java.util.Collection;
 
-    public static final String NAME = "Smashing II";
+public class ModSmashingII extends ModifierTrait {
 
-    public ModSmashingII(ItemStack[] items) {
-        super(items, 0, NAME, "\u00a79", NAME);
-    }
+	private static final float SPEED_DECREASE = 400; // TODO check this number, it's probably terrible
+	private static final float DAMAGE_INCREASE = 3;
 
-    @Override
-    protected boolean canModify(ItemStack toolStack, ItemStack[] input) {
-        if (toolStack.getItem() instanceof ToolCore) {
-            ToolCore toolCore = (ToolCore) toolStack.getItem();
-            if (!validType(toolCore)) {
-                return false;
-            }
+	// TODO where do I limit the valid tools for this modifier?
 
-            NBTTagCompound tags = toolStack.getTagCompound().getCompoundTag("InfiTool");
-            if (!tags.getBoolean("Lava") && !tags.hasKey("Lapis") && !tags.hasKey("Silk Touch") && !tags.hasKey("Crooked")) {
-                return tags.getInteger("Modifiers") > 0 && !tags.getBoolean(key);
-            }
-        }
-        return false;
-    }
+	public ModSmashingII() {
+		super("smashingii", 0xFF0000);
+	}
 
-    @Override
-    public void modify(ItemStack[] input, ItemStack tool) {
-        NBTTagCompound tags = tool.getTagCompound().getCompoundTag("InfiTool");
-        tags.setBoolean(NAME, true);
+	@Override
+	public boolean canApplyTogether(Enchantment enchantment) {
+		return enchantment != Enchantments.SILK_TOUCH;
+	}
 
-        int modifiers = tags.getInteger("Modifiers");
-        modifiers -= 1;
-        tags.setInteger("Modifiers", modifiers);
+	@Override
+	public void miningSpeed(ItemStack tool, PlayerEvent.BreakSpeed event) {
+		super.miningSpeed(tool, event);
+		event.setNewSpeed(Math.max(0.1f, event.getNewSpeed() - SPEED_DECREASE));
+	}
 
-        int miningSpeed = tags.getInteger("MiningSpeed");
-        miningSpeed -= 400;
-        if (miningSpeed < 0) {
-            miningSpeed = 0;
-        }
-        tags.setInteger("MiningSpeed", miningSpeed);
+	@Override
+	public float damage(ItemStack tool, EntityLivingBase player, EntityLivingBase target, float damage, float newDamage, boolean isCritical) {
+		return damage + DAMAGE_INCREASE;
+	}
 
-        int attack = tags.getInteger("Attack");
-        attack += 3;
-        tags.setInteger("Attack", attack);
+	@Override
+	public void blockHarvestDrops(ItemStack tool, BlockEvent.HarvestDropsEvent event) {
+		if(ToolHelper.isToolEffective2(tool, event.getState())) {
+			event.getDrops().clear();
+			Collection<SmashableReward> rewards = CompressedHammerRegistry.getSmashables(event.getState());
+			if(rewards.isEmpty()) {
+				rewards = HammerRegistry.getRewards(event.getState());
+				if(rewards.isEmpty()) {
+					return;
+				}
+			}
+			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
+			for (SmashableReward reward : rewards) {
+				if (event.getWorld().rand.nextFloat() <= reward.getChance() + (reward.getLuckMultiplier() * fortune)) {
+					event.getDrops().add(reward.createItemStack());
+				}
+			}
+		}
+	}
 
-        addToolTip(tool, "\u00a79" + NAME, "\u00a79" + key);
-    }
-
-    private boolean validType(ToolCore tool) {
-        return tool.getToolName().equals("Mattock") ||
-                tool.getToolName().equals("Hatchet") ||
-                tool.getToolName().equals("Broadsword") ||
-                tool.getToolName().equals("Longsword") ||
-                tool.getToolName().equals("Rapier") ||
-                tool.getToolName().equals("Cutlass") ||
-                tool.getToolName().equals("Cleaver") ||
-                tool.getToolName().equals("Lumber Axe") ||
-                tool.getToolName().equals("Scythe") ||
-                tool.getToolName().equals("Pickaxe") ||
-                tool.getToolName().equals("Hammer") ||
-                tool.getToolName().equals("Shovel") ||
-                tool.getToolName().equals("Excavator");
-    }
 }

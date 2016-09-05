@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.block;
 
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressedHammer;
+import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -12,7 +12,7 @@ public class BlockAutoCompressedHammer extends BlockAutoHammer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-        return new TileEntityAutoCompressedHammer();
+        return new TileAutoCompressedHammer();
     }
 
 }

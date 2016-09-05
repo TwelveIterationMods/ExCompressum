@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
-import net.blay09.mods.excompressum.tile.TileEntityHeavySieve;
+import net.blay09.mods.excompressum.tile.TileHeavySieve;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -57,7 +57,7 @@ public class BlockHeavySieve extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-        return new TileEntityHeavySieve();
+        return new TileHeavySieve();
     }
 
     @Override
@@ -68,11 +68,11 @@ public class BlockHeavySieve extends BlockContainer {
             return false;
         }*/
 
-        TileEntityHeavySieve tileEntity = (TileEntityHeavySieve) world.getTileEntity(pos);
+        TileHeavySieve tileEntity = (TileHeavySieve) world.getTileEntity(pos);
 
         if (tileEntity.getMode() == TileEntitySieve.SieveMode.EMPTY && heldItem != null) {
             if (HeavySieveRegistry.isRegistered(Block.getBlockFromItem(heldItem.getItem()), heldItem.getItemDamage())) {
-                tileEntity.addSievable(heldItem);
+                tileEntity.addSiftable(heldItem);
                 if (!player.capabilities.isCreativeMode) {
                     heldItem.stackSize--;
                 }

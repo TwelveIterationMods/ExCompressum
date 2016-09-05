@@ -119,12 +119,7 @@ public class BlockAutoCompressor extends BlockContainer {
     @Override
     @SuppressWarnings("deprecation")
     public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
-        TileEntity tileEntity = world.getTileEntity(pos);
-        if(tileEntity != null) {
-            //noinspection ConstantConditions /// @Nullable missing in getCapability
-            return StupidUtils.getComparatorOutput64(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
-        }
-        return 0;
+        return StupidUtils.getComparatorOutput64(world, pos);
     }
 
 }

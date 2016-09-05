@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.block;
 
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieve;
+import net.blay09.mods.excompressum.tile.TileAutoSieve;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,12 +19,12 @@ public class BlockAutoSieve extends BlockAutoSieveBase {
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-        return new TileEntityAutoSieve();
+        return new TileAutoSieve();
     }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        TileEntityAutoSieve tileEntity = (TileEntityAutoSieve) world.getTileEntity(pos);
+        TileAutoSieve tileEntity = (TileAutoSieve) world.getTileEntity(pos);
         if(tileEntity != null) {
             NBTTagCompound tagCompound = stack.getTagCompound();
             if (tagCompound != null) {
@@ -40,7 +40,7 @@ public class BlockAutoSieve extends BlockAutoSieveBase {
 
     /*@Override
     public ArrayList<ItemStack> dismantleBlock(EntityPlayer entityPlayer, World world, int x, int y, int z, boolean returnDrops) {
-        TileEntityAutoSieve tileEntity = (TileEntityAutoSieve) world.getTileEntity(x, y, z);
+        TileAutoSieve tileEntity = (TileAutoSieve) world.getTileEntity(x, y, z);
         ItemStack itemStack = new ItemStack(this);
         if (itemStack.stackTagCompound == null) {
             itemStack.stackTagCompound = new NBTTagCompound();

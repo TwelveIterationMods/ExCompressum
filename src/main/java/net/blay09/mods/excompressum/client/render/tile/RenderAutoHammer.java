@@ -1,55 +1,43 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ModItems;
-import net.blay09.mods.excompressum.block.BlockAutoCompressedHammer;
-import net.blay09.mods.excompressum.client.render.model.ModelAutoFrame;
-import net.blay09.mods.excompressum.tile.TileEntityAutoHammer;
-import net.minecraft.block.Block;
+import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+import net.minecraft.util.EnumFacing;
 
-public class RenderAutoHammer extends TileEntitySpecialRenderer {
+public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> {
 
-    private final ResourceLocation textureFrame = new ResourceLocation(ExCompressum.MOD_ID, "textures/blocks/auto_frame.png");
-    private final ModelAutoFrame model = new ModelAutoFrame();
-
+    private final ItemStack hammerItemStack;
     private EntityItem renderItem;
 
+    public RenderAutoHammer(ItemStack hammerItemStack) {
+        this.hammerItemStack = hammerItemStack;
+    }
+
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f) {
+    public void renderTileEntityAt(TileAutoHammer tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
         if(renderItem == null) {
             if(tileEntity.hasWorldObj()) {
-                renderItem = new EntityItem(tileEntity.getWorldObj());
+                renderItem = new EntityItem(tileEntity.getWorld());
             } else {
                 renderItem = new EntityItem(Minecraft.getMinecraft().theWorld);
             }
-            renderItem.setEntityItemStack(createHammerItemStack());
+            renderItem.setEntityItemStack(hammerItemStack);
         }
 
-        TileEntityAutoHammer tileEntityHammer = (TileEntityAutoHammer) tileEntity;
         int metadata = tileEntity.hasWorldObj() ? tileEntity.getBlockMetadata() : 0;
 
-        GL11.glPushMatrix();
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glColor4f(1f, 1f, 1f, 1f);
-        GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
+        GlStateManager.pushMatrix();
+        GlStateManager.enableRescaleNormal(); // TODO why, what is this
+        GlStateManager.color(1f, 1f, 1f, 1f);
+        GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
         float angle;
-        switch(ForgeDirection.getOrientation(metadata)) {
+        switch(EnumFacing.getFront(metadata)) {
             case NORTH:
                 angle = 0;
                 break;
@@ -65,46 +53,43 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer {
             default:
                 angle = -90;
         }
-        GL11.glRotatef(angle, 0f, 1f, 0f);
+        GlStateManager.rotate(angle, 0f, 1f, 0f);
 
-        bindFrameTexture();
-        model.renderSolid();
-        GL11.glEnable(GL11.GL_BLEND);
-        model.renderGlass();
-        GL11.glDisable(GL11.GL_BLEND);
-
-        if(tileEntityHammer.getCurrentStack() != null) {
-            GL11.glPushMatrix();
-            GL11.glScalef(0.5f, 0.5f, 0.5f);
-            GL11.glTranslatef(-0.2f, 0.2f, -0.5f);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
-            renderContent(Block.getBlockFromItem(tileEntityHammer.getCurrentStack().getItem()), tileEntityHammer.getCurrentStack().getItemDamage(), tileEntityHammer.getProgress());
-            GL11.glPopMatrix();
+        if(tileEntity.getCurrentStack() != null) {
+            GlStateManager.pushMatrix();
+            GlStateManager.scale(0.5f, 0.5f, 0.5f);
+            GlStateManager.translate(-0.2f, 0.2f, -0.5f);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            // TODO hi fix me
+//            renderContent(Block.getBlockFromItem(tileEntity.getCurrentStack().getItem()), tileEntity.getCurrentStack().getItemDamage(), tileEntity.getProgress());
+            GlStateManager.popMatrix();
         }
 
         if(renderItem != null) {
-            RenderItem.renderInFrame = true;
-            GL11.glRotatef((float) Math.sin(tileEntityHammer.getProgress() / tileEntityHammer.getSpeedBoost() * 100) * 15, 0, 0, 1);
-            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0, 0f, 0f);
-            if(tileEntityHammer.getStackInSlot(21) != null) {
-                GL11.glPushMatrix();
-                GL11.glRotatef(-15, 0f, 1f, 0f);
-                RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, -0.3, 0f, 0f);
-                GL11.glPopMatrix();
+            GlStateManager.rotate((float) Math.sin(tileEntity.getProgress() / tileEntity.getSpeedBoost() * 100) * 15, 0, 0, 1);
+            // TODO check CfB for item render code
+//            RenderItem.renderInFrame = true;
+//            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0, 0f, 0f);
+            if(tileEntity.getUpgradeStack(0) != null) {
+                GlStateManager.pushMatrix();
+                GlStateManager.rotate(-15, 0f, 1f, 0f);
+//                RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, -0.3, 0f, 0f);
+                GlStateManager.popMatrix();
             }
-            if(tileEntityHammer.getStackInSlot(21) != null) {
-                GL11.glPushMatrix();
-                GL11.glRotatef(15, 0f, 1f, 0f);
-                RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0.3, 0f, 0f);
-                GL11.glPopMatrix();
+            if(tileEntity.getUpgradeStack(1) != null) {
+                GlStateManager.pushMatrix();
+                GlStateManager.rotate(15, 0f, 1f, 0f);
+//                RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0.3, 0f, 0f);
+                GlStateManager.popMatrix();
             }
-            RenderItem.renderInFrame = false;
+//            RenderItem.renderInFrame = false;
         }
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glPopMatrix();
-        GL11.glColor4f(1f, 1f, 1f, 1f);
+        GlStateManager.enableRescaleNormal(); // TODO again, why, wat dis
+        GlStateManager.popMatrix();
+        GlStateManager.color(1f, 1f, 1f, 1f);
     }
 
+    /* TODO fix this too
     private void renderContent(Block block, int metadata, float progress) {
         Tessellator.instance.startDrawingQuads();
         Tessellator.instance.setColorRGBA_F(1f, 1f, 1f, 1f);
@@ -115,9 +100,10 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer {
         }
 
         Tessellator.instance.draw();
-    }
+    }*/
 
-    private void renderBlock(Block block, int metadata, IIcon override) {
+    // TODO yeah fix this
+    /*private void renderBlock(Block block, int metadata, IIcon override) {
         IIcon icon = override != null ? override : block.getIcon(ForgeDirection.UP.ordinal(), metadata);
         Tessellator.instance.addVertexWithUV(1, 1, 1, icon.getMinU(), icon.getMinV());
         Tessellator.instance.addVertexWithUV(1, 1, 0, icon.getMinU(), icon.getMaxV());
@@ -153,13 +139,6 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer {
         Tessellator.instance.addVertexWithUV(1, 1, 0, icon.getMinU(), icon.getMaxV());
         Tessellator.instance.addVertexWithUV(1, 0, 0, icon.getMaxU(), icon.getMaxV());
         Tessellator.instance.addVertexWithUV(0, 0, 0, icon.getMaxU(), icon.getMinV());
-    }
+    }*/
 
-    protected void bindFrameTexture() {
-        bindTexture(textureFrame);
-    }
-
-    protected ItemStack createHammerItemStack() {
-        return new ItemStack(GameRegistry.findItem("exnihilo", "hammer_diamond"));
-    }
 }

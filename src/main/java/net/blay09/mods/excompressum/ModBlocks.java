@@ -60,20 +60,20 @@ public class ModBlocks {
             GameRegistry.register(new ItemBlockManaSieve(manaSieve));
         }
 
-        GameRegistry.registerTileEntity(TileEntityWoodenCrucible.class, ExCompressum.MOD_ID + ":wooden_crucible");
-        GameRegistry.registerTileEntity(TileEntityHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
-        GameRegistry.registerTileEntity(TileEntityBait.class, ExCompressum.MOD_ID + ":bait");
+        GameRegistry.registerTileEntity(TileWoodenCrucible.class, ExCompressum.MOD_ID + ":wooden_crucible");
+        GameRegistry.registerTileEntity(TileHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
+        GameRegistry.registerTileEntity(TileBait.class, ExCompressum.MOD_ID + ":bait");
 
         if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) { // TODO Tesla? Or what's the cool new thing for power now?
-            GameRegistry.registerTileEntity(TileEntityAutoHammer.class, ExCompressum.MOD_ID + "auto_hammer");
-            GameRegistry.registerTileEntity(TileEntityAutoCompressedHammer.class, ExCompressum.MOD_ID + "auto_compressed_hammer");
-            GameRegistry.registerTileEntity(TileEntityAutoSieve.class, ExCompressum.MOD_ID + "auto_sieve");
-            GameRegistry.registerTileEntity(TileEntityAutoHeavySieve.class, ExCompressum.MOD_ID + "auto_heavy_sieve");
+            GameRegistry.registerTileEntity(TileAutoHammer.class, ExCompressum.MOD_ID + "auto_hammer");
+            GameRegistry.registerTileEntity(TileAutoCompressedHammer.class, ExCompressum.MOD_ID + "auto_compressed_hammer");
+            GameRegistry.registerTileEntity(TileAutoSieve.class, ExCompressum.MOD_ID + "auto_sieve");
+            GameRegistry.registerTileEntity(TileAutoHeavySieve.class, ExCompressum.MOD_ID + "auto_heavy_sieve");
             GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, ExCompressum.MOD_ID + "auto_compressor");
         }
 
         if(Loader.isModLoaded(Compat.BOTANIA)) {
-            GameRegistry.registerTileEntity(TileEntityAutoSieveMana.class, ExCompressum.MOD_ID + "mana_sieve");
+            GameRegistry.registerTileEntity(TileAutoSieveMana.class, ExCompressum.MOD_ID + "mana_sieve");
         }
     }
 

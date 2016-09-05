@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.tile.TileEntityBait;
+import net.blay09.mods.excompressum.tile.TileBait;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -77,17 +77,17 @@ public class BlockBait extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-        return new TileEntityBait();
+        return new TileBait();
     }
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        TileEntityBait tileEntity = (TileEntityBait) world.getTileEntity(pos);
+        TileBait tileEntity = (TileBait) world.getTileEntity(pos);
         if(tileEntity != null) {
-            TileEntityBait.EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
+            TileBait.EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
             if (!world.isRemote) {
                 ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
-                chatComponent.getStyle().setColor(environmentStatus != TileEntityBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
+                chatComponent.getStyle().setColor(environmentStatus != TileBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
                 player.addChatComponentMessage(chatComponent);
             }
         }
@@ -97,12 +97,12 @@ public class BlockBait extends BlockContainer {
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         if(placer instanceof EntityPlayer) {
-            TileEntityBait tileEntity = (TileEntityBait) world.getTileEntity(pos);
+            TileBait tileEntity = (TileBait) world.getTileEntity(pos);
             if(tileEntity != null) {
-                TileEntityBait.EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
+                TileBait.EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
                 if (!world.isRemote) {
                     ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
-                    chatComponent.getStyle().setColor(environmentStatus != TileEntityBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
+                    chatComponent.getStyle().setColor(environmentStatus != TileBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
                     ((EntityPlayer) placer).addChatComponentMessage(chatComponent);
                 }
             }
@@ -111,8 +111,8 @@ public class BlockBait extends BlockContainer {
 
     @Override
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-        TileEntityBait tileEntity = (TileEntityBait) world.getTileEntity(pos);
-        if(tileEntity != null && tileEntity.checkSpawnConditions(false) == TileEntityBait.EnvironmentalCondition.CanSpawn) {
+        TileBait tileEntity = (TileBait) world.getTileEntity(pos);
+        if(tileEntity != null && tileEntity.checkSpawnConditions(false) == TileBait.EnvironmentalCondition.CanSpawn) {
             if (rand.nextFloat() <= 0.2f) {
                 world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + rand.nextFloat(), pos.getY() + rand.nextFloat() * 0.5f, pos.getZ() + rand.nextFloat(), 0.0, 0.0, 0.0);
             }

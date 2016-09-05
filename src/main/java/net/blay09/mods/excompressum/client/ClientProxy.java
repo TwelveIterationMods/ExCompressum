@@ -5,13 +5,31 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.client.render.entity.RenderAngryChicken;
+import net.blay09.mods.excompressum.client.render.tile.RenderAutoSieve;
+import net.blay09.mods.excompressum.client.render.tile.RenderBait;
+import net.blay09.mods.excompressum.client.render.tile.RenderHeavySieve;
+import net.blay09.mods.excompressum.client.render.tile.RenderWoodenCrucible;
+import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
+import net.blay09.mods.excompressum.tile.TileBait;
+import net.blay09.mods.excompressum.tile.TileAutoSieve;
+import net.blay09.mods.excompressum.tile.TileAutoSieveMana;
+import net.blay09.mods.excompressum.tile.TileAutoHeavySieve;
+import net.blay09.mods.excompressum.tile.TileHeavySieve;
+import net.blay09.mods.excompressum.tile.TileWoodenCrucible;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelChicken;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -31,33 +49,23 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(this);
 
         // TODO JSON FUN:
-        /*ModelSieve sieve = new ModelSieve();
-        ModelSieveMesh mesh = new ModelSieveMesh();
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHeavySieve.class, new RenderHeavySieve(sieve, mesh));
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.heavySieve), new ItemRenderHeavySieve(sieve, mesh));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileHeavySieve.class, new RenderHeavySieve());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieve.class, new RenderAutoSieve());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieveMana.class, new RenderAutoSieve());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoHeavySieve.class, new RenderAutoSieve());
+//        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoHammer.class, new RenderAutoHammer()); // TODO uh, we don't really have the items here yet, so fix this later
+//        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoCompressedHammer.class, new RenderAutoHammer());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoSieve.class, new RenderAutoSieve());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoSieve), new ItemRenderAutoSieve());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileWoodenCrucible.class, new RenderWoodenCrucible());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileBait.class, new RenderBait());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoSieveMana.class, new RenderManaSieve());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.manaSieve), new ItemRenderManaSieve());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHeavySieve.class, new RenderAutoHeavySieve());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoHeavySieve), new ItemRenderAutoHeavySieve());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWoodenCrucible.class, new RenderWoodenCrucible());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.woodenCrucible), new ItemRenderWoodenCrucible());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoHammer.class, new RenderAutoHammer());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoHammer), new ItemRenderAutoHammer());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAutoCompressedHammer.class, new RenderAutoCompressedHammer());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ModBlocks.autoCompressedHammer), new ItemRenderAutoCompressedHammer());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBait.class, new RenderBait());*/
-
-        // TODO "use the factory version", thanks, very helpful!
-        //RenderingRegistry.registerEntityRenderingHandler(EntityAngryChicken.class, new RenderAngryChicken(new ModelChicken(), 0.3f));
+        final ModelChicken modelChicken = new ModelChicken();
+        RenderingRegistry.registerEntityRenderingHandler(EntityAngryChicken.class, new IRenderFactory<EntityAngryChicken>() {
+            @Override
+            public Render<? super EntityAngryChicken> createRenderFor(RenderManager manager) {
+                return new RenderAngryChicken(manager, modelChicken, 0.3f);
+            }
+        });
     }
 
     @Override

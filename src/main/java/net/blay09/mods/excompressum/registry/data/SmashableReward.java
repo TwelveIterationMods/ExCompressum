@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.registry.data;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class SmashableReward {
 	private Item item;
@@ -23,5 +23,9 @@ public class SmashableReward {
 
 	public float getLuckMultiplier() {
 		return luckMultiplier;
+	}
+
+	public ItemStack createItemStack() { // TODO use me everywhere
+		return new ItemStack(item, 1, metadata);
 	}
 }

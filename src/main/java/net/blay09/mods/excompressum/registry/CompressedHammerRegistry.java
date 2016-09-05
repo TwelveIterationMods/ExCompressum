@@ -6,6 +6,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 import net.blay09.mods.excompressum.registry.data.SmashableReward;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -27,7 +28,7 @@ public class CompressedHammerRegistry {
         smashables.put(new ItemAndMetadata(source, sourceMeta), entry);
     }
 
-    public static Collection<SmashableReward> getSmashables(Block block, int metadata) {
+    public static Collection<SmashableReward> getSmashables(IBlockState state) {
         return getSmashables(new ItemAndMetadata(block, metadata));
     }
 

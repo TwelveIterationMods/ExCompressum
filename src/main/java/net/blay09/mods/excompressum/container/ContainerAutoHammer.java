@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.container;
 
-import net.blay09.mods.excompressum.tile.TileEntityAutoHammer;
+import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,12 +12,12 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerAutoHammer extends Container {
 
-    private final TileEntityAutoHammer tileEntity;
+    private final TileAutoHammer tileEntity;
 
     private float lastProgress;
     private int lastEnergy;
 
-    public ContainerAutoHammer(InventoryPlayer inventoryPlayer, TileEntityAutoHammer tileEntity) {
+    public ContainerAutoHammer(InventoryPlayer inventoryPlayer, TileAutoHammer tileEntity) {
         this.tileEntity = tileEntity;
 
         ItemStackHandler itemHandler = tileEntity.getItemHandler();

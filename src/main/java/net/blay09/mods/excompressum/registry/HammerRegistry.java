@@ -17,10 +17,15 @@ public class HammerRegistry {
 		return new ArrayList<>();
 	}
 
+	public static boolean isRegistered(IBlockState state) {
+		return false;
+	}
+
 	public static boolean isRegistered(ItemStack itemStack) {
 		return false;
 	}
 
+	@Deprecated // TODO move to the other thing
 	public static boolean isHammerUpgrade(ItemStack itemStack) {
 		return false;
 	}

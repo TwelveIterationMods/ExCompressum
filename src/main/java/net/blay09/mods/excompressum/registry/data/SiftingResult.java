@@ -3,11 +3,11 @@ package net.blay09.mods.excompressum.registry.data;
 import net.minecraft.block.Block;
 
 public class SiftingResult {
-	private float rarity;
+	private int rarity;
 	private Block item;
 	private int metadata;
 
-	public float getRarity() {
+	public int getRarity() {
 		return rarity;
 	}
 

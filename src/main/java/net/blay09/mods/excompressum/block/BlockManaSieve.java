@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.block;
 
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieveMana;
+import net.blay09.mods.excompressum.tile.TileAutoSieveMana;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -14,7 +14,7 @@ public class BlockManaSieve extends BlockAutoSieveBase {
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-        return new TileEntityAutoSieveMana();
+        return new TileAutoSieveMana();
     }
 
 }
