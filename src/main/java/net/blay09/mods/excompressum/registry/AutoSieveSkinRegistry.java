@@ -49,6 +49,8 @@ public class AutoSieveSkinRegistry {
                 logger.error("Could not load remote skins for auto sieve: ", e);
             } catch (IOException e) {
                 logger.error("Could not load remote skins for auto sieve: ", e);
+            } catch (Throwable e) { // Screw it, let's just be overprotective.
+                logger.error("Could not load remote skins for auto sieve: ", e);
             }
         }
     }
