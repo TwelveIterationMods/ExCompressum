@@ -26,6 +26,9 @@ import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 
+// TODO overfills on rain
+// TODO cannot empty with empty bucket
+// TODO cannot fill empty with bucket
 public class TileWoodenCrucible extends TileEntity implements ITickable {
 
     public static final int MAX_FLUID = Fluid.BUCKET_VOLUME;
@@ -213,10 +216,6 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
         return fluidTank.getFluid() != null ? fluidTank.getFluid().getFluid() : null; // yeah this is beautiful
     }
 
-    public boolean hasFluids() {
-        return fluidTank.getFluidAmount() > 0;
-    }
-
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
@@ -238,5 +237,13 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 
     public FluidTank getFluidTank() {
         return fluidTank;
+    }
+
+    public int getFluidAmount() {
+        return fluidTank.getFluidAmount();
+    }
+
+    public int getFluidCapacity() {
+        return MAX_FLUID;
     }
 }

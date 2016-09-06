@@ -21,10 +21,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
     public void renderTileEntityAt(TileEntityAutoSieveBase tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
         int metadata = tileEntity.hasWorldObj() ? tileEntity.getBlockMetadata() : 0;
         GlStateManager.pushMatrix();
-//        boolean oldRescaleNormal = GlStateManager.(GL12.GL_RESCALE_NORMAL); // TODO no seriously what is this and why do I care
-//        if (!oldRescaleNormal) {
-//            GlStateManager.glEnable(GL12.GL_RESCALE_NORMAL);
-//        }
+        GlStateManager.enableRescaleNormal();
         GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
 

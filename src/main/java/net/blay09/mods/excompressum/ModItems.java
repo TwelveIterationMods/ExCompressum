@@ -18,7 +18,7 @@ public class ModItems {
     public static ItemCompressedHammer compressedHammerDiamond;
     public static ItemDoubleCompressedDiamondHammer doubleCompressedDiamondHammer;
     public static ItemCompressedCrook compressedCrook;
-    public static ItemHeavySilkMesh heavySilkMesh;
+    public static ItemIronMesh heavySilkMesh;
     public static ItemWoodChipping woodChipping;
     public static ItemUncompressedCoal uncompressedCoal;
     public static ItemBatZapper batZapper;
@@ -45,7 +45,7 @@ public class ModItems {
         compressedCrook = new ItemCompressedCrook();
         register(compressedCrook);
 
-        heavySilkMesh = new ItemHeavySilkMesh();
+        heavySilkMesh = new ItemIronMesh();
         register(heavySilkMesh);
 
         woodChipping = new ItemWoodChipping();

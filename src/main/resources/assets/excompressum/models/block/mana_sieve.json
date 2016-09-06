@@ -3,7 +3,8 @@
 "textures": {
     "texture": "excompressum:blocks/mana_frame_top",
     "texture_glass": "excompressum:blocks/mana_frame_glass",
-    "texture_side": "excompressum:blocks/mana_frame_side"
+    "texture_side": "excompressum:blocks/mana_frame_side",
+    "particle": "excompressum:blocks/mana_frame_side"
 },
 "elements": [ 
 {

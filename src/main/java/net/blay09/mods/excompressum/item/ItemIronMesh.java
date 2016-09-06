@@ -6,11 +6,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 
-// TODO turn this into an iron mesh
-public class ItemHeavySilkMesh extends Item {
+public class ItemIronMesh extends Item {
 
-    public ItemHeavySilkMesh() {
-        setRegistryName("heavy_silk_mesh");
+    public ItemIronMesh() {
+        setRegistryName("iron_mesh");
         setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(ExCompressum.creativeTab);
     }
