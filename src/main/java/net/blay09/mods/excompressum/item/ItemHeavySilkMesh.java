@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 
+// TODO turn this into an iron mesh
 public class ItemHeavySilkMesh extends Item {
 
     public ItemHeavySilkMesh() {

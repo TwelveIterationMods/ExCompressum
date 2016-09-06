@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 public class ItemWoodChipping extends Item {
 
     public ItemWoodChipping() {
-        setRegistryName("wood_chipping");
+        setRegistryName("wood_chippings");
         setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(ExCompressum.creativeTab);
     }

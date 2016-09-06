@@ -65,8 +65,6 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
 //            contents.renderBottom(icon);
         }
         GlStateManager.popMatrix();
-
-        GlStateManager.popMatrix();
     }
 
     private void bindPlayerTexture(GameProfile customSkin) {

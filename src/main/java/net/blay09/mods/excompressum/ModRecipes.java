@@ -1,12 +1,14 @@
 package net.blay09.mods.excompressum;
 
-import net.blay09.mods.excompressum.item.ItemCompressedHammer;
-import net.blay09.mods.excompressum.item.ItemHeavySilkMesh;
-import net.blay09.mods.excompressum.item.ItemOreSmasher;
+import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -16,13 +18,11 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.util.List;
 
 public class ModRecipes {
 
 	public static void init(Configuration config) {
 		registerItems(config);
-		registerWoodChippings(config);
 
 		if (config.getBoolean("Heavy Sieve", "blocks", true, "If set to false, the recipe for the heavy sieve will be disabled.")) {
 			for (int i = 0; i < 4; i++) {
@@ -55,8 +55,12 @@ public class ModRecipes {
 			}
 
 			if (config.getBoolean("Auto Hammer", "blocks", true, "Set this to false to disable the recipe for the auto hammer.")) {
-				Item hammerDiamond = GameRegistry.findItem("exnihilo", "hammer_diamond");
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHammer), "IPI", "IHI", "IPI", 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'H', hammerDiamond, 'I', "ingotIron"));
+				Item hammerDiamond = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
+				if(hammerDiamond != null) {
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHammer), "IPI", "IHI", "IPI", 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'H', hammerDiamond, 'I', "ingotIron"));
+				} else {
+					ExCompressum.logger.warn("No diamond hammer found - Auto Hammer recipe will be disabled.");
+				}
 			}
 
 			if (config.getBoolean("Auto Compressed Hammer", "blocks", true, "Set this to false to disable the recipe for the auto compressed hammer.")) {
@@ -68,8 +72,13 @@ public class ModRecipes {
 			}
 
 			if (config.getBoolean("Auto Sieve", "blocks", true, "Set this to false to disable the recipe for the auto sieve.")) {
-				ItemStack sieve = new ItemStack(GameRegistry.findBlock("exnihilo", "sifting_table"), 1, OreDictionary.WILDCARD_VALUE); // TODO generify
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieve, 'G', "paneGlassColorless", 'I', "ingotIron"));
+				Block sieveBlock = ExRegistro.getNihiloBlock(ExNihiloProvider.NihiloBlocks.SIEVE);
+				if(sieveBlock != null) {
+					ItemStack sieve = new ItemStack(sieveBlock, 1, OreDictionary.WILDCARD_VALUE);
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieve, 'G', "paneGlassColorless", 'I', "ingotIron"));
+				} else {
+					ExCompressum.logger.warn("No Sieve found - Auto Sieve recipe will be disabled.");
+				}
 			}
 
 			if (config.getBoolean("Auto Heavy Sieve", "blocks", true, "Set this to false to disable the recipe for the auto heavy sieve.")) {
@@ -84,28 +93,40 @@ public class ModRecipes {
 		// Botania Magicz
 		if (Loader.isModLoaded("Botania")) {
 			if (config.getBoolean("Mana Sieve", "blocks", true, "Set this to false to disable the recipe for the mana sieve.")) {
-				ItemStack manaSteelBlock = new ItemStack(GameRegistry.findBlock("Botania", "storage"), 1, 0);
-				ItemStack sieve = new ItemStack(GameRegistry.findBlock("exnihilo", "sifting_table"), 1, OreDictionary.WILDCARD_VALUE);
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.manaSieve), "BGB", "GSG", "IGI", 'B', manaSteelBlock, 'S', sieve, 'G', "paneGlassColorless", 'I', "ingotManasteel"));
+				Block manaSteelBlock = Block.REGISTRY.getObject(new ResourceLocation(Compat.BOTANIA, "storage"));
+				if(manaSteelBlock != Blocks.AIR) {
+					Block sieveBlock = ExRegistro.getNihiloBlock(ExNihiloProvider.NihiloBlocks.SIEVE);
+					if(sieveBlock != null) {
+						ItemStack manaSteelBlockStack = new ItemStack(manaSteelBlock);
+						ItemStack sieve = new ItemStack(sieveBlock, 1, OreDictionary.WILDCARD_VALUE);
+						GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.manaSieve), "BGB", "GSG", "IGI", 'B', manaSteelBlockStack, 'S', sieve, 'G', "paneGlassColorless", 'I', "ingotManasteel"));
+					} else {
+						ExCompressum.logger.warn("No Sieve found - Mana Sieve recipe will be disabled.");
+					}
+				} else {
+					ExCompressum.logger.warn("No Manasteel Block found - Mana Sieve recipe will be disabled.");
+				}
+
 			}
 		}
 	}
 
 	private static void registerItems(Configuration config) {
-		Item itemSilkMesh = GameRegistry.findItem("exnihilo", "mesh"); // TODO probably disable
+		Item itemSilkMesh = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SILK_MESH);
 		if (itemSilkMesh != null) {
 			GameRegistry.addRecipe(new ItemStack(ModItems.heavySilkMesh), "##", "##", '#', itemSilkMesh);
+		} else {
+			ExCompressum.logger.warn("No Silk Mesh found - Heavy Silk Mesh recipe will be disabled.");
 		}
 
 		registerCompressedHammers(config);
 
-		// TODO is tconstruct loaded: also check config modifgeirenabled yeah that one
-		GameRegistry.addRecipe(new ItemStack(ModItems.doubleCompressedDiamondHammer), "##", "##", '#', ModItems.compressedHammerDiamond);
-
 		if(config.getBoolean("Compressed Crook", "items", true, "If set to false, the recipe for the compressed crook will be disabled.")) {
-			Item itemCrook = GameRegistry.findItem("exnihilo", "crook");
+			Item itemCrook = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.CROOK_WOODEN);
 			if(itemCrook != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedCrook), "## ", " # ", " # ", '#', itemCrook);
+			} else {
+				ExCompressum.logger.warn("No Crook found - Compressed Crook recipe will be disabled.");
 			}
 		}
 
@@ -134,64 +155,47 @@ public class ModRecipes {
 
 	private static void registerCompressedHammers(Configuration config) {
 		if (config.getBoolean("Compressed Wooden Hammer", "items", true, "If set to false, the recipe for the compressed wooden hammer will be disabled.")) {
-			Item itemHammerWood = GameRegistry.findItem("exnihilo", "hammer_wood");
+			Item itemHammerWood = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_WOODEN);
 			if (itemHammerWood != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerWood), "###", "###", "###", '#', itemHammerWood);
+			} else {
+				ExCompressum.logger.warn("No Wooden Hammer found - Compressed Wooden Hammer recipe will be disabled.");
 			}
 		}
 
 		if (config.getBoolean("Compressed Stone Hammer", "items", true, "If set to false, the recipe for the compressed stone hammer will be disabled.")) {
-			Item itemHammerStone = GameRegistry.findItem("exnihilo", "hammer_stone");
+			Item itemHammerStone = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_STONE);
 			if (itemHammerStone != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerStone), "###", "###", "###", '#', itemHammerStone);
+			} else {
+				ExCompressum.logger.warn("No Stone Hammer found - Compressed Stone Hammer recipe will be disabled.");
 			}
 		}
 
 		if (config.getBoolean("Compressed Iron Hammer", "items", true, "If set to false, the recipe for the compressed iron hammer will be disabled.")) {
-			Item itemHammerIron = GameRegistry.findItem("exnihilo", "hammer_iron");
+			Item itemHammerIron = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_IRON);
 			if (itemHammerIron != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerIron), "###", "###", "###", '#', itemHammerIron);
+			} else {
+				ExCompressum.logger.warn("No Iron Hammer found - Compressed Iron Hammer recipe will be disabled.");
 			}
 		}
 
 		if (config.getBoolean("Compressed Gold Hammer", "items", true, "If set to false, the recipe for the compressed gold hammer will be disabled.")) {
-			Item itemHammerGold = GameRegistry.findItem("exnihilo", "hammer_gold");
+			Item itemHammerGold = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_GOLD);
 			if (itemHammerGold != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerGold), "###", "###", "###", '#', itemHammerGold);
+			} else {
+				ExCompressum.logger.warn("No Gold Hammer found - Compressed Gold Hammer recipe will be disabled.");
 			}
 		}
 
 		if (config.getBoolean("Compressed Diamond Hammer", "items", true, "If set to false, the recipe for the compressed diamond hammer will be disabled.")) {
-			Item itemHammerDiamond = GameRegistry.findItem("exnihilo", "hammer_diamond");
+			Item itemHammerDiamond = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
 			if (itemHammerDiamond != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerDiamond), "###", "###", "###", '#', itemHammerDiamond);
-			}
-		}
-	}
-
-	private static void registerWoodChippings(Configuration config) {
-		if(config.getBoolean("Wood Chippings", "items", true, "If set to true, wood can be smashed into wood chippings, which can be composted into dirt.")) {
-			for (int i = 0; i < 4; i++) {
-				for(int j = 0; j <= 8; j += 4) {
-					// TODO me too
-//					HammerRegistry.register(Blocks.LOG, i | j, ModItems.woodChipping, 0, 1f, 0f);
-//					HammerRegistry.register(Blocks.LOG, i | j, ModItems.woodChipping, 0, 0.75f, 0f);
-//					HammerRegistry.register(Blocks.LOG, i | j, ModItems.woodChipping, 0, 0.5f, 0f);
-//					HammerRegistry.register(Blocks.LOG, i | j, ModItems.woodChipping, 0, 0.25f, 0f);
-				}
-			}
-			for (int i = 0; i < 2; i++) {
-				for(int j = 0; j <= 8; j += 4) {
-					// TODO and me too
-//					HammerRegistry.register(Blocks.LOG2, i | j, ModItems.woodChipping, 0, 1f, 0f);
-//					HammerRegistry.register(Blocks.LOG2, i | j, ModItems.woodChipping, 0, 0.75f, 0f);
-//					HammerRegistry.register(Blocks.LOG2, i | j, ModItems.woodChipping, 0, 0.5f, 0f);
-//					HammerRegistry.register(Blocks.LOG2, i | j, ModItems.woodChipping, 0, 0.25f, 0f);
-				}
-			}
-			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
-			for(ItemStack itemStack : oreDictStacks) {
-				//CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, new Color("C77826")); // TODO do me
+			} else {
+				ExCompressum.logger.warn("No Diamond Hammer found - Compressed Diamond Hammer recipe will be disabled.");
 			}
 		}
 	}
@@ -199,8 +203,13 @@ public class ModRecipes {
 	private static void registerCompressedBlocks(Configuration config) {
 		boolean exUtilsLoaded = Loader.isModLoaded("ExtraUtilities"); // TODO does ExUtils still do this?
 		if (config.getBoolean("Compressed Dust", "blocks", true, "Set this to false to disable the recipe for the compressed dust.")) {
-			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 0), "###", "###", "###", '#', GameRegistry.findBlock("exnihilo", "dust"));
-			GameRegistry.addShapelessRecipe(new ItemStack(GameRegistry.findBlock("exnihilo", "dust"), 9), new ItemStack(ModBlocks.compressedBlock, 1, 0)); // TODO generify
+			Block dustBlock = ExRegistro.getNihiloBlock(ExNihiloProvider.NihiloBlocks.DUST);
+			if(dustBlock != null) {
+				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 0), "###", "###", "###", '#', dustBlock);
+				GameRegistry.addShapelessRecipe(new ItemStack(dustBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, 0));
+			} else {
+				ExCompressum.logger.warn("No Dust found - Compressed Dust recipe will be disabled.");
+			}
 		}
 		if (config.getBoolean("Compressed Cobblestone", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed cobblestone.")) {
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 1), "###", "###", "###", '#', Blocks.COBBLESTONE);
@@ -250,7 +259,12 @@ public class ModRecipes {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 4), Items.WHEAT_SEEDS, Items.WHEAT_SEEDS);
 		}
 		if (config.getBoolean("Sheep Bait", "blocks", true, "If set to false, the recipe for the sheep bait will be disabled.")) {
-			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 5), GameRegistry.findItem("exnihilo", "seed_grass"), Items.WHEAT); // TODO generify
+			Item grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
+			if(grassSeeds != null) {
+				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 5), grassSeeds, Items.WHEAT);
+			} else {
+				ExCompressum.logger.warn("No Grass Seeds found - sheep bait recipe will be disabled!");
+			}
 		}
 		if (config.getBoolean("Squid Bait", "blocks", false, "If set to false, the recipe for the squid bait will be disabled.")) {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 6), Items.FISH, Items.FISH);

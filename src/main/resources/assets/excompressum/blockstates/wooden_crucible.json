@@ -2,13 +2,42 @@
   "forge_marker": 1,
   "defaults": {
     "model": "excompressum:wooden_crucible",
-    "textures": {
-      "particle": "minecraft:blocks/log_oak",
-      "texture": "minecraft:blocks/log_oak"
-    }
+    "transform": "forge:default-block"
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{}]
+    "inventory": [{}],
+    "variant": {
+      "oak": {
+        "textures": {
+          "texture": "minecraft:blocks/log_oak"
+        }
+      },
+      "spruce": {
+        "textures": {
+          "texture": "minecraft:blocks/log_spruce"
+        }
+      },
+      "birch": {
+        "textures": {
+          "texture": "minecraft:blocks/log_birch"
+        }
+      },
+      "jungle": {
+        "textures": {
+          "texture": "minecraft:blocks/log_jungle"
+        }
+      },
+      "acacia": {
+        "textures": {
+          "texture": "minecraft:blocks/log_acacia"
+        }
+      },
+      "dark_oak": {
+        "textures": {
+          "texture": "minecraft:blocks/log_big_oak"
+        }
+      }
+    }
   }
 }

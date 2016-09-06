@@ -6,7 +6,7 @@ item.excompressum:compressed_hammer_diamond.name=Compressed Diamond Hammer
 item.excompressum:double_compressed_diamond_hammer.name=Double Compressed Diamond Hammer
 item.excompressum:compressed_crook.name=Compressed Crook
 item.excompressum:chicken_stick.name=Chicken Stick
-item.excompressum:heavy_silk_mesh.name=Heavy Silk Mesh
+item.excompressum:heavy_silk_mesh.name=Iron Mesh
 item.excompressum:bait_0.name=Wolf Bait
 item.excompressum:bait_1.name=Ocelot Bait
 item.excompressum:bait_2.name=Cow Bait
@@ -64,7 +64,7 @@ tile.excompressum:auto_compressor.name=Auto Compressor
 tile.excompressum:auto_hammer.name=Auto Hammer
 tile.excompressum:auto_compressed_hammer.name=Auto Compressed Hammer
 tile.excompressum:auto_sieve.name=Auto Sieve
-tile.excompressum:auto_sieve_mana.name=Mana Sieve
+tile.excompressum:mana_sieve.name=Mana Sieve
 tile.excompressum:auto_heavy_sieve.name=Auto Heavy Sieve
 
 entity.excompressum.AngryChicken.name=Angry Chicken

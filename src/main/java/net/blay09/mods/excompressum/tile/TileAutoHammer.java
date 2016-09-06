@@ -323,7 +323,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     public boolean isHammerUpgrade(ItemStack itemStack) {
-        return ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.HammerDiamond);
+        return ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
     }
 
     public boolean isRegistered(ItemStack itemStack) {

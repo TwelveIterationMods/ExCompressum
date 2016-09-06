@@ -10,6 +10,7 @@ public class BlockManaSieve extends BlockAutoSieveBase {
     public BlockManaSieve() {
         super(Material.IRON);
         setRegistryName("mana_sieve");
+        setUnlocalizedName(getRegistryName().toString());
     }
 
     @Override

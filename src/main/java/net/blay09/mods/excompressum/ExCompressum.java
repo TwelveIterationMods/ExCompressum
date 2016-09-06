@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
@@ -69,11 +70,20 @@ public class ExCompressum {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         FMLInterModComms.sendMessage("Waila", "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
+
+        proxy.init(event);
     }
 
     @Mod.EventHandler
     @SuppressWarnings("unused unchecked")
     public void postInit(FMLPostInitializationEvent event) {
+        registerAddon(event, Compat.EXNIHILOOMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
+
+        if(ExRegistro.instance == null) {
+            ExCompressum.logger.warn("No Ex Nihilo mod installed - many things will be disabled. Why would you run Ex Compressum without Ex Nihilo? Pfft.");
+            ExRegistro.instance = new NihilisticNihiloProvider();
+        }
+
         ModRecipes.init(config);
 
         CompressedHammerRegistry.loadFromConfig(config);
@@ -83,9 +93,8 @@ public class ExCompressum {
         WoodenCrucibleRegistry.load(config);
         AutoSieveSkinRegistry.load();
 
-        registerAddon(event, Compat.EXNIHILOOMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
         registerAddon(event, "MineTweaker3", "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
-        registerAddon(event, Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
+        //registerAddon(event, Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon"); // TODO Botania requires addons to register stuff in preInit because stupid, fix this later
         registerAddon(event, "TConstruct", "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
 
         for(IAddon addon : addons) {
@@ -101,9 +110,9 @@ public class ExCompressum {
     }
 
     private void registerAddon(FMLPostInitializationEvent event, String modid, String className) {
-        IAddon addon = (IAddon) event.buildSoftDependProxy(modid, className);
-        if(addon != null) {
-            addons.add(addon);
+        Optional<?> optional = event.buildSoftDependProxy(modid, className);
+        if(optional.isPresent()) {
+            addons.add((IAddon) optional.get());
         }
     }
 

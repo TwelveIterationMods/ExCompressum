@@ -1,10 +1,16 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.tile.TileBait;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +20,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -21,20 +29,69 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockBait extends BlockContainer {
+public class BlockBait extends BlockContainer implements IRegisterModel {
+
+    public enum Type implements IStringSerializable {
+        WOLF,
+        OCELOT,
+        COW,
+        PIG,
+        CHICKEN,
+        SHEEP,
+        SQUID;
+
+        public static Type[] values = values();
+
+        @Override
+        public String getName() {
+            return name().toLowerCase();
+        }
+    }
 
     private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 0.1, 1);
+    public static final PropertyEnum<Type> VARIANT = PropertyEnum.create("variant", Type.class);
 
     public BlockBait() {
         super(Material.GROUND);
         setHardness(0.1f);
         setCreativeTab(ExCompressum.creativeTab);
         setRegistryName("bait");
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, VARIANT);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public IBlockState getStateFromMeta(int meta) {
+        if(meta < 0 || meta >= Type.values.length) {
+            return getDefaultState();
+        }
+        return getDefaultState().withProperty(VARIANT, Type.values[meta]);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(VARIANT).ordinal();
+    }
+
+    @Nullable
+    @Override
+    protected ItemStack createStackedBlock(IBlockState state) {
+        return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return state.getValue(VARIANT).ordinal();
     }
 
     @Override
@@ -48,11 +105,6 @@ public class BlockBait extends BlockContainer {
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
         return null;
-    }
-
-    @Override
-    public int damageDropped(IBlockState state) {
-        return getMetaFromState(state);
     }
 
     @Override
@@ -70,7 +122,7 @@ public class BlockBait extends BlockContainer {
     @Override
     @SuppressWarnings("unchecked")
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        for (int i = 0; i <= 6; i++) {
+        for (int i = 0; i < Type.values.length; i++) {
             list.add(new ItemStack(item, 1, i));
         }
     }
@@ -119,4 +171,23 @@ public class BlockBait extends BlockContainer {
         }
     }
 
+    @Override
+    public void registerModel(Item item) {
+        ResourceLocation[] variants = new ResourceLocation[Type.values.length];
+        for(int i = 0; i < variants.length; i++) {
+            variants[i] = new ResourceLocation(ExCompressum.MOD_ID, "bait_" + Type.values[i].getName());
+        }
+        ModelBakery.registerItemVariants(item, variants);
+        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
+            @Override
+            public ModelResourceLocation getModelLocation(ItemStack itemStack) {
+                Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
+                if(type != null) {
+                    return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "bait_" + type.getName()), "inventory");
+                } else {
+                    return new ModelResourceLocation("missingno");
+                }
+            }
+        });
+    }
 }

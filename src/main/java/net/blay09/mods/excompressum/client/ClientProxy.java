@@ -5,6 +5,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.client.render.entity.RenderAngryChicken;
 import net.blay09.mods.excompressum.client.render.tile.RenderAutoSieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderBait;
@@ -30,6 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -48,7 +50,6 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
 
-        // TODO JSON FUN:
         ClientRegistry.bindTileEntitySpecialRenderer(TileHeavySieve.class, new RenderHeavySieve());
         ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieve.class, new RenderAutoSieve());
         ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieveMana.class, new RenderAutoSieve());
@@ -95,9 +96,9 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void onTextureStitch(TextureStitchEvent.Pre event) {
         if(event.getMap() == Minecraft.getMinecraft().getTextureMapBlocks()) {
-            iconEmptyBookSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "empty_enchanted_book_slot"));
-            iconEmptyHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "empty_hammer_slot"));
-            iconEmptyCompressedHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "empty_compressed_hammer_slot"));
+            iconEmptyBookSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_enchanted_book_slot"));
+            iconEmptyHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_hammer_slot"));
+            iconEmptyCompressedHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_compressed_hammer_slot"));
         }
     }
 }

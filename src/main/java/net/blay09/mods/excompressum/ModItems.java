@@ -1,8 +1,10 @@
 package net.blay09.mods.excompressum;
 
 import net.blay09.mods.excompressum.item.*;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -24,40 +26,49 @@ public class ModItems {
 
     public static void init() {
         chickenStick = new ItemChickenStick();
-        GameRegistry.register(chickenStick);
+        register(chickenStick);
 
         compressedHammerWood = new ItemCompressedHammer(Item.ToolMaterial.WOOD, "wood");
-        GameRegistry.register(compressedHammerWood);
+        register(compressedHammerWood);
         compressedHammerStone = new ItemCompressedHammer(Item.ToolMaterial.STONE, "stone");
-        GameRegistry.register(compressedHammerStone);
+        register(compressedHammerStone);
         compressedHammerIron = new ItemCompressedHammer(Item.ToolMaterial.IRON, "iron");
-        GameRegistry.register(compressedHammerIron);
+        register(compressedHammerIron);
         compressedHammerGold = new ItemCompressedHammer(Item.ToolMaterial.GOLD, "gold");
-        GameRegistry.register(compressedHammerGold);
+        register(compressedHammerGold);
         compressedHammerDiamond = new ItemCompressedHammer(Item.ToolMaterial.DIAMOND, "diamond");
-        GameRegistry.register(compressedHammerDiamond);
+        register(compressedHammerDiamond);
 
         doubleCompressedDiamondHammer = new ItemDoubleCompressedDiamondHammer();
-        GameRegistry.register(doubleCompressedDiamondHammer);
+        register(doubleCompressedDiamondHammer);
 
         compressedCrook = new ItemCompressedCrook();
-        GameRegistry.register(compressedCrook);
+        register(compressedCrook);
 
         heavySilkMesh = new ItemHeavySilkMesh();
-        GameRegistry.register(heavySilkMesh);
+        register(heavySilkMesh);
 
         woodChipping = new ItemWoodChipping();
-        GameRegistry.register(woodChipping);
+        register(woodChipping);
         OreDictionary.registerOre("dustWood", new ItemStack(woodChipping));
 
         uncompressedCoal = new ItemUncompressedCoal();
-        GameRegistry.register(uncompressedCoal);
+        register(uncompressedCoal);
 
         batZapper = new ItemBatZapper();
-        GameRegistry.register(batZapper);
+        register(batZapper);
 
         oreSmasher = new ItemOreSmasher();
-        GameRegistry.register(oreSmasher);
+        register(oreSmasher);
+    }
+
+    public static void register(Item item) {
+        GameRegistry.register(item);
+        if(item instanceof IRegisterModel) {
+            ((IRegisterModel) item).registerModel(item);
+        } else {
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+        }
     }
 
 }

@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 public class BlockAutoHeavySieve extends BlockAutoSieve {
 
     public BlockAutoHeavySieve() {
-        setRegistryName("auto_heavy_sieve");
+        super("auto_heavy_sieve");
     }
 
     @Override

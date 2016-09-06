@@ -12,11 +12,15 @@ import java.util.Random;
 public interface ExNihiloProvider {
 
 	enum NihiloItems {
-		HammerDiamond
+		SEEDS_GRASS,
+		HAMMER_DIAMOND,
+		CROOK_WOODEN,
+		HAMMER_WOODEN, HAMMER_STONE, HAMMER_IRON, HAMMER_GOLD, SILK_MESH
 	}
 
 	enum NihiloBlocks {
-		Dust
+		DUST,
+		SIEVE
 	}
 
 	@Nullable

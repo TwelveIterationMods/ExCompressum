@@ -5,7 +5,10 @@ import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.item.*;
 import net.blay09.mods.excompressum.tile.*;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModAPIManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -23,41 +26,35 @@ public class ModBlocks {
     public static BlockAutoCompressor autoCompressor;
 
     public static void init() {
-        compressedBlock = new BlockCompressed(); // TODO omniafy
-        GameRegistry.register(compressedBlock);
-        GameRegistry.register(new ItemBlockCompressed(compressedBlock).setRegistryName(compressedBlock.getRegistryName()));
+        compressedBlock = new BlockCompressed();
+        registerBlock(compressedBlock, new ItemBlockCompressed(compressedBlock).setRegistryName(compressedBlock.getRegistryName()));
 
         heavySieve = new BlockHeavySieve(); // TODO omniafy
-        GameRegistry.register(heavySieve);
-        GameRegistry.register(new ItemBlockHeavySieve(heavySieve).setRegistryName(heavySieve.getRegistryName()));
+        registerBlock(heavySieve, new ItemBlockHeavySieve(heavySieve).setRegistryName(heavySieve.getRegistryName()));
 
         woodenCrucible = new BlockWoodenCrucible();
-        GameRegistry.register(woodenCrucible);
-        GameRegistry.register(new ItemBlockWoodenCrucible(woodenCrucible).setRegistryName(woodenCrucible.getRegistryName()));
+        registerBlock(woodenCrucible, new ItemBlockWoodenCrucible(woodenCrucible).setRegistryName(woodenCrucible.getRegistryName()));
 
         bait = new BlockBait();
-        GameRegistry.register(bait);
-        GameRegistry.register(new ItemBlockBait(bait).setRegistryName(bait.getRegistryName()));
+        registerBlock(bait, new ItemBlockBait(bait).setRegistryName(bait.getRegistryName()));
 
-        autoHammer = new BlockAutoHammer();
+        // wow seriously fuck this
+        autoHammer = new BlockAutoHammer("auto_hammer");
         autoCompressedHammer = new BlockAutoCompressedHammer();
-        autoSieve = new BlockAutoSieve(); // TODO omniafy
+        autoSieve = new BlockAutoSieve("auto_sieve"); // TODO omniafy
         autoHeavySieve = new BlockAutoHeavySieve(); // TODO omniafy
         autoCompressor = new BlockAutoCompressor();
         if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) { // TODO Tesla? Or what's the cool new thing for power now?
             registerDefaultBlock(autoHammer);
             registerDefaultBlock(autoCompressedHammer);
-            GameRegistry.register(autoSieve);
-            GameRegistry.register(new ItemBlockAutoSieve(autoSieve).setRegistryName(autoSieve.getRegistryName()));
-            GameRegistry.register(autoHeavySieve);
-            GameRegistry.register(new ItemBlockAutoHeavySieve(autoHeavySieve).setRegistryName(autoHeavySieve.getRegistryName()));
+            registerBlock(autoSieve, new ItemBlockAutoSieve(autoSieve).setRegistryName(autoSieve.getRegistryName()));
+            registerBlock(autoHeavySieve, new ItemBlockAutoHeavySieve(autoHeavySieve).setRegistryName(autoHeavySieve.getRegistryName()));
             registerDefaultBlock(autoCompressor);
         }
 
         manaSieve = new BlockManaSieve();
         if(Loader.isModLoaded(Compat.BOTANIA)) {
-            GameRegistry.register(manaSieve);
-            GameRegistry.register(new ItemBlockManaSieve(manaSieve));
+            registerBlock(manaSieve, new ItemBlockManaSieve(manaSieve).setRegistryName(manaSieve.getRegistryName()));
         }
 
         GameRegistry.registerTileEntity(TileWoodenCrucible.class, ExCompressum.MOD_ID + ":wooden_crucible");
@@ -66,7 +63,7 @@ public class ModBlocks {
 
         if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) { // TODO Tesla? Or what's the cool new thing for power now?
             GameRegistry.registerTileEntity(TileAutoHammer.class, ExCompressum.MOD_ID + "auto_hammer");
-            GameRegistry.registerTileEntity(TileAutoCompressedHammer.class, ExCompressum.MOD_ID + "auto_compressed_hammer");
+            GameRegistry.registerTileEntity(TileAutoCompressedHammer.class, ExCompressum.MOD_ID + "auto_compressed_hammer.json");
             GameRegistry.registerTileEntity(TileAutoSieve.class, ExCompressum.MOD_ID + "auto_sieve");
             GameRegistry.registerTileEntity(TileAutoHeavySieve.class, ExCompressum.MOD_ID + "auto_heavy_sieve");
             GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, ExCompressum.MOD_ID + "auto_compressor");
@@ -78,8 +75,17 @@ public class ModBlocks {
     }
 
     private static void registerDefaultBlock(Block block) {
+        registerBlock(block, new ItemBlock(block).setRegistryName(block.getRegistryName()));
+    }
+
+    private static void registerBlock(Block block, Item itemBlock) {
         GameRegistry.register(block);
-        GameRegistry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+        GameRegistry.register(itemBlock);
+        if(block instanceof IRegisterModel) {
+            ((IRegisterModel) block).registerModel(itemBlock);
+        } else {
+            ModelLoader.setCustomModelResourceLocation(itemBlock, 0, new ModelResourceLocation(itemBlock.getRegistryName(), "inventory"));
+        }
     }
 
 }

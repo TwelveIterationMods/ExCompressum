@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 public class BlockAutoCompressedHammer extends BlockAutoHammer {
 
     public BlockAutoCompressedHammer() {
-        setRegistryName("auto_compressed_hammer");
+        super("auto_compressed_hammer");
     }
 
     @Override

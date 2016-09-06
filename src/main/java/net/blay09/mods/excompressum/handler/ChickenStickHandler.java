@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum.handler;
 import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
-import net.blay09.mods.excompressum.entity.EntityItemNoCombine;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.init.Items;
@@ -27,11 +26,11 @@ public class ChickenStickHandler {
 				event.getTarget().setDead();
 				if(!event.getTarget().worldObj.isRemote) {
 					if (Math.random() <= ExCompressumConfig.createChickenStickChance) {
-						event.getTarget().worldObj.playSound(event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, SoundEvents.ENTITY_CHICKEN_AMBIENT, SoundCategory.NEUTRAL, 1f, 2f, false); // TODO is .ambient == .say?
+						event.getTarget().worldObj.playSound(event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, SoundEvents.ENTITY_CHICKEN_AMBIENT, SoundCategory.NEUTRAL, 1f, 2f, false);
 						event.getTarget().worldObj.playSound(event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, SoundEvents.ENTITY_CHICKEN_HURT, SoundCategory.NEUTRAL, 1f, 2f, false);
 
 						for(int i = 0; i < 3; i++) {
-							EntityItem entityItem = new EntityItemNoCombine(event.getTarget().worldObj, event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, new ItemStack(Items.FEATHER));
+							EntityItem entityItem = new EntityItem(event.getTarget().worldObj, event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, new ItemStack(Items.FEATHER));
 							float motion = 0.05f;
 							entityItem.setPickupDelay(20);
 							entityItem.motionX = event.getTarget().worldObj.rand.nextGaussian() * motion;

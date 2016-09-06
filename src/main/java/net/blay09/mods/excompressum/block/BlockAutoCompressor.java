@@ -29,6 +29,7 @@ public class BlockAutoCompressor extends BlockContainer {
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
         setRegistryName("auto_compressor");
+        setUnlocalizedName(getRegistryName().toString());
     }
 
     @Override

@@ -13,6 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -24,17 +26,28 @@ import javax.annotation.Nullable;
 
 public class BlockAutoHammer extends BlockContainer {
 
-    public BlockAutoHammer() {
+    public BlockAutoHammer(String registryName) {
         super(Material.IRON);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
-        setRegistryName("auto_hammer");
+        setRegistryName(registryName);
+        setUnlocalizedName(getRegistryName().toString());
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
+    }
+
+    @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
+
+    @Override
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
     }
 
     @Override

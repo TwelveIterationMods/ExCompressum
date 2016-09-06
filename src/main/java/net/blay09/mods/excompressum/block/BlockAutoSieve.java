@@ -7,14 +7,16 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockAutoSieve extends BlockAutoSieveBase {
 
-    public BlockAutoSieve() {
+    public BlockAutoSieve(String registryName) {
         super(Material.IRON);
-        setRegistryName("auto_sieve");
+        setRegistryName(registryName);
+        setUnlocalizedName(getRegistryName().toString());
     }
 
     @Override

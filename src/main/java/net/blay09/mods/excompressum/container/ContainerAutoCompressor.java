@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.container;
 
-import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -84,7 +83,7 @@ public class ContainerAutoCompressor extends Container {
                 if (!mergeItemStack(slotStack, 24, 60, true)) {
                     return null;
                 }
-            } else if(CompressedRecipeRegistry.getRecipe(slotStack) != null) { // TODO cleanup: could use itemhandler to remove duplicate logic
+            } else if(tileEntity.getItemHandler().isItemValid(0, slotStack)) {
                 if (!mergeItemStack(slotStack, 0, 12, false)) {
                     return null;
                 }

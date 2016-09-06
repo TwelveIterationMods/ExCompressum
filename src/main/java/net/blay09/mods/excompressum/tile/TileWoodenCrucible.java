@@ -75,7 +75,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
     public boolean addItem(ItemStack itemStack) {
         // Make clay if possible
         if (ExCompressumConfig.woodenCrucibleMakesClay && fluidTank.getFluidAmount() >= Fluid.BUCKET_VOLUME) {
-            if(ExRegistro.isNihiloBlock(itemStack, ExNihiloProvider.NihiloBlocks.Dust)) {
+            if(ExRegistro.isNihiloBlock(itemStack, ExNihiloProvider.NihiloBlocks.DUST)) {
                 if(!worldObj.isRemote) {
                     FluidStack drained = fluidTank.drain(Fluid.BUCKET_VOLUME, true);
                     if(drained == null || drained.amount < Fluid.BUCKET_VOLUME) {
@@ -168,6 +168,10 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
         solidVolume = tagCompound.getFloat("SolidVolume");
         fluidProgress = tagCompound.getFloat("FluidProgress");
         fluidTank.readFromNBT(tagCompound.getCompoundTag("FluidTank"));
+        Fluid lockFluid = getFluid();
+        if(lockFluid != null) {
+            fillingFluid = new FluidStack(lockFluid, 0);
+        }
         if (tagCompound.hasKey("Content")) {
             currentMeltable = WoodenCrucibleRegistry.getMeltable(ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content")));
         }

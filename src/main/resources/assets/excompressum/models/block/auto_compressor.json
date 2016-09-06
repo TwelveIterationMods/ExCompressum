@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "excompressum:blocks/auto_compressor_side",
+        "down": "excompressum:blocks/auto_compressor_side",
+        "up": "excompressum:blocks/auto_compressor_top",
+        "north": "excompressum:blocks/auto_compressor_side",
+        "east": "excompressum:blocks/auto_compressor_side",
+        "south": "excompressum:blocks/auto_compressor_side",
+        "west": "excompressum:blocks/auto_compressor_side"
+    }
+}

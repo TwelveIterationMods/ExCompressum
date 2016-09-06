@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "excompressum:items/ore_smasher"
+  }
+}

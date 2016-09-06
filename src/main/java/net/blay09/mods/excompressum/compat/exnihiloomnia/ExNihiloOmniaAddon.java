@@ -2,21 +2,31 @@ package net.blay09.mods.excompressum.compat.exnihiloomnia;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import exnihiloomnia.registries.composting.CompostRegistry;
+import exnihiloomnia.registries.composting.CompostRegistryEntry;
 import exnihiloomnia.registries.hammering.HammerRegistry;
 import exnihiloomnia.registries.hammering.HammerRegistryEntry;
 import exnihiloomnia.registries.hammering.HammerReward;
 import exnihiloomnia.registries.sifting.SieveRegistry;
 import exnihiloomnia.registries.sifting.SieveRegistryEntry;
 import exnihiloomnia.registries.sifting.SieveReward;
+import exnihiloomnia.util.Color;
 import exnihiloomnia.util.enums.EnumMetadataBehavior;
+import net.blay09.mods.excompressum.ExCompressumConfig;
+import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -26,7 +36,7 @@ import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings("unused")
-public class ExNihiloOmniaAddon implements ExNihiloProvider {
+public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 
 	private final EnumMap<NihiloItems, Item> itemMap = Maps.newEnumMap(NihiloItems.class);
 	private final EnumMap<NihiloBlocks, Block> blockMap = Maps.newEnumMap(NihiloBlocks.class);
@@ -34,9 +44,17 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider {
 	private static final float SIEVE_LUCK_MODIFIER = 2.5f;
 
 	public ExNihiloOmniaAddon() {
-		itemMap.put(NihiloItems.HammerDiamond, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_diamond")));
+		itemMap.put(NihiloItems.HAMMER_WOODEN, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_wood")));
+		itemMap.put(NihiloItems.HAMMER_STONE, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_stone")));
+		itemMap.put(NihiloItems.HAMMER_IRON, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_iron")));
+		itemMap.put(NihiloItems.HAMMER_GOLD, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_gold")));
+		itemMap.put(NihiloItems.HAMMER_DIAMOND, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_diamond")));
+		itemMap.put(NihiloItems.CROOK_WOODEN, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "crook_wood")));
+		itemMap.put(NihiloItems.SILK_MESH, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "mesh_silk_white")));
+		itemMap.put(NihiloItems.SEEDS_GRASS, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "seeds_grass")));
 
-		blockMap.put(NihiloBlocks.Dust, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "dust")));
+		blockMap.put(NihiloBlocks.DUST, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "dust")));
+		blockMap.put(NihiloBlocks.SIEVE, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "sieve_wood")));
 
 		ExRegistro.instance = this;
 	}
@@ -100,5 +118,39 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider {
 				list.add(reward.getItem().copy());
 			}
 		}
+	}
+
+	@Override
+	public void loadConfig(Configuration config) {
+
+	}
+
+	@Override
+	public void postInit() {
+		if(ExCompressumConfig.enableWoodChippings) {
+			HammerRegistryEntry log = new HammerRegistryEntry(Blocks.LOG.getDefaultState(), EnumMetadataBehavior.IGNORED);
+			log.addReward(new ItemStack(ModItems.woodChipping), 100, 0);
+			log.addReward(new ItemStack(ModItems.woodChipping), 75, 0);
+			log.addReward(new ItemStack(ModItems.woodChipping), 50, 0);
+			log.addReward(new ItemStack(ModItems.woodChipping), 25, 0);
+			HammerRegistry.add(log);
+
+			HammerRegistryEntry log2 = new HammerRegistryEntry(Blocks.LOG2.getDefaultState(), EnumMetadataBehavior.IGNORED);
+			log2.addReward(new ItemStack(ModItems.woodChipping), 100, 0);
+			log2.addReward(new ItemStack(ModItems.woodChipping), 75, 0);
+			log2.addReward(new ItemStack(ModItems.woodChipping), 50, 0);
+			log2.addReward(new ItemStack(ModItems.woodChipping), 25, 0);
+			HammerRegistry.add(log2);
+
+			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
+			for(ItemStack itemStack : oreDictStacks) {
+				CompostRegistry.add(new CompostRegistryEntry(itemStack, 125, new Color(0xFFC77826)));
+			}
+		}
+	}
+
+	@Override
+	public void serverStarted(FMLServerStartedEvent event) {
+
 	}
 }

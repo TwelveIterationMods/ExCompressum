@@ -4,6 +4,8 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.ModBlocks;
+import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.ItemAndMetadata;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityAgeable;
@@ -13,13 +15,13 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -90,7 +92,13 @@ public class TileBait extends TileEntity implements ITickable {
             case 2: return new ItemStack(Items.WHEAT);
             case 3: return new ItemStack(Items.CARROT);
             case 4: return new ItemStack(Items.WHEAT_SEEDS);
-            case 5: return i == 0 ? new ItemStack(GameRegistry.findItem("exnihilo" ,"seed_grass")) : new ItemStack(Items.WHEAT); // TODO generify
+            case 5:
+                Item grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
+                if(grassSeeds != null) {
+                    return i == 0 ? new ItemStack(grassSeeds) : new ItemStack(Items.WHEAT);
+                } else {
+                    return new ItemStack(Items.WHEAT);
+                }
             case 6: return new ItemStack(Items.FISH);
         }
         return null;

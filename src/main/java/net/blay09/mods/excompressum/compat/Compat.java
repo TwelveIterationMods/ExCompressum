@@ -4,5 +4,6 @@ public class Compat {
 
 	public static final String BOTANIA = "Botania";
 	public static final String EXNIHILOOMNIA = "exnihiloomnia";
+	public static final String TCONSTRUCT = "tconstruct";
 
 }

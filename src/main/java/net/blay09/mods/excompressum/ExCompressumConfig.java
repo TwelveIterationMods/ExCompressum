@@ -47,6 +47,8 @@ public class ExCompressumConfig {
 
 	public static boolean skipAutoSieveSkins;
 
+	public static boolean enableWoodChippings;
+
 	public static void load(Configuration config) {
 
 		compressedCrookDurabilityMultiplier = config.getFloat("Compressed Crook Durability Multiplier", "general", 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
@@ -102,5 +104,7 @@ public class ExCompressumConfig {
 				"Ghast",
 //                "Wither" okay, calm down Blay
 		}, "A list of entity names that can spawn as compressed entities."));
+
+		enableWoodChippings = config.getBoolean("Wood Chippings", "items", true, "If set to true, wood can be smashed into wood chippings, which can be composted into dirt.");
 	}
 }
