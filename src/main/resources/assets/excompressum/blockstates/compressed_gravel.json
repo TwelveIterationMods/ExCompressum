@@ -1,7 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "excompressum:compressed_gravel"
+    "model": "minecraft:cube_all",
+    "textures": {
+      "all": "excompressum:blocks/compressed_gravel"
+    }
   },
   "variants": {
     "normal": [{}],

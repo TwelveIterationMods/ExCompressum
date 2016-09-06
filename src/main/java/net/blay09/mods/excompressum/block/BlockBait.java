@@ -48,6 +48,10 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
 
         public static Type[] values = values();
 
+        public static Type fromId(int id) {
+            return id >= 0 && id < values.length ? values[id] : null;
+        }
+
         @Override
         public String getName() {
             return name().toLowerCase();

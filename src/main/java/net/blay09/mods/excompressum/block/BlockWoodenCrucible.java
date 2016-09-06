@@ -31,7 +31,7 @@ import java.util.List;
 
 public class BlockWoodenCrucible extends BlockContainer implements IRegisterModel {
 
-    public enum WoodType implements IStringSerializable {
+    public enum Type implements IStringSerializable {
         OAK,
         SPRUCE,
         BIRCH,
@@ -39,7 +39,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
         ACACIA,
         DARK_OAK;
 
-        public static WoodType[] values = values();
+        public static Type[] values = values();
 
         @Override
         public String getName() {
@@ -47,7 +47,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
         }
     }
 
-    public static final PropertyEnum<WoodType> VARIANT = PropertyEnum.create("variant", WoodType.class);
+    public static final PropertyEnum<Type> VARIANT = PropertyEnum.create("variant", Type.class);
 
     public BlockWoodenCrucible() {
         super(Material.WOOD);
@@ -65,10 +65,10 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
-        if(meta < 0 || meta >= BlockCompressed.Type.values.length) {
+        if(meta < 0 || meta >= Type.values.length) {
             return getDefaultState();
         }
-        return getDefaultState().withProperty(VARIANT, WoodType.values[meta]);
+        return getDefaultState().withProperty(VARIANT, Type.values[meta]);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
 
     @Override
     public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for(int i = 0; i < WoodType.values.length; i++) {
+        for(int i = 0; i < Type.values.length; i++) {
             list.add(new ItemStack(item, 1, i));
         }
     }
@@ -175,15 +175,10 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
 
     @Override
     public void registerModel(Item item) {
-        /*ResourceLocation[] variants = new ResourceLocation[BlockCompressed.Type.values.length];
-        for(int i = 0; i < variants.length; i++) {
-            variants[i] = new ResourceLocation(ExCompressum.MOD_ID, "compressed_" + BlockCompressed.Type.values[i].getName());
-        }
-        ModelBakery.registerItemVariants(item, variants);*/
         ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
             @Override
             public ModelResourceLocation getModelLocation(ItemStack itemStack) {
-                WoodType type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < WoodType.values.length ? WoodType.values[itemStack.getItemDamage()] : null;
+                Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
                 if(type != null) {
                     return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName());
                 } else {

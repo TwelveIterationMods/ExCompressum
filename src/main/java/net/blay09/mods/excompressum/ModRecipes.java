@@ -231,13 +231,23 @@ public class ModRecipes {
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 5), "###", "###", "###", '#', Items.FLINT);
 			GameRegistry.addShapelessRecipe(new ItemStack(Items.FLINT, 9), new ItemStack(ModBlocks.compressedBlock, 1, 5));
 		}
-		if (config.getBoolean("Compressed Stone", "blocks", true, "Set this to false to disable the recipe for the compressed stone.")) {
-			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 6), "###", "###", "###", '#', Blocks.STONE);
-			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.STONE, 9), new ItemStack(ModBlocks.compressedBlock, 1, 6));
+		if (config.getBoolean("Compressed Ender Gravel", "blocks", true, "Set this to false to disable the recipe for the compressed ender gravel.")) {
+			Block enderGravelBlock = ExRegistro.getNihiloBlock(ExNihiloProvider.NihiloBlocks.ENDER_GRAVEL);
+			if(enderGravelBlock != null) {
+				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 6), "###", "###", "###", '#', enderGravelBlock);
+				GameRegistry.addShapelessRecipe(new ItemStack(enderGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, 6));
+			} else {
+				ExCompressum.logger.warn("No Ender Gravel found - Compressed Ender Gravel recipe will be disabled.");
+			}
 		}
-		if (config.getBoolean("Compressed Netherrack", "blocks", true, "Set this to false to disable the recipe for the compressed netherrack.")) {
-			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 7), "###", "###", "###", '#', Blocks.NETHERRACK);
-			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.NETHERRACK, 9), new ItemStack(ModBlocks.compressedBlock, 1, 7));
+		if (config.getBoolean("Compressed Nether Gravel", "blocks", true, "Set this to false to disable the recipe for the compressed nether gravel.")) {
+			Block netherGravelBlock = ExRegistro.getNihiloBlock(ExNihiloProvider.NihiloBlocks.NETHER_GRAVEL);
+			if(netherGravelBlock != null) {
+				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 6), "###", "###", "###", '#', netherGravelBlock);
+				GameRegistry.addShapelessRecipe(new ItemStack(netherGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, 6));
+			} else {
+				ExCompressum.logger.warn("No Nether Gravel found - Compressed Nether Gravel recipe will be disabled.");
+			}
 		}
 	}
 
@@ -263,7 +273,7 @@ public class ModRecipes {
 			if(grassSeeds != null) {
 				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 5), grassSeeds, Items.WHEAT);
 			} else {
-				ExCompressum.logger.warn("No Grass Seeds found - sheep bait recipe will be disabled!");
+				ExCompressum.logger.warn("No Grass Seeds found - Sheep Bait recipe will be disabled!");
 			}
 		}
 		if (config.getBoolean("Squid Bait", "blocks", false, "If set to false, the recipe for the squid bait will be disabled.")) {

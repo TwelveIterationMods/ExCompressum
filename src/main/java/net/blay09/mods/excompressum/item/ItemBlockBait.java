@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.block.BlockBait;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,14 +21,16 @@ public class ItemBlockBait extends ItemBlock {
     @Override
     @SuppressWarnings("unchecked")
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean debug) {
-        if(itemStack.getItemDamage() == 6) {
+        BlockBait.Type type = BlockBait.Type.fromId(itemStack.getItemDamage());
+        if(type == BlockBait.Type.SQUID) {
             list.add(I18n.format("info.excompressum:baitPlaceInWater"));
         }
     }
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
-        return "item." + ExCompressum.MOD_ID + ":bait_" + itemStack.getItemDamage();
+        BlockBait.Type type = BlockBait.Type.fromId(itemStack.getItemDamage());
+        return "item." + ExCompressum.MOD_ID + ":bait_" + (type != null ? type.getName() : "unknown");
     }
 
     @Override

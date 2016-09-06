@@ -3,8 +3,7 @@
 "textures": {
     "texture_top": "excompressum:blocks/auto_frame_top",
     "texture_glass": "excompressum:blocks/auto_frame_glass",
-    "texture_side": "excompressum:blocks/auto_frame_side",
-    "hammer": "exnihiloomnia:items/hammer_diamond"
+    "texture_side": "excompressum:blocks/auto_frame_side"
 },
 "elements": [ 
 {
@@ -111,10 +110,10 @@
 },
 {
     "__comment": "Hammer",
-    "from": [ 2, 2, 7.5 ],
-    "to": [ 14, 14, 8.5 ],
+    "from": [ 7.5, 2, 2 ],
+    "to": [ 8.5, 14, 14 ],
     "faces": {
-        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#hammer" }
+        "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#hammer" }
     }
 }
 ]

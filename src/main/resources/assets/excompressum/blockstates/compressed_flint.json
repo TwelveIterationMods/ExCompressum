@@ -1,7 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "excompressum:compressed_flint"
+    "model": "minecraft:cube_all",
+    "textures": {
+      "all": "excompressum:blocks/compressed_flint"
+    }
   },
   "variants": {
     "normal": [{}],

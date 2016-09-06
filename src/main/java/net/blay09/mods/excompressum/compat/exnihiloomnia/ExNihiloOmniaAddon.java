@@ -55,6 +55,8 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 
 		blockMap.put(NihiloBlocks.DUST, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "dust")));
 		blockMap.put(NihiloBlocks.SIEVE, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "sieve_wood")));
+		blockMap.put(NihiloBlocks.NETHER_GRAVEL, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "gravel_nether")));
+		blockMap.put(NihiloBlocks.ENDER_GRAVEL, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "gravel_ender")));
 
 		ExRegistro.instance = this;
 	}

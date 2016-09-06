@@ -6,6 +6,11 @@
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{}]
+    "inventory": [{
+      "model": "excompressum:auto_hammer_inventory",
+      "textures": {
+        "hammer": "exnihiloomnia:items/hammer_diamond"
+      }
+    }]
   }
 }

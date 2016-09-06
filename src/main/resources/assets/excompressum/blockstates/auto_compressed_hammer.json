@@ -6,6 +6,8 @@
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{}]
+    "inventory": [{
+      "model": "excompressum:auto_compressed_hammer_inventory"
+    }]
   }
 }

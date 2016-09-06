@@ -30,7 +30,9 @@ public class BlockCompressed extends Block implements IRegisterModel {
 		GRAVEL,
 		SAND,
 		DIRT,
-		FLINT;
+		FLINT,
+		NETHER_GRAVEL,
+		ENDER_GRAVEL;
 
 		public static final Type[] values = values();
 

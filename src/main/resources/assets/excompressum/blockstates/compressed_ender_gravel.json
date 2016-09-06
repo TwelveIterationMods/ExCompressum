@@ -3,7 +3,7 @@
   "defaults": {
     "model": "minecraft:cube_all",
     "textures": {
-      "all": "excompressum:blocks/compressed_sand"
+      "all": "excompressum:blocks/compressed_ender_gravel"
     }
   },
   "variants": {

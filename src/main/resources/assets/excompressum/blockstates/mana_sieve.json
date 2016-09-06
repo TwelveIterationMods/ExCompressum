@@ -1,7 +1,8 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "excompressum:mana_sieve"
+    "model": "excompressum:mana_sieve",
+    "transform": "forge:default-block"
   },
   "variants": {
     "normal": [{}],
