@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry;
+package net.blay09.mods.excompressum.registry.compressor;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

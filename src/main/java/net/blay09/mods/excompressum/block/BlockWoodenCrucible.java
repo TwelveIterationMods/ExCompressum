@@ -65,11 +65,11 @@ public class BlockWoodenCrucible extends BlockContainer {
                     }
                 }
 
+                // TODO capability stuffs ItemFluidContainer
+
                 FluidStack heldItemFluid = FluidContainerRegistry.getFluidForFilledItem(heldItem);
                 if (heldItemFluid != null) {
-                    int available = tileEntity.fill(EnumFacing.UP, heldItemFluid, false);
-                    if (available > 0) {
-                        tileEntity.fill(EnumFacing.UP, heldItemFluid, true);
+                    if(tileEntity.getFluidTank().fill(heldItemFluid, true) > 0) {
                         if (!player.capabilities.isCreativeMode) {
                             if (heldItem.getItem() == Items.POTIONITEM && heldItem.getItemDamage() == 0) {
                                 player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(Items.GLASS_BOTTLE, 1, 0));
@@ -79,7 +79,7 @@ public class BlockWoodenCrucible extends BlockContainer {
                         }
                     }
                 } else if (FluidContainerRegistry.isContainer(heldItem)) {
-                    FluidStack fluidStack = tileEntity.drain(EnumFacing.DOWN, Integer.MAX_VALUE, false);
+                    FluidStack fluidStack = tileEntity.getFluidTank().drain(Integer.MAX_VALUE, false);
                     if (fluidStack != null) {
                         ItemStack filledStack = FluidContainerRegistry.fillFluidContainer(fluidStack, heldItem);
                         if (filledStack != null) {
@@ -96,7 +96,7 @@ public class BlockWoodenCrucible extends BlockContainer {
                                     player.inventory.setInventorySlotContents(player.inventory.currentItem, filledStack);
                                 }
 
-                                tileEntity.drain(EnumFacing.DOWN, filledFluid.amount, true);
+                                tileEntity.getFluidTank().drain(filledFluid.amount, true);
                                 return true;
                             }
                         }

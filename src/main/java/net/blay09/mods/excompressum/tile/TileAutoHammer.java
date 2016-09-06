@@ -7,8 +7,8 @@ import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.ItemHandlerAutomation;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.registry.HammerRegistry;
-import net.blay09.mods.excompressum.registry.data.SmashableReward;
+import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -27,6 +27,7 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Random;
 
 public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergyReceiver {
 
@@ -111,20 +112,15 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
                         }
                     }
                     if (!worldObj.isRemote) {
-                        Collection<SmashableReward> rewards = getSmashableRewards(currentStack);
-                        if (!rewards.isEmpty()) {
-                            for (SmashableReward reward : rewards) {
-                                if (worldObj.rand.nextFloat() <= reward.getChance() + (reward.getLuckMultiplier() * getEffectiveLuck())) {
-                                    ItemStack rewardStack = new ItemStack(reward.getItem(), 1, reward.getMetadata());
-                                    if (!addItemToOutput(rewardStack)) {
-                                        EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, rewardStack);
-                                        double motion = 0.05;
-                                        entityItem.motionX = worldObj.rand.nextGaussian() * motion;
-                                        entityItem.motionY = 0.2;
-                                        entityItem.motionZ = worldObj.rand.nextGaussian() * motion;
-                                        worldObj.spawnEntityInWorld(entityItem);
-                                    }
-                                }
+                        Collection<ItemStack> rewards = rollHammerRewards(currentStack, getEffectiveLuck(), worldObj.rand);
+                        for (ItemStack itemStack : rewards) {
+                            if (!addItemToOutput(itemStack)) {
+                                EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
+                                double motion = 0.05;
+                                entityItem.motionX = worldObj.rand.nextGaussian() * motion;
+                                entityItem.motionY = 0.2;
+                                entityItem.motionZ = worldObj.rand.nextGaussian() * motion;
+                                worldObj.spawnEntityInWorld(entityItem);
                             }
                         }
                     } else {
@@ -135,14 +131,6 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
                 }
             }
         }
-    }
-
-    protected Collection<SmashableReward> getSmashableRewards(ItemStack itemStack) {
-        return HammerRegistry.getRewards(itemStack);
-    }
-
-    public boolean isRegistered(ItemStack itemStack) {
-        return HammerRegistry.isRegistered(itemStack);
     }
 
     private boolean addItemToOutput(ItemStack itemStack) {
@@ -186,10 +174,10 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
 
     public float getEffectiveSpeed() {
         return ExCompressumConfig.autoHammerSpeed * getSpeedBoost();
-    }
+    } // TODO should probably take hammer enchantments into account
 
     public float getEffectiveLuck() {
-        return 0f;
+        return 0f; // TODO should probably take hammer enchantments into account
     }
 
     @Override
@@ -271,10 +259,6 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         return true;
     }
 
-    public boolean isHammerUpgrade(ItemStack itemStack) {
-        return HammerRegistry.isHammerUpgrade(itemStack);
-    }
-
     public void setEnergyStored(int energyStored) {
         storage.setEnergyStored(energyStored);
     }
@@ -336,5 +320,17 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     @Nullable
     public ItemStack getUpgradeStack(int i) {
         return itemHandlerUpgrades.getStackInSlot(i);
+    }
+
+    public boolean isHammerUpgrade(ItemStack itemStack) {
+        return ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.HammerDiamond);
+    }
+
+    public boolean isRegistered(ItemStack itemStack) {
+        return ExRegistro.isHammerable(itemStack);
+    }
+
+    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, float luck, Random rand) {
+        return ExRegistro.rollHammerRewards(itemStack, luck, rand);
     }
 }

@@ -1,22 +1,22 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.ExCompressumConfig;
-import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
-import net.blay09.mods.excompressum.registry.data.SiftingResult;
+import net.blay09.mods.excompressum.registry.sieve.HeavySieveRegistry;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
+import java.util.Random;
 
 public class TileAutoHeavySieve extends TileAutoSieve {
 
     @Override
     public boolean isRegistered(ItemStack itemStack) {
-        return HeavySieveRegistry.isRegistered(itemStack);
+        return HeavySieveRegistry.isSiftable(itemStack);
     }
 
     @Override
-    public Collection<SiftingResult> getSiftingOutput(ItemStack itemStack) {
-        return HeavySieveRegistry.getSiftingOutput(itemStack);
+    public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, float luck, Random rand) {
+        return HeavySieveRegistry.rollSieveRewards(itemStack, luck, rand);
     }
 
     @Override

@@ -1,8 +1,7 @@
-package net.blay09.mods.excompressum.registry;
+package net.blay09.mods.excompressum.registry.crucible;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
-import net.blay09.mods.excompressum.registry.data.WoodenMeltable;
+import net.blay09.mods.excompressum.registry.ItemAndMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;

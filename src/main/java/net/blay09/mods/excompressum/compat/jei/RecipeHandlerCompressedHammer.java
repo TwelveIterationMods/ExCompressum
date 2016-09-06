@@ -10,7 +10,7 @@
 //import com.google.common.collect.Multimap;
 //import com.google.common.collect.Multiset;
 //import exnihilo.registries.helpers.Smashable;
-//import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
+//import net.blay09.mods.excompressum.registry.CompressedHammerRegistryOld;
 //import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 //import net.minecraft.block.Block;
 //import net.minecraft.item.ItemStack;
@@ -88,7 +88,7 @@
 //        if (itemStack != null && itemStack != sourceStack) {
 //            list.add("Drop Chance:");
 //            condensedTooltip.clear();
-//            for (Smashable smashable : CompressedHammerRegistry.getSmashables(Block.getBlockFromItem(sourceStack.getItem()), sourceStack.getItemDamage())) {
+//            for (Smashable smashable : CompressedHammerRegistryOld.getSmashables(Block.getBlockFromItem(sourceStack.getItem()), sourceStack.getItemDamage())) {
 //                if (NEIServerUtils.areStacksSameTypeCrafting(itemStack, new ItemStack(smashable.item, 1, smashable.meta))) {
 //                    int chance = (int) (100 * smashable.chance);
 //                    int fortune = (int) (100 * smashable.luckMultiplier);
@@ -132,7 +132,7 @@
 //            super.loadCraftingRecipes(outputID, wat);
 //            return;
 //        }
-//        Multimap<ItemAndMetadata, Smashable> smashables = CompressedHammerRegistry.getSmashables();
+//        Multimap<ItemAndMetadata, Smashable> smashables = CompressedHammerRegistryOld.getSmashables();
 //        for(ItemAndMetadata sourceInfo : smashables.keySet()) {
 //            Collection<Smashable> results = smashables.get(sourceInfo);
 //            Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
@@ -149,7 +149,7 @@
 //
 //    @Override
 //    public void loadCraftingRecipes(ItemStack itemStack) {
-//        Multimap<ItemAndMetadata, Smashable> smashables = CompressedHammerRegistry.getSmashables();
+//        Multimap<ItemAndMetadata, Smashable> smashables = CompressedHammerRegistryOld.getSmashables();
 //        for (ItemAndMetadata sourceInfo : smashables.keySet()) {
 //            Collection<Smashable> results = smashables.get(sourceInfo);
 //            Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
@@ -170,10 +170,10 @@
 //    @Override
 //    public void loadUsageRecipes(ItemStack itemStack) {
 //        Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
-//        if (!CompressedHammerRegistry.isRegistered(itemStack)) {
+//        if (!CompressedHammerRegistryOld.isRegistered(itemStack)) {
 //            return;
 //        }
-//        for (Smashable result : CompressedHammerRegistry.getSmashables(itemStack)) {
+//        for (Smashable result : CompressedHammerRegistryOld.getSmashables(itemStack)) {
 //            countedSet.add(new ItemAndMetadata(result.item, result.meta));
 //        }
 //        List<ItemStack> resultStacks = Lists.newArrayList();

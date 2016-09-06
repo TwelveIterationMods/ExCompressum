@@ -1,12 +1,17 @@
 package net.blay09.mods.excompressum;
 
 import com.google.common.collect.Lists;
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.handler.ChickenStickHandler;
 import net.blay09.mods.excompressum.handler.CompressedEnemyHandler;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.*;
+import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
+import net.blay09.mods.excompressum.registry.crucible.WoodenCrucibleRegistry;
+import net.blay09.mods.excompressum.registry.hammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.sieve.HeavySieveRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -71,16 +76,16 @@ public class ExCompressum {
     public void postInit(FMLPostInitializationEvent event) {
         ModRecipes.init(config);
 
-        CompressedHammerRegistry.load(config);
+        CompressedHammerRegistry.loadFromConfig(config);
         ChickenStickRegistry.load(config);
-        HeavySieveRegistry.load(config);
+        HeavySieveRegistry.loadFromConfig(config);
         CompressedRecipeRegistry.reload();
         WoodenCrucibleRegistry.load(config);
         AutoSieveSkinRegistry.load();
 
-        //registerAddon(event, "exnihiloomnia", "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon"); // TODO enable
-        registerAddon(event, "MineTweaker3", "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon"); // TODO CraftTweaker
-        registerAddon(event, "Botania", "net.blay09.mods.excompressum.compat.botania.BotaniaAddon"); // TODO BotaniaUnofficial
+        registerAddon(event, Compat.EXNIHILOOMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
+        registerAddon(event, "MineTweaker3", "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
+        registerAddon(event, Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
         registerAddon(event, "TConstruct", "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
 
         for(IAddon addon : addons) {

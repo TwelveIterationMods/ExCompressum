@@ -1,8 +1,7 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
-import net.blay09.mods.excompressum.registry.data.SiftingResult;
+import net.blay09.mods.excompressum.registry.sieve.HeavySieveRegistry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -67,16 +66,14 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         }
         if (volume <= 0) {
             if (!worldObj.isRemote) {
-                Collection<SiftingResult> rewards = HeavySieveRegistry.getSiftingOutput(currentStack);
-                for (SiftingResult reward : rewards) {
-                    if (worldObj.rand.nextInt(reward.getRarity()) == 0) {
-                        EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, new ItemStack(reward.getItem(), 1, reward.getMetadata()));
-                        double motionScale = 0.05;
-                        entityItem.motionX = worldObj.rand.nextGaussian() * motionScale;
-                        entityItem.motionY = 0.2;
-                        entityItem.motionZ = worldObj.rand.nextGaussian() * motionScale;
-                        worldObj.spawnEntityInWorld(entityItem);
-                    }
+                Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, 0f, worldObj.rand);
+                for (ItemStack itemStack : rewards) {
+                    EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
+                    double motionScale = 0.05;
+                    entityItem.motionX = worldObj.rand.nextGaussian() * motionScale;
+                    entityItem.motionY = 0.2;
+                    entityItem.motionZ = worldObj.rand.nextGaussian() * motionScale;
+                    worldObj.spawnEntityInWorld(entityItem);
                 }
             }
         } else {

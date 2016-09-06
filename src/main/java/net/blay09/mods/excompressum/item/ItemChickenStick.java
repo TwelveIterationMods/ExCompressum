@@ -5,8 +5,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
-import net.blay09.mods.excompressum.registry.HammerRegistry;
-import net.blay09.mods.excompressum.registry.data.SmashableReward;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -81,19 +80,17 @@ public class ItemChickenStick extends ItemTool {
         if (!ChickenStickRegistry.isValidBlock(state)) {
             return false;
         }
-        Collection<SmashableReward> rewards = HammerRegistry.getRewards(state); // generify
+        Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, 0f, world.rand);
         if (rewards.isEmpty()) {
             return false;
         }
-        for (SmashableReward reward : rewards) {
-            if (world.rand.nextFloat() <= reward.getChance()) {
-                EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(reward.getItem(), 1, reward.getMetadata()));
-                double motion = 0.05;
-                entityItem.motionX = world.rand.nextGaussian() * motion;
-                entityItem.motionY = 0.2;
-                entityItem.motionZ = world.rand.nextGaussian() * motion;
-                world.spawnEntityInWorld(entityItem);
-            }
+        for (ItemStack rewardStack : rewards) {
+            EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(rewardStack.getItem(), 1, rewardStack.getMetadata()));
+            double motion = 0.05;
+            entityItem.motionX = world.rand.nextGaussian() * motion;
+            entityItem.motionY = 0.2;
+            entityItem.motionZ = world.rand.nextGaussian() * motion;
+            world.spawnEntityInWorld(entityItem);
         }
         world.setBlockToAir(pos);
         playChickenSound(world, pos);
@@ -109,7 +106,6 @@ public class ItemChickenStick extends ItemTool {
     public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
         return ChickenStickRegistry.isValidBlock(state);
     }
-
 
     // TODO what is the new getDigSpeed?
     /*@Override

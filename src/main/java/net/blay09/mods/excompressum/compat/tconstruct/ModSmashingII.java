@@ -1,10 +1,8 @@
 package net.blay09.mods.excompressum.compat.tconstruct;
 
-import net.blay09.mods.excompressum.registry.CompressedHammerRegistry;
-import net.blay09.mods.excompressum.registry.HammerRegistry;
-import net.blay09.mods.excompressum.registry.data.SmashableReward;
+import net.blay09.mods.excompressum.registry.hammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
@@ -46,18 +44,12 @@ public class ModSmashingII extends ModifierTrait {
 	public void blockHarvestDrops(ItemStack tool, BlockEvent.HarvestDropsEvent event) {
 		if(ToolHelper.isToolEffective2(tool, event.getState())) {
 			event.getDrops().clear();
-			Collection<SmashableReward> rewards = CompressedHammerRegistry.getSmashables(event.getState());
+			Collection<ItemStack> rewards = CompressedHammerRegistry.rollHammerRewards(event.getState(), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
 			if(rewards.isEmpty()) {
-				rewards = HammerRegistry.getRewards(event.getState());
-				if(rewards.isEmpty()) {
-					return;
-				}
+				rewards = ExRegistro.rollHammerRewards(event.getState(), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
 			}
-			int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
-			for (SmashableReward reward : rewards) {
-				if (event.getWorld().rand.nextFloat() <= reward.getChance() + (reward.getLuckMultiplier() * fortune)) {
-					event.getDrops().add(reward.createItemStack());
-				}
+			for(ItemStack itemStack : rewards) {
+				event.getDrops().add(itemStack);
 			}
 		}
 	}

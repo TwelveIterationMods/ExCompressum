@@ -1,9 +1,8 @@
-package net.blay09.mods.excompressum.registry;
+package net.blay09.mods.excompressum.registry.compressor;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.blay09.mods.excompressum.registry.data.CompressedRecipe;
-import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
+import net.blay09.mods.excompressum.registry.ItemAndMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +14,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -51,31 +51,44 @@ public class CompressedRecipeRegistry {
         }
     }
 
-    private static void addCompressedRecipe(IRecipe recipe, ItemStack sourceStack) {
+    // TODO I don't *have* a world at this time. Why does it even get a world passed? stupid
+
+    private static void addCompressedRecipe(IRecipe recipe, @Nullable ItemStack sourceStack) {
+        //noinspection ConstantConditions /// Forge missing @Nullable
         if(sourceStack != null && sourceStack.getItem() != null) { // .getItem() != null is needed because some mod is registering a broken recipe
             sourceStack = sourceStack.copy();
             if(recipe.getRecipeSize() == 4) {
                 matcherSmall.fill(sourceStack);
                 if(recipe.matches(matcherSmall, null)) {
                     sourceStack.stackSize = 4;
-                    recipesSmall.add(new CompressedRecipe(sourceStack, recipe.getCraftingResult(matcherSmall).copy()));
+                    ItemStack result = recipe.getCraftingResult(matcherSmall);
+                    if(result != null) {
+                        recipesSmall.add(new CompressedRecipe(sourceStack, result.copy()));
+                    }
                 }
             } else if(recipe.getRecipeSize() == 9) {
                 matcher.fill(sourceStack);
                 if(recipe.matches(matcher, null)) {
                     sourceStack.stackSize = 9;
-                    recipes.add(new CompressedRecipe(sourceStack, recipe.getCraftingResult(matcher).copy()));
+                    ItemStack result = recipe.getCraftingResult(matcher);
+                    if(result != null) {
+                        recipes.add(new CompressedRecipe(sourceStack, result.copy()));
+                    }
                 } else { // Fallback for stupid mods that register 2x2 recipes in a 3x3 shaped grid
                     matcherSmallStupid.fill(sourceStack);
                     if(recipe.matches(matcherSmallStupid, null)) {
                         sourceStack.stackSize = 4;
-                        recipesSmall.add(new CompressedRecipe(sourceStack, recipe.getCraftingResult(matcherSmallStupid).copy()));
+                        ItemStack result = recipe.getCraftingResult(matcherSmallStupid);
+                        if(result != null) {
+                            recipesSmall.add(new CompressedRecipe(sourceStack, result.copy()));
+                        }
                     }
                 }
             }
         }
     }
 
+    @Nullable
     private static ItemStack getRecipeSource(ShapedRecipes recipe) {
         for(ItemStack itemStack : recipe.recipeItems) {
             if(itemStack != null) {
@@ -85,6 +98,7 @@ public class CompressedRecipeRegistry {
         return null;
     }
 
+    @Nullable
     private static ItemStack getRecipeSource(ShapelessRecipes recipe) {
         for(Object obj : recipe.recipeItems) {
             if(obj != null) {
@@ -130,8 +144,9 @@ public class CompressedRecipeRegistry {
         return Collections.emptyList();
     }
 
+    @Nullable
     public static CompressedRecipe getRecipe(ItemStack itemStack) {
-        if(itemStack == null || itemStack.getTagCompound() != null) {
+        if(itemStack.getTagCompound() != null) {
             return null;
         }
         ItemAndMetadata itemAndMetadata = new ItemAndMetadata(itemStack);

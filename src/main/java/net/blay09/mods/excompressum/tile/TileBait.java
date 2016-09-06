@@ -4,7 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.ModBlocks;
-import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
+import net.blay09.mods.excompressum.registry.ItemAndMetadata;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;

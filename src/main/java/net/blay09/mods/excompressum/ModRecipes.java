@@ -127,7 +127,9 @@ public class ModRecipes {
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.batZapper), " RG", " SR", "S  ", 'R', Items.REDSTONE, 'G', Items.GLOWSTONE_DUST, 'S', "stickWood"));
 		}
 
-		ItemOreSmasher.registerRecipes(config);
+		if(config.getBoolean("Ore Smasher", "items", true, "If set to false, the recipe for the ore smasher will be disabled.")) {
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.oreSmasher), " CD", " SC", "S  ", 'C', Blocks.CRAFTING_TABLE, 'D', Items.DIAMOND, 'S', "stickWood"));
+		}
 	}
 
 	private static void registerCompressedHammers(Configuration config) {

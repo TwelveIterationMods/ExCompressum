@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.container;
 
-import net.blay09.mods.excompressum.registry.CompressedRecipeRegistry;
+import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

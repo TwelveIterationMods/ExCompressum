@@ -33,8 +33,8 @@ public class WoodenCrucibleDataProvider implements IWailaDataProvider {
             if(tileEntity.getSolidVolume() > 0f) {
                 list.add(I18n.format("waila.excompressum:solidVolume", (int) tileEntity.getSolidVolume()));
             }
-            if(tileEntity.getFluidVolume() > 0f) {
-                list.add(I18n.format("waila.excompressum:fluidVolume", (int) tileEntity.getFluidVolume()));
+            if(tileEntity.getFluidProgress() > 0f) {
+                list.add(I18n.format("waila.excompressum:fluidVolume", (int) tileEntity.getFluidProgress()));
             }
         }
         return list;

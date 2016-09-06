@@ -2,37 +2,86 @@ package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.registry.BarrelRecipeRegistry;
-import net.blay09.mods.excompressum.registry.WoodenCrucibleRegistry;
-import net.blay09.mods.excompressum.registry.data.WoodenMeltable;
+import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.crucible.WoodenCrucibleRegistry;
+import net.blay09.mods.excompressum.registry.crucible.WoodenMeltable;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+
+import javax.annotation.Nullable;
 
 public class TileWoodenCrucible extends TileEntity implements ITickable {
 
-    public static final int MAX_FLUID = 1000;
+    public static final int MAX_FLUID = Fluid.BUCKET_VOLUME;
     private static final int UPDATE_INTERVAL = 10;
 
-    private Fluid fluid;
+    private IItemHandler itemHandler = new IItemHandler() {
+        @Override
+        public int getSlots() {
+            return 1;
+        }
+
+        @Override
+        @Nullable
+        public ItemStack getStackInSlot(int slot) {
+            return null;
+        }
+
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            ItemStack tryStack = stack.copy();
+            if(addItem(tryStack)) {
+                return tryStack;
+            }
+            return stack;
+        }
+
+        @Override
+        @Nullable
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            return null;
+        }
+    };
+    private FluidTank fluidTank = new FluidTank(MAX_FLUID) {
+        @Override
+        public boolean canFillFluidType(FluidStack fluid) {
+            return fluid.getFluid().getTemperature() > 500;
+        }
+    };
+
     private int ticksSinceUpdate;
     private boolean isDirty;
     private WoodenMeltable currentMeltable;
     private float solidVolume;
-    private float fluidVolume;
+    private float fluidProgress;
+    private FluidStack fillingFluid;
 
     public boolean addItem(ItemStack itemStack) {
-        if (ExCompressumConfig.woodenCrucibleBarrelRecipes && fluidVolume >= 1000) {
-            ItemStack outputStack = BarrelRecipeRegistry.getOutput(new FluidStack(fluid, (int) fluidVolume), itemStack);
-            if (outputStack != null) {
+        // Make clay if possible
+        if (ExCompressumConfig.woodenCrucibleMakesClay && fluidTank.getFluidAmount() >= Fluid.BUCKET_VOLUME) {
+            if(ExRegistro.isNihiloBlock(itemStack, ExNihiloProvider.NihiloBlocks.Dust)) {
                 if(!worldObj.isRemote) {
-                    fluidVolume -= 1000;
-                    EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, outputStack);
+                    FluidStack drained = fluidTank.drain(Fluid.BUCKET_VOLUME, true);
+                    if(drained == null || drained.amount < Fluid.BUCKET_VOLUME) {
+                        return false;
+                    }
+                    EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, new ItemStack(Blocks.CLAY));
                     entityItem.motionY = 0.2;
                     worldObj.spawnEntityInWorld(entityItem);
                     VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -40,11 +89,17 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
                 return true;
             }
         }
+
+        // Add meltable to the crucible
         WoodenMeltable meltable = WoodenCrucibleRegistry.getMeltable(itemStack);
         float capacityLeft = getCapacityLeft();
-        if (meltable != null && capacityLeft > meltable.fluidStack.amount && (fluid == null || meltable.fluidStack.getFluid() == fluid)) {
+        Fluid lockFluid = getFluid();
+        if (meltable != null && capacityLeft > meltable.fluidStack.amount && (lockFluid == null || meltable.fluidStack.getFluid() == lockFluid)) {
             currentMeltable = meltable;
-            fluid = meltable.fluidStack.getFluid();
+            if(lockFluid == null) {
+                fillingFluid = new FluidStack(meltable.fluidStack.getFluid(), 0);
+                fluidTank.setFluid(fillingFluid.copy());
+            }
             solidVolume = solidVolume + meltable.fluidStack.amount;
             VanillaPacketHandler.sendTileEntityUpdate(this);
             return true;
@@ -55,19 +110,29 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
     @Override
     public void update() {
         if (!worldObj.isRemote) {
-            float rainFall = worldObj.getBiomeGenForCoords(pos).getRainfall();
-            if ((fluidVolume == 0 || fluid == FluidRegistry.WATER) && worldObj.isRaining() && pos.getY() >= worldObj.getTopSolidOrLiquidBlock(pos).getY() - 1 && rainFall > 0f && ExCompressumConfig.woodenCrucibleFillFromRain) {
-                fluidVolume = Math.min(MAX_FLUID, fluidVolume + rainFall);
+            Fluid lockFluid = getFluid();
+            float rainFall = worldObj.getBiome(pos).getRainfall();
+            if ((lockFluid == null || lockFluid == FluidRegistry.WATER) && worldObj.isRaining() && pos.getY() >= worldObj.getTopSolidOrLiquidBlock(pos).getY() - 1 && rainFall > 0f && ExCompressumConfig.woodenCrucibleFillFromRain) {
+                if(lockFluid == null) {
+                    fillingFluid = new FluidStack(FluidRegistry.WATER, 0);
+                    fluidTank.setFluid(fillingFluid.copy());
+                }
+                fluidProgress += rainFall;
                 isDirty = true;
             }
 
             float speed = ExCompressumConfig.woodenCrucibleSpeed;
-            if (solidVolume > 0 && fluidVolume < MAX_FLUID) {
-                fluidVolume = Math.min(MAX_FLUID, fluidVolume + Math.min(speed, solidVolume));
+            if (solidVolume > 0 && fluidProgress < MAX_FLUID) {
+                fluidProgress += Math.min(speed, solidVolume);
                 solidVolume = Math.max(0, solidVolume - speed);
                 isDirty = true;
-            } else if (fluidVolume == 0 && fluid != null) {
+            } else if (fluidProgress == 0 && lockFluid != null) {
                 isDirty = true;
+            }
+
+            if(fluidProgress >= 1f) {
+                fillingFluid.amount = (int) fluidProgress;
+                fluidProgress -= fluidTank.fill(fillingFluid, true);
             }
 
             ticksSinceUpdate++;
@@ -93,167 +158,16 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
         return solidVolume > 0;
     }
 
-    public float getFluidVolume() {
-        return fluidVolume;
+    public float getFluidProgress() {
+        return fluidProgress;
     }
-
-    // TODO Fluid Capability
-
-    /*@Override
-    public int fill(ForgeDirection from, FluidStack fillStack, boolean doFill) {
-        if(fillStack.getFluid().getTemperature() > 500) {
-            return 0;
-        }
-        int capacityLeft = (int) (getCapacityLeft() - fluidVolume);
-        if (!doFill) {
-            if (fluid == null) {
-                return fillStack.amount;
-            } else {
-                return fluid == fillStack.getFluid() ? Math.min(capacityLeft, fillStack.amount) : 0;
-            }
-        }
-        int addedFluid = Math.min(capacityLeft, fillStack.amount);
-        if (fluid == null || fluid == fillStack.getFluid()) {
-            fluid = fillStack.getFluid();
-            fluidVolume += addedFluid;
-        } else {
-            return 0;
-        }
-        isDirty = true;
-        return addedFluid;
-    }
-
-    @Override
-    public FluidStack drain(ForgeDirection from, FluidStack drainStack, boolean doDrain) {
-        if (fluid == null || fluid != drainStack.getFluid()) {
-            return null;
-        }
-        FluidStack result = new FluidStack(drainStack, Math.min((int) fluidVolume, drainStack.amount));
-        if (doDrain) {
-            fluidVolume -= result.amount;
-            isDirty = true;
-        }
-        return result;
-    }
-
-    @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-        if (fluid == null) {
-            return null;
-        }
-        FluidStack result = new FluidStack(fluid, Math.min((int) fluidVolume, maxDrain));
-        if (doDrain) {
-            fluidVolume -= result.amount;
-            isDirty = true;
-        }
-        return result;
-    }
-
-    @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
-        return true;
-    }
-
-    @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        return true;
-    }
-
-    @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        return new FluidTankInfo[]{new FluidTankInfo(new FluidStack(fluid != null ? fluid : FluidRegistry.WATER, (int) fluidVolume), MAX_FLUID)};
-    }*/
-
-    // TODO ItemHandler Capability
-
-    /*@Override
-    public int[] getAccessibleSlotsFromSide(int side) {
-        if (side == ForgeDirection.UP.ordinal()) {
-            return new int[]{0};
-        }
-        return new int[0];
-    }
-
-    @Override
-    public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
-        if (side == 1 && slot == 1) {
-            WoodenMeltable meltable = WoodenCrucibleRegistry.getMeltable(itemStack);
-            if (meltable != null && getCapacityLeft() >= meltable.fluidStack.amount && (fluid == null || meltable.fluidStack.getFluid() == fluid)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-        return false;
-    }
-
-    @Override
-    public int getSizeInventory() {
-        return 1;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int slot) {
-        return null;
-    }
-
-    @Override
-    public ItemStack decrStackSize(int slot, int amount) {
-        return null;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int slot) {
-        return null;
-    }
-
-    @Override
-    public void setInventorySlotContents(int slot, ItemStack itemStack) {
-        addItem(itemStack);
-    }
-
-    @Override
-    public String getInventoryName() {
-        return null;
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 1;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
-        return false;
-    }
-
-    @Override
-    public void openInventory() {
-    }
-
-    @Override
-    public void closeInventory() {
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
-        return WoodenCrucibleRegistry.isRegistered(itemStack);
-    }*/
 
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
         solidVolume = tagCompound.getFloat("SolidVolume");
-        fluid = FluidRegistry.getFluid(tagCompound.getString("FluidName"));
-        fluidVolume = tagCompound.getFloat("FluidVolume");
+        fluidProgress = tagCompound.getFloat("FluidProgress");
+        fluidTank.readFromNBT(tagCompound.getCompoundTag("FluidTank"));
         if (tagCompound.hasKey("Content")) {
             currentMeltable = WoodenCrucibleRegistry.getMeltable(ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content")));
         }
@@ -266,20 +180,19 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
             tagCompound.setTag("Content", currentMeltable.itemStack.writeToNBT(new NBTTagCompound()));
         }
         tagCompound.setFloat("SolidVolume", solidVolume);
-        if (fluid != null) {
-            tagCompound.setString("FluidName", fluid.getName());
-        }
-        tagCompound.setFloat("FluidVolume", fluidVolume);
+        tagCompound.setFloat("FluidProgress", fluidProgress);
+        tagCompound.setTag("FluidTank", fluidTank.writeToNBT(new NBTTagCompound()));
         return tagCompound;
     }
 
-    // TODO fix te syncing
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        return writeToNBT(new NBTTagCompound());
+    }
 
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tagCompound = new NBTTagCompound();
-        writeToNBT(tagCompound);
-        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), tagCompound);
+        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), getUpdateTag());
     }
 
     @Override
@@ -291,11 +204,35 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
         return solidVolume;
     }
 
+    @Nullable
     public Fluid getFluid() {
-        return fluid;
+        return fluidTank.getFluid() != null ? fluidTank.getFluid().getFluid() : null; // yeah this is beautiful
     }
 
     public boolean hasFluids() {
-        return fluid != null && fluidVolume > 0;
+        return fluidTank.getFluidAmount() > 0;
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
+                || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+                || super.hasCapability(capability, facing);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return (T) fluidTank;
+        }
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) itemHandler;
+        }
+        return super.getCapability(capability, facing);
+    }
+
+    public FluidTank getFluidTank() {
+        return fluidTank;
     }
 }

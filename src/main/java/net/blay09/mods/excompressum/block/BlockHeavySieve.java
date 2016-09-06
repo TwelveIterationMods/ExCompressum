@@ -2,9 +2,8 @@ package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ExCompressumConfig;
-import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.sieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -69,21 +68,22 @@ public class BlockHeavySieve extends BlockContainer {
         }*/
 
         TileHeavySieve tileEntity = (TileHeavySieve) world.getTileEntity(pos);
-
-        if (tileEntity.getMode() == TileEntitySieve.SieveMode.EMPTY && heldItem != null) {
-            if (HeavySieveRegistry.isRegistered(Block.getBlockFromItem(heldItem.getItem()), heldItem.getItemDamage())) {
-                tileEntity.addSiftable(heldItem);
-                if (!player.capabilities.isCreativeMode) {
-                    heldItem.stackSize--;
+        if(tileEntity != null) {
+            if (tileEntity.getCurrentStack() == null && heldItem != null) {
+                if (HeavySieveRegistry.isSiftable(heldItem)) {
+                    tileEntity.addSiftable(heldItem);
+                    if (!player.capabilities.isCreativeMode) {
+                        heldItem.stackSize--;
+                    }
                 }
-            }
-        } else {
-            if (world.isRemote) {
-                tileEntity.processContents(player.capabilities.isCreativeMode);
             } else {
-                if (tileEntity.getMode() != TileEntitySieve.SieveMode.EMPTY) {
-                    if (ExCompressumConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
-                        tileEntity.processContents(player.capabilities.isCreativeMode);
+                if (world.isRemote) {
+                    tileEntity.processContents(player.capabilities.isCreativeMode);
+                } else {
+                    if (tileEntity.getCurrentStack() != null) {
+                        if (ExCompressumConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
+                            tileEntity.processContents(player.capabilities.isCreativeMode);
+                        }
                     }
                 }
             }

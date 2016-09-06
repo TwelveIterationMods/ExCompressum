@@ -8,9 +8,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.ItemHandlerAutomation;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.registry.SieveRegistry;
-import net.blay09.mods.excompressum.registry.data.SiftingResult;
-import net.minecraft.block.Block;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Enchantments;
@@ -34,6 +32,7 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Random;
 
 public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable {
 
@@ -121,23 +120,18 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 				isDirty = true;
 				if (progress >= 1) {
 					if (!worldObj.isRemote) {
-						Collection<SiftingResult> rewards = getSiftingOutput(currentStack);
-						if (!rewards.isEmpty()) {
-							for (SiftingResult reward : rewards) {
-								if (worldObj.rand.nextInt((int) Math.max(1f, reward.getRarity() / getEffectiveLuck())) == 0) {
-									ItemStack rewardStack = new ItemStack(reward.getItem(), 1, reward.getMetadata());
-									if (!addItemToOutput(rewardStack)) {
-										EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, rewardStack);
-										double motion = 0.05;
-										entityItem.motionX = worldObj.rand.nextGaussian() * motion;
-										entityItem.motionY = 0.2;
-										entityItem.motionZ = worldObj.rand.nextGaussian() * motion;
-										worldObj.spawnEntityInWorld(entityItem);
-									}
-								}
+						Collection<ItemStack> rewards = rollSieveRewards(currentStack, getEffectiveLuck(), worldObj.rand);
+						for (ItemStack itemStack : rewards) {
+							if (!addItemToOutput(itemStack)) {
+								EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
+								double motion = 0.05;
+								entityItem.motionX = worldObj.rand.nextGaussian() * motion;
+								entityItem.motionY = 0.2;
+								entityItem.motionZ = worldObj.rand.nextGaussian() * motion;
+								worldObj.spawnEntityInWorld(entityItem);
 							}
-							degradeBook();
 						}
+						degradeBook();
 					}
 					progress = 0f;
 					currentStack = null;
@@ -212,7 +206,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	}
 
 	public boolean isRegistered(ItemStack itemStack) {
-		return SieveRegistry.isRegistered(Block.getBlockFromItem(itemStack.getItem()), itemStack.getItemDamage());
+		return ExRegistro.isSiftable(itemStack);
 	}
 
 	public boolean isValidBook(ItemStack itemStack) {
@@ -248,8 +242,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		return 0;
 	}
 
-	public Collection<SiftingResult> getSiftingOutput(ItemStack itemStack) {
-		return SieveRegistry.getSiftingOutput(itemStack);
+	public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, float luck, Random rand) {
+		return ExRegistro.rollSieveRewards(itemStack, luck, rand);
 	}
 
 	@Override

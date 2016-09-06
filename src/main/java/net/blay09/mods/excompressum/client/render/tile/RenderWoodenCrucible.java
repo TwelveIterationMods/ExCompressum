@@ -25,7 +25,7 @@ public class RenderWoodenCrucible extends TileEntitySpecialRenderer<TileWoodenCr
         // Render Fluid Content
         if(tileEntity.hasFluids()) {
             GlStateManager.pushMatrix();
-            float fluidRenderVolume = Math.max(0.2f, Math.min(0.95f, (tileEntity.getFluidVolume() / TileWoodenCrucible.MAX_FLUID)));
+            float fluidRenderVolume = Math.max(0.2f, Math.min(0.95f, (tileEntity.getFluidProgress() / TileWoodenCrucible.MAX_FLUID)));
             GlStateManager.translate((float) x + 0.5f, (float) y + fluidRenderVolume, (float) z + 0.5f);
             bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 //            internal.render(new Color(tileEntity.getFluid().getColor()), tileEntity.getFluid().getIcon(), true);

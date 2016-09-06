@@ -4,7 +4,6 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.minecraft.block.Block;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
@@ -23,12 +22,8 @@ public class BotaniaAddon implements IAddon {
     public static final String SUBTILE_ORECHID_EVOLVED = ExCompressum.MOD_ID + ".orechidEvolved";
     private static final String LEXICON_ORECHID_EVOLVED = "botania.entry." + ExCompressum.MOD_ID + ".orechidEvolved";
     private static final String LEXICON_ORECHID_EVOLVED_PAGE = "botania.page." + ExCompressum.MOD_ID + ".orechidEvolved";
-    private static final String LEXICON_BROKEN_COMPRILLA = "botania.entry." + ExCompressum.MOD_ID + ".brokenComprilla";
-    private static final String LEXICON_BROKEN_COMPRILLA_PAGE = "botania.page." + ExCompressum.MOD_ID + ".brokenComprilla";
-    public static final String SUBTILE_BROKEN_COMPRILLA = ExCompressum.MOD_ID + ".brokenComprilla";
 
     public static LexiconEntry lexiconOrechidEvolved;
-    public static LexiconEntry lexiconBrokenComprilla;
     public static Block runicAltar;
 
     private static boolean enableEvolvedOrechid;
@@ -36,9 +31,6 @@ public class BotaniaAddon implements IAddon {
     public static int manaSieveCost;
     public static int evolvedOrechidCost;
     public static int evolvedOrechidDelay;
-    private static boolean enableBrokenComprilla;
-    public static int brokenComprillaCost;
-    public static int brokenComprillaDelay;
 
     @Override
     public void loadConfig(Configuration config) {
@@ -47,9 +39,6 @@ public class BotaniaAddon implements IAddon {
         manaSieveCost = config.getInt("Mana Sieve Mana Cost", "compat.botania", 1, 1, 10, "The mana cost of the Mana Sieve per Tick.");
         evolvedOrechidCost = config.getInt("Evolved Orechid Mana Cost", "compat.botania", 700, 0, 175000, "The mana cost of the Evolved Orechid. GoG Orechid is 700, vanilla Orechid is 17500.");
         evolvedOrechidDelay = config.getInt("Evolved Orechid Delay", "compat.botania", 2, 1, 1200, "The ore generation delay for the Evolved Orechid in ticks. GoG Orechid is 2, vanilla Orechid is 100.");
-        enableBrokenComprilla = config.getBoolean("Enable Broken Comprilla", "compat.botania", true, "Setting this to false will disable the Broken Comprilla.");
-        brokenComprillaCost = config.getInt("Broken Comprilla Mana Cost", "compat.botania", 100, 0, 1000, "The mana cost of the Broken Comprilla (per operation).");
-        brokenComprillaDelay = config.getInt("Broken Comprilla Delay", "compat.botania", 40, 1, 1200, "The compression delay for the Broken Comprilla in ticks.");
     }
 
     @Override
@@ -78,29 +67,6 @@ public class BotaniaAddon implements IAddon {
             lexiconOrechidEvolved.setPriority();
             BotaniaAPI.addEntry(lexiconOrechidEvolved, lexiconOrechidEvolved.category);
             BotaniaAPI.addSubTileToCreativeMenu(SUBTILE_ORECHID_EVOLVED);
-        }
-
-        if(enableBrokenComprilla) {
-            BotaniaAPI.registerSubTile(SUBTILE_BROKEN_COMPRILLA, SubTileBrokenComprilla.class);
-            BotaniaAPI.registerSubTileSignature(SubTileBrokenComprilla.class, new SubTileBrokenComprillaSignature());
-            ItemStack brokenComprilla = ItemBlockSpecialFlower.ofType(SUBTILE_BROKEN_COMPRILLA);
-            ExCompressum.creativeTab.addAdditionalItem(brokenComprilla);
-            RecipePetals recipeBrokenComprilla = BotaniaAPI.registerPetalRecipe(brokenComprilla, "petalLightBlue", "petalLightBlue", "petalWhite", "petalWhite", "petalBlack", "petalBlack", new ItemStack(Items.FLINT), new ItemStack(Items.FLINT));
-            lexiconBrokenComprilla = new LexiconEntry(LEXICON_BROKEN_COMPRILLA, BotaniaAPI.categoryFunctionalFlowers) {
-                @Override
-                public String getWebLink() {
-                    return "http://balyware.com/index.php/ex-compressum/broken-comprilla/";
-                }
-
-                @Override
-                public String getTagline() {
-                    return "botania.tagline.excompressum.brokenComprilla";
-                }
-            };
-            lexiconBrokenComprilla.setLexiconPages(new PageText(LEXICON_BROKEN_COMPRILLA_PAGE + "0"), new PagePetalRecipe(LEXICON_BROKEN_COMPRILLA_PAGE + "1", recipeBrokenComprilla));
-            lexiconBrokenComprilla.setPriority();
-            BotaniaAPI.addEntry(lexiconBrokenComprilla, lexiconBrokenComprilla.category);
-            BotaniaAPI.addSubTileToCreativeMenu(SUBTILE_BROKEN_COMPRILLA);
         }
 
         if(disableVanillaOrechid) {

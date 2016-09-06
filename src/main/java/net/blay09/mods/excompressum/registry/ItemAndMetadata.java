@@ -1,9 +1,10 @@
-package net.blay09.mods.excompressum.registry.data;
+package net.blay09.mods.excompressum.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+@Deprecated
 public class ItemAndMetadata {
 
     public final Item item;

@@ -1,9 +1,12 @@
 package net.blay09.mods.excompressum;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -56,5 +59,20 @@ public class StupidUtils {
 			return MathHelper.floor_float(f * 14f) + (i > 0 ? 1 : 0);
 		}
 		return 0;
+	}
+
+	/**
+	 * Wish this would just be part of ItemBlock itself.
+	 * @param itemStack
+	 * @return
+	 */
+	@Nullable
+	public static IBlockState getStateFromItemStack(ItemStack itemStack) {
+		if(itemStack.getItem() instanceof ItemBlock) {
+			Block block = ((ItemBlock) itemStack.getItem()).block;
+			int meta = itemStack.getItem().getMetadata(itemStack.getItemDamage());
+			return block.getStateFromMeta(meta);
+		}
+		return null;
 	}
 }

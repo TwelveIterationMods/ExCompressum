@@ -6,13 +6,14 @@ import net.minecraftforge.common.config.Configuration;
 import java.util.Collections;
 import java.util.List;
 
+// TODO go over the config file and clean things up a little
 public class ExCompressumConfig {
 
 	public static float compressedCrookDurabilityMultiplier;
 	public static float compressedCrookSpeedMultiplier;
 
 	public static boolean allowHeavySieveAutomation;
-	public static boolean woodenCrucibleBarrelRecipes;
+	public static boolean woodenCrucibleMakesClay;
 	public static float woodenCrucibleSpeed;
 	public static boolean woodenCrucibleFillFromRain;
 
@@ -51,7 +52,7 @@ public class ExCompressumConfig {
 		compressedCrookDurabilityMultiplier = config.getFloat("Compressed Crook Durability Multiplier", "general", 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
 		compressedCrookSpeedMultiplier = config.getFloat("Compressed Crook Speed Multiplier", "general", 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
 		allowHeavySieveAutomation = config.getBoolean("Allow Heavy Sieve Automation", "general", false, "Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)");
-		woodenCrucibleBarrelRecipes = config.getBoolean("Allow Barrel Recipes in Wooden Crucible", "general", true, "Set this to true to have barrel recipes work in a Wooden Crucible (e.g. Water + Dust = Clay)");
+		woodenCrucibleMakesClay = config.getBoolean("Allow making clay in Wooden Crucible", "general", true, "Set this to true to be able to create clay by putting dust in a wooden crucible with water");
 		woodenCrucibleSpeed = config.getFloat("Wooden Crucible Speed", "general", 0.5f, 0.1f, 1f, "The speed at which the wooden crucible extracts water. 0.1 is equivalent to a torch below a crucible, 0.3 is equivalent to fire below a crucible.");
 		woodenCrucibleFillFromRain = config.getBoolean("Allow Wooden Crucible filling from Rain", "general", true, "Set this to true to allow wooden crucibles to fill from rain.");
 

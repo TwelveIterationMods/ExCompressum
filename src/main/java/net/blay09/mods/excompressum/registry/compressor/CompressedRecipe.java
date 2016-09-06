@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry.data;
+package net.blay09.mods.excompressum.registry.compressor;
 
 import net.minecraft.item.ItemStack;
 

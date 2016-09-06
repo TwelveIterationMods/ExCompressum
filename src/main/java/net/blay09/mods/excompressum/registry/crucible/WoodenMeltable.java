@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry.data;
+package net.blay09.mods.excompressum.registry.crucible;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

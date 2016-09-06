@@ -6,8 +6,8 @@
 //import codechicken.nei.recipe.GuiRecipe;
 //import codechicken.nei.recipe.TemplateRecipeHandler;
 //import com.google.common.collect.*;
-//import exnihilo.registries.helpers.SiftingResult;
-//import net.blay09.mods.excompressum.registry.HeavySieveRegistry;
+//import exnihilo.registries.helpers.HeavySieveRegistryEntry;
+//import net.blay09.mods.excompressum.registry.HeavySieveRegistryOld;
 //import net.blay09.mods.excompressum.registry.data.ItemAndMetadata;
 //import net.minecraft.block.Block;
 //import net.minecraft.item.ItemStack;
@@ -85,7 +85,7 @@
 //        if (itemStack != null && itemStack != sourceStack) {
 //            list.add("Drop Chance:");
 //            condensedTooltip.clear();
-//            for (SiftingResult result : HeavySieveRegistry.getSiftingOutput(Block.getBlockFromItem(sourceStack.getItem()), sourceStack.getItemDamage())) {
+//            for (HeavySieveRegistryEntry result : HeavySieveRegistryOld.rollHammerRewards(Block.getBlockFromItem(sourceStack.getItem()), sourceStack.getItemDamage())) {
 //                if (NEIServerUtils.areStacksSameTypeCrafting(itemStack, new ItemStack(result.item, 1, result.meta))) {
 //                    condensedTooltip.add(Integer.toString((int) Math.round(100 * (1.0 / result.rarity))) + "%");
 //                }
@@ -123,11 +123,11 @@
 //            super.loadCraftingRecipes(outputId, wat);
 //            return;
 //        }
-//        Multimap<ItemAndMetadata, SiftingResult> siftables = HeavySieveRegistry.getSiftables();
+//        Multimap<ItemAndMetadata, HeavySieveRegistryEntry> siftables = HeavySieveRegistryOld.getSiftables();
 //        for (ItemAndMetadata sourceInfo : siftables.keySet()) {
-//            Collection<SiftingResult> results = siftables.get(sourceInfo);
+//            Collection<HeavySieveRegistryEntry> results = siftables.get(sourceInfo);
 //            Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
-//            for(SiftingResult result : results) {
+//            for(HeavySieveRegistryEntry result : results) {
 //                countedSet.add(new ItemAndMetadata(result.item, result.meta));
 //            }
 //            List<ItemStack> resultStacks = Lists.newArrayList();
@@ -140,11 +140,11 @@
 //
 //    @Override
 //    public void loadCraftingRecipes(ItemStack itemStack) {
-//        Multimap<ItemAndMetadata, SiftingResult> siftables = HeavySieveRegistry.getSiftables();
+//        Multimap<ItemAndMetadata, HeavySieveRegistryEntry> siftables = HeavySieveRegistryOld.getSiftables();
 //        for (ItemAndMetadata sourceInfo : siftables.keySet()) {
-//            Collection<SiftingResult> results = siftables.get(sourceInfo);
+//            Collection<HeavySieveRegistryEntry> results = siftables.get(sourceInfo);
 //            Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
-//            for(SiftingResult result : results) {
+//            for(HeavySieveRegistryEntry result : results) {
 //                countedSet.add(new ItemAndMetadata(result.item, result.meta));
 //            }
 //            if (!countedSet.contains(new ItemAndMetadata(itemStack))) {
@@ -161,10 +161,10 @@
 //    @Override
 //    public void loadUsageRecipes(ItemStack itemStack) {
 //        Multiset<ItemAndMetadata> countedSet = HashMultiset.create();
-//        if (!HeavySieveRegistry.isRegistered(itemStack)) {
+//        if (!HeavySieveRegistryOld.isRegistered(itemStack)) {
 //            return;
 //        }
-//        for (SiftingResult result : HeavySieveRegistry.getSiftingOutput(itemStack)) {
+//        for (HeavySieveRegistryEntry result : HeavySieveRegistryOld.rollHammerRewards(itemStack)) {
 //            countedSet.add(new ItemAndMetadata(result.item, result.meta));
 //        }
 //        List<ItemStack> resultStacks = Lists.newArrayList();
