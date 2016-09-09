@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.registry;
 
 import net.blay09.mods.excompressum.StupidUtils;
+import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -34,14 +35,14 @@ public abstract class ExRegistro {
 		return state != null && instance.isHammerable(state);
 	}
 
-	public static Collection<ItemStack> rollHammerRewards(IBlockState state, float luck, Random rand) {
-		return instance.rollHammerRewards(state, luck, rand);
+	public static Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand) {
+		return instance.rollHammerRewards(state, miningLevel, luck, rand);
 	}
 
-	public static Collection<ItemStack> rollHammerRewards(ItemStack itemStack, float luck, Random rand) {
+	public static Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
 		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		if(state != null) {
-			return instance.rollHammerRewards(state, luck, rand);
+			return instance.rollHammerRewards(state, miningLevel, luck, rand);
 		}
 		return Collections.emptyList();
 	}
@@ -51,14 +52,14 @@ public abstract class ExRegistro {
 		return state != null && instance.isSiftable(state);
 	}
 
-	public static Collection<ItemStack> rollSieveRewards(IBlockState state, float luck, Random rand) {
-		return instance.rollSieveRewards(state, luck, rand);
+	public static Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand) {
+		return instance.rollSieveRewards(state, meshLevel, luck, rand);
 	}
 
-	public static Collection<ItemStack> rollSieveRewards(ItemStack itemStack, float luck, Random rand) {
+	public static Collection<ItemStack> rollSieveRewards(ItemStack itemStack, int meshLevel, float luck, Random rand) {
 		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		if(state != null) {
-			return instance.rollSieveRewards(state, luck, rand);
+			return instance.rollSieveRewards(state, meshLevel, luck, rand);
 		}
 		return Collections.emptyList();
 	}
@@ -66,5 +67,9 @@ public abstract class ExRegistro {
 	@Nullable
 	public static ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune) {
 		return instance.rollSilkWorm(player, state, fortune);
+	}
+
+	public static SieveModelBounds getSieveBounds() {
+		return instance.getSieveBounds();
 	}
 }

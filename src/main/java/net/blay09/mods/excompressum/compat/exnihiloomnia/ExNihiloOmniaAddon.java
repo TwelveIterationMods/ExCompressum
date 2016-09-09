@@ -16,6 +16,7 @@ import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
+import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
@@ -43,6 +44,8 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 
 	private static final float SIEVE_LUCK_MODIFIER = 2.5f;
 
+	private final SieveModelBounds sieveModelBounds;
+
 	public ExNihiloOmniaAddon() {
 		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood", 0));
 		itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammer_stone", 0));
@@ -60,12 +63,19 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("gravel_ender", 0));
 		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("infested_leaves", 0));
 
+		sieveModelBounds = new SieveModelBounds(0.5625f, 0.0625f, 0.88f, 0.5f);
+
 		ExRegistro.instance = this;
+	}
+
+	@Override
+	public SieveModelBounds getSieveBounds() {
+		return sieveModelBounds;
 	}
 
 	@Nullable
 	private ItemStack findItem(String name, int withMetadata) {
-		ResourceLocation location = new ResourceLocation(Compat.EXNIHILOOMNIA, name);
+		ResourceLocation location = new ResourceLocation(Compat.EXNIHILO_OMNIA, name);
 		Item item = Item.REGISTRY.getObject(location);
 		if(item != null) {
 			return new ItemStack(item, 1, withMetadata);
@@ -75,7 +85,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 
 	@Nullable
 	private ItemStack findBlock(String name, int withMetadata) {
-		ResourceLocation location = new ResourceLocation(Compat.EXNIHILOOMNIA, name);
+		ResourceLocation location = new ResourceLocation(Compat.EXNIHILO_OMNIA, name);
 		if(Block.REGISTRY.containsKey(location)) {
 			return new ItemStack(Block.REGISTRY.getObject(location), 1, withMetadata);
 		}
@@ -94,7 +104,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	}
 
 	@Override
-	public Collection<ItemStack> rollHammerRewards(IBlockState state, float luck, Random rand) {
+	public Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand) {
 		HammerRegistryEntry entry = HammerRegistry.getEntryForBlockState(state);
 		if(entry != null) {
 			List<ItemStack> list = Lists.newArrayList();
@@ -116,7 +126,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	}
 
 	@Override
-	public Collection<ItemStack> rollSieveRewards(IBlockState state, float luck, Random rand) {
+	public Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand) {
 		List<ItemStack> list = Lists.newArrayList();
 		SieveRegistryEntry genericEntry = SieveRegistry.getEntryForBlockState(state, EnumMetadataBehavior.IGNORED);
 		if(genericEntry != null) {

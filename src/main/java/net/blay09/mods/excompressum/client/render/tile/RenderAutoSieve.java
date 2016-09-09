@@ -5,6 +5,9 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.blay09.mods.excompressum.ModBlocks;
 import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
 import net.blay09.mods.excompressum.client.render.model.ModelTinyHuman;
+import net.blay09.mods.excompressum.compat.SieveModelBounds;
+import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -16,7 +19,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -28,6 +30,12 @@ import java.util.Map;
 public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSieveBase> {
 
     private final ModelTinyHuman biped = new ModelTinyHuman();
+    private final boolean isHeavy;
+    private IBlockState sieveState;
+
+    public RenderAutoSieve(boolean isHeavy) {
+        this.isHeavy = isHeavy;
+    }
 
     @Override
     public void renderTileEntityAt(TileEntityAutoSieveBase tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
@@ -37,6 +45,15 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
         IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
         if(!(state.getBlock() instanceof BlockAutoSieveBase)) {
             return;
+        }
+        if(sieveState == null) {
+            sieveState = ModBlocks.heavySieve.getDefaultState();
+            if(!isHeavy) {
+                ItemStack nihiloSieve = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SIEVE);
+                if(nihiloSieve != null) {
+                    sieveState = Block.getBlockFromItem(nihiloSieve.getItem()).getDefaultState();
+                }
+            }
         }
 
         Minecraft mc = Minecraft.getMinecraft();
@@ -58,31 +75,32 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
         biped.renderAll(tileEntity.isActive(), tileEntity.getSpeedBoost());
         GlStateManager.popMatrix();
 
-
+        // Sieve & Content
         GlStateManager.pushMatrix();
         GlStateManager.scale(0.5f, 0.5f, 0.5f);
         GlStateManager.translate(-0.25f, 0f, -0.5f);
-
         // Render the sieve
         renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        mc.getBlockRendererDispatcher().renderBlock(ModBlocks.heavySieve.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+        mc.getBlockRendererDispatcher().renderBlock(sieveState, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
         tessellator.draw();
-
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (currentStack != null) {
-            float progress = tileEntity.getProgress();
             Block block = Block.getBlockFromItem(currentStack.getItem());
-            renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-            mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(0.0625f, 0.5625f, 0.0625f);
-            GlStateManager.scale(0.88f, 0.5f - progress * 0.5f, 0.88f);
-            mc.getBlockRendererDispatcher().renderBlock(block.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
-            tessellator.draw();
-            GlStateManager.popMatrix();
+            //noinspection ConstantConditions /// Forge needs @Nullable
+            if(block != null) {
+                SieveModelBounds bounds = ExRegistro.getSieveBounds();
+                float progress = tileEntity.getProgress();
+                renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+                mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(bounds.contentOffset, bounds.meshY, bounds.contentOffset);
+                GlStateManager.scale(bounds.contentScaleXZ, bounds.contentBaseScaleY - progress * bounds.contentBaseScaleY, bounds.contentScaleXZ);
+                mc.getBlockRendererDispatcher().renderBlock(block.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+                tessellator.draw();
+                GlStateManager.popMatrix();
+            }
         }
-
         GlStateManager.popMatrix();
 
         GlStateManager.popMatrix();

@@ -1,35 +1,41 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
+import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 
 public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> {
 
-    private final ItemStack hammerItemStack;
-    private EntityItem renderItem;
+    private final boolean isCompressed;
+    private ItemStack hammerItemStack;
 
-    public RenderAutoHammer(ItemStack hammerItemStack) {
-        this.hammerItemStack = hammerItemStack;
+    public RenderAutoHammer(boolean isCompressed) {
+        this.isCompressed = isCompressed;
     }
 
     @Override
     public void renderTileEntityAt(TileAutoHammer tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
-        if(renderItem == null) {
-            if(tileEntity.hasWorldObj()) {
-                renderItem = new EntityItem(tileEntity.getWorld());
+        if (hammerItemStack == null) {
+            if (isCompressed) {
+                hammerItemStack = new ItemStack(ModItems.compressedHammerDiamond);
             } else {
-                renderItem = new EntityItem(Minecraft.getMinecraft().theWorld);
+                hammerItemStack = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
+                if (hammerItemStack == null) {
+                    hammerItemStack = new ItemStack(Items.FISH); // This should never happen
+                }
             }
-            renderItem.setEntityItemStack(hammerItemStack);
         }
 
-        int metadata = tileEntity.hasWorldObj() ? tileEntity.getBlockMetadata() : 0;
+        /*int metadata = tileEntity.hasWorldObj() ? tileEntity.getBlockMetadata() : 0;
 
         GlStateManager.pushMatrix();
         GlStateManager.enableRescaleNormal(); // TODO why, what is this
@@ -102,7 +108,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         Tessellator.instance.draw();
     }*/
 
-    // TODO yeah fix this
+        // TODO yeah fix this
     /*private void renderBlock(Block block, int metadata, IIcon override) {
         IIcon icon = override != null ? override : block.getIcon(ForgeDirection.UP.ordinal(), metadata);
         Tessellator.instance.addVertexWithUV(1, 1, 1, icon.getMinU(), icon.getMinV());
@@ -140,5 +146,5 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         Tessellator.instance.addVertexWithUV(1, 0, 0, icon.getMaxU(), icon.getMaxV());
         Tessellator.instance.addVertexWithUV(0, 0, 0, icon.getMaxU(), icon.getMinV());
     }*/
-
+    }
 }

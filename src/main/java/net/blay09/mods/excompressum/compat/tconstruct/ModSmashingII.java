@@ -46,7 +46,7 @@ public class ModSmashingII extends ModifierTrait {
 			event.getDrops().clear();
 			Collection<ItemStack> rewards = CompressedHammerRegistry.rollHammerRewards(event.getState(), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
 			if(rewards.isEmpty()) {
-				rewards = ExRegistro.rollHammerRewards(event.getState(), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
+				rewards = ExRegistro.rollHammerRewards(event.getState(), ToolHelper.getHarvestLevelStat(tool), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
 			}
 			for(ItemStack itemStack : rewards) {
 				event.getDrops().add(itemStack);

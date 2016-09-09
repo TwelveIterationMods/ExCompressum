@@ -1,5 +1,6 @@
 dependencies {
     deobfCompile "hosted-api:exnihiloomnia:1.0.0"
+    deobfCompile "hosted-api:exnihiloadscensio:0.0.1"
     deobfCompile "hosted-api:Botania-unofficial:r1.8-320"
     deobfCompile "hosted-api:CraftTweaker:1.10.2"
     deobfCompile "slimeknights:TConstruct:1.10.2-2.4.1.jenkins339"

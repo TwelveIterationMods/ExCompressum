@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -112,7 +113,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
                         }
                     }
                     if (!worldObj.isRemote) {
-                        Collection<ItemStack> rewards = rollHammerRewards(currentStack, getEffectiveLuck(), worldObj.rand);
+                        Collection<ItemStack> rewards = rollHammerRewards(currentStack, getMiningLevel(), getEffectiveLuck(), worldObj.rand);
                         for (ItemStack itemStack : rewards) {
                             if (!addItemToOutput(itemStack)) {
                                 EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
@@ -330,7 +331,11 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         return ExRegistro.isHammerable(itemStack);
     }
 
-    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, float luck, Random rand) {
-        return ExRegistro.rollHammerRewards(itemStack, luck, rand);
+    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
+        return ExRegistro.rollHammerRewards(itemStack, miningLevel, luck, rand);
+    }
+
+    public int getMiningLevel() {
+        return Item.ToolMaterial.DIAMOND.getHarvestLevel();
     }
 }

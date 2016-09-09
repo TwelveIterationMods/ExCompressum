@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.registry;
 
+import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -10,6 +11,8 @@ import java.util.Collections;
 import java.util.Random;
 
 public class NihilisticNihiloProvider implements ExNihiloProvider {
+	private final SieveModelBounds nullBounds = new SieveModelBounds(0f, 0f, 0f, 0f);
+
 	@Nullable
 	@Override
 	public ItemStack getNihiloItem(NihiloItems type) {
@@ -22,7 +25,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public Collection<ItemStack> rollHammerRewards(IBlockState state, float luck, Random rand) {
+	public Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand) {
 		return Collections.emptyList();
 	}
 
@@ -32,7 +35,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public Collection<ItemStack> rollSieveRewards(IBlockState state, float luck, Random rand) {
+	public Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand) {
 		return Collections.emptyList();
 	}
 
@@ -40,5 +43,10 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	@Override
 	public ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune) {
 		return null;
+	}
+
+	@Override
+	public SieveModelBounds getSieveBounds() {
+		return nullBounds;
 	}
 }

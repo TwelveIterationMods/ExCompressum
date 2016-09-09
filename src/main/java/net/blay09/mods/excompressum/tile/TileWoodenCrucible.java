@@ -57,8 +57,13 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 		}
 
 		@Override
+		public boolean canFill() {
+			return itemHandler.getStackInSlot(0) == null;
+		}
+
+		@Override
 		public boolean canFillFluidType(FluidStack fluid) {
-			return fluid.getFluid().getTemperature() <= 300;
+			return super.canFillFluidType(fluid) && fluid.getFluid().getTemperature() <= 300;
 		}
 
 		@Override

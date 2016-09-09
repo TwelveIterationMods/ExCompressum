@@ -6,6 +6,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -72,6 +73,20 @@ public class StupidUtils {
 			Block block = ((ItemBlock) itemStack.getItem()).block;
 			int meta = itemStack.getItem().getMetadata(itemStack.getItemDamage());
 			return block.getStateFromMeta(meta);
+		}
+		return null;
+	}
+
+	/**
+	 * Exists as createStackedBlock but it's protected, thanks Notch
+	 * @param state
+	 * @return
+	 */
+	@Nullable
+	public static ItemStack getItemStackFromState(IBlockState state) {
+		Item item = Item.getItemFromBlock(state.getBlock());
+		if(item != null) {
+			return new ItemStack(item, 1, state.getBlock().getMetaFromState(state)); // this could break but it's fineeee
 		}
 		return null;
 	}

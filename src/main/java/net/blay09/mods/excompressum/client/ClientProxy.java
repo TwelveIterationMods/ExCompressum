@@ -51,9 +51,9 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(this);
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileHeavySieve.class, new RenderHeavySieve());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieve.class, new RenderAutoSieve());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieveMana.class, new RenderAutoSieve());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoHeavySieve.class, new RenderAutoSieve());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieve.class, new RenderAutoSieve(false));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieveMana.class, new RenderAutoSieve(false));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoHeavySieve.class, new RenderAutoSieve(true));
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoHammer.class, new RenderAutoHammer()); // TODO uh, we don't really have the items here yet, so fix this later
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoCompressedHammer.class, new RenderAutoHammer());
 

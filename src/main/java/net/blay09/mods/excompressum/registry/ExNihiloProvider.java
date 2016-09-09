@@ -1,10 +1,8 @@
 package net.blay09.mods.excompressum.registry;
 
-import net.minecraft.block.Block;
+import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -33,9 +31,10 @@ public interface ExNihiloProvider {
 	@Nullable
 	ItemStack getNihiloItem(NihiloItems type);
 	boolean isHammerable(IBlockState state);
-	Collection<ItemStack> rollHammerRewards(IBlockState state, float luck, Random rand);
+	Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand);
 	boolean isSiftable(IBlockState state);
-	Collection<ItemStack> rollSieveRewards(IBlockState state, float luck, Random rand);
+	Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand);
 	@Nullable
-	ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune);
+	ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune); // TODO Adscensio has a CrookRegistry, so we need something for that too; just turn this into "doTheCrookThingies"
+	SieveModelBounds getSieveBounds();
 }

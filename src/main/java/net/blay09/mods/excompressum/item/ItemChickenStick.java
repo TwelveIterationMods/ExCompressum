@@ -80,7 +80,7 @@ public class ItemChickenStick extends ItemTool {
         if (!ChickenStickRegistry.isValidBlock(state)) {
             return false;
         }
-        Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, 0f, world.rand);
+        Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, 0, 0f, world.rand);
         if (rewards.isEmpty()) {
             return false;
         }

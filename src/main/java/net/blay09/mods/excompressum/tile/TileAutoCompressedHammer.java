@@ -26,7 +26,7 @@ public class TileAutoCompressedHammer extends TileAutoHammer {
     }
 
     @Override
-    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, float luck, Random rand) {
+    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
         return CompressedHammerRegistry.rollHammerRewards(itemStack, luck, rand);
     }
 

@@ -36,10 +36,6 @@ import java.util.Random;
 
 public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable {
 
-	// TODO needs to simulate progress on client, only seems to do so for short amount of time until GUI is opened again?
-	// ^^^^^^^^^might be the sieve thinking it has no power on the client, not sure if power is synced outside of GUI
-	// TODO ^^^spec stops moving too
-
 	private static final int UPDATE_INTERVAL = 20;
 
 	private DefaultItemHandler itemHandler = new DefaultItemHandler(this, 22) {
@@ -125,7 +121,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 				isDirty = true;
 				if (progress >= 1) {
 					if (!worldObj.isRemote) {
-						Collection<ItemStack> rewards = rollSieveRewards(currentStack, getEffectiveLuck(), worldObj.rand);
+						Collection<ItemStack> rewards = rollSieveRewards(currentStack, getMeshLevel(), getEffectiveLuck(), worldObj.rand);
 						for (ItemStack itemStack : rewards) {
 							if (!addItemToOutput(itemStack)) {
 								EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
@@ -247,8 +243,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		return 0;
 	}
 
-	public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, float luck, Random rand) {
-		return ExRegistro.rollSieveRewards(itemStack, luck, rand);
+	public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, int meshLevel, float luck, Random rand) {
+		return ExRegistro.rollSieveRewards(itemStack, meshLevel, luck, rand);
 	}
 
 	@Override
@@ -421,5 +417,9 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 
 	public DefaultItemHandler getItemHandler() {
 		return itemHandler;
+	}
+
+	public int getMeshLevel() {
+		return 0; // TODO Mesh Level impl
 	}
 }

@@ -15,7 +15,7 @@ public class TileAutoHeavySieve extends TileAutoSieve {
     }
 
     @Override
-    public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, float luck, Random rand) {
+    public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, int meshLevel, float luck, Random rand) {
         return HeavySieveRegistry.rollSieveRewards(itemStack, luck, rand);
     }
 

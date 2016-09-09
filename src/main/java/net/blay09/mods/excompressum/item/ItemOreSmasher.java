@@ -122,7 +122,7 @@ public class ItemOreSmasher extends ItemTool {
 		if(canHarvestBlock(state, itemStack) && ExRegistro.isHammerable(state)) {
 			if(!world.isRemote) {
 				world.setBlockToAir(pos);
-				Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);
+				Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, toolMaterial.getHarvestLevel(), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);
 				for(ItemStack rewardStack : rewards) {
 					world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
 				}
