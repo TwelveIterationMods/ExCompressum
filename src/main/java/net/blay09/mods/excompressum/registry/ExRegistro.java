@@ -1,12 +1,10 @@
 package net.blay09.mods.excompressum.registry;
 
 import net.blay09.mods.excompressum.StupidUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -18,23 +16,13 @@ public abstract class ExRegistro {
 	public static ExNihiloProvider instance;
 
 	public static boolean isNihiloItem(ItemStack itemStack, ExNihiloProvider.NihiloItems type) {
-		return itemStack.getItem() == instance.getNihiloItem(type);
+		ItemStack nihiloStack = instance.getNihiloItem(type);
+		return nihiloStack != null && itemStack.getItem() == nihiloStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || nihiloStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || itemStack.getItemDamage() == nihiloStack.getItemDamage());
 	}
 
 	@Nullable
-	public static Item getNihiloItem(ExNihiloProvider.NihiloItems type) {
+	public static ItemStack getNihiloItem(ExNihiloProvider.NihiloItems type) {
 		return instance.getNihiloItem(type);
-	}
-
-	public static boolean isNihiloBlock(ItemStack itemStack, ExNihiloProvider.NihiloBlocks type) {
-		Block block = Block.getBlockFromItem(itemStack.getItem());
-		//noinspection ConstantConditions /// Forge needs @Nullable
-		return block != null && block == instance.getNihiloBlock(type);
-	}
-
-	@Nullable
-	public static Block getNihiloBlock(ExNihiloProvider.NihiloBlocks type) {
-		return instance.getNihiloBlock(type);
 	}
 
 	public static boolean isHammerable(IBlockState state) {

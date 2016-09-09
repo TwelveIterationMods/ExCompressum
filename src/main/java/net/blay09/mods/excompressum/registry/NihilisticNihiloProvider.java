@@ -1,10 +1,7 @@
 package net.blay09.mods.excompressum.registry;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -15,13 +12,7 @@ import java.util.Random;
 public class NihilisticNihiloProvider implements ExNihiloProvider {
 	@Nullable
 	@Override
-	public Item getNihiloItem(NihiloItems type) {
-		return null;
-	}
-
-	@Nullable
-	@Override
-	public Block getNihiloBlock(NihiloBlocks type) {
+	public ItemStack getNihiloItem(NihiloItems type) {
 		return null;
 	}
 

@@ -21,20 +21,17 @@ public interface ExNihiloProvider {
 		HAMMER_IRON,
 		HAMMER_GOLD,
 		HAMMER_DIAMOND,
-		SILK_WORM, SILK_MESH
-	}
-
-	enum NihiloBlocks {
+		SILK_WORM,
+		SILK_MESH,
 		DUST,
 		NETHER_GRAVEL,
 		ENDER_GRAVEL,
-		INFESTED_LEAVES, SIEVE
+		INFESTED_LEAVES,
+		SIEVE
 	}
 
 	@Nullable
-	Item getNihiloItem(NihiloItems type);
-	@Nullable
-	Block getNihiloBlock(NihiloBlocks type);
+	ItemStack getNihiloItem(NihiloItems type);
 	boolean isHammerable(IBlockState state);
 	Collection<ItemStack> rollHammerRewards(IBlockState state, float luck, Random rand);
 	boolean isSiftable(IBlockState state);

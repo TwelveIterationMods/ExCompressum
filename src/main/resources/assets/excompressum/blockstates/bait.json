@@ -1,18 +1,47 @@
 {
   "forge_marker": 1,
   "defaults": {
+    "model": "excompressum:empty"
   },
   "variants": {
     "normal": [{}],
     "inventory": [{}],
     "variant": {
-      "wolf": {},
-      "ocelot": {},
-      "cow": {},
-      "pig": {},
-      "chicken": {},
-      "sheep": {},
-      "squid": {}
+      "wolf": {
+        "textures": {
+          "particle": "minecraft:items/beef_raw"
+        }
+      },
+      "ocelot": {
+        "textures": {
+          "particle": "minecraft:items/fish_cod_raw"
+        }
+      },
+      "cow": {
+        "textures": {
+          "particle": "minecraft:items/wheat"
+        }
+      },
+      "pig": {
+        "textures": {
+          "particle": "minecraft:items/carrot"
+        }
+      },
+      "chicken": {
+        "textures": {
+          "particle": "minecraft:items/seeds_wheat"
+        }
+      },
+      "sheep": {
+        "textures": {
+          "particle": "minecraft:items/wheat"
+        }
+      },
+      "squid": {
+        "textures": {
+          "particle": "minecraft:items/fish_cod_raw"
+        }
+      }
     }
   }
 }

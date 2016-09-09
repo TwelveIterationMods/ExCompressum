@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.compat.exnihiloomnia;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import exnihiloomnia.blocks.ENOBlocks;
 import exnihiloomnia.registries.composting.CompostRegistry;
 import exnihiloomnia.registries.composting.CompostRegistryEntry;
 import exnihiloomnia.registries.hammering.HammerRegistry;
@@ -22,7 +21,6 @@ import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -41,41 +39,53 @@ import java.util.Random;
 @SuppressWarnings("unused")
 public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 
-	private final EnumMap<NihiloItems, Item> itemMap = Maps.newEnumMap(NihiloItems.class);
-	private final EnumMap<NihiloBlocks, Block> blockMap = Maps.newEnumMap(NihiloBlocks.class);
+	private final EnumMap<NihiloItems, ItemStack> itemMap = Maps.newEnumMap(NihiloItems.class);
 
 	private static final float SIEVE_LUCK_MODIFIER = 2.5f;
 
 	public ExNihiloOmniaAddon() {
-		itemMap.put(NihiloItems.HAMMER_WOODEN, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_wood")));
-		itemMap.put(NihiloItems.HAMMER_STONE, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_stone")));
-		itemMap.put(NihiloItems.HAMMER_IRON, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_iron")));
-		itemMap.put(NihiloItems.HAMMER_GOLD, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_gold")));
-		itemMap.put(NihiloItems.HAMMER_DIAMOND, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "hammer_diamond")));
-		itemMap.put(NihiloItems.CROOK_WOODEN, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "crook_wood")));
-		itemMap.put(NihiloItems.SILK_MESH, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "mesh_silk_white")));
-		itemMap.put(NihiloItems.SEEDS_GRASS, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "seeds_grass")));
-		itemMap.put(NihiloItems.SILK_WORM, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "silkworm")));
+		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood", 0));
+		itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammer_stone", 0));
+		itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammer_iron", 0));
+		itemMap.put(NihiloItems.HAMMER_GOLD, findItem("hammer_gold", 0));
+		itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammer_diamond", 0));
+		itemMap.put(NihiloItems.CROOK_WOODEN, findItem("crook_wood", 0));
+		itemMap.put(NihiloItems.SILK_MESH, findItem("mesh_silk_white", 0));
+		itemMap.put(NihiloItems.SEEDS_GRASS, findItem("seeds_grass", 0));
+		itemMap.put(NihiloItems.SILK_WORM, findItem("silkworm", 0));
 
-		blockMap.put(NihiloBlocks.DUST, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "dust")));
-		blockMap.put(NihiloBlocks.SIEVE, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "sieve_wood")));
-		blockMap.put(NihiloBlocks.NETHER_GRAVEL, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "gravel_nether")));
-		blockMap.put(NihiloBlocks.ENDER_GRAVEL, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "gravel_ender")));
-		blockMap.put(NihiloBlocks.INFESTED_LEAVES, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "infested_leaves")));
+		itemMap.put(NihiloItems.DUST, findBlock("dust", 0));
+		itemMap.put(NihiloItems.SIEVE, findBlock("sieve_wood", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("gravel_nether", 0));
+		itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("gravel_ender", 0));
+		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("infested_leaves", 0));
 
 		ExRegistro.instance = this;
 	}
 
 	@Nullable
-	@Override
-	public Item getNihiloItem(NihiloItems type) {
-		return itemMap.get(type);
+	private ItemStack findItem(String name, int withMetadata) {
+		ResourceLocation location = new ResourceLocation(Compat.EXNIHILOOMNIA, name);
+		Item item = Item.REGISTRY.getObject(location);
+		if(item != null) {
+			return new ItemStack(item, 1, withMetadata);
+		}
+		return null;
+	}
+
+	@Nullable
+	private ItemStack findBlock(String name, int withMetadata) {
+		ResourceLocation location = new ResourceLocation(Compat.EXNIHILOOMNIA, name);
+		if(Block.REGISTRY.containsKey(location)) {
+			return new ItemStack(Block.REGISTRY.getObject(location), 1, withMetadata);
+		}
+		return null;
 	}
 
 	@Nullable
 	@Override
-	public Block getNihiloBlock(NihiloBlocks type) {
-		return blockMap.get(type);
+	public ItemStack getNihiloItem(NihiloItems type) {
+		return itemMap.get(type);
 	}
 
 	@Override
@@ -122,10 +132,11 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	@Nullable
 	@Override
 	public ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune) {
-		if(player.worldObj.rand.nextInt(100) == 0 || state.getBlock() == getNihiloBlock(NihiloBlocks.INFESTED_LEAVES)) {
-			Item silkWormItem = getNihiloItem(NihiloItems.SILK_WORM);
+		ItemStack infestedLeaves = getNihiloItem(NihiloItems.INFESTED_LEAVES);
+		if(infestedLeaves != null && (player.worldObj.rand.nextInt(100) == 0 || state.getBlock() == Block.getBlockFromItem(infestedLeaves.getItem()))) {
+			ItemStack silkWormItem = getNihiloItem(NihiloItems.SILK_WORM);
 			if(silkWormItem != null) {
-				return new ItemStack(silkWormItem);
+				return silkWormItem.copy();
 			}
 		}
 		return null;

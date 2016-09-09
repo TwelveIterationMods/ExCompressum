@@ -20,8 +20,8 @@ public class ItemBlockCompressed extends ItemBlock {
             case 3: return "tile." + ExCompressum.MOD_ID + ":compressed_sand";
             case 4: return "tile." + ExCompressum.MOD_ID + ":compressed_dirt";
             case 5: return "tile." + ExCompressum.MOD_ID + ":compressed_flint";
-            case 6: return "tile." + ExCompressum.MOD_ID + ":compressed_stone";
-            case 7: return "tile." + ExCompressum.MOD_ID + ":compressed_netherrack";
+            case 6: return "tile." + ExCompressum.MOD_ID + ":compressed_nether_gravel";
+            case 7: return "tile." + ExCompressum.MOD_ID + ":compressed_ender_gravel";
         }
         return "tile." + ExCompressum.MOD_ID + ":compressed_dust";
     }

@@ -1,12 +1,12 @@
 package net.blay09.mods.excompressum;
 
+import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModAPIManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -25,10 +26,10 @@ public class ModRecipes {
 
 		if (config.getBoolean("Heavy Sieve", "blocks", true, "If set to false, the recipe for the heavy sieve will be disabled.")) {
 			for (int i = 0; i < 4; i++) {
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.LOG, 1, i), 'm', ModItems.heavySilkMesh, 's', "stickWood"));
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, i), "p p", "ppp", "s s", 'p', new ItemStack(Blocks.LOG, 1, i), 's', "stickWood"));
 			}
 			for (int i = 0; i < 2; i++) {
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, 4 + i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.LOG2, 1, i), 'm', ModItems.heavySilkMesh, 's', "stickWood"));
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, 4 + i), "p p", "ppp", "s s", 'p', new ItemStack(Blocks.LOG2, 1, i), 's', "stickWood"));
 			}
 		}
 
@@ -54,7 +55,7 @@ public class ModRecipes {
 			}
 
 			if (config.getBoolean("Auto Hammer", "blocks", true, "Set this to false to disable the recipe for the auto hammer.")) {
-				Item hammerDiamond = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
+				ItemStack hammerDiamond = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
 				if(hammerDiamond != null) {
 					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHammer), "IPI", "IHI", "IPI", 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'H', hammerDiamond, 'I', "ingotIron"));
 				} else {
@@ -71,10 +72,9 @@ public class ModRecipes {
 			}
 
 			if (config.getBoolean("Auto Sieve", "blocks", true, "Set this to false to disable the recipe for the auto sieve.")) {
-				Block sieveBlock = ExRegistro.getNihiloBlock(ExNihiloProvider.NihiloBlocks.SIEVE);
+				ItemStack sieveBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SIEVE);
 				if(sieveBlock != null) {
-					ItemStack sieve = new ItemStack(sieveBlock, 1, OreDictionary.WILDCARD_VALUE);
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieve, 'G', "paneGlassColorless", 'I', "ingotIron"));
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieveBlock, 'G', "paneGlassColorless", 'I', "ingotIron"));
 				} else {
 					ExCompressum.logger.warn("No Sieve found - Auto Sieve recipe will be disabled.");
 				}
@@ -94,11 +94,10 @@ public class ModRecipes {
 			if (config.getBoolean("Mana Sieve", "blocks", true, "Set this to false to disable the recipe for the mana sieve.")) {
 				Block manaSteelBlock = Block.REGISTRY.getObject(new ResourceLocation(Compat.BOTANIA, "storage"));
 				if(manaSteelBlock != Blocks.AIR) {
-					Block sieveBlock = ExRegistro.getNihiloBlock(ExNihiloProvider.NihiloBlocks.SIEVE);
+					ItemStack sieveBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SIEVE);
 					if(sieveBlock != null) {
 						ItemStack manaSteelBlockStack = new ItemStack(manaSteelBlock);
-						ItemStack sieve = new ItemStack(sieveBlock, 1, OreDictionary.WILDCARD_VALUE);
-						GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.manaSieve), "BGB", "GSG", "IGI", 'B', manaSteelBlockStack, 'S', sieve, 'G', "paneGlassColorless", 'I', "ingotManasteel"));
+						GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.manaSieve), "BGB", "GSG", "IGI", 'B', manaSteelBlockStack, 'S', sieveBlock, 'G', "paneGlassColorless", 'I', "ingotManasteel"));
 					} else {
 						ExCompressum.logger.warn("No Sieve found - Mana Sieve recipe will be disabled.");
 					}
@@ -111,7 +110,7 @@ public class ModRecipes {
 	}
 
 	private static void registerItems(Configuration config) {
-		Item itemSilkMesh = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SILK_MESH);
+		ItemStack itemSilkMesh = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SILK_MESH);
 		if (itemSilkMesh != null) {
 			GameRegistry.addRecipe(new ItemStack(ModItems.heavySilkMesh), "##", "##", '#', itemSilkMesh);
 		} else {
@@ -121,7 +120,7 @@ public class ModRecipes {
 		registerCompressedHammers(config);
 
 		if(config.getBoolean("Compressed Crook", "items", true, "If set to false, the recipe for the compressed crook will be disabled.")) {
-			Item itemCrook = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.CROOK_WOODEN);
+			ItemStack itemCrook = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.CROOK_WOODEN);
 			if(itemCrook != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedCrook), "## ", " # ", " # ", '#', itemCrook);
 			} else {
@@ -154,7 +153,7 @@ public class ModRecipes {
 
 	private static void registerCompressedHammers(Configuration config) {
 		if (config.getBoolean("Compressed Wooden Hammer", "items", true, "If set to false, the recipe for the compressed wooden hammer will be disabled.")) {
-			Item itemHammerWood = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_WOODEN);
+			ItemStack itemHammerWood = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_WOODEN);
 			if (itemHammerWood != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerWood), "###", "###", "###", '#', itemHammerWood);
 			} else {
@@ -163,7 +162,7 @@ public class ModRecipes {
 		}
 
 		if (config.getBoolean("Compressed Stone Hammer", "items", true, "If set to false, the recipe for the compressed stone hammer will be disabled.")) {
-			Item itemHammerStone = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_STONE);
+			ItemStack itemHammerStone = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_STONE);
 			if (itemHammerStone != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerStone), "###", "###", "###", '#', itemHammerStone);
 			} else {
@@ -172,7 +171,7 @@ public class ModRecipes {
 		}
 
 		if (config.getBoolean("Compressed Iron Hammer", "items", true, "If set to false, the recipe for the compressed iron hammer will be disabled.")) {
-			Item itemHammerIron = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_IRON);
+			ItemStack itemHammerIron = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_IRON);
 			if (itemHammerIron != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerIron), "###", "###", "###", '#', itemHammerIron);
 			} else {
@@ -181,7 +180,7 @@ public class ModRecipes {
 		}
 
 		if (config.getBoolean("Compressed Gold Hammer", "items", true, "If set to false, the recipe for the compressed gold hammer will be disabled.")) {
-			Item itemHammerGold = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_GOLD);
+			ItemStack itemHammerGold = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_GOLD);
 			if (itemHammerGold != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerGold), "###", "###", "###", '#', itemHammerGold);
 			} else {
@@ -190,7 +189,7 @@ public class ModRecipes {
 		}
 
 		if (config.getBoolean("Compressed Diamond Hammer", "items", true, "If set to false, the recipe for the compressed diamond hammer will be disabled.")) {
-			Item itemHammerDiamond = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
+			ItemStack itemHammerDiamond = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
 			if (itemHammerDiamond != null) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerDiamond), "###", "###", "###", '#', itemHammerDiamond);
 			} else {
@@ -202,48 +201,48 @@ public class ModRecipes {
 	private static void registerCompressedBlocks(Configuration config) {
 		boolean exUtilsLoaded = Loader.isModLoaded("ExtraUtilities"); // TODO does ExUtils still do this?
 		if (config.getBoolean("Compressed Dust", "blocks", true, "Set this to false to disable the recipe for the compressed dust.")) {
-			Block dustBlock = ExRegistro.getNihiloBlock(ExNihiloProvider.NihiloBlocks.DUST);
+			ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
 			if(dustBlock != null) {
 				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 0), "###", "###", "###", '#', dustBlock);
-				GameRegistry.addShapelessRecipe(new ItemStack(dustBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, 0));
+				GameRegistry.addShapelessRecipe(ItemHandlerHelper.copyStackWithSize(dustBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, 0));
 			} else {
 				ExCompressum.logger.warn("No Dust found - Compressed Dust recipe will be disabled.");
 			}
 		}
 		if (config.getBoolean("Compressed Cobblestone", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed cobblestone.")) {
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 1), "###", "###", "###", '#', Blocks.COBBLESTONE);
-			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.COBBLESTONE, 9), new ItemStack(ModBlocks.compressedBlock, 1, 1));
+			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.COBBLESTONE, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.COBBLESTONE.ordinal()));
 		}
 		if (config.getBoolean("Compressed Gravel", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed gravel.")) {
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 2), "###", "###", "###", '#', Blocks.GRAVEL);
-			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.GRAVEL, 9), new ItemStack(ModBlocks.compressedBlock, 1, 2));
+			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.GRAVEL, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal()));
 		}
 		if (config.getBoolean("Compressed Sand", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed sand.")) {
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 3), "###", "###", "###", '#', Blocks.SAND);
-			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.SAND, 9), new ItemStack(ModBlocks.compressedBlock, 1, 3));
+			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.SAND, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal()));
 		}
 		if (config.getBoolean("Compressed Dirt", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed dirt.")) {
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 4), "###", "###", "###", '#', Blocks.DIRT);
-			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.DIRT, 9), new ItemStack(ModBlocks.compressedBlock, 1, 4));
+			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.DIRT, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()));
 		}
 		if (config.getBoolean("Compressed Flint", "blocks", true, "Set this to false to disable the recipe for the compressed flint.")) {
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 5), "###", "###", "###", '#', Items.FLINT);
-			GameRegistry.addShapelessRecipe(new ItemStack(Items.FLINT, 9), new ItemStack(ModBlocks.compressedBlock, 1, 5));
+			GameRegistry.addShapelessRecipe(new ItemStack(Items.FLINT, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.FLINT.ordinal()));
 		}
 		if (config.getBoolean("Compressed Ender Gravel", "blocks", true, "Set this to false to disable the recipe for the compressed ender gravel.")) {
-			Block enderGravelBlock = ExRegistro.getNihiloBlock(ExNihiloProvider.NihiloBlocks.ENDER_GRAVEL);
+			ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
 			if(enderGravelBlock != null) {
 				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 6), "###", "###", "###", '#', enderGravelBlock);
-				GameRegistry.addShapelessRecipe(new ItemStack(enderGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, 6));
+				GameRegistry.addShapelessRecipe(ItemHandlerHelper.copyStackWithSize(enderGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()));
 			} else {
 				ExCompressum.logger.warn("No Ender Gravel found - Compressed Ender Gravel recipe will be disabled.");
 			}
 		}
 		if (config.getBoolean("Compressed Nether Gravel", "blocks", true, "Set this to false to disable the recipe for the compressed nether gravel.")) {
-			Block netherGravelBlock = ExRegistro.getNihiloBlock(ExNihiloProvider.NihiloBlocks.NETHER_GRAVEL);
+			ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
 			if(netherGravelBlock != null) {
 				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 6), "###", "###", "###", '#', netherGravelBlock);
-				GameRegistry.addShapelessRecipe(new ItemStack(netherGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, 6));
+				GameRegistry.addShapelessRecipe(ItemHandlerHelper.copyStackWithSize(netherGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()));
 			} else {
 				ExCompressum.logger.warn("No Nether Gravel found - Compressed Nether Gravel recipe will be disabled.");
 			}
@@ -268,7 +267,7 @@ public class ModRecipes {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 4), Items.WHEAT_SEEDS, Items.WHEAT_SEEDS);
 		}
 		if (config.getBoolean("Sheep Bait", "blocks", true, "If set to false, the recipe for the sheep bait will be disabled.")) {
-			Item grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
+			ItemStack grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
 			if(grassSeeds != null) {
 				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 5), grassSeeds, Items.WHEAT);
 			} else {

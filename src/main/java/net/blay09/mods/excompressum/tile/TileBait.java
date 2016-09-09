@@ -4,25 +4,27 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.ModBlocks;
+import net.blay09.mods.excompressum.block.BlockBait;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.registry.ItemAndMetadata;
+import net.minecraft.block.BlockNewLog;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockSapling;
+import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -48,10 +50,28 @@ public class TileBait extends TileEntity implements ITickable {
         }
     }
 
-    private static final Multimap<Integer, ItemAndMetadata> envBlockMap = ArrayListMultimap.create();
+    public static class BaitBlockCondition {
+        private final IBlockState state;
+        private final boolean isWildcard;
 
-    private EntityItem renderItemMain;
-    private EntityItem renderItemSub;
+        public BaitBlockCondition(IBlockState state, boolean isWildcard) {
+            this.state = state;
+            this.isWildcard = isWildcard;
+        }
+
+        public IBlockState getState() {
+            return state;
+        }
+
+        public boolean isWildcard() {
+            return isWildcard;
+        }
+    }
+
+    private static final Multimap<BlockBait.Type, BaitBlockCondition> envBlockMap = ArrayListMultimap.create();
+
+    private ItemStack renderItemMain;
+    private ItemStack renderItemSub;
     private EnvironmentalCondition environmentStatus;
     private int ticksSinceEnvironmentalCheck;
 
@@ -60,12 +80,10 @@ public class TileBait extends TileEntity implements ITickable {
         ticksSinceEnvironmentalCheck++;
         int metadata = getBlockMetadata();
         if(renderItemMain == null) {
-            renderItemMain = new EntityItem(worldObj);
-            renderItemMain.setEntityItemStack(getBaitDisplayItem(metadata, 0));
+            renderItemMain = getBaitDisplayItem(metadata, 0);
         }
         if(renderItemSub == null) {
-            renderItemSub = new EntityItem(worldObj);
-            renderItemSub.setEntityItemStack(getBaitDisplayItem(metadata, 1));
+            renderItemSub = getBaitDisplayItem(metadata, 1);
         }
         if(!worldObj.isRemote && worldObj.rand.nextFloat() <= getBaitChance(metadata)) {
             if(checkSpawnConditions(true) == EnvironmentalCondition.CanSpawn) {
@@ -93,9 +111,9 @@ public class TileBait extends TileEntity implements ITickable {
             case 3: return new ItemStack(Items.CARROT);
             case 4: return new ItemStack(Items.WHEAT_SEEDS);
             case 5:
-                Item grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
+                ItemStack grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
                 if(grassSeeds != null) {
-                    return i == 0 ? new ItemStack(grassSeeds) : new ItemStack(Items.WHEAT);
+                    return i == 0 ? grassSeeds : new ItemStack(Items.WHEAT);
                 } else {
                     return new ItemStack(Items.WHEAT);
                 }
@@ -131,14 +149,15 @@ public class TileBait extends TileEntity implements ITickable {
     }
 
     @Nullable
-    public EntityItem getRenderItem(int i) {
+    public ItemStack getRenderItem(int i) {
         return i == 0 ? renderItemMain : renderItemSub;
     }
 
+    // TODO if this turns out to perform badly, distribute the check over several ticks
     public EnvironmentalCondition checkSpawnConditions(boolean checkNow) {
         if(checkNow || ticksSinceEnvironmentalCheck > ENVIRONMENTAL_CHECK_INTERVAL) {
             int metadata = getBlockMetadata();
-            Collection<ItemAndMetadata> envBlocks = envBlockMap.get(metadata);
+            Collection<BaitBlockCondition> envBlocks = envBlockMap.get(BlockBait.Type.fromId(metadata));
             populateEnvBlocks();
             final int range = 5;
             final int rangeVertical = 3;
@@ -155,11 +174,19 @@ public class TileBait extends TileEntity implements ITickable {
                         } else if(state.getBlock() == Blocks.WATER || state.getBlock() == Blocks.FLOWING_WATER) {
                             foundWater = true;
                         }
-                        if(envBlocks.contains(state)) { // TODO again, make sure this is safe to do with IBlockState
-                            countEnvBlocks++;
-                        }/* else if (envBlocks.contains(new ItemAndMetadata(block, OreDictionary.WILDCARD_VALUE))) { // TODO yeah RIP
-                            countEnvBlocks++;
-                        }*/
+
+                        for(BaitBlockCondition envBlock : envBlocks) {
+                            if(state.getBlock() == envBlock.getState().getBlock()) {
+                                if(!envBlock.isWildcard()) {
+                                    int meta = state.getBlock().getMetaFromState(state);
+                                    int envMeta = envBlock.getState().getBlock().getMetaFromState(envBlock.getState());
+                                    if(meta != envMeta) {
+                                        continue;
+                                    }
+                                }
+                                countEnvBlocks++;
+                            }
+                        }
                     }
                 }
             }
@@ -185,27 +212,32 @@ public class TileBait extends TileEntity implements ITickable {
             return;
         }
 
-        // Wolf, Cow, Pig, Chicken, Sheep
-        for(int i = 0; i <= 5; i++) {
-            if(i == 1) {
-                continue;
+        BlockBait.Type[] simpleTypes = new BlockBait.Type[] {BlockBait.Type.WOLF, BlockBait.Type.COW, BlockBait.Type.PIG, BlockBait.Type.CHICKEN, BlockBait.Type.SHEEP};
+        BlockPlanks.EnumType[] acceptedTrees = new BlockPlanks.EnumType[] {BlockPlanks.EnumType.OAK, BlockPlanks.EnumType.BIRCH, BlockPlanks.EnumType.SPRUCE, BlockPlanks.EnumType.ACACIA, BlockPlanks.EnumType.DARK_OAK };
+        for(BlockBait.Type type : simpleTypes) {
+            envBlockMap.put(type, new BaitBlockCondition(Blocks.GRASS.getDefaultState(), false));
+
+            for(BlockPlanks.EnumType treeType : acceptedTrees) {
+                envBlockMap.put(type, new BaitBlockCondition(Blocks.SAPLING.getDefaultState().withProperty(BlockSapling.TYPE, treeType), false));
+                if(BlockOldLog.VARIANT.getAllowedValues().contains(treeType)) {
+                    envBlockMap.put(type, new BaitBlockCondition(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, treeType), false));
+                }
+                if(BlockNewLog.VARIANT.getAllowedValues().contains(treeType)) {
+                    envBlockMap.put(type, new BaitBlockCondition(Blocks.LOG2.getDefaultState().withProperty(BlockNewLog.VARIANT, treeType), false));
+                }
             }
-            envBlockMap.put(i, new ItemAndMetadata(Blocks.GRASS, 0));
-            for (int j = 0; j <= 2; j++) envBlockMap.put(i, new ItemAndMetadata(Blocks.SAPLING, j));
-            for (int j = 1; j <= 2; j++) envBlockMap.put(i, new ItemAndMetadata(Blocks.TALLGRASS, j));
-            for (int j = 0; j <= 2; j++) envBlockMap.put(i, new ItemAndMetadata(Blocks.LOG, j));
-            for (int j = 0; j <= 1; j++) envBlockMap.put(i, new ItemAndMetadata(Blocks.LOG2, j));
+
+            envBlockMap.put(type, new BaitBlockCondition(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS), false));
+            envBlockMap.put(type, new BaitBlockCondition(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN), false));
         }
 
-        // Ocelot
-        envBlockMap.put(1, new ItemAndMetadata(Blocks.LOG, 3));
-        envBlockMap.put(1, new ItemAndMetadata(Blocks.VINE, OreDictionary.WILDCARD_VALUE));
-        envBlockMap.put(1, new ItemAndMetadata(Blocks.WATERLILY, 0));
-        envBlockMap.put(1, new ItemAndMetadata(Blocks.SAPLING, 3));
+        envBlockMap.put(BlockBait.Type.OCELOT, new BaitBlockCondition(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE), false));
+        envBlockMap.put(BlockBait.Type.OCELOT, new BaitBlockCondition(Blocks.VINE.getDefaultState(), true));
+        envBlockMap.put(BlockBait.Type.OCELOT, new BaitBlockCondition(Blocks.WATERLILY.getDefaultState(), false));
+        envBlockMap.put(BlockBait.Type.OCELOT, new BaitBlockCondition(Blocks.SAPLING.getDefaultState().withProperty(BlockSapling.TYPE, BlockPlanks.EnumType.JUNGLE), false));
 
-        // Squid
-        envBlockMap.put(6, new ItemAndMetadata(Blocks.WATER, OreDictionary.WILDCARD_VALUE));
-        envBlockMap.put(6, new ItemAndMetadata(Blocks.FLOWING_WATER, OreDictionary.WILDCARD_VALUE));
+        envBlockMap.put(BlockBait.Type.SQUID, new BaitBlockCondition(Blocks.WATER.getDefaultState(), true));
+        envBlockMap.put(BlockBait.Type.SQUID, new BaitBlockCondition(Blocks.FLOWING_WATER.getDefaultState(), true));
     }
 
 }
