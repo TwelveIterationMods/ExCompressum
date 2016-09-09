@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.registry;
 import net.blay09.mods.excompressum.StupidUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -69,4 +70,8 @@ public abstract class ExRegistro {
 		return Collections.emptyList();
 	}
 
+	@Nullable
+	public static ItemStack rollSilkWorm(EntityPlayer player, IBlockState state, int fortune) {
+		return instance.rollSilkWorm(player, state, fortune);
+	}
 }

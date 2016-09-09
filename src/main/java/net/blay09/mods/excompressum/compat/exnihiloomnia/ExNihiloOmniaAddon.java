@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.compat.exnihiloomnia;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import exnihiloomnia.blocks.ENOBlocks;
 import exnihiloomnia.registries.composting.CompostRegistry;
 import exnihiloomnia.registries.composting.CompostRegistryEntry;
 import exnihiloomnia.registries.hammering.HammerRegistry;
@@ -20,6 +21,7 @@ import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -52,11 +54,13 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.CROOK_WOODEN, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "crook_wood")));
 		itemMap.put(NihiloItems.SILK_MESH, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "mesh_silk_white")));
 		itemMap.put(NihiloItems.SEEDS_GRASS, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "seeds_grass")));
+		itemMap.put(NihiloItems.SILK_WORM, Item.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "silkworm")));
 
 		blockMap.put(NihiloBlocks.DUST, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "dust")));
 		blockMap.put(NihiloBlocks.SIEVE, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "sieve_wood")));
 		blockMap.put(NihiloBlocks.NETHER_GRAVEL, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "gravel_nether")));
 		blockMap.put(NihiloBlocks.ENDER_GRAVEL, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "gravel_ender")));
+		blockMap.put(NihiloBlocks.INFESTED_LEAVES, Block.REGISTRY.getObject(new ResourceLocation(Compat.EXNIHILOOMNIA, "infested_leaves")));
 
 		ExRegistro.instance = this;
 	}
@@ -112,6 +116,18 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 			rollSieveRewardsToList(entry, list, luck, rand);
 		}
 		return list;
+	}
+
+	@Nullable
+	@Override
+	public ItemStack rollSilkWorm(EntityPlayer player, IBlockState state, int fortune) {
+		if(player.worldObj.rand.nextInt(100) == 0 || state.getBlock() == getNihiloBlock(NihiloBlocks.INFESTED_LEAVES)) {
+			Item silkWormItem = getNihiloItem(NihiloItems.SILK_WORM);
+			if(silkWormItem != null) {
+				return new ItemStack(silkWormItem);
+			}
+		}
+		return null;
 	}
 
 	private void rollSieveRewardsToList(SieveRegistryEntry entry, List<ItemStack> list, float luck, Random rand) {

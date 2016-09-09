@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -19,14 +20,14 @@ public interface ExNihiloProvider {
 		HAMMER_IRON,
 		HAMMER_GOLD,
 		HAMMER_DIAMOND,
-		SILK_MESH
+		SILK_WORM, SILK_MESH
 	}
 
 	enum NihiloBlocks {
 		DUST,
 		NETHER_GRAVEL,
 		ENDER_GRAVEL,
-		SIEVE
+		INFESTED_LEAVES, SIEVE
 	}
 
 	@Nullable
@@ -37,4 +38,6 @@ public interface ExNihiloProvider {
 	Collection<ItemStack> rollHammerRewards(IBlockState state, float luck, Random rand);
 	boolean isSiftable(IBlockState state);
 	Collection<ItemStack> rollSieveRewards(IBlockState state, float luck, Random rand);
+	@Nullable
+	ItemStack rollSilkWorm(EntityPlayer player, IBlockState state, int fortune);
 }

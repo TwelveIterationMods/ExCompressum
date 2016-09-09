@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -41,5 +42,11 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	@Override
 	public Collection<ItemStack> rollSieveRewards(IBlockState state, float luck, Random rand) {
 		return Collections.emptyList();
+	}
+
+	@Nullable
+	@Override
+	public ItemStack rollSilkWorm(EntityPlayer player, IBlockState state, int fortune) {
+		return null;
 	}
 }

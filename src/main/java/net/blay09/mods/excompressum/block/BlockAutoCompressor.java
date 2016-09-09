@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -33,6 +34,11 @@ public class BlockAutoCompressor extends BlockContainer {
     }
 
     @Override
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
+    }
+
+    @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
         return new TileEntityAutoCompressor();
     }
@@ -49,27 +55,16 @@ public class BlockAutoCompressor extends BlockContainer {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if(tileEntity != null) {
-            //noinspection ConstantConditions /// getCapability needs @Nullable
-            IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+            IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
             for (int i = 0; i < itemHandler.getSlots(); i++) {
                 ItemStack itemStack = itemHandler.getStackInSlot(i);
                 if (itemStack != null) {
-                    EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemStack);
-                    double motion = 0.05;
-                    entityItem.motionX = world.rand.nextGaussian() * motion;
-                    entityItem.motionY = 0.2;
-                    entityItem.motionZ = world.rand.nextGaussian() * motion;
-                    world.spawnEntityInWorld(entityItem);
+                    world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemStack));
                 }
             }
             ItemStack currentStack = ((TileEntityAutoCompressor) tileEntity).getCurrentStack();
             if (currentStack != null) {
-                EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack);
-                double motion = 0.05;
-                entityItem.motionX = world.rand.nextGaussian() * motion;
-                entityItem.motionY = 0.2;
-                entityItem.motionZ = world.rand.nextGaussian() * motion;
-                world.spawnEntityInWorld(entityItem);
+                world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
             }
         }
         super.breakBlock(world, pos, state);
