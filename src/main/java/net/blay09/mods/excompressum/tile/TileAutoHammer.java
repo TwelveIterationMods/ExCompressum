@@ -63,14 +63,6 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
 
     @Override
     public void update() {
-        ticksSinceUpdate++;
-        if (ticksSinceUpdate > UPDATE_INTERVAL) {
-            if (isDirty) {
-                VanillaPacketHandler.sendTileEntityUpdate(this);
-                isDirty = false;
-            }
-            ticksSinceUpdate = 0;
-        }
         int effectiveEnergy = getEffectiveEnergy();
         if (storage.getEnergyStored() >= effectiveEnergy) {
             if (currentStack == null) {
@@ -132,6 +124,16 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
                 }
             }
         }
+
+        // Sync to clients
+        ticksSinceUpdate++;
+        if (ticksSinceUpdate > UPDATE_INTERVAL) {
+            if (isDirty) {
+                VanillaPacketHandler.sendTileEntityUpdate(this);
+                isDirty = false;
+            }
+            ticksSinceUpdate = 0;
+        }
     }
 
     private boolean addItemToOutput(ItemStack itemStack) {
@@ -185,25 +187,25 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
         readFromNBTSynced(tagCompound);
-        storage.readFromNBT(tagCompound);
         itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
     }
 
     private void readFromNBTSynced(NBTTagCompound tagCompound) {
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
+        storage.readFromNBT(tagCompound);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
         writeToNBTSynced(tagCompound);
-        storage.writeToNBT(tagCompound);
         tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
         return tagCompound;
     }
 
     private void writeToNBTSynced(NBTTagCompound tagCompound) {
+        storage.writeToNBT(tagCompound);
         if (currentStack != null) {
             tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         }
@@ -232,7 +234,8 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         IBlockState currentBlock = getCurrentBlock();
         if (currentBlock != null) {
             for (int i = 0; i < 10; i++) {
-                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleAutoHammer(worldObj, pos.getX() + 0.5, pos.getY() + 0.3125, pos.getZ() + 0.5, (worldObj.rand.nextDouble() / 2) - 0.25, 0, (worldObj.rand.nextDouble() / 2) - 0.25, currentBlock));
+                // -0.09375f, 0.0625f, -0.25
+                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleAutoHammer(worldObj, pos, pos.getX() + 0.7f, pos.getY() + 0.3f, pos.getZ() + 0.5f, (-worldObj.rand.nextDouble() + 0.2f) / 9, 0.2f, (worldObj.rand.nextDouble() - 0.5) / 9, currentBlock));
             }
         }
     }
@@ -338,4 +341,5 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     public int getMiningLevel() {
         return Item.ToolMaterial.DIAMOND.getHarvestLevel();
     }
+
 }

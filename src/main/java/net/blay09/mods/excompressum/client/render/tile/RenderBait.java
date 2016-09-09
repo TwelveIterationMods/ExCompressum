@@ -30,7 +30,7 @@ public class RenderBait extends TileEntitySpecialRenderer<TileBait> {
     }
 
     private static void renderItem(RenderItem itemRenderer, ItemStack itemStack, float x, float y, float z, float angle, float xr, float yr, float zr) {
-        GlStateManager.pushMatrix();
+        GlStateManager.pushMatrix(); // TODO optimize this
         GlStateManager.translate(x, y, z);
         GlStateManager.rotate(angle, xr, yr, zr);
         if (!itemRenderer.shouldRenderItemIn3D(itemStack)) {

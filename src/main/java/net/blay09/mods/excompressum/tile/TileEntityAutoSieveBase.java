@@ -36,6 +36,8 @@ import java.util.Random;
 
 public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable {
 
+	// TODO need mesh slot
+
 	private static final int UPDATE_INTERVAL = 20;
 
 	private DefaultItemHandler itemHandler = new DefaultItemHandler(this, 22) {

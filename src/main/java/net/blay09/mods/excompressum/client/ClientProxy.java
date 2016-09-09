@@ -7,12 +7,15 @@ import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.client.render.entity.RenderAngryChicken;
+import net.blay09.mods.excompressum.client.render.tile.RenderAutoHammer;
 import net.blay09.mods.excompressum.client.render.tile.RenderAutoSieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderBait;
 import net.blay09.mods.excompressum.client.render.tile.RenderHeavySieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderWoodenCrucible;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
+import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
+import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.blay09.mods.excompressum.tile.TileBait;
 import net.blay09.mods.excompressum.tile.TileAutoSieve;
 import net.blay09.mods.excompressum.tile.TileAutoSieveMana;
@@ -41,64 +44,72 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
 
-    private final Set<GameProfile> skinRequested = Sets.newHashSet();
-    public static TextureAtlasSprite iconEmptyBookSlot;
-    public static TextureAtlasSprite iconEmptyHammerSlot;
-    public static TextureAtlasSprite iconEmptyCompressedHammerSlot;
+	private final Set<GameProfile> skinRequested = Sets.newHashSet();
+	public static TextureAtlasSprite iconEmptyBookSlot;
+	public static TextureAtlasSprite iconEmptyHammerSlot;
+	public static TextureAtlasSprite iconEmptyCompressedHammerSlot;
+	public static final TextureAtlasSprite[] destroyBlockIcons = new TextureAtlasSprite[10];
 
-    @Override
-    public void preInit(FMLPreInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(this);
+	@Override
+	public void preInit(FMLPreInitializationEvent event) {
+		MinecraftForge.EVENT_BUS.register(this);
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileHeavySieve.class, new RenderHeavySieve());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieve.class, new RenderAutoSieve(false));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieveMana.class, new RenderAutoSieve(false));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoHeavySieve.class, new RenderAutoSieve(true));
-//        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoHammer.class, new RenderAutoHammer()); // TODO uh, we don't really have the items here yet, so fix this later
-//        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoCompressedHammer.class, new RenderAutoHammer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileHeavySieve.class, new RenderHeavySieve());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieve.class, new RenderAutoSieve(false));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieveMana.class, new RenderAutoSieve(false));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileAutoHeavySieve.class, new RenderAutoSieve(true));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileAutoHammer.class, new RenderAutoHammer(false));
+		ClientRegistry.bindTileEntitySpecialRenderer(TileAutoCompressedHammer.class, new RenderAutoHammer(true));
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileWoodenCrucible.class, new RenderWoodenCrucible());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileBait.class, new RenderBait());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileWoodenCrucible.class, new RenderWoodenCrucible());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileBait.class, new RenderBait());
 
-        final ModelChicken modelChicken = new ModelChicken();
-        RenderingRegistry.registerEntityRenderingHandler(EntityAngryChicken.class, new IRenderFactory<EntityAngryChicken>() {
-            @Override
-            public Render<? super EntityAngryChicken> createRenderFor(RenderManager manager) {
-                return new RenderAngryChicken(manager, modelChicken, 0.3f);
-            }
-        });
-    }
+		final ModelChicken modelChicken = new ModelChicken();
+		RenderingRegistry.registerEntityRenderingHandler(EntityAngryChicken.class, new IRenderFactory<EntityAngryChicken>() {
+			@Override
+			public Render<? super EntityAngryChicken> createRenderFor(RenderManager manager) {
+				return new RenderAngryChicken(manager, modelChicken, 0.3f);
+			}
+		});
+	}
 
-    @Override
-    public void postInit(FMLPostInitializationEvent event) {
-        String customName = ChickenStickRegistry.chickenStickNames.get(Minecraft.getMinecraft().getSession().getUsername().toLowerCase());
-        if(customName == null) {
-            customName = ChickenStickRegistry.chickenStickNames.get("*");
-        }
-        if(customName != null) {
-            ChickenStickRegistry.setChickenStickName(customName);
-        }
-    }
+	@Override
+	public void postInit(FMLPostInitializationEvent event) {
+		String customName = ChickenStickRegistry.chickenStickNames.get(Minecraft.getMinecraft().getSession().getUsername().toLowerCase());
+		if (customName == null) {
+			customName = ChickenStickRegistry.chickenStickNames.get("*");
+		}
+		if (customName != null) {
+			ChickenStickRegistry.setChickenStickName(customName);
+		}
+	}
 
-    @Override
-    public void preloadSkin(GameProfile customSkin) {
-        if(!skinRequested.contains(customSkin)) {
-            Minecraft.getMinecraft().getSkinManager().loadProfileTextures(customSkin, new SkinManager.SkinAvailableCallback() {
-                @Override
-                public void skinAvailable(MinecraftProfileTexture.Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture) {
-                    // NOP
-                }
-            }, true);
-            skinRequested.add(customSkin);
-        }
-    }
+	@Override
+	public void preloadSkin(GameProfile customSkin) {
+		if (!skinRequested.contains(customSkin)) {
+			Minecraft.getMinecraft().getSkinManager().loadProfileTextures(customSkin, new SkinManager.SkinAvailableCallback() {
+				@Override
+				public void skinAvailable(MinecraftProfileTexture.Type typeIn, ResourceLocation location, MinecraftProfileTexture profileTexture) {
+					// NOP
+				}
+			}, true);
+			skinRequested.add(customSkin);
+		}
+	}
 
-    @SubscribeEvent
-    public void onTextureStitch(TextureStitchEvent.Pre event) {
-        if(event.getMap() == Minecraft.getMinecraft().getTextureMapBlocks()) {
-            iconEmptyBookSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_enchanted_book_slot"));
-            iconEmptyHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_hammer_slot"));
-            iconEmptyCompressedHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_compressed_hammer_slot"));
-        }
-    }
+	@SubscribeEvent
+	public void onTextureStitch(TextureStitchEvent.Pre event) {
+		if (event.getMap() == Minecraft.getMinecraft().getTextureMapBlocks()) {
+			iconEmptyBookSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_enchanted_book_slot"));
+			iconEmptyHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_hammer_slot"));
+			iconEmptyCompressedHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_compressed_hammer_slot"));
+		}
+	}
+
+	@SubscribeEvent
+	public void afterTextureStitch(TextureStitchEvent.Post event) {
+		for (int i = 0; i < destroyBlockIcons.length; i++) {
+			destroyBlockIcons[i] = event.getMap().getAtlasSprite("minecraft:blocks/destroy_stage_" + i);
+		}
+	}
 }

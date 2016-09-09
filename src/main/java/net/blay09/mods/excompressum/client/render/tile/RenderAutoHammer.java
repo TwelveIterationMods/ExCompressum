@@ -1,17 +1,29 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
 import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.block.BlockAutoHammer;
+import net.blay09.mods.excompressum.client.ClientProxy;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import org.lwjgl.opengl.GL11;
 
 public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> {
 
@@ -24,6 +36,13 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
 
     @Override
     public void renderTileEntityAt(TileAutoHammer tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
+        if(!tileEntity.hasWorldObj()) {
+            return;
+        }
+        IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
+        if(!(state.getBlock() instanceof BlockAutoHammer)) {
+            return;
+        }
         if (hammerItemStack == null) {
             if (isCompressed) {
                 hammerItemStack = new ItemStack(ModItems.compressedHammerDiamond);
@@ -35,116 +54,77 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
             }
         }
 
-        /*int metadata = tileEntity.hasWorldObj() ? tileEntity.getBlockMetadata() : 0;
+        Minecraft mc = Minecraft.getMinecraft();
+        RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer renderer = tessellator.getBuffer();
+
+        RenderHelper.disableStandardItemLighting();
 
         GlStateManager.pushMatrix();
-        GlStateManager.enableRescaleNormal(); // TODO why, what is this
         GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
-        float angle;
-        switch(EnumFacing.getFront(metadata)) {
-            case NORTH:
-                angle = 0;
-                break;
-            case EAST:
-                angle = -90;
-                break;
-            case SOUTH:
-                angle = 180;
-                break;
-            case WEST:
-                angle = 90;
-                break;
-            default:
-                angle = -90;
-        }
-        GlStateManager.rotate(angle, 0f, 1f, 0f);
+        float progress = tileEntity.getProgress();
 
-        if(tileEntity.getCurrentStack() != null) {
+        // Render the hammers
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate((float) Math.sin(tileEntity.getProgress() / tileEntity.getSpeedBoost() * 100) * 15, 0f, 0f, 1f); // angle: hammer progress from tile entity
+        GlStateManager.translate(-0.15f, 0.6f, 0f);
+        GlStateManager.scale(0.5f, 0.5f, 0.5f);
+        itemRenderer.renderItem(hammerItemStack, ItemCameraTransforms.TransformType.FIXED);
+        ItemStack firstHammer = tileEntity.getUpgradeStack(0);
+        if(firstHammer != null) {
             GlStateManager.pushMatrix();
-            GlStateManager.scale(0.5f, 0.5f, 0.5f);
-            GlStateManager.translate(-0.2f, 0.2f, -0.5f);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            // TODO hi fix me
-//            renderContent(Block.getBlockFromItem(tileEntity.getCurrentStack().getItem()), tileEntity.getCurrentStack().getItemDamage(), tileEntity.getProgress());
+            GlStateManager.translate(0f, 0f, 0.33f);
+            GlStateManager.rotate(10f, 0f, 1f, 0f);
+            itemRenderer.renderItem(firstHammer, ItemCameraTransforms.TransformType.FIXED);
             GlStateManager.popMatrix();
         }
-
-        if(renderItem != null) {
-            GlStateManager.rotate((float) Math.sin(tileEntity.getProgress() / tileEntity.getSpeedBoost() * 100) * 15, 0, 0, 1);
-            // TODO check CfB for item render code
-//            RenderItem.renderInFrame = true;
-//            RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0, 0f, 0f);
-            if(tileEntity.getUpgradeStack(0) != null) {
-                GlStateManager.pushMatrix();
-                GlStateManager.rotate(-15, 0f, 1f, 0f);
-//                RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, -0.3, 0f, 0f);
-                GlStateManager.popMatrix();
-            }
-            if(tileEntity.getUpgradeStack(1) != null) {
-                GlStateManager.pushMatrix();
-                GlStateManager.rotate(15, 0f, 1f, 0f);
-//                RenderManager.instance.renderEntityWithPosYaw(renderItem, -0.1, 0.4, 0.3, 0f, 0f);
-                GlStateManager.popMatrix();
-            }
-//            RenderItem.renderInFrame = false;
+        ItemStack secondHammer = tileEntity.getUpgradeStack(1);
+        if(secondHammer != null) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0f, 0f, -0.33f);
+            GlStateManager.rotate(-10f, 0f, 1f, 0f);
+            itemRenderer.renderItem(secondHammer, ItemCameraTransforms.TransformType.FIXED);
+            GlStateManager.popMatrix();
         }
-        GlStateManager.enableRescaleNormal(); // TODO again, why, wat dis
         GlStateManager.popMatrix();
-        GlStateManager.color(1f, 1f, 1f, 1f);
+
+        ItemStack currentStack = tileEntity.getCurrentStack();
+        if (currentStack != null) {
+            Block block = Block.getBlockFromItem(currentStack.getItem());
+            //noinspection ConstantConditions /// Forge needs @Nullable
+            if(block != null) {
+                renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+                mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(-0.09375f, 0.0625f, -0.25);
+                GlStateManager.scale(0.5, 0.5, 0.5);
+                mc.getBlockRendererDispatcher().renderBlock(block.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+                mc.getBlockRendererDispatcher().renderBlockDamage(block.getDefaultState(), new BlockPos(0, 0, 0), ClientProxy.destroyBlockIcons[Math.min(9, (int) (progress * 9f))], tileEntity.getWorld());
+                tessellator.draw();
+                GlStateManager.popMatrix();
+            }
+        }
+
+        GlStateManager.popMatrix();
+
+        RenderHelper.enableStandardItemLighting();
     }
 
-    /* TODO fix this too
-    private void renderContent(Block block, int metadata, float progress) {
-        Tessellator.instance.startDrawingQuads();
-        Tessellator.instance.setColorRGBA_F(1f, 1f, 1f, 1f);
-
-        renderBlock(block, metadata, null);
-        if(progress > 0f) {
-            renderBlock(block, metadata, BlockAutoCompressedHammer.destroyStages[(int) (progress * 9f)]);
+    private float getRotationAngle(EnumFacing facing) {
+        switch(facing) {
+            case NORTH:
+                return 0;
+            case EAST:
+                return -90;
+            case SOUTH:
+                return 180;
+            case WEST:
+                return 90;
+            default:
+                return -90;
         }
-
-        Tessellator.instance.draw();
-    }*/
-
-        // TODO yeah fix this
-    /*private void renderBlock(Block block, int metadata, IIcon override) {
-        IIcon icon = override != null ? override : block.getIcon(ForgeDirection.UP.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(1, 1, 1, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(1, 1, 0, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(0, 1, 0, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(0, 1, 1, icon.getMaxU(), icon.getMinV());
-
-        icon = override != null ? override : block.getIcon(ForgeDirection.DOWN.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(0, 0, 1, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(0, 0, 0, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 0, 0, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 0, 1, icon.getMaxU(), icon.getMinV());
-
-        icon = override != null ? override : block.getIcon(ForgeDirection.WEST.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(0, 1, 1, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(0, 1, 0, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(0, 0, 0, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(0, 0, 1, icon.getMaxU(), icon.getMinV());
-
-        icon = override != null ? override : block.getIcon(ForgeDirection.EAST.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(1, 0, 1, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(1, 0, 0, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 1, 0, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 1, 1, icon.getMaxU(), icon.getMinV());
-
-        icon = override != null ? override : block.getIcon(ForgeDirection.SOUTH.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(0, 1, 1, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(0, 0, 1, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 0, 1, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 1, 1, icon.getMaxU(), icon.getMinV());
-
-        icon = override != null ? override : block.getIcon(ForgeDirection.NORTH.ordinal(), metadata);
-        Tessellator.instance.addVertexWithUV(0, 1, 0, icon.getMinU(), icon.getMinV());
-        Tessellator.instance.addVertexWithUV(1, 1, 0, icon.getMinU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(1, 0, 0, icon.getMaxU(), icon.getMaxV());
-        Tessellator.instance.addVertexWithUV(0, 0, 0, icon.getMaxU(), icon.getMinV());
-    }*/
     }
 }
