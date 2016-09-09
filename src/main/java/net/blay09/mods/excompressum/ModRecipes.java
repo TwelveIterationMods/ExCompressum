@@ -210,29 +210,29 @@ public class ModRecipes {
 			}
 		}
 		if (config.getBoolean("Compressed Cobblestone", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed cobblestone.")) {
-			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 1), "###", "###", "###", '#', Blocks.COBBLESTONE);
+			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.COBBLESTONE.ordinal()), "###", "###", "###", '#', Blocks.COBBLESTONE);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.COBBLESTONE, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.COBBLESTONE.ordinal()));
 		}
 		if (config.getBoolean("Compressed Gravel", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed gravel.")) {
-			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 2), "###", "###", "###", '#', Blocks.GRAVEL);
+			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal()), "###", "###", "###", '#', Blocks.GRAVEL);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.GRAVEL, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal()));
 		}
 		if (config.getBoolean("Compressed Sand", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed sand.")) {
-			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 3), "###", "###", "###", '#', Blocks.SAND);
+			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal()), "###", "###", "###", '#', Blocks.SAND);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.SAND, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal()));
 		}
 		if (config.getBoolean("Compressed Dirt", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed dirt.")) {
-			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 4), "###", "###", "###", '#', Blocks.DIRT);
+			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()), "###", "###", "###", '#', Blocks.DIRT);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.DIRT, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()));
 		}
 		if (config.getBoolean("Compressed Flint", "blocks", true, "Set this to false to disable the recipe for the compressed flint.")) {
-			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 5), "###", "###", "###", '#', Items.FLINT);
+			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.FLINT.ordinal()), "###", "###", "###", '#', Items.FLINT);
 			GameRegistry.addShapelessRecipe(new ItemStack(Items.FLINT, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.FLINT.ordinal()));
 		}
 		if (config.getBoolean("Compressed Ender Gravel", "blocks", true, "Set this to false to disable the recipe for the compressed ender gravel.")) {
 			ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
 			if(enderGravelBlock != null) {
-				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 6), "###", "###", "###", '#', enderGravelBlock);
+				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()), "###", "###", "###", '#', enderGravelBlock);
 				GameRegistry.addShapelessRecipe(ItemHandlerHelper.copyStackWithSize(enderGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()));
 			} else {
 				ExCompressum.logger.warn("No Ender Gravel found - Compressed Ender Gravel recipe will be disabled.");
@@ -241,7 +241,7 @@ public class ModRecipes {
 		if (config.getBoolean("Compressed Nether Gravel", "blocks", true, "Set this to false to disable the recipe for the compressed nether gravel.")) {
 			ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
 			if(netherGravelBlock != null) {
-				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 6), "###", "###", "###", '#', netherGravelBlock);
+				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()), "###", "###", "###", '#', netherGravelBlock);
 				GameRegistry.addShapelessRecipe(ItemHandlerHelper.copyStackWithSize(netherGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()));
 			} else {
 				ExCompressum.logger.warn("No Nether Gravel found - Compressed Nether Gravel recipe will be disabled.");
