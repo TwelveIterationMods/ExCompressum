@@ -1,7 +1,5 @@
 package net.blay09.mods.excompressum.item;
 
-import exnihiloomnia.blocks.ENOBlocks;
-import exnihiloomnia.items.ENOItems;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -70,7 +68,7 @@ public class ItemCompressedCrook extends ItemTool {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, EntityPlayer player) {
+    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState block, BlockPos pos, EntityLivingBase player) {
         if(!player.worldObj.isRemote) {
             IBlockState state = player.worldObj.getBlockState(pos);
             boolean isLeaves = state.getMaterial() == Material.LEAVES;
@@ -85,11 +83,6 @@ public class ItemCompressedCrook extends ItemTool {
                 }
             }
         }
-        return false;
-    }
-
-    @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState block, BlockPos pos, EntityLivingBase player) {
         itemStack.damageItem(1, player);
         return true;
     }

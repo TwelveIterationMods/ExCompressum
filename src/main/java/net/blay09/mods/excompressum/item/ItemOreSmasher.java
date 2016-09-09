@@ -1,11 +1,16 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumActionResult;
@@ -17,10 +22,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.Collection;
 import java.util.HashSet;
 
 public class ItemOreSmasher extends ItemTool {
 
+	// TODO this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
 	private static final String[] ORE_BLOCKS = new String[] {
 			"exnihiloomnia:ore_gravel",
 			"exnihiloomnia:ore_gravel_ender",
@@ -34,12 +41,12 @@ public class ItemOreSmasher extends ItemTool {
 			"oreSand"
 	};
 
+	// TODO this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
 	private static final String[] ORE_ITEMS = new String[] {
 			"exnihiloomnia:ore_broken",
 			"exnihiloomnia:ore_broken_nether",
 			"exnihiloomnia:ore_broken_ender",
-			"exnihiloomnia:ore_crushed",
-			"exnihiloomnia:ore_powder"
+			"exnihiloomnia:ore_crushed"
 	};
 
 	private static final String[] ORE_ITEMS_OREDICT = new String[] {
@@ -60,13 +67,13 @@ public class ItemOreSmasher extends ItemTool {
 		return isOreBlock(new ItemStack(state.getBlock()));
 	}
 
-	/*@Override // TODO so uh... what happened to getDigSpeed?
-	public float getDigSpeed(ItemStack item, Block block, int meta) {
-		if (isOreBlock(new ItemStack(block))) {
-			return efficiencyOnProperMaterial;
+	@Override
+	public float getStrVsBlock(ItemStack stack, IBlockState state) {
+		if (isOreBlock(new ItemStack(state.getBlock()))) {
+			return efficiencyOnProperMaterial; // Note: Omnia's ore blocks break instantly at the moment. Not sure if intended, but it's not an issue on our side.
 		}
 		return 0.8f;
-	}*/
+	}
 
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -109,6 +116,22 @@ public class ItemOreSmasher extends ItemTool {
         }
         return EnumActionResult.FAIL;
     }
+
+	@Override
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState state, BlockPos pos, EntityLivingBase player) {
+		if(canHarvestBlock(state, itemStack) && ExRegistro.isHammerable(state)) {
+			if(!world.isRemote) {
+				world.setBlockToAir(pos);
+				Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);
+				for(ItemStack rewardStack : rewards) {
+					world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
+				}
+			}
+			itemStack.damageItem(1, player);
+			return true;
+		}
+		return false;
+	}
 
 	private boolean isOreItem(ItemStack itemStack) {
 		String registryName = itemStack.getItem().getRegistryName().toString();

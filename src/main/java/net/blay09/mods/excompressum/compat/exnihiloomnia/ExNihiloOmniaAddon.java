@@ -21,6 +21,7 @@ import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -120,7 +121,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 
 	@Nullable
 	@Override
-	public ItemStack rollSilkWorm(EntityPlayer player, IBlockState state, int fortune) {
+	public ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune) {
 		if(player.worldObj.rand.nextInt(100) == 0 || state.getBlock() == getNihiloBlock(NihiloBlocks.INFESTED_LEAVES)) {
 			Item silkWormItem = getNihiloItem(NihiloItems.SILK_WORM);
 			if(silkWormItem != null) {
