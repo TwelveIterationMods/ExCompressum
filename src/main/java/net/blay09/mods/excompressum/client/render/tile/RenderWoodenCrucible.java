@@ -5,80 +5,110 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.opengl.GL11;
 
 public class RenderWoodenCrucible extends TileEntitySpecialRenderer<TileWoodenCrucible> {
 
-    protected static BlockRendererDispatcher blockRenderer;
-
-    public static IBakedModel modelSolid;
-    public static IBakedModel modelFluid;
-
     @Override
     public void renderTileEntityAt(TileWoodenCrucible tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
-        if(!tileEntity.hasWorldObj()) {
-            return;
-        }
-        if(blockRenderer == null) {
-            blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
-        }
+        Minecraft mc = Minecraft.getMinecraft();
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer renderer = tessellator.getBuffer();
 
-        if (tileEntity.hasSolids()) {
+        RenderHelper.disableStandardItemLighting();
+//        mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+        ItemStack outputStack = tileEntity.getItemHandler().getStackInSlot(0);
+        if(outputStack != null) {
+            renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+            mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             GlStateManager.pushMatrix();
-            float solidRenderVolume = Math.max(0.2f, Math.min(0.95f, (tileEntity.getSolidVolume() / TileWoodenCrucible.MAX_FLUID)));
-            GlStateManager.translate((float) x + 0.5f, (float) y + solidRenderVolume, (float) z + 0.5f);
-            bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            // TODO color it maybe
-//            IIcon icon = tileEntity.getCurrentMeltable().appearance.getIcon(0, tileEntity.getCurrentMeltable().appearanceMeta);
-//            internal.render(new Color(tileEntity.getCurrentMeltable().appearance.getBlockColor()), icon, false);
+            GlStateManager.translate(x + 0.0625f, y + 0.2f, z + 0.0625f);
+            GlStateManager.scale(0.9375f, 0.75f, 0.9375f);
+            mc.getBlockRendererDispatcher().renderBlock(Blocks.CLAY.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+            tessellator.draw();
             GlStateManager.popMatrix();
         }
 
-        Fluid fluid = tileEntity.getFluid();
-        if(fluid != null && tileEntity.getFluidAmount() > 0) {
-            RenderHelper.disableStandardItemLighting();
+        int solidVolume = tileEntity.getSolidVolume();
+        if(solidVolume > 0) {
+            renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x + 0.0625f, y + 0.251f, z + 0.0625f);
+            GlStateManager.scale(0.9375f, 0.71 * (float) solidVolume / (float) tileEntity.getSolidCapacity(), 0.9375f);
+            mc.getBlockRendererDispatcher().renderBlock(Blocks.LEAVES.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+            tessellator.draw();
+            GlStateManager.popMatrix();
+        }
 
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        FluidStack fluidStack = tileEntity.getFluidTank().getFluid();
+        if(fluidStack != null) {
+            ResourceLocation still = fluidStack.getFluid().getStill(fluidStack);
+            int color = fluidStack.getFluid().getColor(fluidStack);
+            TextureAtlasSprite sprite = still == null ? null : mc.getTextureMapBlocks().getTextureExtry(still.toString());
+            if (sprite == null) {
+                sprite = mc.getTextureMapBlocks().getMissingSprite();
+            }
+            renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+
+            GlStateManager.pushMatrix();
+
             GlStateManager.enableBlend();
-            GlStateManager.disableCull();
+            GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            if(Minecraft.isAmbientOcclusionEnabled()) {
+                GL11.glShadeModel(GL11.GL_SMOOTH);
+            } else {
+                GL11.glShadeModel(GL11.GL_FLAT);
+            }
 
-            GlStateManager.pushMatrix();
             GlStateManager.translate(x, y, z);
-            GlStateManager.scale(1f, tileEntity.getFluidAmount() / tileEntity.getFluidCapacity(), 1f);
-            bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            int color = fluid.getColor();
-            float alpha = (color >> 24 & 0xFF) / 255f;
-            float red = (color >> 16 & 0xFF) / 255f;
-            float green = (color >> 8 & 0xFF) / 255f;
-            float blue = (color & 0xFF) / 255f;
-            GlStateManager.color(red, green, blue, alpha);
-            //Minecraft.getMinecraft().getRenderItem().renderModel(modelMilkLiquid, 0xFFFFFFFF);
-            GlStateManager.popMatrix();
 
-            RenderHelper.enableStandardItemLighting();
+            float waterXZ = 0.0625f;
+            float waterXZ2 = 1f - waterXZ;
+            float waterY = 0.25f + 0.7f * ((float) fluidStack.amount / (float) tileEntity.getFluidTank().getCapacity());
+            int brightness = tileEntity.getWorld().getCombinedLight(tileEntity.getPos().offset(EnumFacing.UP), fluidStack.getFluid().getLuminosity(fluidStack));
+            renderQuadUp(renderer, waterXZ, waterY, waterXZ, waterXZ2, waterY, waterXZ2, color, brightness, sprite);
+            tessellator.draw();
+
+            GlStateManager.disableBlend();
+            GlStateManager.popMatrix();
         }
+
+        RenderHelper.enableStandardItemLighting();
     }
 
+    private void renderQuadUp(VertexBuffer renderer, float x, float y, float z, float x2, float y2, float z2, int color, int brightness, TextureAtlasSprite sprite) {
+        float d = 0.005f;
+        float d2 = 1 - (d * 2);
+        double minU = sprite.getInterpolatedU(d%1d * 16f);
+        double maxU = sprite.getInterpolatedU((d + d2) * 16f);
+        double minV = sprite.getInterpolatedV((d % 1d) * 16f);
+        double maxV = sprite.getInterpolatedV((d + d2) * 16f);
 
-
-
-//    @Override
-//    public void renderTileEntityAt(TileWoodenCrucible tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
-//        // TODO check CfB Milk Jar to get the internal render stuff
-//
-//        // Render Solid Content
-//        if (tileEntity.hasSolids()) {
-//            GlStateManager.pushMatrix();
-//            float solidRenderVolume = Math.max(0.2f, Math.min(0.95f, (tileEntity.getSolidVolume() / TileWoodenCrucible.MAX_FLUID)));
-//            GlStateManager.translate((float) x + 0.5f, (float) y + solidRenderVolume, (float) z + 0.5f);
-//            bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-////            IIcon icon = tileEntity.getCurrentMeltable().appearance.getIcon(0, tileEntity.getCurrentMeltable().appearanceMeta);
-////            internal.render(new Color(tileEntity.getCurrentMeltable().appearance.getBlockColor()), icon, false);
-//            GlStateManager.popMatrix();
-//        }
-//    }
+        int a = color >> 24 & 0xFF;
+        int r = color >> 16 & 0xFF;
+        int g = color >> 8 & 0xFF;
+        int b = color & 0xFF;
+        int lightX = brightness >> 0x10 & 0xFFFF;
+        int lightZ = brightness & 0xFFFF;
+        renderer.pos(x, y, z).color(r, g, b, a).tex(minU, minV).lightmap(lightX, lightZ).endVertex();
+        renderer.pos(x, y, z2).color(r, g, b, a).tex(minU, maxV).lightmap(lightX, lightZ).endVertex();
+        renderer.pos(x2, y, z2).color(r, g, b, a).tex(maxU, maxV).lightmap(lightX, lightZ).endVertex();
+        renderer.pos(x2, y, z).color(r, g, b, a).tex(maxU, minV).lightmap(lightX, lightZ).endVertex();
+    }
 
 }

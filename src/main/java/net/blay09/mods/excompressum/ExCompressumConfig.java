@@ -14,7 +14,7 @@ public class ExCompressumConfig {
 
 	public static boolean allowHeavySieveAutomation;
 	public static boolean woodenCrucibleMakesClay;
-	public static float woodenCrucibleSpeed;
+	public static int woodenCrucibleSpeed;
 	public static boolean woodenCrucibleFillFromRain;
 
 	public static float baitWolfChance;
@@ -55,7 +55,7 @@ public class ExCompressumConfig {
 		compressedCrookSpeedMultiplier = config.getFloat("Compressed Crook Speed Multiplier", "general", 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
 		allowHeavySieveAutomation = config.getBoolean("Allow Heavy Sieve Automation", "general", false, "Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)");
 		woodenCrucibleMakesClay = config.getBoolean("Allow making clay in Wooden Crucible", "general", true, "Set this to true to be able to create clay by putting dust in a wooden crucible with water");
-		woodenCrucibleSpeed = config.getFloat("Wooden Crucible Speed", "general", 0.5f, 0.1f, 1f, "The speed at which the wooden crucible extracts water. 0.1 is equivalent to a torch below a crucible, 0.3 is equivalent to fire below a crucible.");
+		woodenCrucibleSpeed = config.getInt("Wooden Crucible Speed", "general", 8, 1, 20, "The rate at which the wooden crucible extracts water. Measured in liquid per second.");
 		woodenCrucibleFillFromRain = config.getBoolean("Allow Wooden Crucible filling from Rain", "general", true, "Set this to true to allow wooden crucibles to fill from rain.");
 
 		baitWolfChance = config.getFloat("Wolf Bait Chance", "baits", 0.0005f, 0.0001f, 1f, "The chance (per tick) that a wolf bait will result in a wolf spawn.");

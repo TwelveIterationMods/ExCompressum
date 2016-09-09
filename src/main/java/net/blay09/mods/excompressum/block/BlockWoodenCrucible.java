@@ -11,9 +11,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -23,8 +24,9 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -114,63 +116,27 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileWoodenCrucible tileEntity = (TileWoodenCrucible) world.getTileEntity(pos);
         if(tileEntity != null) {
-            if (heldItem != null) {
-                if (tileEntity.addItem(heldItem) && !player.capabilities.isCreativeMode) {
-                    heldItem.stackSize--;
-                    if (heldItem.stackSize == 0) {
-                        heldItem = null;
+            ItemStack outputStack = tileEntity.getItemHandler().extractItem(0, 64, false);
+            if (outputStack != null) {
+                if (!world.isRemote) {
+                    if (!player.inventory.addItemStackToInventory(outputStack)) {
+                        world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, outputStack));
                     }
                 }
+                return true;
+            }
 
-                // TODO capability stuffs ItemFluidContainer
-
-                FluidStack heldItemFluid = FluidContainerRegistry.getFluidForFilledItem(heldItem);
-                if (heldItemFluid != null) {
-                    if(tileEntity.getFluidTank().fill(heldItemFluid, true) > 0) {
-                        if (!player.capabilities.isCreativeMode) {
-                            if (heldItem.getItem() == Items.POTIONITEM && heldItem.getItemDamage() == 0) {
-                                player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(Items.GLASS_BOTTLE, 1, 0));
-                            } else {
-                                player.inventory.setInventorySlotContents(player.inventory.currentItem, this.getContainer(heldItem));
-                            }
-                        }
-                    }
-                } else if (FluidContainerRegistry.isContainer(heldItem)) {
-                    FluidStack fluidStack = tileEntity.getFluidTank().drain(Integer.MAX_VALUE, false);
-                    if (fluidStack != null) {
-                        ItemStack filledStack = FluidContainerRegistry.fillFluidContainer(fluidStack, heldItem);
-                        if (filledStack != null) {
-                            FluidStack filledFluid = FluidContainerRegistry.getFluidForFilledItem(filledStack);
-                            if (filledFluid != null) {
-                                if (heldItem.stackSize > 1) {
-                                    boolean added = player.inventory.addItemStackToInventory(filledStack);
-                                    if (!added) {
-                                        return false;
-                                    }
-
-                                    heldItem.stackSize--;
-                                } else {
-                                    player.inventory.setInventorySlotContents(player.inventory.currentItem, filledStack);
-                                }
-
-                                tileEntity.getFluidTank().drain(filledFluid.amount, true);
-                                return true;
-                            }
-                        }
-                    }
+            if (heldItem != null) {
+                if (tileEntity.addItem(heldItem)) {
+                    return true;
                 }
             }
-        }
-        return true;
-    }
 
-    private ItemStack getContainer(ItemStack itemStack) {
-        if (itemStack.stackSize == 1) {
-            return itemStack.getItem().hasContainerItem(itemStack) ? itemStack.getItem().getContainerItem(itemStack) : null;
-        } else {
-            itemStack.splitStack(1);
-            return itemStack;
+            IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
+            FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, player);
+            return true;
         }
+        return false;
     }
 
     @Override

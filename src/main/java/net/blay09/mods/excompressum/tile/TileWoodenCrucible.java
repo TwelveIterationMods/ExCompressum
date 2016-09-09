@@ -6,7 +6,6 @@ import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.crucible.WoodenCrucibleRegistry;
 import net.blay09.mods.excompressum.registry.crucible.WoodenMeltable;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,228 +21,194 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
-import javax.annotation.Nullable;
-
-// TODO overfills on rain
-// TODO cannot empty with empty bucket
-// TODO cannot fill empty with bucket
 public class TileWoodenCrucible extends TileEntity implements ITickable {
 
-    public static final int MAX_FLUID = Fluid.BUCKET_VOLUME;
-    private static final int UPDATE_INTERVAL = 10;
+	private static final int RAIN_FILL_INTERVAL = 20;
+	private static final int MELT_INTERVAL = 20;
+	private static final int RAIN_FILL_SPEED = 8;
+	private static final int SYNC_INTERVAL = 10;
 
-    private IItemHandler itemHandler = new IItemHandler() {
-        @Override
-        public int getSlots() {
-            return 1;
-        }
+	private ItemStackHandler itemHandler = new ItemStackHandler(1) {
+		@Override
+		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+			ItemStack copy = stack.copy();
+			if (addItem(copy)) {
+				return copy.stackSize == 0 ? null : copy;
+			}
+			return stack;
+		}
+	};
 
-        @Override
-        @Nullable
-        public ItemStack getStackInSlot(int slot) {
-            return null;
-        }
+	private FluidTank fluidTank = new FluidTank(1999) {
+		@Override
+		public int fill(FluidStack resource, boolean doFill) {
+			int result = super.fill(resource, doFill);
+			if (fluid != null && fluid.amount > 1000) {
+				fluid.amount = 1000;
+			}
+			return result;
+		}
 
-        @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            ItemStack tryStack = stack.copy();
-            if(addItem(tryStack)) {
-                return tryStack;
-            }
-            return stack;
-        }
+		@Override
+		public int getCapacity() {
+			return 1000;
+		}
 
-        @Override
-        @Nullable
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return null;
-        }
-    };
-    private FluidTank fluidTank = new FluidTank(MAX_FLUID) {
-        @Override
-        public boolean canFillFluidType(FluidStack fluid) {
-            return fluid.getFluid().getTemperature() > 500;
-        }
-    };
+		@Override
+		public boolean canFillFluidType(FluidStack fluid) {
+			return fluid.getFluid().getTemperature() <= 300;
+		}
 
-    private int ticksSinceUpdate;
-    private boolean isDirty;
-    private WoodenMeltable currentMeltable;
-    private float solidVolume;
-    private float fluidProgress;
-    private FluidStack fillingFluid;
+		@Override
+		protected void onContentsChanged() {
+			markDirty();
+			isDirty = true;
+		}
+	};
 
-    public boolean addItem(ItemStack itemStack) {
-        // Make clay if possible
-        if (ExCompressumConfig.woodenCrucibleMakesClay && fluidTank.getFluidAmount() >= Fluid.BUCKET_VOLUME) {
-            if(ExRegistro.isNihiloBlock(itemStack, ExNihiloProvider.NihiloBlocks.DUST)) {
-                if(!worldObj.isRemote) {
-                    FluidStack drained = fluidTank.drain(Fluid.BUCKET_VOLUME, true);
-                    if(drained == null || drained.amount < Fluid.BUCKET_VOLUME) {
-                        return false;
-                    }
-                    EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, new ItemStack(Blocks.CLAY));
-                    entityItem.motionY = 0.2;
-                    worldObj.spawnEntityInWorld(entityItem);
-                    VanillaPacketHandler.sendTileEntityUpdate(this);
-                }
-                return true;
-            }
-        }
+	private int ticksSinceSync;
+	private boolean isDirty;
+	private int ticksSinceRain;
+	private int ticksSinceMelt;
+	private WoodenMeltable currentMeltable;
+	private int solidVolume;
 
-        // Add meltable to the crucible
-        WoodenMeltable meltable = WoodenCrucibleRegistry.getMeltable(itemStack);
-        float capacityLeft = getCapacityLeft();
-        Fluid lockFluid = getFluid();
-        if (meltable != null && capacityLeft > meltable.fluidStack.amount && (lockFluid == null || meltable.fluidStack.getFluid() == lockFluid)) {
-            currentMeltable = meltable;
-            if(lockFluid == null) {
-                fillingFluid = new FluidStack(meltable.fluidStack.getFluid(), 0);
-                fluidTank.setFluid(fillingFluid.copy());
-            }
-            solidVolume = solidVolume + meltable.fluidStack.amount;
-            VanillaPacketHandler.sendTileEntityUpdate(this);
-            return true;
-        }
-        return false;
-    }
+	public boolean addItem(ItemStack itemStack) {
+		// TODO This should be registryfied:
+		// When inserting dust, turn it into clay if we have enough liquid
+		if (ExCompressumConfig.woodenCrucibleMakesClay && fluidTank.getFluidAmount() >= Fluid.BUCKET_VOLUME && ExRegistro.isNihiloBlock(itemStack, ExNihiloProvider.NihiloBlocks.DUST)) {
+			itemStack.stackSize--;
+			itemHandler.setStackInSlot(0, new ItemStack(Blocks.CLAY));
+			fluidTank.setFluid(null);
+			VanillaPacketHandler.sendTileEntityUpdate(this);
+			return true;
+		}
 
-    @Override
-    public void update() {
-        if (!worldObj.isRemote) {
-            Fluid lockFluid = getFluid();
-            float rainFall = worldObj.getBiome(pos).getRainfall();
-            if ((lockFluid == null || lockFluid == FluidRegistry.WATER) && worldObj.isRaining() && pos.getY() >= worldObj.getTopSolidOrLiquidBlock(pos).getY() - 1 && rainFall > 0f && ExCompressumConfig.woodenCrucibleFillFromRain) {
-                if(lockFluid == null) {
-                    fillingFluid = new FluidStack(FluidRegistry.WATER, 0);
-                    fluidTank.setFluid(fillingFluid.copy());
-                }
-                fluidProgress += rainFall;
-                isDirty = true;
-            }
+		// Otherwise, try to add it as a meltable
+		WoodenMeltable meltable = WoodenCrucibleRegistry.getMeltable(itemStack);
+		if (meltable != null) {
+			int capacityLeft = fluidTank.getCapacity() - fluidTank.getFluidAmount() - solidVolume;
+			if (capacityLeft >= meltable.fluidStack.amount) {
+				itemStack.stackSize--;
+				currentMeltable = meltable;
+				solidVolume += meltable.fluidStack.amount;
+				VanillaPacketHandler.sendTileEntityUpdate(this);
+				return true;
+			}
+		}
+		return false;
+	}
 
-            float speed = ExCompressumConfig.woodenCrucibleSpeed;
-            if (solidVolume > 0 && fluidProgress < MAX_FLUID) {
-                fluidProgress += Math.min(speed, solidVolume);
-                solidVolume = Math.max(0, solidVolume - speed);
-                isDirty = true;
-            } else if (fluidProgress == 0 && lockFluid != null) {
-                isDirty = true;
-            }
+	@Override
+	public void update() {
+		if (!worldObj.isRemote) {
+			// Fill the crucible from rain
+			// Note: It'd be stupid to depend on the biome's rainfall since this is a skyblock. The biome isn't known unless you go into the debug screen.
+			if (worldObj.getWorldInfo().isRaining() && worldObj.canBlockSeeSky(pos) && ExCompressumConfig.woodenCrucibleFillFromRain) {
+				ticksSinceRain++;
+				if (ticksSinceRain >= RAIN_FILL_INTERVAL) {
+					fluidTank.fill(new FluidStack(FluidRegistry.WATER, RAIN_FILL_SPEED), true);
+					ticksSinceRain = 0;
+					isDirty = true;
+				}
+			}
 
-            if(fluidProgress >= 1f) {
-                fillingFluid.amount = (int) fluidProgress;
-                fluidProgress -= fluidTank.fill(fillingFluid, true);
-            }
+			// Melt down content
+			if (currentMeltable != null) {
+				ticksSinceMelt++;
+				if (ticksSinceMelt >= MELT_INTERVAL && fluidTank.getFluidAmount() < fluidTank.getCapacity()) {
+					int amount = Math.min(ExCompressumConfig.woodenCrucibleSpeed, solidVolume);
+					fluidTank.fill(new FluidStack(currentMeltable.fluidStack.getFluid(), amount), true);
+					solidVolume = Math.max(0, solidVolume - amount);
+					ticksSinceMelt = 0;
+					isDirty = true;
+				}
+			}
 
-            ticksSinceUpdate++;
-            if (ticksSinceUpdate >= UPDATE_INTERVAL) {
-                ticksSinceUpdate = 0;
-                if (isDirty) {
-                    VanillaPacketHandler.sendTileEntityUpdate(this);
-                    isDirty = false;
-                }
-            }
-        }
-    }
+			// Sync to clients
+			ticksSinceSync++;
+			if (ticksSinceSync >= SYNC_INTERVAL) {
+				ticksSinceSync = 0;
+				if (isDirty) {
+					VanillaPacketHandler.sendTileEntityUpdate(this);
+					isDirty = false;
+				}
+			}
+		}
+	}
 
-    private float getCapacityLeft() {
-        return MAX_FLUID - solidVolume;
-    }
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		solidVolume = tagCompound.getInteger("SolidVolume");
+		fluidTank.readFromNBT(tagCompound.getCompoundTag("FluidTank"));
+		itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
+		if (tagCompound.hasKey("Content")) {
+			currentMeltable = WoodenCrucibleRegistry.getMeltable(ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content")));
+		}
+	}
 
-    public WoodenMeltable getCurrentMeltable() {
-        return currentMeltable;
-    }
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		if (currentMeltable != null) {
+			tagCompound.setTag("Content", currentMeltable.itemStack.writeToNBT(new NBTTagCompound()));
+		}
+		tagCompound.setInteger("SolidVolume", solidVolume);
+		tagCompound.setTag("FluidTank", fluidTank.writeToNBT(new NBTTagCompound()));
+		tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
+		return tagCompound;
+	}
 
-    public boolean hasSolids() {
-        return solidVolume > 0;
-    }
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return writeToNBT(new NBTTagCompound());
+	}
 
-    public float getFluidProgress() {
-        return fluidProgress;
-    }
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(pos, getBlockMetadata(), getUpdateTag());
+	}
 
-    @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
-        super.readFromNBT(tagCompound);
-        solidVolume = tagCompound.getFloat("SolidVolume");
-        fluidProgress = tagCompound.getFloat("FluidProgress");
-        fluidTank.readFromNBT(tagCompound.getCompoundTag("FluidTank"));
-        Fluid lockFluid = getFluid();
-        if(lockFluid != null) {
-            fillingFluid = new FluidStack(lockFluid, 0);
-        }
-        if (tagCompound.hasKey("Content")) {
-            currentMeltable = WoodenCrucibleRegistry.getMeltable(ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content")));
-        }
-    }
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		readFromNBT(pkt.getNbtCompound());
+	}
 
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
-        super.writeToNBT(tagCompound);
-        if (currentMeltable != null) {
-            tagCompound.setTag("Content", currentMeltable.itemStack.writeToNBT(new NBTTagCompound()));
-        }
-        tagCompound.setFloat("SolidVolume", solidVolume);
-        tagCompound.setFloat("FluidProgress", fluidProgress);
-        tagCompound.setTag("FluidTank", fluidTank.writeToNBT(new NBTTagCompound()));
-        return tagCompound;
-    }
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
+				|| capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+				|| super.hasCapability(capability, facing);
+	}
 
-    @Override
-    public NBTTagCompound getUpdateTag() {
-        return writeToNBT(new NBTTagCompound());
-    }
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			return (T) fluidTank;
+		}
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			return (T) itemHandler;
+		}
+		return super.getCapability(capability, facing);
+	}
 
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), getUpdateTag());
-    }
+	public FluidTank getFluidTank() {
+		return fluidTank;
+	}
 
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        readFromNBT(pkt.getNbtCompound());
-    }
+	public int getSolidVolume() {
+		return solidVolume;
+	}
 
-    public float getSolidVolume() {
-        return solidVolume;
-    }
+	public int getSolidCapacity() {
+		return fluidTank.getCapacity();
+	}
 
-    @Nullable
-    public Fluid getFluid() {
-        return fluidTank.getFluid() != null ? fluidTank.getFluid().getFluid() : null; // yeah this is beautiful
-    }
-
-    @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
-                || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-                || super.hasCapability(capability, facing);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return (T) fluidTank;
-        }
-        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) itemHandler;
-        }
-        return super.getCapability(capability, facing);
-    }
-
-    public FluidTank getFluidTank() {
-        return fluidTank;
-    }
-
-    public int getFluidAmount() {
-        return fluidTank.getFluidAmount();
-    }
-
-    public int getFluidCapacity() {
-        return MAX_FLUID;
-    }
+	public ItemStackHandler getItemHandler() {
+		return itemHandler;
+	}
 }
