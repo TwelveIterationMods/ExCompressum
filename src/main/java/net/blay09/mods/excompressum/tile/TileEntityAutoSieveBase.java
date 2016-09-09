@@ -36,6 +36,10 @@ import java.util.Random;
 
 public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable {
 
+	// TODO needs to simulate progress on client, only seems to do so for short amount of time until GUI is opened again?
+	// ^^^^^^^^^might be the sieve thinking it has no power on the client, not sure if power is synced outside of GUI
+	// TODO ^^^spec stops moving too
+
 	private static final int UPDATE_INTERVAL = 20;
 
 	private DefaultItemHandler itemHandler = new DefaultItemHandler(this, 22) {
@@ -92,6 +96,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 			}
 			ticksSinceUpdate = 0;
 		}
+
 		int effectiveEnergy = getEffectiveEnergy();
 		if (getEnergyStored() >= effectiveEnergy) {
 			if (currentStack == null) {
@@ -253,7 +258,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
 	}
 
-	private void readFromNBTSynced(NBTTagCompound tagCompound) {
+	protected void readFromNBTSynced(NBTTagCompound tagCompound) {
 		currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
 		progress = tagCompound.getFloat("Progress");
 		spawnParticles = tagCompound.getBoolean("Particles");
@@ -273,7 +278,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		return tagCompound;
 	}
 
-	private void writeToNBTSynced(NBTTagCompound tagCompound) {
+	protected void writeToNBTSynced(NBTTagCompound tagCompound) {
 		if (currentStack != null) {
 			tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
 		}

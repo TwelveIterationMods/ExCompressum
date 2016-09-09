@@ -7,7 +7,10 @@ import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -31,10 +34,34 @@ import javax.annotation.Nullable;
 
 public abstract class BlockAutoSieveBase extends BlockContainer {
 
+	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
+
 	protected BlockAutoSieveBase(Material material) {
 		super(material);
 		setCreativeTab(ExCompressum.creativeTab);
 		setHardness(2f);
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, FACING);
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).ordinal();
+	}
+
+	@Override
+	@SuppressWarnings("deprecation")
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+	}
+
+	@Nullable
+	@Override
+	protected ItemStack createStackedBlock(IBlockState state) {
+		return new ItemStack(this, 1, state.getValue(FACING).ordinal());
 	}
 
 	@Override
@@ -120,6 +147,15 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	}
 
 	@Override
+	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		EnumFacing facing = BlockPistonBase.getFacingFromEntity(pos, placer);
+		if(facing.getAxis() == EnumFacing.Axis.Y) {
+			facing = EnumFacing.NORTH;
+		}
+		return getStateFromMeta(meta).withProperty(FACING, facing);
+	}
+
+	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		TileEntityAutoSieveBase tileEntity = (TileEntityAutoSieveBase) world.getTileEntity(pos);
 		if(tileEntity != null) {
@@ -138,21 +174,6 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 				tileEntity.setCustomSkin(new GameProfile(null, AutoSieveSkinRegistry.getRandomSkin()));
 			}
 		}
-		// TODO fix facing
-		/*int facing = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		if (facing == 0) {
-			world.setBlockMetadataWithNotify(x, y, z, 2, 2);
-		}
-		if (facing == 1) {
-			world.setBlockMetadataWithNotify(x, y, z, 5, 2);
-		}
-		if (facing == 2) {
-			world.setBlockMetadataWithNotify(x, y, z, 3, 2);
-		}
-		if (facing == 3) {
-			world.setBlockMetadataWithNotify(x, y, z, 4, 2);
-		}
-		super.onBlockPlacedBy(world, x, y, z, player, itemStack);*/
 	}
 
 	@Override

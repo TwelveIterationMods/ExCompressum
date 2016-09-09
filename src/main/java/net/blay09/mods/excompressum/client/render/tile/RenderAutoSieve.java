@@ -2,14 +2,26 @@ package net.blay09.mods.excompressum.client.render.tile;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import net.blay09.mods.excompressum.ModBlocks;
+import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
 import net.blay09.mods.excompressum.client.render.model.ModelTinyHuman;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
@@ -19,31 +31,24 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
 
     @Override
     public void renderTileEntityAt(TileEntityAutoSieveBase tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
-        int metadata = tileEntity.hasWorldObj() ? tileEntity.getBlockMetadata() : 0;
+        if(!tileEntity.hasWorldObj()) {
+            return;
+        }
+        IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
+        if(!(state.getBlock() instanceof BlockAutoSieveBase)) {
+            return;
+        }
+
+        Minecraft mc = Minecraft.getMinecraft();
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer renderer = tessellator.getBuffer();
+
         GlStateManager.pushMatrix();
-        GlStateManager.enableRescaleNormal();
         GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
+        GlStateManager.rotate(getRotationAngle(state.getValue(BlockAutoSieveBase.FACING)), 0f, 1f, 0f);
 
-        float angle;
-        switch(EnumFacing.getFront(metadata)) {
-            case NORTH:
-                angle = 0;
-                break;
-            case EAST:
-                angle = -90;
-                break;
-            case SOUTH:
-                angle = 180;
-                break;
-            case WEST:
-                angle = 90;
-                break;
-            default:
-                angle = -90;
-        }
-        GlStateManager.rotate(angle, 0f, 1f, 0f);
-
+        // Render the tiny human
         GlStateManager.pushMatrix();
         GlStateManager.rotate(90, 0, 1, 0);
         GlStateManager.rotate(180, 1, 0, 0);
@@ -53,14 +58,33 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
         biped.renderAll(tileEntity.isActive(), tileEntity.getSpeedBoost());
         GlStateManager.popMatrix();
 
-        if (tileEntity.getCurrentStack() != null) {
-            // TODO yeah the milk jar as usual <3
-//            IIcon icon = tileEntity.getCurrentStack().getIconIndex();
-//            float contentY = ((1f - tileEntity.getProgress()) * (0.9f - 0.7f)) + 0.7f;
-//            GlStateManager.translate(0, -contentY + 0.7f, 0);
-//            contents.renderTop(icon);
-//            contents.renderBottom(icon);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(0.5f, 0.5f, 0.5f);
+        GlStateManager.translate(-0.25f, 0f, -0.5f);
+
+        // Render the sieve
+        renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+        mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        mc.getBlockRendererDispatcher().renderBlock(ModBlocks.heavySieve.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+        tessellator.draw();
+
+        ItemStack currentStack = tileEntity.getCurrentStack();
+        if (currentStack != null) {
+            float progress = tileEntity.getProgress();
+            Block block = Block.getBlockFromItem(currentStack.getItem());
+            renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+            mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0.0625f, 0.5625f, 0.0625f);
+            GlStateManager.scale(0.88f, 0.5f - progress * 0.5f, 0.88f);
+            mc.getBlockRendererDispatcher().renderBlock(block.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+            tessellator.draw();
+            GlStateManager.popMatrix();
         }
+
+        GlStateManager.popMatrix();
+
         GlStateManager.popMatrix();
     }
 
@@ -75,4 +99,18 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
         bindTexture(resourceLocation);
     }
 
+    private float getRotationAngle(EnumFacing facing) {
+        switch(facing) {
+            case NORTH:
+                return 0;
+            case EAST:
+                return -90;
+            case SOUTH:
+                return 180;
+            case WEST:
+                return 90;
+            default:
+                return -90;
+        }
+    }
 }
