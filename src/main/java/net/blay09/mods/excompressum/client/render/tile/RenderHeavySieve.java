@@ -2,6 +2,8 @@ package net.blay09.mods.excompressum.client.render.tile;
 
 import net.blay09.mods.excompressum.StupidUtils;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
+import net.blay09.mods.excompressum.item.ModItems;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
@@ -22,8 +24,13 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> {
 
+    private ItemStack defaultMesh;
+
     @Override
     public void renderTileEntityAt(TileHeavySieve tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
+        if(defaultMesh == null) {
+            defaultMesh = new ItemStack(ModItems.ironMesh);
+        }
         Minecraft mc = Minecraft.getMinecraft();
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer renderer = tessellator.getBuffer();
@@ -36,7 +43,7 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> 
         mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         // Render mesh
-        ItemStack meshStack = tileEntity.getMeshStack();
+        ItemStack meshStack = ExRegistro.doMeshesHaveDurability() ? tileEntity.getMeshStack() : defaultMesh;
         if(meshStack != null) {
             SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
             if(sieveMesh != null) {

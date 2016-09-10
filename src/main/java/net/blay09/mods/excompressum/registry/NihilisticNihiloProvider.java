@@ -55,4 +55,14 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	public Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count) {
 		return Collections.emptyList();
 	}
+
+	@Override
+	public boolean doMeshesHaveDurability() {
+		return true;
+	}
+
+	@Override
+	public NihiloMod getNihiloMod() {
+		return NihiloMod.Nihilistic;
+	}
 }

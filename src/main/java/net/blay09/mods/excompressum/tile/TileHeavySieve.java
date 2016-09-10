@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,7 +33,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
     private int ticksSinceSync;
 
     public boolean addSiftable(EntityPlayer player, ItemStack itemStack) {
-        if(currentStack != null || meshStack == null || !HeavySieveRegistry.isSiftable(itemStack)) {
+        if(currentStack != null || (ExRegistro.doMeshesHaveDurability() && meshStack == null) || !HeavySieveRegistry.isSiftable(itemStack)) {
             return false;
         }
         currentStack = player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(itemStack, 1) : itemStack.splitStack(1);
@@ -56,7 +57,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
     }
 
     public void processContents(EntityPlayer player) {
-        if(currentStack != null && meshStack != null) {
+        if(currentStack != null && (!ExRegistro.doMeshesHaveDurability() || meshStack != null)) {
             if (player.capabilities.isCreativeMode) {
                 progress = 1f;
             } else {
@@ -72,10 +73,12 @@ public class TileHeavySieve extends TileEntity implements ITickable {
                         worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
                     }
                     currentStack = null;
-                    meshStack.damageItem(1, player);
-                    if(meshStack.stackSize == 0) {
-                        // TODO this should probably play a broken sound and show particles
-                        meshStack = null;
+                    if(ExRegistro.doMeshesHaveDurability()) {
+                        meshStack.damageItem(1, player);
+                        if (meshStack.stackSize == 0) {
+                            // TODO this should probably play a broken sound and show particles
+                            meshStack = null;
+                        }
                     }
                     progress = 0f;
                     VanillaPacketHandler.sendTileEntityUpdate(this);

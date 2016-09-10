@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.compat.waila;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -33,11 +34,13 @@ public class HeavySieveDataProvider implements IWailaDataProvider {
             if(tileEntity.getProgress() > 0f) {
                 list.add(I18n.format("waila.excompressum:sieveProgress", (int) (tileEntity.getProgress() * 100) + "%"));
             }
-            ItemStack meshStack = tileEntity.getMeshStack();
-            if(meshStack != null) {
-                list.add(I18n.format("waila.excompressum:sieveMesh", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getItemDamage(), meshStack.getMaxDamage()));
-            } else {
-                list.add(I18n.format("waila.excompressum:sieveNoMesh"));
+            if(ExRegistro.doMeshesHaveDurability()) {
+                ItemStack meshStack = tileEntity.getMeshStack();
+                if (meshStack != null) {
+                    list.add(I18n.format("waila.excompressum:sieveMesh", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getItemDamage(), meshStack.getMaxDamage()));
+                } else {
+                    list.add(I18n.format("waila.excompressum:sieveNoMesh"));
+                }
             }
         }
         return list;

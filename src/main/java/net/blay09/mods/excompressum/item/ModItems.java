@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.IRegisterModel;
-import net.blay09.mods.excompressum.item.*;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,7 +18,7 @@ public class ModItems {
     public static ItemCompressedHammer compressedHammerDiamond;
     public static ItemDoubleCompressedDiamondHammer doubleCompressedDiamondHammer;
     public static ItemCompressedCrook compressedCrook;
-    public static ItemIronMesh heavySilkMesh;
+    public static ItemIronMesh ironMesh;
     public static ItemWoodChipping woodChipping;
     public static ItemUncompressedCoal uncompressedCoal;
     public static ItemBatZapper batZapper;
@@ -46,8 +45,8 @@ public class ModItems {
         compressedCrook = new ItemCompressedCrook();
         register(compressedCrook);
 
-        heavySilkMesh = new ItemIronMesh();
-        register(heavySilkMesh);
+        ironMesh = new ItemIronMesh();
+        register(ironMesh);
 
         woodChipping = new ItemWoodChipping();
         register(woodChipping);

@@ -15,7 +15,7 @@ public class SieveMeshRegistry {
 	private static final Map<RegistryKey, SieveMeshRegistryEntry> entries = Maps.newHashMap();
 
 	public static void registerDefaults() {
-		SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(new ItemStack(ModItems.heavySilkMesh, 1, OreDictionary.WILDCARD_VALUE));
+		SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(new ItemStack(ModItems.ironMesh, 1, OreDictionary.WILDCARD_VALUE));
 		ironMesh.setHeavy(true);
 		ironMesh.setMeshLevel(3);
 		ironMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/iron_mesh"));

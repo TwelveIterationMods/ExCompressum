@@ -120,7 +120,6 @@ public class ExCompressum {
         AutoSieveSkinRegistry.load();
 
         registerAddon(event, Compat.MINETWEAKER, "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
-        registerAddon(event, Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
         registerAddon(event, Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
 
         for(IAddon addon : addons) {

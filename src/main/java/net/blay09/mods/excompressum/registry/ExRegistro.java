@@ -78,4 +78,12 @@ public abstract class ExRegistro {
 	public static Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count) {
 		return instance.generateHeavyRewards(sourceStack, count);
 	}
+
+	public static boolean doMeshesHaveDurability() {
+		return instance.doMeshesHaveDurability();
+	}
+
+	public static ExNihiloProvider.NihiloMod getNihiloMod() {
+		return instance.getNihiloMod();
+	}
 }

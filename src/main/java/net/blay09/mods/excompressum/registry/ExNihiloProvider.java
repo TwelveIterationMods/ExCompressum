@@ -12,6 +12,12 @@ import java.util.Random;
 
 public interface ExNihiloProvider {
 
+	enum NihiloMod {
+		Nihilistic,
+		Omnia,
+		Adscensio
+	}
+
 	enum NihiloItems {
 		SEEDS_GRASS,
 		CROOK_WOODEN,
@@ -26,6 +32,7 @@ public interface ExNihiloProvider {
 		NETHER_GRAVEL,
 		ENDER_GRAVEL,
 		INFESTED_LEAVES,
+		IRON_MESH,
 		SIEVE
 	}
 
@@ -39,4 +46,7 @@ public interface ExNihiloProvider {
 	ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune); // TODO Adscensio has a CrookRegistry, so we need something for that too; just turn this into "doTheCrookThingies"
 	SieveModelBounds getSieveBounds();
 	Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count);
+	boolean doMeshesHaveDurability();
+	NihiloMod getNihiloMod();
+
 }

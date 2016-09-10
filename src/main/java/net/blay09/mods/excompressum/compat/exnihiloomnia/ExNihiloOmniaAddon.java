@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.compat.exnihiloomnia;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import exnihiloomnia.ENOConfig;
 import exnihiloomnia.registries.composting.CompostRegistry;
 import exnihiloomnia.registries.composting.CompostRegistryEntry;
 import exnihiloomnia.registries.hammering.HammerRegistry;
@@ -238,5 +239,15 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public void serverStarted(FMLServerStartedEvent event) {
 
+	}
+
+	@Override
+	public boolean doMeshesHaveDurability() {
+		return !ENOConfig.classic_sieve;
+	}
+
+	@Override
+	public NihiloMod getNihiloMod() {
+		return NihiloMod.Omnia;
 	}
 }

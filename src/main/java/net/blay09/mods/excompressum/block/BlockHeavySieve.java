@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.AutomationConfig;
 import net.blay09.mods.excompressum.IRegisterModel;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
@@ -12,7 +13,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,11 +26,13 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -134,10 +139,12 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
         TileHeavySieve tileEntity = (TileHeavySieve) world.getTileEntity(pos);
         if(tileEntity != null) {
             if(heldItem != null) {
-                SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
-                if(sieveMesh != null && tileEntity.getMeshStack() == null) {
-                    tileEntity.setMeshStack(player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.splitStack(1));
-                    return true;
+                if(ExRegistro.doMeshesHaveDurability()) {
+                    SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
+                    if (sieveMesh != null && tileEntity.getMeshStack() == null) {
+                        tileEntity.setMeshStack(player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.splitStack(1));
+                        return true;
+                    }
                 }
 
                 if(tileEntity.addSiftable(player, heldItem)) {
@@ -155,12 +162,19 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 
     @Override
     public void registerModel(Item item) {
+        ModelLoader.registerItemVariants(item,
+                new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve"),
+                new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve_with_mesh"));
         ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
             @Override
             public ModelResourceLocation getModelLocation(ItemStack itemStack) {
                 Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
                 if(type != null) {
-                    return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName());
+                    if(ExRegistro.doMeshesHaveDurability()) {
+                        return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName());
+                    } else {
+                        return new ModelResourceLocation(getRegistryName() + "_with_mesh", "variant=" + type.getName());
+                    }
                 } else {
                     return new ModelResourceLocation("missingno");
                 }

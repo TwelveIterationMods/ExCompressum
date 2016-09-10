@@ -7,9 +7,17 @@
   "variants": {
     "normal": [{}],
     "inventory": [{
+    }],
+    "inventory_omnia": [{
       "model": "excompressum:auto_hammer_inventory",
       "textures": {
         "hammer": "exnihiloomnia:items/hammer_diamond"
+      }
+    }],
+    "inventory_adscensio": [{
+      "model": "excompressum:auto_hammer_inventory",
+      "textures": {
+        "hammer": "exnihiloadscensio:items/hammer_diamond"
       }
     }],
     "facing": {

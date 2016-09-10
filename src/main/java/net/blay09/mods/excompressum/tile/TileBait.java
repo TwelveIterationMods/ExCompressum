@@ -176,6 +176,9 @@ public class TileBait extends TileEntity implements ITickable {
                         }
 
                         for(BaitBlockCondition envBlock : envBlocks) {
+                            if(envBlock == null) {
+                                System.out.println("what the hellllll");
+                            }
                             if(state.getBlock() == envBlock.getState().getBlock()) {
                                 if(!envBlock.isWildcard()) {
                                     int meta = state.getBlock().getMetaFromState(state);

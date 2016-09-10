@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum;
 
+import net.blay09.mods.excompressum.block.BlockBait;
 import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
@@ -27,11 +28,20 @@ public class ModRecipes {
 		registerItems(config);
 
 		if (config.getBoolean("Heavy Sieve", "blocks", true, "If set to false, the recipe for the heavy sieve will be disabled.")) {
-			for (int i = 0; i < 4; i++) {
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, i), "p p", "ppp", "s s", 'p', new ItemStack(Blocks.LOG, 1, i), 's', "stickWood"));
-			}
-			for (int i = 0; i < 2; i++) {
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, 4 + i), "p p", "ppp", "s s", 'p', new ItemStack(Blocks.LOG2, 1, i), 's', "stickWood"));
+			if(ExRegistro.doMeshesHaveDurability()) {
+				for (int i = 0; i < 4; i++) {
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, i), "p p", "ppp", "s s", 'p', new ItemStack(Blocks.LOG, 1, i), 's', "stickWood"));
+				}
+				for (int i = 0; i < 2; i++) {
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, 4 + i), "p p", "ppp", "s s", 'p', new ItemStack(Blocks.LOG2, 1, i), 's', "stickWood"));
+				}
+			} else {
+				for (int i = 0; i < 4; i++) {
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.LOG, 1, i), 's', "stickWood", 'm', ModItems.ironMesh));
+				}
+				for (int i = 0; i < 2; i++) {
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, 4 + i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.LOG2, 1, i), 's', "stickWood", 'm', ModItems.ironMesh));
+				}
 			}
 		}
 
@@ -84,7 +94,7 @@ public class ModRecipes {
 
 			if (config.getBoolean("Auto Heavy Sieve", "blocks", true, "Set this to false to disable the recipe for the auto heavy sieve.")) {
 				if(OreDictionary.getOres("blockSteel", false).isEmpty() || OreDictionary.getOres("ingotSteel", false).isEmpty()) {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlassColorless", 'I', "ingotSteel"));
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlassColorless", 'I', "ingotIron"));
 				} else {
 					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "IGI", 'B', "blockSteel", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlassColorless", 'I', "ingotSteel"));
 				}
@@ -112,11 +122,8 @@ public class ModRecipes {
 	}
 
 	private static void registerItems(Configuration config) {
-		ItemStack itemSilkMesh = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SILK_MESH);
-		if (itemSilkMesh != null) {
-			GameRegistry.addRecipe(new ItemStack(ModItems.heavySilkMesh), "##", "##", '#', itemSilkMesh);
-		} else {
-			ExCompressum.logger.warn("No Silk Mesh found - Heavy Silk Mesh recipe will be disabled.");
+		if(ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.IRON_MESH) == null) {
+			GameRegistry.addRecipe(new ItemStack(ModItems.ironMesh), "##", "##", '#', Blocks.IRON_BARS);
 		}
 
 		registerCompressedHammers(config);
@@ -224,7 +231,7 @@ public class ModRecipes {
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.SAND, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal()));
 		}
 		if (config.getBoolean("Compressed Dirt", "blocks", !exUtilsLoaded, "Set this to false to disable the recipe for the compressed dirt.")) {
-			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()), "###", "###", "###", '#', Blocks.DIRT);
+			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()), "###", "###", "###", '#', new ItemStack(Blocks.DIRT, 1, 0));
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.DIRT, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()));
 		}
 		if (config.getBoolean("Compressed Flint", "blocks", true, "Set this to false to disable the recipe for the compressed flint.")) {
@@ -253,32 +260,32 @@ public class ModRecipes {
 
 	private static void registerBaits(Configuration config) {
 		if (config.getBoolean("Wolf Bait", "blocks", true, "If set to false, the recipe for the wolf bait will be disabled.")) {
-			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 0), Items.BONE, Items.BEEF);
+			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.WOLF.ordinal()), Items.BONE, Items.BEEF);
 		}
 		if (config.getBoolean("Ocelot Bait", "blocks", true, "If set to false, the recipe for the ocelot bait will be disabled.")) {
-			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 1), Items.GUNPOWDER, new ItemStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE));
-			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, 1), Items.GUNPOWDER, "listAllfishraw")); // Pam's Fishies
+			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.OCELOT.ordinal()), Items.GUNPOWDER, new ItemStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE));
+			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.OCELOT.ordinal()), Items.GUNPOWDER, "listAllfishraw")); // Pam's Fishies
 		}
 		if (config.getBoolean("Cow Bait", "blocks", true, "If set to false, the recipe for the cow bait will be disabled.")) {
-			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 2), Items.WHEAT, Items.WHEAT);
+			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.COW.ordinal()), Items.WHEAT, Items.WHEAT);
 		}
 		if (config.getBoolean("Pig Bait", "blocks", true, "If set to false, the recipe for the pig bait will be disabled.")) {
-			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 3), Items.CARROT, Items.CARROT);
+			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.PIG.ordinal()), Items.CARROT, Items.CARROT);
 		}
 		if (config.getBoolean("Chicken Bait", "blocks", true, "If set to false, the recipe for the chicken bait will be disabled.")) {
-			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 4), Items.WHEAT_SEEDS, Items.WHEAT_SEEDS);
+			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.CHICKEN.ordinal()), Items.WHEAT_SEEDS, Items.WHEAT_SEEDS);
 		}
 		if (config.getBoolean("Sheep Bait", "blocks", true, "If set to false, the recipe for the sheep bait will be disabled.")) {
 			ItemStack grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
 			if(grassSeeds != null) {
-				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 5), grassSeeds, Items.WHEAT);
+				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SHEEP.ordinal()), grassSeeds, Items.WHEAT);
 			} else {
-				ExCompressum.logger.warn("No Grass Seeds found - Sheep Bait recipe will be disabled!");
+				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SHEEP.ordinal()), Items.WHEAT_SEEDS, Items.WHEAT_SEEDS, Items.WHEAT);
 			}
 		}
 		if (config.getBoolean("Squid Bait", "blocks", false, "If set to false, the recipe for the squid bait will be disabled.")) {
-			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, 6), Items.FISH, Items.FISH);
-			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, 6), "listAllfishraw", "listAllfishraw")); // Pam's Fishies
+			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SQUID.ordinal()), Items.FISH, Items.FISH);
+			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SQUID.ordinal()), "listAllfishraw", "listAllfishraw")); // Pam's Fishies
 		}
 	}
 }

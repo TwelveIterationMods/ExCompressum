@@ -52,6 +52,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammerDiamond", 0));
 		itemMap.put(NihiloItems.CROOK_WOODEN, findItem("crookWood", 0));
 		itemMap.put(NihiloItems.SILK_MESH, findItem("itemMesh", 0));
+		itemMap.put(NihiloItems.IRON_MESH, findItem("itemMesh", 3));
 
 		itemMap.put(NihiloItems.DUST, findBlock("blockDust", 0));
 		itemMap.put(NihiloItems.SIEVE, findBlock("blockSieve", 0)); // NOTE Adscensio only has an Oak Sieve at the moment
@@ -69,13 +70,17 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count) {
-		List<HeavySieveReward> rewards = Lists.newArrayList();
-		for(Siftable siftable : SieveRegistry.getDrops(sourceStack)) {
-			for(int i = 0; i < count; i++) {
-				rewards.add(new HeavySieveReward(siftable.getDrop().getItemStack(), siftable.getChance(), sieveLuckMultiplier));
+		List<Siftable> siftables = SieveRegistry.getDrops(sourceStack);
+		if(siftables != null) {
+			List<HeavySieveReward> rewards = Lists.newArrayList();
+			for (Siftable siftable : siftables) {
+				for (int i = 0; i < count; i++) {
+					rewards.add(new HeavySieveReward(siftable.getDrop().getItemStack(), siftable.getChance(), sieveLuckMultiplier));
+				}
 			}
+			return rewards;
 		}
-		return rewards;
+		return Collections.emptyList();
 	}
 
 	@Nullable
@@ -159,18 +164,20 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public void postInit() {
 		if(ExCompressumConfig.enableWoodChippings) {
+			// NOTE Ex Adscensio does not support multiple hammer outputs atm due to a bug,
+			// TODO go report it (map.get(state) on Map<ItemInfo,...>), and re-enable the lower chances when it's fixed
 			for(IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
 				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
+//				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
+//				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
+//				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
 			}
 
 			for(IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
 				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
+//				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
+//				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
+//				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
 			}
 
 			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
@@ -183,5 +190,15 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public void serverStarted(FMLServerStartedEvent event) {
 
+	}
+
+	@Override
+	public boolean doMeshesHaveDurability() {
+		return false;
+	}
+
+	@Override
+	public NihiloMod getNihiloMod() {
+		return NihiloMod.Adscensio;
 	}
 }
