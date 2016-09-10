@@ -248,6 +248,6 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public NihiloMod getNihiloMod() {
-		return NihiloMod.Omnia;
+		return NihiloMod.OMNIA;
 	}
 }

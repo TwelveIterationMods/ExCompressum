@@ -63,6 +63,6 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 
 	@Override
 	public NihiloMod getNihiloMod() {
-		return NihiloMod.Nihilistic;
+		return NihiloMod.NONE;
 	}
 }

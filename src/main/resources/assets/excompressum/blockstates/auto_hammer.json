@@ -8,18 +8,22 @@
     "normal": [{}],
     "inventory": [{
     }],
-    "inventory_omnia": [{
-      "model": "excompressum:auto_hammer_inventory",
-      "textures": {
-        "hammer": "exnihiloomnia:items/hammer_diamond"
+    "hammer_mod": {
+      "none": {
+      },
+      "omnia": {
+        "model": "excompressum:auto_hammer_inventory",
+        "textures": {
+          "hammer": "exnihiloomnia:items/hammer_diamond"
+        }
+      },
+      "adscensio": {
+        "model": "excompressum:auto_hammer_inventory",
+        "textures": {
+          "hammer": "exnihiloadscensio:items/hammer_diamond"
+        }
       }
-    }],
-    "inventory_adscensio": [{
-      "model": "excompressum:auto_hammer_inventory",
-      "textures": {
-        "hammer": "exnihiloadscensio:items/hammer_diamond"
-      }
-    }],
+    },
     "facing": {
       "north": {
       },

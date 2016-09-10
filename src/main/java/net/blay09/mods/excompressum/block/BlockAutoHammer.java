@@ -12,6 +12,7 @@ import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
@@ -28,6 +29,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -38,6 +40,7 @@ import javax.annotation.Nullable;
 public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final PropertyEnum<ExNihiloProvider.NihiloMod> HAMMER_MOD = PropertyEnum.create("hammer_mod", ExNihiloProvider.NihiloMod.class);
 
     public BlockAutoHammer(String registryName) {
         super(Material.IRON);
@@ -49,7 +52,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
+        return new BlockStateContainer(this, FACING, HAMMER_MOD);
     }
 
     @Override
@@ -60,7 +63,11 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+        EnumFacing facing = EnumFacing.getFront(meta);
+        if(facing.getAxis() == EnumFacing.Axis.Y) {
+            facing = EnumFacing.NORTH;
+        }
+        return getDefaultState().withProperty(FACING, facing);
     }
 
     @Nullable
@@ -105,6 +112,12 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return state.withProperty(HAMMER_MOD, ExNihiloProvider.NihiloMod.NONE); // Property is inventory-only
+    }
+
+    @Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if(tileEntity != null) {
@@ -112,22 +125,12 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
             IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
             for (int i = 0; i < itemHandler.getSlots(); i++) {
                 if (itemHandler.getStackInSlot(i) != null) {
-                    EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
-                    double motion = 0.05;
-                    entityItem.motionX = world.rand.nextGaussian() * motion;
-                    entityItem.motionY = 0.2;
-                    entityItem.motionZ = world.rand.nextGaussian() * motion;
-                    world.spawnEntityInWorld(entityItem);
+                    world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i)));
                 }
             }
             ItemStack currentStack = ((TileAutoHammer) tileEntity).getCurrentStack();
             if (currentStack != null) {
-                EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack);
-                double motion = 0.05;
-                entityItem.motionX = world.rand.nextGaussian() * motion;
-                entityItem.motionY = 0.2;
-                entityItem.motionZ = world.rand.nextGaussian() * motion;
-                world.spawnEntityInWorld(entityItem);
+                world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
             }
         }
         super.breakBlock(world, pos, state);
@@ -139,7 +142,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         if(facing.getAxis() == EnumFacing.Axis.Y) {
             facing = EnumFacing.NORTH;
         }
-        return getStateFromMeta(meta).withProperty(FACING, facing);
+        return getDefaultState().withProperty(FACING, facing);
     }
 
     @Override
@@ -170,12 +173,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
             @Override
             public ModelResourceLocation getModelLocation(ItemStack stack) {
-                if(ExRegistro.getNihiloMod() == ExNihiloProvider.NihiloMod.Omnia) {
-                    return new ModelResourceLocation(stack.getItem().getRegistryName(), "inventory_omnia");
-                } else if(ExRegistro.getNihiloMod() == ExNihiloProvider.NihiloMod.Adscensio) {
-                    return new ModelResourceLocation(stack.getItem().getRegistryName(), "inventory_adscensio");
-                }
-                return new ModelResourceLocation(stack.getItem().getRegistryName(), "inventory");
+                return new ModelResourceLocation(getRegistryName(), "facing=south,hammer_mod=" + ExRegistro.getNihiloMod().getName());
             }
         });
     }

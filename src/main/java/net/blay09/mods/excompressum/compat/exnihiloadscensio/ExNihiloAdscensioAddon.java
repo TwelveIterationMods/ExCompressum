@@ -199,6 +199,6 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public NihiloMod getNihiloMod() {
-		return NihiloMod.Adscensio;
+		return NihiloMod.ADSCENSIO;
 	}
 }

@@ -5,17 +5,23 @@ import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Random;
 
 public interface ExNihiloProvider {
 
-	enum NihiloMod {
-		Nihilistic,
-		Omnia,
-		Adscensio
+	enum NihiloMod implements IStringSerializable {
+		NONE,
+		OMNIA,
+		ADSCENSIO;
+
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
 	}
 
 	enum NihiloItems {
