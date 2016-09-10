@@ -1,11 +1,9 @@
 package net.blay09.mods.excompressum.compat.tconstruct;
 
-import net.blay09.mods.excompressum.ModItems;
-import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import slimeknights.tconstruct.library.TinkerRegistry;

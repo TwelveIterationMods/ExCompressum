@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import net.blay09.mods.excompressum.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +32,7 @@ public class AutoSieveSkinRegistry {
                 JsonReader reader = new JsonReader(new InputStreamReader(in));
                 JsonObject root = gson.fromJson(reader, JsonObject.class);
                 if (root.has("error")) {
-                    logger.error("Could not load remote skins for auto sieve: {}", root.get("error").getAsString());
+                    logger.error("Could not loadCustom remote skins for auto sieve: {}", root.get("error").getAsString());
                     return;
                 }
                 if(root.has("skins")) {
@@ -44,7 +44,7 @@ public class AutoSieveSkinRegistry {
                 }
                 reader.close();
             } catch (Throwable e) { // Screw it, let's just be overprotective.
-                logger.error("Could not load remote skins for auto sieve: ", e);
+                logger.error("Could not loadCustom remote skins for auto sieve: ", e);
             }
         }
     }

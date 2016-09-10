@@ -1,5 +1,6 @@
-package net.blay09.mods.excompressum;
+package net.blay09.mods.excompressum.item;
 
+import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.item.*;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;

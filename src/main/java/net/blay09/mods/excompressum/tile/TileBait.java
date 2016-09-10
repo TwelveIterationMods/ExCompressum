@@ -2,8 +2,8 @@ package net.blay09.mods.excompressum.tile;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import net.blay09.mods.excompressum.ExCompressumConfig;
-import net.blay09.mods.excompressum.ModBlocks;
+import net.blay09.mods.excompressum.config.BaitConfig;
+import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.BlockBait;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -91,7 +91,7 @@ public class TileBait extends TileEntity implements ITickable {
                 if (worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty()) {
                     EntityLiving entityLiving = getBaitEntityLiving(worldObj, metadata);
                     if (entityLiving != null) {
-                        if (entityLiving instanceof EntityAgeable && worldObj.rand.nextFloat() <= ExCompressumConfig.baitChildChance) {
+                        if (entityLiving instanceof EntityAgeable && worldObj.rand.nextFloat() <= BaitConfig.baitChildChance) {
                             ((EntityAgeable) entityLiving).setGrowingAge(-24000);
                         }
                         entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
@@ -137,13 +137,13 @@ public class TileBait extends TileEntity implements ITickable {
 
     private float getBaitChance(int metadata) {
         switch(metadata) {
-            case 0: return ExCompressumConfig.baitWolfChance;
-            case 1: return ExCompressumConfig.baitOcelotChance;
-            case 2: return ExCompressumConfig.baitCowChance;
-            case 3: return ExCompressumConfig.baitPigChance;
-            case 4: return ExCompressumConfig.baitChickenChance;
-            case 5: return ExCompressumConfig.baitSheepChance;
-            case 6: return ExCompressumConfig.baitSquidChance;
+            case 0: return BaitConfig.baitWolfChance;
+            case 1: return BaitConfig.baitOcelotChance;
+            case 2: return BaitConfig.baitCowChance;
+            case 3: return BaitConfig.baitPigChance;
+            case 4: return BaitConfig.baitChickenChance;
+            case 5: return BaitConfig.baitSheepChance;
+            case 6: return BaitConfig.baitSquidChance;
         }
         return 0;
     }

@@ -5,15 +5,14 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ModItems;
 import net.blay09.mods.excompressum.client.render.entity.RenderAngryChicken;
 import net.blay09.mods.excompressum.client.render.tile.RenderAutoHammer;
 import net.blay09.mods.excompressum.client.render.tile.RenderAutoSieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderBait;
 import net.blay09.mods.excompressum.client.render.tile.RenderHeavySieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderWoodenCrucible;
+import net.blay09.mods.excompressum.config.ChickenStickConfig;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
-import net.blay09.mods.excompressum.registry.ChickenStickRegistry;
 import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.blay09.mods.excompressum.tile.TileBait;
@@ -34,7 +33,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -48,6 +46,7 @@ public class ClientProxy extends CommonProxy {
 	public static TextureAtlasSprite iconEmptyBookSlot;
 	public static TextureAtlasSprite iconEmptyHammerSlot;
 	public static TextureAtlasSprite iconEmptyCompressedHammerSlot;
+	public static TextureAtlasSprite ironMeshSprite;
 	public static final TextureAtlasSprite[] destroyBlockIcons = new TextureAtlasSprite[10];
 
 	@Override
@@ -75,12 +74,12 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
-		String customName = ChickenStickRegistry.chickenStickNames.get(Minecraft.getMinecraft().getSession().getUsername().toLowerCase());
+		String customName = ChickenStickConfig.chickenStickNames.get(Minecraft.getMinecraft().getSession().getUsername().toLowerCase());
 		if (customName == null) {
-			customName = ChickenStickRegistry.chickenStickNames.get("*");
+			customName = ChickenStickConfig.chickenStickNames.get("*");
 		}
 		if (customName != null) {
-			ChickenStickRegistry.setChickenStickName(customName);
+			ChickenStickConfig.setChickenStickName(customName);
 		}
 	}
 
@@ -103,6 +102,7 @@ public class ClientProxy extends CommonProxy {
 			iconEmptyBookSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_enchanted_book_slot"));
 			iconEmptyHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_hammer_slot"));
 			iconEmptyCompressedHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_compressed_hammer_slot"));
+			ironMeshSprite = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/iron_mesh"));
 		}
 	}
 

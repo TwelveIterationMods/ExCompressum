@@ -29,7 +29,9 @@ waila.excompressum:baitTooClose2=The animals are scared away.
 waila.excompressum:speedBoost=Speed Boost: %s
 waila.excompressum:luckBonus=Luck Bonus: %s
 waila.excompressum:sieveSkin=Skin: %s
-waila.excompressum:sieveLeft=%s left
+waila.excompressum:sieveProgress=Progress: %s
+waila.excompressum:sieveMesh=%s %d/%d
+waila.excompressum:sieveNoMesh=No Mesh
 waila.excompressum:solidVolume=Solid Volume: %s
 waila.excompressum:fluidVolume=Fluid Volume: %s
 

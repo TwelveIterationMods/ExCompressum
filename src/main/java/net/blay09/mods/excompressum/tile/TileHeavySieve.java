@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.registry.sieve.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,21 +17,20 @@ import java.util.Collection;
 
 public class TileHeavySieve extends TileEntity implements ITickable {
 
-    private static final float MIN_RENDER_CAPACITY = 0.70f;
-    private static final float MAX_RENDER_CAPACITY = 0.9f;
     private static final float PROCESSING_INTERVAL = 0.075f;
     private static final int UPDATE_INTERVAL = 20;
 
+    private ItemStack meshStack;
     private ItemStack currentStack;
     private boolean isDirty;
     private boolean spawnParticles;
-    private float volume;
+    private float progress;
     private int ticksSinceUpdate;
     private int clicksSinceUpdate;
 
     public void addSiftable(ItemStack itemStack) {
         currentStack = itemStack;
-        volume = 1f;
+        progress = 0f;
         VanillaPacketHandler.sendTileEntityUpdate(this);
     }
 
@@ -56,30 +55,27 @@ public class TileHeavySieve extends TileEntity implements ITickable {
     }
 
     public void processContents(boolean creative) {
-        if (creative) {
-            volume = 0f;
-        } else {
-            clicksSinceUpdate++;
-            if (clicksSinceUpdate <= 6) {
-                volume -= PROCESSING_INTERVAL;
-            }
-        }
-        if (volume <= 0) {
-            if (!worldObj.isRemote) {
-                Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, 0f, worldObj.rand);
-                for (ItemStack itemStack : rewards) {
-                    EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
-                    double motionScale = 0.05;
-                    entityItem.motionX = worldObj.rand.nextGaussian() * motionScale;
-                    entityItem.motionY = 0.2;
-                    entityItem.motionZ = worldObj.rand.nextGaussian() * motionScale;
-                    worldObj.spawnEntityInWorld(entityItem);
+        if(currentStack != null) {
+            if (creative) {
+                progress = 1f;
+            } else {
+                clicksSinceUpdate++;
+                if (clicksSinceUpdate <= 6) {
+                    progress += PROCESSING_INTERVAL;
                 }
             }
-        } else {
-            spawnParticles = true;
+            if (progress >= 1f) {
+                if (!worldObj.isRemote) {
+                    Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, 0f, worldObj.rand);
+                    for (ItemStack itemStack : rewards) {
+                        worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
+                    }
+                }
+            } else {
+                spawnParticles = true;
+            }
+            isDirty = true;
         }
-        isDirty = true;
     }
 
     @SideOnly(Side.CLIENT)
@@ -97,18 +93,12 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         }
     }
 
-    public float getAdjustedVolume() {
-        float capacity = MAX_RENDER_CAPACITY - MIN_RENDER_CAPACITY;
-        float adjusted = volume * capacity;
-        adjusted += MIN_RENDER_CAPACITY;
-        return adjusted;
-    }
-
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content"));
-        volume = tagCompound.getFloat("Volume");
+        meshStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Mesh"));
+        progress = tagCompound.getFloat("Progress");
         spawnParticles = tagCompound.getBoolean("Particles");
     }
 
@@ -118,7 +108,10 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         if(currentStack != null) {
             tagCompound.setTag("Content", currentStack.writeToNBT(new NBTTagCompound()));
         }
-        tagCompound.setFloat("Volume", volume);
+        if(meshStack != null) {
+            tagCompound.setTag("Mesh", meshStack.writeToNBT(new NBTTagCompound()));
+        }
+        tagCompound.setFloat("Progress", progress);
         tagCompound.setBoolean("Particles", spawnParticles);
         return tagCompound;
     }
@@ -143,7 +136,17 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         return currentStack;
     }
 
-    public float getVolumeLeft() {
-        return volume;
+    @Nullable
+    public ItemStack getMeshStack() {
+        return meshStack;
+    }
+
+    public float getProgress() {
+        return progress;
+    }
+
+    public void setMeshStack(ItemStack meshStack) {
+        this.meshStack = meshStack;
+        isDirty = true;
     }
 }

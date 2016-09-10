@@ -1,7 +1,9 @@
 package net.blay09.mods.excompressum;
 
 import net.blay09.mods.excompressum.block.BlockCompressed;
+import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;

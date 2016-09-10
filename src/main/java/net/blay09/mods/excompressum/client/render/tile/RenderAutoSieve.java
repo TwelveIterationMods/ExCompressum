@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.client.render.tile;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import net.blay09.mods.excompressum.ModBlocks;
+import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
 import net.blay09.mods.excompressum.client.render.model.ModelTinyHuman;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -60,6 +61,8 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer renderer = tessellator.getBuffer();
 
+        RenderHelper.disableStandardItemLighting();
+
         GlStateManager.pushMatrix();
         GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
@@ -104,6 +107,8 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
         GlStateManager.popMatrix();
 
         GlStateManager.popMatrix();
+
+        RenderHelper.enableStandardItemLighting();
     }
 
     private void bindPlayerTexture(GameProfile customSkin) {

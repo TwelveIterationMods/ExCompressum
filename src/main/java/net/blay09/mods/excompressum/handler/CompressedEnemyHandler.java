@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.handler;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.CompressedMobsConfig;
 import net.blay09.mods.excompressum.StupidUtils;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityGhast;
@@ -29,8 +29,8 @@ public class CompressedEnemyHandler {
     public void onSpawnEntity(EntityJoinWorldEvent event) {
         if(!event.getWorld().isRemote && (event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast)) {
             String entityName = EntityList.getEntityString(event.getEntity());
-            if(ExCompressumConfig.compressedMobs.contains(entityName)) {
-                if (event.getEntity().worldObj.rand.nextFloat() <= ExCompressumConfig.compressedMobChance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
+            if(CompressedMobsConfig.compressedMobs.contains(entityName)) {
+                if (event.getEntity().worldObj.rand.nextFloat() <= CompressedMobsConfig.compressedMobChance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
                     event.getEntity().setAlwaysRenderNameTag(true);
                     event.getEntity().setCustomNameTag("Compressed " + event.getEntity().getName()); // TODO i18n
                     NBTTagCompound tagCompound = new NBTTagCompound();
@@ -54,7 +54,7 @@ public class CompressedEnemyHandler {
                         return;
                     }
                     int entityId = EntityList.getEntityID(event.getEntity());
-                    for(int i = 0; i < ExCompressumConfig.compressedMobSize; i++) {
+                    for(int i = 0; i < CompressedMobsConfig.compressedMobSize; i++) {
                         EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByID(entityId, event.getEntity().worldObj);
                         if(entity == null) {
                             return;

@@ -2,9 +2,7 @@ package net.blay09.mods.excompressum.tile;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-import net.blay09.mods.excompressum.DefaultItemHandler;
-import net.blay09.mods.excompressum.ExCompressumConfig;
-import net.blay09.mods.excompressum.ItemHandlerAutomation;
+import net.blay09.mods.excompressum.config.AutomationConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
@@ -90,7 +88,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
                 progress += getEffectiveSpeed();
                 isDirty = true;
                 if (progress >= 1) {
-                    if(worldObj.rand.nextFloat() <= ExCompressumConfig.autoHammerDecay) {
+                    if(worldObj.rand.nextFloat() <= AutomationConfig.autoHammerDecay) {
                         ItemStack firstHammer = itemHandlerUpgrades.getStackInSlot(0);
                         if (firstHammer != null) {
                             if(firstHammer.attemptDamageItem(1, worldObj.rand)) {
@@ -159,7 +157,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     public int getEffectiveEnergy() {
-        return ExCompressumConfig.autoHammerEnergy;
+        return AutomationConfig.autoHammerEnergy;
     }
 
     public float getSpeedBoost() {
@@ -176,7 +174,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressumConfig.autoHammerSpeed * getSpeedBoost();
+        return AutomationConfig.autoHammerSpeed * getSpeedBoost();
     } // TODO should probably take hammer enchantments into account
 
     public float getEffectiveLuck() {

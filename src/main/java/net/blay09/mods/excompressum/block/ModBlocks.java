@@ -1,5 +1,7 @@
-package net.blay09.mods.excompressum;
+package net.blay09.mods.excompressum.block;
 
+import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.block.*;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.item.*;

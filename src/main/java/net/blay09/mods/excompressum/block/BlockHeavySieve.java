@@ -1,9 +1,11 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.AutomationConfig;
 import net.blay09.mods.excompressum.IRegisterModel;
-import net.blay09.mods.excompressum.registry.sieve.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -21,7 +23,9 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.FakePlayer;
@@ -30,6 +34,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
+
+    // TODO BOUNDING BOX
 
     public enum Type implements IStringSerializable {
         OAK,
@@ -47,6 +53,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
         }
     }
 
+    private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 0.75f, 1);
     public static final PropertyEnum<Type> VARIANT = PropertyEnum.create("variant", Type.class);
 
     public BlockHeavySieve() {
@@ -54,6 +61,12 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
         setRegistryName("heavy_sieve");
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return BOUNDING_BOX;
     }
 
     @Override
@@ -117,30 +130,31 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        // TODO wat is this
-        /*PlayerInteractEvent event = new PlayerInteractEvent(player, PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK, x, y, z, side, world); // eh? why is this here?
-        if (MinecraftForge.EVENT_BUS.post(event) || event.getResult() == Event.Result.DENY || event.useBlock == Event.Result.DENY) {
-            return false;
-        }*/
-
         TileHeavySieve tileEntity = (TileHeavySieve) world.getTileEntity(pos);
         if(tileEntity != null) {
-            if (tileEntity.getCurrentStack() == null && heldItem != null) {
-                if (HeavySieveRegistry.isSiftable(heldItem)) {
-                    tileEntity.addSiftable(heldItem);
-                    if (!player.capabilities.isCreativeMode) {
-                        heldItem.stackSize--;
+            if(heldItem != null) {
+                SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
+                if(sieveMesh != null && tileEntity.getMeshStack() == null) {
+                    tileEntity.setMeshStack(heldItem.splitStack(1));
+                    return true;
+                }
+
+                if(tileEntity.getCurrentStack() == null) {
+                    if(HeavySieveRegistry.isSiftable(heldItem)) {
+                        tileEntity.addSiftable(heldItem);
+                        if (!player.capabilities.isCreativeMode) {
+                            heldItem.stackSize--;
+                        }
+                        return true;
                     }
                 }
+            }
+
+            if (world.isRemote) {
+                tileEntity.processContents(player.capabilities.isCreativeMode);
             } else {
-                if (world.isRemote) {
+                if (AutomationConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
                     tileEntity.processContents(player.capabilities.isCreativeMode);
-                } else {
-                    if (tileEntity.getCurrentStack() != null) {
-                        if (ExCompressumConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
-                            tileEntity.processContents(player.capabilities.isCreativeMode);
-                        }
-                    }
                 }
             }
         }

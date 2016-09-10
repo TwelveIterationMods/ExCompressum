@@ -12,13 +12,15 @@ import exnihiloomnia.registries.sifting.SieveRegistryEntry;
 import exnihiloomnia.registries.sifting.SieveReward;
 import exnihiloomnia.util.Color;
 import exnihiloomnia.util.enums.EnumMetadataBehavior;
-import net.blay09.mods.excompressum.ExCompressumConfig;
-import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -64,6 +66,18 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("infested_leaves", 0));
 
 		sieveModelBounds = new SieveModelBounds(0.5625f, 0.0625f, 0.88f, 0.5f);
+
+		ItemStack woodenMeshItem = findItem("mesh_wood", 0);
+		if(woodenMeshItem != null) {
+			SieveMeshRegistryEntry woodenMesh = new SieveMeshRegistryEntry(woodenMeshItem, true);
+			woodenMesh.setSpriteLocation(new ResourceLocation(Compat.EXNIHILO_OMNIA, "blocks/sieve_mesh_wood"));
+			SieveMeshRegistry.add(woodenMesh);
+		}
+
+		SieveMeshRegistryEntry silkMesh = new SieveMeshRegistryEntry(itemMap.get(NihiloItems.SILK_MESH), true);
+		silkMesh.setSpriteLocation(new ResourceLocation(Compat.EXNIHILO_OMNIA, "blocks/sieve_mesh_silk_white"));
+		silkMesh.setMeshLevel(1);
+		SieveMeshRegistry.add(silkMesh);
 
 		ExRegistro.instance = this;
 	}

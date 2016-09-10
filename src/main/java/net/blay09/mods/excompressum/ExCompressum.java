@@ -2,17 +2,22 @@ package net.blay09.mods.excompressum;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.handler.ChickenStickHandler;
 import net.blay09.mods.excompressum.handler.CompressedEnemyHandler;
 import net.blay09.mods.excompressum.handler.GuiHandler;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.*;
+import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.registry.crucible.WoodenCrucibleRegistry;
 import net.blay09.mods.excompressum.registry.hammer.CompressedHammerRegistry;
-import net.blay09.mods.excompressum.registry.sieve.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +32,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.util.List;
 
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum")
@@ -41,6 +47,7 @@ public class ExCompressum {
     @SidedProxy(serverSide = "net.blay09.mods.excompressum.CommonProxy", clientSide = "net.blay09.mods.excompressum.client.ClientProxy")
     public static CommonProxy proxy;
 
+    private File configDir;
     private Configuration config;
 
     public static final ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
@@ -50,7 +57,11 @@ public class ExCompressum {
     @Mod.EventHandler
     @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event) {
-        config = new Configuration(event.getSuggestedConfigurationFile());
+        configDir = new File(event.getModConfigurationDirectory(), "ExCompressum");
+        if(!configDir.exists() && !configDir.mkdirs()) {
+            throw new RuntimeException("Couldn't create Ex Compressum configuration directory");
+        }
+        config = new Configuration(new File(configDir, "ExCompressum.cfg"));
         config.load();
 
         ExCompressumConfig.load(config);
@@ -77,6 +88,10 @@ public class ExCompressum {
     @Mod.EventHandler
     @SuppressWarnings("unused unchecked")
     public void postInit(FMLPostInitializationEvent event) {
+        ChickenStickRegistry.INSTANCE.load(configDir);
+        WoodenCrucibleRegistry.INSTANCE.load(configDir);
+        SieveMeshRegistry.registerDefaults();
+
         registerAddon(event, Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
         registerAddon(event, Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
 
@@ -88,10 +103,9 @@ public class ExCompressum {
         ModRecipes.init(config);
 
         CompressedHammerRegistry.loadFromConfig(config);
-        ChickenStickRegistry.load(config);
         HeavySieveRegistry.loadFromConfig(config);
         CompressedRecipeRegistry.reload();
-        WoodenCrucibleRegistry.load(config);
+
         AutoSieveSkinRegistry.load();
 
         registerAddon(event, "MineTweaker3", "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");

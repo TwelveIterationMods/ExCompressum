@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
-import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.block.BlockAutoHammer;
 import net.blay09.mods.excompressum.client.ClientProxy;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;

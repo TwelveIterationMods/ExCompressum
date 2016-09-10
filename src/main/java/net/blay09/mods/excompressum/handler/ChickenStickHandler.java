@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.handler;
 
-import net.blay09.mods.excompressum.ExCompressumConfig;
-import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.config.ChickenStickConfig;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityChicken;
@@ -17,7 +17,7 @@ public class ChickenStickHandler {
 
 	@SubscribeEvent
 	public void onAttack(AttackEntityEvent event) {
-		if(ExCompressumConfig.createChickenStickChance == 0f) {
+		if(ChickenStickConfig.chickenStickCreationChance == 0f) {
 			return;
 		}
 		if(event.getTarget() instanceof EntityChicken && !((EntityChicken) event.getTarget()).isChild()) {
@@ -25,7 +25,7 @@ public class ChickenStickHandler {
 			if(heldItem != null && heldItem.getItem() == Items.STICK) {
 				event.getTarget().setDead();
 				if(!event.getTarget().worldObj.isRemote) {
-					if (Math.random() <= ExCompressumConfig.createChickenStickChance) {
+					if (Math.random() <= ChickenStickConfig.chickenStickCreationChance) {
 						event.getTarget().worldObj.playSound(event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, SoundEvents.ENTITY_CHICKEN_AMBIENT, SoundCategory.NEUTRAL, 1f, 2f, false);
 						event.getTarget().worldObj.playSound(event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, SoundEvents.ENTITY_CHICKEN_HURT, SoundCategory.NEUTRAL, 1f, 2f, false);
 

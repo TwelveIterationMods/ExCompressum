@@ -30,8 +30,14 @@ public class HeavySieveDataProvider implements IWailaDataProvider {
     public List<String> getWailaBody(ItemStack itemStack, List<String> list, IWailaDataAccessor accessor, IWailaConfigHandler config) {
         if(accessor.getTileEntity() instanceof TileHeavySieve) {
             TileHeavySieve tileEntity = (TileHeavySieve) accessor.getTileEntity();
-            if(tileEntity.getVolumeLeft() > 0f) {
-                list.add(I18n.format("waila.excompressum:sieveLeft", (int) (tileEntity.getVolumeLeft() * 100) + "%"));
+            if(tileEntity.getProgress() > 0f) {
+                list.add(I18n.format("waila.excompressum:sieveProgress", (int) (tileEntity.getProgress() * 100) + "%"));
+            }
+            ItemStack meshStack = tileEntity.getMeshStack();
+            if(meshStack != null) {
+                list.add(I18n.format("waila.excompressum:sieveMesh", meshStack.getDisplayName(), meshStack.getItemDamage(), meshStack.getMaxDamage()));
+            } else {
+                list.add(I18n.format("waila.excompressum:sieveNoMesh"));
             }
         }
         return list;

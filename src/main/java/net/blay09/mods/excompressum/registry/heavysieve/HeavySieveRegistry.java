@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry.sieve;
+package net.blay09.mods.excompressum.registry.heavysieve;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

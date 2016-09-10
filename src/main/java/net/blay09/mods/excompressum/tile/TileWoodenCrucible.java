@@ -1,11 +1,11 @@
 package net.blay09.mods.excompressum.tile;
 
-import net.blay09.mods.excompressum.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.crucible.WoodenCrucibleRegistry;
-import net.blay09.mods.excompressum.registry.crucible.WoodenMeltable;
+import net.blay09.mods.excompressum.registry.crucible.WoodenCrucibleRegistryEntry;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -77,13 +77,13 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 	private boolean isDirty;
 	private int ticksSinceRain;
 	private int ticksSinceMelt;
-	private WoodenMeltable currentMeltable;
+	private WoodenCrucibleRegistryEntry currentMeltable;
 	private int solidVolume;
 
 	public boolean addItem(ItemStack itemStack) {
 		// TODO This should be registryfied:
 		// When inserting dust, turn it into clay if we have enough liquid
-		if (ExCompressumConfig.woodenCrucibleMakesClay && fluidTank.getFluidAmount() >= Fluid.BUCKET_VOLUME && ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.DUST)) {
+		if (fluidTank.getFluidAmount() >= Fluid.BUCKET_VOLUME && ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.DUST)) {
 			itemStack.stackSize--;
 			itemHandler.setStackInSlot(0, new ItemStack(Blocks.CLAY));
 			fluidTank.setFluid(null);
@@ -92,15 +92,17 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 		}
 
 		// Otherwise, try to add it as a meltable
-		WoodenMeltable meltable = WoodenCrucibleRegistry.getMeltable(itemStack);
+		WoodenCrucibleRegistryEntry meltable = WoodenCrucibleRegistry.getEntry(itemStack);
 		if (meltable != null) {
-			int capacityLeft = fluidTank.getCapacity() - fluidTank.getFluidAmount() - solidVolume;
-			if (capacityLeft >= meltable.fluidStack.amount) {
-				itemStack.stackSize--;
-				currentMeltable = meltable;
-				solidVolume += meltable.fluidStack.amount;
-				VanillaPacketHandler.sendTileEntityUpdate(this);
-				return true;
+			if(fluidTank.getFluid() == null || fluidTank.getFluidAmount() == 0 || fluidTank.getFluid().getFluid() == meltable.getFluid()) {
+				int capacityLeft = fluidTank.getCapacity() - fluidTank.getFluidAmount() - solidVolume;
+				if (capacityLeft >= meltable.getAmount()) {
+					itemStack.stackSize--;
+					currentMeltable = meltable;
+					solidVolume += meltable.getAmount();
+					VanillaPacketHandler.sendTileEntityUpdate(this);
+					return true;
+				}
 			}
 		}
 		return false;
@@ -111,12 +113,11 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 		if (!worldObj.isRemote) {
 			// Fill the crucible from rain
 			// Note: It'd be stupid to depend on the biome's rainfall since this is a skyblock. The biome isn't known unless you go into the debug screen.
-			if (worldObj.getWorldInfo().isRaining() && worldObj.canBlockSeeSky(pos) && ExCompressumConfig.woodenCrucibleFillFromRain) {
+			if (worldObj.getWorldInfo().isRaining() && worldObj.canBlockSeeSky(pos)) {
 				ticksSinceRain++;
 				if (ticksSinceRain >= RAIN_FILL_INTERVAL) {
 					fluidTank.fill(new FluidStack(FluidRegistry.WATER, RAIN_FILL_SPEED), true);
 					ticksSinceRain = 0;
-					isDirty = true;
 				}
 			}
 
@@ -125,7 +126,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 				ticksSinceMelt++;
 				if (ticksSinceMelt >= MELT_INTERVAL && fluidTank.getFluidAmount() < fluidTank.getCapacity()) {
 					int amount = Math.min(ExCompressumConfig.woodenCrucibleSpeed, solidVolume);
-					fluidTank.fill(new FluidStack(currentMeltable.fluidStack.getFluid(), amount), true);
+					fluidTank.fill(new FluidStack(currentMeltable.getFluid(), amount), true);
 					solidVolume = Math.max(0, solidVolume - amount);
 					ticksSinceMelt = 0;
 					isDirty = true;
@@ -151,7 +152,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 		fluidTank.readFromNBT(tagCompound.getCompoundTag("FluidTank"));
 		itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
 		if (tagCompound.hasKey("Content")) {
-			currentMeltable = WoodenCrucibleRegistry.getMeltable(ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content")));
+			currentMeltable = WoodenCrucibleRegistry.getEntry(ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content")));
 		}
 	}
 
@@ -159,7 +160,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		if (currentMeltable != null) {
-			tagCompound.setTag("Content", currentMeltable.itemStack.writeToNBT(new NBTTagCompound()));
+			tagCompound.setTag("Content", currentMeltable.getItemStack().writeToNBT(new NBTTagCompound()));
 		}
 		tagCompound.setInteger("SolidVolume", solidVolume);
 		tagCompound.setTag("FluidTank", fluidTank.writeToNBT(new NBTTagCompound()));

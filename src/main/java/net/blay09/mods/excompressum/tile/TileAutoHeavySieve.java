@@ -1,7 +1,8 @@
 package net.blay09.mods.excompressum.tile;
 
-import net.blay09.mods.excompressum.ExCompressumConfig;
-import net.blay09.mods.excompressum.registry.sieve.HeavySieveRegistry;
+import net.blay09.mods.excompressum.config.AutomationConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
@@ -21,11 +22,11 @@ public class TileAutoHeavySieve extends TileAutoSieve {
 
     @Override
     public int getEffectiveEnergy() {
-        return ExCompressumConfig.autoHeavySieveEnergy;
+        return AutomationConfig.autoHeavySieveEnergy;
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressumConfig.autoHeavySieveSpeed * getSpeedBoost();
+        return AutomationConfig.autoHeavySieveSpeed * getSpeedBoost();
     }
 
 }

@@ -59,7 +59,7 @@
 //        }
 //    }
 //
-//    public static void load(Configuration config) {
+//    public static void loadCustom(Configuration config) {
 //        boolean easyMode = false; // TODO remove
 //        String[] smashables = config.getStringList("Smashables", "registries", new String[]{
 //                "ExtraUtilities:cobblestone_compressed:0=9:minecraft:gravel:0:1:0", "excompressum:compressed_dust:1=9:minecraft:gravel:0:1:0",

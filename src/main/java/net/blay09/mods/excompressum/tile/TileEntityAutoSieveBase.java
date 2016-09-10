@@ -3,10 +3,8 @@ package net.blay09.mods.excompressum.tile;
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import net.blay09.mods.excompressum.DefaultItemHandler;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ExCompressumConfig;
-import net.blay09.mods.excompressum.ItemHandlerAutomation;
+import net.blay09.mods.excompressum.config.AutomationConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.enchantment.Enchantment;
@@ -169,7 +167,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 
 	private void degradeBook() {
 		ItemStack upgradeStack = itemHandlerUpgrade.getStackInSlot(0);
-		if (upgradeStack != null && worldObj.rand.nextFloat() <= ExCompressumConfig.autoSieveBookDecay) {
+		if (upgradeStack != null && worldObj.rand.nextFloat() <= AutomationConfig.autoSieveBookDecay) {
 			NBTTagList tagList = getEnchantmentList(upgradeStack);
 			if (tagList != null) {
 				for (int i = 0; i < tagList.tagCount(); ++i) {
@@ -193,11 +191,11 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	}
 
 	public int getEffectiveEnergy() {
-		return ExCompressumConfig.autoSieveEnergy;
+		return AutomationConfig.autoSieveEnergy;
 	}
 
 	public float getEffectiveSpeed() {
-		return ExCompressumConfig.autoSieveSpeed * getSpeedBoost();
+		return AutomationConfig.autoSieveSpeed * getSpeedBoost();
 	}
 
 	public float getEffectiveLuck() {

@@ -1,106 +1,160 @@
 package net.blay09.mods.excompressum.registry.crucible;
 
+import com.google.common.collect.Maps;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.registry.ItemAndMetadata;
-import net.minecraft.block.Block;
+import net.blay09.mods.excompressum.registry.AbstractRegistry;
+import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
-// TODO Split option in "Additional Wooden Meltables" and "Disable Wooden Meltables" lists, so we can update the default list without requiring people to reset their configs
-public class WoodenCrucibleRegistry {
+public class WoodenCrucibleRegistry extends AbstractRegistry {
 
-    private static final Hashtable<ItemAndMetadata, WoodenMeltable> entries = new Hashtable<>();
+	public static final WoodenCrucibleRegistry INSTANCE = new WoodenCrucibleRegistry();
+	private final Map<RegistryKey, WoodenCrucibleRegistryEntry> entries = Maps.newHashMap();
 
-    private static void register(ItemStack itemStack, FluidStack fluidStack, Block appearance, int appearanceMeta) {
-        entries.put(new ItemAndMetadata(itemStack), new WoodenMeltable(itemStack, fluidStack, appearance, appearanceMeta));
-    }
+	public WoodenCrucibleRegistry() {
+		super("WoodenCrucible");
+	}
 
-    @Nullable
-    public static WoodenMeltable getMeltable(ItemStack itemStack) {
-        WoodenMeltable meltable = entries.get(new ItemAndMetadata(itemStack));
-        if(meltable != null) {
-            return meltable;
-        }
-        return entries.get(new ItemAndMetadata(itemStack.getItem(), OreDictionary.WILDCARD_VALUE));
-    }
+	@Nullable
+	public static WoodenCrucibleRegistryEntry getEntry(ItemStack itemStack) {
+		RegistryKey key = new RegistryKey(itemStack);
+		WoodenCrucibleRegistryEntry entry = INSTANCE.entries.get(key);
+		if(entry != null) {
+			return entry;
+		}
+		return INSTANCE.entries.get(key.withWildcard());
+	}
 
-    public static boolean isRegistered(ItemStack itemStack) {
-        return entries.containsKey(new ItemAndMetadata(itemStack));
-    }
+	public static boolean isRegistered(ItemStack itemStack) {
+		RegistryKey key = new RegistryKey(itemStack);
+		return INSTANCE.entries.containsKey(key) || INSTANCE.entries.containsKey(key.withWildcard());
+	}
 
-    public static void load(Configuration config) {
-        String[] meltables = config.getStringList("Wooden Meltables", "registries", new String[] {
-                "ore:treeSapling=100:water:minecraft:leaves:0",
-                "ore:treeLeaves=250:water:minecraft:leaves:0",
-                "minecraft:apple=100:water:minecraft:leaves:0",
-                "minecraft:cactus=250:water:minecraft:cactus:0",
-                "minecraft:yellow_flower=100:water:minecraft:leaves:0",
-                "minecraft:red_flower=100:water:minecraft:leaves:0",
-                "ore:listAllfruit=50:water:minecraft:leaves:0" // Pam's Harvestcraft Fruits
-        }, "Here you can specify additional blocks and items that will melt into water in a wooden crucible. Format: modid:name:meta=amount:fluidName:appearanceModID:appearanceBlock:appearanceMeta, modid can be ore for OreDictionary");
-        for(String meltable : meltables) {
-            String[] s = meltable.split("=");
-            if (s.length < 2) {
-                ExCompressum.logger.error("Skipping wooden meltable " + meltable + " due to invalid format");
-                continue;
-            }
-            String[] source = s[0].split(":");
-            if (source[0].equals("ore") && source.length >= 2) {
-                String oreName = source[1];
-                List<ItemStack> ores = OreDictionary.getOres(oreName, false);
-                if (!ores.isEmpty()) {
-                    for (ItemStack ore : ores) {
-                        if (ore.getItem() instanceof ItemBlock) {
-                            loadMeltable(ore, s[1]);
-                        } else {
-                            ExCompressum.logger.error("Skipping wooden meltable " + meltable + " because the source block is not a block");
-                        }
-                    }
-                } else {
-                    ExCompressum.logger.error("Skipping wooden meltable " + meltable + " because no ore dictionary entries found");
-                }
-            } else {
-                Item sourceItem = Item.REGISTRY.getObject(new ResourceLocation(source[0], source[1]));
-                if(sourceItem == null) {
-                    ExCompressum.logger.error("Skipping wooden meltable " + meltable + " because the source block was not found");
-                    continue;
-                }
-                ItemStack sourceStack = new ItemStack(sourceItem);
-                sourceStack.setItemDamage(source.length > 2 ? Integer.parseInt(source[2]) : OreDictionary.WILDCARD_VALUE);
-                loadMeltable(sourceStack, s[1]);
-            }
-        }
-    }
+	private static void add(WoodenCrucibleRegistryEntry entry) {
+		RegistryKey key = new RegistryKey(entry.getItemStack());
+		if(INSTANCE.entries.containsKey(key)) {
+			ExCompressum.logger.error("Duplicate entry for " + key + " in " + INSTANCE.registryName + ", overwriting...");
+		}
+		INSTANCE.entries.put(key, entry);
+	}
 
-    private static void loadMeltable(ItemStack sourceStack, String result) {
-        String[] s = result.split(":");
-        if(s.length < 5) {
-            ExCompressum.logger.error("Skipping wooden meltable " + result + " due to invalid format");
-            return;
-        }
-        Fluid fluid = FluidRegistry.getFluid(s[1]);
-        if(fluid == null) {
-            ExCompressum.logger.error("Skipping wooden meltable " + result + " due to fluid not found");
-            return;
-        }
-        FluidStack fluidStack = new FluidStack(fluid, Integer.parseInt(s[0]));
-        Block appearance = Block.REGISTRY.getObject(new ResourceLocation(s[2], s[3]));
-        if(appearance == Blocks.AIR) { // Imagine we could do Block.REGISTRY.getDefaultObject(), wouldn't that be sick API design?
-            ExCompressum.logger.error("Skipping wooden meltable " + result + " due to appearance block not found");
-            return;
-        }
-        register(sourceStack, fluidStack, appearance, Integer.parseInt(s[4]));
-    }
+	@Override
+	protected JsonObject create() {
+		JsonObject root = new JsonObject();
+
+		JsonObject defaults = new JsonObject();
+		defaults.addProperty("__comment", "You can disable defaults by setting these to false. Do *NOT* try to add additional entries here. You can add additional entries in the custom section.");
+		root.add("defaults", defaults);
+
+		JsonObject custom = new JsonObject();
+		custom.addProperty("__comment", "You can define additional items to melt in the Wooden Crucible here. Use * as a wildcard for metadata. Use ore: prefix in name to query the Ore Dictionary. Metadata is ignored for Ore Dictionary entries.");
+		JsonObject emptyEntry = new JsonObject();
+		emptyEntry.addProperty("name", "");
+		emptyEntry.addProperty("metadata", "*");
+		emptyEntry.addProperty("fluid", "water");
+		emptyEntry.addProperty("amount", 0);
+
+		JsonArray entries = new JsonArray();
+		entries.add(emptyEntry);
+		custom.add("entries", entries);
+		root.add("custom", custom);
+
+		JsonObject example = new JsonObject();
+		example.addProperty("__comment", "This example would allow fish to be melted into 100mb of water.");
+		example.addProperty("name", "minecraft:fish");
+		example.addProperty("metadata", "0");
+		example.addProperty("fluid", "water");
+		example.addProperty("amount", 100);
+		root.add("example", example);
+
+		return root;
+	}
+
+	@Override
+	protected void loadCustom(JsonObject entry) {
+		String name = tryGetString(entry, "name", "");
+		if(name.isEmpty()) {
+			return;
+		}
+		ResourceLocation location = new ResourceLocation(name);
+		String fluidName = tryGetString(entry, "fluid", "water");
+		Fluid fluid = FluidRegistry.getFluid(fluidName);
+		if(fluid == null) {
+			logUnknownFluid(fluidName, location);
+			return;
+		}
+		int amount = tryGetInt(entry, "amount", 100);
+		if(location.getResourceDomain().equals("ore")) { // it would be funny if someone made a mod with mod id "ore"
+			if(!addOre(location.getResourcePath(), fluid, amount)) {
+				logUnknownOre(location);
+			}
+		} else {
+			Item item = Item.REGISTRY.getObject(location);
+			if(item == null) {
+				logUnknownItem(location);
+				return;
+			}
+			String metadata = tryGetString(entry, "metadata", "0");
+			ItemStack itemStack;
+			if(metadata.equals("*")) {
+				itemStack = new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE);
+			} else {
+				itemStack = new ItemStack(item, 1, tryParseInt(metadata));
+			}
+			add(new WoodenCrucibleRegistryEntry(itemStack, fluid, amount));
+		}
+	}
+
+	@Override
+	protected void registerDefaults(JsonObject defaults) {
+		if(tryGetBoolean(defaults, "minecraft:apple", true)) {
+			add(new WoodenCrucibleRegistryEntry(new ItemStack(Items.APPLE), FluidRegistry.WATER, 100));
+		}
+
+		if(tryGetBoolean(defaults, "ore:treeSapling", true)) {
+			addOre("treeSapling", FluidRegistry.WATER, 100);
+		}
+
+		if(tryGetBoolean(defaults, "ore:treeLeaves", true)) {
+			addOre("treeLeaves", FluidRegistry.WATER, 250);
+		}
+
+		if(tryGetBoolean(defaults, "minecraft:cactus", true)) {
+			add(new WoodenCrucibleRegistryEntry(new ItemStack(Blocks.CACTUS), FluidRegistry.WATER, 250));
+		}
+
+		if(tryGetBoolean(defaults, "minecraft:yellow_flower", true)) {
+			add(new WoodenCrucibleRegistryEntry(new ItemStack(Blocks.YELLOW_FLOWER), FluidRegistry.WATER, 100));
+		}
+
+		if(tryGetBoolean(defaults, "minecraft:red_flower", true)) {
+			add(new WoodenCrucibleRegistryEntry(new ItemStack(Blocks.RED_FLOWER), FluidRegistry.WATER, 100));
+		}
+
+		if(tryGetBoolean(defaults, "ore:listAllfruit", true)) {
+			addOre("listAllfruit", FluidRegistry.WATER, 50);
+		}
+	}
+
+	private boolean addOre(String oreName, Fluid fluid, int amount) {
+		List<ItemStack> list = OreDictionary.getOres(oreName, false);
+		for(ItemStack itemStack : list) {
+			add(new WoodenCrucibleRegistryEntry(itemStack, fluid, amount));
+		}
+		return list.size() > 0;
+	}
+
 }

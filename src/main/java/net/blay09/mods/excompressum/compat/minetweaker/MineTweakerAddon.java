@@ -4,7 +4,7 @@ import minetweaker.MineTweakerImplementationAPI;
 import minetweaker.util.IEventHandler;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
-import net.blay09.mods.excompressum.registry.sieve.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;

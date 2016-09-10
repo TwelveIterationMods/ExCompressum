@@ -1,10 +1,9 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.ModItems;
+import net.blay09.mods.excompressum.client.ClientProxy;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
 
 public class ItemIronMesh extends Item {
 
@@ -12,6 +11,7 @@ public class ItemIronMesh extends Item {
         setRegistryName("iron_mesh");
         setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(ExCompressum.creativeTab);
+        setMaxDamage(256);
     }
 
 }
