@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.registry;
 
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -37,4 +38,5 @@ public interface ExNihiloProvider {
 	@Nullable
 	ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune); // TODO Adscensio has a CrookRegistry, so we need something for that too; just turn this into "doTheCrookThingies"
 	SieveModelBounds getSieveBounds();
+	Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count);
 }

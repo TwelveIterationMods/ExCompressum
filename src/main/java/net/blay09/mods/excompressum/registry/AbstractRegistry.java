@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 // TODO make them crash-safe and just show errors in chat
+// TODO ^^^ also make sure it doesn't kill the file by saving broken stuff or something
 public abstract class AbstractRegistry {
 
 	public static boolean registryErrors;

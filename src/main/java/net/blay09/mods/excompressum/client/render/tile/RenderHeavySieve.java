@@ -1,10 +1,12 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
+import net.blay09.mods.excompressum.StupidUtils;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -54,16 +56,16 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> 
 
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (currentStack != null) {
-            Block block = Block.getBlockFromItem(currentStack.getItem());
+            IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
             //noinspection ConstantConditions /// Forge needs @Nullable
-            if(block != null) {
+            if(state != null) {
                 float progress = tileEntity.getProgress();
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
                 mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(0.0625f, 0.5625f, 0.0625f);
                 GlStateManager.scale(0.88f, 0.5f - progress * 0.5f, 0.88f);
-                mc.getBlockRendererDispatcher().renderBlock(block.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+                mc.getBlockRendererDispatcher().renderBlock(state, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
                 tessellator.draw();
                 GlStateManager.popMatrix();
             }

@@ -12,6 +12,7 @@ import exnihiloomnia.registries.sifting.SieveRegistryEntry;
 import exnihiloomnia.registries.sifting.SieveReward;
 import exnihiloomnia.util.Color;
 import exnihiloomnia.util.enums.EnumMetadataBehavior;
+import net.blay09.mods.excompressum.StupidUtils;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.compat.Compat;
@@ -19,6 +20,7 @@ import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.Block;
@@ -90,6 +92,32 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public SieveModelBounds getSieveBounds() {
 		return sieveModelBounds;
+	}
+
+	@Override
+	public Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count) {
+		IBlockState state = StupidUtils.getStateFromItemStack(sourceStack);
+		if(state == null) {
+			return Collections.emptyList();
+		}
+		List<HeavySieveReward> rewards = Lists.newArrayList();
+		SieveRegistryEntry genericEntry = SieveRegistry.getEntryForBlockState(state, EnumMetadataBehavior.IGNORED);
+		if(genericEntry != null) {
+			for (SieveReward reward : genericEntry.getRewards()) {
+				for (int i = 0; i < count; i++) {
+					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, SIEVE_LUCK_MODIFIER));
+				}
+			}
+		}
+		SieveRegistryEntry entry = SieveRegistry.getEntryForBlockState(state, EnumMetadataBehavior.SPECIFIC);
+		if(entry != null) {
+			for (SieveReward reward : entry.getRewards()) {
+				for (int i = 0; i < count; i++) {
+					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, SIEVE_LUCK_MODIFIER));
+				}
+			}
+		}
+		return rewards;
 	}
 
 	@Nullable

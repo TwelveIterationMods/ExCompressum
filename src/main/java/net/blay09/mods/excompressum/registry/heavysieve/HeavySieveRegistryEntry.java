@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.registry.heavysieve;
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 
+import java.util.Collection;
 import java.util.List;
 
 public class HeavySieveRegistryEntry {
@@ -30,5 +31,9 @@ public class HeavySieveRegistryEntry {
 
 	public void addReward(HeavySieveReward reward) {
 		rewards.add(reward);
+	}
+
+	public void addRewards(Collection<HeavySieveReward> rewards) {
+		this.rewards.addAll(rewards);
 	}
 }

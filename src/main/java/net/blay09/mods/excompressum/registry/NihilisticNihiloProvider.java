@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.registry;
 
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -48,5 +49,10 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	@Override
 	public SieveModelBounds getSieveBounds() {
 		return nullBounds;
+	}
+
+	@Override
+	public Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count) {
+		return Collections.emptyList();
 	}
 }

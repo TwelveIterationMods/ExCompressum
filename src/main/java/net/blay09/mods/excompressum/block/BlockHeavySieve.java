@@ -35,8 +35,6 @@ import java.util.List;
 
 public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 
-    // TODO BOUNDING BOX
-
     public enum Type implements IStringSerializable {
         OAK,
         SPRUCE,

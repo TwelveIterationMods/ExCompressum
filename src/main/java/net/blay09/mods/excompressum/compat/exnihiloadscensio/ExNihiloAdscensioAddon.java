@@ -17,6 +17,7 @@ import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -65,6 +66,17 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public SieveModelBounds getSieveBounds() {
 		return bounds;
+	}
+
+	@Override
+	public Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count) {
+		List<HeavySieveReward> rewards = Lists.newArrayList();
+		for(Siftable siftable : SieveRegistry.getDrops(sourceStack)) {
+			for(int i = 0; i < count; i++) {
+				rewards.add(new HeavySieveReward(siftable.getDrop().getItemStack(), siftable.getChance(), SIEVE_LUCK_MODIFIER));
+			}
+		}
+		return rewards;
 	}
 
 	@Nullable
