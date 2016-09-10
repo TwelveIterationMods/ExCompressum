@@ -5,6 +5,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.ContainerAutoHammer;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -42,8 +43,8 @@ public class GuiAutoHammer extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
             tmpLines.clear();
-            tmpLines.add(tileEntity.getEnergyStored(null) + " RF"); // TODO "RF"
-            tmpLines.add("Consuming " + tileEntity.getEffectiveEnergy() + " RF/t"); // TODO i18n
+            tmpLines.add(tileEntity.getEnergyStored(null) + " RF");
+            tmpLines.add(I18n.format("tooltip.excompressum:consumingEnergy", tileEntity.getEffectiveEnergy()));
             drawHoveringText(tmpLines, mouseX - guiLeft, mouseY - guiTop);
         }
     }

@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.config;
 
 import net.minecraftforge.common.config.Configuration;
 
-// TODO This should really become a registry. Custom baits and such!
+// FUTURE This should really become a registry. Custom baits and such!
 public class BaitConfig {
 
 	public static float baitWolfChance;

@@ -92,13 +92,13 @@ public class ModRecipes {
 		}
 
 		// Botania Magicz
-		if (Loader.isModLoaded("Botania")) {
+		if (Loader.isModLoaded(Compat.BOTANIA)) {
 			if (config.getBoolean("Mana Sieve", "blocks", true, "Set this to false to disable the recipe for the mana sieve.")) {
-				Block manaSteelBlock = Block.REGISTRY.getObject(new ResourceLocation(Compat.BOTANIA, "storage"));
-				if(manaSteelBlock != Blocks.AIR) {
+				ResourceLocation manaSteelLocation = new ResourceLocation(Compat.BOTANIA, "storage");
+				if(Block.REGISTRY.containsKey(manaSteelLocation)) {
 					ItemStack sieveBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SIEVE);
 					if(sieveBlock != null) {
-						ItemStack manaSteelBlockStack = new ItemStack(manaSteelBlock);
+						ItemStack manaSteelBlockStack = new ItemStack(Block.REGISTRY.getObject(manaSteelLocation));
 						GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.manaSieve), "BGB", "GSG", "IGI", 'B', manaSteelBlockStack, 'S', sieveBlock, 'G', "paneGlassColorless", 'I', "ingotManasteel"));
 					} else {
 						ExCompressum.logger.warn("No Sieve found - Mana Sieve recipe will be disabled.");
@@ -201,7 +201,7 @@ public class ModRecipes {
 	}
 
 	private static void registerCompressedBlocks(Configuration config) {
-		boolean exUtilsLoaded = Loader.isModLoaded("ExtraUtilities"); // TODO does ExUtils still do this?
+		boolean exUtilsLoaded = Loader.isModLoaded(Compat.EXTRAUTILS2);
 		if (config.getBoolean("Compressed Dust", "blocks", true, "Set this to false to disable the recipe for the compressed dust.")) {
 			ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
 			if(dustBlock != null) {

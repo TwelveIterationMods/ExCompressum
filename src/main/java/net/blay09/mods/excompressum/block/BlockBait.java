@@ -33,6 +33,7 @@ import net.minecraftforge.client.model.ModelLoader;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class BlockBait extends BlockContainer implements IRegisterModel {
@@ -54,7 +55,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
 
         @Override
         public String getName() {
-            return name().toLowerCase();
+            return name().toLowerCase(Locale.ENGLISH);
         }
     }
 
@@ -124,8 +125,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
         for (int i = 0; i < Type.values.length; i++) {
             list.add(new ItemStack(item, 1, i));
         }

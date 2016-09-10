@@ -5,18 +5,13 @@ import net.minecraft.client.renderer.GlStateManager;
 
 public class ModelTinyHuman extends ModelPlayer {
 
-	private float swingTimer; // TODO this needs to go to the TE, otherwise multiple sieves will speed the arm up since it's shared
-
 	public ModelTinyHuman() {
 		super(0f, false);
 		isChild = true;
 	}
 
-	public void renderAll(boolean active, float speedBoost) {
-		if (active) {
-			swingTimer += 0.05f * (Math.max(1f, speedBoost / 2f));
-			bipedRightArm.rotateAngleX = swingTimer * (int) (Math.PI * 2);
-		}
+	public void renderAll(float armAngle) {
+		bipedRightArm.rotateAngleX = armAngle * (int) (Math.PI * 2);
 
 		float scale = 0.0625f;
 

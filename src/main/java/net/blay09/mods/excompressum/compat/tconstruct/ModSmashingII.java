@@ -13,15 +13,14 @@ import slimeknights.tconstruct.library.utils.ToolHelper;
 
 import java.util.Collection;
 
+// FUTURE This one needs a cool graphic!
 public class ModSmashingII extends ModifierTrait {
 
-	private static final float SPEED_DECREASE = 400; // TODO check this number, it's probably terrible
+	private static final float SPEED_DECREASE = 0.5f;
 	private static final float DAMAGE_INCREASE = 3;
 
-	// TODO where do I limit the valid tools for this modifier?
-
 	public ModSmashingII() {
-		super("smashingii", 0xFF0000);
+		super("excompressum:smashingii", 0xFF0000);
 	}
 
 	@Override

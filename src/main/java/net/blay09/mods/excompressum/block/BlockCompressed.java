@@ -21,6 +21,7 @@ import net.minecraftforge.client.model.ModelLoader;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Locale;
 
 public class BlockCompressed extends Block implements IRegisterModel {
 
@@ -38,7 +39,7 @@ public class BlockCompressed extends Block implements IRegisterModel {
 
 		@Override
 		public String getName() {
-			return name().toLowerCase();
+			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
 

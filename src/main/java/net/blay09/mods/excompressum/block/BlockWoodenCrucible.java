@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Locale;
 
 public class BlockWoodenCrucible extends BlockContainer implements IRegisterModel {
 
@@ -45,7 +46,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
 
         @Override
         public String getName() {
-            return name().toLowerCase();
+            return name().toLowerCase(Locale.ENGLISH);
         }
     }
 

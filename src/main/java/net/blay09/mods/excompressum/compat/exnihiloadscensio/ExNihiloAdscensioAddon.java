@@ -41,9 +41,8 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 
 	private final EnumMap<NihiloItems, ItemStack> itemMap = Maps.newEnumMap(NihiloItems.class);
 
-	private static final float SIEVE_LUCK_MODIFIER = 2.5f;
-
 	private final SieveModelBounds bounds;
+	private float sieveLuckMultiplier = 1f;
 
 	public ExNihiloAdscensioAddon() {
 		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammerWood", 0));
@@ -55,7 +54,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.SILK_MESH, findItem("itemMesh", 0));
 
 		itemMap.put(NihiloItems.DUST, findBlock("blockDust", 0));
-		itemMap.put(NihiloItems.SIEVE, findBlock("blockSieve", 0)); // TODO Adscensio only has an Oak Sieve at the moment
+		itemMap.put(NihiloItems.SIEVE, findBlock("blockSieve", 0)); // NOTE Adscensio only has an Oak Sieve at the moment
 		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("blockInfestedLeaves", 0));
 
 		bounds = new SieveModelBounds(0.8125f, 0.0625f, 0.88f, 0.15625f);
@@ -73,7 +72,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		List<HeavySieveReward> rewards = Lists.newArrayList();
 		for(Siftable siftable : SieveRegistry.getDrops(sourceStack)) {
 			for(int i = 0; i < count; i++) {
-				rewards.add(new HeavySieveReward(siftable.getDrop().getItemStack(), siftable.getChance(), SIEVE_LUCK_MODIFIER));
+				rewards.add(new HeavySieveReward(siftable.getDrop().getItemStack(), siftable.getChance(), sieveLuckMultiplier));
 			}
 		}
 		return rewards;
@@ -137,7 +136,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		if(rewards != null) {
 			List<ItemStack> list = Lists.newArrayList();
 			for(Siftable reward : rewards) {
-				if(meshLevel == reward.getMeshLevel() && rand.nextDouble() < (double) reward.getChance() + SIEVE_LUCK_MODIFIER * luck) { // TODO Sieve Rewards in Adscensio have no luck modifier at the moment; I randomly picked 2.5f for now. Balance it, maybe config it too.
+				if(meshLevel == reward.getMeshLevel() && rand.nextDouble() < (double) reward.getChance() + sieveLuckMultiplier * luck) { // NOTE Sieve Rewards in Adscensio have no luck modifier at the moment
 					list.add(reward.getDrop().getItemStack());
 				}
 			}
@@ -149,12 +148,12 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	@Nullable
 	@Override
 	public ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune) {
-		return null; // TODO Adscensio has no silk worms yet.
+		return null; // NOTE Adscensio has no silk worms yet.
 	}
 
 	@Override
 	public void loadConfig(Configuration config) {
-
+		sieveLuckMultiplier = config.getFloat("Sieve Luck Multiplier", "compat.exnihiloadscensio", sieveLuckMultiplier, 0f, 10f, "Sieve rewards in Adscensio do not have a luck multiplier at the moment. For fortune to work in Auto Sieves, this default value is applied to *all* rewards when sifting.");
 	}
 
 	@Override

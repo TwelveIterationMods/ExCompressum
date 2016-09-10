@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
+// TODO needs particles
 public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable {
 
 	// TODO need mesh slot
@@ -62,20 +63,19 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 
 	private ItemStack currentStack;
 	private GameProfile customSkin;
-	private boolean spawnParticles;
-	private int ticksSinceUpdate;
+
+	private int ticksSinceSync;
 	protected boolean isDirty;
+
 	private float progress;
 
 	private float speedBoost = 1f;
 	private int speedBoostTicks;
 
+	private float armAngle;
+
 	@Override
 	public void update() {
-		if (worldObj.isRemote && spawnParticles) {
-			spawnFX();
-		}
-
 		if (speedBoostTicks > 0) {
 			speedBoostTicks--;
 			if (speedBoostTicks <= 0) {
@@ -83,14 +83,13 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 			}
 		}
 
-		ticksSinceUpdate++;
-		if (ticksSinceUpdate > UPDATE_INTERVAL) {
-			spawnParticles = false;
+		ticksSinceSync++;
+		if (ticksSinceSync > UPDATE_INTERVAL) {
 			if (isDirty) {
 				VanillaPacketHandler.sendTileEntityUpdate(this);
 				isDirty = false;
 			}
-			ticksSinceUpdate = 0;
+			ticksSinceSync = 0;
 		}
 
 		int effectiveEnergy = getEffectiveEnergy();
@@ -116,6 +115,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 					progress = 0f;
 				}
 			} else {
+				armAngle += 0.05f * (Math.max(1f, speedBoost / 2f));
 				setEnergyStored(getEnergyStored() - effectiveEnergy);
 				progress += getEffectiveSpeed();
 				isDirty = true;
@@ -136,8 +136,6 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 					}
 					progress = 0f;
 					currentStack = null;
-				} else {
-					spawnParticles = true;
 				}
 			}
 		}
@@ -257,7 +255,6 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	protected void readFromNBTSynced(NBTTagCompound tagCompound) {
 		currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
 		progress = tagCompound.getFloat("Progress");
-		spawnParticles = tagCompound.getBoolean("Particles");
 		if (tagCompound.hasKey("CustomSkin")) {
 			customSkin = NBTUtil.readGameProfileFromNBT(tagCompound.getCompoundTag("CustomSkin"));
 			if(customSkin != null) {
@@ -279,7 +276,6 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 			tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
 		}
 		tagCompound.setFloat("Progress", progress);
-		tagCompound.setBoolean("Particles", spawnParticles);
 		if (customSkin != null) {
 			NBTTagCompound customSkinTag = new NBTTagCompound();
 			NBTUtil.writeGameProfile(customSkinTag, customSkin);
@@ -302,21 +298,6 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		readFromNBTSynced(pkt.getNbtCompound());
-	}
-
-	@SideOnly(Side.CLIENT)
-	private void spawnFX() {
-		if (currentStack != null) {
-			for (int i = 0; i < 4; i++) {
-				// TODO fix particle here
-				/*ParticleSieve particle = new ParticleSieve(worldObj,
-						pos.getX() + 0.8 * worldObj.rand.nextFloat() + 0.15,
-						pos.getY() + 0.69,
-						pos.getZ() + 0.8 * worldObj.rand.nextFloat() + 0.15,
-						0, 0, 0, icon);
-				Minecraft.getMinecraft().effectRenderer.addEffect(particle);*/
-			}
-		}
 	}
 
 	public abstract void setEnergyStored(int energyStored);
@@ -377,10 +358,6 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		}
 	}
 
-	public boolean isActive() {
-		return spawnParticles;
-	}
-
 	public float getSpeedBoost() {
 		float activeSpeedBoost = speedBoost;
 		ItemStack upgradeStack = itemHandlerUpgrade.getStackInSlot(0);
@@ -421,5 +398,9 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 
 	public int getMeshLevel() {
 		return 0; // TODO Mesh Level impl
+	}
+
+	public float getArmAngle() {
+		return armAngle;
 	}
 }

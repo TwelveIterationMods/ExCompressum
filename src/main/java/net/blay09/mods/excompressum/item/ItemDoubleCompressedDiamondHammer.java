@@ -19,9 +19,7 @@ public class ItemDoubleCompressedDiamondHammer extends Item {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean flag) {
-        super.addInformation(itemStack, entityPlayer, list, flag);
+    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List<String> list, boolean flag) {
         list.add(TextFormatting.DARK_AQUA + I18n.format("tooltip.excompressum:double_compressed_diamond_hammer"));
     }
 

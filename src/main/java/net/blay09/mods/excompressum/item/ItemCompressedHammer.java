@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.StupidUtils;
+import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -20,7 +21,7 @@ import java.util.HashSet;
 public class ItemCompressedHammer extends ItemTool {
 
     public ItemCompressedHammer(ToolMaterial material, String name) {
-        super(5f, 0f, material, new HashSet<Block>()); // TODO check attack speed, should be slow
+        super(6f, -6f, material, new HashSet<Block>());
         setRegistryName("compressed_hammer_" + name);
         setUnlocalizedName(getRegistryName().toString());
         setCreativeTab(ExCompressum.creativeTab);
@@ -31,15 +32,15 @@ public class ItemCompressedHammer extends ItemTool {
         return CompressedHammerRegistry.isHammerable(state);
     }
 
-    /*@Override // TODO still need to find out what happened to getDigSpeed
-    public float getDigSpeed(ItemStack item, Block block, int meta) {
-        if ((CompressedHammerRegistryOld.isRegistered(block, meta) || HammerRegistry.registered(new ItemStack(block, 1, meta))) && block.getHarvestLevel(meta) <= toolMaterial.getHarvestLevel()) {
+    @Override
+    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+        if ((CompressedHammerRegistry.isHammerable(state) || ExRegistro.isHammerable(state)) && state.getBlock().getHarvestLevel(state) <= toolMaterial.getHarvestLevel()) {
             return efficiencyOnProperMaterial * 0.75f;
         }
         return 0.8f;
-    }*/
+    }
 
-    @Override // TODO exnihiloomnia uses onBlockDestroyed, can we use that too? well of course we can, but go find out what's the big difference (and then switch because onBlockDestroyed is probably better and onBlockStartBreak was only taken over from old Ex Nihilo)
+    @Override
     public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, EntityPlayer player) {
         World world = player.worldObj;
         if (world.isRemote || StupidUtils.hasSilkTouchModifier(player)) {
@@ -62,7 +63,7 @@ public class ItemCompressedHammer extends ItemTool {
         world.setBlockToAir(pos);
         itemStack.damageItem(1, player);
         if (itemStack.stackSize == 0) {
-            player.renderBrokenItemStack(itemStack); // TODO is this enough? or do I have to do more
+            player.renderBrokenItemStack(itemStack);
         }
         return true;
     }

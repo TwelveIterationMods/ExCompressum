@@ -35,7 +35,7 @@ public class HeavySieveDataProvider implements IWailaDataProvider {
             }
             ItemStack meshStack = tileEntity.getMeshStack();
             if(meshStack != null) {
-                list.add(I18n.format("waila.excompressum:sieveMesh", meshStack.getDisplayName(), meshStack.getItemDamage(), meshStack.getMaxDamage()));
+                list.add(I18n.format("waila.excompressum:sieveMesh", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getItemDamage(), meshStack.getMaxDamage()));
             } else {
                 list.add(I18n.format("waila.excompressum:sieveNoMesh"));
             }

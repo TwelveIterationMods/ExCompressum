@@ -37,6 +37,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.Locale;
 import java.util.Set;
 
 @SuppressWarnings("unused")
@@ -74,7 +75,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
-		String customName = ChickenStickConfig.chickenStickNames.get(Minecraft.getMinecraft().getSession().getUsername().toLowerCase());
+		String customName = ChickenStickConfig.chickenStickNames.get(Minecraft.getMinecraft().getSession().getUsername().toLowerCase(Locale.ENGLISH));
 		if (customName == null) {
 			customName = ChickenStickConfig.chickenStickNames.get("*");
 		}

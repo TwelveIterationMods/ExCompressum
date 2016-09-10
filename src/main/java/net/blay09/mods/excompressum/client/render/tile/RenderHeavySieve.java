@@ -64,7 +64,8 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> 
                 mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(0.0625f, 0.5625f, 0.0625f);
-                GlStateManager.scale(0.88f, 0.5f - progress * 0.5f, 0.88f);
+                float tt = 0.42f;
+                GlStateManager.scale(0.88f, tt - progress * tt, 0.88f);
                 mc.getBlockRendererDispatcher().renderBlock(state, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
                 tessellator.draw();
                 GlStateManager.popMatrix();

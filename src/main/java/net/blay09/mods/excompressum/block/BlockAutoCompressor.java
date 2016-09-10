@@ -81,31 +81,6 @@ public class BlockAutoCompressor extends BlockContainer {
         }
     }
 
-    // TODO IDismantleable?
-
-    /*@Override
-    public ArrayList<ItemStack> dismantleBlock(EntityPlayer entityPlayer, World world, int x, int y, int z, boolean returnDrops) {
-        TileEntityAutoCompressor tileEntity = (TileEntityAutoCompressor) world.getTileEntity(x, y, z);
-        ItemStack itemStack = new ItemStack(this);
-        if (itemStack.stackTagCompound == null) {
-            itemStack.stackTagCompound = new NBTTagCompound();
-        }
-        itemStack.stackTagCompound.setInteger("EnergyStored", tileEntity.getEnergyStored(null));
-
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-        drops.add(itemStack);
-        world.setBlockToAir(x, y, z);
-        if (!returnDrops) {
-            dropBlockAsItem(world, x, y, z, itemStack);
-        }
-        return drops;
-    }
-
-    @Override
-    public boolean canDismantle(EntityPlayer entityPlayer, World world, int x, int y, int z) {
-        return true;
-    }*/
-
     @Override
     @SuppressWarnings("deprecation")
     public boolean hasComparatorInputOverride(IBlockState state) {

@@ -23,8 +23,6 @@ public class AutomationConfig {
 	public static boolean allowHeavySieveAutomation;
 
 	public static void load(Configuration config) {
-		// TODO measurements for speed
-
 		autoHammerSpeed = config.getFloat("Speed", "Auto Hammer", 0.01f, 0.0001f, 0.1f, "The speed at which the auto hammer will smash stuff.");
 		autoHammerEnergy = config.getInt("Energy Cost", "Auto Hammer", 40, 0, 100000, "The energy cost of the auto hammer per tick.");
 		autoHammerDecay = config.getFloat("Hammer Decay Chance", "Auto Hammer", 0.5f, 0f, 0.1f, "The chance for the upgrade hammers in an auto hammer to lose durability (per operation)");

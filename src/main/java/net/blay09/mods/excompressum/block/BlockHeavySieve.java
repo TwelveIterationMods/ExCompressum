@@ -29,9 +29,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Locale;
 
 public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 
@@ -47,7 +50,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 
         @Override
         public String getName() {
-            return name().toLowerCase();
+            return name().toLowerCase(Locale.ENGLISH);
         }
     }
 
@@ -133,27 +136,17 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
             if(heldItem != null) {
                 SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
                 if(sieveMesh != null && tileEntity.getMeshStack() == null) {
-                    tileEntity.setMeshStack(heldItem.splitStack(1));
+                    tileEntity.setMeshStack(player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.splitStack(1));
                     return true;
                 }
 
-                if(tileEntity.getCurrentStack() == null) {
-                    if(HeavySieveRegistry.isSiftable(heldItem)) {
-                        tileEntity.addSiftable(heldItem);
-                        if (!player.capabilities.isCreativeMode) {
-                            heldItem.stackSize--;
-                        }
-                        return true;
-                    }
+                if(tileEntity.addSiftable(player, heldItem)) {
+                    return true;
                 }
             }
 
-            if (world.isRemote) {
-                tileEntity.processContents(player.capabilities.isCreativeMode);
-            } else {
-                if (AutomationConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
-                    tileEntity.processContents(player.capabilities.isCreativeMode);
-                }
+            if (AutomationConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
+                tileEntity.processContents(player);
             }
         }
 

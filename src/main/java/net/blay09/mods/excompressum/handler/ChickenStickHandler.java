@@ -64,8 +64,8 @@ public class ChickenStickHandler {
 	@SubscribeEvent
 	public void ExtraUtilitiesCodeIsCompletelyUncomprehensible(PlayerInteractEvent event) {
 		if(event.getItemStack() != null && event.getItemStack().getItem() == Items.STICK) {
-			IBlockState state = event.getWorld().getBlockState(event.getPos());
-			event.getEntityPlayer().addChatComponentMessage(new TextComponentString(state.getBlock().getRegistryName() + ":" + state.getBlock().getMetaFromState(state)));
+//			IBlockState state = event.getWorld().getBlockState(event.getPos());
+//			event.getEntityPlayer().addChatComponentMessage(new TextComponentString(state.getBlock().getRegistryName() + ":" + state.getBlock().getMetaFromState(state)));
 		}
 	}
 

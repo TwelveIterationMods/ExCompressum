@@ -5,7 +5,11 @@ import net.blay09.mods.excompressum.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -26,12 +30,36 @@ import javax.annotation.Nullable;
 
 public class BlockAutoHammer extends BlockContainer {
 
+    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+
     public BlockAutoHammer(String registryName) {
         super(Material.IRON);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
         setRegistryName(registryName);
         setUnlocalizedName(getRegistryName().toString());
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(FACING).ordinal();
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+    }
+
+    @Nullable
+    @Override
+    protected ItemStack createStackedBlock(IBlockState state) {
+        return new ItemStack(this, 1, state.getValue(FACING).ordinal());
     }
 
     @Override
@@ -99,6 +127,15 @@ public class BlockAutoHammer extends BlockContainer {
     }
 
     @Override
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        EnumFacing facing = BlockPistonBase.getFacingFromEntity(pos, placer);
+        if(facing.getAxis() == EnumFacing.Axis.Y) {
+            facing = EnumFacing.NORTH;
+        }
+        return getStateFromMeta(meta).withProperty(FACING, facing);
+    }
+
+    @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         NBTTagCompound tagCompound = stack.getTagCompound();
         if (tagCompound != null && tagCompound.hasKey("EnergyStored")) {
@@ -107,47 +144,7 @@ public class BlockAutoHammer extends BlockContainer {
                 tileEntity.setEnergyStored(tagCompound.getInteger("EnergyStored"));
             }
         }
-        // TODO fix facing
-        /*
-        int facing = MathHelper.floor_double((double) (player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-        if (facing == 0) {
-            world.setBlockMetadataWithNotify(x, y, z, 2, 2);
-        }
-        if (facing == 1) {
-            world.setBlockMetadataWithNotify(x, y, z, 5, 2);
-        }
-        if (facing == 2) {
-            world.setBlockMetadataWithNotify(x, y, z, 3, 2);
-        }
-        if (facing == 3) {
-            world.setBlockMetadataWithNotify(x, y, z, 4, 2);
-        }*/
     }
-
-    // TODO wrench stuff
-
-    /*@Override
-    public ArrayList<ItemStack> dismantleBlock(EntityPlayer entityPlayer, World world, int x, int y, int z, boolean returnDrops) {
-        TileAutoHammer tileEntity = (TileAutoHammer) world.getTileEntity(x, y, z);
-        ItemStack itemStack = new ItemStack(this);
-        if (itemStack.stackTagCompound == null) {
-            itemStack.stackTagCompound = new NBTTagCompound();
-        }
-        itemStack.stackTagCompound.setInteger("EnergyStored", tileEntity.getEnergyStored(null));
-
-        ArrayList<ItemStack> drops = Lists.newArrayList();
-        drops.add(itemStack);
-        world.setBlockToAir(x, y, z);
-        if (!returnDrops) {
-            dropBlockAsItem(world, x, y, z, itemStack);
-        }
-        return drops;
-    }
-
-    @Override
-    public boolean canDismantle(EntityPlayer entityPlayer, World world, int x, int y, int z) {
-        return true;
-    }*/
 
     @Override
     @SuppressWarnings("deprecation")

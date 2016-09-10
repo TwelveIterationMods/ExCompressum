@@ -19,8 +19,7 @@ public class ItemBlockBait extends ItemBlock {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List list, boolean debug) {
+    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List<String> list, boolean debug) {
         BlockBait.Type type = BlockBait.Type.fromId(itemStack.getItemDamage());
         if(type == BlockBait.Type.SQUID) {
             list.add(I18n.format("info.excompressum:baitPlaceInWater"));

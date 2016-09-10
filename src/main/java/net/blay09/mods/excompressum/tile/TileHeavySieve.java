@@ -3,52 +3,50 @@ package net.blay09.mods.excompressum.tile;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-// TODO infinite sifting!
-// TODO Waila durability is wrong!
-// TODO use up mesh durability!
+// TODO needs particles
 public class TileHeavySieve extends TileEntity implements ITickable {
 
+    private static final int MAX_CLICKS_PER_SECOND = 6;
     private static final float PROCESSING_INTERVAL = 0.075f;
     private static final int UPDATE_INTERVAL = 20;
 
     private ItemStack meshStack;
     private ItemStack currentStack;
-    private boolean isDirty;
-    private boolean spawnParticles;
-    private float progress;
-    private int ticksSinceUpdate;
-    private int clicksSinceUpdate;
 
-    public void addSiftable(ItemStack itemStack) {
-        currentStack = itemStack;
+    private float progress;
+    private int clicksSinceSync;
+
+    private boolean isDirty;
+    private int ticksSinceSync;
+
+    public boolean addSiftable(EntityPlayer player, ItemStack itemStack) {
+        if(currentStack != null || meshStack == null || !HeavySieveRegistry.isSiftable(itemStack)) {
+            return false;
+        }
+        currentStack = player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(itemStack, 1) : itemStack.splitStack(1);
         progress = 0f;
         VanillaPacketHandler.sendTileEntityUpdate(this);
+        return true;
     }
 
     @Override
     public void update() {
-        if (worldObj.isRemote && spawnParticles) {
-            spawnFX();
-        }
-
-        ticksSinceUpdate++;
-        if (ticksSinceUpdate >= UPDATE_INTERVAL) {
-            ticksSinceUpdate = 0;
-            clicksSinceUpdate = 0;
-
-            spawnParticles = false;
+        ticksSinceSync++;
+        if (ticksSinceSync >= UPDATE_INTERVAL) {
+            ticksSinceSync = 0;
+            clicksSinceSync = 0;
 
             if (isDirty) {
                 VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -57,14 +55,14 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         }
     }
 
-    public void processContents(boolean creative) {
-        if(currentStack != null) {
-            if (creative) {
+    public void processContents(EntityPlayer player) {
+        if(currentStack != null && meshStack != null) {
+            if (player.capabilities.isCreativeMode) {
                 progress = 1f;
             } else {
-                clicksSinceUpdate++;
-                if (clicksSinceUpdate <= 6) {
-                    progress += PROCESSING_INTERVAL;
+                clicksSinceSync++;
+                if (clicksSinceSync <= MAX_CLICKS_PER_SECOND) {
+                    progress = Math.min(1f, progress + PROCESSING_INTERVAL);
                 }
             }
             if (progress >= 1f) {
@@ -73,26 +71,17 @@ public class TileHeavySieve extends TileEntity implements ITickable {
                     for (ItemStack itemStack : rewards) {
                         worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
                     }
+                    currentStack = null;
+                    meshStack.damageItem(1, player);
+                    if(meshStack.stackSize == 0) {
+                        // TODO this should probably play a broken sound and show particles
+                        meshStack = null;
+                    }
+                    progress = 0f;
+                    VanillaPacketHandler.sendTileEntityUpdate(this);
                 }
-            } else {
-                spawnParticles = true;
             }
             isDirty = true;
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void spawnFX() {
-        if (currentStack != null) {
-            for (int i = 0; i < 4; i++) {
-                // TODO fix the particlebobs
-                /*ParticleSieve particle = new ParticleSieve(worldObj,
-                        xCoord + 0.8 * worldObj.rand.nextFloat() + 0.15,
-                        yCoord + 0.69,
-                        zCoord + 0.8 * worldObj.rand.nextFloat() + 0.15,
-                        0, 0, 0, icon);
-                Minecraft.getMinecraft().effectRenderer.addEffect(particle);*/
-            }
         }
     }
 
@@ -102,7 +91,6 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content"));
         meshStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Mesh"));
         progress = tagCompound.getFloat("Progress");
-        spawnParticles = tagCompound.getBoolean("Particles");
     }
 
     @Override
@@ -115,7 +103,6 @@ public class TileHeavySieve extends TileEntity implements ITickable {
             tagCompound.setTag("Mesh", meshStack.writeToNBT(new NBTTagCompound()));
         }
         tagCompound.setFloat("Progress", progress);
-        tagCompound.setBoolean("Particles", spawnParticles);
         return tagCompound;
     }
 

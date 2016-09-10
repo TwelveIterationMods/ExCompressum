@@ -75,7 +75,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
         GlStateManager.translate(0, -1.2f, 0.25f);
         GlStateManager.scale(0.75f, 0.75f, 0.75f);
         bindPlayerTexture(tileEntity.getCustomSkin());
-        biped.renderAll(tileEntity.isActive(), tileEntity.getSpeedBoost());
+        biped.renderAll(tileEntity.getArmAngle());
         GlStateManager.popMatrix();
 
         // Sieve & Content

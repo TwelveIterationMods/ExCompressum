@@ -8,6 +8,19 @@
     "normal": [{}],
     "inventory": [{
       "model": "excompressum:auto_compressed_hammer_inventory"
-    }]
+    }],
+    "facing": {
+      "north": {
+      },
+      "south": {
+        "y": 180
+      },
+      "west": {
+        "y": 90
+      },
+      "east": {
+        "y": -90
+      }
+    }
   }
 }

@@ -14,13 +14,13 @@ import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.*;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -35,6 +35,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum")
@@ -77,20 +78,30 @@ public class ExCompressum {
         MinecraftForge.EVENT_BUS.register(new CompressedEnemyHandler());
         MinecraftForge.EVENT_BUS.register(new ChickenStickHandler());
 
+        // Botania is a special snowflake that requires addon initialization during preInit
+        if(Loader.isModLoaded(Compat.BOTANIA)) {
+            try {
+                Class<?> clazz = Class.forName("net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
+                addons.add((IAddon) clazz.getConstructor(Configuration.class).newInstance(config));
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                ExCompressum.logger.error("Failed to load Botania addon: {}", e);
+            }
+        }
+
         proxy.preInit(event);
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        FMLInterModComms.sendMessage("Waila", "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
+        FMLInterModComms.sendMessage(Compat.WAILA, "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
 
         proxy.init(event);
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        registerAddon(event, Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
         registerAddon(event, Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
+        registerAddon(event, Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
 
         if(ExRegistro.instance == null) {
             ExCompressum.logger.warn("No Ex Nihilo mod installed - many things will be disabled. Why would you run Ex Compressum without Ex Nihilo? Pfft.");
@@ -108,9 +119,9 @@ public class ExCompressum {
         SieveMeshRegistry.registerDefaults();
         AutoSieveSkinRegistry.load();
 
-        registerAddon(event, "MineTweaker3", "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
-        //registerAddon(event, Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon"); // TODO Botania requires addons to register stuff in preInit because stupid, fix this later
-        registerAddon(event, "TConstruct", "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
+        registerAddon(event, Compat.MINETWEAKER, "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
+        registerAddon(event, Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
+        registerAddon(event, Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
 
         for(IAddon addon : addons) {
             addon.loadConfig(config);

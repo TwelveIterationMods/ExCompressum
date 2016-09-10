@@ -17,6 +17,7 @@ import vazkii.botania.common.lexicon.page.PageText;
 
 import java.util.Iterator;
 
+// TODO broken model
 public class BotaniaAddon implements IAddon {
 
     public static final String SUBTILE_ORECHID_EVOLVED = ExCompressum.MOD_ID + ".orechidEvolved";
@@ -31,6 +32,11 @@ public class BotaniaAddon implements IAddon {
     public static int manaSieveCost;
     public static int evolvedOrechidCost;
     public static int evolvedOrechidDelay;
+
+    public BotaniaAddon(Configuration config) {
+        loadConfig(config);
+        BotaniaAPI.registerSubTile(SUBTILE_ORECHID_EVOLVED, SubTileOrechidEvolved.class);
+    }
 
     @Override
     public void loadConfig(Configuration config) {
@@ -47,7 +53,6 @@ public class BotaniaAddon implements IAddon {
         runicAltar = Block.REGISTRY.getObject(new ResourceLocation(Compat.BOTANIA, "runeAltar"));
 
         if(enableEvolvedOrechid) {
-            BotaniaAPI.registerSubTile(SUBTILE_ORECHID_EVOLVED, SubTileOrechidEvolved.class);
             BotaniaAPI.registerSubTileSignature(SubTileOrechidEvolved.class, new SubTileOrechidEvolvedSignature());
             ItemStack orechidEvolved = ItemBlockSpecialFlower.ofType(SUBTILE_ORECHID_EVOLVED);
             ExCompressum.creativeTab.addAdditionalItem(orechidEvolved);

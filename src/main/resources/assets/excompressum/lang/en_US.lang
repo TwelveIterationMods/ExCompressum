@@ -23,6 +23,7 @@ tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
 tooltip.excompressum:auto_sieve=%s in a Box™
 tooltip.excompressum:auto_heavy_sieve=%s in a Heavy Box™
 tooltip.excompressum:mana_sieve=%s in a Magical Box™
+tooltip.excompressum:consumingEnergy=Consuming %d RF/t
 
 waila.excompressum:baitTooClose=You are too close.
 waila.excompressum:baitTooClose2=The animals are scared away.
@@ -88,3 +89,5 @@ botania.page.excompressum.brokenComprilla0=You sieved yourself a good amount of 
 botania.page.excompressum.brokenComprilla1=Keeping the tradition.
 tile.botania:flower.excompressum.brokenComprilla.name=Broken Comprilla
 tile.botania:flower.excompressum.brokenComprilla.reference=It's not actually broken
+
+modifier.excompressum:smashingii.name=Smashing II

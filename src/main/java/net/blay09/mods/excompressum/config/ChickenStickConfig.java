@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import net.minecraftforge.common.config.Configuration;
 
 import javax.annotation.Nullable;
+import java.util.Locale;
 import java.util.Map;
 
 public class ChickenStickConfig {
@@ -33,7 +34,7 @@ public class ChickenStickConfig {
 		for(String name : chickenStickNameList) {
 			String[] s = name.split("=");
 			if(s.length >= 2) {
-				chickenStickNames.put(s[0].toLowerCase(), s[1]);
+				chickenStickNames.put(s[0].toLowerCase(Locale.ENGLISH), s[1]);
 			}
 		}
 

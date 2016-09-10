@@ -27,7 +27,7 @@ import java.util.HashSet;
 
 public class ItemOreSmasher extends ItemTool {
 
-	// TODO this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
+	// CLEANUP this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
 	private static final String[] ORE_BLOCKS = new String[] {
 			"exnihiloomnia:ore_gravel",
 			"exnihiloomnia:ore_gravel_ender",
@@ -41,7 +41,7 @@ public class ItemOreSmasher extends ItemTool {
 			"oreSand"
 	};
 
-	// TODO this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
+	// CLEANUP this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
 	private static final String[] ORE_ITEMS = new String[] {
 			"exnihiloomnia:ore_broken",
 			"exnihiloomnia:ore_broken_nether",
