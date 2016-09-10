@@ -17,23 +17,27 @@ import java.util.List;
 public class ChickenStickRegistry extends AbstractRegistry {
 
     public static final ChickenStickRegistry INSTANCE = new ChickenStickRegistry();
-    private final List<RegistryKey> validBlocks = Lists.newArrayList();
+    private final List<RegistryKey> entries = Lists.newArrayList();
 
     public ChickenStickRegistry() {
         super("ChickenStickRegistry");
     }
 
     public void add(IBlockState state, boolean isWildcard) {
-        validBlocks.add(new RegistryKey(state, isWildcard));
+        entries.add(new RegistryKey(state, isWildcard));
     }
 
     public void add(ItemStack itemStack) {
-        validBlocks.add(new RegistryKey(itemStack));
+        entries.add(new RegistryKey(itemStack));
+    }
+
+    public List<RegistryKey> getEntries() {
+        return entries;
     }
 
     public static boolean isHammerable(IBlockState state) {
         RegistryKey key = new RegistryKey(state, false);
-        return INSTANCE.validBlocks.contains(key) || INSTANCE.validBlocks.contains(key.withWildcard());
+        return INSTANCE.entries.contains(key) || INSTANCE.entries.contains(key.withWildcard());
     }
 
     @Override

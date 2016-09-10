@@ -2,59 +2,45 @@ package net.blay09.mods.excompressum.registry.heavysieve;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.StupidUtils;
+import net.blay09.mods.excompressum.registry.AbstractRegistry;
+import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.config.Configuration;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class HeavySieveRegistry {
+public class HeavySieveRegistry extends AbstractRegistry {
 
-    private static final Map<String, HeavySieveRegistryEntry> entries = Maps.newHashMap();
-    private static Configuration config;
+    public static final HeavySieveRegistry INSTANCE = new HeavySieveRegistry();
+    private static final Map<RegistryKey, HeavySieveRegistryEntry> entries = Maps.newHashMap();
 
-    public static void loadFromConfig(Configuration config) {
-        HeavySieveRegistry.config = config;
-        reload();
+    public HeavySieveRegistry() {
+        super("HeavySieve");
     }
 
-    public static void reload() {
-        // TODO do the thinglemawingles
-    }
-
-    private static void registerDefaults() {
-        int defaultLoss = 3; // TODO config option
-
-        // TODO uhh... think about this first
-
-        // TODO additional compressed block mapping?
-    }
-
-    public static Map<String, HeavySieveRegistryEntry> getEntries() {
-        return entries;
-    }
-
-    public static HeavySieveRegistryEntry getEntryForBlockState(IBlockState state, boolean isWildcard) {
-        String registryName = state.getBlock().getRegistryName().toString();
-        if(isWildcard) {
-            return entries.get(registryName + ":*");
-        } else {
-            return entries.get(registryName + ":" + state.getBlock().getMetaFromState(state));
-        }
+    @Nullable
+    public static HeavySieveRegistryEntry getEntryForBlockState(IBlockState state, boolean withWildcard) {
+        return entries.get(new RegistryKey(state, withWildcard));
     }
 
     public static boolean isSiftable(IBlockState state) {
-        return getEntryForBlockState(state, true) != null || getEntryForBlockState(state, false) != null;
+        return getEntryForBlockState(state, false) != null || getEntryForBlockState(state, true) != null;
     }
 
     public static boolean isSiftable(ItemStack itemStack) {
         IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
         return state != null && isSiftable(state);
+    }
+
+    public static Map<RegistryKey, HeavySieveRegistryEntry> getEntries() {
+        return entries;
     }
 
     public static Collection<ItemStack> rollSieveRewards(IBlockState state, float luck, Random rand) {
@@ -80,10 +66,24 @@ public class HeavySieveRegistry {
 
     private static void rollSieveRewardsToList(HeavySieveRegistryEntry entry, List<ItemStack> list, float luck, Random rand) {
         for(HeavySieveReward reward : entry.getRewards()) {
-            if(rand.nextInt(100) < reward.getBaseChance() + reward.getLuckMultiplier() * luck) {
+            if(rand.nextFloat() < reward.getBaseChance() + reward.getLuckMultiplier() * luck) {
                 list.add(reward.getItemStack().copy());
             }
         }
     }
 
+    @Override
+    protected JsonObject create() {
+        return null;
+    }
+
+    @Override
+    protected void loadCustom(JsonObject entry) {
+
+    }
+
+    @Override
+    protected void registerDefaults(JsonObject defaults) {
+
+    }
 }

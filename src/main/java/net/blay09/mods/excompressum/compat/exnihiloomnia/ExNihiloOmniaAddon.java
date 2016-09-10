@@ -67,17 +67,22 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 
 		sieveModelBounds = new SieveModelBounds(0.5625f, 0.0625f, 0.88f, 0.5f);
 
-		ItemStack woodenMeshItem = findItem("mesh_wood", 0);
+		ItemStack woodenMeshItem = findItem("mesh_wood", OreDictionary.WILDCARD_VALUE);
 		if(woodenMeshItem != null) {
-			SieveMeshRegistryEntry woodenMesh = new SieveMeshRegistryEntry(woodenMeshItem, true);
+			SieveMeshRegistryEntry woodenMesh = new SieveMeshRegistryEntry(woodenMeshItem);
 			woodenMesh.setSpriteLocation(new ResourceLocation(Compat.EXNIHILO_OMNIA, "blocks/sieve_mesh_wood"));
 			SieveMeshRegistry.add(woodenMesh);
 		}
 
-		SieveMeshRegistryEntry silkMesh = new SieveMeshRegistryEntry(itemMap.get(NihiloItems.SILK_MESH), true);
-		silkMesh.setSpriteLocation(new ResourceLocation(Compat.EXNIHILO_OMNIA, "blocks/sieve_mesh_silk_white"));
-		silkMesh.setMeshLevel(1);
-		SieveMeshRegistry.add(silkMesh);
+		ItemStack silkMeshItem = itemMap.get(NihiloItems.SILK_MESH);
+		if(silkMeshItem != null) {
+			silkMeshItem = silkMeshItem.copy();
+			silkMeshItem.setItemDamage(OreDictionary.WILDCARD_VALUE);
+			SieveMeshRegistryEntry silkMesh = new SieveMeshRegistryEntry(silkMeshItem);
+			silkMesh.setSpriteLocation(new ResourceLocation(Compat.EXNIHILO_OMNIA, "blocks/sieve_mesh_silk_white"));
+			silkMesh.setMeshLevel(1);
+			SieveMeshRegistry.add(silkMesh);
+		}
 
 		ExRegistro.instance = this;
 	}

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import net.blay09.mods.excompressum.ExCompressum;
@@ -16,6 +15,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public abstract class AbstractRegistry {
+
+	public static boolean registryErrors;
 
 	protected final String registryName;
 	private boolean hasChanged;
@@ -49,7 +50,7 @@ public abstract class AbstractRegistry {
 				if(element.isJsonObject()) {
 					loadCustom(element.getAsJsonObject());
 				} else {
-					throw new ClassCastException("entries must be an array of json objects");
+					throw new ClassCastException("entries must be an array of json objects in " + registryName);
 				}
 			}
 
@@ -87,6 +88,18 @@ public abstract class AbstractRegistry {
 			JsonElement element = root.get(key);
 			if(element.isJsonPrimitive()) {
 				return element.getAsInt();
+			}
+		}
+		root.addProperty(key, defaultValue);
+		hasChanged = true;
+		return defaultValue;
+	}
+
+	protected float tryGetFloat(JsonObject root, String key, float defaultValue) {
+		if(root.has(key)) {
+			JsonElement element = root.get(key);
+			if(element.isJsonPrimitive()) {
+				return element.getAsFloat();
 			}
 		}
 		root.addProperty(key, defaultValue);
@@ -146,10 +159,12 @@ public abstract class AbstractRegistry {
 
 	protected void logUnknownItem(ResourceLocation location) {
 		ExCompressum.logger.error("Unknown item '{}' in {}", location, registryName);
+		registryErrors = true;
 	}
 
 	protected void logUnknownFluid(String fluidName, ResourceLocation location) {
 		ExCompressum.logger.error("Unknown fluid '{}' when registering {} in {}", fluidName, location, registryName);
+		registryErrors = true;
 	}
 
 	protected void logUnknownOre(ResourceLocation location) {

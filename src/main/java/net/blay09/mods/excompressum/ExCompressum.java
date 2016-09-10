@@ -14,8 +14,9 @@ import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.*;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
-import net.blay09.mods.excompressum.registry.crucible.WoodenCrucibleRegistry;
-import net.blay09.mods.excompressum.registry.hammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
+import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraftforge.common.MinecraftForge;
@@ -88,10 +89,6 @@ public class ExCompressum {
     @Mod.EventHandler
     @SuppressWarnings("unused unchecked")
     public void postInit(FMLPostInitializationEvent event) {
-        ChickenStickRegistry.INSTANCE.load(configDir);
-        WoodenCrucibleRegistry.INSTANCE.load(configDir);
-        SieveMeshRegistry.registerDefaults();
-
         registerAddon(event, Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
         registerAddon(event, Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
 
@@ -100,10 +97,13 @@ public class ExCompressum {
             ExRegistro.instance = new NihilisticNihiloProvider();
         }
 
+        ChickenStickRegistry.INSTANCE.load(configDir);
+        WoodenCrucibleRegistry.INSTANCE.load(configDir);
+        CompressedHammerRegistry.INSTANCE.load(configDir);
+        SieveMeshRegistry.registerDefaults();
+
         ModRecipes.init(config);
 
-        CompressedHammerRegistry.loadFromConfig(config);
-        HeavySieveRegistry.loadFromConfig(config);
         CompressedRecipeRegistry.reload();
 
         AutoSieveSkinRegistry.load();

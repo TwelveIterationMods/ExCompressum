@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry.hammer;
+package net.blay09.mods.excompressum.registry.compressedhammer;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
@@ -27,12 +27,7 @@ public class CompressedHammerRegistryEntry {
 		return rewards;
 	}
 
-	public String getKey() {
-		String registryName = inputState.getBlock().getRegistryName().toString();
-		if(isWildcard) {
-			return registryName + ":*";
-		} else {
-			return registryName + ":" + inputState.getBlock().getMetaFromState(inputState);
-		}
+	public void addReward(CompressedHammerReward reward) {
+		rewards.add(reward);
 	}
 }

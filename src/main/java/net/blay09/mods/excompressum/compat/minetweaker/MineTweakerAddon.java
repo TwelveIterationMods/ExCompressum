@@ -18,7 +18,7 @@ public class MineTweakerAddon implements IEventHandler<MineTweakerImplementation
 
     @Override
     public void handle(MineTweakerImplementationAPI.ReloadEvent reloadEvent) {
-        HeavySieveRegistry.reload();
+//        HeavySieveRegistry.reload(); TODO fix me
         CompressedRecipeRegistry.reload();
     }
 

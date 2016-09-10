@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.compat.tconstruct;
 
-import net.blay09.mods.excompressum.registry.hammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;

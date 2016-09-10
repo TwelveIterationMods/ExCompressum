@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry.crucible;
+package net.blay09.mods.excompressum.registry.woodencrucible;
 
 import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
@@ -38,9 +38,8 @@ public class WoodenCrucibleRegistry extends AbstractRegistry {
 		return INSTANCE.entries.get(key.withWildcard());
 	}
 
-	public static boolean isRegistered(ItemStack itemStack) {
-		RegistryKey key = new RegistryKey(itemStack);
-		return INSTANCE.entries.containsKey(key) || INSTANCE.entries.containsKey(key.withWildcard());
+	public Map<RegistryKey, WoodenCrucibleRegistryEntry> getEntries() {
+		return entries;
 	}
 
 	private static void add(WoodenCrucibleRegistryEntry entry) {

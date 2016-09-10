@@ -28,12 +28,7 @@ public class HeavySieveRegistryEntry {
 		return rewards;
 	}
 
-	public String getKey() {
-		String registryName = inputState.getBlock().getRegistryName().toString();
-		if(isWildcard) {
-			return registryName + ":*";
-		} else {
-			return registryName + ":" + inputState.getBlock().getMetaFromState(inputState);
-		}
+	public void addReward(HeavySieveReward reward) {
+		rewards.add(reward);
 	}
 }

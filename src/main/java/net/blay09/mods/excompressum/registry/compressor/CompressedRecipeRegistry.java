@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.registry.compressor;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.blay09.mods.excompressum.registry.ItemAndMetadata;
+import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,7 +27,7 @@ public class CompressedRecipeRegistry {
     private static final InventoryCompressedMatcher matcherSmallStupid = new InventoryCompressedMatcher(3, 3, true);
     private static final InventoryCompressedMatcher matcher = new InventoryCompressedMatcher(3, 3, false);
 
-    private static final Map<ItemAndMetadata, CompressedRecipe> cachedResults = Maps.newHashMap();
+    private static final Map<RegistryKey, CompressedRecipe> cachedResults = Maps.newHashMap();
 
     public static void reload() {
         cachedResults.clear();
@@ -149,23 +149,24 @@ public class CompressedRecipeRegistry {
         if(itemStack.getTagCompound() != null) {
             return null;
         }
-        ItemAndMetadata itemAndMetadata = new ItemAndMetadata(itemStack);
-        if(cachedResults.containsKey(itemAndMetadata)) {
-            return cachedResults.get(new ItemAndMetadata(itemStack));
+        RegistryKey key = new RegistryKey(itemStack);
+        CompressedRecipe foundRecipe = cachedResults.get(key);
+        if(foundRecipe != null) {
+            return foundRecipe;
         }
         for(CompressedRecipe recipe : recipes) {
             if(itemStack.getItem() == recipe.getSourceStack().getItem() && (recipe.getSourceStack().getItemDamage() == OreDictionary.WILDCARD_VALUE || recipe.getSourceStack().getItemDamage() == itemStack.getItemDamage())) {
-                cachedResults.put(itemAndMetadata, recipe);
+                cachedResults.put(key, recipe);
                 return recipe;
             }
         }
         for(CompressedRecipe recipe : recipesSmall) {
             if(itemStack.getItem() == recipe.getSourceStack().getItem() && (recipe.getSourceStack().getItemDamage() == OreDictionary.WILDCARD_VALUE || recipe.getSourceStack().getItemDamage() == itemStack.getItemDamage())) {
-                cachedResults.put(itemAndMetadata, recipe);
+                cachedResults.put(key, recipe);
                 return recipe;
             }
         }
-        cachedResults.put(itemAndMetadata, null);
+        cachedResults.put(key, null);
         return null;
     }
 

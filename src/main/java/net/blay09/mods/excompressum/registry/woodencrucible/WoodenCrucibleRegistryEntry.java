@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry.crucible;
+package net.blay09.mods.excompressum.registry.woodencrucible;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;

@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.StupidUtils;
-import net.blay09.mods.excompressum.registry.hammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;

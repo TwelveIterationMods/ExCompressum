@@ -7,18 +7,16 @@ import javax.annotation.Nullable;
 
 public class SieveMeshRegistryEntry {
 	private final ItemStack itemStack;
-	private final boolean isWildcard;
 	private int meshLevel;
 	private boolean isHeavy;
 	private ResourceLocation spriteLocation;
 
-	public SieveMeshRegistryEntry(ItemStack itemStack, boolean isWildcard) {
+	public SieveMeshRegistryEntry(ItemStack itemStack) {
 		this.itemStack = itemStack;
-		this.isWildcard = isWildcard;
 	}
 
-	public String getKey() {
-		return itemStack.getItem().getRegistryName() + ":" + (isWildcard ? "*" : itemStack.getItemDamage());
+	public ItemStack getItemStack() {
+		return itemStack;
 	}
 
 	public int getMeshLevel() {

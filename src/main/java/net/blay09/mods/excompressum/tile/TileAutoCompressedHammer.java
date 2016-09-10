@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.config.AutomationConfig;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.registry.hammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;

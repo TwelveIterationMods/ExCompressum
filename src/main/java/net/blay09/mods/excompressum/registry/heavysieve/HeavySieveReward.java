@@ -4,10 +4,10 @@ import net.minecraft.item.ItemStack;
 
 public class HeavySieveReward {
 	private final ItemStack itemStack;
-	private final int baseChance;
-	private final int luckMultiplier;
+	private final float baseChance;
+	private final float luckMultiplier;
 
-	public HeavySieveReward(ItemStack itemStack, int baseChance, int luckMultiplier) {
+	public HeavySieveReward(ItemStack itemStack, float baseChance, float luckMultiplier) {
 		this.itemStack = itemStack;
 		this.baseChance = baseChance;
 		this.luckMultiplier = luckMultiplier;
@@ -17,11 +17,11 @@ public class HeavySieveReward {
 		return itemStack;
 	}
 
-	public int getBaseChance() {
+	public float getBaseChance() {
 		return baseChance;
 	}
 
-	public int getLuckMultiplier() {
+	public float getLuckMultiplier() {
 		return luckMultiplier;
 	}
 }
