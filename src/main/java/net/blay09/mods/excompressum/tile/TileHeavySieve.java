@@ -15,6 +15,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
+// TODO infinite sifting!
+// TODO Waila durability is wrong!
+// TODO use up mesh durability!
 public class TileHeavySieve extends TileEntity implements ITickable {
 
     private static final float PROCESSING_INTERVAL = 0.075f;

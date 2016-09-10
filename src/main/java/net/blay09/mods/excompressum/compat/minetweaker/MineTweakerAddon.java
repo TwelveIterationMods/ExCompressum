@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.compat.minetweaker;
 
 import minetweaker.MineTweakerImplementationAPI;
 import minetweaker.util.IEventHandler;
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
@@ -18,7 +19,7 @@ public class MineTweakerAddon implements IEventHandler<MineTweakerImplementation
 
     @Override
     public void handle(MineTweakerImplementationAPI.ReloadEvent reloadEvent) {
-//        HeavySieveRegistry.reload(); TODO fix me
+        HeavySieveRegistry.INSTANCE.load(ExCompressum.configDir);
         CompressedRecipeRegistry.reload();
     }
 

@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -37,6 +38,7 @@ import java.io.File;
 import java.util.List;
 
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum")
+@SuppressWarnings("unused")
 public class ExCompressum {
 
     public static final Logger logger = LogManager.getLogger();
@@ -48,7 +50,7 @@ public class ExCompressum {
     @SidedProxy(serverSide = "net.blay09.mods.excompressum.CommonProxy", clientSide = "net.blay09.mods.excompressum.client.ClientProxy")
     public static CommonProxy proxy;
 
-    private File configDir;
+    public static File configDir;
     private Configuration config;
 
     public static final ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
@@ -56,7 +58,6 @@ public class ExCompressum {
     public final List<IAddon> addons = Lists.newArrayList();
 
     @Mod.EventHandler
-    @SuppressWarnings("unused")
     public void preInit(FMLPreInitializationEvent event) {
         configDir = new File(event.getModConfigurationDirectory(), "ExCompressum");
         if(!configDir.exists() && !configDir.mkdirs()) {
@@ -87,7 +88,6 @@ public class ExCompressum {
     }
 
     @Mod.EventHandler
-    @SuppressWarnings("unused unchecked")
     public void postInit(FMLPostInitializationEvent event) {
         registerAddon(event, Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
         registerAddon(event, Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
@@ -100,12 +100,12 @@ public class ExCompressum {
         ChickenStickRegistry.INSTANCE.load(configDir);
         WoodenCrucibleRegistry.INSTANCE.load(configDir);
         CompressedHammerRegistry.INSTANCE.load(configDir);
-        SieveMeshRegistry.registerDefaults();
+        HeavySieveRegistry.INSTANCE.load(configDir);
 
         ModRecipes.init(config);
-
         CompressedRecipeRegistry.reload();
 
+        SieveMeshRegistry.registerDefaults();
         AutoSieveSkinRegistry.load();
 
         registerAddon(event, "MineTweaker3", "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
@@ -132,7 +132,11 @@ public class ExCompressum {
     }
 
     @Mod.EventHandler
-    @SuppressWarnings("unused")
+    public void serverStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandExCompressum());
+    }
+
+    @Mod.EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
         for(IAddon addon : addons) {
             addon.serverStarted(event);

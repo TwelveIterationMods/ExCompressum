@@ -42,6 +42,8 @@ info.excompressum:baitNearbyAnimal=Animals are shy. There's too many of them her
 info.excompressum:baitNoWater=There's no water in this area.
 info.excompressum:baitPlaceInWater=Must be placed in water.
 
+commands.excompressum:reload.success=Ex Compressum registries reloaded.
+
 tile.excompressum:compressed_dust.name=Compressed Dust
 tile.excompressum:compressed_cobblestone.name=Compressed Cobblestone
 tile.excompressum:compressed_sand.name=Compressed Sand

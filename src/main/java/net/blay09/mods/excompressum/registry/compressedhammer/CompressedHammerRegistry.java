@@ -33,26 +33,34 @@ import java.util.Random;
 public class CompressedHammerRegistry extends AbstractRegistry {
 
 	public static final CompressedHammerRegistry INSTANCE = new CompressedHammerRegistry();
-	private static Map<RegistryKey, CompressedHammerRegistryEntry> entries = Maps.newHashMap();
+	private Map<RegistryKey, CompressedHammerRegistryEntry> entries = Maps.newHashMap();
 
 	public CompressedHammerRegistry() {
 		super("CompressedHammer");
 	}
 
-	public static Map<RegistryKey, CompressedHammerRegistryEntry> getEntries() {
+	public Map<RegistryKey, CompressedHammerRegistryEntry> getEntries() {
 		return entries;
 	}
 
-	public static void add(CompressedHammerRegistryEntry entry) {
-		entries.put(new RegistryKey(entry.getInputState(), entry.isWildcard()), entry);
+	public void add(CompressedHammerRegistryEntry entry) {
+		RegistryKey key = new RegistryKey(entry.getInputState(), entry.isWildcard());
+		CompressedHammerRegistryEntry previousEntry = entries.get(key);
+		if(previousEntry != null) {
+			for(CompressedHammerReward reward : entry.getRewards()) {
+				previousEntry.addReward(reward);
+			}
+		} else {
+			entries.put(key, entry);
+		}
 	}
 
 	@Nullable
 	public static CompressedHammerRegistryEntry getEntryForBlockState(IBlockState state) {
 		RegistryKey key = new RegistryKey(state, false);
-		CompressedHammerRegistryEntry entry = entries.get(key);
+		CompressedHammerRegistryEntry entry = INSTANCE.entries.get(key);
 		if(entry == null) {
-			return entries.get(key.withWildcard());
+			return INSTANCE.entries.get(key.withWildcard());
 		}
 		return entry;
 	}
@@ -87,6 +95,11 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			return rollHammerRewards(state, luck, rand);
 		}
 		return Collections.emptyList();
+	}
+
+	@Override
+	protected void clear() {
+		entries.clear();
 	}
 
 	@Override

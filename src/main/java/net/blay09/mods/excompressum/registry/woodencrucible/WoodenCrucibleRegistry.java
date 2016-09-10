@@ -51,6 +51,11 @@ public class WoodenCrucibleRegistry extends AbstractRegistry {
 	}
 
 	@Override
+	protected void clear() {
+		entries.clear();
+	}
+
+	@Override
 	protected JsonObject create() {
 		JsonObject root = new JsonObject();
 

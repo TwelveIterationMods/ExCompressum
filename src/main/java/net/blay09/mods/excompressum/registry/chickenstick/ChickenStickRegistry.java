@@ -56,6 +56,11 @@ public class ChickenStickRegistry extends AbstractRegistry {
     }
 
     @Override
+    protected void clear() {
+        entries.clear();
+    }
+
+    @Override
     public JsonObject create() {
         JsonObject root = new JsonObject();
 

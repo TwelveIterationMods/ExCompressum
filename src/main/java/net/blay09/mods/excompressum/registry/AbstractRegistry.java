@@ -8,12 +8,14 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+// TODO make them crash-safe and just show errors in chat
 public abstract class AbstractRegistry {
 
 	public static boolean registryErrors;
@@ -25,7 +27,8 @@ public abstract class AbstractRegistry {
 		this.registryName = registryName;
 	}
 
-	public void load(File configDir) {
+	public final void load(File configDir) {
+		clear();
 		Gson gson = new Gson();
 		File configFile = new File(configDir, registryName + ".json");
 		if(!configFile.exists()) {
@@ -41,6 +44,10 @@ public abstract class AbstractRegistry {
 		try(JsonReader jsonReader = new JsonReader(new FileReader(configFile))) {
 			jsonReader.setLenient(true);
 			root = gson.fromJson(jsonReader, JsonObject.class);
+			if(hasOptions()) {
+				JsonObject options = tryGetObject(root, "options");
+				loadOptions(options);
+			}
 			JsonObject defaults = tryGetObject(root, "defaults");
 			registerDefaults(defaults);
 			JsonObject custom = tryGetObject(root, "custom");
@@ -65,13 +72,20 @@ public abstract class AbstractRegistry {
 				ExCompressum.logger.error("Failed to save updated {} registry: {}", registryName, e);
 			}
 		}
+		MinecraftForge.EVENT_BUS.post(new ReloadRegistryEvent(this));
 	}
 
+	protected abstract void clear();
 	protected abstract JsonObject create();
 	protected abstract void loadCustom(JsonObject entry);
 	protected abstract void registerDefaults(JsonObject defaults);
 
-	public boolean tryGetBoolean(JsonObject root, String key, boolean defaultValue) {
+	protected void loadOptions(JsonObject entry) {}
+	protected boolean hasOptions() {
+		return false;
+	}
+
+	protected final boolean tryGetBoolean(JsonObject root, String key, boolean defaultValue) {
 		if(root.has(key)) {
 			JsonElement element = root.get(key);
 			if(element.isJsonPrimitive()) {
@@ -83,7 +97,7 @@ public abstract class AbstractRegistry {
 		return defaultValue;
 	}
 
-	protected int tryGetInt(JsonObject root, String key, int defaultValue) {
+	protected final int tryGetInt(JsonObject root, String key, int defaultValue) {
 		if(root.has(key)) {
 			JsonElement element = root.get(key);
 			if(element.isJsonPrimitive()) {
@@ -95,7 +109,7 @@ public abstract class AbstractRegistry {
 		return defaultValue;
 	}
 
-	protected float tryGetFloat(JsonObject root, String key, float defaultValue) {
+	protected final float tryGetFloat(JsonObject root, String key, float defaultValue) {
 		if(root.has(key)) {
 			JsonElement element = root.get(key);
 			if(element.isJsonPrimitive()) {
@@ -107,7 +121,7 @@ public abstract class AbstractRegistry {
 		return defaultValue;
 	}
 
-	protected String tryGetString(JsonObject root, String key, String defaultValue) {
+	protected final String tryGetString(JsonObject root, String key, String defaultValue) {
 		if(root.has(key)) {
 			JsonElement element = root.get(key);
 			if(element.isJsonPrimitive()) {
@@ -119,7 +133,7 @@ public abstract class AbstractRegistry {
 		return defaultValue;
 	}
 
-	protected JsonObject tryGetObject(JsonObject root, String key) {
+	protected final JsonObject tryGetObject(JsonObject root, String key) {
 		if(root.has(key)) {
 			JsonElement element = root.get(key);
 			if(element.isJsonObject()) {
@@ -134,7 +148,7 @@ public abstract class AbstractRegistry {
 		return newObject;
 	}
 
-	protected JsonArray tryGetArray(JsonObject root, String key) {
+	protected final JsonArray tryGetArray(JsonObject root, String key) {
 		if(root.has(key)) {
 			JsonElement element = root.get(key);
 			if(element.isJsonArray()) {
@@ -149,7 +163,7 @@ public abstract class AbstractRegistry {
 		return newArray;
 	}
 
-	protected int tryParseInt(String s) {
+	protected final int tryParseInt(String s) {
 		try {
 			return Integer.parseInt(s);
 		} catch (NumberFormatException e) {
@@ -157,17 +171,17 @@ public abstract class AbstractRegistry {
 		}
 	}
 
-	protected void logUnknownItem(ResourceLocation location) {
+	protected final void logUnknownItem(ResourceLocation location) {
 		ExCompressum.logger.error("Unknown item '{}' in {}", location, registryName);
 		registryErrors = true;
 	}
 
-	protected void logUnknownFluid(String fluidName, ResourceLocation location) {
+	protected final void logUnknownFluid(String fluidName, ResourceLocation location) {
 		ExCompressum.logger.error("Unknown fluid '{}' when registering {} in {}", fluidName, location, registryName);
 		registryErrors = true;
 	}
 
-	protected void logUnknownOre(ResourceLocation location) {
+	protected final void logUnknownOre(ResourceLocation location) {
 		ExCompressum.logger.warn("No ore dictionary entries found for {} in {}", location.getResourcePath(), registryName);
 	}
 
