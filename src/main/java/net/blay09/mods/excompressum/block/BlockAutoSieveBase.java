@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.StupidUtils;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
@@ -56,7 +56,11 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	@Override
 	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+		EnumFacing facing = EnumFacing.getFront(meta);
+		if(facing.getAxis() == EnumFacing.Axis.Y) {
+			facing = EnumFacing.NORTH;
+		}
+		return getDefaultState().withProperty(FACING, facing);
 	}
 
 	@Nullable

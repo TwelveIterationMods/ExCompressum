@@ -7,6 +7,8 @@ import com.google.common.collect.Multiset;
 import net.blay09.mods.excompressum.config.AutomationConfig;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
+import net.blay09.mods.excompressum.utils.DefaultItemHandler;
+import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

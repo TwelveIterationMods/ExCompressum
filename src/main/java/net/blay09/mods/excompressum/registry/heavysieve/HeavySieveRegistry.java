@@ -6,7 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.StupidUtils;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;

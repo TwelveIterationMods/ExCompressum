@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.handler;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.CompressedMobsConfig;
-import net.blay09.mods.excompressum.StupidUtils;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityPigZombie;

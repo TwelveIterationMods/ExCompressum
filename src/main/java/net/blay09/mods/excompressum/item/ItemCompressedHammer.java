@@ -1,9 +1,8 @@
 package net.blay09.mods.excompressum.item;
 
 import com.google.common.collect.Lists;
-import exnihiloadscensio.registries.HammerRegistry;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.StupidUtils;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.minecraft.block.Block;
@@ -17,7 +16,6 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 

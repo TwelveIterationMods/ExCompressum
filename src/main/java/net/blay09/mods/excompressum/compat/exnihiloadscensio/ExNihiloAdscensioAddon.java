@@ -11,7 +11,7 @@ import exnihiloadscensio.texturing.Color;
 import exnihiloadscensio.util.BlockInfo;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.StupidUtils;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;

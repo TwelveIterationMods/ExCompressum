@@ -13,7 +13,7 @@ import exnihiloomnia.registries.sifting.SieveRegistryEntry;
 import exnihiloomnia.registries.sifting.SieveReward;
 import exnihiloomnia.util.Color;
 import exnihiloomnia.util.enums.EnumMetadataBehavior;
-import net.blay09.mods.excompressum.StupidUtils;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.compat.Compat;
@@ -157,7 +157,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 			List<ItemStack> list = Lists.newArrayList();
 			for(HammerReward reward : entry.getRewards()) {
 				int fortuneModifier = reward.getFortuneModifier();
-				int chance = reward.getBaseChance() + (int) (fortuneModifier * luck); // TODO Omnia's fortune modifier is weird, looks like a bug (it does .getFortuneModifier() * .getFortuneModifier() rather than taking the hammer fortune level into account; fixed here, go report
+				int chance = reward.getBaseChance() + (int) (fortuneModifier * luck); // NOTE https://github.com/Jozufozu/ExNihiloOmnia/issues/11
 				if(rand.nextInt(100) < chance) {
 					list.add(reward.getItem().copy());
 				}

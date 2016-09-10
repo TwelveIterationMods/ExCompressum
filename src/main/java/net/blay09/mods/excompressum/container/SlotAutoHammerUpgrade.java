@@ -10,14 +10,17 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class SlotAutoHammerUpgrade extends SlotItemHandler {
 
-    public SlotAutoHammerUpgrade(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+    private final boolean isCompressed;
+
+    public SlotAutoHammerUpgrade(IItemHandler itemHandler, int index, int xPosition, int yPosition, boolean isCompressed) {
         super(itemHandler, index, xPosition, yPosition);
+        this.isCompressed = isCompressed;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public TextureAtlasSprite getBackgroundSprite() {
-        return inventory instanceof TileAutoCompressedHammer ? ClientProxy.iconEmptyCompressedHammerSlot : ClientProxy.iconEmptyHammerSlot;
+        return isCompressed ? ClientProxy.iconEmptyCompressedHammerSlot : ClientProxy.iconEmptyHammerSlot;
     }
 
 }

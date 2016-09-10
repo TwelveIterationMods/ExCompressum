@@ -7,6 +7,9 @@ import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.utils.DefaultItemHandler;
+import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
+import net.blay09.mods.excompressum.utils.SubItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -22,7 +25,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -33,7 +35,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     private static final int UPDATE_INTERVAL = 20;
 
     private final EnergyStorage storage = new EnergyStorage(32000);
-    private DefaultItemHandler itemHandler = new DefaultItemHandler(this, 23) {
+    private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 23) {
         @Override
         public boolean isItemValid(int slot, ItemStack itemStack) {
             if(slot == 0) {
@@ -44,13 +46,18 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
             return true;
         }
     };
-    private RangedWrapper itemHandlerInput = new RangedWrapper(itemHandler, 0, 1);
-    private RangedWrapper itemHandlerOutput = new RangedWrapper(itemHandler, 1, 21);
-    private RangedWrapper itemHandlerUpgrades = new RangedWrapper(itemHandler, 21, 23);
-    private ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
+    private final SubItemHandler itemHandlerInput = new SubItemHandler(itemHandler, 0, 1);
+    private final SubItemHandler itemHandlerOutput = new SubItemHandler(itemHandler, 1, 21);
+    private final SubItemHandler itemHandlerUpgrades = new SubItemHandler(itemHandler, 21, 23);
+    private final ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
         @Override
         public boolean canExtractItem(int slot, int amount) {
-            return slot >= 1 && slot <= 20;
+            return super.canExtractItem(slot, amount) && itemHandlerOutput.isInside(slot);
+        }
+
+        @Override
+        public boolean canInsertItem(int slot, ItemStack itemStack) {
+            return super.canInsertItem(slot, itemStack) && itemHandlerInput.isInside(slot) || itemHandlerUpgrades.isInside(slot);
         }
     };
     private ItemStack currentStack;

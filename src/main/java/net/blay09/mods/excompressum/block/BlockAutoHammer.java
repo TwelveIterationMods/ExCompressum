@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
-import net.blay09.mods.excompressum.StupidUtils;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -142,7 +142,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         if(facing.getAxis() == EnumFacing.Axis.Y) {
             facing = EnumFacing.NORTH;
         }
-        return getDefaultState().withProperty(FACING, facing);
+        return getStateFromMeta(meta).withProperty(FACING, facing);
     }
 
     @Override

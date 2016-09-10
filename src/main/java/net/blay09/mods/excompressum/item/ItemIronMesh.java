@@ -14,4 +14,9 @@ public class ItemIronMesh extends Item {
         setMaxDamage(256);
     }
 
+    @Override
+    public int getItemEnchantability() {
+        return 30;
+    }
+
 }

@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.tile;
+package net.blay09.mods.excompressum.utils;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;

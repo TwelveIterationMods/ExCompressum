@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.container;
 
+import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -40,8 +41,8 @@ public class ContainerAutoHammer extends Container {
             addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
         }
 
-        addSlotToContainer(new SlotAutoHammerUpgrade(itemHandler, 21, 8, 62));
-        addSlotToContainer(new SlotAutoHammerUpgrade(itemHandler, 22, 32, 62));
+        addSlotToContainer(new SlotAutoHammerUpgrade(itemHandler, 21, 8, 62, tileEntity instanceof TileAutoCompressedHammer));
+        addSlotToContainer(new SlotAutoHammerUpgrade(itemHandler, 22, 32, 62, tileEntity instanceof TileAutoCompressedHammer));
     }
 
     @Override

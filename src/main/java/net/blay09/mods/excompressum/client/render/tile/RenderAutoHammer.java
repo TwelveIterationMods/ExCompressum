@@ -1,12 +1,12 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.block.BlockAutoHammer;
 import net.blay09.mods.excompressum.client.ClientProxy;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -92,16 +92,16 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
 
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (currentStack != null) {
-            Block block = Block.getBlockFromItem(currentStack.getItem());
+            IBlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
             //noinspection ConstantConditions /// Forge needs @Nullable
-            if(block != null) {
+            if(contentState != null) {
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
                 mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(-0.09375f, 0.0625f, -0.25);
                 GlStateManager.scale(0.5, 0.5, 0.5);
-                mc.getBlockRendererDispatcher().renderBlock(block.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
-                mc.getBlockRendererDispatcher().renderBlockDamage(block.getDefaultState(), new BlockPos(0, 0, 0), ClientProxy.destroyBlockIcons[Math.min(9, (int) (progress * 9f))], tileEntity.getWorld());
+                mc.getBlockRendererDispatcher().renderBlock(contentState, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+                mc.getBlockRendererDispatcher().renderBlockDamage(contentState, new BlockPos(0, 0, 0), ClientProxy.destroyBlockIcons[Math.min(9, (int) (progress * 9f))], tileEntity.getWorld());
                 tessellator.draw();
                 GlStateManager.popMatrix();
             }

@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum;
+package net.blay09.mods.excompressum.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
