@@ -171,7 +171,9 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
                 Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
                 if(type != null) {
                     if(ExRegistro.doMeshesHaveDurability()) {
-                        return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName());
+//                        return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName());
+//                        return new ModelResourceLocation(getRegistryName() + "_with_mesh", "variant=" + type.getName()); // testing
+                        return new ModelResourceLocation(getRegistryName() + "_with_mesh", "inventory"); // testing 2
                     } else {
                         return new ModelResourceLocation(getRegistryName() + "_with_mesh", "variant=" + type.getName());
                     }
