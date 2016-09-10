@@ -11,6 +11,14 @@
     "inventory": [
       {}
     ],
+    "with_mesh": {
+      "true": {
+        "model": "excompressum:heavy_sieve_with_mesh"
+      },
+      "false": {
+        "model": "excompressum:heavy_sieve"
+      }
+    },
     "variant": {
       "oak": {
         "textures": {

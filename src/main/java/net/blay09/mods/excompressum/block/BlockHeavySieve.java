@@ -10,6 +10,8 @@ import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -22,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -33,9 +36,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.property.Properties;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import org.lwjgl.opengl.EXTDrawRangeElements;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -43,145 +50,152 @@ import java.util.Locale;
 
 public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 
-    public enum Type implements IStringSerializable {
-        OAK,
-        SPRUCE,
-        BIRCH,
-        JUNGLE,
-        ACACIA,
-        DARK_OAK;
+	public enum Type implements IStringSerializable {
+		OAK,
+		SPRUCE,
+		BIRCH,
+		JUNGLE,
+		ACACIA,
+		DARK_OAK;
 
-        public static Type[] values = values();
+		public static Type[] values = values();
 
-        @Override
-        public String getName() {
-            return name().toLowerCase(Locale.ENGLISH);
-        }
-    }
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
+	}
 
-    private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 0.75f, 1);
-    public static final PropertyEnum<Type> VARIANT = PropertyEnum.create("variant", Type.class);
+	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 0.75f, 1);
+	public static final PropertyEnum<Type> VARIANT = PropertyEnum.create("variant", Type.class);
+	public static final PropertyBool WITH_MESH = PropertyBool.create("with_mesh");
 
-    public BlockHeavySieve() {
-        super(Material.WOOD);
-        setCreativeTab(ExCompressum.creativeTab);
-        setHardness(2f);
-        setRegistryName("heavy_sieve");
-    }
+	public BlockHeavySieve() {
+		super(Material.WOOD);
+		setCreativeTab(ExCompressum.creativeTab);
+		setHardness(2f);
+		setRegistryName("heavy_sieve");
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return BOUNDING_BOX;
-    }
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return ExRegistro.doMeshesHaveDurability() ? layer == BlockRenderLayer.SOLID : layer == BlockRenderLayer.CUTOUT;
+	}
 
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, VARIANT);
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BOUNDING_BOX;
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public IBlockState getStateFromMeta(int meta) {
-        if(meta < 0 || meta >= Type.values.length) {
-            return getDefaultState();
-        }
-        return getDefaultState().withProperty(VARIANT, Type.values[meta]);
-    }
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, VARIANT, WITH_MESH);
+	}
 
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(VARIANT).ordinal();
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public IBlockState getStateFromMeta(int meta) {
+		if (meta < 0 || meta >= Type.values.length) {
+			return getDefaultState();
+		}
+		return getDefaultState().withProperty(VARIANT, Type.values[meta]);
+	}
 
-    @Nullable
-    @Override
-    protected ItemStack createStackedBlock(IBlockState state) {
-        return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(VARIANT).ordinal();
+	}
 
-    @Override
-    public int damageDropped(IBlockState state) {
-        return state.getValue(VARIANT).ordinal();
-    }
+	@Nullable
+	@Override
+	protected ItemStack createStackedBlock(IBlockState state) {
+		return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
+	}
 
-    @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-        for(int i = 0; i < BlockWoodenCrucible.Type.values.length; i++) {
-            list.add(new ItemStack(item, 1, i));
-        }
-    }
+	@Override
+	public int damageDropped(IBlockState state) {
+		return state.getValue(VARIANT).ordinal();
+	}
 
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
-    }
+	@Override
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+		for (int i = 0; i < BlockWoodenCrucible.Type.values.length; i++) {
+			list.add(new ItemStack(item, 1, i));
+		}
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean isFullCube(IBlockState state) {
-        return false;
-    }
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
 
-    @Override
-    public TileEntity createNewTileEntity(World world, int metadata) {
-        return new TileHeavySieve();
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
 
-    @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        TileHeavySieve tileEntity = (TileHeavySieve) world.getTileEntity(pos);
-        if(tileEntity != null) {
-            if(heldItem != null) {
-                if(ExRegistro.doMeshesHaveDurability()) {
-                    SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
-                    if (sieveMesh != null && tileEntity.getMeshStack() == null) {
-                        tileEntity.setMeshStack(player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.splitStack(1));
-                        return true;
-                    }
-                }
+	@Override
+	public TileEntity createNewTileEntity(World world, int metadata) {
+		return new TileHeavySieve();
+	}
 
-                if(tileEntity.addSiftable(player, heldItem)) {
-                    return true;
-                }
-            }
+	@Override
+	@SuppressWarnings("deprecation")
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		return state.withProperty(WITH_MESH, !ExRegistro.doMeshesHaveDurability());
+	}
 
-            if (AutomationConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
-                tileEntity.processContents(player);
-            }
-        }
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileHeavySieve tileEntity = (TileHeavySieve) world.getTileEntity(pos);
+		if (tileEntity != null) {
+			if (heldItem != null) {
+				if (ExRegistro.doMeshesHaveDurability()) {
+					SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
+					if (sieveMesh != null && tileEntity.getMeshStack() == null) {
+						tileEntity.setMeshStack(player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.splitStack(1));
+						return true;
+					}
+				}
 
-        return true;
-    }
+				if (tileEntity.addSiftable(player, heldItem)) {
+					return true;
+				}
+			}
 
-    @Override
-    public void registerModel(Item item) {
-        ModelLoader.registerItemVariants(item,
-                new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve"),
-                new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve_with_mesh"));
-        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
-            @Override
-            public ModelResourceLocation getModelLocation(ItemStack itemStack) {
-                Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
-                if(type != null) {
-                    if(ExRegistro.doMeshesHaveDurability()) {
-//                        return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName());
-//                        return new ModelResourceLocation(getRegistryName() + "_with_mesh", "variant=" + type.getName()); // testing
-                        return new ModelResourceLocation(getRegistryName() + "_with_mesh", "inventory"); // testing 2
-                    } else {
-                        return new ModelResourceLocation(getRegistryName() + "_with_mesh", "variant=" + type.getName());
-                    }
-                } else {
-                    return new ModelResourceLocation("missingno");
-                }
-            }
-        });
-    }
+			if (AutomationConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
+				tileEntity.processContents(player);
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	public void registerModel(Item item) {
+		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
+			@Override
+			public ModelResourceLocation getModelLocation(ItemStack itemStack) {
+				Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
+				if (type != null) {
+					if (ExRegistro.doMeshesHaveDurability()) {
+						return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName() + ",with_mesh=false");
+					} else {
+						return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName() + ",with_mesh=true");
+					}
+				} else {
+					return new ModelResourceLocation("missingno");
+				}
+			}
+		});
+	}
 
 }

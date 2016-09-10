@@ -43,21 +43,23 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> 
         mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         // Render mesh
-        ItemStack meshStack = ExRegistro.doMeshesHaveDurability() ? tileEntity.getMeshStack() : defaultMesh;
-        if(meshStack != null) {
-            SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
-            if(sieveMesh != null) {
-                renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-                TextureAtlasSprite sprite = sieveMesh.getSpriteLocation() != null ? mc.getTextureMapBlocks().getTextureExtry(sieveMesh.getSpriteLocation().toString()) : null;
-                if (sprite == null) {
-                    sprite = mc.getTextureMapBlocks().getMissingSprite();
+        if(ExRegistro.doMeshesHaveDurability()) {
+            ItemStack meshStack = tileEntity.getMeshStack();
+            if (meshStack != null) {
+                SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
+                if (sieveMesh != null) {
+                    renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+                    TextureAtlasSprite sprite = sieveMesh.getSpriteLocation() != null ? mc.getTextureMapBlocks().getTextureExtry(sieveMesh.getSpriteLocation().toString()) : null;
+                    if (sprite == null) {
+                        sprite = mc.getTextureMapBlocks().getMissingSprite();
+                    }
+                    int brightness = tileEntity.getWorld().getCombinedLight(tileEntity.getPos().up(), 0);
+                    float meshXZ = 0.0625f;
+                    float meshXZ2 = 1f - meshXZ;
+                    float meshY = 0.56f;
+                    RenderUtils.renderQuadUp(renderer, meshXZ, meshY, meshXZ, meshXZ2, meshY, meshXZ2, 0xFFFFFFFF, brightness, sprite);
+                    tessellator.draw();
                 }
-                int brightness = tileEntity.getWorld().getCombinedLight(tileEntity.getPos().up(), 0);
-                float meshXZ = 0.0625f;
-                float meshXZ2 = 1f - meshXZ;
-                float meshY = 0.56f;
-                RenderUtils.renderQuadUp(renderer, meshXZ, meshY, meshXZ, meshXZ2, meshY, meshXZ2, 0xFFFFFFFF, brightness, sprite);
-                tessellator.draw();
             }
         }
 
