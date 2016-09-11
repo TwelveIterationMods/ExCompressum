@@ -72,6 +72,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 		ItemStack woodenMeshItem = findItem("mesh_wood", OreDictionary.WILDCARD_VALUE);
 		if(woodenMeshItem != null) {
 			SieveMeshRegistryEntry woodenMesh = new SieveMeshRegistryEntry(woodenMeshItem);
+			woodenMesh.setMeshLevel(1);
 			woodenMesh.setSpriteLocation(new ResourceLocation(Compat.EXNIHILO_OMNIA, "blocks/sieve_mesh_wood"));
 			SieveMeshRegistry.add(woodenMesh);
 		}
@@ -81,8 +82,8 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 			silkMeshItem = silkMeshItem.copy();
 			silkMeshItem.setItemDamage(OreDictionary.WILDCARD_VALUE);
 			SieveMeshRegistryEntry silkMesh = new SieveMeshRegistryEntry(silkMeshItem);
-			silkMesh.setSpriteLocation(new ResourceLocation(Compat.EXNIHILO_OMNIA, "blocks/sieve_mesh_silk_white"));
 			silkMesh.setMeshLevel(1);
+			silkMesh.setSpriteLocation(new ResourceLocation(Compat.EXNIHILO_OMNIA, "blocks/sieve_mesh_silk_white"));
 			SieveMeshRegistry.add(silkMesh);
 		}
 

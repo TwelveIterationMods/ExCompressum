@@ -127,7 +127,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 					progress = 0f;
 				}
 			} else {
-				armAngle += 0.05f * (Math.max(1f, speedBoost / 2f));
+				armAngle += 0.1f * (Math.max(1f, speedBoost / 2f));
 				setEnergyStored(getEnergyStored() - effectiveEnergy);
 				progress += getEffectiveSpeed();
 				isDirty = true;

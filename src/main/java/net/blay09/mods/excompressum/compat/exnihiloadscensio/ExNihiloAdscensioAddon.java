@@ -11,6 +11,7 @@ import exnihiloadscensio.registries.SieveRegistry;
 import exnihiloadscensio.registries.types.Siftable;
 import exnihiloadscensio.texturing.Color;
 import exnihiloadscensio.util.BlockInfo;
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.compat.Compat;
@@ -19,6 +20,8 @@ import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -52,7 +55,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.HAMMER_GOLD, findItem("hammerGold", 0));
 		itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammerDiamond", 0));
 		itemMap.put(NihiloItems.CROOK_WOODEN, findItem("crookWood", 0));
-		itemMap.put(NihiloItems.SILK_MESH, findItem("itemMesh", 0));
+		itemMap.put(NihiloItems.SILK_MESH, findItem("itemMesh", 1));
 		itemMap.put(NihiloItems.IRON_MESH, findItem("itemMesh", 3));
 
 		itemMap.put(NihiloItems.DUST, findBlock("blockDust", 0));
@@ -60,6 +63,40 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("blockInfestedLeaves", 0));
 
 		bounds = new SieveModelBounds(0.8125f, 0.0625f, 0.88f, 0.15625f);
+
+		ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
+		if(stringMeshItem != null) {
+			SieveMeshRegistryEntry stringMesh = new SieveMeshRegistryEntry(stringMeshItem);
+			stringMesh.setMeshLevel(1);
+			stringMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/string_mesh"));
+			SieveMeshRegistry.add(stringMesh);
+		}
+
+		ItemStack flintMeshItem = findItem("itemMesh", 2);
+		if(flintMeshItem != null) {
+			SieveMeshRegistryEntry flintMesh = new SieveMeshRegistryEntry(flintMeshItem);
+			flintMesh.setMeshLevel(2);
+			flintMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/flint_mesh"));
+			SieveMeshRegistry.add(flintMesh);
+		}
+
+		ItemStack ironMeshItem = getNihiloItem(NihiloItems.IRON_MESH);
+		if(ironMeshItem != null) {
+			SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(ironMeshItem);
+			ironMesh.setMeshLevel(3);
+			ironMesh.setHeavy(true);
+			ironMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/iron_mesh"));
+			SieveMeshRegistry.add(ironMesh);
+		}
+
+		ItemStack diamondMeshItem = findItem("itemMesh", 4);
+		if(diamondMeshItem != null) {
+			SieveMeshRegistryEntry diamondMesh = new SieveMeshRegistryEntry(diamondMeshItem);
+			diamondMesh.setMeshLevel(4);
+			diamondMesh.setHeavy(true);
+			diamondMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/diamond_mesh"));
+			SieveMeshRegistry.add(diamondMesh);
+		}
 
 		ExRegistro.instance = this;
 	}

@@ -23,13 +23,8 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> {
 
-    private ItemStack defaultMesh;
-
     @Override
     public void renderTileEntityAt(TileHeavySieve tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
-        if(defaultMesh == null) {
-            defaultMesh = new ItemStack(ModItems.ironMesh);
-        }
         Minecraft mc = Minecraft.getMinecraft();
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer renderer = tessellator.getBuffer();
@@ -42,23 +37,21 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> 
         mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         // Render mesh
-        if(ExRegistro.doMeshesHaveDurability()) {
-            ItemStack meshStack = tileEntity.getMeshStack();
-            if (meshStack != null) {
-                SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
-                if (sieveMesh != null) {
-                    renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-                    TextureAtlasSprite sprite = sieveMesh.getSpriteLocation() != null ? mc.getTextureMapBlocks().getTextureExtry(sieveMesh.getSpriteLocation().toString()) : null;
-                    if (sprite == null) {
-                        sprite = mc.getTextureMapBlocks().getMissingSprite();
-                    }
-                    int brightness = tileEntity.getWorld().getCombinedLight(tileEntity.getPos().up(), 0);
-                    float meshXZ = 0.0625f;
-                    float meshXZ2 = 1f - meshXZ;
-                    float meshY = 0.56f;
-                    RenderUtils.renderQuadUp(renderer, meshXZ, meshY, meshXZ, meshXZ2, meshY, meshXZ2, 0xFFFFFFFF, brightness, sprite);
-                    tessellator.draw();
+        ItemStack meshStack = tileEntity.getMeshStack();
+        if (meshStack != null) {
+            SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
+            if (sieveMesh != null) {
+                renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+                TextureAtlasSprite sprite = sieveMesh.getSpriteLocation() != null ? mc.getTextureMapBlocks().getTextureExtry(sieveMesh.getSpriteLocation().toString()) : null;
+                if (sprite == null) {
+                    sprite = mc.getTextureMapBlocks().getMissingSprite();
                 }
+                int brightness = tileEntity.getWorld().getCombinedLight(tileEntity.getPos().up(), 0);
+                float meshXZ = 0.0625f;
+                float meshXZ2 = 1f - meshXZ;
+                float meshY = 0.56f;
+                RenderUtils.renderQuadUp(renderer, meshXZ, meshY, meshXZ, meshXZ2, meshY, meshXZ2, 0xFFFFFFFF, brightness, sprite);
+                tessellator.draw();
             }
         }
 

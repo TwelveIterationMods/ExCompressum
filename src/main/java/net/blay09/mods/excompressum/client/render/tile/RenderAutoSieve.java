@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.client.render.tile;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
@@ -95,6 +96,9 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
         tessellator.draw();
 
         SieveModelBounds bounds = ExRegistro.getSieveBounds();
+        if(isHeavy) {
+            bounds = BlockHeavySieve.SIEVE_BOUNDS;
+        }
 
         // Render the sieve mesh
         ItemStack meshStack = tileEntity.getMeshStack();

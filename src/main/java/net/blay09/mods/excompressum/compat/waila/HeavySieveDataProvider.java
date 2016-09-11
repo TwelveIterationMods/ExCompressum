@@ -34,13 +34,15 @@ public class HeavySieveDataProvider implements IWailaDataProvider {
             if(tileEntity.getProgress() > 0f) {
                 list.add(I18n.format("waila.excompressum:sieveProgress", (int) (tileEntity.getProgress() * 100) + "%"));
             }
-            if(ExRegistro.doMeshesHaveDurability()) {
-                ItemStack meshStack = tileEntity.getMeshStack();
-                if (meshStack != null) {
+            ItemStack meshStack = tileEntity.getMeshStack();
+            if (meshStack != null) {
+                if(ExRegistro.doMeshesHaveDurability()) {
                     list.add(I18n.format("waila.excompressum:sieveMesh", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getItemDamage(), meshStack.getMaxDamage()));
                 } else {
-                    list.add(I18n.format("waila.excompressum:sieveNoMesh"));
+                    list.add(meshStack.getDisplayName());
                 }
+            } else {
+                list.add(I18n.format("waila.excompressum:sieveNoMesh"));
             }
         }
         return list;

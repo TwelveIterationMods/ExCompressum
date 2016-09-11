@@ -28,20 +28,11 @@ public class ModRecipes {
 		registerItems(config);
 
 		if (config.getBoolean("Heavy Sieve", "blocks", true, "If set to false, the recipe for the heavy sieve will be disabled.")) {
-			if(ExRegistro.doMeshesHaveDurability()) {
-				for (int i = 0; i < 4; i++) {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, i), "p p", "ppp", "s s", 'p', new ItemStack(Blocks.LOG, 1, i), 's', "stickWood"));
-				}
-				for (int i = 0; i < 2; i++) {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, 4 + i), "p p", "ppp", "s s", 'p', new ItemStack(Blocks.LOG2, 1, i), 's', "stickWood"));
-				}
-			} else {
-				for (int i = 0; i < 4; i++) {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.LOG, 1, i), 's', "stickWood", 'm', ModItems.ironMesh));
-				}
-				for (int i = 0; i < 2; i++) {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, 4 + i), "pmp", "pmp", "s s", 'p', new ItemStack(Blocks.LOG2, 1, i), 's', "stickWood", 'm', ModItems.ironMesh));
-				}
+			for (int i = 0; i < 4; i++) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, i), "p p", "ppp", "s s", 'p', new ItemStack(Blocks.LOG, 1, i), 's', "stickWood"));
+			}
+			for (int i = 0; i < 2; i++) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.heavySieve, 1, 4 + i), "p p", "ppp", "s s", 'p', new ItemStack(Blocks.LOG2, 1, i), 's', "stickWood"));
 			}
 		}
 

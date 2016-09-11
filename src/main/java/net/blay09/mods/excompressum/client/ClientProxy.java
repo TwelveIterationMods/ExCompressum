@@ -49,6 +49,9 @@ public class ClientProxy extends CommonProxy {
 	public static TextureAtlasSprite iconEmptyHammerSlot;
 	public static TextureAtlasSprite iconEmptyCompressedHammerSlot;
 	public static TextureAtlasSprite ironMeshSprite;
+	public static TextureAtlasSprite stringMeshSprite;
+	public static TextureAtlasSprite flintMeshSprite;
+	public static TextureAtlasSprite diamondMeshSprite;
 	public static final TextureAtlasSprite[] destroyBlockIcons = new TextureAtlasSprite[10];
 
 	@Override
@@ -105,7 +108,10 @@ public class ClientProxy extends CommonProxy {
 			iconEmptyMeshSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_mesh_slot"));
 			iconEmptyHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_hammer_slot"));
 			iconEmptyCompressedHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_compressed_hammer_slot"));
+			stringMeshSprite = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/string_mesh"));
+			flintMeshSprite = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/flint_mesh"));
 			ironMeshSprite = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/iron_mesh"));
+			diamondMeshSprite = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/diamond_mesh"));
 		}
 	}
 

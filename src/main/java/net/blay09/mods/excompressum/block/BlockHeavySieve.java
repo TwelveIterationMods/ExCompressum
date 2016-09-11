@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.config.AutomationConfig;
 import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -50,6 +51,8 @@ import java.util.Locale;
 
 public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 
+	public static final SieveModelBounds SIEVE_BOUNDS = new SieveModelBounds(0.5625f, 0.0625f, 0.88f, 0.5f);
+
 	public enum Type implements IStringSerializable {
 		OAK,
 		SPRUCE,
@@ -75,11 +78,6 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 		setCreativeTab(ExCompressum.creativeTab);
 		setHardness(2f);
 		setRegistryName("heavy_sieve");
-	}
-
-	@Override
-	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-		return ExRegistro.doMeshesHaveDurability() ? layer == BlockRenderLayer.SOLID : layer == BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
@@ -150,7 +148,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	@Override
 	@SuppressWarnings("deprecation")
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		return state.withProperty(WITH_MESH, !ExRegistro.doMeshesHaveDurability());
+		return state.withProperty(WITH_MESH, false); // Property is inventory-only
 	}
 
 	@Override
@@ -158,12 +156,10 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 		TileHeavySieve tileEntity = (TileHeavySieve) world.getTileEntity(pos);
 		if (tileEntity != null) {
 			if (heldItem != null) {
-				if (ExRegistro.doMeshesHaveDurability()) {
-					SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
-					if (sieveMesh != null && tileEntity.getMeshStack() == null) {
-						tileEntity.setMeshStack(player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.splitStack(1));
-						return true;
-					}
+				SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
+				if (sieveMesh != null && tileEntity.getMeshStack() == null) {
+					tileEntity.setMeshStack(player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.splitStack(1));
+					return true;
 				}
 
 				if (tileEntity.addSiftable(player, heldItem)) {
