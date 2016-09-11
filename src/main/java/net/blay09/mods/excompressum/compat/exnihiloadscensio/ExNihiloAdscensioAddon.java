@@ -13,7 +13,6 @@ import exnihiloadscensio.texturing.Color;
 import exnihiloadscensio.util.BlockInfo;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
@@ -44,7 +43,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	private final EnumMap<NihiloItems, ItemStack> itemMap = Maps.newEnumMap(NihiloItems.class);
 
 	private final SieveModelBounds bounds;
-	private float sieveLuckMultiplier = 1f;
+	private float sieveLuckMultiplier = 0.1f;
 
 	public ExNihiloAdscensioAddon() {
 		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammerWood", 0));

@@ -180,9 +180,9 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	public float getEffectiveLuck() {
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
 		if (meshStack != null) {
-			return 1f + EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, meshStack);
+			return EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, meshStack);
 		}
-		return 1f;
+		return 0f;
 	}
 
 	public boolean isSiftable(ItemStack itemStack) {
@@ -359,5 +359,10 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 
 	public float getArmAngle() {
 		return armAngle;
+	}
+
+	@Nullable
+	public ItemStack getMeshStack() {
+		return meshSlots.getStackInSlot(0);
 	}
 }

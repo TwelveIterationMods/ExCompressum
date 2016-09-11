@@ -48,7 +48,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	private final EnumMap<NihiloItems, ItemStack> itemMap = Maps.newEnumMap(NihiloItems.class);
 
 	private final SieveModelBounds sieveModelBounds;
-	private float sieveLuckMultiplier = 1f;
+	private float sieveLuckMultiplier = 0.1f;
 
 	public ExNihiloOmniaAddon() {
 		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood", 0));

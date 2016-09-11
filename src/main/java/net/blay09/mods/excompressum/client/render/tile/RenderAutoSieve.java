@@ -4,11 +4,15 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
+import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.client.render.model.ModelTinyHuman;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -16,6 +20,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -82,24 +87,47 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
         GlStateManager.pushMatrix();
         GlStateManager.scale(0.5f, 0.5f, 0.5f);
         GlStateManager.translate(-0.25f, 0f, -0.5f);
+
         // Render the sieve
         renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         mc.getBlockRendererDispatcher().renderBlock(sieveState, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
         tessellator.draw();
+
+        SieveModelBounds bounds = ExRegistro.getSieveBounds();
+
+        // Render the sieve mesh
+        ItemStack meshStack = tileEntity.getMeshStack();
+        if (meshStack != null) {
+            SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
+            if (sieveMesh != null) {
+                renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+                TextureAtlasSprite sprite = sieveMesh.getSpriteLocation() != null ? mc.getTextureMapBlocks().getTextureExtry(sieveMesh.getSpriteLocation().toString()) : null;
+                if (sprite == null) {
+                    sprite = mc.getTextureMapBlocks().getMissingSprite();
+                }
+                int brightness = tileEntity.getWorld().getCombinedLight(tileEntity.getPos(), 0);
+                float meshXZ = bounds.contentOffset;
+                float meshXZ2 = 1f - meshXZ;
+                float meshY = bounds.meshY - 0.025f;
+                RenderUtils.renderQuadUp(renderer, meshXZ, meshY, meshXZ, meshXZ2, meshY, meshXZ2, 0xFFFFFFFF, brightness, sprite);
+                tessellator.draw();
+            }
+        }
+
+        // Render the content
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (currentStack != null) {
-            Block block = Block.getBlockFromItem(currentStack.getItem());
+            IBlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
             //noinspection ConstantConditions /// Forge needs @Nullable
-            if(block != null) {
-                SieveModelBounds bounds = ExRegistro.getSieveBounds();
+            if(contentState != null) {
                 float progress = tileEntity.getProgress();
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
                 mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(bounds.contentOffset, bounds.meshY, bounds.contentOffset);
                 GlStateManager.scale(bounds.contentScaleXZ, bounds.contentBaseScaleY - progress * bounds.contentBaseScaleY, bounds.contentScaleXZ);
-                mc.getBlockRendererDispatcher().renderBlock(block.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+                mc.getBlockRendererDispatcher().renderBlock(contentState, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
                 tessellator.draw();
                 GlStateManager.popMatrix();
             }
