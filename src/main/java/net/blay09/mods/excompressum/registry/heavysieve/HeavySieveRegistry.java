@@ -336,24 +336,27 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
         if(tryGetBoolean(defaults, "ExUtils2:CompressedGravel", true)) {
             ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel");
-            if(Block.REGISTRY.containsKey(location)) {
-                ItemStack itemStack = new ItemStack(Block.REGISTRY.getObject(location), 1, 0);
+            Item exUtilsBlock = Item.REGISTRY.getObject(location);
+            if(exUtilsBlock != null) {
+                ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
                 addGeneratedEntry(itemStack, GRAVEL, COMPRESSION_SIZE - defaultLoss);
             }
         }
 
         if(tryGetBoolean(defaults, "ExUtils2:CompressedSand", true)) {
             ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedSand");
-            if(Block.REGISTRY.containsKey(location)) {
-                ItemStack itemStack = new ItemStack(Block.REGISTRY.getObject(location), 1, 0);
+            Item exUtilsBlock = Item.REGISTRY.getObject(location);
+            if(exUtilsBlock != null) {
+                ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
                 addGeneratedEntry(itemStack, SAND, COMPRESSION_SIZE - defaultLoss);
             }
         }
 
         if(tryGetBoolean(defaults, "ExUtils2:CompressedDirt", true)) {
             ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedDirt");
-            if(Block.REGISTRY.containsKey(location)) {
-                ItemStack itemStack = new ItemStack(Block.REGISTRY.getObject(location), 1, 0);
+            Item exUtilsBlock = Item.REGISTRY.getObject(location);
+            if(exUtilsBlock != null) {
+                ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
                 addGeneratedEntry(itemStack, DIRT, COMPRESSION_SIZE - defaultLoss);
             }
         }
