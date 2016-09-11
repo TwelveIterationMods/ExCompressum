@@ -27,6 +27,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.FMLModIdMappingEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
@@ -116,7 +117,6 @@ public class ExCompressum {
         ChickenStickRegistry.INSTANCE.load(configDir);
         WoodenCrucibleRegistry.INSTANCE.load(configDir);
         CompressedHammerRegistry.INSTANCE.load(configDir);
-        HeavySieveRegistry.INSTANCE.load(configDir);
 
         ModRecipes.init(config);
         CompressedRecipeRegistry.reload();
@@ -156,6 +156,11 @@ public class ExCompressum {
         for(IAddon addon : addons) {
             addon.serverStarted(event);
         }
+    }
+
+    @Mod.EventHandler
+    public void modMappings(FMLModIdMappingEvent event) {
+        HeavySieveRegistry.INSTANCE.load(configDir); // This needs to be done here as Adscensio only loads their registries at this point.
     }
 
     @SubscribeEvent

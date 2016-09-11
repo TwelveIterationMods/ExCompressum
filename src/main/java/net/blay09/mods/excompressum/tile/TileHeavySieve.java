@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.tile;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.entity.item.EntityItem;
@@ -75,12 +76,12 @@ public class TileHeavySieve extends TileEntity implements ITickable {
                         worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
                     }
                     currentStack = null;
-                    SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
-                    if(sieveMesh != null && !sieveMesh.isHeavy()) {
-                        // TODO this should probably play a broken sound and show particles
-                        meshStack = null;
-                    } else {
-                        if(ExRegistro.doMeshesHaveDurability()) {
+                    if(ExRegistro.doMeshesHaveDurability()) {
+                        SieveMeshRegistryEntry entry = SieveMeshRegistry.getEntry(meshStack);
+                        if(entry != null && !entry.isHeavy()) {
+                            // TODO this should probably play a broken sound and show particles
+                            meshStack = null;
+                        } else {
                             meshStack.damageItem(1, player);
                             if (meshStack.stackSize == 0) {
                                 // TODO this should probably play a broken sound and show particles

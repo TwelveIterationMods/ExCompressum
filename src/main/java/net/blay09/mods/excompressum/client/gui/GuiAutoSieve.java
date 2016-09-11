@@ -5,6 +5,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.ContainerAutoSieve;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -46,6 +47,13 @@ public class GuiAutoSieve extends GuiContainer {
             tmpLines.add(tileEntity.getEnergyStored() + " RF");
             tmpLines.add(I18n.format("tooltip.excompressum:consumingEnergy", tileEntity.getEffectiveEnergy()));
             drawHoveringText(tmpLines, mouseX - guiLeft, mouseY - guiTop);
+        }
+        if(tileEntity.getMeshStack() == null) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0, 0, 300);
+            drawRect(58, 16, 144, 71, 0x99000000);
+            drawCenteredString(fontRendererObj, "No Mesh", 101, 43 - fontRendererObj.FONT_HEIGHT / 2, 0xFFFFFFFF);
+            GlStateManager.popMatrix();
         }
     }
 

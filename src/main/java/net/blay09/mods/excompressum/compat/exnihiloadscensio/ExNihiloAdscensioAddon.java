@@ -219,17 +219,16 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public void postInit() {
 		if(ExCompressumConfig.enableWoodChippings) {
-			// NOTE Ex Adscensio does not support multiple hammer outputs atm due to a bug,
-			// TODO go report it (map.get(state) on Map<ItemInfo,...>), and re-enable the lower chances when it's fixed
+			// NOTE Ex Adscensio does not support multiple hammer outputs atm due to a bug https://github.com/MikeLydeamore/ExNihiloAdscensio/issues/3
 			for(IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
+				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping, 4), 0, 1f, 0f); // NOTE stackSize back to 1 once fixed
 //				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
 //				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
 //				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
 			}
 
 			for(IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
+				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping, 4), 0, 1f, 0f); // NOTE stackSize back to 1 once fixed
 //				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
 //				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
 //				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
