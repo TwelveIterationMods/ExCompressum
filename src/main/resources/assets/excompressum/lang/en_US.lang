@@ -19,6 +19,9 @@ item.excompressum:uncompressed_coal.name=Uncompressed Coal
 item.excompressum:bat_zapper.name=Bat Zapper
 item.excompressum:ore_smasher.name=Ore Smasher
 
+gui.excompressum:autoSieve.noMesh=No Mesh
+gui.excompressum:autoSieve.incorrectMesh=Incorrect Mesh
+
 tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
 tooltip.excompressum:auto_sieve=%s in a Box™
 tooltip.excompressum:auto_heavy_sieve=%s in a Heavy Box™

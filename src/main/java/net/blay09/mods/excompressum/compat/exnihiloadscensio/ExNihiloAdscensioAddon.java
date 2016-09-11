@@ -113,7 +113,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 			List<HeavySieveReward> rewards = Lists.newArrayList();
 			for (Siftable siftable : siftables) {
 				for (int i = 0; i < count; i++) {
-					rewards.add(new HeavySieveReward(siftable.getDrop().getItemStack(), siftable.getChance(), sieveLuckMultiplier));
+					rewards.add(new HeavySieveReward(siftable.getDrop().getItemStack(), siftable.getChance(), sieveLuckMultiplier, siftable.getMeshLevel()));
 				}
 			}
 			return rewards;
@@ -169,11 +169,17 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	}
 
 	@Override
-	public boolean isSiftable(IBlockState state, int meshLevel) {
+	public boolean isSiftable(IBlockState state) {
+		Collection<Siftable> siftables = SieveRegistry.getDrops(new BlockInfo(state));
+		return siftables != null && !siftables.isEmpty();
+	}
+
+	@Override
+	public boolean isSiftableWithMesh(IBlockState state, SieveMeshRegistryEntry sieveMesh) {
 		List<Siftable> siftables = SieveRegistry.getDrops(new BlockInfo(state));
 		if(siftables != null) {
 			for(Siftable siftable : siftables) {
-				if(siftable.getMeshLevel() == meshLevel) {
+				if(siftable.getMeshLevel() == sieveMesh.getMeshLevel()) {
 					return true;
 				}
 			}
@@ -182,12 +188,12 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	}
 
 	@Override
-	public Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand) {
+	public Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
 		List<Siftable> rewards = SieveRegistry.getDrops(new BlockInfo(state));
 		if(rewards != null) {
 			List<ItemStack> list = Lists.newArrayList();
 			for(Siftable reward : rewards) {
-				if(meshLevel == reward.getMeshLevel() && rand.nextDouble() < (double) reward.getChance() + sieveLuckMultiplier * luck) { // NOTE Sieve Rewards in Adscensio have no luck modifier at the moment
+				if(sieveMesh.getMeshLevel() == reward.getMeshLevel() && rand.nextDouble() < (double) reward.getChance() + sieveLuckMultiplier * luck) { // NOTE Sieve Rewards in Adscensio have no luck modifier at the moment
 					list.add(reward.getDrop().getItemStack());
 				}
 			}
@@ -249,6 +255,11 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public boolean doMeshesHaveDurability() {
 		return false;
+	}
+
+	@Override
+	public boolean doMeshesSplitLootTables() {
+		return true;
 	}
 
 	@Override

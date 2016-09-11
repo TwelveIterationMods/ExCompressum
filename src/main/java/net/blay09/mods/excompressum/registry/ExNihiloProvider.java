@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.registry;
 
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -46,12 +47,14 @@ public interface ExNihiloProvider {
 	ItemStack getNihiloItem(NihiloItems type);
 	boolean isHammerable(IBlockState state);
 	Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand);
-	boolean isSiftable(IBlockState state, int meshLevel);
-	Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand);
+	boolean isSiftable(IBlockState state);
+	boolean isSiftableWithMesh(IBlockState state, SieveMeshRegistryEntry sieveMesh);
+	Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand);
 	Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand);
 	SieveModelBounds getSieveBounds();
 	Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count);
 	boolean doMeshesHaveDurability();
+	boolean doMeshesSplitLootTables();
 	NihiloMod getNihiloMod();
 
 }

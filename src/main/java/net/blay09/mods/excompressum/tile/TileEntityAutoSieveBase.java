@@ -98,7 +98,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		if (getEnergyStored() >= effectiveEnergy) {
 			if (currentStack == null) {
 				ItemStack inputStack = inputSlots.getStackInSlot(0);
-				if (inputStack != null && meshSlots.getStackInSlot(0) != null && isSiftable(inputStack)) {
+				SieveMeshRegistryEntry sieveMesh = getSieveMesh();
+				if (inputStack != null && sieveMesh != null && isSiftableWithMesh(inputStack, sieveMesh)) {
 					boolean foundSpace = false;
 					for (int i = 0; i < outputSlots.getSlots(); i++) {
 						if (outputSlots.getStackInSlot(i) == null) {
@@ -112,16 +113,6 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 					if (inputStack.stackSize == 0) {
 						inputSlots.setStackInSlot(0, null);
 					}
-					if(ExRegistro.doMeshesHaveDurability()) {
-						ItemStack meshStack = meshSlots.getStackInSlot(0);
-						if (meshStack != null) {
-							if(meshStack.attemptDamageItem(1, worldObj.rand)) {
-								// TODO sound for mesh break?
-								meshStack.stackSize--;
-								meshSlots.setStackInSlot(0, null);
-							}
-						}
-					}
 					setEnergyStored(getEnergyStored() - effectiveEnergy);
 					VanillaPacketHandler.sendTileEntityUpdate(this);
 					progress = 0f;
@@ -133,10 +124,27 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 				isDirty = true;
 				if (progress >= 1) {
 					if (!worldObj.isRemote) {
-						Collection<ItemStack> rewards = rollSieveRewards(currentStack, getMeshLevel(), getEffectiveLuck(), worldObj.rand);
-						for (ItemStack itemStack : rewards) {
-							if (!addItemToOutput(itemStack)) {
-								worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
+						SieveMeshRegistryEntry sieveMesh = getSieveMesh();
+						if(sieveMesh != null) {
+							Collection<ItemStack> rewards = rollSieveRewards(currentStack, sieveMesh, getEffectiveLuck(), worldObj.rand);
+							for (ItemStack itemStack : rewards) {
+								if (!addItemToOutput(itemStack)) {
+									worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
+								}
+							}
+							if(ExRegistro.doMeshesHaveDurability()) {
+								ItemStack meshStack = meshSlots.getStackInSlot(0);
+								if (meshStack != null) {
+									if(meshStack.attemptDamageItem(1, worldObj.rand)) {
+										// TODO sound for mesh break?
+										meshStack.stackSize--;
+										meshSlots.setStackInSlot(0, null);
+									}
+								}
+							}
+						} else {
+							if (!addItemToOutput(currentStack)) {
+								worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, currentStack));
 							}
 						}
 					}
@@ -186,15 +194,19 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	}
 
 	public boolean isSiftable(ItemStack itemStack) {
-		return ExRegistro.isSiftable(itemStack, getMeshLevel());
+		return ExRegistro.isSiftable(itemStack);
+	}
+
+	public boolean isSiftableWithMesh(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
+		return ExRegistro.isSiftableWithMesh(itemStack, sieveMesh);
 	}
 
 	public boolean isMesh(ItemStack itemStack) {
 		return SieveMeshRegistry.getEntry(itemStack) != null;
 	}
 
-	public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, int meshLevel, float luck, Random rand) {
-		return ExRegistro.rollSieveRewards(itemStack, meshLevel, luck, rand);
+	public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+		return ExRegistro.rollSieveRewards(itemStack, sieveMesh, luck, rand);
 	}
 
 	@Override
@@ -348,13 +360,13 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		return itemHandler;
 	}
 
-	public int getMeshLevel() {
+	@Nullable
+	public SieveMeshRegistryEntry getSieveMesh() {
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
 		if(meshStack != null) {
-			SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
-			return sieveMesh != null ? sieveMesh.getMeshLevel() : 0;
+			return SieveMeshRegistry.getEntry(meshStack);
 		}
-		return 0;
+		return null;
 	}
 
 	public float getArmAngle() {
@@ -365,4 +377,14 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	public ItemStack getMeshStack() {
 		return meshSlots.getStackInSlot(0);
 	}
+
+	public boolean isCorrectSieveMesh() {
+		ItemStack inputStack = inputSlots.getStackInSlot(0);
+		SieveMeshRegistryEntry sieveMesh = getSieveMesh();
+		if(inputStack == null || sieveMesh == null) {
+			return true;
+		}
+		return isSiftableWithMesh(inputStack, sieveMesh);
+	}
+
 }

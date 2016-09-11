@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.ModBlocks;
@@ -14,7 +15,6 @@ import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.RegistryKey;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -48,7 +48,26 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     public static boolean isSiftable(IBlockState state) {
-        return getEntryForBlockState(state, false) != null || getEntryForBlockState(state, true) != null;
+        RegistryKey key = new RegistryKey(state, false);
+        return INSTANCE.entries.get(key) != null || INSTANCE.entries.get(key.withWildcard()) != null;
+    }
+
+    public static boolean isSiftableWithMesh(IBlockState state, SieveMeshRegistryEntry sieveMesh) {
+        if(ExRegistro.doMeshesSplitLootTables()) {
+            RegistryKey key = new RegistryKey(state, false);
+            HeavySieveRegistryEntry entry = INSTANCE.entries.get(key);
+            if(entry != null && !entry.getRewardsForMesh(sieveMesh).isEmpty()) {
+                return true;
+            }
+            HeavySieveRegistryEntry wildcardEntry = INSTANCE.entries.get(key.withWildcard());
+            return wildcardEntry != null && !wildcardEntry.getRewardsForMesh(sieveMesh).isEmpty();
+        }
+        return isSiftable(state);
+    }
+
+    public static boolean isSiftableWithMesh(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
+        IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+        return state != null && isSiftableWithMesh(state, sieveMesh);
     }
 
     public static boolean isSiftable(ItemStack itemStack) {
@@ -72,29 +91,30 @@ public class HeavySieveRegistry extends AbstractRegistry {
         return entries;
     }
 
-    public static Collection<ItemStack> rollSieveRewards(IBlockState state, float luck, Random rand) {
+    public static Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
         List<ItemStack> list = Lists.newArrayList();
-        HeavySieveRegistryEntry genericEntry = getEntryForBlockState(state, true);
-        if(genericEntry != null) {
-            rollSieveRewardsToList(genericEntry, list, luck, rand);
-        }
-        HeavySieveRegistryEntry entry = getEntryForBlockState(state, false);
+        RegistryKey key = new RegistryKey(state, false);
+        HeavySieveRegistryEntry entry = INSTANCE.entries.get(key);
         if(entry != null) {
-            rollSieveRewardsToList(entry, list, luck, rand);
+            rollSieveRewardsToList(entry, list, sieveMesh, luck, rand);
+        }
+        HeavySieveRegistryEntry wildcardEntry = INSTANCE.entries.get(key.withWildcard());
+        if(wildcardEntry != null) {
+            rollSieveRewardsToList(wildcardEntry, list, sieveMesh, luck, rand);
         }
         return list;
     }
 
-    public static Collection<ItemStack> rollSieveRewards(ItemStack itemStack, float luck, Random rand) {
+    public static Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
         IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
         if(state != null) {
-            return rollSieveRewards(state, luck, rand);
+            return rollSieveRewards(state, sieveMesh, luck, rand);
         }
         return Collections.emptyList();
     }
 
-    private static void rollSieveRewardsToList(HeavySieveRegistryEntry entry, List<ItemStack> list, float luck, Random rand) {
-        for(HeavySieveReward reward : entry.getRewards()) {
+    private static void rollSieveRewardsToList(HeavySieveRegistryEntry entry, List<ItemStack> list, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+        for(HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh)) {
             if(rand.nextFloat() < reward.getBaseChance() + reward.getLuckMultiplier() * luck) {
                 list.add(reward.getItemStack().copy());
             }
@@ -120,7 +140,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         root.add("defaults", defaults);
 
         JsonObject custom = new JsonObject();
-        custom.addProperty("__comment", "You can define additional blocks to sift in the Heavy Sieve here. Use * as a wildcard for metadata. Ure ore: prefix in name to query the Ore Dictionary.");
+        custom.addProperty("__comment", "You can define additional blocks to sift in the Heavy Sieve here. Use * as a wildcard for metadata. Ure ore: prefix in name to query the Ore Dictionary. Mesh Level is only used for Adscensio.");
 
         JsonArray entries = new JsonArray();
 
@@ -261,7 +281,8 @@ public class HeavySieveRegistry extends AbstractRegistry {
                             chance = 1f;
                         }
                         float luckMultiplier = tryGetFloat(reward, "luck", 0f);
-                        rewardList.add(new HeavySieveReward(new ItemStack(item, count, rewardMetadata), chance, luckMultiplier));
+                        int meshLevel = tryGetInt(reward, "meshLevel", 1);
+                        rewardList.add(new HeavySieveReward(new ItemStack(item, count, rewardMetadata), chance, luckMultiplier, meshLevel));
                     } else {
                         logError("Failed to load %s registry; rewards must be an array of json objects", registryName);
                         return;

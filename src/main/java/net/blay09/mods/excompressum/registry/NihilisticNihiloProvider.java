@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.registry;
 
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -31,12 +32,17 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public boolean isSiftable(IBlockState state, int meshLevel) {
+	public boolean isSiftable(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand) {
+	public boolean isSiftableWithMesh(IBlockState state, SieveMeshRegistryEntry sieveMesh) {
+		return false;
+	}
+
+	@Override
+	public Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
 		return Collections.emptyList();
 	}
 
@@ -58,6 +64,11 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	@Override
 	public boolean doMeshesHaveDurability() {
 		return true;
+	}
+
+	@Override
+	public boolean doMeshesSplitLootTables() {
+		return false;
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.registry;
 
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
@@ -48,19 +49,24 @@ public abstract class ExRegistro {
 		return Collections.emptyList();
 	}
 
-	public static boolean isSiftable(ItemStack itemStack, int meshLevel) {
+	public static boolean isSiftable(ItemStack itemStack) {
 		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
-		return state != null && instance.isSiftable(state, meshLevel);
+		return state != null && instance.isSiftable(state);
 	}
 
-	public static Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand) {
-		return instance.rollSieveRewards(state, meshLevel, luck, rand);
+	public static boolean isSiftableWithMesh(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
+		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+		return state != null && instance.isSiftableWithMesh(state, sieveMesh);
 	}
 
-	public static Collection<ItemStack> rollSieveRewards(ItemStack itemStack, int meshLevel, float luck, Random rand) {
+	public static Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+		return instance.rollSieveRewards(state, sieveMesh, luck, rand);
+	}
+
+	public static Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
 		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		if(state != null) {
-			return instance.rollSieveRewards(state, meshLevel, luck, rand);
+			return instance.rollSieveRewards(state, sieveMesh, luck, rand);
 		}
 		return Collections.emptyList();
 	}
@@ -79,6 +85,10 @@ public abstract class ExRegistro {
 
 	public static boolean doMeshesHaveDurability() {
 		return instance.doMeshesHaveDurability();
+	}
+
+	public static boolean doMeshesSplitLootTables() {
+		return instance.doMeshesSplitLootTables();
 	}
 
 	public static ExNihiloProvider.NihiloMod getNihiloMod() {

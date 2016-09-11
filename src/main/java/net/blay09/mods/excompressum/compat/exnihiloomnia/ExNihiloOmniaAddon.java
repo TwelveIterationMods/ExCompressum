@@ -106,7 +106,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 		if(genericEntry != null) {
 			for (SieveReward reward : genericEntry.getRewards()) {
 				for (int i = 0; i < count; i++) {
-					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, sieveLuckMultiplier));
+					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, sieveLuckMultiplier, 0));
 				}
 			}
 		}
@@ -114,7 +114,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 		if(entry != null) {
 			for (SieveReward reward : entry.getRewards()) {
 				for (int i = 0; i < count; i++) {
-					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, sieveLuckMultiplier));
+					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, sieveLuckMultiplier, 0));
 				}
 			}
 		}
@@ -169,12 +169,17 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	}
 
 	@Override
-	public boolean isSiftable(IBlockState state, int meshLevel) {
+	public boolean isSiftable(IBlockState state) {
 		return SieveRegistry.isSiftable(state);
 	}
 
 	@Override
-	public Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand) {
+	public boolean isSiftableWithMesh(IBlockState state, SieveMeshRegistryEntry sieveMesh) {
+		return isSiftable(state);
+	}
+
+	@Override
+	public Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
 		List<ItemStack> list = Lists.newArrayList();
 		SieveRegistryEntry genericEntry = SieveRegistry.getEntryForBlockState(state, EnumMetadataBehavior.IGNORED);
 		if(genericEntry != null) {
@@ -244,6 +249,11 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public boolean doMeshesHaveDurability() {
 		return !ENOConfig.classic_sieve;
+	}
+
+	@Override
+	public boolean doMeshesSplitLootTables() {
+		return false;
 	}
 
 	@Override

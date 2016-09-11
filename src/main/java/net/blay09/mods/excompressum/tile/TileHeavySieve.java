@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum.tile;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.entity.item.EntityItem;
@@ -71,14 +70,18 @@ public class TileHeavySieve extends TileEntity implements ITickable {
             }
             if (progress >= 1f) {
                 if (!worldObj.isRemote) {
-                    Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, 0f, worldObj.rand);
-                    for (ItemStack itemStack : rewards) {
-                        worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
+                    SieveMeshRegistryEntry sieveMesh = getSieveMesh();
+                    if(sieveMesh != null) {
+                        Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, sieveMesh, 0f, worldObj.rand);
+                        for (ItemStack itemStack : rewards) {
+                            worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
+                        }
+                    } else {
+                        worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, currentStack));
                     }
                     currentStack = null;
-                    if(ExRegistro.doMeshesHaveDurability()) {
-                        SieveMeshRegistryEntry entry = SieveMeshRegistry.getEntry(meshStack);
-                        if(entry != null && !entry.isHeavy()) {
+                    if(ExRegistro.doMeshesHaveDurability() && sieveMesh != null) {
+                        if(!sieveMesh.isHeavy()) {
                             // TODO this should probably play a broken sound and show particles
                             meshStack = null;
                         } else {
@@ -145,6 +148,14 @@ public class TileHeavySieve extends TileEntity implements ITickable {
 
     public float getProgress() {
         return progress;
+    }
+
+    @Nullable
+    public SieveMeshRegistryEntry getSieveMesh() {
+        if(meshStack != null) {
+            return SieveMeshRegistry.getEntry(meshStack);
+        }
+        return null;
     }
 
     public void setMeshStack(ItemStack meshStack) {

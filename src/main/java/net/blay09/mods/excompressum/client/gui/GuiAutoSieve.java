@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.client.gui;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.ContainerAutoSieve;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -52,7 +53,13 @@ public class GuiAutoSieve extends GuiContainer {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, 0, 300);
             drawRect(58, 16, 144, 71, 0x99000000);
-            drawCenteredString(fontRendererObj, "No Mesh", 101, 43 - fontRendererObj.FONT_HEIGHT / 2, 0xFFFFFFFF);
+            drawCenteredString(fontRendererObj, I18n.format("gui.excompressum:autoSieve.noMesh"), 101, 43 - fontRendererObj.FONT_HEIGHT / 2, 0xFFFFFFFF);
+            GlStateManager.popMatrix();
+        } else if(!tileEntity.isCorrectSieveMesh()) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0, 0, 300);
+            drawRect(58, 16, 144, 71, 0x99000000);
+            drawCenteredString(fontRendererObj, I18n.format("gui.excompressum:autoSieve.incorrectMesh"), 101, 43 - fontRendererObj.FONT_HEIGHT / 2, 0xFFFFFFFF);
             GlStateManager.popMatrix();
         }
     }
