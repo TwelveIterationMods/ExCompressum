@@ -20,6 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -260,35 +261,37 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			}
 		}
 
-		if(tryGetBoolean(defaults, "ExtraUtils2:CompressedCobblestone", true)) {
-			ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedCobblestone");
-			if(Block.REGISTRY.containsKey(location)) {
-				Block exUtilsBlock = Block.REGISTRY.getObject(location);
-				CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);
-				entry.addReward(new CompressedHammerReward(new ItemStack(Blocks.GRAVEL, 9), 1f, 0f));
-				add(entry);
-			}
-		}
-
-		if(tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
-			ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel");
-			if(Block.REGISTRY.containsKey(location)) {
-				Block exUtilsBlock = Block.REGISTRY.getObject(location);
-				CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);
-				entry.addReward(new CompressedHammerReward(new ItemStack(Blocks.SAND, 9), 1f, 0f));
-				add(entry);
-			}
-		}
-
-		if(tryGetBoolean(defaults, "ExtraUtils2:CompressedSand", true)) {
-			ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
-			if(dustBlock != null) {
-				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedSand");
+		if(Loader.isModLoaded(Compat.EXTRAUTILS2)) {
+			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedCobblestone", true)) {
+				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedCobblestone");
 				if (Block.REGISTRY.containsKey(location)) {
 					Block exUtilsBlock = Block.REGISTRY.getObject(location);
 					CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);
-					entry.addReward(new CompressedHammerReward(ItemHandlerHelper.copyStackWithSize(dustBlock, 9), 1f, 0f));
+					entry.addReward(new CompressedHammerReward(new ItemStack(Blocks.GRAVEL, 9), 1f, 0f));
 					add(entry);
+				}
+			}
+
+			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
+				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel");
+				if (Block.REGISTRY.containsKey(location)) {
+					Block exUtilsBlock = Block.REGISTRY.getObject(location);
+					CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);
+					entry.addReward(new CompressedHammerReward(new ItemStack(Blocks.SAND, 9), 1f, 0f));
+					add(entry);
+				}
+			}
+
+			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedSand", true)) {
+				ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
+				if (dustBlock != null) {
+					ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedSand");
+					if (Block.REGISTRY.containsKey(location)) {
+						Block exUtilsBlock = Block.REGISTRY.getObject(location);
+						CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);
+						entry.addReward(new CompressedHammerReward(ItemHandlerHelper.copyStackWithSize(dustBlock, 9), 1f, 0f));
+						add(entry);
+					}
 				}
 			}
 		}

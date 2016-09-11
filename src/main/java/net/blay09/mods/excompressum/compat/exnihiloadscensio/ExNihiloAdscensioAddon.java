@@ -173,7 +173,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		List<Siftable> siftables = SieveRegistry.getDrops(new BlockInfo(state));
 		if(siftables != null) {
 			for(Siftable siftable : siftables) {
-				if(siftable.getMeshLevel() <= meshLevel) {
+				if(siftable.getMeshLevel() == meshLevel) {
 					return true;
 				}
 			}

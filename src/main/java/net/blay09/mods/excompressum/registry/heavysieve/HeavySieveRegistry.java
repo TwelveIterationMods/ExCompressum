@@ -20,6 +20,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -334,30 +335,32 @@ public class HeavySieveRegistry extends AbstractRegistry {
             }
         }
 
-        if(tryGetBoolean(defaults, "ExUtils2:CompressedGravel", true)) {
-            ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel");
-            Item exUtilsBlock = Item.REGISTRY.getObject(location);
-            if(exUtilsBlock != null) {
-                ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
-                addGeneratedEntry(itemStack, GRAVEL, COMPRESSION_SIZE - defaultLoss);
+        if (Loader.isModLoaded(Compat.EXTRAUTILS2)) {
+            if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
+                ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel");
+                Item exUtilsBlock = Item.REGISTRY.getObject(location);
+                if (exUtilsBlock != null) {
+                    ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
+                    addGeneratedEntry(itemStack, GRAVEL, COMPRESSION_SIZE - defaultLoss);
+                }
             }
-        }
 
-        if(tryGetBoolean(defaults, "ExUtils2:CompressedSand", true)) {
-            ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedSand");
-            Item exUtilsBlock = Item.REGISTRY.getObject(location);
-            if(exUtilsBlock != null) {
-                ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
-                addGeneratedEntry(itemStack, SAND, COMPRESSION_SIZE - defaultLoss);
+            if (tryGetBoolean(defaults, "ExtraUtils2:CompressedSand", true)) {
+                ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedSand");
+                Item exUtilsBlock = Item.REGISTRY.getObject(location);
+                if (exUtilsBlock != null) {
+                    ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
+                    addGeneratedEntry(itemStack, SAND, COMPRESSION_SIZE - defaultLoss);
+                }
             }
-        }
 
-        if(tryGetBoolean(defaults, "ExUtils2:CompressedDirt", true)) {
-            ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedDirt");
-            Item exUtilsBlock = Item.REGISTRY.getObject(location);
-            if(exUtilsBlock != null) {
-                ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
-                addGeneratedEntry(itemStack, DIRT, COMPRESSION_SIZE - defaultLoss);
+            if (tryGetBoolean(defaults, "ExtraUtils2:CompressedDirt", true)) {
+                ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedDirt");
+                Item exUtilsBlock = Item.REGISTRY.getObject(location);
+                if (exUtilsBlock != null) {
+                    ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
+                    addGeneratedEntry(itemStack, DIRT, COMPRESSION_SIZE - defaultLoss);
+                }
             }
         }
     }
