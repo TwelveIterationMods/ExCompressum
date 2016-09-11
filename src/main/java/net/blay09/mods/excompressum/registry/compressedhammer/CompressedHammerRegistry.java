@@ -177,13 +177,14 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 				int metadata = tryGetInt(reward, "metadata", 0);
 				float chance = tryGetFloat(reward, "chance", 1f);
 				if(chance > 1f) {
-					ExCompressum.logger.warn("Reward chance is out of range for {} in {}, capping at 1.0...", rewardLocation, registryName);
+					logError("Reward chance is out of range for %s in %s, capping at 1.0...", rewardLocation, registryName);
 					chance = 1f;
 				}
 				float luckMultiplier = tryGetFloat(reward, "luck", 0f);
 				rewardList.add(new CompressedHammerReward(new ItemStack(item, count, metadata), chance, luckMultiplier));
 			} else {
-				throw new ClassCastException("rewards must be an array of json objects in " + registryName);
+				logError("Failed to load %s registry: rewards must be an array of json objects in ", registryName);
+				return;
 			}
 		}
 		if(location.getResourceDomain().equals("ore")) {
@@ -211,7 +212,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 				}
 				add(newEntry);
 			} else {
-				ExCompressum.logger.warn("Entry {} could not be registered for {}; it's not a block", location, registryName);
+				logError("Entry %s could not be registered for %s; it's not a block", location, registryName);
 			}
 		}
 	}

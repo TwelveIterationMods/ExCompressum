@@ -3,6 +3,8 @@ package net.blay09.mods.excompressum.compat.exnihiloadscensio;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import exnihiloadscensio.registries.CompostRegistry;
+import exnihiloadscensio.registries.CrookRegistry;
+import exnihiloadscensio.registries.CrookReward;
 import exnihiloadscensio.registries.HammerRegistry;
 import exnihiloadscensio.registries.HammerReward;
 import exnihiloadscensio.registries.SieveRegistry;
@@ -131,8 +133,16 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	}
 
 	@Override
-	public boolean isSiftable(IBlockState state) {
-		return SieveRegistry.canBeSifted(StupidUtils.getItemStackFromState(state));
+	public boolean isSiftable(IBlockState state, int meshLevel) {
+		List<Siftable> siftables = SieveRegistry.getDrops(new BlockInfo(state));
+		if(siftables != null) {
+			for(Siftable siftable : siftables) {
+				if(siftable.getMeshLevel() <= meshLevel) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -150,10 +160,19 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		return Collections.emptyList();
 	}
 
-	@Nullable
 	@Override
-	public ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune) {
-		return null; // NOTE Adscensio has no silk worms yet.
+	public Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand) {
+		List<CrookReward> rewards = CrookRegistry.getRewards(state);
+		if(rewards != null) {
+			List<ItemStack> list = Lists.newArrayList();
+			for (CrookReward reward : rewards) {
+				if(rand.nextFloat() <= reward.getChance() + reward.getFortuneChance() * luck) {
+					list.add(reward.getStack().copy());
+				}
+			}
+			return list;
+		}
+		return Collections.emptyList();
 	}
 
 	@Override

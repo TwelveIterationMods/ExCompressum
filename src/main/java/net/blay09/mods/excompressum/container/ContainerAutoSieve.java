@@ -22,8 +22,8 @@ public class ContainerAutoSieve extends Container {
 
         ItemStackHandler itemHandler = tileEntity.getItemHandler();
 
-        addSlotToContainer(new SlotItemHandler(itemHandler, 0, 8, 35));
-        addSlotToContainer(new SlotAutoSieveBook(itemHandler, 21, 8, 62));
+        addSlotToContainer(new SlotItemHandler(itemHandler, 0, 8, 22));
+        addSlotToContainer(new SlotItemHandler(itemHandler, 21, 8, 49));
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
@@ -85,7 +85,7 @@ public class ContainerAutoSieve extends Container {
                     return null;
                 }
             } else if (tileEntity.getItemHandler().isItemValid(21, slotStack)) {
-                if (!mergeItemStack(slotStack, 21, 22, false)) {
+                if (!mergeItemStack(slotStack, 1, 2, false)) {
                     return null;
                 }
             }

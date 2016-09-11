@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Collection;
 import java.util.HashSet;
 
 public class ItemCompressedCrook extends ItemTool {
@@ -76,9 +77,9 @@ public class ItemCompressedCrook extends ItemTool {
                 int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack);
                 state.getBlock().dropBlockAsItem(player.worldObj, pos, player.worldObj.getBlockState(pos), fortune);
                 if (isLeaves) {
-                    ItemStack silkWorm = ExRegistro.rollSilkWorm(player, state, fortune);
-                    if(silkWorm != null) {
-                        player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, silkWorm));
+                    Collection<ItemStack> rewards = ExRegistro.rollCrookRewards(player, state, fortune, world.rand);
+                    for(ItemStack rewardStack : rewards) {
+                        player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
                     }
                 }
             }

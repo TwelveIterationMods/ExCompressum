@@ -46,10 +46,9 @@ public interface ExNihiloProvider {
 	ItemStack getNihiloItem(NihiloItems type);
 	boolean isHammerable(IBlockState state);
 	Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand);
-	boolean isSiftable(IBlockState state);
+	boolean isSiftable(IBlockState state, int meshLevel);
 	Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand);
-	@Nullable
-	ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune); // TODO Adscensio has a CrookRegistry, so we need something for that too; just turn this into "doTheCrookThingies"
+	Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand);
 	SieveModelBounds getSieveBounds();
 	Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count);
 	boolean doMeshesHaveDurability();

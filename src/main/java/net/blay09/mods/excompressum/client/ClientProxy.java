@@ -45,6 +45,7 @@ public class ClientProxy extends CommonProxy {
 
 	private final Set<GameProfile> skinRequested = Sets.newHashSet();
 	public static TextureAtlasSprite iconEmptyBookSlot;
+	public static TextureAtlasSprite iconEmptyMeshSlot;
 	public static TextureAtlasSprite iconEmptyHammerSlot;
 	public static TextureAtlasSprite iconEmptyCompressedHammerSlot;
 	public static TextureAtlasSprite ironMeshSprite;
@@ -101,6 +102,7 @@ public class ClientProxy extends CommonProxy {
 	public void onTextureStitch(TextureStitchEvent.Pre event) {
 		if (event.getMap() == Minecraft.getMinecraft().getTextureMapBlocks()) {
 			iconEmptyBookSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_enchanted_book_slot"));
+			iconEmptyMeshSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_mesh_slot"));
 			iconEmptyHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_hammer_slot"));
 			iconEmptyCompressedHammerSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_compressed_hammer_slot"));
 			ironMeshSprite = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/iron_mesh"));

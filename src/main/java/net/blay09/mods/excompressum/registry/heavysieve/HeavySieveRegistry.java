@@ -189,7 +189,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
     protected void loadOptions(JsonObject entry) {
         defaultLoss = tryGetInt(entry, "loss for default generated rewards (out of 9)", DEFAULT_LOSS);
         if(defaultLoss < 0 || defaultLoss > 8) {
-            ExCompressum.logger.warn("Default loss option in {} is out of range, resetting to {}...", registryName, DEFAULT_LOSS);
+            logError("Default loss option in %s is out of range, resetting to %d...", registryName, DEFAULT_LOSS);
             defaultLoss = DEFAULT_LOSS;
         }
     }
@@ -256,13 +256,14 @@ public class HeavySieveRegistry extends AbstractRegistry {
                         int rewardMetadata = tryGetInt(reward, "metadata", 0);
                         float chance = tryGetFloat(reward, "chance", 1f);
                         if(chance > 1f) {
-                            ExCompressum.logger.warn("Reward chance is out of range for {} in {}, capping at 1.0...", rewardLocation, registryName);
+                            logError("Reward chance is out of range for %s in %s, capping at 1.0...", rewardLocation, registryName);
                             chance = 1f;
                         }
                         float luckMultiplier = tryGetFloat(reward, "luck", 0f);
                         rewardList.add(new HeavySieveReward(new ItemStack(item, count, rewardMetadata), chance, luckMultiplier));
                     } else {
-                        throw new ClassCastException("rewards must be an array of json objects in " + registryName);
+                        logError("Failed to load %s registry; rewards must be an array of json objects", registryName);
+                        return;
                     }
 
                     if(location.getResourceDomain().equals("ore")) {
@@ -284,13 +285,13 @@ public class HeavySieveRegistry extends AbstractRegistry {
                             }
                             add(newEntry);
                         } else {
-                            ExCompressum.logger.warn("Entry {} could not be registered for {}; it's not a block", location, registryName);
+                            logError("Entry %s could not be registered for %s; it's not a block", location, registryName);
                         }
                     }
                 }
                 break;
             default:
-                ExCompressum.logger.error("Unknown type {} for {} in {}, skipping...", type, location, registryName);
+                logError("Unknown type %s for %s in %s, skipping...", type, location, registryName);
                 break;
         }
     }
@@ -386,13 +387,13 @@ public class HeavySieveRegistry extends AbstractRegistry {
     private void addGeneratedEntry(ItemStack itemStack, ItemStack sourceStack, int count) {
         IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
         if(state == null) {
-            ExCompressum.logger.warn("Entry {} could not be generated from {} for {}; it's not a block", itemStack.getItem().getRegistryName(), sourceStack.getItem().getRegistryName(), registryName);
+            logError("Entry %s could not be generated from %s for %s; it's not a block", itemStack.getItem().getRegistryName(), sourceStack.getItem().getRegistryName(), registryName);
             return;
         }
         HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state, itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE);
         Collection<HeavySieveReward> rewards = ExRegistro.generateHeavyRewards(sourceStack, count);
         if(rewards.isEmpty()) {
-            ExCompressum.logger.warn("Entry {} could not be generated in {} because {} is not an Ex Nihilo siftable", itemStack.getItem().getRegistryName(), registryName, sourceStack.getItem().getRegistryName());
+            logError("Entry %s could not be generated in %s because %s is not an Ex Nihilo siftable", itemStack.getItem().getRegistryName(), registryName, sourceStack.getItem().getRegistryName());
             return;
         }
         entry.addRewards(rewards);

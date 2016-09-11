@@ -7,16 +7,16 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.AutomationConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
 import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
 import net.blay09.mods.excompressum.utils.SubItemHandler;
-import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -24,7 +24,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -35,34 +34,32 @@ import java.util.Random;
 // TODO needs particles
 public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable {
 
-	// TODO need mesh slot
-
 	private static final int UPDATE_INTERVAL = 20;
 
 	private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 22) {
 		@Override
 		public boolean isItemValid(int slot, ItemStack itemStack) {
-			if(slot == 0) {
-				return isRegistered(itemStack);
-			} else if(slot == 21) {
-				return isValidBook(itemStack);
+			if(inputSlots.isInside(slot)) {
+				return isSiftable(itemStack);
+			} else if(meshSlots.isInside(slot)) {
+				return isMesh(itemStack);
 			}
 			return true;
 		}
 	};
-	private final SubItemHandler itemHandlerInput = new SubItemHandler(itemHandler, 0, 1);
-	private final SubItemHandler itemHandlerOutput = new SubItemHandler(itemHandler, 1, 21);
-	private final SubItemHandler itemHandlerUpgrade = new SubItemHandler(itemHandler, 21, 22);
+	private final SubItemHandler inputSlots = new SubItemHandler(itemHandler, 0, 1);
+	private final SubItemHandler outputSlots = new SubItemHandler(itemHandler, 1, 21);
+	private final SubItemHandler meshSlots = new SubItemHandler(itemHandler, 21, 22);
 
 	private final ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
 		@Override
 		public boolean canExtractItem(int slot, int amount) {
-			return super.canExtractItem(slot, amount) && itemHandlerOutput.isInside(slot);
+			return super.canExtractItem(slot, amount) && outputSlots.isInside(slot);
 		}
 
 		@Override
 		public boolean canInsertItem(int slot, ItemStack itemStack) {
-			return super.canInsertItem(slot, itemStack) && (itemHandlerInput.isInside(slot) || itemHandlerUpgrade.isInside(slot));
+			return super.canInsertItem(slot, itemStack) && (inputSlots.isInside(slot) || meshSlots.isInside(slot));
 		}
 	};
 
@@ -100,11 +97,11 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		int effectiveEnergy = getEffectiveEnergy();
 		if (getEnergyStored() >= effectiveEnergy) {
 			if (currentStack == null) {
-				ItemStack inputStack = itemHandlerInput.getStackInSlot(0);
-				if (inputStack != null && isRegistered(inputStack)) {
+				ItemStack inputStack = inputSlots.getStackInSlot(0);
+				if (inputStack != null && meshSlots.getStackInSlot(0) != null && isSiftable(inputStack)) {
 					boolean foundSpace = false;
-					for (int i = 0; i < itemHandlerOutput.getSlots(); i++) {
-						if (itemHandlerOutput.getStackInSlot(i) == null) {
+					for (int i = 0; i < outputSlots.getSlots(); i++) {
+						if (outputSlots.getStackInSlot(i) == null) {
 							foundSpace = true;
 						}
 					}
@@ -113,7 +110,17 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 					}
 					currentStack = inputStack.splitStack(1);
 					if (inputStack.stackSize == 0) {
-						itemHandlerInput.setStackInSlot(0, null);
+						inputSlots.setStackInSlot(0, null);
+					}
+					if(ExRegistro.doMeshesHaveDurability()) {
+						ItemStack meshStack = meshSlots.getStackInSlot(0);
+						if (meshStack != null) {
+							if(meshStack.attemptDamageItem(1, worldObj.rand)) {
+								// TODO sound for mesh break?
+								meshStack.stackSize--;
+								meshSlots.setStackInSlot(0, null);
+							}
+						}
 					}
 					setEnergyStored(getEnergyStored() - effectiveEnergy);
 					VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -129,15 +136,9 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 						Collection<ItemStack> rewards = rollSieveRewards(currentStack, getMeshLevel(), getEffectiveLuck(), worldObj.rand);
 						for (ItemStack itemStack : rewards) {
 							if (!addItemToOutput(itemStack)) {
-								EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
-								double motion = 0.05;
-								entityItem.motionX = worldObj.rand.nextGaussian() * motion;
-								entityItem.motionY = 0.2;
-								entityItem.motionZ = worldObj.rand.nextGaussian() * motion;
-								worldObj.spawnEntityInWorld(entityItem);
+								worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
 							}
 						}
-						degradeBook();
 					}
 					progress = 0f;
 					currentStack = null;
@@ -148,8 +149,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 
 	private boolean addItemToOutput(ItemStack itemStack) {
 		int firstEmptySlot = -1;
-		for (int i = 0; i < itemHandlerOutput.getSlots(); i++) {
-			ItemStack slotStack = itemHandlerOutput.getStackInSlot(i);
+		for (int i = 0; i < outputSlots.getSlots(); i++) {
+			ItemStack slotStack = outputSlots.getStackInSlot(i);
 			if (slotStack == null) {
 				if (firstEmptySlot == -1) {
 					firstEmptySlot = i;
@@ -162,35 +163,10 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 			}
 		}
 		if (firstEmptySlot != -1) {
-			itemHandlerOutput.setStackInSlot(firstEmptySlot, itemStack);
+			outputSlots.setStackInSlot(firstEmptySlot, itemStack);
 			return true;
 		}
 		return false;
-	}
-
-	private void degradeBook() {
-		ItemStack upgradeStack = itemHandlerUpgrade.getStackInSlot(0);
-		if (upgradeStack != null && worldObj.rand.nextFloat() <= AutomationConfig.autoSieveBookDecay) {
-			NBTTagList tagList = getEnchantmentList(upgradeStack);
-			if (tagList != null) {
-				for (int i = 0; i < tagList.tagCount(); ++i) {
-					short id = tagList.getCompoundTagAt(i).getShort("id");
-					if (id != Enchantment.getEnchantmentID(Enchantments.FORTUNE) && id != Enchantment.getEnchantmentID(Enchantments.EFFICIENCY)) {
-						continue;
-					}
-					int level = tagList.getCompoundTagAt(i).getShort("lvl") - 1;
-					if (level <= 0) {
-						tagList.removeTag(i);
-					} else {
-						tagList.getCompoundTagAt(i).setShort("lvl", (short) level);
-					}
-					break;
-				}
-				if (tagList.tagCount() == 0) {
-					itemHandlerUpgrade.setStackInSlot(0, new ItemStack(Items.BOOK));
-				}
-			}
-		}
 	}
 
 	public int getEffectiveEnergy() {
@@ -202,48 +178,19 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	}
 
 	public float getEffectiveLuck() {
-		ItemStack upgradeStack = itemHandlerUpgrade.getStackInSlot(0);
-		if (upgradeStack != null) {
-			return 1f + getEnchantmentLevel(Enchantments.FORTUNE, upgradeStack);
+		ItemStack meshStack = meshSlots.getStackInSlot(0);
+		if (meshStack != null) {
+			return 1f + EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, meshStack);
 		}
 		return 1f;
 	}
 
-	public boolean isRegistered(ItemStack itemStack) {
-		return ExRegistro.isSiftable(itemStack);
+	public boolean isSiftable(ItemStack itemStack) {
+		return ExRegistro.isSiftable(itemStack, getMeshLevel());
 	}
 
-	public boolean isValidBook(ItemStack itemStack) {
-		return itemStack.getItem() == Items.ENCHANTED_BOOK && (getEnchantmentLevel(Enchantments.FORTUNE, itemStack) > 0 || getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack) > 0);
-	}
-
-	private static NBTTagList getEnchantmentList(ItemStack itemStack) {
-		NBTTagCompound tagCompound = itemStack.getTagCompound();
-		if(tagCompound == null) {
-			return null;
-		}
-		if(tagCompound.hasKey("StoredEnchantments")) {
-			return tagCompound.getTagList("StoredEnchantments", Constants.NBT.TAG_COMPOUND);
-		}
-		if(tagCompound.hasKey("ench")) {
-			return tagCompound.getTagList("ench", Constants.NBT.TAG_COMPOUND);
-		}
-		return null;
-	}
-
-	private static int getEnchantmentLevel(Enchantment enchantment, ItemStack itemStack) {
-		NBTTagList tagList = getEnchantmentList(itemStack);
-		if (tagList == null) {
-			return 0;
-		}
-		for (int i = 0; i < tagList.tagCount(); i++) {
-			short id = tagList.getCompoundTagAt(i).getShort("id");
-			short lvl = tagList.getCompoundTagAt(i).getShort("lvl");
-			if (id == Enchantment.getEnchantmentID(enchantment)) {
-				return lvl;
-			}
-		}
-		return 0;
+	public boolean isMesh(ItemStack itemStack) {
+		return SieveMeshRegistry.getEntry(itemStack) != null;
 	}
 
 	public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, int meshLevel, float luck, Random rand) {
@@ -365,9 +312,9 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 
 	public float getSpeedBoost() {
 		float activeSpeedBoost = speedBoost;
-		ItemStack upgradeStack = itemHandlerUpgrade.getStackInSlot(0);
-		if (upgradeStack != null) {
-			activeSpeedBoost += getEnchantmentLevel(Enchantments.EFFICIENCY, upgradeStack);
+		ItemStack meshStack = meshSlots.getStackInSlot(0);
+		if (meshStack != null) {
+			activeSpeedBoost += EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, meshStack);
 		}
 		return activeSpeedBoost;
 	}
@@ -402,7 +349,12 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	}
 
 	public int getMeshLevel() {
-		return 0; // TODO Mesh Level impl
+		ItemStack meshStack = meshSlots.getStackInSlot(0);
+		if(meshStack != null) {
+			SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
+			return sieveMesh != null ? sieveMesh.getMeshLevel() : 0;
+		}
+		return 0;
 	}
 
 	public float getArmAngle() {

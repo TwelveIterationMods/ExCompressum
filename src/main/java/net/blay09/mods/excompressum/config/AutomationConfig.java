@@ -15,7 +15,6 @@ public class AutomationConfig {
 
 	public static int autoSieveEnergy;
 	public static float autoSieveSpeed;
-	public static float autoSieveBookDecay;
 
 	public static int autoCompressorEnergy;
 	public static float autoCompressorSpeed;
@@ -35,7 +34,6 @@ public class AutomationConfig {
 
 		autoSieveSpeed = config.getFloat("Speed", "Auto Sieve", 0.005f, 0.0001f, 0.1f, "The speed at which the auto sieve will sift stuff.");
 		autoSieveEnergy = config.getInt("Energy Cost", "Auto Sieve", 40, 0, 100000, "The energy cost of the auto sieve per tick.");
-		autoSieveBookDecay = config.getFloat("Book Decay Chance", "Auto Sieve", 0.003f, 0f, 0.1f, "The chance for the enchantment on books in a sieve to lose a level (per operation)");
 
 		autoCompressorSpeed = config.getFloat("Speed", "Auto Compressor", 0.1f, 0.0001f, 1f, "The speed at which the auto compressor will compress stuff.");
 		autoCompressorEnergy = config.getInt("Energy Cost", "Auto Compressor", 5, 0, 100000, "The energy cost of the auto compressor per tick.");

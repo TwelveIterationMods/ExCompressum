@@ -168,7 +168,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	}
 
 	@Override
-	public boolean isSiftable(IBlockState state) {
+	public boolean isSiftable(IBlockState state, int meshLevel) {
 		return SieveRegistry.isSiftable(state);
 	}
 
@@ -186,17 +186,16 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 		return list;
 	}
 
-	@Nullable
 	@Override
-	public ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune) {
+	public Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand) {
 		ItemStack infestedLeaves = getNihiloItem(NihiloItems.INFESTED_LEAVES);
-		if(infestedLeaves != null && (player.worldObj.rand.nextInt(100) == 0 || state.getBlock() == Block.getBlockFromItem(infestedLeaves.getItem()))) {
+		if(infestedLeaves != null && (rand.nextInt(100) == 0 || state.getBlock() == Block.getBlockFromItem(infestedLeaves.getItem()))) {
 			ItemStack silkWormItem = getNihiloItem(NihiloItems.SILK_WORM);
 			if(silkWormItem != null) {
-				return silkWormItem.copy();
+				return Lists.newArrayList(silkWormItem.copy());
 			}
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	private void rollSieveRewardsToList(SieveRegistryEntry entry, List<ItemStack> list, float luck, Random rand) {

@@ -18,6 +18,8 @@ import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegist
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
@@ -29,6 +31,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -75,6 +79,7 @@ public class ExCompressum {
         EntityRegistry.registerModEntity(EntityAngryChicken.class, "AngryChicken", 0, this, 64, 5, true);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+        MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new CompressedEnemyHandler());
         MinecraftForge.EVENT_BUS.register(new ChickenStickHandler());
 
@@ -150,6 +155,18 @@ public class ExCompressum {
     public void serverStarted(FMLServerStartedEvent event) {
         for(IAddon addon : addons) {
             addon.serverStarted(event);
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if(AbstractRegistry.registryErrors.size() > 0) {
+            event.player.addChatComponentMessage(new TextComponentString(TextFormatting.RED + "There were errors loading the Ex Compressum registries:"));
+            TextFormatting lastFormatting = TextFormatting.WHITE;
+            for(String error : AbstractRegistry.registryErrors) {
+                event.player.addChatMessage(new TextComponentString(lastFormatting + "* " + error));
+                lastFormatting = lastFormatting == TextFormatting.GRAY ? TextFormatting.WHITE : TextFormatting.GRAY;
+            }
         }
     }
 

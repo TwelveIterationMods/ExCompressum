@@ -48,9 +48,9 @@ public abstract class ExRegistro {
 		return Collections.emptyList();
 	}
 
-	public static boolean isSiftable(ItemStack itemStack) {
+	public static boolean isSiftable(ItemStack itemStack, int meshLevel) {
 		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
-		return state != null && instance.isSiftable(state);
+		return state != null && instance.isSiftable(state, meshLevel);
 	}
 
 	public static Collection<ItemStack> rollSieveRewards(IBlockState state, int meshLevel, float luck, Random rand) {
@@ -65,9 +65,8 @@ public abstract class ExRegistro {
 		return Collections.emptyList();
 	}
 
-	@Nullable
-	public static ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune) {
-		return instance.rollSilkWorm(player, state, fortune);
+	public static Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand) {
+		return instance.rollCrookRewards(player, state, luck, rand);
 	}
 
 	public static SieveModelBounds getSieveBounds() {
@@ -85,4 +84,5 @@ public abstract class ExRegistro {
 	public static ExNihiloProvider.NihiloMod getNihiloMod() {
 		return instance.getNihiloMod();
 	}
+
 }

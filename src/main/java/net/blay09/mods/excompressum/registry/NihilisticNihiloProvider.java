@@ -31,7 +31,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public boolean isSiftable(IBlockState state) {
+	public boolean isSiftable(IBlockState state, int meshLevel) {
 		return false;
 	}
 
@@ -40,10 +40,9 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 		return Collections.emptyList();
 	}
 
-	@Nullable
 	@Override
-	public ItemStack rollSilkWorm(EntityLivingBase player, IBlockState state, int fortune) {
-		return null;
+	public Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand) {
+		return Collections.emptyList();
 	}
 
 	@Override

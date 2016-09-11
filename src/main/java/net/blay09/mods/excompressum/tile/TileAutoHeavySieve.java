@@ -11,7 +11,7 @@ import java.util.Random;
 public class TileAutoHeavySieve extends TileAutoSieve {
 
     @Override
-    public boolean isRegistered(ItemStack itemStack) {
+    public boolean isSiftable(ItemStack itemStack) {
         return HeavySieveRegistry.isSiftable(itemStack);
     }
 
