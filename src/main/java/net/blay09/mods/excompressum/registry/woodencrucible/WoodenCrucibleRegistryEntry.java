@@ -27,12 +27,4 @@ public class WoodenCrucibleRegistryEntry {
 		return amount;
 	}
 
-	public String getKey() {
-		String registryName = itemStack.getItem().getRegistryName().toString();
-		if(itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-			return registryName + ":*";
-		} else {
-			return registryName + ":" + itemStack.getItemDamage();
-		}
-	}
 }

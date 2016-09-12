@@ -164,6 +164,6 @@ public class TileHeavySieve extends TileEntity implements ITickable {
 
     public void setMeshStack(@Nullable ItemStack meshStack) {
         this.meshStack = meshStack;
-        isDirty = true;
+        VanillaPacketHandler.sendTileEntityUpdate(this);
     }
 }

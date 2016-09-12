@@ -1,7 +1,5 @@
 package net.blay09.mods.excompressum.compat.jei;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -10,7 +8,7 @@ import mezz.jei.api.gui.ITooltipCallback;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerReward;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
@@ -21,10 +19,10 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
-public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecipe> {
+public class CompressedHammerRecipeCategory implements IRecipeCategory<CompressedHammerRecipe> {
 
-	public static final String UID = "excompressum:heavySieve";
-	private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_heavy_sieve.png");
+	private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_compressed_hammer.png");
+	public static final String UID = "excompressum:compressedHammer";
 
 	private final IDrawableStatic background;
 	private final IDrawableStatic slotHighlight;
@@ -32,8 +30,8 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 	private int highlightX;
 	private int highlightY;
 
-	public HeavySieveRecipeCategory(IGuiHelper guiHelper) {
-		this.background = guiHelper.createDrawable(texture, 0, 0, 166, 130);
+	public CompressedHammerRecipeCategory(IGuiHelper guiHelper) {
+		this.background = guiHelper.createDrawable(texture, 0, 0, 166, 63);
 		this.slotHighlight = guiHelper.createDrawable(texture, 166, 0, 18, 18);
 	}
 
@@ -68,21 +66,19 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 	}
 
 	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull final HeavySieveRecipe recipeWrapper) {
-		recipeLayout.getItemStacks().init(0, true, 61, 9);
-		Object inputMesh = recipeWrapper.getInputs().get(0);
-		recipeLayout.getItemStacks().setFromRecipe(0, inputMesh);
-		recipeLayout.getItemStacks().init(1, true, 87, 9);
-		recipeLayout.getItemStacks().set(1, (ItemStack) recipeWrapper.getInputs().get(1));
+	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull final CompressedHammerRecipe recipeWrapper) {
+		recipeLayout.getItemStacks().init(0, true, 74, 9);
+		recipeLayout.getItemStacks().setFromRecipe(0, recipeWrapper.getInputs().get(0));
 
 		IFocus<ItemStack> focus = recipeLayout.getItemStacks().getFocus();
 		hasHighlight = focus.getMode() == IFocus.Mode.OUTPUT;
+
 		final List outputs = recipeWrapper.getOutputs();
-		final int INPUT_SLOTS = 2;
+		final int INPUT_SLOTS = 1;
 		int slotNumber = 0;
 		for(int i = 0; i < outputs.size(); i++) {
-			final int slotX = 2 + (slotNumber % 9 * 18);
-			final int slotY = 36 + (slotNumber / 9 * 18);
+			final int slotX = 2 + slotNumber * 18;
+			final int slotY = 36;
 			recipeLayout.getItemStacks().init(INPUT_SLOTS + slotNumber, false, slotX, slotY);
 			Object output = outputs.get(i);
 			if(output instanceof Collection) {
@@ -101,23 +97,18 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 			}
 			slotNumber++;
 		}
+
 		recipeLayout.getItemStacks().addTooltipCallback(new ITooltipCallback<ItemStack>() {
 			@Override
 			public void onTooltip(int slotIndex, boolean input, ItemStack ingredient, List<String> tooltip) {
 				if(!input) {
-					Multiset<String> condensedTooltips = HashMultiset.create();
-					for(HeavySieveReward reward : recipeWrapper.getRewardsForItemStack(ingredient)) {
-						String s = String.format("%3d%%", (int) (reward.getBaseChance() * 100f));
-						if(reward.getLuckMultiplier() > 0f) {
-							s += TextFormatting.BLUE + String.format(" (+ %1.1f luck)", reward.getLuckMultiplier()); // i18n
-						}
-						condensedTooltips.add(s);
-					}
-					// TODO figure out the sorting of these
+					CompressedHammerReward reward = recipeWrapper.getRewardAt(slotIndex - INPUT_SLOTS);
 					tooltip.add("Drop Chance:"); // i18n
-					for(String line : condensedTooltips.elementSet()) {
-						tooltip.add(" * " + condensedTooltips.count(line) + "x " + line);
+					String s = String.format(" * %3d%%", (int) (reward.getBaseChance() * 100f));
+					if(reward.getLuckMultiplier() > 0f) {
+						s += TextFormatting.BLUE + String.format(" (+ %1.1f luck)", reward.getLuckMultiplier()); // i18n
 					}
+					tooltip.add(s);
 				}
 			}
 		});

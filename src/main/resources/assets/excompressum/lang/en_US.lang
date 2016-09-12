@@ -76,13 +76,6 @@ botania.page.excompressum.orechidEvolved1=&oStill not dragon poop though&r.
 tile.botania:flower.excompressum.orechidEvolved.name=Evolved Orechid
 tile.botania:flower.excompressum.orechidEvolved.reference=Orechid: Evolved: Skyblock: The Movie
 
-botania.entry.excompressum.brokenComprilla=Broken Comprilla
-botania.tagline.excompressum.brokenComprilla=Compresses items into blocks
-botania.page.excompressum.brokenComprilla0=You sieved yourself a good amount of &4Broken Ores&0 by now, haven't you? The &1Broken Comprilla&0 will use &4Mana&0 to compress items into their block forms, so they can be stored in a compact way or smelted down for ingots.<br>The items to compress need to put onto a &1Runic Altar&0 in range. It will work for any items that can be crafted into a two-by-two or three-by-three cube.
-botania.page.excompressum.brokenComprilla1=Keeping the tradition.
-tile.botania:flower.excompressum.brokenComprilla.name=Broken Comprilla
-tile.botania:flower.excompressum.brokenComprilla.reference=It's not actually broken
-
 modifier.excompressum:smashingii.name=Smashing II
 
 waila.excompressum:baitTooClose=You are too close.
@@ -97,3 +90,5 @@ waila.excompressum:solidVolume=Solid Volume: %s
 waila.excompressum:fluidVolume=Fluid Volume: %s
 
 jei.excompressum:heavySieve=Heavy Sieve
+jei.excompressum:compressedHammer=Compressed Hammer
+jei.excompressum:woodenCrucible=Wooden Crucible
