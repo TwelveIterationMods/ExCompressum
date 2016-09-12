@@ -4,7 +4,7 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import net.blay09.mods.excompressum.config.AutomationConfig;
+import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
@@ -155,11 +155,11 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
     }
 
     public int getEffectiveEnergy() {
-        return AutomationConfig.autoCompressorEnergy;
+        return ProcessingConfig.autoCompressorEnergy;
     }
 
     public float getEffectiveSpeed() {
-        return AutomationConfig.autoCompressorSpeed;
+        return ProcessingConfig.autoCompressorSpeed;
     }
 
     @Override

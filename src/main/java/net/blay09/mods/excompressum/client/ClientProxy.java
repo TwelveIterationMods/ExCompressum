@@ -11,7 +11,7 @@ import net.blay09.mods.excompressum.client.render.tile.RenderAutoSieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderBait;
 import net.blay09.mods.excompressum.client.render.tile.RenderHeavySieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderWoodenCrucible;
-import net.blay09.mods.excompressum.config.ChickenStickConfig;
+import net.blay09.mods.excompressum.config.ToolsConfig;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
@@ -79,12 +79,12 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
-		String customName = ChickenStickConfig.chickenStickNames.get(Minecraft.getMinecraft().getSession().getUsername().toLowerCase(Locale.ENGLISH));
+		String customName = ToolsConfig.chickenStickNames.get(Minecraft.getMinecraft().getSession().getUsername().toLowerCase(Locale.ENGLISH));
 		if (customName == null) {
-			customName = ChickenStickConfig.chickenStickNames.get("*");
+			customName = ToolsConfig.chickenStickNames.get("*");
 		}
 		if (customName != null) {
-			ChickenStickConfig.setChickenStickName(customName);
+			ToolsConfig.setChickenStickName(customName);
 		}
 	}
 

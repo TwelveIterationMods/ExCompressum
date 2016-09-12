@@ -214,7 +214,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public void loadConfig(Configuration config) {
-		sieveLuckMultiplier = config.getFloat("Sieve Luck Multiplier", "compat.exnihiloadscensio", sieveLuckMultiplier, 0f, 10f, "Sieve rewards in Omnia do not have a luck multiplier at the moment. For fortune to work in Auto Sieves, this default value is applied to *all* rewards when sifting.");
+		sieveLuckMultiplier = config.getFloat("Sieve Luck Multiplier", "compat.exnihiloomnia", sieveLuckMultiplier, 0f, 10f, "Sieve rewards in Omnia do not have a luck multiplier at the moment. For fortune to work in Auto Sieves, this default value is applied to *all* rewards when sifting.");
 	}
 
 	@Override

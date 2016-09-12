@@ -4,7 +4,7 @@ import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.AutomationConfig;
+import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
@@ -178,11 +178,11 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	}
 
 	public int getEffectiveEnergy() {
-		return AutomationConfig.autoSieveEnergy;
+		return ProcessingConfig.autoSieveEnergy;
 	}
 
 	public float getEffectiveSpeed() {
-		return AutomationConfig.autoSieveSpeed * getSpeedBoost();
+		return ProcessingConfig.autoSieveSpeed * getSpeedBoost();
 	}
 
 	public float getEffectiveLuck() {

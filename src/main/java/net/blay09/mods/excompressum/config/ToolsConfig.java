@@ -1,32 +1,42 @@
 package net.blay09.mods.excompressum.config;
 
 import com.google.common.collect.Maps;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
 import java.util.Map;
 
-public class ChickenStickConfig {
+public class ToolsConfig {
 	public static float chickenStickCreationChance;
 	public static float chickenStickSoundChance;
 	public static float chickenStickSpawnChance;
-	public static String[] chickenStickSounds;
+	private static String[] chickenStickSoundNames;
+	public static ResourceLocation[] chickenStickSounds;
 	public static final Map<String, String> chickenStickNames = Maps.newHashMap();
+
+	public static float compressedCrookDurabilityMultiplier;
+	public static float compressedCrookSpeedMultiplier;
 
 	public static String chickenStickName;
 
 	public static void load(Configuration config) {
-		final String CATEGORY = "Chicken Stick";
+		final String CATEGORY = "tools";
 		chickenStickCreationChance = config.getFloat("Creation Chance", CATEGORY, 0.2f, 0f, 1f, "The chance that hitting a chicken with a stick will create a chicken stick. 0 means disabled.");
 		chickenStickSpawnChance = config.getFloat("Chicken Spawn Chance", CATEGORY, 0.008f, 0f, 1f, "The chance for the chicken stick to spawn a chicken. Set to 0 to disable.");
 		chickenStickSoundChance = config.getFloat("Sound Chance", CATEGORY, 0.2f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
-		chickenStickSounds = config.getStringList("Sound List", CATEGORY, new String[] {
-				"entity.chicken.environment",
+		chickenStickSoundNames = config.getStringList("Sound List", CATEGORY, new String[] {
+				"entity.chicken.ambient",
 				"entity.chicken.hurt",
 				"entity.chicken.egg",
 				"entity.chicken.step"
 		}, "The sound names the chicken stick will randomly play.");
+		chickenStickSounds = new ResourceLocation[chickenStickSoundNames.length];
+		for(int i = 0; i < chickenStickSoundNames.length; i++) {
+			chickenStickSounds[i] = new ResourceLocation(chickenStickSoundNames[i]);
+		}
+
 		String[] chickenStickNameList = config.getStringList("Custom Names", CATEGORY, new String[] {}, "Format: Username=ItemName, Username can be * to affect all users");
 		chickenStickNames.put("wyld", "The Cluckington");
 		chickenStickNames.put("slowpoke101", "Dark Matter Hammer");
@@ -38,6 +48,8 @@ public class ChickenStickConfig {
 			}
 		}
 
+		compressedCrookDurabilityMultiplier = config.getFloat("Compressed Crook Durability Multiplier", "tools", 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
+		compressedCrookSpeedMultiplier = config.getFloat("Compressed Crook Speed Multiplier", "tools", 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
 	}
 
 	@Nullable

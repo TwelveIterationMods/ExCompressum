@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ChickenStickConfig;
+import net.blay09.mods.excompressum.config.ToolsConfig;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
@@ -43,14 +43,14 @@ public class ItemChickenStick extends ItemTool {
 
     @Override
     public String getItemStackDisplayName(ItemStack itemStack) {
-        String chickenStickName = ChickenStickConfig.getChickenStickName();
+        String chickenStickName = ToolsConfig.getChickenStickName();
         return chickenStickName != null ? chickenStickName : super.getItemStackDisplayName(itemStack);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List<String> list, boolean flag) {
-        if(ChickenStickConfig.getChickenStickName() != null) {
+        if(ToolsConfig.getChickenStickName() != null) {
             list.add(TextFormatting.GRAY + I18n.format("item.excompressum:chicken_stick.name"));
         }
     }
@@ -87,7 +87,7 @@ public class ItemChickenStick extends ItemTool {
         }
         world.setBlockToAir(pos);
         playChickenSound(world, pos);
-        if(world.rand.nextFloat() <= ChickenStickConfig.chickenStickSpawnChance) {
+        if(world.rand.nextFloat() <= ToolsConfig.chickenStickSpawnChance) {
             EntityChicken entityChicken = new EntityChicken(world);
             entityChicken.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
             world.spawnEntityInWorld(entityChicken);
@@ -114,14 +114,18 @@ public class ItemChickenStick extends ItemTool {
     }
 
     private void playChickenSound(World world, BlockPos pos) {
-        if(world.rand.nextFloat() <= ChickenStickConfig.chickenStickSoundChance) {
-            String soundName = null;
-            if(ChickenStickConfig.chickenStickSounds.length > 0) {
-                soundName = ChickenStickConfig.chickenStickSounds[world.rand.nextInt(ChickenStickConfig.chickenStickSounds.length)];
+        if(world.rand.nextFloat() <= ToolsConfig.chickenStickSoundChance) {
+            ResourceLocation location = null;
+            if(ToolsConfig.chickenStickSounds.length > 0) {
+                location = ToolsConfig.chickenStickSounds[world.rand.nextInt(ToolsConfig.chickenStickSounds.length)];
             }
-            if(soundName != null) {
-                SoundEvent soundEvent = SoundEvent.REGISTRY.getObject(new ResourceLocation(soundName));
-                world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundEvent, SoundCategory.PLAYERS, 1f, world.rand.nextFloat() * 0.1f + 0.9f, false);
+            if(location != null) {
+                SoundEvent soundEvent = SoundEvent.REGISTRY.getObject(location);
+                if(soundEvent != null) {
+                    world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundEvent, SoundCategory.PLAYERS, 1f, world.rand.nextFloat() * 0.1f + 0.9f, false);
+                } else {
+                    ExCompressum.logger.warn("Chicken Stick tried to play a sound that does not exist: {}", location);
+                }
             }
         }
     }

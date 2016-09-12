@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.tile;
 
-import net.blay09.mods.excompressum.config.AutomationConfig;
+import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.minecraft.item.ItemStack;
@@ -12,12 +12,12 @@ public class TileAutoCompressedHammer extends TileAutoHammer {
 
     @Override
     public int getEffectiveEnergy() {
-        return AutomationConfig.autoCompressedHammerEnergy; // TODO hammer enchantments
+        return ProcessingConfig.autoCompressedHammerEnergy; // TODO hammer enchantments
     }
 
     @Override
     public float getEffectiveSpeed() {
-        return AutomationConfig.autoCompressedHammerSpeed * getSpeedBoost(); // TODO hammer enchantments
+        return ProcessingConfig.autoCompressedHammerSpeed * getSpeedBoost(); // TODO hammer enchantments
     }
 
     @Override

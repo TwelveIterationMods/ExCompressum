@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.ToolsConfig;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTallGrass;
@@ -28,7 +28,7 @@ public class ItemCompressedCrook extends ItemTool {
         super(0f, 0f, ToolMaterial.WOOD, new HashSet<Block>());
         setRegistryName("compressed_crook");
         setUnlocalizedName(getRegistryName().toString());
-        setMaxDamage((int) (ToolMaterial.WOOD.getMaxUses() * 2 * ExCompressumConfig.compressedCrookDurabilityMultiplier));
+        setMaxDamage((int) (ToolMaterial.WOOD.getMaxUses() * 2 * ToolsConfig.compressedCrookDurabilityMultiplier));
         setCreativeTab(ExCompressum.creativeTab);
     }
 
@@ -65,7 +65,7 @@ public class ItemCompressedCrook extends ItemTool {
 
     @Override
     public float getStrVsBlock(ItemStack item, IBlockState block) {
-        return block.getMaterial() == Material.LEAVES ? toolMaterial.getEfficiencyOnProperMaterial() * ExCompressumConfig.compressedCrookSpeedMultiplier : 0f;
+        return block.getMaterial() == Material.LEAVES ? toolMaterial.getEfficiencyOnProperMaterial() * ToolsConfig.compressedCrookSpeedMultiplier : 0f;
     }
 
     @Override
