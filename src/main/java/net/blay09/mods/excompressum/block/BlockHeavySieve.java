@@ -17,7 +17,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -25,6 +27,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -151,12 +154,25 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 				}
 
 				if (tileEntity.addSiftable(player, heldItem)) {
+					world.playSound(null, pos, SoundEvents.BLOCK_GRAVEL_STEP, SoundCategory.BLOCKS, 0.5f, 1f);
 					return true;
+				}
+			} else {
+				if(!world.isRemote && player.isSneaking()) {
+					ItemStack meshStack = tileEntity.getMeshStack();
+					if(meshStack != null) {
+						if (player.inventory.addItemStackToInventory(meshStack)) {
+							world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, meshStack));
+						}
+						tileEntity.setMeshStack(null);
+					}
 				}
 			}
 
 			if (ProcessingConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
-				tileEntity.processContents(player);
+				if(tileEntity.processContents(player)) {
+					world.playSound(null, pos, SoundEvents.BLOCK_SAND_STEP, SoundCategory.BLOCKS, 0.3f, 0.6f);
+				}
 			}
 		}
 

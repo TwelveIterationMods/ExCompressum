@@ -22,6 +22,10 @@ public class SieveMeshRegistry {
 		add(ironMesh);
 	}
 
+	public static Map<RegistryKey, SieveMeshRegistryEntry> getEntries() {
+		return entries;
+	}
+
 	public static SieveMeshRegistryEntry getEntry(ItemStack itemStack) {
 		RegistryKey key = new RegistryKey(itemStack);
 		SieveMeshRegistryEntry entry = entries.get(key);

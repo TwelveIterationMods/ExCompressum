@@ -323,6 +323,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         final ItemStack GRAVEL = new ItemStack(Blocks.GRAVEL);
         final ItemStack SAND = new ItemStack(Blocks.SAND);
         final ItemStack DIRT = new ItemStack(Blocks.DIRT);
+        final ItemStack SOUL_SAND = new ItemStack(Blocks.SOUL_SAND);
         final int COMPRESSION_SIZE = 9;
         if(tryGetBoolean(defaults, "excompressum:compressed_gravel", true)) {
             ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal());
@@ -337,6 +338,11 @@ public class HeavySieveRegistry extends AbstractRegistry {
         if(tryGetBoolean(defaults, "excompressum:compressed_dirt", true)) {
             ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal());
             addGeneratedEntry(itemStack, DIRT, COMPRESSION_SIZE - defaultLoss);
+        }
+
+        if(tryGetBoolean(defaults, "excompressum:compressed_soul_sand", true)) {
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SOUL_SAND.ordinal());
+            addGeneratedEntry(itemStack, SOUL_SAND, COMPRESSION_SIZE - defaultLoss);
         }
 
         if(tryGetBoolean(defaults, "excompressum:compressed_dust", true)) {

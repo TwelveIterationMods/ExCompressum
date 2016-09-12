@@ -28,17 +28,6 @@ tooltip.excompressum:auto_heavy_sieve=%s in a Heavy Box™
 tooltip.excompressum:mana_sieve=%s in a Magical Box™
 tooltip.excompressum:consumingEnergy=Consuming %d RF/t
 
-waila.excompressum:baitTooClose=You are too close.
-waila.excompressum:baitTooClose2=The animals are scared away.
-waila.excompressum:speedBoost=Speed Boost: %s
-waila.excompressum:luckBonus=Luck Bonus: %s
-waila.excompressum:sieveSkin=Skin: %s
-waila.excompressum:sieveProgress=Progress: %s
-waila.excompressum:sieveMesh=%s %d/%d
-waila.excompressum:sieveNoMesh=No Mesh
-waila.excompressum:solidVolume=Solid Volume: %s
-waila.excompressum:fluidVolume=Fluid Volume: %s
-
 info.excompressum:baitCanSpawn=This bait will work in this environment. Move out of range so you don't scare the animals away!
 info.excompressum:baitNearbyBait=There's too many baits in this area. Way too suspicious.
 info.excompressum:baitWrongEnv=Place more blocks from the animals' home biome here.
@@ -56,6 +45,7 @@ tile.excompressum:compressed_gravel.name=Compressed Gravel
 tile.excompressum:compressed_flint.name=Compressed Flint
 tile.excompressum:compressed_ender_gravel.name=Compressed Ender Gravel
 tile.excompressum:compressed_nether_gravel.name=Compressed Nether Gravel
+tile.excompressum:compressed_soul_sand.name=Compressed Soul Sand
 tile.excompressum:heavy_sieve_0.name=Heavy Oak Sieve
 tile.excompressum:heavy_sieve_1.name=Heavy Spruce Sieve
 tile.excompressum:heavy_sieve_2.name=Heavy Birch Sieve
@@ -94,3 +84,16 @@ tile.botania:flower.excompressum.brokenComprilla.name=Broken Comprilla
 tile.botania:flower.excompressum.brokenComprilla.reference=It's not actually broken
 
 modifier.excompressum:smashingii.name=Smashing II
+
+waila.excompressum:baitTooClose=You are too close.
+waila.excompressum:baitTooClose2=The animals are scared away.
+waila.excompressum:speedBoost=Speed Boost: %s
+waila.excompressum:luckBonus=Luck Bonus: %s
+waila.excompressum:sieveSkin=Skin: %s
+waila.excompressum:sieveProgress=Progress: %s
+waila.excompressum:sieveMesh=%s %d/%d
+waila.excompressum:sieveNoMesh=No Mesh
+waila.excompressum:solidVolume=Solid Volume: %s
+waila.excompressum:fluidVolume=Fluid Volume: %s
+
+jei.excompressum:heavySieve=Heavy Sieve

@@ -33,13 +33,19 @@ public class BlockCompressed extends Block implements IRegisterModel {
 		DIRT,
 		FLINT,
 		NETHER_GRAVEL,
-		ENDER_GRAVEL;
+		ENDER_GRAVEL,
+		SOUL_SAND, Blocks;
 
 		public static final Type[] values = values();
 
 		@Override
 		public String getName() {
 			return name().toLowerCase(Locale.ENGLISH);
+		}
+
+		@Nullable
+		public static Type fromId(int id) {
+			return id >= 0 && id < values.length ? values[id] : null;
 		}
 	}
 
@@ -102,7 +108,7 @@ public class BlockCompressed extends Block implements IRegisterModel {
 		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
 			@Override
 			public ModelResourceLocation getModelLocation(ItemStack itemStack) {
-				Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
+				Type type = Type.fromId(itemStack.getItemDamage());
 				if(type != null) {
 					return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "compressed_" + type.getName()), "inventory");
 				} else {

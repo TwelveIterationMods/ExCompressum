@@ -15,6 +15,7 @@ import net.blay09.mods.excompressum.utils.SubItemHandler;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Enchantments;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -22,6 +23,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -136,7 +138,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 								ItemStack meshStack = meshSlots.getStackInSlot(0);
 								if (meshStack != null) {
 									if(meshStack.attemptDamageItem(1, worldObj.rand)) {
-										// TODO sound for mesh break?
+										getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
 										meshStack.stackSize--;
 										meshSlots.setStackInSlot(0, null);
 									}

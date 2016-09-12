@@ -7,12 +7,14 @@ import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
@@ -58,7 +60,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         }
     }
 
-    public void processContents(EntityPlayer player) {
+    public boolean processContents(EntityPlayer player) {
         if(currentStack != null && meshStack != null) {
             if (player.capabilities.isCreativeMode) {
                 progress = 1f;
@@ -82,12 +84,12 @@ public class TileHeavySieve extends TileEntity implements ITickable {
                     currentStack = null;
                     if(ExRegistro.doMeshesHaveDurability() && sieveMesh != null) {
                         if(!sieveMesh.isHeavy()) {
-                            // TODO this should probably play a broken sound and show particles
+                            getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
                             meshStack = null;
                         } else {
                             meshStack.damageItem(1, player);
                             if (meshStack.stackSize == 0) {
-                                // TODO this should probably play a broken sound and show particles
+                                getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
                                 meshStack = null;
                             }
                         }
@@ -97,7 +99,9 @@ public class TileHeavySieve extends TileEntity implements ITickable {
                 }
             }
             isDirty = true;
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -158,7 +162,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         return null;
     }
 
-    public void setMeshStack(ItemStack meshStack) {
+    public void setMeshStack(@Nullable ItemStack meshStack) {
         this.meshStack = meshStack;
         isDirty = true;
     }
