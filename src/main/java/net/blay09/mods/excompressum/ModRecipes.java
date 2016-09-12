@@ -154,45 +154,60 @@ public class ModRecipes {
 
 	private static void registerCompressedHammers(Configuration config) {
 		if (config.getBoolean("Compressed Wooden Hammer", "items", true, "If set to false, the recipe for the compressed wooden hammer will be disabled.")) {
-			ItemStack itemHammerWood = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_WOODEN);
-			if (itemHammerWood != null) {
-				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerWood), "###", "###", "###", '#', itemHammerWood);
+			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_WOODEN);
+			if (nihiloHammer != null) {
+				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
+				}
+				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerWood), "###", "###", "###", '#', nihiloHammer);
 			} else {
 				ExCompressum.logger.warn("No Wooden Hammer found - Compressed Wooden Hammer recipe will be disabled.");
 			}
 		}
 
 		if (config.getBoolean("Compressed Stone Hammer", "items", true, "If set to false, the recipe for the compressed stone hammer will be disabled.")) {
-			ItemStack itemHammerStone = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_STONE);
-			if (itemHammerStone != null) {
-				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerStone), "###", "###", "###", '#', itemHammerStone);
+			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_STONE);
+			if (nihiloHammer != null) {
+				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
+				}
+				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerStone), "###", "###", "###", '#', nihiloHammer);
 			} else {
 				ExCompressum.logger.warn("No Stone Hammer found - Compressed Stone Hammer recipe will be disabled.");
 			}
 		}
 
 		if (config.getBoolean("Compressed Iron Hammer", "items", true, "If set to false, the recipe for the compressed iron hammer will be disabled.")) {
-			ItemStack itemHammerIron = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_IRON);
-			if (itemHammerIron != null) {
-				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerIron), "###", "###", "###", '#', itemHammerIron);
+			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_IRON);
+			if (nihiloHammer != null) {
+				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
+				}
+				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerIron), "###", "###", "###", '#', nihiloHammer);
 			} else {
 				ExCompressum.logger.warn("No Iron Hammer found - Compressed Iron Hammer recipe will be disabled.");
 			}
 		}
 
 		if (config.getBoolean("Compressed Gold Hammer", "items", true, "If set to false, the recipe for the compressed gold hammer will be disabled.")) {
-			ItemStack itemHammerGold = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_GOLD);
-			if (itemHammerGold != null) {
-				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerGold), "###", "###", "###", '#', itemHammerGold);
+			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_GOLD);
+			if (nihiloHammer != null) {
+				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
+				}
+				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerGold), "###", "###", "###", '#', nihiloHammer);
 			} else {
 				ExCompressum.logger.warn("No Gold Hammer found - Compressed Gold Hammer recipe will be disabled.");
 			}
 		}
 
 		if (config.getBoolean("Compressed Diamond Hammer", "items", true, "If set to false, the recipe for the compressed diamond hammer will be disabled.")) {
-			ItemStack itemHammerDiamond = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
-			if (itemHammerDiamond != null) {
-				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerDiamond), "###", "###", "###", '#', itemHammerDiamond);
+			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
+			if (nihiloHammer != null) {
+				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
+				}
+				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerDiamond), "###", "###", "###", '#', nihiloHammer);
 			} else {
 				ExCompressum.logger.warn("No Diamond Hammer found - Compressed Diamond Hammer recipe will be disabled.");
 			}

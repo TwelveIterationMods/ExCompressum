@@ -51,11 +51,11 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	private float sieveLuckMultiplier = 0.1f;
 
 	public ExNihiloOmniaAddon() {
-		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood", 0));
-		itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammer_stone", 0));
-		itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammer_iron", 0));
-		itemMap.put(NihiloItems.HAMMER_GOLD, findItem("hammer_gold", 0));
-		itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammer_diamond", 0));
+		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammer_stone", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammer_iron", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_GOLD, findItem("hammer_gold", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammer_diamond", OreDictionary.WILDCARD_VALUE));
 		itemMap.put(NihiloItems.CROOK_WOODEN, findItem("crook_wood", 0));
 		itemMap.put(NihiloItems.SILK_MESH, findItem("mesh_silk_white", 0));
 		itemMap.put(NihiloItems.SEEDS_GRASS, findItem("seeds_grass", 0));

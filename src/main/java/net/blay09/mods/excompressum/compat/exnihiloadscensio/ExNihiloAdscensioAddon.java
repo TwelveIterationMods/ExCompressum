@@ -49,11 +49,11 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	private float sieveLuckMultiplier = 0.1f;
 
 	public ExNihiloAdscensioAddon() {
-		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammerWood", 0));
-		itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammerStone", 0));
-		itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammerIron", 0));
-		itemMap.put(NihiloItems.HAMMER_GOLD, findItem("hammerGold", 0));
-		itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammerDiamond", 0));
+		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammerWood", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammerStone", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammerIron", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_GOLD, findItem("hammerGold", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammerDiamond", OreDictionary.WILDCARD_VALUE));
 		itemMap.put(NihiloItems.CROOK_WOODEN, findItem("crookWood", 0));
 		itemMap.put(NihiloItems.SILK_MESH, findItem("itemMesh", 1));
 		itemMap.put(NihiloItems.IRON_MESH, findItem("itemMesh", 3));

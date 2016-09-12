@@ -34,7 +34,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
     public static final HeavySieveRegistry INSTANCE = new HeavySieveRegistry();
     private final Map<RegistryKey, HeavySieveRegistryEntry> entries = Maps.newHashMap();
-    private static final int DEFAULT_LOSS = 3;
+    private static final int DEFAULT_LOSS = 2;
 
     private int defaultLoss;
 
