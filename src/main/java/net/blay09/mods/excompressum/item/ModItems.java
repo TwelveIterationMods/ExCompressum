@@ -1,15 +1,21 @@
 package net.blay09.mods.excompressum.item;
 
+import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.IRegisterModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.List;
 
 public class ModItems {
 
+    private static final List<Item> modItems = Lists.newArrayList();
     public static ItemChickenStick chickenStick;
     public static ItemCompressedHammer compressedHammerWood;
     public static ItemCompressedHammer compressedHammerStone;
@@ -64,10 +70,17 @@ public class ModItems {
 
     public static void register(Item item) {
         GameRegistry.register(item);
-        if(item instanceof IRegisterModel) {
-            ((IRegisterModel) item).registerModel(item);
-        } else {
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+        modItems.add(item);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void registerModels() {
+        for(Item item : modItems) {
+            if (item instanceof IRegisterModel) {
+                ((IRegisterModel) item).registerModel(item);
+            } else {
+                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+            }
         }
     }
 

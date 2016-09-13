@@ -31,8 +31,8 @@ public class TileHeavySieve extends TileEntity implements ITickable {
 
     private static final int MAX_CLICKS_PER_SECOND = 6;
     private static final float PROCESSING_INTERVAL = 0.075f;
-    private static final int UPDATE_INTERVAL = 20;
-    private static final int PARTICLE_TICKS = 30;
+    private static final int UPDATE_INTERVAL = 10;
+    private static final int PARTICLE_TICKS = 20;
 
     private ItemStack meshStack;
     private ItemStack currentStack;

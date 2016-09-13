@@ -101,35 +101,35 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null) {
-			TileEntityAutoSieveBase tileEntity = (TileEntityAutoSieveBase) world.getTileEntity(pos);
-			if(tileEntity != null) {
-				if (heldItem.getItem() instanceof ItemFood) {
-					ItemFood itemFood = (ItemFood) heldItem.getItem();
-					if (tileEntity.getSpeedBoost() <= 1f) {
-						tileEntity.setSpeedBoost((int) (itemFood.getSaturationModifier(heldItem) * 640), Math.max(1f, itemFood.getHealAmount(heldItem) * 0.75f));
-						if (!player.capabilities.isCreativeMode) {
-							ItemStack returnStack = itemFood.onItemUseFinish(heldItem, world, null);
-							if(returnStack != heldItem) {
-								player.setHeldItem(hand, returnStack);
+		if(!world.isRemote) {
+			if (heldItem != null) {
+				TileEntityAutoSieveBase tileEntity = (TileEntityAutoSieveBase) world.getTileEntity(pos);
+				if (tileEntity != null) {
+					if (heldItem.getItem() instanceof ItemFood) {
+						ItemFood itemFood = (ItemFood) heldItem.getItem();
+						if (tileEntity.getSpeedBoost() <= 1f) {
+							tileEntity.setSpeedBoost((int) (itemFood.getSaturationModifier(heldItem) * 640), Math.max(1f, itemFood.getHealAmount(heldItem) * 0.75f));
+							if (!player.capabilities.isCreativeMode) {
+								ItemStack returnStack = itemFood.onItemUseFinish(heldItem, world, null);
+								if (returnStack != heldItem) {
+									player.setHeldItem(hand, returnStack);
+								}
 							}
-						}
-						if (!world.isRemote) {
 							world.playEvent(2005, pos, 0);
 						}
+						return true;
+					} else if (heldItem.getItem() == Items.NAME_TAG && heldItem.hasDisplayName()) {
+						tileEntity.setCustomSkin(new GameProfile(null, heldItem.getDisplayName()));
+						if (!player.capabilities.isCreativeMode) {
+							heldItem.stackSize--;
+						}
+						return true;
 					}
-					return true;
-				} else if (heldItem.getItem() == Items.NAME_TAG && heldItem.hasDisplayName()) {
-					tileEntity.setCustomSkin(new GameProfile(null, heldItem.getDisplayName()));
-					if (!player.capabilities.isCreativeMode) {
-						heldItem.stackSize--;
-					}
-					return true;
 				}
 			}
-		}
-		if(!player.isSneaking()) {
-			player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_SIEVE, world, pos.getX(), pos.getY(), pos.getZ());
+			if (!player.isSneaking()) {
+				player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_SIEVE, world, pos.getX(), pos.getY(), pos.getZ());
+			}
 		}
 		return true;
 	}

@@ -45,7 +45,7 @@ public class BlockAutoCompressor extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!player.isSneaking()) {
+        if(!player.isSneaking() && !world.isRemote) {
             player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_COMPRESSOR, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;

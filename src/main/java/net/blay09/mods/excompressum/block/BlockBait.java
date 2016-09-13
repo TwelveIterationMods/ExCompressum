@@ -30,6 +30,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -176,6 +178,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerModel(Item item) {
         ResourceLocation[] variants = new ResourceLocation[Type.values.length];
         for(int i = 0; i < variants.length; i++) {

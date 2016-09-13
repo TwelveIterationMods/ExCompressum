@@ -5,6 +5,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.client.render.entity.RenderAngryChicken;
 import net.blay09.mods.excompressum.client.render.tile.RenderAutoHammer;
 import net.blay09.mods.excompressum.client.render.tile.RenderAutoSieve;
@@ -14,6 +15,7 @@ import net.blay09.mods.excompressum.client.render.tile.RenderWoodenCrucible;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.config.ToolsConfig;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.blay09.mods.excompressum.tile.TileBait;
@@ -58,6 +60,9 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
+
+		ModItems.registerModels();
+		ModBlocks.registerModels();
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileHeavySieve.class, new RenderHeavySieve());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSieve.class, new RenderAutoSieve(false));

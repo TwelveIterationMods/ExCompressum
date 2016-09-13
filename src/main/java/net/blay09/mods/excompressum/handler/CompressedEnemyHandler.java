@@ -30,7 +30,7 @@ public class CompressedEnemyHandler {
         if(!event.getWorld().isRemote && (event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast)) {
             String entityName = EntityList.getEntityString(event.getEntity());
             if(CompressedMobsConfig.compressedMobs.contains(entityName)) {
-                if (event.getEntity().worldObj.rand.nextFloat() <= CompressedMobsConfig.compressedMobChance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
+                if (event.getEntity().worldObj.rand.nextFloat() >= CompressedMobsConfig.compressedMobChance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
                     event.getEntity().setAlwaysRenderNameTag(true);
                     event.getEntity().setCustomNameTag("Compressed " + event.getEntity().getName());
                     NBTTagCompound tagCompound = new NBTTagCompound();

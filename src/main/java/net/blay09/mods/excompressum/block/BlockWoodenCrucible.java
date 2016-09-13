@@ -27,6 +27,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -141,6 +143,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerModel(Item item) {
         ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
             @Override

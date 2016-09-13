@@ -32,6 +32,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -105,7 +107,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!player.isSneaking()) {
+        if(!player.isSneaking() && !world.isRemote) {
             player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_HAMMER, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
@@ -169,6 +171,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerModel(Item item) {
         ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
             @Override

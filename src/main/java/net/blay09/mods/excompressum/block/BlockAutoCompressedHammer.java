@@ -10,6 +10,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockAutoCompressedHammer extends BlockAutoHammer {
 
@@ -33,6 +35,7 @@ public class BlockAutoCompressedHammer extends BlockAutoHammer {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerModel(Item item) {
         ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }

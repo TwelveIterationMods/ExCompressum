@@ -55,6 +55,12 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 			}
 			return true;
 		}
+
+		@Override
+		protected void onContentsChanged(int slot) {
+			super.onContentsChanged(slot);
+			isDirty = true;
+		}
 	};
 	private final SubItemHandler inputSlots = new SubItemHandler(itemHandler, 0, 1);
 	private final SubItemHandler outputSlots = new SubItemHandler(itemHandler, 1, 21);
@@ -277,6 +283,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 				ExCompressum.proxy.preloadSkin(customSkin);
 			}
 		}
+		speedBoost = tagCompound.getFloat("SpeedBoost");
+		speedBoostTicks = tagCompound.getInteger("SpeedBoostTicks");
 		particleTicks = tagCompound.getInteger("ParticleTicks");
 		particleCount = tagCompound.getInteger("ParticleCount");
 	}
@@ -299,6 +307,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 			NBTUtil.writeGameProfile(customSkinTag, customSkin);
 			tagCompound.setTag("CustomSkin", customSkinTag);
 		}
+		tagCompound.setFloat("SpeedBoost", speedBoost);
+		tagCompound.setInteger("SpeedBoostTicks", speedBoostTicks);
 		tagCompound.setInteger("ParticleTicks", particleTicks);
 		tagCompound.setInteger("ParticleCount", particleCount);
 	}

@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.block;
 
+import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.compat.Compat;
@@ -14,7 +15,10 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModAPIManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import java.util.List;
+
 public class ModBlocks {
+    private static final List<Block> modBlocks = Lists.newArrayList();
     public static BlockCompressed compressedBlock;
     public static BlockHeavySieve heavySieve;
     public static BlockWoodenCrucible woodenCrucible;
@@ -82,11 +86,19 @@ public class ModBlocks {
     private static void registerBlock(Block block, Item itemBlock) {
         GameRegistry.register(block);
         GameRegistry.register(itemBlock);
-        if(block instanceof IRegisterModel) {
-            ((IRegisterModel) block).registerModel(itemBlock);
-        } else {
-            ModelLoader.setCustomModelResourceLocation(itemBlock, 0, new ModelResourceLocation(itemBlock.getRegistryName(), "inventory"));
-        }
+        modBlocks.add(block);
     }
 
+    public static void registerModels() {
+        for(Block block : modBlocks) {
+            Item itemBlock = Item.getItemFromBlock(block);
+            if(itemBlock != null) {
+                if (block instanceof IRegisterModel) {
+                    ((IRegisterModel) block).registerModel(itemBlock);
+                } else {
+                    ModelLoader.setCustomModelResourceLocation(itemBlock, 0, new ModelResourceLocation(itemBlock.getRegistryName(), "inventory"));
+                }
+            }
+        }
+    }
 }

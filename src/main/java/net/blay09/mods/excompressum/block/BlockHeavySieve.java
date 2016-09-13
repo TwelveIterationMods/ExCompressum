@@ -34,6 +34,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
@@ -169,9 +171,11 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 				}
 			}
 
-			if (ProcessingConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
-				if(tileEntity.processContents(player)) {
-					world.playSound(null, pos, SoundEvents.BLOCK_SAND_STEP, SoundCategory.BLOCKS, 0.3f, 0.6f);
+			if(!world.isRemote) {
+				if (ProcessingConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
+					if (tileEntity.processContents(player)) {
+						world.playSound(null, pos, SoundEvents.BLOCK_SAND_STEP, SoundCategory.BLOCKS, 0.3f, 0.6f);
+					}
 				}
 			}
 		}
@@ -180,6 +184,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModel(Item item) {
 		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
 			@Override

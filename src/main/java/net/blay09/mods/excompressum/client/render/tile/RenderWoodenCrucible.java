@@ -49,7 +49,7 @@ public class RenderWoodenCrucible extends TileEntitySpecialRenderer<TileWoodenCr
             renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
             GlStateManager.pushMatrix();
             GlStateManager.translate(x + 0.0625f, y + 0.251f, z + 0.0625f);
-            GlStateManager.scale(0.9375f, 0.71 * (float) solidVolume / (float) tileEntity.getSolidCapacity(), 0.9375f);
+            GlStateManager.scale(0.93749f, 0.71 * (float) solidVolume / (float) tileEntity.getSolidCapacity(), 0.93749f);
             mc.getBlockRendererDispatcher().renderBlock(Blocks.LEAVES.getDefaultState(), new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
             tessellator.draw();
             GlStateManager.popMatrix();
