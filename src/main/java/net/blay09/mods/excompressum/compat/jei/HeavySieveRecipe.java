@@ -42,7 +42,7 @@ public class HeavySieveRecipe implements IRecipeWrapper {
 		inputs = Lists.newArrayList();
 		rewards = ArrayListMultimap.create();
 		if(sieveMesh != null) {
-			inputs.add(sieveMesh);
+			inputs.add(sieveMesh.getItemStack());
 			for(HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh)) {
 				rewards.put(new RegistryKey(reward.getItemStack()), reward);
 			}

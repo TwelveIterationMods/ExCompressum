@@ -189,7 +189,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 					if (ExRegistro.doMeshesHaveDurability()) {
 						return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName() + ",with_mesh=false");
 					} else {
-						return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName() + ",with_mesh=true");
+						return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName() + ",with_mesh=false"); // NOTE it's false here too because it was a dumb idea based on wrong thinking; don't want to remove it now though
 					}
 				} else {
 					return new ModelResourceLocation("missingno");

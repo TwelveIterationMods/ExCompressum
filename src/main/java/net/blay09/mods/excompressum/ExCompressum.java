@@ -106,8 +106,8 @@ public class ExCompressum {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        registerAddon(event, Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
         registerAddon(event, Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
+        registerAddon(event, Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
 
         if(ExRegistro.instance == null) {
             ExCompressum.logger.warn("No Ex Nihilo mod installed - many things will be disabled. Why would you run Ex Compressum without Ex Nihilo? Pfft.");

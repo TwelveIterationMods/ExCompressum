@@ -107,7 +107,13 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 				if(!input) {
 					Multiset<String> condensedTooltips = HashMultiset.create();
 					for(HeavySieveReward reward : recipeWrapper.getRewardsForItemStack(ingredient)) {
-						String s = String.format("%3d%%", (int) (reward.getBaseChance() * 100f));
+						String s;
+						int iChance = (int) (reward.getBaseChance() * 100f);
+						if(iChance > 0) {
+							s = String.format("%3d%%", (int) (reward.getBaseChance() * 100f));
+						} else {
+							s = String.format("%1.1f%%", reward.getBaseChance() * 100f);
+						}
 						if(reward.getLuckMultiplier() > 0f) {
 							s += TextFormatting.BLUE + String.format(" (+ %1.1f luck)", reward.getLuckMultiplier()); // i18n
 						}
