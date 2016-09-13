@@ -33,6 +33,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -239,6 +241,12 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 				CompostRegistry.add(new CompostRegistryEntry(itemStack, 125, new Color(0xFFC77826)));
 			}
 		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void clientInit() {
+
 	}
 
 	@Override

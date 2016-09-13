@@ -9,6 +9,8 @@ import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SuppressWarnings("unused")
 @Optional.Interface(modid = "MineTweaker3", iface = "minetweaker.util.IEventHandler", striprefs = true)
@@ -21,6 +23,12 @@ public class MineTweakerAddon implements IEventHandler<MineTweakerImplementation
     public void handle(MineTweakerImplementationAPI.ReloadEvent reloadEvent) {
         HeavySieveRegistry.INSTANCE.load(ExCompressum.configDir);
         CompressedRecipeRegistry.reload();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void clientInit() {
+
     }
 
     @Override

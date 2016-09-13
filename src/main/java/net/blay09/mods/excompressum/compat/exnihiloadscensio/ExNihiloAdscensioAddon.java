@@ -31,6 +31,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -248,6 +250,12 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public void serverStarted(FMLServerStartedEvent event) {
+
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void clientInit() {
 
 	}
 

@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.google.gson.stream.MalformedJsonException;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;

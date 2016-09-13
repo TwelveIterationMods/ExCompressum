@@ -4,16 +4,21 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.api.BotaniaAPIClient;
 import vazkii.botania.api.lexicon.LexiconEntry;
 import vazkii.botania.api.recipe.RecipePetals;
 import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 import vazkii.botania.common.lexicon.page.PagePetalRecipe;
 import vazkii.botania.common.lexicon.page.PageText;
+import vazkii.botania.common.lib.LibBlockNames;
 
 import java.util.Iterator;
 
@@ -36,6 +41,12 @@ public class BotaniaAddon implements IAddon {
     public BotaniaAddon(Configuration config) {
         loadConfig(config);
         BotaniaAPI.registerSubTile(SUBTILE_ORECHID_EVOLVED, SubTileOrechidEvolved.class);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void clientInit() {
+        BotaniaAPIClient.registerSubtileModel(SubTileOrechidEvolved.class, new ModelResourceLocation(new ResourceLocation(Compat.BOTANIA, LibBlockNames.SUBTILE_ORECHID), "normal"));
     }
 
     @Override

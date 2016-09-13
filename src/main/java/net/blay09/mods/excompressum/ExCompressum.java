@@ -84,7 +84,7 @@ public class ExCompressum {
         MinecraftForge.EVENT_BUS.register(new CompressedEnemyHandler());
         MinecraftForge.EVENT_BUS.register(new ChickenStickHandler());
 
-        // Botania is a special snowflake that requires addon initialization during preInit
+        // NOTE Botania is a special snowflake that requires addon initialization during preInit
         if(Loader.isModLoaded(Compat.BOTANIA)) {
             try {
                 Class<?> clazz = Class.forName("net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
@@ -95,6 +95,11 @@ public class ExCompressum {
         }
 
         proxy.preInit(event);
+
+        // NOTE Botania decided to be a special snowflake once more
+        for(IAddon addon : addons) {
+            proxy.preInitAddon(addon);
+        }
     }
 
     @Mod.EventHandler

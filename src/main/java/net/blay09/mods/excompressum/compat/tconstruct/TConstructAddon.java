@@ -6,6 +6,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import slimeknights.tconstruct.library.TinkerRegistry;
 
 @SuppressWarnings("unused")
@@ -26,6 +28,12 @@ public class TConstructAddon implements IAddon {
             TinkerRegistry.registerModifier(smashingII);
             GameRegistry.addRecipe(new ItemStack(ModItems.doubleCompressedDiamondHammer), "##", "##", '#', ModItems.compressedHammerDiamond);
         }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void clientInit() {
+
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.blay09.mods.excompressum.client.render.tile.RenderAutoSieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderBait;
 import net.blay09.mods.excompressum.client.render.tile.RenderHeavySieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderWoodenCrucible;
+import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.config.ToolsConfig;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
@@ -120,5 +121,10 @@ public class ClientProxy extends CommonProxy {
 		for (int i = 0; i < destroyBlockIcons.length; i++) {
 			destroyBlockIcons[i] = event.getMap().getAtlasSprite("minecraft:blocks/destroy_stage_" + i);
 		}
+	}
+
+	@Override
+	public void preInitAddon(IAddon addon) {
+		addon.clientInit();
 	}
 }
