@@ -2,14 +2,20 @@ package net.blay09.mods.excompressum.client.render;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.ParticleDigging;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ParticleSieve extends ParticleDigging {
-	public ParticleSieve(World world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, IBlockState state) {
-		super(world, x, y, z, velocityX, velocityY, velocityZ, state);
+	public ParticleSieve(World world, BlockPos pos, double x, double y, double z, IBlockState state) {
+		super(world, pos.getX() + x, pos.getY() + y, pos.getZ() + z, 0f, 0f, 0f, state);
+		setBlockPos(pos);
 
-		motionX = velocityX;
-		motionY = velocityY;
-		motionZ = velocityZ;
+		particleScale = 0.2f;
+		particleMaxAge = world.rand.nextInt(30) + 10;
+		particleGravity = world.rand.nextFloat() * 0.25f;
+
+		motionX = (world.rand.nextFloat() - 0.5f) * 0.025f;
+		motionY = 0f;
+		motionZ = (world.rand.nextFloat() - 0.5f) * 0.025f;
 	}
 }

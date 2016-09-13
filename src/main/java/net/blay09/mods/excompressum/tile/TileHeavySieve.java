@@ -1,10 +1,14 @@
 package net.blay09.mods.excompressum.tile;
 
+import net.blay09.mods.excompressum.client.render.ParticleSieve;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.utils.StupidUtils;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -15,17 +19,19 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-// TODO needs particles
 public class TileHeavySieve extends TileEntity implements ITickable {
 
     private static final int MAX_CLICKS_PER_SECOND = 6;
     private static final float PROCESSING_INTERVAL = 0.075f;
     private static final int UPDATE_INTERVAL = 20;
+    private static final int PARTICLE_TICKS = 30;
 
     private ItemStack meshStack;
     private ItemStack currentStack;
@@ -35,6 +41,9 @@ public class TileHeavySieve extends TileEntity implements ITickable {
 
     private boolean isDirty;
     private int ticksSinceSync;
+
+    private int particleTicks;
+    private int particleCount;
 
     public boolean addSiftable(EntityPlayer player, ItemStack itemStack) {
         if(currentStack != null || meshStack == null || !HeavySieveRegistry.isSiftable(itemStack)) {
@@ -56,6 +65,26 @@ public class TileHeavySieve extends TileEntity implements ITickable {
             if (isDirty) {
                 VanillaPacketHandler.sendTileEntityUpdate(this);
                 isDirty = false;
+            }
+        }
+
+        if(particleTicks > 0 && worldObj.isRemote) {
+            particleTicks--;
+            if(particleTicks <= 0) {
+                particleCount = 0;
+            }
+            spawnParticles();
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void spawnParticles() {
+        if(currentStack != null) {
+            IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
+            if (state != null) {
+                for(int i = 0; i < particleCount; i++) {
+                    Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(worldObj, pos, 0.5 + worldObj.rand.nextFloat() * 0.8 - 0.4, 0.4, 0.5 + worldObj.rand.nextFloat() * 0.8 - 0.4, state));
+                }
             }
         }
     }
@@ -98,6 +127,8 @@ public class TileHeavySieve extends TileEntity implements ITickable {
                     VanillaPacketHandler.sendTileEntityUpdate(this);
                 }
             }
+            particleTicks = PARTICLE_TICKS;
+            particleCount++;
             isDirty = true;
             return true;
         }
@@ -110,6 +141,8 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content"));
         meshStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Mesh"));
         progress = tagCompound.getFloat("Progress");
+        particleTicks = tagCompound.getInteger("ParticleTicks");
+        particleCount = tagCompound.getInteger("ParticleCount");
     }
 
     @Override
@@ -122,6 +155,8 @@ public class TileHeavySieve extends TileEntity implements ITickable {
             tagCompound.setTag("Mesh", meshStack.writeToNBT(new NBTTagCompound()));
         }
         tagCompound.setFloat("Progress", progress);
+        tagCompound.setInteger("ParticleTicks", particleTicks);
+        tagCompound.setInteger("ParticleCount", particleCount);
         return tagCompound;
     }
 

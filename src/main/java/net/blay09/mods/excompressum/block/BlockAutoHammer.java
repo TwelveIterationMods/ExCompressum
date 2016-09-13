@@ -173,7 +173,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
             @Override
             public ModelResourceLocation getModelLocation(ItemStack stack) {
-                return new ModelResourceLocation(getRegistryName(), "facing=south,hammer_mod=" + ExRegistro.getNihiloMod().getName());
+                return new ModelResourceLocation(getRegistryName(), "facing=north,hammer_mod=" + ExRegistro.getNihiloMod().getName());
             }
         });
     }

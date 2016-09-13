@@ -20,7 +20,7 @@
       "adscensio": {
         "model": "excompressum:auto_hammer_inventory",
         "textures": {
-          "hammer": "exnihiloadscensio:items/hammer_diamond"
+          "hammer": "exnihiloadscensio:items/hammerDiamond"
         }
       }
     },
