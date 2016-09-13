@@ -37,9 +37,9 @@ public class EntityAngryChicken extends EntityMob {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(25.0);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.45);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0);
 	}
 
 	@Override
@@ -86,6 +86,8 @@ public class EntityAngryChicken extends EntityMob {
 		} else {
 			dropItem(Items.CHICKEN, 1);
 		}
+
+		dropItem(ModItems.chickenStick, 1);
 	}
 
 	@Override

@@ -33,12 +33,15 @@ public class JEIAddon implements IModPlugin {
 		registry.addRecipeCategories(
 				new HeavySieveRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
 				new CompressedHammerRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
-				new WoodenCrucibleRecipeCategory(registry.getJeiHelpers().getGuiHelper())
+				new WoodenCrucibleRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
+				new ChickenStickRecipeCategory(registry.getJeiHelpers().getGuiHelper())
 				);
 		registry.addRecipeHandlers(
 				new HeavySieveRecipeHandler(),
 				new CompressedHammerRecipeHandler(),
-				new WoodenCrucibleRecipeHandler());
+				new WoodenCrucibleRecipeHandler(),
+				new ChickenStickRecipeHandler()
+				);
 
 		List<HeavySieveRecipe> heavySieveRecipes = Lists.newArrayList();
 		if(ExRegistro.doMeshesSplitLootTables()) {
@@ -72,6 +75,8 @@ public class JEIAddon implements IModPlugin {
 			woodenCrucibleRecipes.add(new WoodenCrucibleRecipe(FluidRegistry.getFluid(fluidName), fluidOutputMap.get(fluidName)));
 		}
 		registry.addRecipes(woodenCrucibleRecipes);
+
+		registry.addRecipes(Lists.newArrayList(new ChickenStickRecipe()));
 
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.heavySieve), HeavySieveRecipeCategory.UID);
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.woodenCrucible), WoodenCrucibleRecipeCategory.UID);
