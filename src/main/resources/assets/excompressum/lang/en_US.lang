@@ -93,3 +93,7 @@ jei.excompressum:heavySieve=Heavy Sieve
 jei.excompressum:compressedHammer=Compressed Hammer
 jei.excompressum:woodenCrucible=Wooden Crucible
 jei.excompressum:chickenStick=Chicken Stick
+jei.excompressum:compressedHammer.dropChance=Drop Chance:
+jei.excompressum:heavySieve.dropChance=Drop Chance:
+jei.excompressum:compressedHammer.luck=luck
+jei.excompressum:heavySieve.luck=luck

@@ -168,7 +168,7 @@ public class TileBait extends TileEntity implements ITickable {
         return i == 0 ? renderItemMain : renderItemSub;
     }
 
-    // TODO if this turns out to perform badly, distribute the check over several ticks
+    // NOTE if this turns out to perform badly, distribute the check over several ticks
     public EnvironmentalCondition checkSpawnConditions(boolean checkNow) {
         if(checkNow || ticksSinceEnvironmentalCheck > ENVIRONMENTAL_CHECK_INTERVAL) {
             int metadata = getBlockMetadata();

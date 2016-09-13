@@ -22,7 +22,6 @@ import vazkii.botania.common.lib.LibBlockNames;
 
 import java.util.Iterator;
 
-// TODO broken model
 public class BotaniaAddon implements IAddon {
 
     public static final String SUBTILE_ORECHID_EVOLVED = ExCompressum.MOD_ID + ".orechidEvolved";

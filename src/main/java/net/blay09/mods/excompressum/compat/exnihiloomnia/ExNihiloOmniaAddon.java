@@ -160,7 +160,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 			List<ItemStack> list = Lists.newArrayList();
 			for(HammerReward reward : entry.getRewards()) {
 				int fortuneModifier = reward.getFortuneModifier();
-				int chance = reward.getBaseChance() + (int) (fortuneModifier * luck); // NOTE https://github.com/Jozufozu/ExNihiloOmnia/issues/11
+				int chance = reward.getBaseChance() + (int) (fortuneModifier * luck);
 				if(rand.nextInt(100) < chance) {
 					list.add(reward.getItem().copy());
 				}

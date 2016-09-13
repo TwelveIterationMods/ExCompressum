@@ -51,8 +51,6 @@ public class CompressedRecipeRegistry {
         }
     }
 
-    // TODO I don't *have* a world at this time. Why does it even get a world passed? stupid
-
     private static void addCompressedRecipe(IRecipe recipe, @Nullable ItemStack sourceStack) {
         //noinspection ConstantConditions /// Forge missing @Nullable
         if(sourceStack != null && sourceStack.getItem() != null) { // .getItem() != null is needed because some mod is registering a broken recipe

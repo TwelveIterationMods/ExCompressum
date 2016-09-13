@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.tile;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
@@ -15,7 +14,9 @@ import net.blay09.mods.excompressum.utils.SubItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -173,21 +174,30 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         float boost = 1f;
         ItemStack firstHammer = itemHandlerUpgrades.getStackInSlot(0);
         if(firstHammer != null && isHammerUpgrade(firstHammer)) {
-            boost += 1f;
+            boost += 1f * (1f + EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, firstHammer));
         }
         ItemStack secondHammer = itemHandlerUpgrades.getStackInSlot(1);
         if(secondHammer != null && isHammerUpgrade(secondHammer)) {
-            boost += 1f;
+            boost += 1f * (1f + EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, secondHammer));
         }
         return boost;
     }
 
     public float getEffectiveSpeed() {
         return ProcessingConfig.autoHammerSpeed * getSpeedBoost();
-    } // TODO should probably take hammer enchantments into account
+    }
 
     public float getEffectiveLuck() {
-        return 0f; // TODO should probably take hammer enchantments into account
+        float luck = 0f;
+        ItemStack firstHammer = itemHandlerUpgrades.getStackInSlot(0);
+        if(firstHammer != null && isHammerUpgrade(firstHammer)) {
+            luck += EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, firstHammer);
+        }
+        ItemStack secondHammer = itemHandlerUpgrades.getStackInSlot(1);
+        if(secondHammer != null && isHammerUpgrade(secondHammer)) {
+            luck += EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, secondHammer);
+        }
+        return luck;
     }
 
     @Override

@@ -103,10 +103,10 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
 			public void onTooltip(int slotIndex, boolean input, ItemStack ingredient, List<String> tooltip) {
 				if(!input) {
 					CompressedHammerReward reward = recipeWrapper.getRewardAt(slotIndex - INPUT_SLOTS);
-					tooltip.add("Drop Chance:"); // i18n
+					tooltip.add(I18n.format("jei.excompressum:compressedHammer.dropChance"));
 					String s = String.format(" * %3d%%", (int) (reward.getBaseChance() * 100f));
 					if(reward.getLuckMultiplier() > 0f) {
-						s += TextFormatting.BLUE + String.format(" (+ %1.1f luck)", reward.getLuckMultiplier()); // i18n
+						s += TextFormatting.BLUE + String.format(" (+ %1.1f " + I18n.format("jei.excompressum:compressedHammer.luck") + ")", reward.getLuckMultiplier());
 					}
 					tooltip.add(s);
 				}

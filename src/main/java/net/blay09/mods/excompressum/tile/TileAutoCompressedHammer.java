@@ -12,12 +12,12 @@ public class TileAutoCompressedHammer extends TileAutoHammer {
 
     @Override
     public int getEffectiveEnergy() {
-        return ProcessingConfig.autoCompressedHammerEnergy; // TODO hammer enchantments
+        return ProcessingConfig.autoCompressedHammerEnergy;
     }
 
     @Override
     public float getEffectiveSpeed() {
-        return ProcessingConfig.autoCompressedHammerSpeed * getSpeedBoost(); // TODO hammer enchantments
+        return ProcessingConfig.autoCompressedHammerSpeed * getSpeedBoost();
     }
 
     @Override
