@@ -16,13 +16,13 @@ public class BaitConfig {
 
 	public static void load(Configuration config) {
 		final String CATEGORY = "Baits";
-		baitWolfChance = config.getFloat("Wolf Bait Chance", CATEGORY, 0.0005f, 0.0001f, 1f, "The chance (per tick) that a wolf bait will result in a wolf spawn.");
-		baitOcelotChance = config.getFloat("Ocelot Bait Chance", CATEGORY, 0.0005f, 0.0001f, 1f, "The chance (per tick) that an ocelot bait will result in an ocelot spawn.");
-		baitCowChance = config.getFloat("Cow Bait Chance", CATEGORY, 0.0005f, 0.0001f, 1f, "The chance (per tick) that a cow bait will result in a cow spawn.");
-		baitPigChance = config.getFloat("Pig Bait Chance", CATEGORY, 0.0005f, 0.0001f, 1f, "The chance (per tick) that a pig bait will result in a pig spawn.");
-		baitChickenChance = config.getFloat("Chicken Bait Chance", CATEGORY, 0.0005f, 0.0001f, 1f, "The chance (per tick) that a chicken bait will result in a chicken spawn.");
-		baitSheepChance = config.getFloat("Sheep Bait Chance", CATEGORY, 0.0005f, 0.0001f, 1f, "The chance (per tick) that a sheep bait will result in a sheep spawn.");
-		baitSquidChance = config.getFloat("Squid Bait Chance", CATEGORY, 0.0005f, 0.0001f, 1f, "The chance (per tick) that a squid bait will result in a squid spawn.");
+		baitWolfChance = config.getFloat("Wolf Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a wolf bait will result in a wolf spawn.");
+		baitOcelotChance = config.getFloat("Ocelot Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that an ocelot bait will result in an ocelot spawn.");
+		baitCowChance = config.getFloat("Cow Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a cow bait will result in a cow spawn.");
+		baitPigChance = config.getFloat("Pig Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a pig bait will result in a pig spawn.");
+		baitChickenChance = config.getFloat("Chicken Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a chicken bait will result in a chicken spawn.");
+		baitSheepChance = config.getFloat("Sheep Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a sheep bait will result in a sheep spawn.");
+		baitSquidChance = config.getFloat("Squid Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a squid bait will result in a squid spawn.");
 
 		baitChildChance = config.getFloat("Bait Child Chance", CATEGORY, 0.5f, 0f, 1f, "The chance that an animal spawned from a bait will result in a child.");
 	}

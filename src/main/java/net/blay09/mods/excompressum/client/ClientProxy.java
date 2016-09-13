@@ -127,4 +127,9 @@ public class ClientProxy extends CommonProxy {
 	public void preInitAddon(IAddon addon) {
 		addon.clientInit();
 	}
+
+	@Override
+	public void addScheduledTask(Runnable runnable) {
+		Minecraft.getMinecraft().addScheduledTask(runnable);
+	}
 }

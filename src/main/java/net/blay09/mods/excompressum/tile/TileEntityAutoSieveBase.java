@@ -4,6 +4,8 @@ import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.client.render.ParticleSieve;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -11,7 +13,10 @@ import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
 import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.utils.SubItemHandler;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Enchantments;
@@ -27,16 +32,18 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
-// TODO needs particles
 public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable {
 
 	private static final int UPDATE_INTERVAL = 20;
+	private static final int PARTICLE_TICKS = 30;
 
 	private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 22) {
 		@Override
@@ -77,6 +84,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	private int speedBoostTicks;
 
 	private float armAngle;
+	private int particleTicks;
+	private int particleCount;
 
 	@Override
 	public void update() {
@@ -120,9 +129,13 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 					progress = 0f;
 				}
 			} else {
-				armAngle += 0.1f * (Math.max(1f, speedBoost / 2f));
 				setEnergyStored(getEnergyStored() - effectiveEnergy);
 				progress += getEffectiveSpeed();
+
+				armAngle += 0.1f * (Math.max(1f, speedBoost / 2f));
+				particleTicks = PARTICLE_TICKS;
+				particleCount = (int) getSpeedBoost();
+
 				isDirty = true;
 				if (progress >= 1) {
 					if (!worldObj.isRemote) {
@@ -152,6 +165,43 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 					}
 					progress = 0f;
 					currentStack = null;
+				}
+			}
+		}
+
+		if(particleTicks > 0 && worldObj.isRemote) {
+			particleTicks--;
+			if(particleTicks <= 0) {
+				particleCount = 0;
+			}
+			spawnParticles();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void spawnParticles() {
+		if(currentStack != null && !ExCompressumConfig.disableParticles) {
+			int metadata = getBlockMetadata();
+			IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
+			if (state != null) {
+				for(int i = 0; i < particleCount; i++) {
+					double particleX = 0.5 + worldObj.rand.nextFloat() * 0.4 - 0.2;
+					double particleZ = 0.5 + worldObj.rand.nextFloat() * 0.4 - 0.2;
+					switch(EnumFacing.getFront(metadata)) {
+						case WEST:
+							particleZ -= 0.125f;
+							break;
+						case EAST:
+							particleZ += 0.125f;
+							break;
+						case NORTH:
+							particleX += 0.125f;
+							break;
+						case SOUTH:
+							particleX -= 0.125f;
+							break;
+					}
+					Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(worldObj, pos, particleX, 0.2, particleZ, 0.5f, state));
 				}
 			}
 		}
@@ -227,6 +277,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 				ExCompressum.proxy.preloadSkin(customSkin);
 			}
 		}
+		particleTicks = tagCompound.getInteger("ParticleTicks");
+		particleCount = tagCompound.getInteger("ParticleCount");
 	}
 
 	@Override
@@ -247,6 +299,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 			NBTUtil.writeGameProfile(customSkinTag, customSkin);
 			tagCompound.setTag("CustomSkin", customSkinTag);
 		}
+		tagCompound.setInteger("ParticleTicks", particleTicks);
+		tagCompound.setInteger("ParticleCount", particleCount);
 	}
 
 	@Override
@@ -383,10 +437,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	public boolean isCorrectSieveMesh() {
 		ItemStack inputStack = inputSlots.getStackInSlot(0);
 		SieveMeshRegistryEntry sieveMesh = getSieveMesh();
-		if(inputStack == null || sieveMesh == null) {
-			return true;
-		}
-		return isSiftableWithMesh(inputStack, sieveMesh);
+		return inputStack == null || sieveMesh == null || isSiftableWithMesh(inputStack, sieveMesh);
 	}
 
 }

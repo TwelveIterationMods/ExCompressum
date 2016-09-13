@@ -2,6 +2,8 @@ package net.blay09.mods.excompressum.tile;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
+import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
@@ -236,11 +238,12 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
 
     @SideOnly(Side.CLIENT)
     private void spawnCrushParticles() {
-        IBlockState currentBlock = getCurrentBlock();
-        if (currentBlock != null) {
-            for (int i = 0; i < 10; i++) {
-                // -0.09375f, 0.0625f, -0.25
-                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleAutoHammer(worldObj, pos, pos.getX() + 0.7f, pos.getY() + 0.3f, pos.getZ() + 0.5f, (-worldObj.rand.nextDouble() + 0.2f) / 9, 0.2f, (worldObj.rand.nextDouble() - 0.5) / 9, currentBlock));
+        if(!ExCompressumConfig.disableParticles) {
+            IBlockState currentBlock = getCurrentBlock();
+            if (currentBlock != null) {
+                for (int i = 0; i < 10; i++) {
+                    Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleAutoHammer(worldObj, pos, pos.getX() + 0.7f, pos.getY() + 0.3f, pos.getZ() + 0.5f, (-worldObj.rand.nextDouble() + 0.2f) / 9, 0.2f, (worldObj.rand.nextDouble() - 0.5) / 9, currentBlock));
+                }
             }
         }
     }

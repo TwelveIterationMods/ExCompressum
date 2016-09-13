@@ -19,12 +19,16 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -35,6 +39,8 @@ public class TileBait extends TileEntity implements ITickable {
     private static final int MAX_BAITS_IN_AREA = 2;
     private static final int MIN_ENV_IN_AREA = 10;
     private static final int MAX_ANIMALS_IN_AREA = 2;
+    private static final int SPAWN_CHECK_INTERVAL = 20;
+    private static final int MIN_DISTANCE_NO_PLAYERS = 6;
 
     public enum EnvironmentalCondition {
         CanSpawn("info.excompressum:baitCanSpawn"),
@@ -74,32 +80,41 @@ public class TileBait extends TileEntity implements ITickable {
     private ItemStack renderItemSub;
     private EnvironmentalCondition environmentStatus;
     private int ticksSinceEnvironmentalCheck;
+    private int ticksSinceSpawnCheck;
 
     @Override
     public void update() {
-        ticksSinceEnvironmentalCheck++;
-        int metadata = getBlockMetadata();
         if(renderItemMain == null) {
-            renderItemMain = getBaitDisplayItem(metadata, 0);
+            renderItemMain = getBaitDisplayItem(getBlockMetadata(), 0);
         }
         if(renderItemSub == null) {
-            renderItemSub = getBaitDisplayItem(metadata, 1);
+            renderItemSub = getBaitDisplayItem(getBlockMetadata(), 1);
         }
-        if(!worldObj.isRemote && worldObj.rand.nextFloat() <= getBaitChance(metadata)) {
-            if(checkSpawnConditions(true) == EnvironmentalCondition.CanSpawn) {
-                float range = 24f;
-                if (worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty()) {
-                    EntityLiving entityLiving = getBaitEntityLiving(worldObj, metadata);
-                    if (entityLiving != null) {
-                        if (entityLiving instanceof EntityAgeable && worldObj.rand.nextFloat() <= BaitConfig.baitChildChance) {
-                            ((EntityAgeable) entityLiving).setGrowingAge(-24000);
+
+        ticksSinceEnvironmentalCheck++;
+
+        ticksSinceSpawnCheck++;
+        if(ticksSinceSpawnCheck >= SPAWN_CHECK_INTERVAL) {
+            int metadata = getBlockMetadata();
+            if(!worldObj.isRemote && worldObj.rand.nextFloat() <= getBaitChance(metadata)) {
+                if(checkSpawnConditions(true) == EnvironmentalCondition.CanSpawn) {
+                    final float range = MIN_DISTANCE_NO_PLAYERS;
+                    if (worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty()) {
+                        EntityLiving entityLiving = getBaitEntityLiving(worldObj, metadata);
+                        if (entityLiving != null) {
+                            if (entityLiving instanceof EntityAgeable && worldObj.rand.nextFloat() <= BaitConfig.baitChildChance) {
+                                ((EntityAgeable) entityLiving).setGrowingAge(-24000);
+                            }
+                            entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                            worldObj.spawnEntityInWorld(entityLiving);
+                            ((WorldServer) worldObj).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, false, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1, 0, 0, 0, 0.0);
+                            worldObj.playSound(null, pos, SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.BLOCKS, 1f, 1f);
                         }
-                        entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-                        worldObj.spawnEntityInWorld(entityLiving);
+                        worldObj.setBlockToAir(pos);
                     }
-                    worldObj.setBlockToAir(pos);
                 }
             }
+            ticksSinceSpawnCheck = 0;
         }
     }
 
