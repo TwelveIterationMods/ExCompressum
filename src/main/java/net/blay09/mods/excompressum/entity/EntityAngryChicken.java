@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.entity;
 
+import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -16,29 +17,29 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-// TODO they are being terrible
 public class EntityAngryChicken extends EntityMob {
 
 	public EntityAngryChicken(World world) {
 		super(world);
 
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(2, new EntityAIAttackMelee(this, 1.0, false));
+		tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4f));
+		tasks.addTask(2, new EntityAIAttackMelee(this, 1f, true));
 		tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0));
 		tasks.addTask(7, new EntityAIWander(this, 1.0));
 		tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8f));
 		tasks.addTask(8, new EntityAILookIdle(this));
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
-		setSize(0.3f, 0.7f);
+		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
+		setSize(0.4f, 1f);
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(8.0);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.45);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0);
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class EntityAngryChicken extends EntityMob {
 
 	@Override
 	protected Item getDropItem() {
-		return Items.FEATHER;
+		return ModItems.chickenStick;
 	}
 
 	@Override

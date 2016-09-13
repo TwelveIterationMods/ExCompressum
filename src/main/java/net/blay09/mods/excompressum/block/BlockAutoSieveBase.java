@@ -13,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,15 +28,22 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public abstract class BlockAutoSieveBase extends BlockContainer {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+
+	private ItemStack lastHoverStack;
+	private String currentRandomName;
 
 	protected BlockAutoSieveBase(Material material) {
 		super(material);
@@ -97,10 +105,14 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 			TileEntityAutoSieveBase tileEntity = (TileEntityAutoSieveBase) world.getTileEntity(pos);
 			if(tileEntity != null) {
 				if (heldItem.getItem() instanceof ItemFood) {
+					ItemFood itemFood = (ItemFood) heldItem.getItem();
 					if (tileEntity.getSpeedBoost() <= 1f) {
-						tileEntity.setSpeedBoost((int) (((ItemFood) heldItem.getItem()).getSaturationModifier(heldItem) * 640), Math.max(1f, ((ItemFood) heldItem.getItem()).getHealAmount(heldItem) * 0.75f));
+						tileEntity.setSpeedBoost((int) (itemFood.getSaturationModifier(heldItem) * 640), Math.max(1f, itemFood.getHealAmount(heldItem) * 0.75f));
 						if (!player.capabilities.isCreativeMode) {
-							heldItem.stackSize--;
+							ItemStack returnStack = itemFood.onItemUseFinish(heldItem, world, null);
+							if(returnStack != heldItem) {
+								player.setHeldItem(hand, returnStack);
+							}
 						}
 						if (!world.isRemote) {
 							world.playEvent(2005, pos, 0);
@@ -191,6 +203,27 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	@SuppressWarnings("deprecation")
 	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
 		return StupidUtils.getComparatorOutput64(world, pos);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List<String> list, boolean flag) {
+		NBTTagCompound tagCompound = itemStack.getTagCompound();
+		if(tagCompound != null && tagCompound.hasKey("CustomSkin")) {
+			GameProfile customSkin = NBTUtil.readGameProfileFromNBT(tagCompound.getCompoundTag("CustomSkin"));
+			if(customSkin != null) {
+				list.add(TextFormatting.GRAY + I18n.format("tooltip." + getRegistryName(), customSkin.getName()));
+			}
+		} else {
+			if(currentRandomName == null) {
+				currentRandomName = AutoSieveSkinRegistry.getRandomSkin();
+			}
+			list.add(TextFormatting.GRAY + I18n.format("tooltip." + getRegistryName(), currentRandomName));
+		}
+		if(lastHoverStack != itemStack) {
+			currentRandomName = AutoSieveSkinRegistry.getRandomSkin();
+			lastHoverStack = itemStack;
+		}
 	}
 
 }

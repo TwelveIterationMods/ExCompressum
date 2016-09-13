@@ -9,10 +9,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ToolsConfig {
-	public static float chickenStickCreationChance;
+	public static boolean allowChickenStickCreation;
 	public static float chickenStickSoundChance;
 	public static float chickenStickSpawnChance;
-	private static String[] chickenStickSoundNames;
 	public static ResourceLocation[] chickenStickSounds;
 	public static final Map<String, String> chickenStickNames = Maps.newHashMap();
 
@@ -23,10 +22,10 @@ public class ToolsConfig {
 
 	public static void load(Configuration config) {
 		final String CATEGORY = "tools";
-		chickenStickCreationChance = config.getFloat("Creation Chance", CATEGORY, 0.2f, 0f, 1f, "The chance that hitting a chicken with a stick will create a chicken stick. 0 means disabled.");
+		allowChickenStickCreation = config.getBoolean("Allow Creation", CATEGORY, true, "If true, hitting a chicken with a stick will turn it into an Angry Chicken, which will drop a Chicken Stick when killed.");
 		chickenStickSpawnChance = config.getFloat("Chicken Spawn Chance", CATEGORY, 0.008f, 0f, 1f, "The chance for the chicken stick to spawn a chicken. Set to 0 to disable.");
 		chickenStickSoundChance = config.getFloat("Sound Chance", CATEGORY, 0.2f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
-		chickenStickSoundNames = config.getStringList("Sound List", CATEGORY, new String[] {
+		String[] chickenStickSoundNames = config.getStringList("Sound List", CATEGORY, new String[]{
 				"entity.chicken.ambient",
 				"entity.chicken.hurt",
 				"entity.chicken.egg",

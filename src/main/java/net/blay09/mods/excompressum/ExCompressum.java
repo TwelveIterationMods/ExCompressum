@@ -77,7 +77,7 @@ public class ExCompressum {
         ModItems.init();
         ModBlocks.init();
 
-        EntityRegistry.registerModEntity(EntityAngryChicken.class, "AngryChicken", 0, this, 64, 5, true);
+        EntityRegistry.registerModEntity(EntityAngryChicken.class, "AngryChicken", 0, this, 64, 3, true);
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         MinecraftForge.EVENT_BUS.register(this);

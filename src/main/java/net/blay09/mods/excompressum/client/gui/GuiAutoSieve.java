@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum.client.gui;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.ContainerAutoSieve;
-import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -43,12 +42,7 @@ public class GuiAutoSieve extends GuiContainer {
     private static final List<String> tmpLines = Lists.newArrayList();
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
-            tmpLines.clear();
-            tmpLines.add(tileEntity.getEnergyStored() + " RF");
-            tmpLines.add(I18n.format("tooltip.excompressum:consumingEnergy", tileEntity.getEffectiveEnergy()));
-            drawHoveringText(tmpLines, mouseX - guiLeft, mouseY - guiTop);
-        }
+        // Render No Mesh / Incorrect Mesh overlay
         if(tileEntity.getMeshStack() == null) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, 0, 300);
@@ -61,6 +55,14 @@ public class GuiAutoSieve extends GuiContainer {
             drawRect(58, 16, 144, 71, 0x99000000);
             drawCenteredString(fontRendererObj, I18n.format("gui.excompressum:autoSieve.incorrectMesh"), 101, 43 - fontRendererObj.FONT_HEIGHT / 2, 0xFFFFFFFF);
             GlStateManager.popMatrix();
+        }
+
+        // Render power tooltip
+        if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
+            tmpLines.clear();
+            tmpLines.add(tileEntity.getEnergyStored() + " RF");
+            tmpLines.add(I18n.format("tooltip.excompressum:consumingEnergy", tileEntity.getEffectiveEnergy()));
+            drawHoveringText(tmpLines, mouseX - guiLeft, mouseY - guiTop);
         }
     }
 
