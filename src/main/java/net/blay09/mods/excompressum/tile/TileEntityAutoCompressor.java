@@ -163,8 +163,12 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
-        super.readFromNBT(tagCompound);
+    protected boolean hasUpdatePacket() {
+        return false;
+    }
+
+    @Override
+    protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
         itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
@@ -172,15 +176,13 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
-        super.writeToNBT(tagCompound);
+    protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
         if (currentStack != null) {
             tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         }
         tagCompound.setFloat("Progress", progress);
         tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
         storage.writeToNBT(tagCompound);
-        return tagCompound;
     }
 
     @Override

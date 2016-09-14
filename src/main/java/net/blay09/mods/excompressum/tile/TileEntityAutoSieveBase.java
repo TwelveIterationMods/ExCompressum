@@ -8,6 +8,7 @@ import net.blay09.mods.excompressum.client.render.ParticleSieve;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
@@ -24,8 +25,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -40,7 +39,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
-public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable {
+public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable { // TODO name
 
 	private static final int UPDATE_INTERVAL = 20;
 	private static final int PARTICLE_TICKS = 30;
@@ -269,13 +268,12 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompound) {
-		super.readFromNBT(tagCompound);
-		readFromNBTSynced(tagCompound);
-		itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
+	protected boolean hasUpdatePacket() {
+		return true;
 	}
 
-	protected void readFromNBTSynced(NBTTagCompound tagCompound) {
+	@Override
+	protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
 		currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
 		progress = tagCompound.getFloat("Progress");
 		if (tagCompound.hasKey("CustomSkin")) {
@@ -288,17 +286,15 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		speedBoostTicks = tagCompound.getInteger("SpeedBoostTicks");
 		particleTicks = tagCompound.getInteger("ParticleTicks");
 		particleCount = tagCompound.getInteger("ParticleCount");
+		if(isSync) {
+			meshSlots.setStackInSlot(0, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("MeshStack")));
+		} else {
+			itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
+		}
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
-		super.writeToNBT(tagCompound);
-		writeToNBTSynced(tagCompound);
-		tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
-		return tagCompound;
-	}
-
-	protected void writeToNBTSynced(NBTTagCompound tagCompound) {
+	protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
 		if (currentStack != null) {
 			tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
 		}
@@ -312,23 +308,14 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		tagCompound.setInteger("SpeedBoostTicks", speedBoostTicks);
 		tagCompound.setInteger("ParticleTicks", particleTicks);
 		tagCompound.setInteger("ParticleCount", particleCount);
-	}
-
-	@Override
-	public NBTTagCompound getUpdateTag() {
-		return writeToNBT(new NBTTagCompound());
-	}
-
-	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		writeToNBTSynced(tagCompound);
-		return new SPacketUpdateTileEntity(pos, getBlockMetadata(), tagCompound);
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		readFromNBTSynced(pkt.getNbtCompound());
+		if(isSync) {
+			ItemStack meshStack = meshSlots.getStackInSlot(0);
+			if(meshStack != null) {
+				tagCompound.setTag("MeshStack", meshStack.writeToNBT(new NBTTagCompound()));
+			}
+		} else {
+			tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
+		}
 	}
 
 	public abstract void setEnergyStored(int energyStored);

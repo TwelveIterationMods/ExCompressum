@@ -10,14 +10,14 @@ public class TileAutoSieve extends TileEntityAutoSieveBase implements IEnergyRec
     private final EnergyStorage storage = new EnergyStorage(32000);
 
     @Override
-    protected void writeToNBTSynced(NBTTagCompound tagCompound) {
-        super.writeToNBTSynced(tagCompound);
+    protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
+        super.writeToNBTSynced(tagCompound, isSync);
         storage.writeToNBT(tagCompound);
     }
 
     @Override
-    protected void readFromNBTSynced(NBTTagCompound tagCompound) {
-        super.readFromNBTSynced(tagCompound);
+    protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
+        super.readFromNBTSynced(tagCompound, isSync);
         storage.readFromNBT(tagCompound);
     }
 

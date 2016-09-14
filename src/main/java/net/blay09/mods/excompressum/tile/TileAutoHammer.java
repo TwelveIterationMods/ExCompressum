@@ -6,6 +6,7 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
@@ -17,11 +18,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
@@ -51,7 +51,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     };
     private final SubItemHandler itemHandlerInput = new SubItemHandler(itemHandler, 0, 1);
     private final SubItemHandler itemHandlerOutput = new SubItemHandler(itemHandler, 1, 21);
-    private final SubItemHandler itemHandlerUpgrades = new SubItemHandler(itemHandler, 21, 23);
+    private final SubItemHandler itemHandlerUpgrades = new SubItemHandler(itemHandler, 21, 23); // TODO rename these for consistnecy with TASB
     private final ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
         @Override
         public boolean canExtractItem(int slot, int amount) {
@@ -201,49 +201,42 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
-        super.readFromNBT(tagCompound);
-        readFromNBTSynced(tagCompound);
-        itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
-    }
-
-    private void readFromNBTSynced(NBTTagCompound tagCompound) {
-        currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
-        progress = tagCompound.getFloat("Progress");
-        storage.readFromNBT(tagCompound);
+    protected boolean hasUpdatePacket() {
+        return true;
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
-        super.writeToNBT(tagCompound);
-        writeToNBTSynced(tagCompound);
-        tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
-        return tagCompound;
+    protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
+        currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
+        progress = tagCompound.getFloat("Progress");
+        storage.readFromNBT(tagCompound);
+        if(isSync) {
+            itemHandlerUpgrades.setStackInSlot(0, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("FirstHammer")));
+            itemHandlerUpgrades.setStackInSlot(1, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("SecondHammer")));
+        } else {
+            itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
+        }
     }
 
-    private void writeToNBTSynced(NBTTagCompound tagCompound) {
+    @Override
+    protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
         storage.writeToNBT(tagCompound);
         if (currentStack != null) {
             tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         }
         tagCompound.setFloat("Progress", progress);
-    }
-
-    @Override
-    public NBTTagCompound getUpdateTag() {
-        return writeToNBT(new NBTTagCompound());
-    }
-
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tagCompound = new NBTTagCompound();
-        writeToNBTSynced(tagCompound);
-        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), tagCompound);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        readFromNBTSynced(pkt.getNbtCompound());
+        if(isSync) {
+            ItemStack firstHammer = itemHandlerUpgrades.getStackInSlot(0);
+            if(firstHammer != null) {
+                tagCompound.setTag("FirstHammer", firstHammer.writeToNBT(new NBTTagCompound()));
+            }
+            ItemStack secondHammer = itemHandlerUpgrades.getStackInSlot(1);
+            if(secondHammer != null) {
+                tagCompound.setTag("SecondHammer", secondHammer.writeToNBT(new NBTTagCompound()));
+            }
+        } else {
+            tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
+        }
     }
 
     @SideOnly(Side.CLIENT)

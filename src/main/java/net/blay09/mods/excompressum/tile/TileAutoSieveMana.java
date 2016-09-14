@@ -32,16 +32,19 @@ public class TileAutoSieveMana extends TileEntityAutoSieveBase implements IManaR
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
-        super.writeToNBT(tagCompound);
-        tagCompound.setInteger("ManaStored", manaStored);
-        return tagCompound;
+    protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
+        super.writeToNBTSynced(tagCompound, isSync);
+        if(!isSync) {
+            tagCompound.setInteger("ManaStored", manaStored);
+        }
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
-        super.readFromNBT(tagCompound);
-        manaStored = tagCompound.getInteger("ManaStored");
+    protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
+        super.readFromNBTSynced(tagCompound, isSync);
+        if(!isSync) {
+            manaStored = tagCompound.getInteger("ManaStored");
+        }
     }
 
     @Override
