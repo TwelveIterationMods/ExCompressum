@@ -22,10 +22,11 @@ public class ToolsConfig {
 
 	public static void load(Configuration config) {
 		final String CATEGORY = "tools";
-		allowChickenStickCreation = config.getBoolean("Allow Creation", CATEGORY, true, "If true, hitting a chicken with a stick will turn it into an Angry Chicken, which will drop a Chicken Stick when killed.");
-		chickenStickSpawnChance = config.getFloat("Chicken Spawn Chance", CATEGORY, 0.008f, 0f, 1f, "The chance for the chicken stick to spawn a chicken. Set to 0 to disable.");
-		chickenStickSoundChance = config.getFloat("Sound Chance", CATEGORY, 0.2f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
-		String[] chickenStickSoundNames = config.getStringList("Sound List", CATEGORY, new String[]{
+		final String CHICKEN_STICK = CATEGORY + ".chicken_stick";
+		allowChickenStickCreation = config.getBoolean("Allow Creation", CHICKEN_STICK, true, "If true, hitting a chicken with a stick will turn it into an Angry Chicken, which will drop a Chicken Stick when killed.");
+		chickenStickSpawnChance = config.getFloat("Chicken Spawn Chance", CHICKEN_STICK, 0.008f, 0f, 1f, "The chance for the chicken stick to spawn a chicken. Set to 0 to disable.");
+		chickenStickSoundChance = config.getFloat("Sound Chance", CHICKEN_STICK, 0.2f, 0f, 1f, "The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.");
+		String[] chickenStickSoundNames = config.getStringList("Sound List", CHICKEN_STICK, new String[]{
 				"entity.chicken.ambient",
 				"entity.chicken.hurt",
 				"entity.chicken.egg",
@@ -36,7 +37,7 @@ public class ToolsConfig {
 			chickenStickSounds[i] = new ResourceLocation(chickenStickSoundNames[i]);
 		}
 
-		String[] chickenStickNameList = config.getStringList("Custom Names", CATEGORY, new String[] {}, "Format: Username=ItemName, Username can be * to affect all users");
+		String[] chickenStickNameList = config.getStringList("Custom Names", CHICKEN_STICK, new String[] {}, "Format: Username=ItemName, Username can be * to affect all users");
 		chickenStickNames.put("wyld", "The Cluckington");
 		chickenStickNames.put("slowpoke101", "Dark Matter Hammer");
 		chickenStickNames.put("jake_evans", "Cock Stick");
@@ -47,8 +48,9 @@ public class ToolsConfig {
 			}
 		}
 
-		compressedCrookDurabilityMultiplier = config.getFloat("Compressed Crook Durability Multiplier", "tools", 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
-		compressedCrookSpeedMultiplier = config.getFloat("Compressed Crook Speed Multiplier", "tools", 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
+		final String COMPRESSED_CROOK = CATEGORY + ".compressed_crook";
+		compressedCrookDurabilityMultiplier = config.getFloat("Durability Multiplier", COMPRESSED_CROOK, 2f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)");
+		compressedCrookSpeedMultiplier = config.getFloat("Speed Multiplier", COMPRESSED_CROOK, 4f, 0.1f, 10f, "The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)");
 	}
 
 	@Nullable

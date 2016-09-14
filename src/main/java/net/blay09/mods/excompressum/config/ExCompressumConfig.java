@@ -20,4 +20,9 @@ public class ExCompressumConfig {
 		ToolsConfig.load(config);
 		BaitConfig.load(config);
 	}
+
+	public static void postLoad(Configuration config) {
+		BlockConfig.postLoad(config);
+		ItemConfig.postLoad(config);
+	}
 }

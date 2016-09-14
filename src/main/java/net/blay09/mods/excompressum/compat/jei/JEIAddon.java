@@ -7,6 +7,9 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import net.blay09.mods.excompressum.block.ModBlocks;
+import net.blay09.mods.excompressum.config.BlockConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.ItemConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
@@ -85,6 +88,22 @@ public class JEIAddon implements IModPlugin {
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModItems.compressedHammerIron), CompressedHammerRecipeCategory.UID);
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModItems.compressedHammerStone), CompressedHammerRecipeCategory.UID);
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModItems.compressedHammerWood), CompressedHammerRecipeCategory.UID);
+
+		for(BlockConfig.Entry entry : BlockConfig.getEntries()) {
+			if(!entry.isEnabled()) {
+				registry.getJeiHelpers().getItemBlacklist().addItemToBlacklist(entry.getItemStack());
+			}
+		}
+
+		for(ItemConfig.Entry entry : ItemConfig.getEntries()) {
+			if(!entry.isEnabled()) {
+				registry.getJeiHelpers().getItemBlacklist().addItemToBlacklist(entry.getItemStack());
+			}
+		}
+
+		if(!ExCompressumConfig.enableWoodChippings) {
+			registry.getJeiHelpers().getItemBlacklist().addItemToBlacklist(new ItemStack(ModItems.woodChipping));
+		}
 	}
 
 	@Override

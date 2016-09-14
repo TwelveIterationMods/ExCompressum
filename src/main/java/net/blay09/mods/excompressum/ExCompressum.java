@@ -111,6 +111,8 @@ public class ExCompressum {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        ExCompressumConfig.postLoad(config);
+
         registerAddon(event, Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
         registerAddon(event, Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
 
@@ -123,7 +125,7 @@ public class ExCompressum {
         WoodenCrucibleRegistry.INSTANCE.load(configDir);
         CompressedHammerRegistry.INSTANCE.load(configDir);
 
-        ModRecipes.init(config);
+        ModRecipes.init();
         CompressedRecipeRegistry.reload();
 
         SieveMeshRegistry.registerDefaults();
