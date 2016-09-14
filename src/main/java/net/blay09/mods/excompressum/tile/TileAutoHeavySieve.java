@@ -31,7 +31,7 @@ public class TileAutoHeavySieve extends TileAutoSieve {
     }
 
     public float getEffectiveSpeed() {
-        return ProcessingConfig.autoHeavySieveSpeed * getSpeedBoost();
+        return ProcessingConfig.autoHeavySieveSpeed * getSpeedMultiplier();
     }
 
 }

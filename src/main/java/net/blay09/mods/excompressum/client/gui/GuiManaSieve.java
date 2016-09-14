@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.client.gui;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.ContainerAutoSieve;
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
+import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -11,9 +11,9 @@ import org.lwjgl.opengl.GL11;
 public class GuiManaSieve extends GuiContainer {
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/manaSieve.png");
-    private TileEntityAutoSieveBase tileEntity;
+    private TileAutoSieveBase tileEntity;
 
-    public GuiManaSieve(InventoryPlayer inventoryPlayer, TileEntityAutoSieveBase tileEntity) {
+    public GuiManaSieve(InventoryPlayer inventoryPlayer, TileAutoSieveBase tileEntity) {
         super(new ContainerAutoSieve(inventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
         xSize = 176;

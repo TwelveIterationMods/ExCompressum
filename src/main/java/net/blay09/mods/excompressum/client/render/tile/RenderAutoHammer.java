@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
+import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.block.BlockAutoHammer;
@@ -64,11 +65,9 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
-        float progress = tileEntity.getProgress();
-
         // Render the hammers
         GlStateManager.pushMatrix();
-        GlStateManager.rotate((float) Math.sin(tileEntity.getProgress() / tileEntity.getSpeedBoost() * 100) * 15, 0f, 0f, 1f); // angle: hammer progress from tile entity
+        GlStateManager.rotate((float) Math.sin(tileEntity.getHammerAngle() * 6) * 15, 0f, 0f, 1f);
         GlStateManager.translate(-0.15f, 0.6f, 0f);
         GlStateManager.scale(0.5f, 0.5f, 0.5f);
         itemRenderer.renderItem(hammerItemStack, ItemCameraTransforms.TransformType.FIXED);
@@ -90,6 +89,8 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         }
         GlStateManager.popMatrix();
 
+        RenderHelper.disableStandardItemLighting();
+
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (currentStack != null) {
             IBlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
@@ -101,7 +102,9 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
                 GlStateManager.translate(-0.09375f, 0.0625f, -0.25);
                 GlStateManager.scale(0.5, 0.5, 0.5);
                 mc.getBlockRendererDispatcher().renderBlock(contentState, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
-                mc.getBlockRendererDispatcher().renderBlockDamage(contentState, new BlockPos(0, 0, 0), ClientProxy.destroyBlockIcons[Math.min(9, (int) (progress * 9f))], tileEntity.getWorld());
+//                RenderUtils.preBlockDamage(); // TODO look at this later for auto hammer. for some reason doing this makes the block inside go half-transparent too
+                mc.getBlockRendererDispatcher().renderBlockDamage(contentState, new BlockPos(0, 0, 0), ClientProxy.destroyBlockIcons[Math.min(9, (int) (tileEntity.getProgress() * 9f))], tileEntity.getWorld());
+//                RenderUtils.postBlockDamage();
                 tessellator.draw();
                 GlStateManager.popMatrix();
             }

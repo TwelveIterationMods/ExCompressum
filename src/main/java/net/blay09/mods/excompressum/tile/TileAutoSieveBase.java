@@ -8,7 +8,6 @@ import net.blay09.mods.excompressum.client.render.ParticleSieve;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
@@ -39,10 +38,11 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
-public abstract class TileEntityAutoSieveBase extends TileEntityBase implements ITickable { // TODO name
+public abstract class TileAutoSieveBase extends TileEntityBase implements ITickable {
 
 	private static final int UPDATE_INTERVAL = 20;
 	private static final int PARTICLE_TICKS = 30;
+	private static final float ARM_ANIMATION_SPEED = 0.1f;
 
 	private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 22) {
 		@Override
@@ -58,7 +58,10 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		@Override
 		protected void onContentsChanged(int slot) {
 			super.onContentsChanged(slot);
-			isDirty = true;
+			// Make sure the mesh slot is always synced.
+			if(meshSlots.isInside(slot)) {
+				isDirty = true;
+			}
 		}
 	};
 	private final SubItemHandler inputSlots = new SubItemHandler(itemHandler, 0, 1);
@@ -85,8 +88,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 
 	private float progress;
 
-	private float speedBoost;
-	private int speedBoostTicks;
+	private float foodBoost;
+	private int foodBoostTicks;
 
 	private float armAngle;
 	private int particleTicks;
@@ -94,10 +97,10 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 
 	@Override
 	public void update() {
-		if (speedBoostTicks > 0) {
-			speedBoostTicks--;
-			if (speedBoostTicks <= 0) {
-				speedBoost = 0f;
+		if (foodBoostTicks > 0) {
+			foodBoostTicks--;
+			if (foodBoostTicks <= 0) {
+				foodBoost = 0f;
 			}
 		}
 
@@ -137,10 +140,10 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 				setEnergyStored(getEnergyStored() - effectiveEnergy);
 				progress += getEffectiveSpeed();
 
-				float activeSpeedBoost = getSpeedBoost();
-				armAngle += 0.1f * (Math.max(1f, activeSpeedBoost / 2f));
+				float speedMultiplier = getSpeedMultiplier();
+				armAngle += ARM_ANIMATION_SPEED * (Math.max(1f, speedMultiplier / 2f));
 				particleTicks = PARTICLE_TICKS;
-				particleCount = (int) activeSpeedBoost;
+				particleCount = (int) speedMultiplier;
 
 				isDirty = true;
 				if (progress >= 1) {
@@ -240,7 +243,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	}
 
 	public float getEffectiveSpeed() {
-		return ProcessingConfig.autoSieveSpeed * getSpeedBoost();
+		return ProcessingConfig.autoSieveSpeed * getSpeedMultiplier();
 	}
 
 	public float getEffectiveLuck() {
@@ -282,8 +285,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 				ExCompressum.proxy.preloadSkin(customSkin);
 			}
 		}
-		speedBoost = tagCompound.getFloat("SpeedBoost");
-		speedBoostTicks = tagCompound.getInteger("SpeedBoostTicks");
+		foodBoost = tagCompound.getFloat("FoodBoost");
+		foodBoostTicks = tagCompound.getInteger("FoodBoostTicks");
 		particleTicks = tagCompound.getInteger("ParticleTicks");
 		particleCount = tagCompound.getInteger("ParticleCount");
 		if(isSync) {
@@ -304,8 +307,8 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 			NBTUtil.writeGameProfile(customSkinTag, customSkin);
 			tagCompound.setTag("CustomSkin", customSkinTag);
 		}
-		tagCompound.setFloat("SpeedBoost", speedBoost);
-		tagCompound.setInteger("SpeedBoostTicks", speedBoostTicks);
+		tagCompound.setFloat("FoodBoost", foodBoost);
+		tagCompound.setInteger("FoodBoostTicks", foodBoostTicks);
 		tagCompound.setInteger("ParticleTicks", particleTicks);
 		tagCompound.setInteger("ParticleCount", particleCount);
 		if(isSync) {
@@ -376,18 +379,23 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		}
 	}
 
-	public float getSpeedBoost() {
-		float activeSpeedBoost = 1f + speedBoost;
+	public float getSpeedMultiplier() {
+		final float EFFICIENCY_BOOST = 1f;
+		float boost = 1f;
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
-		if (meshStack != null) {
-			activeSpeedBoost += EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, meshStack);
+		if(meshStack != null) {
+			boost += EFFICIENCY_BOOST * EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, meshStack);
 		}
-		return activeSpeedBoost;
+		return boost * foodBoost;
 	}
 
-	public void setSpeedBoost(int speedBoostTicks, float speedBoost) {
-		this.speedBoostTicks = speedBoostTicks;
-		this.speedBoost = speedBoost;
+	public float getFoodBoost() {
+		return foodBoost;
+	}
+
+	public void setFoodBoost(int foodBoostTicks, float foodBoost) {
+		this.foodBoostTicks = foodBoostTicks;
+		this.foodBoost = foodBoost;
 		this.isDirty = true;
 	}
 

@@ -2,10 +2,10 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockPistonBase;
@@ -103,12 +103,12 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if(!world.isRemote) {
 			if (heldItem != null) {
-				TileEntityAutoSieveBase tileEntity = (TileEntityAutoSieveBase) world.getTileEntity(pos);
+				TileAutoSieveBase tileEntity = (TileAutoSieveBase) world.getTileEntity(pos);
 				if (tileEntity != null) {
 					if (heldItem.getItem() instanceof ItemFood) {
 						ItemFood itemFood = (ItemFood) heldItem.getItem();
-						if (tileEntity.getSpeedBoost() <= 1f) {
-							tileEntity.setSpeedBoost((int) (itemFood.getSaturationModifier(heldItem) * 640), Math.max(1f, itemFood.getHealAmount(heldItem) * 0.75f));
+						if (tileEntity.getSpeedMultiplier() <= 1f) {
+							tileEntity.setFoodBoost((int) (itemFood.getSaturationModifier(heldItem) * 640), Math.max(1f, itemFood.getHealAmount(heldItem) * 0.75f));
 							if (!player.capabilities.isCreativeMode) {
 								ItemStack returnStack = itemFood.onItemUseFinish(heldItem, world, null);
 								if (returnStack != heldItem) {
@@ -150,7 +150,7 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 					world.spawnEntityInWorld(entityItem);
 				}
 			}
-			ItemStack currentStack = ((TileEntityAutoSieveBase) tileEntity).getCurrentStack();
+			ItemStack currentStack = ((TileAutoSieveBase) tileEntity).getCurrentStack();
 			if (currentStack != null) {
 				EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack);
 				double motion = 0.05;
@@ -174,7 +174,7 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		TileEntityAutoSieveBase tileEntity = (TileEntityAutoSieveBase) world.getTileEntity(pos);
+		TileAutoSieveBase tileEntity = (TileAutoSieveBase) world.getTileEntity(pos);
 		if(tileEntity != null) {
 			boolean useRandomSkin = true;
 			NBTTagCompound tagCompound = stack.getTagCompound();

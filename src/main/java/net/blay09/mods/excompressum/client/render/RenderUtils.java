@@ -1,7 +1,9 @@
 package net.blay09.mods.excompressum.client.render;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import org.lwjgl.opengl.GL11;
 
 public class RenderUtils {
 
@@ -25,4 +27,23 @@ public class RenderUtils {
 		renderer.pos(x2, y, z).color(r, g, b, a).tex(maxU, minV).lightmap(lightX, lightZ).endVertex();
 	}
 
+	public static void preBlockDamage() {
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.enableBlend();
+		GlStateManager.color(1f, 1f, 1f, 0.5f);
+		GlStateManager.doPolygonOffset(-3f, -3f);
+		GlStateManager.enablePolygonOffset();
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1f);
+		GlStateManager.enableAlpha();
+		GlStateManager.pushMatrix();
+	}
+
+	public static void postBlockDamage() {
+		GlStateManager.disableAlpha();
+		GlStateManager.doPolygonOffset(0f, 0f);
+		GlStateManager.disablePolygonOffset();
+		GlStateManager.enableAlpha();
+		GlStateManager.depthMask(true);
+		GlStateManager.popMatrix();
+	}
 }

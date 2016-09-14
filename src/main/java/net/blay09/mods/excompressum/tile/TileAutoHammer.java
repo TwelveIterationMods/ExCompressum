@@ -6,7 +6,6 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
@@ -18,7 +17,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,6 +34,7 @@ import java.util.Random;
 public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergyReceiver {
 
     private static final int UPDATE_INTERVAL = 20;
+    private static final float HAMMER_ANIMATION_SPEED = 0.1f;
 
     private final EnergyStorage storage = new EnergyStorage(32000);
     private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 23) {
@@ -48,19 +47,28 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
             }
             return true;
         }
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            super.onContentsChanged(slot);
+            // Make sure the hammer slots are always synced.
+            if(hammerSlots.isInside(slot)) {
+                isDirty = true;
+            }
+        }
     };
-    private final SubItemHandler itemHandlerInput = new SubItemHandler(itemHandler, 0, 1);
-    private final SubItemHandler itemHandlerOutput = new SubItemHandler(itemHandler, 1, 21);
-    private final SubItemHandler itemHandlerUpgrades = new SubItemHandler(itemHandler, 21, 23); // TODO rename these for consistnecy with TASB
+    private final SubItemHandler inputSlots = new SubItemHandler(itemHandler, 0, 1);
+    private final SubItemHandler outputSlots = new SubItemHandler(itemHandler, 1, 21);
+    private final SubItemHandler hammerSlots = new SubItemHandler(itemHandler, 21, 23);
     private final ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
         @Override
         public boolean canExtractItem(int slot, int amount) {
-            return super.canExtractItem(slot, amount) && itemHandlerOutput.isInside(slot);
+            return super.canExtractItem(slot, amount) && outputSlots.isInside(slot);
         }
 
         @Override
         public boolean canInsertItem(int slot, ItemStack itemStack) {
-            return super.canInsertItem(slot, itemStack) && itemHandlerInput.isInside(slot) || itemHandlerUpgrades.isInside(slot);
+            return super.canInsertItem(slot, itemStack) && inputSlots.isInside(slot) || hammerSlots.isInside(slot);
         }
     };
     private ItemStack currentStack;
@@ -69,16 +77,18 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     private boolean isDirty;
     private float progress;
 
+    private float hammerAngle;
+
     @Override
     public void update() {
         int effectiveEnergy = getEffectiveEnergy();
         if (storage.getEnergyStored() >= effectiveEnergy) {
             if (currentStack == null) {
-                ItemStack inputStack = itemHandlerInput.getStackInSlot(0);
+                ItemStack inputStack = inputSlots.getStackInSlot(0);
                 if (inputStack != null && isRegistered(inputStack)) {
                     boolean foundSpace = false;
-                    for(int i = 0; i < itemHandlerOutput.getSlots(); i++) {
-                        if(itemHandlerOutput.getStackInSlot(i) == null) {
+                    for(int i = 0; i < outputSlots.getSlots(); i++) {
+                        if(outputSlots.getStackInSlot(i) == null) {
                             foundSpace = true;
                         }
                     }
@@ -87,7 +97,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
                     }
                     currentStack = inputStack.splitStack(1);
                     if (inputStack.stackSize == 0) {
-                        itemHandlerInput.setStackInSlot(0, null);
+                        inputSlots.setStackInSlot(0, null);
                     }
                     storage.extractEnergy(effectiveEnergy, false);
                     VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -96,23 +106,24 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
             } else {
                 storage.extractEnergy(effectiveEnergy, false);
                 progress += getEffectiveSpeed();
+                hammerAngle += HAMMER_ANIMATION_SPEED;
                 isDirty = true;
                 if (progress >= 1) {
-                    if(worldObj.rand.nextFloat() <= ProcessingConfig.autoHammerDecay) {
-                        ItemStack firstHammer = itemHandlerUpgrades.getStackInSlot(0);
-                        if (firstHammer != null) {
-                            if(firstHammer.attemptDamageItem(1, worldObj.rand)) {
-                                itemHandlerUpgrades.setStackInSlot(0, null);
-                            }
-                        }
-                        ItemStack secondHammer = itemHandlerUpgrades.getStackInSlot(1);
-                        if (secondHammer != null) {
-                            if(secondHammer.attemptDamageItem(1, worldObj.rand)) {
-                                itemHandlerUpgrades.setStackInSlot(1, null);
-                            }
-                        }
-                    }
                     if (!worldObj.isRemote) {
+                        if(worldObj.rand.nextFloat() <= ProcessingConfig.autoHammerDecay) {
+                            ItemStack firstHammer = hammerSlots.getStackInSlot(0);
+                            if (firstHammer != null) {
+                                if(firstHammer.attemptDamageItem(1, worldObj.rand)) {
+                                    hammerSlots.setStackInSlot(0, null);
+                                }
+                            }
+                            ItemStack secondHammer = hammerSlots.getStackInSlot(1);
+                            if (secondHammer != null) {
+                                if(secondHammer.attemptDamageItem(1, worldObj.rand)) {
+                                    hammerSlots.setStackInSlot(1, null);
+                                }
+                            }
+                        }
                         Collection<ItemStack> rewards = rollHammerRewards(currentStack, getMiningLevel(), getEffectiveLuck(), worldObj.rand);
                         for (ItemStack itemStack : rewards) {
                             if (!addItemToOutput(itemStack)) {
@@ -146,8 +157,8 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
 
     private boolean addItemToOutput(ItemStack itemStack) {
         int firstEmptySlot = -1;
-        for (int i = 0; i < itemHandlerOutput.getSlots(); i++) {
-            ItemStack slotStack = itemHandlerOutput.getStackInSlot(i);
+        for (int i = 0; i < outputSlots.getSlots(); i++) {
+            ItemStack slotStack = outputSlots.getStackInSlot(i);
             if (slotStack == null) {
                 if(firstEmptySlot == -1){
                     firstEmptySlot = i;
@@ -160,40 +171,45 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
             }
         }
         if (firstEmptySlot != -1) {
-            itemHandlerOutput.setStackInSlot(firstEmptySlot, itemStack);
+            outputSlots.setStackInSlot(firstEmptySlot, itemStack);
             return true;
         }
         return false;
     }
 
     public int getEffectiveEnergy() {
+        storage.setEnergyStored(10000); // TODO remove me
         return ProcessingConfig.autoHammerEnergy;
     }
 
-    public float getSpeedBoost() {
+    public float getSpeedMultiplier() {
+        final float HAMMER_BOOST = 0.5f;
+        final float EFFICIENCY_BOOST = 0.5f;
         float boost = 1f;
-        ItemStack firstHammer = itemHandlerUpgrades.getStackInSlot(0);
+        ItemStack firstHammer = hammerSlots.getStackInSlot(0);
         if(firstHammer != null && isHammerUpgrade(firstHammer)) {
-            boost += 1f * (1f + EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, firstHammer));
+            boost += HAMMER_BOOST;
+            boost += EFFICIENCY_BOOST * EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, firstHammer);
         }
-        ItemStack secondHammer = itemHandlerUpgrades.getStackInSlot(1);
+        ItemStack secondHammer = hammerSlots.getStackInSlot(1);
         if(secondHammer != null && isHammerUpgrade(secondHammer)) {
-            boost += 1f * (1f + EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, secondHammer));
+            boost += HAMMER_BOOST;
+            boost += EFFICIENCY_BOOST * EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, secondHammer);
         }
         return boost;
     }
 
     public float getEffectiveSpeed() {
-        return ProcessingConfig.autoHammerSpeed * getSpeedBoost();
+        return ProcessingConfig.autoHammerSpeed * getSpeedMultiplier();
     }
 
     public float getEffectiveLuck() {
         float luck = 0f;
-        ItemStack firstHammer = itemHandlerUpgrades.getStackInSlot(0);
+        ItemStack firstHammer = hammerSlots.getStackInSlot(0);
         if(firstHammer != null && isHammerUpgrade(firstHammer)) {
             luck += EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, firstHammer);
         }
-        ItemStack secondHammer = itemHandlerUpgrades.getStackInSlot(1);
+        ItemStack secondHammer = hammerSlots.getStackInSlot(1);
         if(secondHammer != null && isHammerUpgrade(secondHammer)) {
             luck += EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, secondHammer);
         }
@@ -211,8 +227,8 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         progress = tagCompound.getFloat("Progress");
         storage.readFromNBT(tagCompound);
         if(isSync) {
-            itemHandlerUpgrades.setStackInSlot(0, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("FirstHammer")));
-            itemHandlerUpgrades.setStackInSlot(1, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("SecondHammer")));
+            hammerSlots.setStackInSlot(0, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("FirstHammer")));
+            hammerSlots.setStackInSlot(1, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("SecondHammer")));
         } else {
             itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
         }
@@ -226,11 +242,11 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         }
         tagCompound.setFloat("Progress", progress);
         if(isSync) {
-            ItemStack firstHammer = itemHandlerUpgrades.getStackInSlot(0);
+            ItemStack firstHammer = hammerSlots.getStackInSlot(0);
             if(firstHammer != null) {
                 tagCompound.setTag("FirstHammer", firstHammer.writeToNBT(new NBTTagCompound()));
             }
-            ItemStack secondHammer = itemHandlerUpgrades.getStackInSlot(1);
+            ItemStack secondHammer = hammerSlots.getStackInSlot(1);
             if(secondHammer != null) {
                 tagCompound.setTag("SecondHammer", secondHammer.writeToNBT(new NBTTagCompound()));
             }
@@ -334,7 +350,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
 
     @Nullable
     public ItemStack getUpgradeStack(int i) {
-        return itemHandlerUpgrades.getStackInSlot(i);
+        return hammerSlots.getStackInSlot(i);
     }
 
     public boolean isHammerUpgrade(ItemStack itemStack) {
@@ -353,4 +369,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         return Item.ToolMaterial.DIAMOND.getHarvestLevel();
     }
 
+    public float getHammerAngle() {
+        return hammerAngle;
+    }
 }

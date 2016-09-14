@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Optional;
 import vazkii.botania.api.mana.IManaReceiver;
 
 @Optional.Interface(modid = Compat.BOTANIA, iface = "vazkii.botania.api.mana.IManaReceiver", striprefs = true)
-public class TileAutoSieveMana extends TileEntityAutoSieveBase implements IManaReceiver {
+public class TileAutoSieveMana extends TileAutoSieveBase implements IManaReceiver {
 
     private int manaStored;
 

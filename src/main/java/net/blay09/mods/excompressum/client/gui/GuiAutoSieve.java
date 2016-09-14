@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.client.gui;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.ContainerAutoSieve;
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
+import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -16,9 +16,9 @@ import java.util.List;
 public class GuiAutoSieve extends GuiContainer {
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoSieve.png");
-    private TileEntityAutoSieveBase tileEntity;
+    private TileAutoSieveBase tileEntity;
 
-    public GuiAutoSieve(InventoryPlayer inventoryPlayer, TileEntityAutoSieveBase tileEntity) {
+    public GuiAutoSieve(InventoryPlayer inventoryPlayer, TileAutoSieveBase tileEntity) {
         super(new ContainerAutoSieve(inventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
         xSize = 176;

@@ -34,8 +34,8 @@ public class GuiHandler implements IGuiHandler {
                 }
                 break;
             case GUI_AUTO_SIEVE:
-                if(tileEntity instanceof TileEntityAutoSieveBase) {
-                    return new ContainerAutoSieve(entityPlayer.inventory, (TileEntityAutoSieveBase) tileEntity);
+                if(tileEntity instanceof TileAutoSieveBase) {
+                    return new ContainerAutoSieve(entityPlayer.inventory, (TileAutoSieveBase) tileEntity);
                 }
                 break;
         }
@@ -58,7 +58,7 @@ public class GuiHandler implements IGuiHandler {
                 break;
             case GUI_AUTO_SIEVE:
                 if(tileEntity instanceof TileAutoSieve) {
-                    return new GuiAutoSieve(entityPlayer.inventory, (TileEntityAutoSieveBase) tileEntity);
+                    return new GuiAutoSieve(entityPlayer.inventory, (TileAutoSieveBase) tileEntity);
                 } else if(tileEntity instanceof TileAutoSieveMana) {
                     return new GuiManaSieve(entityPlayer.inventory, (TileAutoSieveMana) tileEntity);
                 }

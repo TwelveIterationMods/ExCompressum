@@ -5,7 +5,7 @@ import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
-public class TileAutoSieve extends TileEntityAutoSieveBase implements IEnergyReceiver {
+public class TileAutoSieve extends TileAutoSieveBase implements IEnergyReceiver {
 
     private final EnergyStorage storage = new EnergyStorage(32000);
 
@@ -23,6 +23,7 @@ public class TileAutoSieve extends TileEntityAutoSieveBase implements IEnergyRec
 
     @Override
     public int getEnergyStored() {
+        storage.setEnergyStored(10000);
         return storage.getEnergyStored();
     }
 

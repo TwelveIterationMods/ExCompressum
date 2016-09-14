@@ -12,7 +12,7 @@ import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
+import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +34,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 
-public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSieveBase> {
+public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase> {
 
     private final ModelTinyHuman biped = new ModelTinyHuman();
     private final boolean isHeavy;
@@ -45,7 +45,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileEntityAutoSie
     }
 
     @Override
-    public void renderTileEntityAt(TileEntityAutoSieveBase tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void renderTileEntityAt(TileAutoSieveBase tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
         if(!tileEntity.hasWorldObj()) {
             return;
         }

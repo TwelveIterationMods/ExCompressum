@@ -17,7 +17,7 @@ public class TileAutoCompressedHammer extends TileAutoHammer {
 
     @Override
     public float getEffectiveSpeed() {
-        return ProcessingConfig.autoCompressedHammerSpeed * getSpeedBoost();
+        return ProcessingConfig.autoCompressedHammerSpeed * getSpeedMultiplier();
     }
 
     @Override

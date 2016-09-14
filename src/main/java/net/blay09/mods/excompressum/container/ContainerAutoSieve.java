@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.container;
 
-import net.blay09.mods.excompressum.tile.TileEntityAutoSieveBase;
+import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,12 +12,12 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerAutoSieve extends Container {
 
-    private final TileEntityAutoSieveBase tileEntity;
+    private final TileAutoSieveBase tileEntity;
 
     private float lastProgress;
     private int lastEnergy;
 
-    public ContainerAutoSieve(InventoryPlayer inventoryPlayer, TileEntityAutoSieveBase tileEntity) {
+    public ContainerAutoSieve(InventoryPlayer inventoryPlayer, TileAutoSieveBase tileEntity) {
         this.tileEntity = tileEntity;
 
         ItemStackHandler itemHandler = tileEntity.getItemHandler();
