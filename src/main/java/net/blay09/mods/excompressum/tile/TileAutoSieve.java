@@ -20,7 +20,9 @@ public class TileAutoSieve extends TileAutoSieveBase implements IEnergyReceiver 
     @Override
     protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
         super.readFromNBTSynced(tagCompound, isSync);
-        CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.getTag("EnergyStorage"));
+        if(tagCompound.hasKey("EnergyStorage")) {
+            CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.getTag("EnergyStorage"));
+        }
     }
 
     @Override

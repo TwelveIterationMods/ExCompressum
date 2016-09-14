@@ -67,15 +67,15 @@ public class ModBlocks {
         GameRegistry.registerTileEntity(TileBait.class, ExCompressum.MOD_ID + ":bait");
 
         if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) {
-            GameRegistry.registerTileEntity(TileAutoHammer.class, ExCompressum.MOD_ID + "auto_hammer");
-            GameRegistry.registerTileEntity(TileAutoCompressedHammer.class, ExCompressum.MOD_ID + "auto_compressed_hammer.json");
-            GameRegistry.registerTileEntity(TileAutoSieve.class, ExCompressum.MOD_ID + "auto_sieve");
-            GameRegistry.registerTileEntity(TileAutoHeavySieve.class, ExCompressum.MOD_ID + "auto_heavy_sieve");
-            GameRegistry.registerTileEntity(TileAutoCompressor.class, ExCompressum.MOD_ID + "auto_compressor");
+            GameRegistry.registerTileEntity(TileAutoHammer.class, ExCompressum.MOD_ID + ":auto_hammer");
+            GameRegistry.registerTileEntity(TileAutoCompressedHammer.class, ExCompressum.MOD_ID + ":auto_compressed_hammer.json");
+            GameRegistry.registerTileEntity(TileAutoSieve.class, ExCompressum.MOD_ID + ":auto_sieve");
+            GameRegistry.registerTileEntity(TileAutoHeavySieve.class, ExCompressum.MOD_ID + ":auto_heavy_sieve");
+            GameRegistry.registerTileEntity(TileAutoCompressor.class, ExCompressum.MOD_ID + ":auto_compressor");
         }
 
         if(Loader.isModLoaded(Compat.BOTANIA)) {
-            GameRegistry.registerTileEntity(TileAutoSieveMana.class, ExCompressum.MOD_ID + "mana_sieve");
+            GameRegistry.registerTileEntity(TileAutoSieveMana.class, ExCompressum.MOD_ID + ":mana_sieve");
         }
     }
 

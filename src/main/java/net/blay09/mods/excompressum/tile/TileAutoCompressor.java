@@ -172,7 +172,9 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
         itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
-        CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.getTag("EnergyStorage"));
+        if(tagCompound.hasKey("EnergyStorage")) {
+            CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.getTag("EnergyStorage"));
+        }
     }
 
     @Override

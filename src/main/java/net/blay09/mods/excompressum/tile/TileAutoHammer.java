@@ -224,7 +224,9 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
-        CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.getTag("EnergyStorage"));
+        if(tagCompound.hasKey("EnergyStorage")) {
+            CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.getTag("EnergyStorage"));
+        }
         if(isSync) {
             hammerSlots.setStackInSlot(0, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("FirstHammer")));
             hammerSlots.setStackInSlot(1, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("SecondHammer")));
