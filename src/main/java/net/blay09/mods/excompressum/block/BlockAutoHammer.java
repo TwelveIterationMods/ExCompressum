@@ -153,7 +153,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         if (tagCompound != null && tagCompound.hasKey("EnergyStored")) {
             TileAutoHammer tileEntity = (TileAutoHammer) world.getTileEntity(pos);
             if(tileEntity != null) {
-                tileEntity.setEnergyStored(tagCompound.getInteger("EnergyStored"));
+                tileEntity.getEnergyStorage().setEnergyStored(tagCompound.getInteger("EnergyStored"));
             }
         }
     }

@@ -30,7 +30,7 @@ public class BlockAutoSieve extends BlockAutoSieveBase {
             NBTTagCompound tagCompound = stack.getTagCompound();
             if (tagCompound != null) {
                 if (tagCompound.hasKey("EnergyStored")) {
-                    tileEntity.setEnergyStored(tagCompound.getInteger("EnergyStored"));
+                    tileEntity.getEnergyStorage().setEnergyStored(tagCompound.getInteger("EnergyStored"));
                 }
             }
         }

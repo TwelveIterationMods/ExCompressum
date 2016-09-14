@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.tile;
 
-import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -8,6 +7,7 @@ import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
+import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
 import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -15,15 +15,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 
-public class TileEntityAutoCompressor extends TileEntityBase implements ITickable, IEnergyReceiver {
+public class TileAutoCompressor extends TileEntityBase implements ITickable, IEnergyReceiver {
 
-    private final EnergyStorage storage = new EnergyStorage(32000);
+    private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000);
     private final Multiset<CompressedRecipe> inputItems = HashMultiset.create();
     private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 24) {
         @Override
@@ -31,8 +32,8 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
             return slot >= 12 || CompressedRecipeRegistry.getRecipe(itemStack) != null;
         }
     };
-    private final RangedWrapper itemHandlerInput = new RangedWrapper(itemHandler, 0, 12);
-    private final RangedWrapper itemHandlerOutput = new RangedWrapper(itemHandler, 12, 24);
+    private final RangedWrapper inputSlots = new RangedWrapper(itemHandler, 0, 12);
+    private final RangedWrapper outputSlots = new RangedWrapper(itemHandler, 12, 24);
     private final ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
         @Override
         public boolean canExtractItem(int slot, int amount) {
@@ -41,17 +42,16 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
     };
 
     private ItemStack currentStack;
-
     private float progress;
 
     @Override
     public void update() {
         int effectiveEnergy = getEffectiveEnergy();
-        if (storage.getEnergyStored() > effectiveEnergy) {
+        if (energyStorage.getEnergyStored() > effectiveEnergy) {
             if (currentStack == null) {
                 inputItems.clear();
-                for (int i = 0; i < itemHandlerInput.getSlots(); i++) {
-                    ItemStack slotStack = itemHandlerInput.getStackInSlot(i);
+                for (int i = 0; i < inputSlots.getSlots(); i++) {
+                    ItemStack slotStack = inputSlots.getStackInSlot(i);
                     if (slotStack != null) {
                         CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(slotStack);
                         if (compressedRecipe != null) {
@@ -63,8 +63,8 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
                     ItemStack sourceStack = compressedRecipe.getSourceStack();
                     if (inputItems.count(compressedRecipe) >= sourceStack.stackSize) {
                         int space = 0;
-                        for(int i = 0; i < itemHandlerOutput.getSlots(); i++) {
-                            ItemStack slotStack = itemHandlerOutput.getStackInSlot(i);
+                        for(int i = 0; i < outputSlots.getSlots(); i++) {
+                            ItemStack slotStack = outputSlots.getStackInSlot(i);
                             if(slotStack == null) {
                                 space = 64;
                             } else if(isItemEqualWildcard(slotStack, compressedRecipe.getResultStack())) {
@@ -78,19 +78,19 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
                             continue;
                         }
                         int count = sourceStack.stackSize;
-                        for (int i = 0; i < itemHandlerInput.getSlots(); i++) {
-                            ItemStack slotStack = itemHandlerInput.getStackInSlot(i);
+                        for (int i = 0; i < inputSlots.getSlots(); i++) {
+                            ItemStack slotStack = inputSlots.getStackInSlot(i);
                             if (slotStack != null && isItemEqualWildcard(slotStack, sourceStack)) {
                                 if (slotStack.stackSize >= count) {
                                     slotStack.stackSize -= count;
                                     if (slotStack.stackSize == 0) {
-                                        itemHandlerInput.setStackInSlot(i, null);
+                                        inputSlots.setStackInSlot(i, null);
                                     }
                                     count = 0;
                                     break;
                                 } else {
                                     count -= slotStack.stackSize;
-                                    itemHandlerInput.setStackInSlot(i, null);
+                                    inputSlots.setStackInSlot(i, null);
                                 }
                             }
                         }
@@ -102,7 +102,7 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
                     }
                 }
             } else {
-                storage.extractEnergy(effectiveEnergy, false);
+                energyStorage.extractEnergy(effectiveEnergy, false);
                 progress = Math.min(1f, progress + getEffectiveSpeed());
                 if (progress >= 1) {
                     if (!worldObj.isRemote) {
@@ -134,8 +134,8 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
 
     private boolean addItemToOutput(ItemStack itemStack) {
         int firstEmptySlot = -1;
-        for (int i = 0; i < itemHandlerOutput.getSlots(); i++) {
-            ItemStack slotStack = itemHandlerOutput.getStackInSlot(i);
+        for (int i = 0; i < outputSlots.getSlots(); i++) {
+            ItemStack slotStack = outputSlots.getStackInSlot(i);
             if (slotStack == null) {
                 if (firstEmptySlot == -1) {
                     firstEmptySlot = i;
@@ -148,7 +148,7 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
             }
         }
         if (firstEmptySlot != -1) {
-            itemHandlerOutput.setStackInSlot(firstEmptySlot, itemStack);
+            outputSlots.setStackInSlot(firstEmptySlot, itemStack);
             return true;
         }
         return false;
@@ -172,7 +172,7 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
         itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
-        storage.readFromNBT(tagCompound);
+        CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.getTag("EnergyStorage"));
     }
 
     @Override
@@ -182,31 +182,27 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
         }
         tagCompound.setFloat("Progress", progress);
         tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
-        storage.writeToNBT(tagCompound);
+        tagCompound.setTag("EnergyStorage", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
     }
 
     @Override
     public int receiveEnergy(EnumFacing side, int maxReceive, boolean simulate) {
-        return storage.receiveEnergy(maxReceive, simulate);
+        return energyStorage.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
     public int getEnergyStored(@Nullable EnumFacing side) {
-        return storage.getEnergyStored();
+        return energyStorage.getEnergyStored();
     }
 
     @Override
     public int getMaxEnergyStored(EnumFacing side) {
-        return storage.getMaxEnergyStored();
+        return energyStorage.getMaxEnergyStored();
     }
 
     @Override
     public boolean canConnectEnergy(EnumFacing side) {
         return true;
-    }
-
-    public void setEnergyStored(int energyStored) {
-        storage.setEnergyStored(energyStored);
     }
 
     public boolean isProcessing() {
@@ -222,7 +218,7 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
     }
 
     public float getEnergyPercentage() {
-        return (float) storage.getEnergyStored() / (float) storage.getMaxEnergyStored();
+        return (float) energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
     }
 
     @Nullable
@@ -233,6 +229,7 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+                || capability == CapabilityEnergy.ENERGY
                 || super.hasCapability(capability, facing);
     }
 
@@ -242,6 +239,9 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return (T) itemHandlerAutomation;
         }
+        if(capability == CapabilityEnergy.ENERGY) {
+            return (T) energyStorage;
+        }
         return super.getCapability(capability, facing);
     }
 
@@ -249,4 +249,7 @@ public class TileEntityAutoCompressor extends TileEntityBase implements ITickabl
         return itemHandler;
     }
 
+    public EnergyStorageModifiable getEnergyStorage() {
+        return energyStorage;
+    }
 }

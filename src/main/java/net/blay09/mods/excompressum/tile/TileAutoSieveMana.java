@@ -12,11 +12,6 @@ public class TileAutoSieveMana extends TileAutoSieveBase implements IManaReceive
     private int manaStored;
 
     @Override
-    public void setEnergyStored(int energyStored) {
-        this.manaStored = Math.max(0, Math.min(getMaxEnergyStored(), energyStored));
-    }
-
-    @Override
     public int getEffectiveEnergy() {
         return BotaniaAddon.manaSieveCost;
     }
@@ -29,6 +24,20 @@ public class TileAutoSieveMana extends TileAutoSieveBase implements IManaReceive
     @Override
     public int getEnergyStored() {
         return manaStored;
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        int manaExtracted = Math.min(manaStored, maxExtract);
+        if (!simulate) {
+            manaStored -= manaExtracted;
+        }
+        return manaExtracted;
+    }
+
+    @Override
+    public void setEnergyStored(int energy) {
+        this.manaStored = energy;
     }
 
     @Override

@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.client.gui;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.ContainerAutoCompressor;
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
+import net.blay09.mods.excompressum.tile.TileAutoCompressor;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -15,9 +15,9 @@ import java.util.List;
 public class GuiAutoCompressor extends GuiContainer {
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoCompressor.png");
-    private TileEntityAutoCompressor tileEntity;
+    private TileAutoCompressor tileEntity;
 
-    public GuiAutoCompressor(InventoryPlayer inventoryPlayer, TileEntityAutoCompressor tileEntity) {
+    public GuiAutoCompressor(InventoryPlayer inventoryPlayer, TileAutoCompressor tileEntity) {
         super(new ContainerAutoCompressor(inventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
         xSize = 176;

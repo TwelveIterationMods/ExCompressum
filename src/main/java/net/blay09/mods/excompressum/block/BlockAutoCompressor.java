@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
+import net.blay09.mods.excompressum.tile.TileAutoCompressor;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -40,7 +40,7 @@ public class BlockAutoCompressor extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-        return new TileEntityAutoCompressor();
+        return new TileAutoCompressor();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class BlockAutoCompressor extends BlockContainer {
                     world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemStack));
                 }
             }
-            ItemStack currentStack = ((TileEntityAutoCompressor) tileEntity).getCurrentStack();
+            ItemStack currentStack = ((TileAutoCompressor) tileEntity).getCurrentStack();
             if (currentStack != null) {
                 world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
             }
@@ -75,8 +75,8 @@ public class BlockAutoCompressor extends BlockContainer {
         NBTTagCompound tagCompound = stack.getTagCompound();
         if (tagCompound != null && tagCompound.hasKey("EnergyStored")) {
             TileEntity tileEntity = world.getTileEntity(pos);
-            if(tileEntity instanceof TileEntityAutoCompressor) {
-                ((TileEntityAutoCompressor) tileEntity).setEnergyStored(tagCompound.getInteger("EnergyStored"));
+            if(tileEntity instanceof TileAutoCompressor) {
+                ((TileAutoCompressor) tileEntity).getEnergyStorage().setEnergyStored(tagCompound.getInteger("EnergyStored"));
             }
         }
     }

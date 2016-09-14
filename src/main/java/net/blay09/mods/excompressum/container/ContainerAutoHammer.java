@@ -63,7 +63,7 @@ public class ContainerAutoHammer extends Container {
     public void updateProgressBar(int var, int val) {
         switch(var) {
             case 0: tileEntity.setProgress((float) val / 100f);
-            case 1: tileEntity.setEnergyStored(val);
+            case 1: tileEntity.getEnergyStorage().setEnergyStored(val);
         }
     }
 

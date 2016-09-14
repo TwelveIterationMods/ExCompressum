@@ -131,12 +131,12 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 					if (inputStack.stackSize == 0) {
 						inputSlots.setStackInSlot(0, null);
 					}
-					setEnergyStored(getEnergyStored() - effectiveEnergy);
+					extractEnergy(effectiveEnergy, false);
 					VanillaPacketHandler.sendTileEntityUpdate(this);
 					progress = 0f;
 				}
 			} else {
-				setEnergyStored(getEnergyStored() - effectiveEnergy);
+				extractEnergy(effectiveEnergy, false);
 				progress += getEffectiveSpeed();
 
 				particleTicks = PARTICLE_TICKS;
@@ -318,11 +318,10 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		}
 	}
 
-	public abstract void setEnergyStored(int energyStored);
-
 	public abstract int getMaxEnergyStored();
-
 	public abstract int getEnergyStored();
+	public abstract int extractEnergy(int maxExtract, boolean simulate);
+	public abstract void setEnergyStored(int energy);
 
 	public float getEnergyPercentage() {
 		return (float) getEnergyStored() / (float) getMaxEnergyStored();

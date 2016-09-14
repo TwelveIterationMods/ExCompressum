@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.container;
 
-import net.blay09.mods.excompressum.tile.TileEntityAutoCompressor;
+import net.blay09.mods.excompressum.tile.TileAutoCompressor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,12 +12,12 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerAutoCompressor extends Container {
 
-    private final TileEntityAutoCompressor tileEntity;
+    private final TileAutoCompressor tileEntity;
 
     private float lastProgress;
     private int lastEnergy;
 
-    public ContainerAutoCompressor(InventoryPlayer inventoryPlayer, TileEntityAutoCompressor tileEntity) {
+    public ContainerAutoCompressor(InventoryPlayer inventoryPlayer, TileAutoCompressor tileEntity) {
         this.tileEntity = tileEntity;
 
         ItemStackHandler itemHandler = tileEntity.getItemHandler();
@@ -63,7 +63,7 @@ public class ContainerAutoCompressor extends Container {
     public void updateProgressBar(int var, int val) {
         switch(var) {
             case 0: tileEntity.setProgress((float) val / 100f);
-            case 1: tileEntity.setEnergyStored(val);
+            case 1: tileEntity.getEnergyStorage().setEnergyStored(val);
         }
     }
 

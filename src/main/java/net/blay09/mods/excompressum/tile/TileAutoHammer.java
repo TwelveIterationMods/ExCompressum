@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.tile;
 
-import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
@@ -9,6 +8,7 @@ import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
+import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
 import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
 import net.blay09.mods.excompressum.utils.SubItemHandler;
 import net.minecraft.block.Block;
@@ -23,6 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -35,7 +36,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
 
     private static final int UPDATE_INTERVAL = 20;
 
-    private final EnergyStorage storage = new EnergyStorage(32000);
+    private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000);
     private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 23) {
         @Override
         public boolean isItemValid(int slot, ItemStack itemStack) {
@@ -70,6 +71,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
             return super.canInsertItem(slot, itemStack) && inputSlots.isInside(slot) || hammerSlots.isInside(slot);
         }
     };
+
     private ItemStack currentStack;
 
     private int ticksSinceUpdate;
@@ -81,7 +83,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     @Override
     public void update() {
         int effectiveEnergy = getEffectiveEnergy();
-        if (storage.getEnergyStored() >= effectiveEnergy) {
+        if (energyStorage.getEnergyStored() >= effectiveEnergy) {
             if (currentStack == null) {
                 ItemStack inputStack = inputSlots.getStackInSlot(0);
                 if (inputStack != null && isRegistered(inputStack)) {
@@ -98,12 +100,12 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
                     if (inputStack.stackSize == 0) {
                         inputSlots.setStackInSlot(0, null);
                     }
-                    storage.extractEnergy(effectiveEnergy, false);
+                    energyStorage.extractEnergy(effectiveEnergy, false);
                     VanillaPacketHandler.sendTileEntityUpdate(this);
                     progress = 0f;
                 }
             } else {
-                storage.extractEnergy(effectiveEnergy, false);
+                energyStorage.extractEnergy(effectiveEnergy, false);
                 progress += getEffectiveSpeed();
                 isDirty = true;
                 if (progress >= 1) {
@@ -222,7 +224,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
         currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
-        storage.readFromNBT(tagCompound);
+        CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.getTag("EnergyStorage"));
         if(isSync) {
             hammerSlots.setStackInSlot(0, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("FirstHammer")));
             hammerSlots.setStackInSlot(1, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("SecondHammer")));
@@ -233,7 +235,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
 
     @Override
     protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
-        storage.writeToNBT(tagCompound);
+        tagCompound.setTag("EnergyStorage", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
         if (currentStack != null) {
             tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         }
@@ -269,26 +271,22 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         if(!simulate) {
             isDirty = true;
         }
-        return storage.receiveEnergy(maxReceive, simulate);
+        return energyStorage.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
     public int getEnergyStored(@Nullable EnumFacing side) {
-        return storage.getEnergyStored();
+        return energyStorage.getEnergyStored();
     }
 
     @Override
     public int getMaxEnergyStored(EnumFacing side) {
-        return storage.getMaxEnergyStored();
+        return energyStorage.getMaxEnergyStored();
     }
 
     @Override
     public boolean canConnectEnergy(EnumFacing side) {
         return true;
-    }
-
-    public void setEnergyStored(int energyStored) {
-        storage.setEnergyStored(energyStored);
     }
 
     public boolean isProcessing() {
@@ -300,7 +298,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     public float getEnergyPercentage() {
-        return (float) storage.getEnergyStored() / (float) storage.getMaxEnergyStored();
+        return (float) energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
     }
 
     @Nullable
@@ -329,7 +327,8 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-            || super.hasCapability(capability, facing);
+                || capability == CapabilityEnergy.ENERGY
+                || super.hasCapability(capability, facing);
     }
 
     @Override
@@ -337,6 +336,9 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return (T) itemHandlerAutomation;
+        }
+        if(capability == CapabilityEnergy.ENERGY) {
+            return (T) energyStorage;
         }
         return super.getCapability(capability, facing);
     }
@@ -367,6 +369,10 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     public boolean shouldAnimate() {
-        return currentStack != null && storage.getEnergyStored() >= getEffectiveEnergy();
+        return currentStack != null && energyStorage.getEnergyStored() >= getEffectiveEnergy();
+    }
+
+    public EnergyStorageModifiable getEnergyStorage() {
+        return energyStorage;
     }
 }

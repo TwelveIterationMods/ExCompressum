@@ -28,15 +28,14 @@ public class GuiAutoSieve extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GL11.glColor4f(1f, 1f, 1f, 1f);
-        mc.getTextureManager().bindTexture(texture);
+        mc.getTextureManager().bindTexture(getBackgroundTexture());
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
         if (tileEntity.isProcessing()) {
             drawTexturedModalRect(guiLeft + 32, guiTop + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 15);
         }
 
-        float energyPercentage = tileEntity.getEnergyPercentage();
-        drawTexturedModalRect(guiLeft + 152, guiTop + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70));
+       renderEnergyBar();
     }
 
     private static final List<String> tmpLines = Lists.newArrayList();
@@ -57,7 +56,19 @@ public class GuiAutoSieve extends GuiContainer {
             GlStateManager.popMatrix();
         }
 
-        // Render power tooltip
+        renderPowerTooltip(mouseX, mouseY);
+    }
+
+    protected ResourceLocation getBackgroundTexture() {
+        return texture;
+    }
+
+    protected void renderEnergyBar() {
+        float energyPercentage = tileEntity.getEnergyPercentage();
+        drawTexturedModalRect(guiLeft + 152, guiTop + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70));
+    }
+
+    protected void renderPowerTooltip(int mouseX, int mouseY) {
         if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
             tmpLines.clear();
             tmpLines.add(tileEntity.getEnergyStored() + " RF");

@@ -29,8 +29,8 @@ public class GuiHandler implements IGuiHandler {
                 }
                 break;
             case GUI_AUTO_COMPRESSOR:
-                if(tileEntity instanceof TileEntityAutoCompressor) {
-                    return new ContainerAutoCompressor(entityPlayer.inventory, (TileEntityAutoCompressor) tileEntity);
+                if(tileEntity instanceof TileAutoCompressor) {
+                    return new ContainerAutoCompressor(entityPlayer.inventory, (TileAutoCompressor) tileEntity);
                 }
                 break;
             case GUI_AUTO_SIEVE:
@@ -52,8 +52,8 @@ public class GuiHandler implements IGuiHandler {
                 }
                 break;
             case GUI_AUTO_COMPRESSOR:
-                if(tileEntity instanceof TileEntityAutoCompressor) {
-                    return new GuiAutoCompressor(entityPlayer.inventory, (TileEntityAutoCompressor) tileEntity);
+                if(tileEntity instanceof TileAutoCompressor) {
+                    return new GuiAutoCompressor(entityPlayer.inventory, (TileAutoCompressor) tileEntity);
                 }
                 break;
             case GUI_AUTO_SIEVE:

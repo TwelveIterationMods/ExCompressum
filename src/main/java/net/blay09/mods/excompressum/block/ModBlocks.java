@@ -71,7 +71,7 @@ public class ModBlocks {
             GameRegistry.registerTileEntity(TileAutoCompressedHammer.class, ExCompressum.MOD_ID + "auto_compressed_hammer.json");
             GameRegistry.registerTileEntity(TileAutoSieve.class, ExCompressum.MOD_ID + "auto_sieve");
             GameRegistry.registerTileEntity(TileAutoHeavySieve.class, ExCompressum.MOD_ID + "auto_heavy_sieve");
-            GameRegistry.registerTileEntity(TileEntityAutoCompressor.class, ExCompressum.MOD_ID + "auto_compressor");
+            GameRegistry.registerTileEntity(TileAutoCompressor.class, ExCompressum.MOD_ID + "auto_compressor");
         }
 
         if(Loader.isModLoaded(Compat.BOTANIA)) {
