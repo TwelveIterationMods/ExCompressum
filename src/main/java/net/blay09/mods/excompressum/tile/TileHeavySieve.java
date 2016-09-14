@@ -31,7 +31,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
 
     private static final int MAX_CLICKS_PER_SECOND = 6;
     private static final float PROCESSING_INTERVAL = 0.075f;
-    private static final int UPDATE_INTERVAL = 10;
+    private static final int UPDATE_INTERVAL = 5;
     private static final int PARTICLE_TICKS = 20;
 
     private ItemStack meshStack;
@@ -69,12 +69,14 @@ public class TileHeavySieve extends TileEntity implements ITickable {
             }
         }
 
-        if(particleTicks > 0 && worldObj.isRemote) {
+        if(particleTicks > 0) {
             particleTicks--;
             if(particleTicks <= 0) {
                 particleCount = 0;
             }
-            spawnParticles();
+            if(worldObj.isRemote) {
+                spawnParticles();
+            }
         }
     }
 
@@ -83,6 +85,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         if(currentStack != null && !ExCompressumConfig.disableParticles) {
             IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
             if (state != null) {
+                System.out.println(particleCount);
                 for(int i = 0; i < particleCount; i++) {
                     Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(worldObj, pos, 0.5 + worldObj.rand.nextFloat() * 0.8 - 0.4, 0.4, 0.5 + worldObj.rand.nextFloat() * 0.8 - 0.4, 1f, state));
                 }

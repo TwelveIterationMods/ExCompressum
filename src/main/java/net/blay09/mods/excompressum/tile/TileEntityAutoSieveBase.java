@@ -86,7 +86,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 
 	private float progress;
 
-	private float speedBoost = 1f;
+	private float speedBoost;
 	private int speedBoostTicks;
 
 	private float armAngle;
@@ -98,7 +98,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 		if (speedBoostTicks > 0) {
 			speedBoostTicks--;
 			if (speedBoostTicks <= 0) {
-				speedBoost = 1f;
+				speedBoost = 0f;
 			}
 		}
 
@@ -138,9 +138,10 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 				setEnergyStored(getEnergyStored() - effectiveEnergy);
 				progress += getEffectiveSpeed();
 
-				armAngle += 0.1f * (Math.max(1f, speedBoost / 2f));
+				float activeSpeedBoost = getSpeedBoost();
+				armAngle += 0.1f * (Math.max(1f, activeSpeedBoost / 2f));
 				particleTicks = PARTICLE_TICKS;
-				particleCount = (int) getSpeedBoost();
+				particleCount = (int) activeSpeedBoost;
 
 				isDirty = true;
 				if (progress >= 1) {
@@ -389,7 +390,7 @@ public abstract class TileEntityAutoSieveBase extends TileEntityBase implements 
 	}
 
 	public float getSpeedBoost() {
-		float activeSpeedBoost = speedBoost;
+		float activeSpeedBoost = 1f + speedBoost;
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
 		if (meshStack != null) {
 			activeSpeedBoost += EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, meshStack);

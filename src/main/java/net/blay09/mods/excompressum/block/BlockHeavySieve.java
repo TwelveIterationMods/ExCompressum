@@ -171,15 +171,12 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 				}
 			}
 
-			if(!world.isRemote) {
-				if (ProcessingConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
-					if (tileEntity.processContents(player)) {
-						world.playSound(null, pos, SoundEvents.BLOCK_SAND_STEP, SoundCategory.BLOCKS, 0.3f, 0.6f);
-					}
+			if (ProcessingConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
+				if (tileEntity.processContents(player)) {
+					world.playSound(null, pos, SoundEvents.BLOCK_SAND_STEP, SoundCategory.BLOCKS, 0.3f, 0.6f);
 				}
 			}
 		}
-
 		return true;
 	}
 

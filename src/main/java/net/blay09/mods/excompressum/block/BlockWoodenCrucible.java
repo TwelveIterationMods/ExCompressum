@@ -118,13 +118,11 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileWoodenCrucible tileEntity = (TileWoodenCrucible) world.getTileEntity(pos);
-        if(tileEntity != null) {
+        if (tileEntity != null) {
             ItemStack outputStack = tileEntity.getItemHandler().extractItem(0, 64, false);
             if (outputStack != null) {
-                if (!world.isRemote) {
-                    if (!player.inventory.addItemStackToInventory(outputStack)) {
-                        world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, outputStack));
-                    }
+                if (!player.inventory.addItemStackToInventory(outputStack)) {
+                    world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, outputStack));
                 }
                 return true;
             }
@@ -137,9 +135,8 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
 
             IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
             FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, player);
-            return true;
         }
-        return false;
+        return true;
     }
 
     @Override

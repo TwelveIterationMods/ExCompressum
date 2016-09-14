@@ -43,14 +43,14 @@ public class ProcessingConfig {
 		autoHeavySieveSpeed = config.getFloat("Speed", AUTO_HEAVY_SIEVE, 0.0175f, 0.001f, 1f, "The speed at which the auto heavy sieve will sift stuff.");
 		autoHeavySieveEnergy = config.getInt("Energy Cost", AUTO_HEAVY_SIEVE, 80, 0, 100000, "The energy cost of the auto heavy sieve per tick.");
 
-		final String AUTO_COMPRESSOR = ".auto_compressor";
+		final String AUTO_COMPRESSOR = CATEGORY + ".auto_compressor";
 		autoCompressorSpeed = config.getFloat("Speed", AUTO_COMPRESSOR, 0.1f, 0.0001f, 1f, "The speed at which the auto compressor will compress stuff.");
 		autoCompressorEnergy = config.getInt("Energy Cost", AUTO_COMPRESSOR, 5, 0, 100000, "The energy cost of the auto compressor per tick.");
 
-		final String HEAVY_SIEVE = ".heavy_sieve";
+		final String HEAVY_SIEVE = CATEGORY + ".heavy_sieve";
 		allowHeavySieveAutomation = config.getBoolean("Allow Fake Players", HEAVY_SIEVE, false, "Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)");
 
-		final String WOODEN_CRUCIBLE = ".wooden_crucible";
+		final String WOODEN_CRUCIBLE = CATEGORY + ".wooden_crucible";
 		woodenCrucibleSpeed = config.getInt("Speed", WOODEN_CRUCIBLE, 8, 1, 20, "The rate at which the wooden crucible extracts water. Measured in liquid per second.");
 	}
 
