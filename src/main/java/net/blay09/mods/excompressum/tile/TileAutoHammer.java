@@ -34,7 +34,6 @@ import java.util.Random;
 public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergyReceiver {
 
     private static final int UPDATE_INTERVAL = 20;
-    private static final float HAMMER_ANIMATION_SPEED = 0.1f;
 
     private final EnergyStorage storage = new EnergyStorage(32000);
     private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 23) {
@@ -77,7 +76,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     private boolean isDirty;
     private float progress;
 
-    private float hammerAngle;
+    public float hammerAngle;
 
     @Override
     public void update() {
@@ -106,7 +105,6 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
             } else {
                 storage.extractEnergy(effectiveEnergy, false);
                 progress += getEffectiveSpeed();
-                hammerAngle += HAMMER_ANIMATION_SPEED;
                 isDirty = true;
                 if (progress >= 1) {
                     if (!worldObj.isRemote) {
@@ -178,7 +176,6 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     public int getEffectiveEnergy() {
-        storage.setEnergyStored(10000); // TODO remove me
         return ProcessingConfig.autoHammerEnergy;
     }
 
@@ -369,7 +366,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         return Item.ToolMaterial.DIAMOND.getHarvestLevel();
     }
 
-    public float getHammerAngle() {
-        return hammerAngle;
+    public boolean shouldAnimate() {
+        return currentStack != null && storage.getEnergyStored() >= getEffectiveEnergy();
     }
 }

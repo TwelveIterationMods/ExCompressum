@@ -23,7 +23,6 @@ public class TileAutoSieve extends TileAutoSieveBase implements IEnergyReceiver 
 
     @Override
     public int getEnergyStored() {
-        storage.setEnergyStored(10000);
         return storage.getEnergyStored();
     }
 

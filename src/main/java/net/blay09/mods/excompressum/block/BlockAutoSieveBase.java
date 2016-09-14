@@ -107,7 +107,7 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 				if (tileEntity != null) {
 					if (heldItem.getItem() instanceof ItemFood) {
 						ItemFood itemFood = (ItemFood) heldItem.getItem();
-						if (tileEntity.getSpeedMultiplier() <= 1f) {
+						if (tileEntity.getFoodBoost() <= 1f) {
 							tileEntity.setFoodBoost((int) (itemFood.getSaturationModifier(heldItem) * 640), Math.max(1f, itemFood.getHealAmount(heldItem) * 0.75f));
 							if (!player.capabilities.isCreativeMode) {
 								ItemStack returnStack = itemFood.onItemUseFinish(heldItem, world, null);

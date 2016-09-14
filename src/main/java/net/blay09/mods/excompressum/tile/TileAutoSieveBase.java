@@ -42,7 +42,6 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 	private static final int UPDATE_INTERVAL = 20;
 	private static final int PARTICLE_TICKS = 30;
-	private static final float ARM_ANIMATION_SPEED = 0.1f;
 
 	private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 22) {
 		@Override
@@ -91,7 +90,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	private float foodBoost;
 	private int foodBoostTicks;
 
-	private float armAngle;
+	public float armAngle;
 	private int particleTicks;
 	private int particleCount;
 
@@ -140,10 +139,8 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 				setEnergyStored(getEnergyStored() - effectiveEnergy);
 				progress += getEffectiveSpeed();
 
-				float speedMultiplier = getSpeedMultiplier();
-				armAngle += ARM_ANIMATION_SPEED * (Math.max(1f, speedMultiplier / 2f));
 				particleTicks = PARTICLE_TICKS;
-				particleCount = (int) speedMultiplier;
+				particleCount = (int) getSpeedMultiplier();
 
 				isDirty = true;
 				if (progress >= 1) {
@@ -380,17 +377,17 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	}
 
 	public float getSpeedMultiplier() {
-		final float EFFICIENCY_BOOST = 1f;
+		final float EFFICIENCY_BOOST = 0.25f;
 		float boost = 1f;
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
 		if(meshStack != null) {
 			boost += EFFICIENCY_BOOST * EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, meshStack);
 		}
-		return boost * foodBoost;
+		return boost * getFoodBoost();
 	}
 
 	public float getFoodBoost() {
-		return foodBoost;
+		return 1f + foodBoost;
 	}
 
 	public void setFoodBoost(int foodBoostTicks, float foodBoost) {
@@ -431,10 +428,6 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		return null;
 	}
 
-	public float getArmAngle() {
-		return armAngle;
-	}
-
 	@Nullable
 	public ItemStack getMeshStack() {
 		return meshSlots.getStackInSlot(0);
@@ -446,4 +439,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		return inputStack == null || sieveMesh == null || isSiftableWithMesh(inputStack, sieveMesh);
 	}
 
+	public boolean shouldAnimate() {
+		return currentStack != null && getEnergyStored() >= getEffectiveEnergy();
+	}
 }

@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.tile.TileBait;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -169,10 +170,12 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
 
     @Override
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-        TileBait tileEntity = (TileBait) world.getTileEntity(pos);
-        if(tileEntity != null && tileEntity.checkSpawnConditions(false) == TileBait.EnvironmentalCondition.CanSpawn) {
-            if (rand.nextFloat() <= 0.2f) {
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + rand.nextFloat(), pos.getY() + rand.nextFloat() * 0.5f, pos.getZ() + rand.nextFloat(), 0.0, 0.0, 0.0);
+        if(!ExCompressumConfig.disableParticles) {
+            TileBait tileEntity = (TileBait) world.getTileEntity(pos);
+            if (tileEntity != null && tileEntity.checkSpawnConditions(false) == TileBait.EnvironmentalCondition.CanSpawn) {
+                if (rand.nextFloat() <= 0.2f) {
+                    world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + rand.nextFloat(), pos.getY() + rand.nextFloat() * 0.5f, pos.getZ() + rand.nextFloat(), 0.0, 0.0, 0.0);
+                }
             }
         }
     }

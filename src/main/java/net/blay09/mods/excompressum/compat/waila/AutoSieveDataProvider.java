@@ -33,7 +33,7 @@ public class AutoSieveDataProvider implements IWailaDataProvider {
             if(tileEntity.getCustomSkin() != null) {
                 list.add(I18n.format("waila.excompressum:sieveSkin", tileEntity.getCustomSkin().getName()));
             }
-            if(tileEntity.getSpeedMultiplier() > 1f) {
+            if(tileEntity.getFoodBoost() > 1f) {
                 list.add(I18n.format("waila.excompressum:speedBoost", tileEntity.getFoodBoost()));
             }
             if(tileEntity.getEffectiveLuck() > 1) {
