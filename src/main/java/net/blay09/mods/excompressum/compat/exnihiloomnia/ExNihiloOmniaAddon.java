@@ -13,6 +13,7 @@ import exnihiloomnia.registries.sifting.SieveRegistryEntry;
 import exnihiloomnia.registries.sifting.SieveReward;
 import exnihiloomnia.util.Color;
 import exnihiloomnia.util.enums.EnumMetadataBehavior;
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
@@ -107,6 +108,11 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 		SieveRegistryEntry genericEntry = SieveRegistry.getEntryForBlockState(state, EnumMetadataBehavior.IGNORED);
 		if(genericEntry != null) {
 			for (SieveReward reward : genericEntry.getRewards()) {
+				//noinspection ConstantConditions /// @Nullable
+				if(reward.getItem().getItem() == null) {
+					ExCompressum.logger.error("Tried to generate Heavy Sieve rewards from a null reward entry: {}", genericEntry.getKey());
+					continue;
+				}
 				for (int i = 0; i < count; i++) {
 					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, sieveLuckMultiplier, 0));
 				}
@@ -115,6 +121,11 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 		SieveRegistryEntry entry = SieveRegistry.getEntryForBlockState(state, EnumMetadataBehavior.SPECIFIC);
 		if(entry != null) {
 			for (SieveReward reward : entry.getRewards()) {
+				//noinspection ConstantConditions /// @Nullable
+				if(reward.getItem().getItem() == null) {
+					ExCompressum.logger.error("Tried to generate Heavy Sieve rewards from a null reward entry: {}", genericEntry.getKey());
+					continue;
+				}
 				for (int i = 0; i < count; i++) {
 					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, sieveLuckMultiplier, 0));
 				}
@@ -159,6 +170,11 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 		if(entry != null) {
 			List<ItemStack> list = Lists.newArrayList();
 			for(HammerReward reward : entry.getRewards()) {
+				//noinspection ConstantConditions /// @Nullable
+				if(reward.getItem().getItem() == null) {
+					ExCompressum.logger.error("Tried to roll hammer rewards from a null reward entry: {} (base chance: {}, luck: {})", entry.getKey(), reward.getBaseChance(), reward.getFortuneModifier());
+					continue;
+				}
 				int fortuneModifier = reward.getFortuneModifier();
 				int chance = reward.getBaseChance() + (int) (fortuneModifier * luck);
 				if(rand.nextInt(100) < chance) {
@@ -208,6 +224,11 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 
 	private void rollSieveRewardsToList(SieveRegistryEntry entry, List<ItemStack> list, float luck, Random rand) {
 		for(SieveReward reward : entry.getRewards()) {
+			//noinspection ConstantConditions /// @Nullable
+			if(reward.getItem().getItem() == null) {
+				ExCompressum.logger.error("Tried to roll sieve rewards from a null reward entry: {} (base chance: {})", entry.getKey(), reward.getBaseChance());
+				continue;
+			}
 			if(rand.nextInt(100) < reward.getBaseChance() + sieveLuckMultiplier * luck) { // NOTE Sieve Rewards in Omnia have no luck modifier at the moment
 				list.add(reward.getItem().copy());
 			}

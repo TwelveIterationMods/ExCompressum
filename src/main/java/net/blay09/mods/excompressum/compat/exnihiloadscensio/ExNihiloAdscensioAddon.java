@@ -114,6 +114,11 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		if(siftables != null) {
 			List<HeavySieveReward> rewards = Lists.newArrayList();
 			for (Siftable siftable : siftables) {
+				//noinspection ConstantConditions /// @Nullable
+				if(siftable.getDrop().getItem() == null) {
+					ExCompressum.logger.error("Tried to generate Heavy Sieve rewards from a null reward entry: {}", sourceStack.getItem().getRegistryName());
+					continue;
+				}
 				for (int i = 0; i < count; i++) {
 					rewards.add(new HeavySieveReward(siftable.getDrop().getItemStack(), siftable.getChance(), sieveLuckMultiplier, siftable.getMeshLevel()));
 				}
@@ -159,6 +164,11 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		if(rewards != null) {
 			List<ItemStack> list = Lists.newArrayList();
 			for(HammerReward reward : rewards) {
+				//noinspection ConstantConditions /// @Nullable
+				if(reward.getStack().getItem() == null) {
+					ExCompressum.logger.error("Tried to roll hammer rewards from a null reward entry: {} (base chance: {}, luck: {}, mining level: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getFortuneChance(), reward.getMiningLevel());
+					continue;
+				}
 				float fortuneModifier = reward.getFortuneChance();
 				float chance = reward.getChance() + reward.getFortuneChance() * luck;
 				if(rand.nextFloat() <= chance) {
@@ -195,6 +205,11 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		if(rewards != null) {
 			List<ItemStack> list = Lists.newArrayList();
 			for(Siftable reward : rewards) {
+				//noinspection ConstantConditions /// @Nullable
+				if(reward.getDrop().getItem() == null) {
+					ExCompressum.logger.error("Tried to roll sieve rewards from a null reward entry: {} (base chance: {}, mesh level: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getMeshLevel());
+					continue;
+				}
 				if(sieveMesh.getMeshLevel() == reward.getMeshLevel() && rand.nextDouble() < (double) reward.getChance() + sieveLuckMultiplier * luck) { // NOTE Sieve Rewards in Adscensio have no luck modifier at the moment
 					list.add(reward.getDrop().getItemStack());
 				}
@@ -210,6 +225,11 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		if(rewards != null) {
 			List<ItemStack> list = Lists.newArrayList();
 			for (CrookReward reward : rewards) {
+				//noinspection ConstantConditions /// @Nullable
+				if(reward.getStack().getItem() == null) {
+					ExCompressum.logger.error("Tried to roll crook rewards from a null reward entry: {} (base chance: {}, luck: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getFortuneChance());
+					continue;
+				}
 				if(rand.nextFloat() <= reward.getChance() + reward.getFortuneChance() * luck) {
 					list.add(reward.getStack().copy());
 				}
