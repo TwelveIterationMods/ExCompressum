@@ -47,6 +47,9 @@ public class AutoSieveSkinRegistry {
                 logger.error("Could not loadCustom remote skins for auto sieve: ", e);
             }
         }
+        if(availableSkins.isEmpty()) {
+            availableSkins.add("Steve");
+        }
     }
 
     public static String getRandomSkin() {
