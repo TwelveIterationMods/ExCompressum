@@ -118,21 +118,15 @@ public class ItemOreSmasher extends ItemTool {
     }
 
 	@Override
-	public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, EntityPlayer player) {
-		IBlockState state = player.worldObj.getBlockState(pos);
-		if(!player.worldObj.isRemote && canHarvestBlock(state, itemStack) && ExRegistro.isHammerable(state)) {
-			player.worldObj.setBlockToAir(pos);
-			Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, toolMaterial.getHarvestLevel(), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), player.worldObj.rand);
+	public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+		if(!world.isRemote && canHarvestBlock(state, itemStack) && ExRegistro.isHammerable(state)) {
+			world.setBlockToAir(pos);
+			Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, toolMaterial.getHarvestLevel(), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);
 			for(ItemStack rewardStack : rewards) {
-				player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
+				world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
 			}
-			itemStack.damageItem(1, player);
-			if(itemStack.stackSize == 0) {
-				player.renderBrokenItemStack(itemStack);
-			}
-			return true;
 		}
-		return false;
+		return super.onBlockDestroyed(itemStack, world, state, pos, entityLiving);
 	}
 
 	private boolean isOreItem(ItemStack itemStack) {

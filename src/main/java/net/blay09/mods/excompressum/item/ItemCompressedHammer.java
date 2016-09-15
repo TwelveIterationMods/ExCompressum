@@ -8,6 +8,7 @@ import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRe
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
@@ -42,28 +43,17 @@ public class ItemCompressedHammer extends ItemTool {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, EntityPlayer player) {
-        World world = player.worldObj;
-        if (world.isRemote || StupidUtils.hasSilkTouchModifier(player)) {
-            return false;
+    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+        if(!world.isRemote && !StupidUtils.hasSilkTouchModifier(entityLiving) && canHarvestBlock(state, itemStack)) {
+            int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack);
+            List<ItemStack> rewards = Lists.newArrayList();
+            rewards.addAll(CompressedHammerRegistry.rollHammerRewards(state, fortune, world.rand));
+            rewards.addAll(ExRegistro.rollHammerRewards(state, toolMaterial.getHarvestLevel(), fortune, world.rand));
+            for (ItemStack rewardStack : rewards) {
+                world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
+            }
+            world.setBlockToAir(pos);
         }
-        IBlockState state = world.getBlockState(pos);
-        int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack);
-        List<ItemStack> rewards = Lists.newArrayList();
-        rewards.addAll(CompressedHammerRegistry.rollHammerRewards(state, fortune, world.rand));
-        rewards.addAll(ExRegistro.rollHammerRewards(state, toolMaterial.getHarvestLevel(), fortune, world.rand));
-        if (rewards.isEmpty()) {
-            return false;
-        }
-        for (ItemStack rewardStack : rewards) {
-            world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
-        }
-        world.setBlockToAir(pos);
-        itemStack.damageItem(1, player);
-        if (itemStack.stackSize == 0) {
-            player.renderBrokenItemStack(itemStack);
-        }
-        return true;
+        return super.onBlockDestroyed(itemStack, world, state, pos, entityLiving);
     }
-
 }

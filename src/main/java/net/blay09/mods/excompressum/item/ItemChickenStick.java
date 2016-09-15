@@ -69,28 +69,19 @@ public class ItemChickenStick extends ItemTool {
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack itemStack, BlockPos pos, EntityPlayer player) {
-        World world = player.worldObj;
-        if(world.isRemote || player instanceof FakePlayer) {
-            return false;
-        }
-        IBlockState state = world.getBlockState(pos);
-        if (!ChickenStickRegistry.isHammerable(state)) {
-            return false;
-        }
-        Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, 0, 0f, world.rand);
-        if (rewards.isEmpty()) {
-            return false;
-        }
-        for (ItemStack rewardStack : rewards) {
-            world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
-        }
-        world.setBlockToAir(pos);
-        playChickenSound(world, pos);
-        if(world.rand.nextFloat() <= ToolsConfig.chickenStickSpawnChance) {
-            EntityChicken entityChicken = new EntityChicken(world);
-            entityChicken.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-            world.spawnEntityInWorld(entityChicken);
+    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+        if(!world.isRemote && !(entityLiving instanceof FakePlayer) && ChickenStickRegistry.isHammerable(state)) {
+            Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, 0, 0f, world.rand);
+            for (ItemStack rewardStack : rewards) {
+                world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
+            }
+            world.setBlockToAir(pos);
+            playChickenSound(world, pos);
+            if (world.rand.nextFloat() <= ToolsConfig.chickenStickSpawnChance) {
+                EntityChicken entityChicken = new EntityChicken(world);
+                entityChicken.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                world.spawnEntityInWorld(entityChicken);
+            }
         }
         return true;
     }
