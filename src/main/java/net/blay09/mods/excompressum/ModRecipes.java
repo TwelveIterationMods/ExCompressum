@@ -269,23 +269,23 @@ public class ModRecipes {
 	}
 
 	private static void registerBaits() {
-		if (ItemConfig.isEnabled("Wolf Bait")) {
+		if (BlockConfig.isEnabled("Wolf Bait")) {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.WOLF.ordinal()), Items.BONE, Items.BEEF);
 		}
-		if (ItemConfig.isEnabled("Ocelot Bait")) {
+		if (BlockConfig.isEnabled("Ocelot Bait")) {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.OCELOT.ordinal()), Items.GUNPOWDER, new ItemStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE));
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.OCELOT.ordinal()), Items.GUNPOWDER, "listAllfishraw")); // Pam's Fishies
 		}
-		if (ItemConfig.isEnabled("Cow Bait")) {
+		if (BlockConfig.isEnabled("Cow Bait")) {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.COW.ordinal()), Items.WHEAT, Items.WHEAT);
 		}
-		if (ItemConfig.isEnabled("Pig Bait")) {
+		if (BlockConfig.isEnabled("Pig Bait")) {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.PIG.ordinal()), Items.CARROT, Items.CARROT);
 		}
-		if (ItemConfig.isEnabled("Chicken Bait")) {
+		if (BlockConfig.isEnabled("Chicken Bait")) {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.CHICKEN.ordinal()), Items.WHEAT_SEEDS, Items.WHEAT_SEEDS);
 		}
-		if (ItemConfig.isEnabled("Sheep Bait")) {
+		if (BlockConfig.isEnabled("Sheep Bait")) {
 			ItemStack grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
 			if(grassSeeds != null) {
 				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SHEEP.ordinal()), grassSeeds, Items.WHEAT);
@@ -293,7 +293,7 @@ public class ModRecipes {
 				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SHEEP.ordinal()), Items.WHEAT_SEEDS, Items.WHEAT_SEEDS, Items.WHEAT);
 			}
 		}
-		if (ItemConfig.isEnabled("Squid Bait")) {
+		if (BlockConfig.isEnabled("Squid Bait")) {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SQUID.ordinal()), Items.FISH, Items.FISH);
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SQUID.ordinal()), "listAllfishraw", "listAllfishraw")); // Pam's Fishies
 		}
