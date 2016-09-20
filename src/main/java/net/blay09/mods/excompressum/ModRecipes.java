@@ -52,44 +52,42 @@ public class ModRecipes {
 		// Baits
 		registerBaits();
 
-		// RF Thingies
-		if(ModAPIManager.INSTANCE.hasAPI("CoFHAPI")) {
-			if (BlockConfig.isEnabled("Auto Compressor")) {
-				GameRegistry.addRecipe(new ItemStack(ModBlocks.autoCompressor), "#I#", "IBI", "#I#", '#', Blocks.CRAFTING_TABLE, 'B', Blocks.IRON_BLOCK, 'I', Items.IRON_INGOT);
-			}
+		// Fuwafuwagy™ Powered
+		if (BlockConfig.isEnabled("Auto Compressor")) {
+			GameRegistry.addRecipe(new ItemStack(ModBlocks.autoCompressor), "#I#", "IBI", "#I#", '#', Blocks.CRAFTING_TABLE, 'B', Blocks.IRON_BLOCK, 'I', Items.IRON_INGOT);
+		}
 
-			if (BlockConfig.isEnabled("Auto Hammer")) {
-				ItemStack hammerDiamond = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
-				if(hammerDiamond != null) {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHammer), "IPI", "IHI", "IPI", 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'H', hammerDiamond, 'I', "ingotIron"));
-				} else {
-					ExCompressum.logger.warn("No diamond hammer found - Auto Hammer recipe will be disabled.");
-				}
+		if (BlockConfig.isEnabled("Auto Hammer")) {
+			ItemStack hammerDiamond = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
+			if(hammerDiamond != null) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHammer), "IPI", "IHI", "IPI", 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'H', hammerDiamond, 'I', "ingotIron"));
+			} else {
+				ExCompressum.logger.warn("No diamond hammer found - Auto Hammer recipe will be disabled.");
 			}
+		}
 
-			if (BlockConfig.isEnabled("Auto Compressed Hammer")) {
-				if(OreDictionary.getOres("blockSteel", false).isEmpty() || OreDictionary.getOres("ingotSteel", false).isEmpty()) {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoCompressedHammer), "BPB", "IHI", "BPB", 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'H', ModItems.compressedHammerDiamond, 'B', "blockIron", 'I', "ingotIron"));
-				} else {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoCompressedHammer), "IPI", "IHI", "IPI", 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'H', ModItems.compressedHammerDiamond, 'B', "blockSteel", 'I', "ingotSteel"));
-				}
+		if (BlockConfig.isEnabled("Auto Compressed Hammer")) {
+			if(OreDictionary.getOres("blockSteel", false).isEmpty() || OreDictionary.getOres("ingotSteel", false).isEmpty()) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoCompressedHammer), "BPB", "IHI", "BPB", 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'H', ModItems.compressedHammerDiamond, 'B', "blockIron", 'I', "ingotIron"));
+			} else {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoCompressedHammer), "IPI", "IHI", "IPI", 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'H', ModItems.compressedHammerDiamond, 'B', "blockSteel", 'I', "ingotSteel"));
 			}
+		}
 
-			if (BlockConfig.isEnabled("Auto Sieve")) {
-				ItemStack sieveBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SIEVE);
-				if(sieveBlock != null) {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieveBlock, 'G', "paneGlassColorless", 'I', "ingotIron"));
-				} else {
-					ExCompressum.logger.warn("No Sieve found - Auto Sieve recipe will be disabled.");
-				}
+		if (BlockConfig.isEnabled("Auto Sieve")) {
+			ItemStack sieveBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SIEVE);
+			if(sieveBlock != null) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieveBlock, 'G', "paneGlassColorless", 'I', "ingotIron"));
+			} else {
+				ExCompressum.logger.warn("No Sieve found - Auto Sieve recipe will be disabled.");
 			}
+		}
 
-			if (BlockConfig.isEnabled("Auto Heavy Sieve")) {
-				if(OreDictionary.getOres("blockSteel", false).isEmpty() || OreDictionary.getOres("ingotSteel", false).isEmpty()) {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlassColorless", 'I', "ingotIron"));
-				} else {
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "IGI", 'B', "blockSteel", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlassColorless", 'I', "ingotSteel"));
-				}
+		if (BlockConfig.isEnabled("Auto Heavy Sieve")) {
+			if(OreDictionary.getOres("blockSteel", false).isEmpty() || OreDictionary.getOres("ingotSteel", false).isEmpty()) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlassColorless", 'I', "ingotIron"));
+			} else {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHeavySieve), "BGB", "GSG", "IGI", 'B', "blockSteel", 'S', new ItemStack(ModBlocks.heavySieve, 1, OreDictionary.WILDCARD_VALUE), 'G', "paneGlassColorless", 'I', "ingotSteel"));
 			}
 		}
 
@@ -290,7 +288,7 @@ public class ModRecipes {
 			if(grassSeeds != null) {
 				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SHEEP.ordinal()), grassSeeds, Items.WHEAT);
 			} else {
-				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SHEEP.ordinal()), Items.WHEAT_SEEDS, Items.WHEAT_SEEDS, Items.WHEAT);
+				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SHEEP.ordinal()), Items.WHEAT_SEEDS, Items.WHEAT);
 			}
 		}
 		if (BlockConfig.isEnabled("Squid Bait")) {
