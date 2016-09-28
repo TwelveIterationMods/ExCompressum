@@ -52,7 +52,6 @@ public class ItemCompressedHammer extends ItemTool {
             for (ItemStack rewardStack : rewards) {
                 world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
             }
-            world.setBlockToAir(pos);
         }
         return super.onBlockDestroyed(itemStack, world, state, pos, entityLiving);
     }
