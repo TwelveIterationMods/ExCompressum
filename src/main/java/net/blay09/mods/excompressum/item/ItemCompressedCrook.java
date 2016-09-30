@@ -69,7 +69,7 @@ public class ItemCompressedCrook extends ItemTool {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState block, BlockPos pos, EntityLivingBase player) {
+    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState block, BlockPos pos, EntityLivingBase player) { // TODO Move this to HarvestDropsEvent for consistency and less hackyness
         if(!player.worldObj.isRemote) {
             IBlockState state = player.worldObj.getBlockState(pos);
             boolean isLeaves = state.getMaterial() == Material.LEAVES;

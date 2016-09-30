@@ -43,7 +43,7 @@ public class ItemCompressedHammer extends ItemTool {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) { // TODO Move this to HarvestDropsEvent for consistency and less hackyness
         if(!world.isRemote && !StupidUtils.hasSilkTouchModifier(entityLiving) && canHarvestBlock(state, itemStack)) {
             int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack);
             List<ItemStack> rewards = Lists.newArrayList();
@@ -52,7 +52,9 @@ public class ItemCompressedHammer extends ItemTool {
             for (ItemStack rewardStack : rewards) {
                 world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
             }
+            boolean result = super.onBlockDestroyed(itemStack, world, state, pos, entityLiving);
             world.setBlockToAir(pos);
+            return result;
         }
         return super.onBlockDestroyed(itemStack, world, state, pos, entityLiving);
     }

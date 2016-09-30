@@ -85,7 +85,6 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         if(currentStack != null && !ExCompressumConfig.disableParticles) {
             IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
             if (state != null) {
-                System.out.println(particleCount);
                 for(int i = 0; i < particleCount; i++) {
                     Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(worldObj, pos, 0.5 + worldObj.rand.nextFloat() * 0.8 - 0.4, 0.4, 0.5 + worldObj.rand.nextFloat() * 0.8 - 0.4, 1f, state));
                 }
