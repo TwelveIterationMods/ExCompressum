@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import exnihiloadscensio.registries.CompostRegistry;
 import exnihiloadscensio.registries.CrookRegistry;
 import exnihiloadscensio.registries.HammerRegistry;
-import exnihiloadscensio.registries.HammerReward;
 import exnihiloadscensio.registries.SieveRegistry;
 import exnihiloadscensio.registries.types.CrookReward;
 import exnihiloadscensio.registries.types.Siftable;
@@ -160,24 +159,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand) {
-		List<HammerReward> rewards = HammerRegistry.getRewards(state, miningLevel);
-		if(rewards != null) {
-			List<ItemStack> list = Lists.newArrayList();
-			for(HammerReward reward : rewards) {
-				//noinspection ConstantConditions /// @Nullable
-				if(reward.getStack().getItem() == null) {
-					ExCompressum.logger.error("Tried to roll hammer rewards from a null reward entry: {} (base chance: {}, luck: {}, mining level: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getFortuneChance(), reward.getMiningLevel());
-					continue;
-				}
-				float fortuneModifier = reward.getFortuneChance();
-				float chance = reward.getChance() + reward.getFortuneChance() * luck;
-				if(rand.nextFloat() <= chance) {
-					list.add(reward.getStack().copy());
-				}
-			}
-			return list;
-		}
-		return Collections.emptyList();
+		return HammerRegistry.getRewardDrops(rand, state, miningLevel, (int) luck);
 	}
 
 	@Override
