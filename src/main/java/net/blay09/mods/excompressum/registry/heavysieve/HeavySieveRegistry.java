@@ -362,6 +362,14 @@ public class HeavySieveRegistry extends AbstractRegistry {
             }
         }
 
+        if(tryGetBoolean(defaults, "excompressum:compressed_ender_gravel", true)) {
+            ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
+            if(enderGravelBlock != null) {
+                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal());
+                addGeneratedEntry(itemStack, enderGravelBlock, COMPRESSION_SIZE - defaultLoss);
+            }
+        }
+
         if (Loader.isModLoaded(Compat.EXTRAUTILS2)) {
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel");
