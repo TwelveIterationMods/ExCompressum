@@ -62,6 +62,8 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.DUST, findBlock("blockDust", 0));
 		itemMap.put(NihiloItems.SIEVE, findBlock("blockSieve", 0)); // NOTE Adscensio only has an Oak Sieve at the moment
 		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("blockInfestedLeaves", 0));
+		itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("blockNetherrackCrushed", 0));
+		itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("blockEndstoneCrushed", 0));
 
 		bounds = new SieveModelBounds(0.8125f, 0.0625f, 0.88f, 0.15625f);
 
@@ -113,7 +115,6 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		if(siftables != null) {
 			List<HeavySieveReward> rewards = Lists.newArrayList();
 			for (Siftable siftable : siftables) {
-				//noinspection ConstantConditions /// @Nullable
 				if(siftable.getDrop().getItem() == null) {
 					ExCompressum.logger.error("Tried to generate Heavy Sieve rewards from a null reward entry: {}", sourceStack.getItem().getRegistryName());
 					continue;

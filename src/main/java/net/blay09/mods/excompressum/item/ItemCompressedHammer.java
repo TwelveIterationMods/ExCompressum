@@ -31,7 +31,7 @@ public class ItemCompressedHammer extends ItemTool {
 
     @Override
     public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
-        return CompressedHammerRegistry.isHammerable(state);
+        return CompressedHammerRegistry.isHammerable(state) || ExRegistro.isHammerable(state);
     }
 
     @Override
