@@ -8,7 +8,9 @@ import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.handler.ChickenStickHandler;
+import net.blay09.mods.excompressum.handler.CompressedCrookHandler;
 import net.blay09.mods.excompressum.handler.CompressedEnemyHandler;
+import net.blay09.mods.excompressum.handler.CompressedHammerHandler;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.*;
@@ -81,6 +83,8 @@ public class ExCompressum {
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new CompressedHammerHandler());
+        MinecraftForge.EVENT_BUS.register(new CompressedCrookHandler());
         MinecraftForge.EVENT_BUS.register(new CompressedEnemyHandler());
         MinecraftForge.EVENT_BUS.register(new ChickenStickHandler());
 

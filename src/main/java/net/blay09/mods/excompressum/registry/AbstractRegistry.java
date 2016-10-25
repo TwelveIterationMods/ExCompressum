@@ -9,6 +9,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -185,6 +186,14 @@ public abstract class AbstractRegistry {
 		String s = String.format(format, args);
 		ExCompressum.logger.error(s);
 		registryErrors.add(s);
+	}
+
+	protected final void logWarning(String format, Object... args) {
+		String s = String.format(format, args);
+		ExCompressum.logger.error(s);
+		if(ExCompressumConfig.showRegistryWarnings) {
+			registryErrors.add(s);
+		}
 	}
 
 	protected final void logUnknownItem(ResourceLocation location) {

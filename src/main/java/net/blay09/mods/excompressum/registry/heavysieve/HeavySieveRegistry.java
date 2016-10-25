@@ -434,7 +434,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state, itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE);
         Collection<HeavySieveReward> rewards = ExRegistro.generateHeavyRewards(sourceStack, count);
         if(rewards.isEmpty()) {
-            logError("Entry %s could not be generated in %s because %s is not an Ex Nihilo siftable", itemStack.getItem().getRegistryName(), registryName, sourceStack.getItem().getRegistryName());
+            logWarning("Entry %s could not be generated in %s because %s is not an Ex Nihilo siftable", itemStack.getItem().getRegistryName(), registryName, sourceStack.getItem().getRegistryName());
             return;
         }
         entry.addRewards(rewards);

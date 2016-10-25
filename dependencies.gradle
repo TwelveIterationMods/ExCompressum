@@ -1,6 +1,6 @@
 dependencies {
-    deobfCompile "hosted-api:exnihiloomnia:1.1.0"
-    deobfCompile "hosted-api:exnihiloadscensio:0.0.19"
+    deobfCompile "hosted-api:exnihiloomnia:1.1.4"
+    deobfCompile "hosted-api:exnihiloadscensio:0.0.23"
     deobfCompile "hosted-api:Botania-unofficial:r1.8-320"
     deobfCompile "hosted-api:CraftTweaker:1.10.2"
 //    deobfCompile "hosted-api:extrautils2:1.10.2-alpha" // broken ATs causing builds to fail

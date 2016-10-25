@@ -1,28 +1,25 @@
 package net.blay09.mods.excompressum.item;
 
+import exnihiloadscensio.items.tools.ICrook;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ToolsConfig;
-import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 
-import java.util.Collection;
 import java.util.HashSet;
 
-public class ItemCompressedCrook extends ItemTool {
+@Optional.Interface(iface = "exnihiloadscensio.items.tools.ICrook", modid = Compat.EXNIHILO_ADSCENSIO)
+public class ItemCompressedCrook extends ItemTool implements ICompressedCrook, ICrook {
 
     public ItemCompressedCrook() {
         super(0f, 0f, ToolMaterial.WOOD, new HashSet<Block>());
@@ -69,23 +66,12 @@ public class ItemCompressedCrook extends ItemTool {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState block, BlockPos pos, EntityLivingBase player) { // TODO Move this to HarvestDropsEvent for consistency and less hackyness
-        if(!player.worldObj.isRemote) {
-            IBlockState state = player.worldObj.getBlockState(pos);
-            boolean isLeaves = state.getMaterial() == Material.LEAVES;
-            if (isLeaves || state instanceof BlockTallGrass) { // Looks like Omnia also makes seeds from grass more frequent, that's cool, so do it for compressed as well
-                int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack);
-                state.getBlock().dropBlockAsItem(player.worldObj, pos, player.worldObj.getBlockState(pos), fortune);
-                if (isLeaves) {
-                    Collection<ItemStack> rewards = ExRegistro.rollCrookRewards(player, state, fortune, world.rand);
-                    for(ItemStack rewardStack : rewards) {
-                        player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
-                    }
-                }
-            }
-        }
-        itemStack.damageItem(1, player);
+    public boolean canCrook(ItemStack itemStack, World world, IBlockState state, EntityPlayer entityPlayer) {
         return true;
     }
 
+    @Override
+    public boolean isCrook(ItemStack itemStack) {
+        return true;
+    }
 }
