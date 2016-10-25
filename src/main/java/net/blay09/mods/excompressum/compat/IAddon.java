@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO register all of these in preInit instead of special-casing botania
 public interface IAddon {
     void loadConfig(Configuration config);
     void postInit();

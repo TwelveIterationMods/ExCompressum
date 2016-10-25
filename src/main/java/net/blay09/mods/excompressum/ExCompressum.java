@@ -12,6 +12,7 @@ import net.blay09.mods.excompressum.handler.CompressedCrookHandler;
 import net.blay09.mods.excompressum.handler.CompressedEnemyHandler;
 import net.blay09.mods.excompressum.handler.CompressedHammerHandler;
 import net.blay09.mods.excompressum.handler.GuiHandler;
+import net.blay09.mods.excompressum.handler.HammerHandler;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.*;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
@@ -83,6 +84,7 @@ public class ExCompressum {
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(new HammerHandler());
         MinecraftForge.EVENT_BUS.register(new CompressedHammerHandler());
         MinecraftForge.EVENT_BUS.register(new CompressedCrookHandler());
         MinecraftForge.EVENT_BUS.register(new CompressedEnemyHandler());
@@ -172,6 +174,7 @@ public class ExCompressum {
     @Mod.EventHandler
     public void modMappings(FMLModIdMappingEvent event) {
         HeavySieveRegistry.INSTANCE.load(configDir); // This needs to be done here as Adscensio only loads their registries at this point.
+        reloadJEI();
     }
 
     @SubscribeEvent
@@ -186,4 +189,13 @@ public class ExCompressum {
         }
     }
 
+    public static void reloadJEI() {
+        if(Loader.isModLoaded(Compat.JEI)) {
+            try {
+                Class.forName("net.blay09.mods.excompressum.compat.jei.JEIAddon").getMethod("reload").invoke(null);  // thanks JEI
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

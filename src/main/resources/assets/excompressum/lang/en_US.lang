@@ -18,6 +18,7 @@ item.excompressum:wood_chippings.name=Wood Chippings
 item.excompressum:uncompressed_coal.name=Uncompressed Coal
 item.excompressum:bat_zapper.name=Bat Zapper
 item.excompressum:ore_smasher.name=Ore Smasher
+item.excompressum:hammer_mana.name=Mana Hammer
 
 gui.excompressum:autoSieve.noMesh=No Mesh
 gui.excompressum:autoSieve.incorrectMesh=Incorrect Mesh

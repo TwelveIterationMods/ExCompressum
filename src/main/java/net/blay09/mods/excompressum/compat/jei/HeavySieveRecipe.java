@@ -1,30 +1,22 @@
 package net.blay09.mods.excompressum.compat.jei;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import mezz.jei.api.recipe.IRecipeWrapper;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.blay09.mods.excompressum.registry.RegistryKey;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-public class HeavySieveRecipe implements IRecipeWrapper {
+public class HeavySieveRecipe extends BlankRecipeWrapper {
 
 	private final HeavySieveRegistryEntry entry;
 	private final SieveMeshRegistryEntry sieveMesh;
@@ -73,44 +65,10 @@ public class HeavySieveRecipe implements IRecipeWrapper {
 	}
 
 	@Override
-	public List getInputs() {
-		return inputs;
-	}
-
-	@Override
-	public List getOutputs() {
-		return outputs;
-	}
-
-	@Override
-	public List<FluidStack> getFluidInputs() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public List<FluidStack> getFluidOutputs() {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-
-	}
-
-	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight) {
-
-	}
-
-	@Nullable
-	@Override
-	public List<String> getTooltipStrings(int mouseX, int mouseY) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
-		return false;
+	public void getIngredients(IIngredients ingredients) {
+		List<List<ItemStack>> inputs = JEIAddon.jeiHelpers.getStackHelper().expandRecipeItemStackInputs(this.inputs);
+		ingredients.setInputLists(ItemStack.class, inputs);
+		ingredients.setOutputs(ItemStack.class, outputs);
 	}
 
 }

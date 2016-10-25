@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.compat.botania;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
+import net.blay09.mods.excompressum.item.ItemManaHammer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,8 @@ public class BotaniaAddon implements IAddon {
 
     public static LexiconEntry lexiconOrechidEvolved;
     public static Block runicAltar;
+
+    public static ItemManaHammer manaHammer;
 
     private static boolean enableEvolvedOrechid;
     private static boolean disableVanillaOrechid;

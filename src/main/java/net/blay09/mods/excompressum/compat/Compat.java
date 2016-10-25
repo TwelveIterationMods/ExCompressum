@@ -9,5 +9,6 @@ public class Compat {
 	public static final String MINETWEAKER = "MineTweaker3";
 	public static final String EXTRAUTILS2 = "ExtraUtils2";
 	public static final String WAILA = "Waila";
+	public static final String JEI = "JEI";
 
 }

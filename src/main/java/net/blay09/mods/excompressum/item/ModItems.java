@@ -2,10 +2,12 @@ package net.blay09.mods.excompressum.item;
 
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.IRegisterModel;
+import net.blay09.mods.excompressum.compat.Compat;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,6 +31,8 @@ public class ModItems {
     public static ItemUncompressedCoal uncompressedCoal;
     public static ItemBatZapper batZapper;
     public static ItemOreSmasher oreSmasher;
+
+    public static Item itemManaHammer;
 
     public static void init() {
         chickenStick = new ItemChickenStick();
@@ -66,6 +70,14 @@ public class ModItems {
 
         oreSmasher = new ItemOreSmasher();
         register(oreSmasher);
+
+        // TODO move this to addon preInit
+        if(Loader.isModLoaded(Compat.BOTANIA)) try {
+            itemManaHammer = (Item) Class.forName("net.blay09.mods.excompressum.item.ItemManaHammer").newInstance();
+            register(itemManaHammer);
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void register(Item item) {

@@ -5,8 +5,9 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.ITooltipCallback;
+import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.IFocus;
-import mezz.jei.api.recipe.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerReward;
 import net.minecraft.client.Minecraft;
@@ -16,10 +17,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.List;
 
-public class CompressedHammerRecipeCategory implements IRecipeCategory<CompressedHammerRecipe> {
+public class CompressedHammerRecipeCategory extends BlankRecipeCategory<CompressedHammerRecipe> {
 
 	private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_compressed_hammer.png");
 	public static final String UID = "excompressum:compressedHammer";
@@ -61,36 +61,25 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
 	}
 
 	@Override
-	public void drawAnimations(@Nonnull Minecraft minecraft) {
-
-	}
-
-	@Override
-	public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull final CompressedHammerRecipe recipeWrapper) {
+	public void setRecipe(IRecipeLayout recipeLayout, final CompressedHammerRecipe recipeWrapper, IIngredients ingredients) {
 		recipeLayout.getItemStacks().init(0, true, 74, 9);
-		recipeLayout.getItemStacks().setFromRecipe(0, recipeWrapper.getInputs().get(0));
+		recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
 
-		IFocus<ItemStack> focus = recipeLayout.getItemStacks().getFocus();
+		IFocus<?> focus = recipeLayout.getFocus();
 		hasHighlight = focus.getMode() == IFocus.Mode.OUTPUT;
 
-		final List outputs = recipeWrapper.getOutputs();
+		final List<ItemStack> outputs = ingredients.getOutputs(ItemStack.class);
 		final int INPUT_SLOTS = 1;
 		int slotNumber = 0;
-		for(int i = 0; i < outputs.size(); i++) {
+		for (ItemStack output : outputs) {
 			final int slotX = 2 + slotNumber * 18;
 			final int slotY = 36;
 			recipeLayout.getItemStacks().init(INPUT_SLOTS + slotNumber, false, slotX, slotY);
-			Object output = outputs.get(i);
-			if(output instanceof Collection) {
-				//noinspection unchecked /// Thanks Java, you're the best <3
-				recipeLayout.getItemStacks().set(INPUT_SLOTS + slotNumber, (Collection<ItemStack>) output);
-			} else if (output instanceof ItemStack) {
-				ItemStack outputItemStack = (ItemStack) output;
-				recipeLayout.getItemStacks().set(INPUT_SLOTS + slotNumber, outputItemStack);
-				ItemStack focusStack = focus.getValue();
-				if(focus.getMode() == IFocus.Mode.OUTPUT && focusStack != null
-						&& focusStack.getItem() == outputItemStack.getItem()
-						&& focusStack.getItemDamage() == outputItemStack.getItemDamage()) {
+			recipeLayout.getItemStacks().set(INPUT_SLOTS + slotNumber, output);
+			Object focusValue = focus.getValue(); // why you gotta do this to me JEI
+			if (focus.getMode() == IFocus.Mode.OUTPUT && focusValue instanceof ItemStack) {
+				ItemStack focusStack = (ItemStack) focusValue;
+				if (focusStack.getItem() == output.getItem() && focusStack.getItemDamage() == output.getItemDamage()) {
 					highlightX = slotX;
 					highlightY = slotY;
 				}

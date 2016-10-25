@@ -71,7 +71,7 @@ public class StupidUtils {
 	public static IBlockState getStateFromItemStack(ItemStack itemStack) {
 		if(itemStack.getItem() instanceof ItemBlock) {
 			Block block = ((ItemBlock) itemStack.getItem()).block;
-			int meta = itemStack.getItem().getMetadata(itemStack.getItemDamage());
+			int meta = itemStack.getItem().getMetadata(itemStack.getItemDamage()); // TODO update Forge, getStateForPlacement
 			return block.getStateFromMeta(meta);
 		}
 		return null;

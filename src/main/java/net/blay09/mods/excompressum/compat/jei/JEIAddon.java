@@ -2,8 +2,8 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import mezz.jei.api.IJeiRuntime;
-import mezz.jei.api.IModPlugin;
+import mezz.jei.api.BlankModPlugin;
+import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import net.blay09.mods.excompressum.block.ModBlocks;
@@ -21,18 +21,20 @@ import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
 @JEIPlugin
-public class JEIAddon implements IModPlugin {
+public class JEIAddon extends BlankModPlugin {
+
+	public static IJeiHelpers jeiHelpers;
 
 	@Override
-	public void register(@Nonnull IModRegistry registry) {
+	public void register(IModRegistry registry) {
+		jeiHelpers = registry.getJeiHelpers();
+
 		registry.addRecipeCategories(
 				new HeavySieveRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
 				new CompressedHammerRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
@@ -106,9 +108,7 @@ public class JEIAddon implements IModPlugin {
 		}
 	}
 
-	@Override
-	public void onRuntimeAvailable(@Nonnull IJeiRuntime jeiRuntime) {
-
+	public static void reload() {
+		jeiHelpers.reload();
 	}
-
 }
