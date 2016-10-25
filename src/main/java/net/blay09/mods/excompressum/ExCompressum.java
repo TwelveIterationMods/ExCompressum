@@ -110,6 +110,7 @@ public class ExCompressum {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+//        FMLInterModComms.sendFunctionMessage(Compat.THEONEPROBE, "getTheOneProbe", "net.blay09.mods.excompressum.compat.top.ThisAPI$IsTerrible"); // TODO get back to this later
         FMLInterModComms.sendMessage(Compat.WAILA, "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
 
         proxy.init(event);

@@ -10,5 +10,6 @@ public class Compat {
 	public static final String EXTRAUTILS2 = "ExtraUtils2";
 	public static final String WAILA = "Waila";
 	public static final String JEI = "JEI";
+	public static final String THEONEPROBE = "theoneprobe";
 
 }

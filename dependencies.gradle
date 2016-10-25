@@ -9,4 +9,5 @@ dependencies {
     deobfCompile "com.azanor.baubles:Baubles:1.9.4-1.2.1.0.22" // for Botania
     deobfCompile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
     deobfCompile "mezz.jei:jei_1.10.2:3.13.0.329"
+    deobfCompile "mcjty.theoneprobe:TheOneProbe:1.10-1.2.0-40"
 }
