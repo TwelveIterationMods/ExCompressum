@@ -76,13 +76,13 @@ public class ItemChickenStick extends ItemTool {
                 world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
             }
             world.setBlockToAir(pos);
-            playChickenSound(world, pos);
             if (world.rand.nextFloat() <= ToolsConfig.chickenStickSpawnChance) {
                 EntityChicken entityChicken = new EntityChicken(world);
                 entityChicken.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 world.spawnEntityInWorld(entityChicken);
             }
         }
+        playChickenSound(world, pos);
         return true;
     }
 
