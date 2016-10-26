@@ -11,7 +11,7 @@ public class CompressedHammerHandler {
 
 	@SubscribeEvent
 	public void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
-		if(!event.isSilkTouching()) {
+		if(!event.isSilkTouching() && event.getHarvester() != null) {
 			ItemStack heldItem = event.getHarvester().getHeldItemMainhand();
 			if(heldItem != null && heldItem.getItem() instanceof ICompressedHammer && ((ICompressedHammer) heldItem.getItem()).canHammer(heldItem, event.getWorld(), event.getState(), event.getHarvester())) {
 				int fortune = event.getFortuneLevel();
