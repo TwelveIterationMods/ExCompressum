@@ -45,7 +45,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-@Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;before:jei;required-after:Forge@[12.18.1.2080,)")
+@Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;before:JEI;required-after:Forge@[12.18.1.2080,)")
 @SuppressWarnings("unused")
 public class ExCompressum {
 
