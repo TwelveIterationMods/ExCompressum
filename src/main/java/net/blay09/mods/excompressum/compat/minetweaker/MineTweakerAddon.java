@@ -28,7 +28,6 @@ public class MineTweakerAddon implements IEventHandler<MineTweakerImplementation
     public void handle(MineTweakerImplementationAPI.ReloadEvent reloadEvent) {
         HeavySieveRegistry.INSTANCE.load(ExCompressum.configDir);
         CompressedRecipeRegistry.reload();
-        ExCompressum.reloadJEI();
     }
 
     @Override

@@ -30,7 +30,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.event.FMLModIdMappingEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
@@ -46,7 +45,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-@Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;required-after:Forge@[12.18.1.2080,)")
+@Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;before:jei;required-after:Forge@[12.18.1.2080,)")
 @SuppressWarnings("unused")
 public class ExCompressum {
 
@@ -113,6 +112,8 @@ public class ExCompressum {
 //        FMLInterModComms.sendFunctionMessage(Compat.THEONEPROBE, "getTheOneProbe", "net.blay09.mods.excompressum.compat.top.ThisAPI$IsTerrible"); // TODO get back to this later
         FMLInterModComms.sendMessage(Compat.WAILA, "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
 
+        ModRecipes.init();
+
         proxy.init(event);
     }
 
@@ -131,8 +132,8 @@ public class ExCompressum {
         ChickenStickRegistry.INSTANCE.load(configDir);
         WoodenCrucibleRegistry.INSTANCE.load(configDir);
         CompressedHammerRegistry.INSTANCE.load(configDir);
+        HeavySieveRegistry.INSTANCE.load(configDir);
 
-        ModRecipes.init();
         CompressedRecipeRegistry.reload();
 
         SieveMeshRegistry.registerDefaults();
@@ -172,12 +173,6 @@ public class ExCompressum {
         }
     }
 
-    @Mod.EventHandler
-    public void modMappings(FMLModIdMappingEvent event) {
-        HeavySieveRegistry.INSTANCE.load(configDir); // This needs to be done here as Adscensio only loads their registries at this point.
-        reloadJEI();
-    }
-
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if(AbstractRegistry.registryErrors.size() > 0) {
@@ -190,13 +185,4 @@ public class ExCompressum {
         }
     }
 
-    public static void reloadJEI() {
-        if(Loader.isModLoaded(Compat.JEI)) {
-            try {
-                Class.forName("net.blay09.mods.excompressum.compat.jei.JEIAddon").getMethod("reload").invoke(null);  // thanks JEI
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
