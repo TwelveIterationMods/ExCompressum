@@ -108,7 +108,4 @@ public class JEIAddon extends BlankModPlugin {
 		}
 	}
 
-	public static void reload() {
-		jeiHelpers.reload();
-	}
 }

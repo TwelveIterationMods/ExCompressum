@@ -184,7 +184,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 				float luckMultiplier = tryGetFloat(reward, "luck", 0f);
 				rewardList.add(new CompressedHammerReward(new ItemStack(item, count, metadata), chance, luckMultiplier));
 			} else {
-				logError("Failed to load %s registry: rewards must be an array of json objects in ", registryName);
+				logError("Failed to preInit %s registry: rewards must be an array of json objects in ", registryName);
 				return;
 			}
 		}

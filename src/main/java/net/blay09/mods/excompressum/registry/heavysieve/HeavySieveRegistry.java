@@ -284,7 +284,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
                         int meshLevel = tryGetInt(reward, "meshLevel", 1);
                         rewardList.add(new HeavySieveReward(new ItemStack(item, count, rewardMetadata), chance, luckMultiplier, meshLevel));
                     } else {
-                        logError("Failed to load %s registry; rewards must be an array of json objects", registryName);
+                        logError("Failed to preInit %s registry; rewards must be an array of json objects", registryName);
                         return;
                     }
 

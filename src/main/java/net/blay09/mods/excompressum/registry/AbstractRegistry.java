@@ -61,12 +61,12 @@ public abstract class AbstractRegistry {
 				if(element.isJsonObject()) {
 					loadCustom(element.getAsJsonObject());
 				} else {
-					logError("Failed to load %s registry: entries must be an array of json objects", registryName);
+					logError("Failed to preInit %s registry: entries must be an array of json objects", registryName);
 				}
 			}
 
 		} catch (IOException | ClassCastException | JsonSyntaxException e) {
-			logError("Failed to load %s registry: %s", registryName, e);
+			logError("Failed to preInit %s registry: %s", registryName, e);
 			refuseSave = true;
 		}
 		if(root != null && hasChanged && !refuseSave) {

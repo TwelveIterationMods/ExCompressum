@@ -74,7 +74,7 @@ public class ExCompressum {
 		config = new Configuration(new File(configDir, "ExCompressum.cfg"));
 		config.load();
 
-		ExCompressumConfig.load(config);
+		ExCompressumConfig.preInit(config);
 
 		ModItems.init();
 		ModBlocks.init();
@@ -95,7 +95,7 @@ public class ExCompressum {
 				Class<?> clazz = Class.forName("net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
 				addons.add((IAddon) clazz.getConstructor(Configuration.class).newInstance(config));
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-				ExCompressum.logger.error("Failed to load Botania addon: {}", e);
+				ExCompressum.logger.error("Failed to preInit Botania addon: {}", e);
 			}
 		}
 
@@ -109,11 +109,13 @@ public class ExCompressum {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
+		ExCompressumConfig.init(config);
+
 		FMLInterModComms.sendFunctionMessage(Compat.THEONEPROBE, "getTheOneProbe", "net.blay09.mods.excompressum.compat.top.TheOneProbeAddon");
 		FMLInterModComms.sendMessage(Compat.WAILA, "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
 
-		registerAddon(Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
 		registerAddon(Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
+		registerAddon(Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
 
 		ModRecipes.init();
 
@@ -122,7 +124,6 @@ public class ExCompressum {
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		ExCompressumConfig.postLoad(config);
 
 		if (ExRegistro.instance == null) {
 			ExCompressum.logger.warn("No Ex Nihilo mod installed - many things will be disabled. Why would you run Ex Compressum without Ex Nihilo? Pfft.");
