@@ -112,8 +112,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 	public void update() {
 		if (!worldObj.isRemote) {
 			// Fill the crucible from rain
-			// Note: It'd be stupid to depend on the biome's rainfall since this is a skyblock. The biome isn't known unless you go into the debug screen.
-			if (worldObj.getWorldInfo().isRaining() && worldObj.canBlockSeeSky(pos)) {
+			if (worldObj.getWorldInfo().isRaining() && worldObj.canBlockSeeSky(pos) && worldObj.getBiomeForCoordsBody(pos).getRainfall() > 0f) {
 				ticksSinceRain++;
 				if (ticksSinceRain >= RAIN_FILL_INTERVAL) {
 					fluidTank.fill(new FluidStack(FluidRegistry.WATER, RAIN_FILL_SPEED), true);
