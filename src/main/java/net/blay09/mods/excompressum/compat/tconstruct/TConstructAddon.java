@@ -53,16 +53,18 @@ public class TConstructAddon implements IAddon {
         if(itemStack == null) {
             return;
         }
-        NBTTagCompound tags = itemStack.getTagCompound().getCompoundTag("InfiTool");
+        NBTTagCompound tagCompound = itemStack.getTagCompound();
+        if(tagCompound == null) {
+            return;
+        }
+        NBTTagCompound tags = tagCompound.getCompoundTag("InfiTool");
         if(tags.getBoolean(ModSmashingII.NAME)) {
             if(event.world.isRemote || event.isSilkTouching) {
                 return;
             }
-            Block block = event.world.getBlock(event.x, event.y, event.z);
-            int metadata = event.world.getBlockMetadata(event.x, event.y, event.z);
-            Collection<Smashable> rewards = CompressedHammerRegistry.getSmashables(block, metadata);
+            Collection<Smashable> rewards = CompressedHammerRegistry.getSmashables(event.block, event.blockMetadata);
             if (rewards == null || rewards.isEmpty()) {
-                rewards = HammerRegistry.getRewards(block, metadata);
+                rewards = HammerRegistry.getRewards(event.block, event.blockMetadata);
                 if(rewards == null || rewards.isEmpty()) {
                     return;
                 }
@@ -74,7 +76,7 @@ public class TConstructAddon implements IAddon {
                     event.drops.add(new ItemStack(reward.item, 1, reward.meta));
                 }
             }
-            AbilityHelper.onBlockChanged(itemStack, event.world, block, event.x, event.y, event.z, event.harvester, AbilityHelper.random);
+            AbilityHelper.onBlockChanged(itemStack, event.world, event.block, event.x, event.y, event.z, event.harvester, AbilityHelper.random);
         }
     }
 }
