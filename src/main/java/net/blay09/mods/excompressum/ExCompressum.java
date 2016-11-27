@@ -120,20 +120,28 @@ public class ExCompressum {
 		ModRecipes.init();
 
 		proxy.init(event);
+
+		if(ExRegistro.instance.getNihiloMod().getName().equals("omnia")) { // TODO Temporary hotfix for circular dependency issue
+			ChickenStickRegistry.INSTANCE.load(configDir);
+			WoodenCrucibleRegistry.INSTANCE.load(configDir);
+			CompressedHammerRegistry.INSTANCE.load(configDir);
+			HeavySieveRegistry.INSTANCE.load(configDir);
+		}
 	}
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-
 		if (ExRegistro.instance == null) {
 			ExCompressum.logger.warn("No Ex Nihilo mod installed - many things will be disabled. Why would you run Ex Compressum without Ex Nihilo? Pfft.");
 			ExRegistro.instance = new NihilisticNihiloProvider();
 		}
 
-		ChickenStickRegistry.INSTANCE.load(configDir);
-		WoodenCrucibleRegistry.INSTANCE.load(configDir);
-		CompressedHammerRegistry.INSTANCE.load(configDir);
-		HeavySieveRegistry.INSTANCE.load(configDir);
+		if(ExRegistro.instance.getNihiloMod().getName().equals("adscensio")) { // TODO Temporary hotfix for circular dependency issue
+			ChickenStickRegistry.INSTANCE.load(configDir);
+			WoodenCrucibleRegistry.INSTANCE.load(configDir);
+			CompressedHammerRegistry.INSTANCE.load(configDir);
+			HeavySieveRegistry.INSTANCE.load(configDir);
+		}
 
 		CompressedRecipeRegistry.reload();
 
