@@ -38,10 +38,11 @@ public class TileHeavySieve extends TileEntity implements ITickable {
     private ItemStack currentStack;
 
     private float progress;
-    private int clicksSinceSync;
+    private int clicksSinceSecond;
 
     private boolean isDirty;
     private int ticksSinceSync;
+    private int ticksSinceSecond;
 
     private int particleTicks;
     private int particleCount;
@@ -61,12 +62,16 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         ticksSinceSync++;
         if (ticksSinceSync >= UPDATE_INTERVAL) {
             ticksSinceSync = 0;
-            clicksSinceSync = 0;
 
             if (isDirty) {
                 VanillaPacketHandler.sendTileEntityUpdate(this);
                 isDirty = false;
             }
+        }
+        ticksSinceSecond++;
+        if(ticksSinceSecond >= 20) {
+            clicksSinceSecond = 0;
+            ticksSinceSecond = 0;
         }
 
         if(particleTicks > 0) {
@@ -97,8 +102,8 @@ public class TileHeavySieve extends TileEntity implements ITickable {
             if (player.capabilities.isCreativeMode) {
                 progress = 1f;
             } else {
-                clicksSinceSync++;
-                if (clicksSinceSync <= MAX_CLICKS_PER_SECOND) {
+                clicksSinceSecond++;
+                if (clicksSinceSecond <= MAX_CLICKS_PER_SECOND) {
                     progress = Math.min(1f, progress + PROCESSING_INTERVAL);
                 }
             }
