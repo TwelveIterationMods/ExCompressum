@@ -200,4 +200,16 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 		});
 	}
 
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if(tileEntity instanceof TileHeavySieve) {
+			TileHeavySieve tileHeavySieve = (TileHeavySieve) tileEntity;
+			if(tileHeavySieve.getMeshStack() != null) {
+				world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tileHeavySieve.getMeshStack()));
+			}
+		}
+		super.breakBlock(world, pos, state);
+	}
+
 }
