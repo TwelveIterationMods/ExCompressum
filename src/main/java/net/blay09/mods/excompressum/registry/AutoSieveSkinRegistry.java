@@ -17,43 +17,49 @@ import java.util.Random;
 
 public class AutoSieveSkinRegistry {
 
-    private static final Logger logger = LogManager.getLogger();
+	private static final Logger logger = LogManager.getLogger();
 
-    private static final Random random = new Random();
-    private static final List<String> availableSkins = Lists.newArrayList();
+	private static final Random random = new Random();
+	private static final List<String> availableSkins = Lists.newArrayList();
 
-    public static void load() {
-        availableSkins.clear();
-        if(!ExCompressumConfig.skipAutoSieveSkins) {
-            try {
-                URL remoteURL = new URL("http://balyware.com/control-panel/api/skins.php");
-                InputStream in = remoteURL.openStream();
-                Gson gson = new Gson();
-                JsonReader reader = new JsonReader(new InputStreamReader(in));
-                JsonObject root = gson.fromJson(reader, JsonObject.class);
-                if (root.has("error")) {
-                    logger.error("Could not loadCustom remote skins for auto sieve: {}", root.get("error").getAsString());
-                    return;
-                }
-                if(root.has("skins")) {
-                    JsonArray skins = root.getAsJsonArray("skins");
-                    for (int i = 0; i < skins.size(); i++) {
-                        JsonObject skin = skins.get(i).getAsJsonObject();
-                        availableSkins.add(skin.get("name").getAsString());
-                    }
-                }
-                reader.close();
-            } catch (Throwable e) { // Screw it, let's just be overprotective.
-                logger.error("Could not loadCustom remote skins for auto sieve: ", e);
-            }
-        }
-        if(availableSkins.isEmpty()) {
-            availableSkins.add("Steve");
-        }
-    }
+	public static void load() {
+		if (!ExCompressumConfig.skipAutoSieveSkins) {
+			availableSkins.clear();
+			Thread loadAutoSieveSkins = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						URL remoteURL = new URL("http://blay09.net/mods/control-panel/api/skins.php");
+						InputStream in = remoteURL.openStream();
+						Gson gson = new Gson();
+						JsonReader reader = new JsonReader(new InputStreamReader(in));
+						JsonObject root = gson.fromJson(reader, JsonObject.class);
+						if (root.has("error")) {
+							logger.error("Could not load remote skins for auto sieve: {}", root.get("error").getAsString());
+							return;
+						}
+						if (root.has("skins")) {
+							JsonArray skins = root.getAsJsonArray("skins");
+							for (int i = 0; i < skins.size(); i++) {
+								JsonObject skin = skins.get(i).getAsJsonObject();
+								availableSkins.add(skin.get("name").getAsString());
+							}
+						}
+						reader.close();
+					} catch (Throwable e) { // Screw it, let's just be overprotective.
+						logger.error("Could not load remote skins for auto sieve: ", e);
+					}
+				}
+			});
+			loadAutoSieveSkins.run();
+		}
+	}
 
-    public static String getRandomSkin() {
-        return availableSkins.get(random.nextInt(availableSkins.size()));
-    }
+	public static String getRandomSkin() {
+		if (availableSkins.isEmpty()) {
+			availableSkins.add("Steve");
+		}
+		return availableSkins.get(random.nextInt(availableSkins.size()));
+	}
 
 }

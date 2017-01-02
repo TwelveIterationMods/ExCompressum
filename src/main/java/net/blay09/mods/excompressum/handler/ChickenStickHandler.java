@@ -27,6 +27,9 @@ public class ChickenStickHandler {
 				event.getTarget().setDead();
 				if(!event.getTarget().worldObj.isRemote) {
 					heldItem.stackSize--;
+					if(heldItem.stackSize <= 0) {
+						event.getEntityPlayer().setHeldItem(EnumHand.MAIN_HAND, null);
+					}
 					EntityAngryChicken angryChicken = new EntityAngryChicken(event.getTarget().worldObj);
 					angryChicken.setLocationAndAngles(event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, event.getTarget().rotationYaw, event.getTarget().rotationPitch);
 					event.getTarget().worldObj.spawnEntityInWorld(angryChicken);

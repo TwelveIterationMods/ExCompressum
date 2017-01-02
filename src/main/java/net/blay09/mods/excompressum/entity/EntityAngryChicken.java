@@ -5,11 +5,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
@@ -87,7 +89,10 @@ public class EntityAngryChicken extends EntityMob {
 			dropItem(Items.CHICKEN, 1);
 		}
 
-		dropItem(ModItems.chickenStick, 1);
+		EntityItem chickenStick = dropItem(ModItems.chickenStick, 1);
+		NBTTagCompound tagCompound = new NBTTagCompound();
+		tagCompound.setBoolean("IsAngry", true);
+		chickenStick.getEntityItem().setTagCompound(tagCompound);
 	}
 
 	@Override

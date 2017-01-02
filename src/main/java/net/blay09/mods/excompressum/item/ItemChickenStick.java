@@ -94,6 +94,9 @@ public class ItemChickenStick extends ItemTool {
     @Override
     public float getStrVsBlock(ItemStack stack, IBlockState state) {
         if ((ChickenStickRegistry.isHammerable(state))) {
+            if(isAngry(stack)) {
+                return efficiencyOnProperMaterial * 1.5f;
+            }
             return efficiencyOnProperMaterial;
         }
         return 0.8f;
@@ -119,5 +122,14 @@ public class ItemChickenStick extends ItemTool {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        return isAngry(stack);
+    }
+
+    public boolean isAngry(ItemStack itemStack) {
+        return itemStack.getTagCompound() != null && itemStack.getTagCompound().getBoolean("IsAngry");
     }
 }

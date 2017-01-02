@@ -5,6 +5,7 @@ import mezz.jei.api.recipe.BlankRecipeWrapper;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ChickenStickRecipe extends BlankRecipeWrapper {
 
@@ -14,6 +15,9 @@ public class ChickenStickRecipe extends BlankRecipeWrapper {
 	public ChickenStickRecipe() {
 		input = new ItemStack(Items.STICK);
 		output = new ItemStack(ModItems.chickenStick);
+		NBTTagCompound tagCompound = new NBTTagCompound();
+		tagCompound.setBoolean("IsAngry", true);
+		output.setTagCompound(tagCompound);
 	}
 
 	@Override
