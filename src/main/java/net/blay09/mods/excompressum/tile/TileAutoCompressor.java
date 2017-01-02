@@ -36,6 +36,11 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
     private final RangedWrapper outputSlots = new RangedWrapper(itemHandler, 12, 24);
     private final ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
         @Override
+        public boolean canInsertItem(int slot, ItemStack itemStack) {
+            return slot < 12 && CompressedRecipeRegistry.getRecipe(itemStack) != null;
+        }
+
+        @Override
         public boolean canExtractItem(int slot, int amount) {
             return slot >= 12;
         }
