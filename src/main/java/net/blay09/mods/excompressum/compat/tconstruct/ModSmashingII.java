@@ -16,11 +16,13 @@ import java.util.Collection;
 // FUTURE This one needs a cool graphic!
 public class ModSmashingII extends ModifierTrait {
 
+	public static final String ID = "excompressum:smashingii";
+
 	private static final float SPEED_DECREASE = 0.5f;
 	private static final float DAMAGE_INCREASE = 3;
 
 	public ModSmashingII() {
-		super("excompressum:smashingii", 0xFF0000);
+		super(ID, 0xFF0000);
 	}
 
 	@Override
@@ -41,15 +43,17 @@ public class ModSmashingII extends ModifierTrait {
 
 	@Override
 	public void blockHarvestDrops(ItemStack tool, BlockEvent.HarvestDropsEvent event) {
-		if(ToolHelper.isToolEffective2(tool, event.getState())) {
-			event.getDrops().clear();
-			Collection<ItemStack> rewards = CompressedHammerRegistry.rollHammerRewards(event.getState(), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
-			if(rewards.isEmpty()) {
-				rewards = ExRegistro.rollHammerRewards(event.getState(), ToolHelper.getHarvestLevelStat(tool), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
+		Collection<ItemStack> rewards = CompressedHammerRegistry.rollHammerRewards(event.getState(), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
+		if (rewards.isEmpty()) {
+			rewards = ExRegistro.rollHammerRewards(event.getState(), ToolHelper.getHarvestLevelStat(tool), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
+			if (rewards.isEmpty()) {
+				return;
 			}
-			for(ItemStack itemStack : rewards) {
-				event.getDrops().add(itemStack);
-			}
+		}
+		event.getDrops().clear();
+		event.setDropChance(1f);
+		for (ItemStack itemStack : rewards) {
+			event.getDrops().add(itemStack);
 		}
 	}
 
