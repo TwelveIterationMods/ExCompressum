@@ -36,7 +36,9 @@ public class BlockCompressed extends Block implements IRegisterModel {
 		FLINT,
 		NETHER_GRAVEL,
 		ENDER_GRAVEL,
-		SOUL_SAND;
+		SOUL_SAND,
+		NETHERRACK,
+		END_STONE;
 
 		public static final Type[] values = values();
 

@@ -85,6 +85,8 @@ public class BlockConfig {
 		addEntry("Compressed Gravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal()), !exUtilsLoaded);
 		addEntry("Compressed Sand", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal()), !exUtilsLoaded);
 		addEntry("Compressed Dirt", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()), !exUtilsLoaded);
+		addEntry("Compressed Netherrack", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHERRACK.ordinal()), !exUtilsLoaded);
+		addEntry("Compressed End Stone", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.END_STONE.ordinal()), !exUtilsLoaded);
 
 		addEntry("Wolf Bait", new ItemStack(ModBlocks.bait, 1, BlockBait.Type.WOLF.ordinal()), true);
 		addEntry("Ocelot Bait", new ItemStack(ModBlocks.bait, 1, BlockBait.Type.OCELOT.ordinal()), true);
@@ -93,6 +95,7 @@ public class BlockConfig {
 		addEntry("Chicken Bait", new ItemStack(ModBlocks.bait, 1, BlockBait.Type.CHICKEN.ordinal()), true);
 		addEntry("Sheep Bait", new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SHEEP.ordinal()), true);
 		addEntry("Squid Bait", new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SQUID.ordinal()), false);
+		addEntry("Rabbit Bait", new ItemStack(ModBlocks.bait, 1, BlockBait.Type.RABBIT.ordinal()), true);
 
 		for (Entry entry : entries.values()) {
 			entry.setEnabled(config.getBoolean(entry.getName(), "blocks", entry.getDefaultValue(), "If set to false, the recipe for the " + entry.getName() + " will be disabled (and it won't show up in JEI)."));

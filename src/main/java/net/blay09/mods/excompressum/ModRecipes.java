@@ -264,6 +264,14 @@ public class ModRecipes {
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SOUL_SAND.ordinal()), "###", "###", "###", '#', Blocks.SOUL_SAND);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.SOUL_SAND, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SOUL_SAND.ordinal()));
 		}
+		if (BlockConfig.isEnabled("Compressed Netherrack")) {
+			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHERRACK.ordinal()), "###", "###", "###", '#', Blocks.NETHERRACK);
+			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.NETHERRACK, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHERRACK.ordinal()));
+		}
+		if (BlockConfig.isEnabled("Compressed End Stone")) {
+			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.END_STONE.ordinal()), "###", "###", "###", '#', Blocks.END_STONE);
+			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.END_STONE, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.END_STONE.ordinal()));
+		}
 	}
 
 	private static void registerBaits() {
