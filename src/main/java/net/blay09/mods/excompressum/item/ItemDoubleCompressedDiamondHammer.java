@@ -21,6 +21,7 @@ public class ItemDoubleCompressedDiamondHammer extends Item {
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List<String> list, boolean flag) {
         list.add(TextFormatting.DARK_AQUA + I18n.format("tooltip.excompressum:double_compressed_diamond_hammer"));
+        list.add(TextFormatting.DARK_AQUA + I18n.format("tooltip.excompressum:best_with_blasting"));
     }
 
 }

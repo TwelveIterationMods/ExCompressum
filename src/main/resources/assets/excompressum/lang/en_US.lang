@@ -24,6 +24,7 @@ gui.excompressum:autoSieve.noMesh=No Mesh
 gui.excompressum:autoSieve.incorrectMesh=Incorrect Mesh
 
 tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifier
+tooltip.excompressum:best_with_blasting=Combine with Blasting for best results
 tooltip.excompressum:auto_sieve=%s in a Box™
 tooltip.excompressum:auto_heavy_sieve=%s in a Heavy Box™
 tooltip.excompressum:mana_sieve=%s in a Magical Box™
