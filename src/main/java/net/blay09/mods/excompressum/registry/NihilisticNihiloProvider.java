@@ -75,4 +75,14 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	public NihiloMod getNihiloMod() {
 		return NihiloMod.NONE;
 	}
+
+	@Override
+	public int getMeshFortune(ItemStack meshStack) {
+		return 0;
+	}
+
+	@Override
+	public int getMeshEfficiency(ItemStack meshStack) {
+		return 0;
+	}
 }

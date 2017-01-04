@@ -33,6 +33,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
     private static final float PROCESSING_INTERVAL = 0.075f;
     private static final int UPDATE_INTERVAL = 5;
     private static final int PARTICLE_TICKS = 20;
+    private static final float EFFICIENCY_BOOST = 0.25f;
 
     private ItemStack meshStack;
     private ItemStack currentStack;
@@ -104,14 +105,17 @@ public class TileHeavySieve extends TileEntity implements ITickable {
             } else {
                 clicksSinceSecond++;
                 if (clicksSinceSecond <= MAX_CLICKS_PER_SECOND) {
-                    progress = Math.min(1f, progress + PROCESSING_INTERVAL);
+                    int efficiency = ExRegistro.getMeshEfficiency(meshStack);
+                    progress = Math.min(1f, progress + PROCESSING_INTERVAL * (1f + efficiency * EFFICIENCY_BOOST));
                 }
             }
             if (progress >= 1f) {
                 if (!worldObj.isRemote) {
                     SieveMeshRegistryEntry sieveMesh = getSieveMesh();
                     if(sieveMesh != null) {
-                        Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, sieveMesh, 0f, worldObj.rand);
+                        int fortune = ExRegistro.getMeshFortune(meshStack);
+                        fortune += player.getLuck();
+                        Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, sieveMesh, fortune, worldObj.rand);
                         for (ItemStack itemStack : rewards) {
                             worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
                         }

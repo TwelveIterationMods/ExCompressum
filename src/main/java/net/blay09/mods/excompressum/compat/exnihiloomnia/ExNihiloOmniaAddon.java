@@ -27,8 +27,10 @@ import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -288,5 +290,15 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public NihiloMod getNihiloMod() {
 		return NihiloMod.OMNIA;
+	}
+
+	@Override
+	public int getMeshFortune(ItemStack meshStack) {
+		return EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, meshStack);
+	}
+
+	@Override
+	public int getMeshEfficiency(ItemStack meshStack) {
+		return EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, meshStack);
 	}
 }

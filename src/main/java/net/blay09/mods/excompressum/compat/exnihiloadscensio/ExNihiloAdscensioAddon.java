@@ -23,8 +23,11 @@ import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -48,8 +51,13 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 
 	private final SieveModelBounds bounds;
 	private float sieveLuckMultiplier = 0.1f;
+	private Enchantment sieveEfficiency;
+	private Enchantment sieveFortune;
 
 	public ExNihiloAdscensioAddon() {
+		sieveEfficiency = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_ADSCENSIO + ":sieveEfficiency");
+		sieveFortune = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_ADSCENSIO + ":sieveFortune");
+
 		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammerWood", OreDictionary.WILDCARD_VALUE));
 		itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammerStone", OreDictionary.WILDCARD_VALUE));
 		itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammerIron", OreDictionary.WILDCARD_VALUE));
@@ -275,5 +283,15 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public NihiloMod getNihiloMod() {
 		return NihiloMod.ADSCENSIO;
+	}
+
+	@Override
+	public int getMeshFortune(ItemStack meshStack) {
+		return EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, meshStack) + EnchantmentHelper.getEnchantmentLevel(sieveFortune, meshStack);
+	}
+
+	@Override
+	public int getMeshEfficiency(ItemStack meshStack) {
+		return EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, meshStack) + EnchantmentHelper.getEnchantmentLevel(sieveEfficiency, meshStack);
 	}
 }

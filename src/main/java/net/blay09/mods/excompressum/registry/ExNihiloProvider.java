@@ -56,5 +56,7 @@ public interface ExNihiloProvider {
 	boolean doMeshesHaveDurability();
 	boolean doMeshesSplitLootTables();
 	NihiloMod getNihiloMod();
+	int getMeshFortune(ItemStack meshStack);
+	int getMeshEfficiency(ItemStack meshStack);
 
 }

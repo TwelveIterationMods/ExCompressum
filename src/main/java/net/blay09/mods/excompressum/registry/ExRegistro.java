@@ -5,7 +5,9 @@ import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -95,4 +97,11 @@ public abstract class ExRegistro {
 		return instance.getNihiloMod();
 	}
 
+	public static int getMeshFortune(ItemStack meshStack) {
+		return instance.getMeshFortune(meshStack);
+	}
+
+	public static int getMeshEfficiency(ItemStack meshStack) {
+		return instance.getMeshEfficiency(meshStack);
+	}
 }

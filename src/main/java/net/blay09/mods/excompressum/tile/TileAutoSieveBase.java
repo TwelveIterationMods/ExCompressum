@@ -17,9 +17,7 @@ import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.utils.SubItemHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -246,7 +244,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	public float getEffectiveLuck() {
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
 		if (meshStack != null) {
-			return EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, meshStack);
+			return ExRegistro.getMeshFortune(meshStack);
 		}
 		return 0f;
 	}
@@ -380,7 +378,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		float boost = 1f;
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
 		if(meshStack != null) {
-			boost += EFFICIENCY_BOOST * EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, meshStack);
+			boost += EFFICIENCY_BOOST * ExRegistro.getMeshEfficiency(meshStack);
 		}
 		return boost * getFoodBoost();
 	}
