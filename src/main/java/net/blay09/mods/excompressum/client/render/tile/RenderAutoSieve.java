@@ -29,7 +29,6 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
@@ -90,10 +89,12 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
         GlStateManager.translate(-0.25f, 0f, -0.5f);
 
         // Render the sieve
+        GlStateManager.pushMatrix();
         renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        mc.getBlockRendererDispatcher().renderBlock(sieveState, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+        RenderUtils.renderBlockWithTranslate(mc, sieveState, tileEntity.getWorld(), tileEntity.getPos(), renderer);
         tessellator.draw();
+        GlStateManager.popMatrix();
 
         SieveModelBounds bounds = ExRegistro.getSieveBounds();
         if(isHeavy) {
@@ -131,7 +132,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(bounds.contentOffset, bounds.meshY, bounds.contentOffset);
                 GlStateManager.scale(bounds.contentScaleXZ, bounds.contentBaseScaleY - progress * bounds.contentBaseScaleY, bounds.contentScaleXZ);
-                mc.getBlockRendererDispatcher().renderBlock(contentState, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+                RenderUtils.renderBlockWithTranslate(mc, contentState, tileEntity.getWorld(), tileEntity.getPos(), renderer);
                 tessellator.draw();
                 GlStateManager.popMatrix();
             }

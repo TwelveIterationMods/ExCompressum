@@ -2,8 +2,6 @@ package net.blay09.mods.excompressum.client.render.tile;
 
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
-import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
@@ -18,7 +16,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> {
@@ -67,7 +64,7 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> 
                 GlStateManager.translate(0.0625f, 0.5625f, 0.0625f);
                 float tt = 0.42f;
                 GlStateManager.scale(0.88f, tt - progress * tt, 0.88f);
-                mc.getBlockRendererDispatcher().renderBlock(state, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
+                RenderUtils.renderBlockWithTranslate(mc, state, tileEntity.getWorld(), tileEntity.getPos(), renderer);
                 tessellator.draw();
                 GlStateManager.popMatrix();
             }

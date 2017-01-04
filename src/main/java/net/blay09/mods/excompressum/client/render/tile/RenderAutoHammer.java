@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
+import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.block.BlockAutoHammer;
@@ -21,7 +22,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> {
@@ -104,10 +104,11 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(-0.09375f, 0.0625f, -0.25);
                 GlStateManager.scale(0.5, 0.5, 0.5);
-                mc.getBlockRendererDispatcher().renderBlock(contentState, new BlockPos(0, 0, 0), tileEntity.getWorld(), renderer);
-//                RenderUtils.preBlockDamage(); // TODO look at this later for auto hammer. for some reason doing this makes the block inside go half-transparent too
-                mc.getBlockRendererDispatcher().renderBlockDamage(contentState, new BlockPos(0, 0, 0), ClientProxy.destroyBlockIcons[Math.min(9, (int) (tileEntity.getProgress() * 9f))], tileEntity.getWorld());
-//                RenderUtils.postBlockDamage();
+                RenderUtils.renderBlockWithTranslate(mc, contentState, tileEntity.getWorld(), tileEntity.getPos(), renderer);
+                RenderUtils.preBlockDamage();
+//                GlStateManager.translate(-tileEntity.getPos().getX(), -tileEntity.getPos().getY(), -tileEntity.getPos().getZ());
+                mc.getBlockRendererDispatcher().renderBlockDamage(contentState, tileEntity.getPos(), ClientProxy.destroyBlockIcons[Math.min(9, (int) (tileEntity.getProgress() * 9f))], tileEntity.getWorld());
+                RenderUtils.postBlockDamage();
                 tessellator.draw();
                 GlStateManager.popMatrix();
             }
@@ -118,18 +119,4 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         RenderHelper.enableStandardItemLighting();
     }
 
-    private float getRotationAngle(EnumFacing facing) {
-        switch(facing) {
-            case NORTH:
-                return 0;
-            case EAST:
-                return -90;
-            case SOUTH:
-                return 180;
-            case WEST:
-                return 90;
-            default:
-                return -90;
-        }
-    }
 }
