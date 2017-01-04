@@ -48,10 +48,12 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
         PIG,
         CHICKEN,
         SHEEP,
-        SQUID;
+        SQUID,
+        RABBIT;
 
         public static Type[] values = values();
 
+        @Nullable
         public static Type fromId(int id) {
             return id >= 0 && id < values.length ? values[id] : null;
         }

@@ -106,7 +106,6 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
                 GlStateManager.scale(0.5, 0.5, 0.5);
                 RenderUtils.renderBlockWithTranslate(mc, contentState, tileEntity.getWorld(), tileEntity.getPos(), renderer);
                 RenderUtils.preBlockDamage();
-//                GlStateManager.translate(-tileEntity.getPos().getX(), -tileEntity.getPos().getY(), -tileEntity.getPos().getZ());
                 mc.getBlockRendererDispatcher().renderBlockDamage(contentState, tileEntity.getPos(), ClientProxy.destroyBlockIcons[Math.min(9, (int) (tileEntity.getProgress() * 9f))], tileEntity.getWorld());
                 RenderUtils.postBlockDamage();
                 tessellator.draw();

@@ -295,5 +295,8 @@ public class ModRecipes {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SQUID.ordinal()), Items.FISH, Items.FISH);
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SQUID.ordinal()), "listAllfishraw", "listAllfishraw")); // Pam's Fishies
 		}
+		if(BlockConfig.isEnabled("Rabbit Bait")) {
+			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.RABBIT.ordinal()), Items.RABBIT, Items.MELON_SEEDS);
+		}
 	}
 }
