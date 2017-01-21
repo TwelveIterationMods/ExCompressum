@@ -21,6 +21,11 @@ public class TConstructAddon implements IAddon {
     }
 
     @Override
+    public void init() {
+
+    }
+
+    @Override
     public void postInit() {
         if(enableModifiers) {
             ModSmashingII smashingII = new ModSmashingII();

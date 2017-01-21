@@ -61,6 +61,10 @@ public class BotaniaAddon implements IAddon {
     }
 
     @Override
+    public void init() {
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public void postInit() {
         runicAltar = Block.REGISTRY.getObject(new ResourceLocation(Compat.BOTANIA, "runeAltar"));

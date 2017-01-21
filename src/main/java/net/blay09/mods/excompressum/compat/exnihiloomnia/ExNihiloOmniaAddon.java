@@ -243,6 +243,11 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	}
 
 	@Override
+	public void init() {
+
+	}
+
+	@Override
 	public void postInit() {
 		if(ExCompressumConfig.enableWoodChippings) {
 			HammerRegistryEntry log = new HammerRegistryEntry(Blocks.LOG.getDefaultState(), EnumMetadataBehavior.IGNORED);

@@ -58,6 +58,45 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	private Enchantment sieveFortune;
 
 	public ExNihiloAdscensioAddon() {
+		bounds = new SieveModelBounds(0.8125f, 0.0625f, 0.88f, 0.15625f);
+
+		if(ExCompressumConfig.enableWoodChippings) {
+			RegistryManager.registerHammerDefaultRecipeHandler(new IHammerDefaultRegistryProvider() {
+				@Override
+				public void registerHammerRecipeDefaults() {
+					for(IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
+					}
+
+					for(IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
+					}
+				}
+			});
+
+			RegistryManager.registerCompostDefaultRecipeHandler(new ICompostDefaultRegistryProvider() {
+				@Override
+				public void registerCompostRecipeDefaults() {
+					List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
+					for(ItemStack itemStack : oreDictStacks) {
+						CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
+					}
+				}
+			});
+
+		}
+
+		ExRegistro.instance = this;
+	}
+
+	@Override
+	public void init() {
 		sieveEfficiency = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_ADSCENSIO + ":sieveEfficiency");
 		sieveFortune = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_ADSCENSIO + ":sieveFortune");
 
@@ -76,7 +115,6 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("blockNetherrackCrushed", 0));
 		itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("blockEndstoneCrushed", 0));
 
-		bounds = new SieveModelBounds(0.8125f, 0.0625f, 0.88f, 0.15625f);
 
 		ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
 		if(stringMeshItem != null) {
@@ -111,39 +149,6 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 			diamondMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/diamond_mesh"));
 			SieveMeshRegistry.add(diamondMesh);
 		}
-
-		if(ExCompressumConfig.enableWoodChippings) {
-			RegistryManager.registerHammerDefaultRecipeHandler(new IHammerDefaultRegistryProvider() {
-				@Override
-				public void registerHammerRecipeDefaults() {
-					for(IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
-					}
-
-					for(IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
-					}
-				}
-			});
-
-			RegistryManager.registerCompostDefaultRecipeHandler(new ICompostDefaultRegistryProvider() {
-				@Override
-				public void registerCompostRecipeDefaults() {
-					List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
-					for(ItemStack itemStack : oreDictStacks) {
-						CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
-					}
-				}
-			});
-		}
-
-		ExRegistro.instance = this;
 	}
 
 	@Override

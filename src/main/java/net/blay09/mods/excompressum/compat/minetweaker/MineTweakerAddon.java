@@ -41,6 +41,11 @@ public class MineTweakerAddon implements IEventHandler<MineTweakerImplementation
     }
 
     @Override
+    public void init() {
+
+    }
+
+    @Override
     public void postInit() {
     }
 
