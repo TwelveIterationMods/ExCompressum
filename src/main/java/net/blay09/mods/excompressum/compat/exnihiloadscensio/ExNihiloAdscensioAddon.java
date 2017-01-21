@@ -6,6 +6,7 @@ import exnihiloadscensio.registries.CompostRegistry;
 import exnihiloadscensio.registries.CrookRegistry;
 import exnihiloadscensio.registries.HammerRegistry;
 import exnihiloadscensio.registries.SieveRegistry;
+import exnihiloadscensio.registries.manager.ICompostDefaultRegistryProvider;
 import exnihiloadscensio.registries.manager.IHammerDefaultRegistryProvider;
 import exnihiloadscensio.registries.manager.RegistryManager;
 import exnihiloadscensio.registries.types.CrookReward;
@@ -109,6 +110,37 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 			diamondMesh.setHeavy(true);
 			diamondMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/diamond_mesh"));
 			SieveMeshRegistry.add(diamondMesh);
+		}
+
+		if(ExCompressumConfig.enableWoodChippings) {
+			RegistryManager.registerHammerDefaultRecipeHandler(new IHammerDefaultRegistryProvider() {
+				@Override
+				public void registerHammerRecipeDefaults() {
+					for(IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
+					}
+
+					for(IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
+					}
+				}
+			});
+
+			RegistryManager.registerCompostDefaultRecipeHandler(new ICompostDefaultRegistryProvider() {
+				@Override
+				public void registerCompostRecipeDefaults() {
+					List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
+					for(ItemStack itemStack : oreDictStacks) {
+						CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
+					}
+				}
+			});
 		}
 
 		ExRegistro.instance = this;
@@ -239,31 +271,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public void postInit() {
-		if(ExCompressumConfig.enableWoodChippings) {
-			RegistryManager.registerHammerDefaultRecipeHandler(new IHammerDefaultRegistryProvider() {
-				@Override
-				public void registerHammerRecipeDefaults() {
-					for(IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
-					}
 
-					for(IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
-					}
-				}
-			});
-
-			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
-			for(ItemStack itemStack : oreDictStacks) {
-				CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
-			}
-		}
 	}
 
 	@Override
