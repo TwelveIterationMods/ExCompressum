@@ -6,6 +6,8 @@ import exnihiloadscensio.registries.CompostRegistry;
 import exnihiloadscensio.registries.CrookRegistry;
 import exnihiloadscensio.registries.HammerRegistry;
 import exnihiloadscensio.registries.SieveRegistry;
+import exnihiloadscensio.registries.manager.IHammerDefaultRegistryProvider;
+import exnihiloadscensio.registries.manager.RegistryManager;
 import exnihiloadscensio.registries.types.CrookReward;
 import exnihiloadscensio.registries.types.Siftable;
 import exnihiloadscensio.texturing.Color;
@@ -238,19 +240,24 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public void postInit() {
 		if(ExCompressumConfig.enableWoodChippings) {
-			for(IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
-			}
+			RegistryManager.registerHammerDefaultRecipeHandler(new IHammerDefaultRegistryProvider() {
+				@Override
+				public void registerHammerRecipeDefaults() {
+					for(IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
+					}
 
-			for(IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-				HammerRegistry.addHammerRecipe(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
-			}
+					for(IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
+						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
+					}
+				}
+			});
 
 			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
 			for(ItemStack itemStack : oreDictStacks) {
