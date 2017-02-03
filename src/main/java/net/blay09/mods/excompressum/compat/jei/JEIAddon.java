@@ -93,18 +93,18 @@ public class JEIAddon extends BlankModPlugin {
 
 		for(BlockConfig.Entry entry : BlockConfig.getEntries()) {
 			if(!entry.isEnabled()) {
-				registry.getJeiHelpers().getItemBlacklist().addItemToBlacklist(entry.getItemStack());
+				registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(entry.getItemStack());
 			}
 		}
 
 		for(ItemConfig.Entry entry : ItemConfig.getEntries()) {
 			if(!entry.isEnabled()) {
-				registry.getJeiHelpers().getItemBlacklist().addItemToBlacklist(entry.getItemStack());
+				registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(entry.getItemStack());
 			}
 		}
 
 		if(!ExCompressumConfig.enableWoodChippings) {
-			registry.getJeiHelpers().getItemBlacklist().addItemToBlacklist(new ItemStack(ModItems.woodChipping));
+			registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModItems.woodChipping));
 		}
 	}
 

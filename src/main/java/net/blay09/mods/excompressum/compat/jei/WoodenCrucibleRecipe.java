@@ -31,7 +31,6 @@ public class WoodenCrucibleRecipe extends BlankRecipeWrapper {
 			inputs.add(entry.getItemStack());
 		}
 		fluidOutputs = Collections.singletonList(new FluidStack(fluid, Fluid.BUCKET_VOLUME));
-		WoodenCrucibleRegistry.INSTANCE.getEntries();
 	}
 
 	public Fluid getFluid() {
