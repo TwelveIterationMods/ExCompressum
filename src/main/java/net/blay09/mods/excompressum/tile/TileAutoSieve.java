@@ -1,15 +1,22 @@
 package net.blay09.mods.excompressum.tile;
 
-import cofh.api.energy.IEnergyReceiver;
 import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 
-public class TileAutoSieve extends TileAutoSieveBase implements IEnergyReceiver {
+public class TileAutoSieve extends TileAutoSieveBase {
 
-    private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000);
+    private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            if(!simulate) {
+                markDirty();
+            }
+            return super.receiveEnergy(maxReceive, simulate);
+        }
+    };
 
     @Override
     protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
@@ -46,29 +53,6 @@ public class TileAutoSieve extends TileAutoSieveBase implements IEnergyReceiver 
             isDirty = true;
         }
         return energyStorage.extractEnergy(maxExtract, simulate);
-    }
-
-    @Override
-    public int receiveEnergy(EnumFacing side, int maxReceive, boolean simulate) {
-        if(!simulate) {
-            isDirty = true;
-        }
-        return energyStorage.receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(EnumFacing side) {
-        return energyStorage.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing side) {
-        return energyStorage.getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing side) {
-        return true;
     }
 
     @Override

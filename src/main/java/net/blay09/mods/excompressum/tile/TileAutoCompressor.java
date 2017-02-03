@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.tile;
 
-import cofh.api.energy.IEnergyReceiver;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
@@ -22,9 +21,18 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 
-public class TileAutoCompressor extends TileEntityBase implements ITickable, IEnergyReceiver {
+public class TileAutoCompressor extends TileEntityBase implements ITickable {
 
-    private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000);
+    private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            if(!simulate) {
+                markDirty();
+            }
+            return super.receiveEnergy(maxReceive, simulate);
+        }
+    };
+
     private final Multiset<CompressedRecipe> inputItems = HashMultiset.create();
     private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 24) {
         @Override
@@ -190,26 +198,6 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
         tagCompound.setFloat("Progress", progress);
         tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
         tagCompound.setTag("EnergyStorage", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
-    }
-
-    @Override
-    public int receiveEnergy(EnumFacing side, int maxReceive, boolean simulate) {
-        return energyStorage.receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(@Nullable EnumFacing side) {
-        return energyStorage.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing side) {
-        return energyStorage.getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing side) {
-        return true;
     }
 
     public boolean isProcessing() {
