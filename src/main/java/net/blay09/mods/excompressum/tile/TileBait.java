@@ -265,7 +265,7 @@ public class TileBait extends TileEntity implements ITickable {
 			return;
 		}
 
-		BlockBait.Type[] simpleTypes = new BlockBait.Type[]{BlockBait.Type.WOLF, BlockBait.Type.COW, BlockBait.Type.PIG, BlockBait.Type.CHICKEN, BlockBait.Type.SHEEP};
+		BlockBait.Type[] simpleTypes = new BlockBait.Type[]{BlockBait.Type.WOLF, BlockBait.Type.COW, BlockBait.Type.PIG, BlockBait.Type.CHICKEN, BlockBait.Type.SHEEP, BlockBait.Type.RABBIT};
 		BlockPlanks.EnumType[] acceptedTrees = new BlockPlanks.EnumType[]{BlockPlanks.EnumType.OAK, BlockPlanks.EnumType.BIRCH, BlockPlanks.EnumType.SPRUCE, BlockPlanks.EnumType.ACACIA, BlockPlanks.EnumType.DARK_OAK};
 		for (BlockBait.Type type : simpleTypes) {
 			envBlockMap.put(type, new BaitBlockCondition(Blocks.GRASS.getDefaultState(), false));
