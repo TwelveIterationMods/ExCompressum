@@ -60,7 +60,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	public ExNihiloAdscensioAddon() {
 		bounds = new SieveModelBounds(0.8125f, 0.0625f, 0.88f, 0.15625f);
 
-		if(ExCompressumConfig.enableWoodChippings) {
+		/*if(ExCompressumConfig.enableWoodChippings) { // won't be using this since it only creates these entries if Ex Compressum was present during the first run.
 			RegistryManager.registerHammerDefaultRecipeHandler(new IHammerDefaultRegistryProvider() {
 				@Override
 				public void registerHammerRecipeDefaults() {
@@ -89,8 +89,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 					}
 				}
 			});
-
-		}
+		}*/
 
 		ExRegistro.instance = this;
 	}
@@ -148,6 +147,28 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 			diamondMesh.setHeavy(true);
 			diamondMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/diamond_mesh"));
 			SieveMeshRegistry.add(diamondMesh);
+		}
+
+		// This should work just fine
+		if(ExCompressumConfig.enableWoodChippings) {
+			for (IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
+				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
+				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
+				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
+				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
+			}
+
+			for (IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
+				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
+				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
+				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
+				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
+			}
+
+			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
+			for (ItemStack itemStack : oreDictStacks) {
+				CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
+			}
 		}
 	}
 
