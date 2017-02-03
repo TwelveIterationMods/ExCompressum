@@ -26,6 +26,7 @@ public class ProcessingConfig {
 	public static float autoCompressorSpeed;
 
 	public static boolean allowHeavySieveAutomation;
+	public static int heavySieveClicksPerSecond;
 
 	public static int woodenCrucibleSpeed;
 
@@ -55,6 +56,7 @@ public class ProcessingConfig {
 
 		final String HEAVY_SIEVE = CATEGORY + ".heavy_sieve";
 		allowHeavySieveAutomation = config.getBoolean("Allow Fake Players", HEAVY_SIEVE, false, "Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)");
+		heavySieveClicksPerSecond = config.getInt("Max Clicks Per Second", HEAVY_SIEVE, 6, 6, 24, "The maximum amount of clicks per second on a heavy sieve. Clicks above this will be ignored.");
 
 		final String WOODEN_CRUCIBLE = CATEGORY + ".wooden_crucible";
 		woodenCrucibleSpeed = config.getInt("Speed", WOODEN_CRUCIBLE, 8, 1, 20, "The rate at which the wooden crucible extracts water. Measured in liquid per second.");
