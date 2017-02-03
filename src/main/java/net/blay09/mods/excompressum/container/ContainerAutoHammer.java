@@ -49,14 +49,14 @@ public class ContainerAutoHammer extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        if(lastProgress != tileEntity.getProgress() || lastEnergy != tileEntity.getEnergyStored(null)) {
+        if(lastProgress != tileEntity.getProgress() || lastEnergy != tileEntity.getEnergyStorage().getEnergyStored()) {
             for (IContainerListener listener : listeners) {
                 listener.sendProgressBarUpdate(this, 0, (int) (100 * tileEntity.getProgress()));
-                listener.sendProgressBarUpdate(this, 1, tileEntity.getEnergyStored(null));
+                listener.sendProgressBarUpdate(this, 1, tileEntity.getEnergyStorage().getEnergyStored());
             }
         }
         lastProgress = tileEntity.getProgress();
-        lastEnergy = tileEntity.getEnergyStored(null);
+        lastEnergy = tileEntity.getEnergyStorage().getEnergyStored();
     }
 
     @Override

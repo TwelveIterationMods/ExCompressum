@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.tile;
 
-import cofh.api.energy.IEnergyReceiver;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
@@ -32,11 +31,19 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
-public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergyReceiver {
+public class TileAutoHammer extends TileEntityBase implements ITickable {
 
     private static final int UPDATE_INTERVAL = 20;
 
-    private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000);
+    private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            if(!simulate) {
+                isDirty = true;
+            }
+            return super.receiveEnergy(maxReceive, simulate);
+        }
+    };
     private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 23) {
         @Override
         public boolean isItemValid(int slot, ItemStack itemStack) {
@@ -266,29 +273,6 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
                 }
             }
         }
-    }
-
-    @Override
-    public int receiveEnergy(EnumFacing side, int maxReceive, boolean simulate) {
-        if(!simulate) {
-            isDirty = true;
-        }
-        return energyStorage.receiveEnergy(maxReceive, simulate);
-    }
-
-    @Override
-    public int getEnergyStored(@Nullable EnumFacing side) {
-        return energyStorage.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing side) {
-        return energyStorage.getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canConnectEnergy(EnumFacing side) {
-        return true;
     }
 
     public boolean isProcessing() {
