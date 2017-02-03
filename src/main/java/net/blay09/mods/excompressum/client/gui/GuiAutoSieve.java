@@ -71,7 +71,7 @@ public class GuiAutoSieve extends GuiContainer {
     protected void renderPowerTooltip(int mouseX, int mouseY) {
         if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
             tmpLines.clear();
-            tmpLines.add(tileEntity.getEnergyStored() + " RF");
+            tmpLines.add(tileEntity.getEnergyStored() + " FE");
             tmpLines.add(I18n.format("tooltip.excompressum:consumingEnergy", tileEntity.getEffectiveEnergy()));
             drawHoveringText(tmpLines, mouseX - guiLeft, mouseY - guiTop);
         }
