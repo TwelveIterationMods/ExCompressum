@@ -283,7 +283,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 
 		if(Loader.isModLoaded(Compat.EXTRAUTILS2)) {
 			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedCobblestone", true)) {
-				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedCobblestone");
+				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedcobblestone");
 				if (Block.REGISTRY.containsKey(location)) {
 					Block exUtilsBlock = Block.REGISTRY.getObject(location);
 					CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);
@@ -293,7 +293,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			}
 
 			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
-				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel");
+				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedgravel");
 				if (Block.REGISTRY.containsKey(location)) {
 					Block exUtilsBlock = Block.REGISTRY.getObject(location);
 					CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);
@@ -305,7 +305,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedSand", true)) {
 				ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
 				if (dustBlock != null) {
-					ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedSand");
+					ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedsand");
 					if (Block.REGISTRY.containsKey(location)) {
 						Block exUtilsBlock = Block.REGISTRY.getObject(location);
 						CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);
@@ -318,7 +318,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedNetherrack", true)) {
 				ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
 				if(netherGravelBlock != null) {
-					ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedNetherrack");
+					ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressednetherrack");
 					if (Block.REGISTRY.containsKey(location)) {
 						Block exUtilsBlock = Block.REGISTRY.getObject(location);
 						CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);

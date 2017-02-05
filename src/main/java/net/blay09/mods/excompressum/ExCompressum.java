@@ -107,13 +107,13 @@ public class ExCompressum {
 		FMLInterModComms.sendFunctionMessage(Compat.THEONEPROBE, "getTheOneProbe", "net.blay09.mods.excompressum.compat.top.TheOneProbeAddon");
 		FMLInterModComms.sendMessage(Compat.WAILA, "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
 
-		ModRecipes.init();
-
 		proxy.init(event);
 
 		for (IAddon addon : addons) {
 			addon.init();
 		}
+
+		ModRecipes.init();
 
 		ChickenStickRegistry.INSTANCE.load(configDir);
 		WoodenCrucibleRegistry.INSTANCE.load(configDir);

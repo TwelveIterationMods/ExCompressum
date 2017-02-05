@@ -372,7 +372,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
         if (Loader.isModLoaded(Compat.EXTRAUTILS2)) {
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
-                ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel");
+                ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedgravel");
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
                     ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
@@ -381,7 +381,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
             }
 
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedSand", true)) {
-                ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedSand");
+                ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedsand");
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
                     ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
@@ -390,7 +390,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
             }
 
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedDirt", true)) {
-                ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedDirt");
+                ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compresseddirt");
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
                     ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
