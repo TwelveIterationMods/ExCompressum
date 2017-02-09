@@ -3,19 +3,14 @@ package net.blay09.mods.excompressum.compat.minetweaker;
 import minetweaker.MineTweakerImplementationAPI;
 import minetweaker.util.IEventHandler;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
-import net.blay09.mods.excompressum.compat.jei.JEIAddon;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.lang.reflect.InvocationTargetException;
 
 @SuppressWarnings("unused")
 @Optional.Interface(modid = "MineTweaker3", iface = "minetweaker.util.IEventHandler", striprefs = true)

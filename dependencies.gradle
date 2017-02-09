@@ -2,7 +2,7 @@ dependencies {
     deobfCompile "hosted-api:exnihiloomnia:1.1.4"
     deobfCompile "hosted-api:exnihiloadscensio:0.1.12"
     deobfCompile "hosted-api:Botania-unofficial:r1.8-320"
-    deobfCompile "hosted-api:CraftTweaker:1.10.2"
+    provided "hosted-api:CraftTweaker:1.10.2"
 //    deobfCompile "hosted-api:extrautils2:1.10.2-alpha" // broken ATs causing builds to fail
     deobfCompile "slimeknights:TConstruct:1.10.2-2.5.0.jenkins346"
     deobfCompile "slimeknights.mantle:Mantle:1.10.2-1.0.0.jenkins170"

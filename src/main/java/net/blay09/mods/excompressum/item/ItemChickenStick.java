@@ -69,24 +69,6 @@ public class ItemChickenStick extends ItemTool {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-        if(!world.isRemote && !(entityLiving instanceof FakePlayer) && ChickenStickRegistry.isHammerable(state)) {
-            Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, 0, 0f, world.rand);
-            for (ItemStack rewardStack : rewards) {
-                world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
-            }
-            world.setBlockToAir(pos);
-            if (world.rand.nextFloat() <= ToolsConfig.chickenStickSpawnChance) {
-                EntityChicken entityChicken = new EntityChicken(world);
-                entityChicken.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-                world.spawnEntityInWorld(entityChicken);
-            }
-        }
-        playChickenSound(world, pos);
-        return true;
-    }
-
-    @Override
     public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
         return ChickenStickRegistry.isHammerable(state);
     }
@@ -107,7 +89,7 @@ public class ItemChickenStick extends ItemTool {
         return 0;
     }
 
-    private void playChickenSound(World world, BlockPos pos) {
+    public void playChickenSound(World world, BlockPos pos) {
         if(world.rand.nextFloat() <= ToolsConfig.chickenStickSoundChance) {
             ResourceLocation location = null;
             if(ToolsConfig.chickenStickSounds.length > 0) {
@@ -132,4 +114,5 @@ public class ItemChickenStick extends ItemTool {
     public boolean isAngry(ItemStack itemStack) {
         return itemStack.getTagCompound() != null && itemStack.getTagCompound().getBoolean("IsAngry");
     }
+
 }
