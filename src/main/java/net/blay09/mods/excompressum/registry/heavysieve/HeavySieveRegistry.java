@@ -15,6 +15,7 @@ import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.RegistryKey;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -373,6 +374,9 @@ public class HeavySieveRegistry extends AbstractRegistry {
         if (Loader.isModLoaded(Compat.EXTRAUTILS2)) {
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedgravel");
+                if (!Block.REGISTRY.containsKey(location)) {
+                    location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel"); // Thanks for doing this mid-version, ExUtils
+                }
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
                     ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
@@ -382,6 +386,9 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedSand", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedsand");
+                if (!Block.REGISTRY.containsKey(location)) {
+                    location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedSand"); // Thanks for doing this mid-version, ExUtils
+                }
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
                     ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
@@ -391,6 +398,9 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedDirt", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compresseddirt");
+                if (!Block.REGISTRY.containsKey(location)) {
+                    location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedDirt"); // Thanks for doing this mid-version, ExUtils
+                }
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
                     ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
