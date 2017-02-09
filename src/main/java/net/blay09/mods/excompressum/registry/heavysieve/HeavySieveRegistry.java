@@ -375,7 +375,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedgravel");
                 if (!Block.REGISTRY.containsKey(location)) {
-                    location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel"); // Thanks for doing this mid-version, ExUtils
+                    location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedGravel"); // Thanks for doing this mid-version, ExUtils
                 }
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
@@ -387,7 +387,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedSand", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedsand");
                 if (!Block.REGISTRY.containsKey(location)) {
-                    location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedSand"); // Thanks for doing this mid-version, ExUtils
+                    location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedSand"); // Thanks for doing this mid-version, ExUtils
                 }
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
@@ -399,7 +399,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedDirt", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compresseddirt");
                 if (!Block.REGISTRY.containsKey(location)) {
-                    location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedDirt"); // Thanks for doing this mid-version, ExUtils
+                    location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedDirt"); // Thanks for doing this mid-version, ExUtils
                 }
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {

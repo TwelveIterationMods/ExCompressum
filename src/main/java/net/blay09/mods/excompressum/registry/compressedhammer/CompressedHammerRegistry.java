@@ -285,7 +285,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedCobblestone", true)) {
 				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedcobblestone");
 				if (!Block.REGISTRY.containsKey(location)) {
-					location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedCobblestone"); // Thanks for doing this mid-version, ExUtils
+					location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedCobblestone"); // Thanks for doing this mid-version, ExUtils
 				}
 				if (Block.REGISTRY.containsKey(location)) {
 					Block exUtilsBlock = Block.REGISTRY.getObject(location);
@@ -298,7 +298,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
 				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedgravel");
 				if (!Block.REGISTRY.containsKey(location)) {
-					location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedGravel"); // Thanks for doing this mid-version, ExUtils
+					location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedGravel"); // Thanks for doing this mid-version, ExUtils
 				}
 				if (Block.REGISTRY.containsKey(location)) {
 					Block exUtilsBlock = Block.REGISTRY.getObject(location);
@@ -313,7 +313,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 				if (dustBlock != null) {
 					ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedsand");
 					if (!Block.REGISTRY.containsKey(location)) {
-						location = new ResourceLocation(Compat.EXTRAUTILS2, "CompressedSand"); // Thanks for doing this mid-version, ExUtils
+						location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedSand"); // Thanks for doing this mid-version, ExUtils
 					}
 					if (Block.REGISTRY.containsKey(location)) {
 						Block exUtilsBlock = Block.REGISTRY.getObject(location);
