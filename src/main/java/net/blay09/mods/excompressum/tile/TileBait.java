@@ -210,8 +210,11 @@ public class TileBait extends TileEntity implements ITickable {
 	public EnvironmentalCondition checkSpawnConditions(boolean checkNow) {
 		if (checkNow || ticksSinceEnvironmentalCheck > ENVIRONMENTAL_CHECK_INTERVAL) {
 			int metadata = getBlockMetadata();
-			Collection<BaitBlockCondition> envBlocks = envBlockMap.get(BlockBait.Type.fromId(metadata));
 			populateEnvBlocks();
+			Collection<BaitBlockCondition> envBlocks = envBlockMap.get(BlockBait.Type.fromId(metadata));
+			if(envBlocks == null) {
+				return EnvironmentalCondition.WrongEnv;
+			}
 			final int range = 5;
 			final int rangeVertical = 3;
 			int countBait = 0;
