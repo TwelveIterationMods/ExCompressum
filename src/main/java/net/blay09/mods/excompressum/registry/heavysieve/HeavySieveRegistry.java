@@ -371,7 +371,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
             }
         }
 
-        if (Loader.isModLoaded(Compat.EXTRAUTILS2)) {
+        if (Loader.isModLoaded(Compat.EXTRAUTILS2) || Loader.isModLoaded(Compat.EXTRAUTILS2_LEGACY)) {
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedgravel");
                 if (!Block.REGISTRY.containsKey(location)) {
