@@ -67,7 +67,7 @@ tile.excompressum:auto_compressor.name=自动压缩
 tile.excompressum:auto_hammer.name=自动锤子
 tile.excompressum:auto_compressed_hammer.name=自动压缩锤
 tile.excompressum:auto_sieve.name=自动筛子
-tile.excompressum:auto_sieve_mana.name=魔钢筛子
+tile.excompressum:mana_sieve.name=魔钢筛子
 tile.excompressum:auto_heavy_sieve.name=重型自动筛子
 
 entity.excompressum.AngryChicken.name=Angry Chicken
