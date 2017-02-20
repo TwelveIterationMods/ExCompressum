@@ -2,9 +2,11 @@ package net.blay09.mods.excompressum.compat.exnihiloadscensio;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.eventbus.Subscribe;
 import exnihiloadscensio.registries.CompostRegistry;
 import exnihiloadscensio.registries.CrookRegistry;
 import exnihiloadscensio.registries.HammerRegistry;
+import exnihiloadscensio.registries.RegistryReloadedEvent;
 import exnihiloadscensio.registries.SieveRegistry;
 import exnihiloadscensio.registries.manager.ICompostDefaultRegistryProvider;
 import exnihiloadscensio.registries.manager.IHammerDefaultRegistryProvider;
@@ -34,8 +36,10 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -58,6 +62,8 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	private Enchantment sieveFortune;
 
 	public ExNihiloAdscensioAddon() {
+		MinecraftForge.EVENT_BUS.register(this);
+
 		bounds = new SieveModelBounds(0.8125f, 0.0625f, 0.88f, 0.15625f);
 
 		/*if(ExCompressumConfig.enableWoodChippings) { // won't be using this since it only creates these entries if Ex Compressum was present during the first run.
@@ -148,22 +154,20 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 			diamondMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/diamond_mesh"));
 			SieveMeshRegistry.add(diamondMesh);
 		}
+	}
 
-		// This should work just fine
+	@SubscribeEvent
+	public void onRegistryReload(RegistryReloadedEvent event) {
 		if(ExCompressumConfig.enableWoodChippings) {
-			for (IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
-				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
-			}
+			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
+			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
+			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
+			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
 
-			for (IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
-				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-				HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
-			}
+			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
+			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
+			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
+			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
 
 			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
 			for (ItemStack itemStack : oreDictStacks) {
