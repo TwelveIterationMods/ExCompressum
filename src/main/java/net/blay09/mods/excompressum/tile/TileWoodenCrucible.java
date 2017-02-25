@@ -96,10 +96,10 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 		if (meltable != null) {
 			if(fluidTank.getFluid() == null || fluidTank.getFluidAmount() == 0 || fluidTank.getFluid().getFluid() == meltable.getFluid()) {
 				int capacityLeft = fluidTank.getCapacity() - fluidTank.getFluidAmount() - solidVolume;
-				if (capacityLeft >= meltable.getAmount()) {
+				if (capacityLeft > 0) {
 					itemStack.stackSize--;
 					currentMeltable = meltable;
-					solidVolume += meltable.getAmount();
+					solidVolume += Math.min(capacityLeft, meltable.getAmount());
 					VanillaPacketHandler.sendTileEntityUpdate(this);
 					return true;
 				}
