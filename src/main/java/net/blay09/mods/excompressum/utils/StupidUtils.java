@@ -5,6 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -71,8 +72,13 @@ public class StupidUtils {
 	public static IBlockState getStateFromItemStack(ItemStack itemStack) {
 		if(itemStack.getItem() instanceof ItemBlock) {
 			Block block = ((ItemBlock) itemStack.getItem()).block;
-			int meta = itemStack.getItem().getMetadata(itemStack.getItemDamage()); // TODO update Forge, getStateForPlacement
-			return block.getStateFromMeta(meta);
+			try {
+				int meta = itemStack.getItem().getMetadata(itemStack.getItemDamage());
+				return block.getStateFromMeta(meta);
+			} catch (Exception e) {
+				// Hacky workaround. In 1.11, don't use block states as identifiers for the registries, as they are a pain to retrieve from an item stack.
+			}
+			return block.getDefaultState();
 		}
 		return null;
 	}
