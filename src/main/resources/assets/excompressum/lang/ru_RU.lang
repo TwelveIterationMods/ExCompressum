@@ -1,0 +1,104 @@
+item.excompressum:compressed_hammer_wood.name=Сжатый Деревянный Молот
+item.excompressum:compressed_hammer_stone.name=Сжатый Каменный Молот
+item.excompressum:compressed_hammer_iron.name=Сжатый Железный Молот
+item.excompressum:compressed_hammer_gold.name=Сжатый Золотой Молот
+item.excompressum:compressed_hammer_diamond.name=Сжатый Алмазный Молот
+item.excompressum:double_compressed_diamond_hammer.name=Двойной Сжатый Алмазный Молот
+item.excompressum:compressed_crook.name=Сжатый Крюк
+item.excompressum:chicken_stick.name=КУРИНАЯ,МАТЬ ЕГО, ПАЛКА
+item.excompressum:iron_mesh.name=Железная сетка
+item.excompressum:bait_wolf.name=Волчья приманка
+item.excompressum:bait_ocelot.name=Приманка для оцелота
+item.excompressum:bait_cow.name=Приманка для коровы
+item.excompressum:bait_pig.name=Приманка для свиньи
+item.excompressum:bait_chicken.name=Приманка для курицы
+item.excompressum:bait_sheep.name=Приманка для овцы
+item.excompressum:bait_squid.name=Приманка для осьминога
+item.excompressum:bait_rabbit.name=Приманка для кролика
+item.excompressum:wood_chippings.name=Опилки
+item.excompressum:uncompressed_coal.name=Нескомпрессованый уголь
+item.excompressum:bat_zapper.name=Разрядник для летучих мышей
+item.excompressum:ore_smasher.name=Крушитель Руды
+item.excompressum:hammer_mana.name=Молот Маны
+
+gui.excompressum:autoSieve.noMesh=Нет Сети
+gui.excompressum:autoSieve.incorrectMesh=Неправильная Сеть
+
+tooltip.excompressum:double_compressed_diamond_hammer=Модификатор для Tinkers Construct
+tooltip.excompressum:best_with_blasting=Скомбинируйте с Blasting для лучших результатов
+tooltip.excompressum:auto_sieve=%s в Коробке™
+tooltip.excompressum:auto_heavy_sieve=%s в Улучшеной Коробке™
+tooltip.excompressum:mana_sieve=%s в Магической Коробке™
+tooltip.excompressum:consumingEnergy=Потребляет %d RF/t
+
+info.excompressum:baitCanSpawn=Приманка здесь сработает. Уйдите, чтоб не спугнуть животных!
+info.excompressum:baitNearbyBait=Здесь очень много приманок. Слишком подозрительно.
+info.excompressum:baitWrongEnv=Поставьте больше блоков из родного биома животного в этой местности.
+info.excompressum:baitNearbyAnimal=Животные стеснительны. Их здесь слишком много.
+info.excompressum:baitNoWater=Здесь нет воды.
+info.excompressum:baitPlaceInWater=Должен располагаться в воде.
+
+commands.excompressum:reload.success=Регистры Ex Compressum перезагружены .
+
+tile.excompressum:compressed_dust.name=Сжатая Пыль
+tile.excompressum:compressed_cobblestone.name=Сжатый Булыжник
+tile.excompressum:compressed_sand.name=Сжатый Песок
+tile.excompressum:compressed_dirt.name=Сжатая Земля
+tile.excompressum:compressed_gravel.name=Сжатый Гравий
+tile.excompressum:compressed_flint.name=Сжатый Кремень
+tile.excompressum:compressed_ender_gravel.name=Сжатый Гравий Энда
+tile.excompressum:compressed_nether_gravel.name=Сжатый Гравий Нижнего Мира
+tile.excompressum:compressed_soul_sand.name=Сжатый Песок Душ
+tile.excompressum:compressed_netherrack.name=Сжатый Камень Нижнего мира
+tile.excompressum:compressed_end_stone.name=Сжатый Камень Энда
+tile.excompressum:heavy_sieve_0.name=Тяжелая Дубовая Просеивалка
+tile.excompressum:heavy_sieve_1.name=Тяжелая Хвойная Просеивалка
+tile.excompressum:heavy_sieve_2.name=Тяжелая Берёзовая  Просеивалка
+tile.excompressum:heavy_sieve_3.name=Тяжелая Просеивалка из Тропической древесины
+tile.excompressum:heavy_sieve_4.name=Тяжелая Просеивалка из Акации
+tile.excompressum:heavy_sieve_5.name=Тяжелая Просеивалка из Тёмного Дуба
+tile.excompressum:wooden_crucible_0.name=Дубовый Тигель
+tile.excompressum:wooden_crucible_1.name=Хвойный Тигель
+tile.excompressum:wooden_crucible_2.name=Берёзовый Тигель
+tile.excompressum:wooden_crucible_3.name=Тигель из Тропического Дерева
+tile.excompressum:wooden_crucible_4.name=Тигель из Акации
+tile.excompressum:wooden_crucible_5.name=Тигель из Тёмного Дуба
+tile.excompressum:auto_compressor.name=Автоматический Сжиматель
+tile.excompressum:auto_hammer.name=Автоматический Молот
+tile.excompressum:auto_compressed_hammer.name=Автоматический Сжатый Молот
+tile.excompressum:auto_sieve.name=Автоматическая Просеивалка
+tile.excompressum:mana_sieve.name=Просеивалка, работающая на Мане
+tile.excompressum:auto_heavy_sieve.name=Автоматическая Тяжёлая Просеивалка
+
+entity.excompressum.AngryChicken.name=Злая Курочка
+
+itemGroup.excompressum=Ex Compressum
+
+botania.entry.excompressum.orechidEvolved=Улучшеный Орхид
+botania.tagline.excompressum.orechidEvolved=Создаёт Руду из Камня
+botania.page.excompressum.orechidEvolved0=Возможно, вы уже поняли, что вам больше не нужно ходить в шахты. The &1Evolved Orechid&0 will use &4Mana&0 to generate &4ores&0 in nearby &1Stone&0 blocks at a faster and cheaper rate than the &1Orechid&0.<br>The ores it generates are random, but seem to be biased towards more common ores rather than rarer ones.
+botania.page.excompressum.orechidEvolved1=&oStill not dragon poop though&r.
+tile.botania:flower.excompressum.orechidEvolved.name=Evolved Orechid
+tile.botania:flower.excompressum.orechidEvolved.reference=Orechid: Evolved: Skyblock: The Movie
+
+modifier.excompressum:smashingii.name=Smashing II
+
+waila.excompressum:baitTooClose=You are too close.
+waila.excompressum:baitTooClose2=The animals are scared away.
+waila.excompressum:speedBoost=Speed Boost: %s
+waila.excompressum:luckBonus=Luck Bonus: %s
+waila.excompressum:sieveSkin=Skin: %s
+waila.excompressum:sieveProgress=Progress: %s
+waila.excompressum:sieveMesh=%s %d/%d
+waila.excompressum:sieveNoMesh=No Mesh
+waila.excompressum:solidVolume=Solid Volume: %s
+waila.excompressum:fluidVolume=Fluid Volume: %s
+
+jei.excompressum:heavySieve=Heavy Sieve
+jei.excompressum:compressedHammer=Compressed Hammer
+jei.excompressum:woodenCrucible=Wooden Crucible
+jei.excompressum:chickenStick=Chicken Stick
+jei.excompressum:compressedHammer.dropChance=Drop Chance:
+jei.excompressum:heavySieve.dropChance=Drop Chance:
+jei.excompressum:compressedHammer.luck=luck
+jei.excompressum:heavySieve.luck=luck
