@@ -43,7 +43,6 @@ public class RenderUtils {
 	public static void renderBlockWithTranslate(Minecraft mc, IBlockState state, World world, BlockPos pos, VertexBuffer renderer) {
 		GlStateManager.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 		BlockRendererDispatcher dispatcher = mc.getBlockRendererDispatcher();
-		dispatcher.renderBlock(state, pos, world, renderer);
 		try {
 			EnumBlockRenderType renderType = state.getRenderType();
 			if (renderType == EnumBlockRenderType.MODEL) {
