@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.api.RegistryType;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.ModBlocks;
@@ -337,6 +338,11 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected RegistryType getRegistryType() {
+		return RegistryType.CompressedHammer;
 	}
 
 }

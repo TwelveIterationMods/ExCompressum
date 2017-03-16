@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
@@ -67,6 +68,8 @@ public class ExCompressum {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		ExCompressumAPI.__setupAPI(new InternalMethods());
+
 		configDir = new File(event.getModConfigurationDirectory(), "ExCompressum");
 		if (!configDir.exists() && !configDir.mkdirs()) {
 			throw new RuntimeException("Couldn't create Ex Compressum configuration directory");

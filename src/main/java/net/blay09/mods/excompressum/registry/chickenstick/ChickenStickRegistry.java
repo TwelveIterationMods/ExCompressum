@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.registry.chickenstick;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.blay09.mods.excompressum.api.RegistryType;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.block.state.IBlockState;
@@ -53,6 +54,11 @@ public class ChickenStickRegistry extends AbstractRegistry {
         if(tryGetBoolean(defaults, "minecraft:sand", true)) {
             add(Blocks.SAND.getDefaultState(), false);
         }
+    }
+
+    @Override
+    protected RegistryType getRegistryType() {
+        return RegistryType.ChickenStick;
     }
 
     @Override

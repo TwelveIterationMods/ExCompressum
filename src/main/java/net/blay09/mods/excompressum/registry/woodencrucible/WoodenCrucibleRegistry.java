@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.api.RegistryType;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.init.Blocks;
@@ -151,6 +152,11 @@ public class WoodenCrucibleRegistry extends AbstractRegistry {
 		if(tryGetBoolean(defaults, "ore:listAllfruit", true)) {
 			addOre("listAllfruit", FluidRegistry.WATER, 50);
 		}
+	}
+
+	@Override
+	protected RegistryType getRegistryType() {
+		return RegistryType.WoodenCrucible;
 	}
 
 	private boolean addOre(String oreName, Fluid fluid, int amount) {
