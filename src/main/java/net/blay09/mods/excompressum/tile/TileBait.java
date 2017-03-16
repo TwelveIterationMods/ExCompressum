@@ -145,6 +145,10 @@ public class TileBait extends TileEntity implements ITickable {
 					return new ItemStack(Items.FISH);
 				case RABBIT:
 					return i == 0 ? new ItemStack(Items.CARROT) : new ItemStack(Items.MELON_SEEDS);
+				case HORSE:
+					return new ItemStack(Items.GOLDEN_APPLE);
+				case DONKEY:
+					return new ItemStack(Items.GOLDEN_CARROT);
 			}
 		}
 		return null;
@@ -171,6 +175,12 @@ public class TileBait extends TileEntity implements ITickable {
 					return new EntitySquid(world);
 				case RABBIT:
 					return new EntityRabbit(world);
+				case HORSE:
+					return new EntityHorse(world);
+				case DONKEY:
+					EntityHorse entity = new EntityHorse(world);
+					entity.setType(HorseType.DONKEY);
+					return entity;
 			}
 		}
 		return null;
@@ -196,6 +206,10 @@ public class TileBait extends TileEntity implements ITickable {
 					return BaitConfig.baitSquidChance;
 				case RABBIT:
 					return BaitConfig.baitRabbitChance;
+				case HORSE:
+					return BaitConfig.baitHorseChance;
+				case DONKEY:
+					return BaitConfig.baitDonkeyChance;
 			}
 		}
 		return 0;
@@ -206,7 +220,6 @@ public class TileBait extends TileEntity implements ITickable {
 		return i == 0 ? renderItemMain : renderItemSub;
 	}
 
-	// NOTE if this turns out to perform badly, distribute the check over several ticks
 	public EnvironmentalCondition checkSpawnConditions(boolean checkNow) {
 		if (checkNow || ticksSinceEnvironmentalCheck > ENVIRONMENTAL_CHECK_INTERVAL) {
 			int metadata = getBlockMetadata();
@@ -268,7 +281,7 @@ public class TileBait extends TileEntity implements ITickable {
 			return;
 		}
 
-		BlockBait.Type[] simpleTypes = new BlockBait.Type[]{BlockBait.Type.WOLF, BlockBait.Type.COW, BlockBait.Type.PIG, BlockBait.Type.CHICKEN, BlockBait.Type.SHEEP, BlockBait.Type.RABBIT};
+		BlockBait.Type[] simpleTypes = new BlockBait.Type[]{BlockBait.Type.WOLF, BlockBait.Type.COW, BlockBait.Type.PIG, BlockBait.Type.CHICKEN, BlockBait.Type.SHEEP, BlockBait.Type.RABBIT, BlockBait.Type.HORSE, BlockBait.Type.DONKEY};
 		BlockPlanks.EnumType[] acceptedTrees = new BlockPlanks.EnumType[]{BlockPlanks.EnumType.OAK, BlockPlanks.EnumType.BIRCH, BlockPlanks.EnumType.SPRUCE, BlockPlanks.EnumType.ACACIA, BlockPlanks.EnumType.DARK_OAK};
 		for (BlockBait.Type type : simpleTypes) {
 			envBlockMap.put(type, new BaitBlockCondition(Blocks.GRASS.getDefaultState(), false));

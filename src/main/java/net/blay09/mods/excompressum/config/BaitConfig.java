@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.config;
 
 import net.minecraftforge.common.config.Configuration;
 
-// FUTURE This should really become a registry. Custom baits and such!
 public class BaitConfig {
 
 	public static float baitWolfChance;
@@ -13,6 +12,8 @@ public class BaitConfig {
 	public static float baitSheepChance;
 	public static float baitSquidChance;
 	public static float baitRabbitChance;
+	public static float baitHorseChance;
+	public static float baitDonkeyChance;
 	public static float baitChildChance;
 
 	public static void load(Configuration config) {
@@ -25,6 +26,8 @@ public class BaitConfig {
 		baitSheepChance = config.getFloat("Sheep Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a sheep bait will result in a sheep spawn.");
 		baitSquidChance = config.getFloat("Squid Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a squid bait will result in a squid spawn.");
 		baitRabbitChance = config.getFloat("Rabbit Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a rabbit bait will result in a rabbit spawn.");
+		baitHorseChance = config.getFloat("Horse Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a horse bait will result in a horse spawn.");
+		baitDonkeyChance = config.getFloat("Donkey Bait Chance", CATEGORY, 0.01f, 0.002f, 1f, "The chance (per second) that a donkey bait will result in a donkey spawn.");
 
 		baitChildChance = config.getFloat("Bait Child Chance", CATEGORY, 0.5f, 0f, 1f, "The chance that an animal spawned from a bait will result in a child.");
 	}

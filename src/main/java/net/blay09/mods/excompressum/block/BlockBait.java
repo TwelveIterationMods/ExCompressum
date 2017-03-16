@@ -49,7 +49,9 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
         CHICKEN,
         SHEEP,
         SQUID,
-        RABBIT;
+        RABBIT,
+        HORSE,
+        DONKEY;
 
         public static Type[] values = values();
 

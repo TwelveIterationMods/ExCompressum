@@ -306,5 +306,11 @@ public class ModRecipes {
 		if(BlockConfig.isEnabled("Rabbit Bait")) {
 			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.RABBIT.ordinal()), Items.CARROT, Items.MELON_SEEDS);
 		}
+		if(BlockConfig.isEnabled("Horse Bait")) {
+			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.HORSE.ordinal()), Items.GOLDEN_APPLE, Items.GOLDEN_APPLE);
+		}
+		if(BlockConfig.isEnabled("Donkey Bait")) {
+			GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.DONKEY.ordinal()), Items.GOLDEN_CARROT, Items.GOLDEN_CARROT);
+		}
 	}
 }
