@@ -214,6 +214,7 @@ public class ModRecipes {
 
 	private static void registerCompressedBlocks() {
 		if (BlockConfig.isEnabled("Compressed Dust")) {
+			OreDictionary.registerOre("compressed1xDust", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DUST.ordinal()));
 			ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
 			if(dustBlock != null) {
 				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 0), "###", "###", "###", '#', dustBlock);
@@ -223,28 +224,34 @@ public class ModRecipes {
 			}
 		}
 		if (BlockConfig.isEnabled("Compressed Cobblestone")) {
+			OreDictionary.registerOre("compressed1xCobblestone", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.COBBLESTONE.ordinal()));
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.COBBLESTONE.ordinal()), "###", "###", "###", '#', Blocks.COBBLESTONE);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.COBBLESTONE, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.COBBLESTONE.ordinal()));
 		}
 		if (BlockConfig.isEnabled("Compressed Gravel")) {
+			OreDictionary.registerOre("compressed1xGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal()));
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal()), "###", "###", "###", '#', Blocks.GRAVEL);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.GRAVEL, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal()));
 		}
 		if (BlockConfig.isEnabled("Compressed Sand")) {
+			OreDictionary.registerOre("compressed1xSand", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal()));
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal()), "###", "###", "###", '#', Blocks.SAND);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.SAND, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal()));
 		}
 		if (BlockConfig.isEnabled("Compressed Dirt")) {
+			OreDictionary.registerOre("compressed1xDirt", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()));
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()), "###", "###", "###", '#', new ItemStack(Blocks.DIRT, 1, 0));
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.DIRT, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()));
 		}
 		if (BlockConfig.isEnabled("Compressed Flint")) {
+			OreDictionary.registerOre("compressed1xFlint", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.FLINT.ordinal()));
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.FLINT.ordinal()), "###", "###", "###", '#', Items.FLINT);
 			GameRegistry.addShapelessRecipe(new ItemStack(Items.FLINT, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.FLINT.ordinal()));
 		}
 		if (BlockConfig.isEnabled("Compressed Ender Gravel")) {
 			ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
 			if(enderGravelBlock != null) {
+				OreDictionary.registerOre("compressed1xEnderGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()));
 				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()), "###", "###", "###", '#', enderGravelBlock);
 				GameRegistry.addShapelessRecipe(ItemHandlerHelper.copyStackWithSize(enderGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()));
 			} else {
@@ -254,6 +261,7 @@ public class ModRecipes {
 		if (BlockConfig.isEnabled("Compressed Nether Gravel")) {
 			ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
 			if(netherGravelBlock != null) {
+				OreDictionary.registerOre("compressed1xNetherGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()));
 				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()), "###", "###", "###", '#', netherGravelBlock);
 				GameRegistry.addShapelessRecipe(ItemHandlerHelper.copyStackWithSize(netherGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()));
 			} else {
@@ -261,14 +269,17 @@ public class ModRecipes {
 			}
 		}
 		if (BlockConfig.isEnabled("Compressed Soul Sand")) {
+			OreDictionary.registerOre("compressed1xSoulsand", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SOUL_SAND.ordinal()));
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SOUL_SAND.ordinal()), "###", "###", "###", '#', Blocks.SOUL_SAND);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.SOUL_SAND, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SOUL_SAND.ordinal()));
 		}
 		if (BlockConfig.isEnabled("Compressed Netherrack")) {
+			OreDictionary.registerOre("compressed1xNetherrack", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHERRACK.ordinal()));
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHERRACK.ordinal()), "###", "###", "###", '#', Blocks.NETHERRACK);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.NETHERRACK, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHERRACK.ordinal()));
 		}
 		if (BlockConfig.isEnabled("Compressed End Stone")) {
+			OreDictionary.registerOre("compressed1xEndStone", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.END_STONE.ordinal()));
 			GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.END_STONE.ordinal()), "###", "###", "###", '#', Blocks.END_STONE);
 			GameRegistry.addShapelessRecipe(new ItemStack(Blocks.END_STONE, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.END_STONE.ordinal()));
 		}
