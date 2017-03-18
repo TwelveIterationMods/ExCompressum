@@ -41,6 +41,21 @@
         "textures": {
           "particle": "minecraft:items/fish_cod_raw"
         }
+      },
+      "rabbit": {
+        "textures": {
+          "particle": "minecraft:items/carrot"
+        }
+      },
+      "horse": {
+        "textures": {
+          "particle": "minecraft:items/golden_apple"
+        }
+      },
+      "donkey": {
+        "textures": {
+          "particle": "minecraft:items/golden_carrot"
+        }
       }
     }
   }
