@@ -8,4 +8,8 @@ public class ExCompressumAPI {
 		ExCompressumAPI.internalMethods = internalMethods;
 	}
 
+	public static void helloReaderJustUseInternalClassesICantBeBotheredRightNow() {
+
+	}
+
 }

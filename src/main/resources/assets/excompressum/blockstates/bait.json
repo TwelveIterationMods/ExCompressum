@@ -49,12 +49,12 @@
       },
       "horse": {
         "textures": {
-          "particle": "minecraft:items/golden_apple"
+          "particle": "minecraft:items/apple_golden"
         }
       },
       "donkey": {
         "textures": {
-          "particle": "minecraft:items/golden_carrot"
+          "particle": "minecraft:items/carrot_golden"
         }
       }
     }
