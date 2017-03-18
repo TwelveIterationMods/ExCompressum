@@ -260,7 +260,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 					ExCompressum.logger.error("Tried to roll sieve rewards from a null reward entry: {} (base chance: {}, mesh level: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getMeshLevel());
 					continue;
 				}
-				int tries = rand.nextInt((int) luck) + 1;
+				int tries = rand.nextInt((int) luck + 1) + 1;
 				for(int i = 0; i < tries; i++) {
 					if (sieveMesh.getMeshLevel() == reward.getMeshLevel() && rand.nextDouble() < (double) reward.getChance()) {
 						list.add(reward.getDrop().getItemStack());

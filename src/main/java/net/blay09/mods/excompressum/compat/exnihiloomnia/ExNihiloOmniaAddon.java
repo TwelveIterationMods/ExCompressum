@@ -230,7 +230,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 				ExCompressum.logger.error("Tried to roll sieve rewards from a null reward entry: {} (base chance: {})", entry.getKey(), reward.getBaseChance());
 				continue;
 			}
-			int tries = rand.nextInt((int) luck) + 1;
+			int tries = rand.nextInt((int) luck + 1) + 1;
 			for(int i = 0; i < tries; i++) {
 				if(rand.nextInt(100) < reward.getBaseChance()) {
 					list.add(reward.getItem().copy());

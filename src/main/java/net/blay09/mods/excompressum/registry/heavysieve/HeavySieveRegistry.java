@@ -117,7 +117,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
     private static void rollSieveRewardsToList(HeavySieveRegistryEntry entry, List<ItemStack> list, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
         for(HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh)) {
-            int tries = rand.nextInt((int) luck) + 1;
+            int tries = rand.nextInt((int) luck + 1) + 1;
             for(int i = 0; i < tries; i++) {
                 if (rand.nextFloat() < reward.getBaseChance()) {
                     list.add(reward.getItemStack().copy());
