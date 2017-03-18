@@ -17,7 +17,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -103,9 +102,9 @@ public class HeavySieveRecipeCategory extends BlankRecipeCategory<HeavySieveReci
 						} else {
 							s = String.format("%1.1f%%", reward.getBaseChance() * 100f);
 						}
-						if(reward.getLuckMultiplier() > 0f) {
-							s += TextFormatting.BLUE + String.format(" (+ %1.1f " + I18n.format("jei.excompressum:compressedHammer.luck") + ")", reward.getLuckMultiplier());
-						}
+//						if(reward.getLuckMultiplier() > 0f) {
+//							s += TextFormatting.BLUE + String.format(" (+ %1.1f " + I18n.format("jei.excompressum:compressedHammer.luck") + ")", reward.getLuckMultiplier());
+//						}
 						condensedTooltips.add(s);
 					}
 					tooltip.add(I18n.format("jei.excompressum:heavySieve.dropChance"));

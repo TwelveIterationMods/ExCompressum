@@ -117,8 +117,11 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
     private static void rollSieveRewardsToList(HeavySieveRegistryEntry entry, List<ItemStack> list, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
         for(HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh)) {
-            if(rand.nextFloat() < reward.getBaseChance() + reward.getLuckMultiplier() * luck) {
-                list.add(reward.getItemStack().copy());
+            int tries = rand.nextInt((int) luck) + 1;
+            for(int i = 0; i < tries; i++) {
+                if (rand.nextFloat() < reward.getBaseChance()) {
+                    list.add(reward.getItemStack().copy());
+                }
             }
         }
     }
@@ -282,9 +285,9 @@ public class HeavySieveRegistry extends AbstractRegistry {
                             logError("Reward chance is out of range for %s in %s, capping at 1.0...", rewardLocation, registryName);
                             chance = 1f;
                         }
-                        float luckMultiplier = tryGetFloat(reward, "luck", 0f);
+//                        float luckMultiplier = tryGetFloat(reward, "luck", 0f);
                         int meshLevel = tryGetInt(reward, "meshLevel", 1);
-                        rewardList.add(new HeavySieveReward(new ItemStack(item, count, rewardMetadata), chance, luckMultiplier, meshLevel));
+                        rewardList.add(new HeavySieveReward(new ItemStack(item, count, rewardMetadata), chance, meshLevel));
                     } else {
                         logError("Failed to preInit %s registry; rewards must be an array of json objects", registryName);
                         return;

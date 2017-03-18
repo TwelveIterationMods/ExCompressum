@@ -2,15 +2,11 @@ package net.blay09.mods.excompressum.compat.exnihiloadscensio;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.eventbus.Subscribe;
 import exnihiloadscensio.registries.CompostRegistry;
 import exnihiloadscensio.registries.CrookRegistry;
 import exnihiloadscensio.registries.HammerRegistry;
 import exnihiloadscensio.registries.RegistryReloadedEvent;
 import exnihiloadscensio.registries.SieveRegistry;
-import exnihiloadscensio.registries.manager.ICompostDefaultRegistryProvider;
-import exnihiloadscensio.registries.manager.IHammerDefaultRegistryProvider;
-import exnihiloadscensio.registries.manager.RegistryManager;
 import exnihiloadscensio.registries.types.CrookReward;
 import exnihiloadscensio.registries.types.Siftable;
 import exnihiloadscensio.texturing.Color;
@@ -57,7 +53,6 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 	private final EnumMap<NihiloItems, ItemStack> itemMap = Maps.newEnumMap(NihiloItems.class);
 
 	private final SieveModelBounds bounds;
-	private float sieveLuckMultiplier = 0.1f;
 	private Enchantment sieveEfficiency;
 	private Enchantment sieveFortune;
 
@@ -192,7 +187,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 					continue;
 				}
 				for (int i = 0; i < count; i++) {
-					rewards.add(new HeavySieveReward(siftable.getDrop().getItemStack(), siftable.getChance(), sieveLuckMultiplier, siftable.getMeshLevel()));
+					rewards.add(new HeavySieveReward(siftable.getDrop().getItemStack(), siftable.getChance(), siftable.getMeshLevel()));
 				}
 			}
 			return rewards;
@@ -265,8 +260,11 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 					ExCompressum.logger.error("Tried to roll sieve rewards from a null reward entry: {} (base chance: {}, mesh level: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getMeshLevel());
 					continue;
 				}
-				if(sieveMesh.getMeshLevel() == reward.getMeshLevel() && rand.nextDouble() < (double) reward.getChance() + sieveLuckMultiplier * luck) { // NOTE Sieve Rewards in Adscensio have no luck modifier at the moment
-					list.add(reward.getDrop().getItemStack());
+				int tries = rand.nextInt((int) luck) + 1;
+				for(int i = 0; i < tries; i++) {
+					if (sieveMesh.getMeshLevel() == reward.getMeshLevel() && rand.nextDouble() < (double) reward.getChance()) {
+						list.add(reward.getDrop().getItemStack());
+					}
 				}
 			}
 			return list;
@@ -296,7 +294,6 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public void loadConfig(Configuration config) {
-		sieveLuckMultiplier = config.getFloat("Sieve Luck Multiplier", "compat.exnihiloadscensio", sieveLuckMultiplier, 0f, 10f, "Sieve rewards in Adscensio do not have a luck multiplier at the moment. For fortune to work in Auto Sieves, this default value is applied to *all* rewards when sifting.");
 	}
 
 	@Override

@@ -53,7 +53,6 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 	private final EnumMap<NihiloItems, ItemStack> itemMap = Maps.newEnumMap(NihiloItems.class);
 
 	private final SieveModelBounds sieveModelBounds;
-	private float sieveLuckMultiplier = 0.1f;
 
 	public ExNihiloOmniaAddon() {
 		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood", OreDictionary.WILDCARD_VALUE));
@@ -116,7 +115,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 					continue;
 				}
 				for (int i = 0; i < count; i++) {
-					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, sieveLuckMultiplier, 0));
+					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, 0));
 				}
 			}
 		}
@@ -129,7 +128,7 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 					continue;
 				}
 				for (int i = 0; i < count; i++) {
-					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, sieveLuckMultiplier, 0));
+					rewards.add(new HeavySieveReward(reward.getItem(), (float) reward.getBaseChance() / 100f, 0));
 				}
 			}
 		}
@@ -231,15 +230,17 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 				ExCompressum.logger.error("Tried to roll sieve rewards from a null reward entry: {} (base chance: {})", entry.getKey(), reward.getBaseChance());
 				continue;
 			}
-			if(rand.nextInt(100) < reward.getBaseChance() + sieveLuckMultiplier * luck) { // NOTE Sieve Rewards in Omnia have no luck modifier at the moment
-				list.add(reward.getItem().copy());
+			int tries = rand.nextInt((int) luck) + 1;
+			for(int i = 0; i < tries; i++) {
+				if(rand.nextInt(100) < reward.getBaseChance()) {
+					list.add(reward.getItem().copy());
+				}
 			}
 		}
 	}
 
 	@Override
 	public void loadConfig(Configuration config) {
-		sieveLuckMultiplier = config.getFloat("Sieve Luck Multiplier", "compat.exnihiloomnia", sieveLuckMultiplier, 0f, 10f, "Sieve rewards in Omnia do not have a luck multiplier at the moment. For fortune to work in Auto Sieves, this default value is applied to *all* rewards when sifting.");
 	}
 
 	@Override
