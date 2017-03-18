@@ -29,7 +29,7 @@ tooltip.excompressum:best_with_blasting=与爆炸结合以获最好的结果
 tooltip.excompressum:auto_sieve=%s 盒装版™
 tooltip.excompressum:auto_heavy_sieve=%s 盒装版™
 tooltip.excompressum:mana_sieve=%s 盒装版™
-tooltip.excompressum:consumingEnergy=输入 %d RF/t
+tooltip.excompressum:consumingEnergy=输入 %d FE/t
 
 info.excompressum:baitCanSpawn=这个诱饵将在这种环境下工作。请离开作用范围，不要吓到动物！
 info.excompressum:baitNearbyBait=这里有太多的诱饵，太可疑了。
