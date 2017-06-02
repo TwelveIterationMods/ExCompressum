@@ -19,7 +19,6 @@ import java.util.List;
 public class HeavySieveRecipe extends BlankRecipeWrapper {
 
 	private final HeavySieveRegistryEntry entry;
-	private final SieveMeshRegistryEntry sieveMesh;
 	private final List<Object> inputs;
 	private final List<ItemStack> outputs;
 	private final ArrayListMultimap<RegistryKey, HeavySieveReward> rewards;
@@ -30,7 +29,6 @@ public class HeavySieveRecipe extends BlankRecipeWrapper {
 
 	public HeavySieveRecipe(HeavySieveRegistryEntry entry, @Nullable SieveMeshRegistryEntry sieveMesh) {
 		this.entry = entry;
-		this.sieveMesh = sieveMesh;
 		inputs = Lists.newArrayList();
 		rewards = ArrayListMultimap.create();
 		if(sieveMesh != null) {

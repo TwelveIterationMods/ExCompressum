@@ -41,12 +41,6 @@ public class JEIAddon extends BlankModPlugin {
 				new WoodenCrucibleRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
 				new ChickenStickRecipeCategory(registry.getJeiHelpers().getGuiHelper())
 				);
-		registry.addRecipeHandlers(
-				new HeavySieveRecipeHandler(),
-				new CompressedHammerRecipeHandler(),
-				new WoodenCrucibleRecipeHandler(),
-				new ChickenStickRecipeHandler()
-				);
 
 		List<HeavySieveRecipe> heavySieveRecipes = Lists.newArrayList();
 		if(ExRegistro.doMeshesSplitLootTables()) {
@@ -63,13 +57,13 @@ public class JEIAddon extends BlankModPlugin {
 				heavySieveRecipes.add(new HeavySieveRecipe(entry));
 			}
 		}
-		registry.addRecipes(heavySieveRecipes);
+		registry.addRecipes(heavySieveRecipes, HeavySieveRecipeCategory.UID);
 
 		List<CompressedHammerRecipe> compressedHammerRecipes = Lists.newArrayList();
 		for(CompressedHammerRegistryEntry entry : CompressedHammerRegistry.INSTANCE.getEntries().values()) {
 			compressedHammerRecipes.add(new CompressedHammerRecipe(entry));
 		}
-		registry.addRecipes(compressedHammerRecipes);
+		registry.addRecipes(compressedHammerRecipes, CompressedHammerRecipeCategory.UID);
 
 		List<WoodenCrucibleRecipe> woodenCrucibleRecipes = Lists.newArrayList();
 		ArrayListMultimap<String, WoodenCrucibleRegistryEntry> fluidOutputMap = ArrayListMultimap.create();
@@ -79,10 +73,10 @@ public class JEIAddon extends BlankModPlugin {
 		for(String fluidName : fluidOutputMap.keySet()) {
 			woodenCrucibleRecipes.add(new WoodenCrucibleRecipe(FluidRegistry.getFluid(fluidName), fluidOutputMap.get(fluidName)));
 		}
-		registry.addRecipes(woodenCrucibleRecipes);
+		registry.addRecipes(woodenCrucibleRecipes, WoodenCrucibleRecipeCategory.UID);
 
-		registry.addRecipes(Lists.newArrayList(new ChickenStickRecipe()));
-
+		registry.addRecipes(Lists.newArrayList(new ChickenStickRecipe()), ChickenStickRecipeCategory.UID);
+		
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.heavySieve), HeavySieveRecipeCategory.UID);
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.woodenCrucible), WoodenCrucibleRecipeCategory.UID);
 		registry.addRecipeCategoryCraftingItem(new ItemStack(ModItems.compressedHammerDiamond), CompressedHammerRecipeCategory.UID);

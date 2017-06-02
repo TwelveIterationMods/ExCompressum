@@ -71,10 +71,10 @@ public class HeavySieveRecipeCategory extends BlankRecipeCategory<HeavySieveReci
 
 		IFocus<?> focus = recipeLayout.getFocus();
 		hasHighlight = focus.getMode() == IFocus.Mode.OUTPUT;
-		final List<ItemStack> outputs = ingredients.getOutputs(ItemStack.class);
+		final List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
 		final int INPUT_SLOTS = 2;
 		int slotNumber = 0;
-		for (ItemStack output : outputs) {
+		for (List<ItemStack> output : outputs) {
 			final int slotX = 2 + (slotNumber % 9 * 18);
 			final int slotY = 36 + (slotNumber / 9 * 18);
 			recipeLayout.getItemStacks().init(INPUT_SLOTS + slotNumber, false, slotX, slotY);
@@ -82,7 +82,7 @@ public class HeavySieveRecipeCategory extends BlankRecipeCategory<HeavySieveReci
 			Object focusValue = focus.getValue();
 			if(focus.getMode() == Focus.Mode.OUTPUT && focusValue instanceof ItemStack) {
 				ItemStack focusStack = (ItemStack) focusValue;
-				if (focusStack.getItem() == output.getItem() && focusStack.getItemDamage() == output.getItemDamage()) {
+				if (focusStack.getItem() == output.get(0).getItem() && focusStack.getItemDamage() == output.get(0).getItemDamage()) {
 					highlightX = slotX;
 					highlightY = slotY;
 				}
