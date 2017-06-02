@@ -43,9 +43,9 @@ public class ModSmashingII extends ModifierTrait {
 
 	@Override
 	public void blockHarvestDrops(ItemStack tool, BlockEvent.HarvestDropsEvent event) {
-		Collection<ItemStack> rewards = CompressedHammerRegistry.rollHammerRewards(event.getState(), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
+		Collection<ItemStack> rewards = CompressedHammerRegistry.rollHammerRewards(event.getState(), event.getFortuneLevel(), event.getHarvester().world.rand);
 		if (rewards.isEmpty()) {
-			rewards = ExRegistro.rollHammerRewards(event.getState(), ToolHelper.getHarvestLevelStat(tool), event.getFortuneLevel(), event.getHarvester().worldObj.rand);
+			rewards = ExRegistro.rollHammerRewards(event.getState(), ToolHelper.getHarvestLevelStat(tool), event.getFortuneLevel(), event.getHarvester().world.rand);
 			if (rewards.isEmpty()) {
 				return;
 			}

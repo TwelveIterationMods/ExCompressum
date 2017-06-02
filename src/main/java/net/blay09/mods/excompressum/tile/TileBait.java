@@ -30,6 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
@@ -77,18 +78,18 @@ public class TileBait extends TileEntity implements ITickable {
 
 	private static final Multimap<BlockBait.Type, BaitBlockCondition> envBlockMap = ArrayListMultimap.create();
 
-	private ItemStack renderItemMain;
-	private ItemStack renderItemSub;
+	private ItemStack renderItemMain = ItemStack.EMPTY;
+	private ItemStack renderItemSub = ItemStack.EMPTY;
 	private EnvironmentalCondition environmentStatus;
 	private int ticksSinceEnvironmentalCheck;
 	private int ticksSinceSpawnCheck;
 
 	@Override
 	public void update() {
-		if (renderItemMain == null) {
+		if (renderItemMain.isEmpty()) {
 			renderItemMain = getBaitDisplayItem(getBlockMetadata(), 0);
 		}
-		if (renderItemSub == null) {
+		if (renderItemSub.isEmpty()) {
 			renderItemSub = getBaitDisplayItem(getBlockMetadata(), 1);
 		}
 
@@ -97,21 +98,21 @@ public class TileBait extends TileEntity implements ITickable {
 		ticksSinceSpawnCheck++;
 		if (ticksSinceSpawnCheck >= SPAWN_CHECK_INTERVAL) {
 			int metadata = getBlockMetadata();
-			if (!worldObj.isRemote && worldObj.rand.nextFloat() <= getBaitChance(metadata)) {
+			if (!world.isRemote && world.rand.nextFloat() <= getBaitChance(metadata)) {
 				if (checkSpawnConditions(true) == EnvironmentalCondition.CanSpawn) {
 					final float range = MIN_DISTANCE_NO_PLAYERS;
-					if (worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty()) {
-						EntityLiving entityLiving = getBaitEntityLiving(worldObj, metadata);
+					if (world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty()) {
+						EntityLiving entityLiving = getBaitEntityLiving(world, metadata);
 						if (entityLiving != null) {
-							if (entityLiving instanceof EntityAgeable && worldObj.rand.nextFloat() <= BaitConfig.baitChildChance) {
+							if (entityLiving instanceof EntityAgeable && world.rand.nextFloat() <= BaitConfig.baitChildChance) {
 								((EntityAgeable) entityLiving).setGrowingAge(-24000);
 							}
 							entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-							worldObj.spawnEntityInWorld(entityLiving);
-							((WorldServer) worldObj).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, false, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1, 0, 0, 0, 0.0);
-							worldObj.playSound(null, pos, SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.BLOCKS, 1f, 1f);
+							world.spawnEntity(entityLiving);
+							((WorldServer) world).spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, false, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1, 0, 0, 0, 0.0);
+							world.playSound(null, pos, SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.BLOCKS, 1f, 1f);
 						}
-						worldObj.setBlockToAir(pos);
+						world.setBlockToAir(pos);
 					}
 				}
 			}
@@ -119,7 +120,7 @@ public class TileBait extends TileEntity implements ITickable {
 		}
 	}
 
-	@Nullable
+	@Nonnull
 	private static ItemStack getBaitDisplayItem(int metadata, int i) {
 		BlockBait.Type type = BlockBait.Type.fromId(metadata);
 		if(type != null) {
@@ -136,7 +137,7 @@ public class TileBait extends TileEntity implements ITickable {
 					return new ItemStack(Items.WHEAT_SEEDS);
 				case SHEEP:
 					ItemStack grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
-					if (grassSeeds != null) {
+					if (!grassSeeds.isEmpty()) {
 						return i == 0 ? grassSeeds : new ItemStack(Items.WHEAT);
 					} else {
 						return new ItemStack(Items.WHEAT);
@@ -151,7 +152,7 @@ public class TileBait extends TileEntity implements ITickable {
 					return new ItemStack(Items.GOLDEN_CARROT);
 			}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Nullable
@@ -178,9 +179,7 @@ public class TileBait extends TileEntity implements ITickable {
 				case HORSE:
 					return new EntityHorse(world);
 				case DONKEY:
-					EntityHorse entity = new EntityHorse(world);
-					entity.setType(HorseType.DONKEY);
-					return entity;
+					return new EntityDonkey(world);
 			}
 		}
 		return null;
@@ -215,7 +214,7 @@ public class TileBait extends TileEntity implements ITickable {
 		return 0;
 	}
 
-	@Nullable
+	@Nonnull
 	public ItemStack getRenderItem(int i) {
 		return i == 0 ? renderItemMain : renderItemSub;
 	}
@@ -237,7 +236,7 @@ public class TileBait extends TileEntity implements ITickable {
 				for (int y = pos.getY() - rangeVertical; y < pos.getY() + rangeVertical; y++) {
 					for (int z = pos.getZ() - range; z < pos.getZ() + range; z++) {
 						BlockPos testPos = new BlockPos(x, y, z);
-						IBlockState state = worldObj.getBlockState(testPos);
+						IBlockState state = world.getBlockState(testPos);
 						if (state.getBlock() == ModBlocks.bait) {
 							countBait++;
 						} else if (state.getBlock() == Blocks.WATER || state.getBlock() == Blocks.FLOWING_WATER) {
@@ -265,7 +264,7 @@ public class TileBait extends TileEntity implements ITickable {
 				environmentStatus = EnvironmentalCondition.NearbyBait;
 			} else if (countEnvBlocks < MIN_ENV_IN_AREA) {
 				environmentStatus = EnvironmentalCondition.WrongEnv;
-			} else if (worldObj.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(pos.getX() - range * 2, pos.getY() - rangeVertical, pos.getZ() - range * 2, pos.getX() + range * 2, pos.getY() + rangeVertical, pos.getZ() + range * 2)).size() > MAX_ANIMALS_IN_AREA) {
+			} else if (world.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(pos.getX() - range * 2, pos.getY() - rangeVertical, pos.getZ() - range * 2, pos.getX() + range * 2, pos.getY() + rangeVertical, pos.getZ() + range * 2)).size() > MAX_ANIMALS_IN_AREA) {
 				environmentStatus = EnvironmentalCondition.NearbyAnimal;
 			} else {
 				environmentStatus = EnvironmentalCondition.CanSpawn;

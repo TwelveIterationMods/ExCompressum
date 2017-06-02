@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class StupidUtils {
@@ -43,7 +44,7 @@ public class StupidUtils {
 	 */
 	public static boolean hasSilkTouchModifier(EntityLivingBase entity) {
 		ItemStack heldItem = entity.getHeldItemMainhand();
-		return heldItem != null && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, heldItem) > 0;
+		return !heldItem.isEmpty() && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, heldItem) > 0;
 	}
 
 	private static int getComparatorOutput64(@Nullable IItemHandler itemHandler) {
@@ -52,13 +53,13 @@ public class StupidUtils {
 			float f = 0f;
 			for (int j = 0; j < itemHandler.getSlots(); ++j) {
 				ItemStack itemstack = itemHandler.getStackInSlot(j);
-				if (itemstack != null) {
-					f += (float) itemstack.stackSize / (float) Math.min(64, itemstack.getMaxStackSize());
+				if (!itemstack.isEmpty()) {
+					f += (float) itemstack.getCount() / (float) Math.min(64, itemstack.getMaxStackSize());
 					i++;
 				}
 			}
 			f = f / (float) itemHandler.getSlots();
-			return MathHelper.floor_float(f * 14f) + (i > 0 ? 1 : 0);
+			return MathHelper.floor(f * 14f) + (i > 0 ? 1 : 0);
 		}
 		return 0;
 	}
@@ -88,12 +89,12 @@ public class StupidUtils {
 	 * @param state
 	 * @return
 	 */
-	@Nullable
+	@Nonnull
 	public static ItemStack getItemStackFromState(IBlockState state) {
 		Item item = Item.getItemFromBlock(state.getBlock());
 		if(item != null) {
 			return new ItemStack(item, 1, state.getBlock().getMetaFromState(state)); // this could break but it's fineeee
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 }

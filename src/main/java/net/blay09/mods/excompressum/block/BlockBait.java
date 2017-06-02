@@ -95,9 +95,9 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
         return state.getValue(VARIANT).ordinal();
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    protected ItemStack createStackedBlock(IBlockState state) {
+    protected ItemStack getSilkTouchDrop(IBlockState state) {
         return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
     }
 
@@ -132,7 +132,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (int i = 0; i < Type.values.length; i++) {
             list.add(new ItemStack(item, 1, i));
         }
@@ -144,14 +144,14 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileBait tileEntity = (TileBait) world.getTileEntity(pos);
         if(tileEntity != null) {
             TileBait.EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
             if (!world.isRemote) {
                 ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
                 chatComponent.getStyle().setColor(environmentStatus != TileBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
-                player.addChatComponentMessage(chatComponent);
+                player.sendMessage(chatComponent);
             }
         }
         return true;
@@ -166,7 +166,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
                 if (!world.isRemote) {
                     ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
                     chatComponent.getStyle().setColor(environmentStatus != TileBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
-                    ((EntityPlayer) placer).addChatComponentMessage(chatComponent);
+                    ((EntityPlayer) placer).sendMessage(chatComponent);
                 }
             }
         }

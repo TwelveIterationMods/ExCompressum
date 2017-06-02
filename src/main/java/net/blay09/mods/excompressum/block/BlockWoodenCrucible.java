@@ -81,9 +81,9 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
         return state.getValue(VARIANT).ordinal();
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    protected ItemStack createStackedBlock(IBlockState state) {
+    protected ItemStack getSilkTouchDrop(IBlockState state) {
         return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
     }
 
@@ -93,7 +93,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for(int i = 0; i < Type.values.length; i++) {
             list.add(new ItemStack(item, 1, i));
         }
@@ -116,25 +116,24 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileWoodenCrucible tileEntity = (TileWoodenCrucible) world.getTileEntity(pos);
         if (tileEntity != null) {
+        	ItemStack heldItem = player.getHeldItem(hand);
             ItemStack outputStack = tileEntity.getItemHandler().extractItem(0, 64, false);
-            if (outputStack != null) {
+            if (!outputStack.isEmpty()) {
                 if (!player.inventory.addItemStackToInventory(outputStack)) {
-                    world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, outputStack));
+                    world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, outputStack));
                 }
                 return true;
             }
 
-            if (heldItem != null) {
+            if (!heldItem.isEmpty()) {
                 if (tileEntity.addItem(heldItem)) {
                     return true;
                 }
             }
-
-            IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
-            FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, player);
+            FluidUtil.interactWithFluidHandler(player, hand, world, pos, side);
         }
         return true;
     }

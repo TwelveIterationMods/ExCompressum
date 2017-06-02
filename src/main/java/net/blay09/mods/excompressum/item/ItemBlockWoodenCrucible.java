@@ -12,7 +12,7 @@ public class ItemBlockWoodenCrucible extends ItemBlock {
     }
 
     public String getUnlocalizedName(ItemStack itemStack) {
-        return "tile." + ExCompressum.MOD_ID + ":wooden_crucible_" + itemStack.getItemDamage();
+        return "tile." + ExCompressum.MOD_ID + ":wooden_crucible_" + itemStack.getMetadata();
     }
 
     @Override

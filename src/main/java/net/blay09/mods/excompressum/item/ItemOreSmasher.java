@@ -76,25 +76,25 @@ public class ItemOreSmasher extends ItemTool {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(!world.checkNoEntityCollision(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
 			return EnumActionResult.FAIL;
 		}
-        for(int i = 0; i < player.inventory.mainInventory.length; i++) {
-            ItemStack inventoryStack = player.inventory.mainInventory[i];
-            if(inventoryStack != null) {
+        for(int i = 0; i < player.inventory.mainInventory.size(); i++) {
+            ItemStack inventoryStack = player.inventory.mainInventory.get(i);
+            if(!inventoryStack.isEmpty()) {
                 if(isOreItem(inventoryStack)) {
 					CompressedRecipe recipe = CompressedRecipeRegistry.getRecipe(inventoryStack);
-					if(recipe != null && recipe.getResultStack().stackSize == 1) {
-						if(inventoryStack.stackSize >= recipe.getSourceStack().stackSize) {
+					if(recipe != null && recipe.getResultStack().getCount() == 1) {
+						if(inventoryStack.getCount() >= recipe.getSourceStack().getCount()) {
 							IBlockState oldState = world.getBlockState(pos);
 							ItemStack resultStack = recipe.getResultStack().copy();
-							resultStack.getItem().onItemUse(resultStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
+							resultStack.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 							world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
-							if(resultStack.stackSize <= 0) {
-								inventoryStack.stackSize -= recipe.getSourceStack().stackSize;
-								if (inventoryStack.stackSize <= 0) {
-									player.inventory.mainInventory[i] = null;
+							if(resultStack.getCount() <= 0) {
+								inventoryStack.setCount(inventoryStack.getCount() - recipe.getSourceStack().getCount());
+								if (inventoryStack.getCount() <= 0) {
+									player.inventory.mainInventory.remove(i);
 								}
 								player.swingArm(hand);
 								return EnumActionResult.SUCCESS;
@@ -104,10 +104,10 @@ public class ItemOreSmasher extends ItemTool {
                 }
 				if (isOreBlock(inventoryStack)) {
 					IBlockState oldState = world.getBlockState(pos);
-					inventoryStack.getItem().onItemUse(inventoryStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
+					inventoryStack.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 					world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
-					if (inventoryStack.stackSize <= 0) {
-						player.inventory.mainInventory[i] = null;
+					if (inventoryStack.getCount() <= 0) {
+						player.inventory.mainInventory.remove(i);
 					}
 					player.swingArm(hand);
 					return EnumActionResult.SUCCESS;
@@ -123,7 +123,7 @@ public class ItemOreSmasher extends ItemTool {
 			world.setBlockToAir(pos);
 			Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, toolMaterial.getHarvestLevel(), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);
 			for(ItemStack rewardStack : rewards) {
-				world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
+				world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
 			}
 		}
 		return super.onBlockDestroyed(itemStack, world, state, pos, entityLiving);

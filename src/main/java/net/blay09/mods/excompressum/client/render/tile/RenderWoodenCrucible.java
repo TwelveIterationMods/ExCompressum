@@ -30,7 +30,7 @@ public class RenderWoodenCrucible extends TileEntitySpecialRenderer<TileWoodenCr
 		mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		ItemStack outputStack = tileEntity.getItemHandler().getStackInSlot(0);
-		if (outputStack != null) {
+		if (!outputStack.isEmpty()) {
 			renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.0625f, y + 0.2f, z + 0.0625f);

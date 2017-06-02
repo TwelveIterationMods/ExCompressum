@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.utils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 public class ItemHandlerAutomation implements IItemHandlerModifiable {
 
@@ -37,10 +37,10 @@ public class ItemHandlerAutomation implements IItemHandlerModifiable {
 	}
 
 	@Override
-	@Nullable
+	@Nonnull
 	public ItemStack extractItem(int slot, int amount, boolean simulate) {
 		if(!canExtractItem(slot, amount)) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		return base.extractItem(slot, amount, simulate);
 	}
@@ -51,6 +51,11 @@ public class ItemHandlerAutomation implements IItemHandlerModifiable {
 
 	public boolean canInsertItem(int slot, ItemStack itemStack) {
 		return true;
+	}
+
+	@Override
+	public int getSlotLimit(int slot) {
+		return 64;
 	}
 
 }

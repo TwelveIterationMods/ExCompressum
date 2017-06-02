@@ -42,7 +42,7 @@ public class ItemCompressedCrook extends ItemTool implements ICompressedCrook, I
     }
 
     private void pushEntity(ItemStack itemStack, EntityPlayer player, Entity entity) {
-        if(!player.worldObj.isRemote) {
+        if(!player.world.isRemote) {
             double distance = Math.sqrt(Math.pow(player.posX - entity.posX, 2) + Math.pow(player.posZ - entity.posZ, 2));
             double scalarX = (player.posX - entity.posX) / distance;
             double scalarZ = (player.posZ - entity.posZ) / distance;

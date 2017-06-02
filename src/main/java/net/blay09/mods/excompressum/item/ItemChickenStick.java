@@ -57,15 +57,15 @@ public class ItemChickenStick extends ItemTool {
 
     @Override
     public boolean hitEntity(ItemStack itemStack, EntityLivingBase attacker, EntityLivingBase target) {
-        playChickenSound(attacker.worldObj, new BlockPos(attacker.posX, attacker.posY, attacker.posZ));
+        playChickenSound(attacker.world, new BlockPos(attacker.posX, attacker.posY, attacker.posZ));
         return super.hitEntity(itemStack, attacker, target);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         playChickenSound(world, new BlockPos(player.posX, player.posY, player.posZ));
         player.swingArm(hand);
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
 
     @Override

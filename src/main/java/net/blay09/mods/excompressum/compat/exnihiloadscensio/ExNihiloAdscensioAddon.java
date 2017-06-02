@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import exnihiloadscensio.registries.CompostRegistry;
 import exnihiloadscensio.registries.CrookRegistry;
 import exnihiloadscensio.registries.HammerRegistry;
-import exnihiloadscensio.registries.RegistryReloadedEvent;
+//import exnihiloadscensio.registries.RegistryReloadedEvent;
 import exnihiloadscensio.registries.SieveRegistry;
 import exnihiloadscensio.registries.types.CrookReward;
 import exnihiloadscensio.registries.types.Siftable;
@@ -40,6 +40,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
@@ -117,7 +118,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 
 
 		ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
-		if(stringMeshItem != null) {
+		if(!stringMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry stringMesh = new SieveMeshRegistryEntry(stringMeshItem);
 			stringMesh.setMeshLevel(1);
 			stringMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/string_mesh"));
@@ -125,7 +126,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		}
 
 		ItemStack flintMeshItem = findItem("itemMesh", 2);
-		if(flintMeshItem != null) {
+		if(!flintMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry flintMesh = new SieveMeshRegistryEntry(flintMeshItem);
 			flintMesh.setMeshLevel(2);
 			flintMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/flint_mesh"));
@@ -133,7 +134,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		}
 
 		ItemStack ironMeshItem = getNihiloItem(NihiloItems.IRON_MESH);
-		if(ironMeshItem != null) {
+		if(!ironMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(ironMeshItem);
 			ironMesh.setMeshLevel(3);
 			ironMesh.setHeavy(true);
@@ -142,7 +143,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		}
 
 		ItemStack diamondMeshItem = findItem("itemMesh", 4);
-		if(diamondMeshItem != null) {
+		if(!diamondMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry diamondMesh = new SieveMeshRegistryEntry(diamondMeshItem);
 			diamondMesh.setMeshLevel(4);
 			diamondMesh.setHeavy(true);
@@ -151,25 +152,25 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		}
 	}
 
-	@SubscribeEvent
-	public void onRegistryReload(RegistryReloadedEvent event) {
-		if(ExCompressumConfig.enableWoodChippings) {
-			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
-			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
-			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
-			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
-
-			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
-			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
-			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
-			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
-
-			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
-			for (ItemStack itemStack : oreDictStacks) {
-				CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
-			}
-		}
-	}
+//	@SubscribeEvent
+//	public void onRegistryReload(RegistryReloadedEvent event) {
+//		if(ExCompressumConfig.enableWoodChippings) {
+//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
+//
+//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
+//
+//			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
+//			for (ItemStack itemStack : oreDictStacks) {
+//				CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
+//			}
+//		}
+//	}
 
 	@Override
 	public SieveModelBounds getSieveBounds() {
@@ -195,26 +196,26 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		return Collections.emptyList();
 	}
 
-	@Nullable
+	@Nonnull
 	private ItemStack findItem(String name, int withMetadata) {
 		ResourceLocation location = new ResourceLocation(Compat.EXNIHILO_ADSCENSIO, name);
 		Item item = Item.REGISTRY.getObject(location);
 		if(item != null) {
 			return new ItemStack(item, 1, withMetadata);
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
-	@Nullable
+	@Nonnull
 	private ItemStack findBlock(String name, int withMetadata) {
 		ResourceLocation location = new ResourceLocation(Compat.EXNIHILO_ADSCENSIO, name);
 		if(Block.REGISTRY.containsKey(location)) {
 			return new ItemStack(Block.REGISTRY.getObject(location), 1, withMetadata);
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
-	@Nullable
+	@Nonnull
 	@Override
 	public ItemStack getNihiloItem(NihiloItems type) {
 		return itemMap.get(type);

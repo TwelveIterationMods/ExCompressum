@@ -32,17 +32,17 @@ public class ChickenStickHandler {
 		}
 		if(event.getTarget() instanceof EntityChicken && !((EntityChicken) event.getTarget()).isChild()) {
 			ItemStack heldItem = event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
-			if(heldItem != null && heldItem.getItem() == Items.STICK) {
+			if(!heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
 				event.getTarget().setDead();
-				if(!event.getTarget().worldObj.isRemote) {
-					heldItem.stackSize--;
-					if(heldItem.stackSize <= 0) {
-						event.getEntityPlayer().setHeldItem(EnumHand.MAIN_HAND, null);
+				if(!event.getTarget().world.isRemote) {
+					heldItem.setCount(heldItem.getCount() - 1);
+					if(heldItem.getCount() <= 0) {
+						event.getEntityPlayer().setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 					}
-					EntityAngryChicken angryChicken = new EntityAngryChicken(event.getTarget().worldObj);
+					EntityAngryChicken angryChicken = new EntityAngryChicken(event.getTarget().world);
 					angryChicken.setLocationAndAngles(event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, event.getTarget().rotationYaw, event.getTarget().rotationPitch);
-					event.getTarget().worldObj.spawnEntityInWorld(angryChicken);
-					event.getTarget().worldObj.playSound(angryChicken.posX, angryChicken.posY, angryChicken.posZ, SoundEvents.ENTITY_CHICKEN_HURT, SoundCategory.NEUTRAL, 1f, 0.5f, false);
+					event.getTarget().world.spawnEntity(angryChicken);
+					event.getTarget().world.playSound(angryChicken.posX, angryChicken.posY, angryChicken.posZ, SoundEvents.ENTITY_CHICKEN_HURT, SoundCategory.NEUTRAL, 1f, 0.5f, false);
 				}
 				event.setCanceled(true);
 			}
@@ -53,7 +53,7 @@ public class ChickenStickHandler {
 	public void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
 		if(event.getHarvester() != null) {
 			ItemStack heldItem = event.getHarvester().getHeldItemMainhand();
-			if(heldItem != null && heldItem.getItem() instanceof ItemChickenStick && ChickenStickRegistry.isHammerable(event.getState())) {
+			if(!heldItem.isEmpty() && heldItem.getItem() instanceof ItemChickenStick && ChickenStickRegistry.isHammerable(event.getState())) {
 				final int fortune = 0;
 				List<ItemStack> rewards = Lists.newArrayList(CompressedHammerRegistry.rollHammerRewards(event.getState(), fortune, event.getWorld().rand));
 				rewards.addAll(ExRegistro.rollHammerRewards(event.getState(), 0, fortune, event.getWorld().rand));
@@ -66,7 +66,7 @@ public class ChickenStickHandler {
 					if (event.getWorld().rand.nextFloat() <= ToolsConfig.chickenStickSpawnChance) {
 						EntityChicken entityChicken = new EntityChicken(event.getWorld());
 						entityChicken.setPosition(event.getPos().getX() + 0.5, event.getPos().getY() + 0.5, event.getPos().getZ() + 0.5);
-						event.getWorld().spawnEntityInWorld(entityChicken);
+						event.getWorld().spawnEntity(entityChicken);
 					}
 				}
 			}

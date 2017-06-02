@@ -25,18 +25,18 @@ public class InventoryCompressedMatcher extends InventoryCrafting {
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        return i < getSizeInventory() ? itemStacks[i] : null;
+        return i < getSizeInventory() ? itemStacks[i] : ItemStack.EMPTY;
     }
 
     @Override
-    public void setInventorySlotContents(int i, @Nullable ItemStack itemStack) {
+    public void setInventorySlotContents(int i, @Nonnull ItemStack itemStack) {
         itemStacks[i] = itemStack;
     }
 
     public void fill(ItemStack itemStack) {
         if(isStupid) {
             for (int i = 0; i < itemStacks.length; i++) {
-                itemStacks[i] = null;
+                itemStacks[i] = ItemStack.EMPTY;
             }
             itemStacks[0] = itemStack;
             itemStacks[1] = itemStack;

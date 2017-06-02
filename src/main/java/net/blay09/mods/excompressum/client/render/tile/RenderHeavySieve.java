@@ -35,7 +35,7 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> 
 
         // Render mesh
         ItemStack meshStack = tileEntity.getMeshStack();
-        if (meshStack != null) {
+        if (!meshStack.isEmpty()) {
             SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
             if (sieveMesh != null) {
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
@@ -53,7 +53,7 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> 
         }
 
         ItemStack currentStack = tileEntity.getCurrentStack();
-        if (currentStack != null) {
+        if (!currentStack.isEmpty()) {
             IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
             //noinspection ConstantConditions /// Forge needs @Nullable
             if(state != null) {

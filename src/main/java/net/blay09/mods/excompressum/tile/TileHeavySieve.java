@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
@@ -35,8 +36,8 @@ public class TileHeavySieve extends TileEntity implements ITickable {
     private static final int PARTICLE_TICKS = 20;
     private static final float EFFICIENCY_BOOST = 0.25f;
 
-    private ItemStack meshStack;
-    private ItemStack currentStack;
+    private ItemStack meshStack = ItemStack.EMPTY;
+    private ItemStack currentStack = ItemStack.EMPTY;
 
     private float progress;
     private int clicksSinceSecond;
@@ -49,7 +50,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
     private int particleCount;
 
     public boolean addSiftable(EntityPlayer player, ItemStack itemStack) {
-        if(currentStack != null || meshStack == null || !HeavySieveRegistry.isSiftable(itemStack)) {
+        if(!currentStack.isEmpty() || meshStack.isEmpty() || !HeavySieveRegistry.isSiftable(itemStack)) {
             return false;
         }
         currentStack = player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(itemStack, 1) : itemStack.splitStack(1);
@@ -80,7 +81,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
             if(particleTicks <= 0) {
                 particleCount = 0;
             }
-            if(worldObj.isRemote) {
+            if(world.isRemote) {
                 spawnParticles();
             }
         }
@@ -88,18 +89,18 @@ public class TileHeavySieve extends TileEntity implements ITickable {
 
     @SideOnly(Side.CLIENT)
     public void spawnParticles() {
-        if(currentStack != null && !ExCompressumConfig.disableParticles) {
+        if(!currentStack.isEmpty() && !ExCompressumConfig.disableParticles) {
             IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
             if (state != null) {
                 for(int i = 0; i < particleCount; i++) {
-                    Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(worldObj, pos, 0.5 + worldObj.rand.nextFloat() * 0.8 - 0.4, 0.4, 0.5 + worldObj.rand.nextFloat() * 0.8 - 0.4, 1f, state));
+                    Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(world, pos, 0.5 + world.rand.nextFloat() * 0.8 - 0.4, 0.4, 0.5 + world.rand.nextFloat() * 0.8 - 0.4, 1f, state));
                 }
             }
         }
     }
 
     public boolean processContents(EntityPlayer player) {
-        if(currentStack != null && meshStack != null) {
+        if(!currentStack.isEmpty() && !meshStack.isEmpty()) {
             if (player.capabilities.isCreativeMode) {
                 progress = 1f;
             } else {
@@ -110,28 +111,28 @@ public class TileHeavySieve extends TileEntity implements ITickable {
                 }
             }
             if (progress >= 1f) {
-                if (!worldObj.isRemote) {
+                if (!world.isRemote) {
                     SieveMeshRegistryEntry sieveMesh = getSieveMesh();
                     if(sieveMesh != null) {
                         int fortune = ExRegistro.getMeshFortune(meshStack);
                         fortune += player.getLuck();
-                        Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, sieveMesh, fortune, worldObj.rand);
+                        Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, sieveMesh, fortune, world.rand);
                         for (ItemStack itemStack : rewards) {
-                            worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
+                            world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
                         }
                     } else {
-                        worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, currentStack));
+                        world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, currentStack));
                     }
-                    currentStack = null;
+                    currentStack = ItemStack.EMPTY;
                     if(ExRegistro.doMeshesHaveDurability() && sieveMesh != null) {
                         if(!sieveMesh.isHeavy()) {
                             getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
-                            meshStack = null;
+                            meshStack = ItemStack.EMPTY;
                         } else {
                             meshStack.damageItem(1, player);
-                            if (meshStack.stackSize == 0) {
+                            if (meshStack.getCount() == 0) {
                                 getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
-                                meshStack = null;
+                                meshStack = ItemStack.EMPTY;
                             }
                         }
                     }
@@ -150,8 +151,8 @@ public class TileHeavySieve extends TileEntity implements ITickable {
     @Override
     public void readFromNBT(NBTTagCompound tagCompound) {
         super.readFromNBT(tagCompound);
-        currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content"));
-        meshStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Mesh"));
+        currentStack = new ItemStack(tagCompound.getCompoundTag("Content"));
+        meshStack = new ItemStack(tagCompound.getCompoundTag("Mesh"));
         progress = tagCompound.getFloat("Progress");
         particleTicks = tagCompound.getInteger("ParticleTicks");
         particleCount = tagCompound.getInteger("ParticleCount");
@@ -160,12 +161,8 @@ public class TileHeavySieve extends TileEntity implements ITickable {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
         super.writeToNBT(tagCompound);
-        if(currentStack != null) {
-            tagCompound.setTag("Content", currentStack.writeToNBT(new NBTTagCompound()));
-        }
-        if(meshStack != null) {
-            tagCompound.setTag("Mesh", meshStack.writeToNBT(new NBTTagCompound()));
-        }
+        tagCompound.setTag("Content", currentStack.writeToNBT(new NBTTagCompound()));
+        tagCompound.setTag("Mesh", meshStack.writeToNBT(new NBTTagCompound()));
         tagCompound.setFloat("Progress", progress);
         tagCompound.setInteger("ParticleTicks", particleTicks);
         tagCompound.setInteger("ParticleCount", particleCount);
@@ -187,12 +184,12 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         readFromNBT(packet.getNbtCompound());
     }
 
-    @Nullable
+    @Nonnull
     public ItemStack getCurrentStack() {
         return currentStack;
     }
 
-    @Nullable
+    @Nonnull
     public ItemStack getMeshStack() {
         return meshStack;
     }
@@ -203,13 +200,13 @@ public class TileHeavySieve extends TileEntity implements ITickable {
 
     @Nullable
     public SieveMeshRegistryEntry getSieveMesh() {
-        if(meshStack != null) {
+        if(!meshStack.isEmpty()) {
             return SieveMeshRegistry.getEntry(meshStack);
         }
         return null;
     }
 
-    public void setMeshStack(@Nullable ItemStack meshStack) {
+    public void setMeshStack(@Nonnull ItemStack meshStack) {
         this.meshStack = meshStack;
         VanillaPacketHandler.sendTileEntityUpdate(this);
     }

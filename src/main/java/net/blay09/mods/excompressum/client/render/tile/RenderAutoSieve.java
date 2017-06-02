@@ -45,7 +45,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
 
     @Override
     public void renderTileEntityAt(TileAutoSieveBase tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
-        if(!tileEntity.hasWorldObj()) {
+        if(!tileEntity.hasWorld()) {
             return;
         }
         IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
@@ -56,7 +56,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
             sieveState = ModBlocks.heavySieve.getDefaultState();
             if(!isHeavy) {
                 ItemStack nihiloSieve = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SIEVE);
-                if(nihiloSieve != null) {
+                if(!nihiloSieve.isEmpty()) {
                     sieveState = Block.getBlockFromItem(nihiloSieve.getItem()).getDefaultState();
                 }
             }
@@ -103,7 +103,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
 
         // Render the sieve mesh
         ItemStack meshStack = tileEntity.getMeshStack();
-        if (meshStack != null) {
+        if (!meshStack.isEmpty()) {
             SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
             if (sieveMesh != null) {
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
@@ -122,7 +122,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
 
         // Render the content
         ItemStack currentStack = tileEntity.getCurrentStack();
-        if (currentStack != null) {
+        if (!currentStack.isEmpty()) {
             IBlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
             //noinspection ConstantConditions /// Forge needs @Nullable
             if(contentState != null) {

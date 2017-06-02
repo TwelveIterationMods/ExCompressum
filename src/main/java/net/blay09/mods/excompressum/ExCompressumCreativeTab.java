@@ -5,6 +5,7 @@ import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
@@ -17,12 +18,12 @@ public class ExCompressumCreativeTab extends CreativeTabs {
     }
 
     @Override
-    public Item getTabIconItem() {
-        return ModItems.compressedHammerIron;
+    public ItemStack getTabIconItem() {
+        return new ItemStack(ModItems.compressedHammerIron);
     }
 
     @Override
-    public void displayAllRelevantItems(List<ItemStack> list) {
+    public void displayAllRelevantItems(NonNullList<ItemStack> list) {
         super.displayAllRelevantItems(list);
         list.addAll(additionalItems);
     }

@@ -103,7 +103,7 @@ public class TheOneProbeAddon implements Function<ITheOneProbe, Void> {
 				info.progress((int) (tileEntity.getProgress() * 100), 100); // because a simple progress(float) isn't cool enough ..
 			}
 			ItemStack meshStack = tileEntity.getMeshStack();
-			if (meshStack != null) {
+			if (!meshStack.isEmpty()) {
 				if(ExRegistro.doMeshesHaveDurability()) {
 					info.text(String.format("%s %d/%d", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getItemDamage(), meshStack.getMaxDamage()));
 				} else {

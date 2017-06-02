@@ -30,7 +30,7 @@ public class CompressedEnemyHandler {
         if(!event.getWorld().isRemote && (event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast)) {
             String entityName = EntityList.getEntityString(event.getEntity());
             if(CompressedMobsConfig.compressedMobs.contains(entityName)) {
-                if (event.getEntity().worldObj.rand.nextFloat() <= CompressedMobsConfig.compressedMobChance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
+                if (event.getEntity().world.rand.nextFloat() <= CompressedMobsConfig.compressedMobChance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
                     event.getEntity().setAlwaysRenderNameTag(true);
                     event.getEntity().setCustomNameTag("Compressed " + event.getEntity().getName());
                     NBTTagCompound tagCompound = new NBTTagCompound();
@@ -47,15 +47,15 @@ public class CompressedEnemyHandler {
 
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
-        if(!event.getEntity().worldObj.isRemote && event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
+        if(!event.getEntity().world.isRemote && event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
             if(event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast) {
                 if(event.getSource().getEntity() instanceof EntityPlayer && !(event.getSource().getEntity() instanceof FakePlayer)) {
                     if(StupidUtils.hasSilkTouchModifier((EntityLivingBase) event.getSource().getEntity())) {
                         return;
                     }
-                    int entityId = EntityList.getEntityID(event.getEntity());
+                    int entityId = EntityList.getID(event.getEntityLiving().getClass());
                     for(int i = 0; i < CompressedMobsConfig.compressedMobSize; i++) {
-                        EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByID(entityId, event.getEntity().worldObj);
+                        EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByID(entityId, event.getEntity().world);
                         if(entity == null) {
                             return;
                         }
@@ -66,27 +66,22 @@ public class CompressedEnemyHandler {
                                 ((EntityAgeable) entity).setGrowingAge(((EntityAgeable) event.getEntity()).getGrowingAge());
                             }
                         }
-                        if(event.getEntity() instanceof EntitySkeleton && entity instanceof EntitySkeleton) {
-                            ((EntitySkeleton) entity).setSkeletonType(((EntitySkeleton) event.getEntity()).getSkeletonType());
-                        }
                         if(entity instanceof EntityPigZombie) {
                             entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
                         } else if(entity instanceof EntitySkeleton) {
-                            if(((EntitySkeleton) entity).getSkeletonType() == SkeletonType.NORMAL) {
-                                entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-                            } else {
-                                entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-                            }
+                            entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+                        } else if(entity instanceof EntityWitherSkeleton) {
+                            entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
                         }
                         NBTTagCompound tagCompound = new NBTTagCompound();
                         tagCompound.setBoolean(NOCOMPRESS, true);
                         entity.getEntityData().setTag(ExCompressum.MOD_ID, tagCompound);
                         entity.setLocationAndAngles(event.getEntity().posX, event.getEntity().posY + 1, event.getEntity().posZ, (float) Math.random(), (float) Math.random());
                         double motion = 0.01;
-                        entity.motionX = (event.getEntity().worldObj.rand.nextGaussian() - 0.5) * motion;
+                        entity.motionX = (event.getEntity().world.rand.nextGaussian() - 0.5) * motion;
                         entity.motionY = 0;
-                        entity.motionZ = (event.getEntity().worldObj.rand.nextGaussian() - 0.5) * motion;
-                        event.getEntity().worldObj.spawnEntityInWorld(entity);
+                        entity.motionZ = (event.getEntity().world.rand.nextGaussian() - 0.5) * motion;
+                        event.getEntity().world.spawnEntity(entity);
                     }
                 }
             }

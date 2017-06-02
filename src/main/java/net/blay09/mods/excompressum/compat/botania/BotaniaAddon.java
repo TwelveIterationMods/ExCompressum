@@ -85,7 +85,7 @@ public class BotaniaAddon implements IAddon {
                     return "botania.tagline.excompressum.orechidEvolved";
                 }
             };
-            lexiconOrechidEvolved.setLexiconPages(new PageText(LEXICON_ORECHID_EVOLVED_PAGE + "0"), new PagePetalRecipe(LEXICON_ORECHID_EVOLVED_PAGE + "1", recipeOrechidEvolved));
+            lexiconOrechidEvolved.setLexiconPages(new PageText(LEXICON_ORECHID_EVOLVED_PAGE + "0"), new PagePetalRecipe<>(LEXICON_ORECHID_EVOLVED_PAGE + "1", recipeOrechidEvolved));
             lexiconOrechidEvolved.setPriority();
             BotaniaAPI.addEntry(lexiconOrechidEvolved, lexiconOrechidEvolved.category);
             BotaniaAPI.addSubTileToCreativeMenu(SUBTILE_ORECHID_EVOLVED);

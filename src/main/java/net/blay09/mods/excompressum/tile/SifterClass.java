@@ -4,7 +4,7 @@ public enum SifterClass {
 	COMMON,
 	DUSTER;
 
-	private static final SifterClass[] values = values();
+	//private static final SifterClass[] values = values();
 
 	public SifterClass forPlayerName(String name) {
 		return null;

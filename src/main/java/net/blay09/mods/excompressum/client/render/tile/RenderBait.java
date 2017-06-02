@@ -17,11 +17,11 @@ public class RenderBait extends TileEntitySpecialRenderer<TileBait> {
         GlStateManager.translate(x + 0.45, y + 0.05, z + 0.45);
         GlStateManager.scale(0.5f, 0.5f, 0.5f);
         GlStateManager.rotate(90f, 1f, 0f, 0f);
-        if(tileEntity.getRenderItem(0) != null) {
+        if(!tileEntity.getRenderItem(0).isEmpty()) {
             itemRenderer.renderItem(tileEntity.getRenderItem(0), ItemCameraTransforms.TransformType.FIXED);
         }
         GlStateManager.rotate(-10f, 1f, 0f, 0f);
-        if(tileEntity.getRenderItem(1) != null) {
+        if(!tileEntity.getRenderItem(1).isEmpty()) {
             itemRenderer.renderItem(tileEntity.getRenderItem(1), ItemCameraTransforms.TransformType.FIXED);
         }
         GlStateManager.popMatrix();

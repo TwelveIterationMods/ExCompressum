@@ -11,7 +11,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
@@ -22,10 +22,10 @@ public abstract class ExRegistro {
 
 	public static boolean isNihiloItem(ItemStack itemStack, ExNihiloProvider.NihiloItems type) {
 		ItemStack nihiloStack = instance.getNihiloItem(type);
-		return nihiloStack != null && itemStack.getItem() == nihiloStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || nihiloStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || itemStack.getItemDamage() == nihiloStack.getItemDamage());
+		return !nihiloStack.isEmpty() && itemStack.getItem() == nihiloStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || nihiloStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || itemStack.getItemDamage() == nihiloStack.getItemDamage());
 	}
 
-	@Nullable
+	@Nonnull
 	public static ItemStack getNihiloItem(ExNihiloProvider.NihiloItems type) {
 		return instance.getNihiloItem(type);
 	}

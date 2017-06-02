@@ -98,9 +98,9 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 		return state.getValue(VARIANT).ordinal();
 	}
 
-	@Nullable
+	@Nonnull
 	@Override
-	protected ItemStack createStackedBlock(IBlockState state) {
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
 		return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
 	}
 
@@ -110,7 +110,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < BlockWoodenCrucible.Type.values.length; i++) {
 			list.add(new ItemStack(item, 1, i));
 		}
@@ -145,12 +145,13 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileHeavySieve tileEntity = (TileHeavySieve) world.getTileEntity(pos);
 		if (tileEntity != null) {
-			if (heldItem != null) {
+			ItemStack heldItem = player.getHeldItem(hand);
+			if (!heldItem.isEmpty()) {
 				SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
-				if (sieveMesh != null && tileEntity.getMeshStack() == null) {
+				if (sieveMesh != null && tileEntity.getMeshStack().isEmpty()) {
 					tileEntity.setMeshStack(player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.splitStack(1));
 					return true;
 				}
@@ -162,9 +163,9 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 			} else {
 				if(!world.isRemote && player.isSneaking()) {
 					ItemStack meshStack = tileEntity.getMeshStack();
-					if(meshStack != null) {
+					if(!meshStack.isEmpty()) {
 						if (player.inventory.addItemStackToInventory(meshStack)) {
-							world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, meshStack));
+							world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, meshStack));
 						}
 						tileEntity.setMeshStack(null);
 					}
@@ -205,8 +206,8 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity instanceof TileHeavySieve) {
 			TileHeavySieve tileHeavySieve = (TileHeavySieve) tileEntity;
-			if(tileHeavySieve.getMeshStack() != null) {
-				world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tileHeavySieve.getMeshStack()));
+			if(!tileHeavySieve.getMeshStack().isEmpty()) {
+				world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tileHeavySieve.getMeshStack()));
 			}
 		}
 		super.breakBlock(world, pos, state);

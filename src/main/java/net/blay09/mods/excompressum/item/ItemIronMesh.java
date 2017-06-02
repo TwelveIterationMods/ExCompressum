@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Optional.Interface(iface = "exnihiloomnia.items.meshs.ISieveMesh", modid = Compat.EXNIHILO_OMNIA)
-public class ItemIronMesh extends Item implements ISieveMesh {
+public class ItemIronMesh extends Item {// implements ISieveMesh { //TODO reenable Ex Nihilo Omnia support if/when it updates
 
     public ItemIronMesh() {
         setRegistryName("iron_mesh");
@@ -26,9 +26,9 @@ public class ItemIronMesh extends Item implements ISieveMesh {
         return 30;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getMeshTexture() {
-        return ClientProxy.ironMeshSprite;
-    }
+    //@Override
+    //@SideOnly(Side.CLIENT)
+    //public TextureAtlasSprite getMeshTexture() {
+    //    return ClientProxy.ironMeshSprite;
+    //}
 }

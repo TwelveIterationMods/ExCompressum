@@ -19,7 +19,7 @@ public class HeavySieveDataProvider implements IWailaDataProvider {
 
     @Override
     public ItemStack getWailaStack(IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class HeavySieveDataProvider implements IWailaDataProvider {
                 list.add(I18n.format("waila.excompressum:sieveProgress", (int) (tileEntity.getProgress() * 100) + "%"));
             }
             ItemStack meshStack = tileEntity.getMeshStack();
-            if (meshStack != null) {
+            if (!meshStack.isEmpty()) {
                 if(ExRegistro.doMeshesHaveDurability()) {
                     list.add(I18n.format("waila.excompressum:sieveMesh", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getItemDamage(), meshStack.getMaxDamage()));
                 } else {

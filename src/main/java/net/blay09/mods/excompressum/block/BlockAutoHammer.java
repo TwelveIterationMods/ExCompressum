@@ -72,9 +72,9 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         return getDefaultState().withProperty(FACING, facing);
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    protected ItemStack createStackedBlock(IBlockState state) {
+    protected ItemStack getSilkTouchDrop(IBlockState state) {
         return new ItemStack(this, 1, state.getValue(FACING).ordinal());
     }
 
@@ -106,7 +106,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!player.isSneaking() && !world.isRemote) {
             player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_HAMMER, world, pos.getX(), pos.getY(), pos.getZ());
         }
@@ -126,21 +126,21 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
             //noinspection ConstantConditions /// Forge needs jesus
             IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
             for (int i = 0; i < itemHandler.getSlots(); i++) {
-                if (itemHandler.getStackInSlot(i) != null) {
-                    world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i)));
+                if (!itemHandler.getStackInSlot(i).isEmpty()) {
+                    world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i)));
                 }
             }
             ItemStack currentStack = ((TileAutoHammer) tileEntity).getCurrentStack();
-            if (currentStack != null) {
-                world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
+            if (!currentStack.isEmpty()) {
+                world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
             }
         }
         super.breakBlock(world, pos, state);
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        EnumFacing facing = BlockPistonBase.getFacingFromEntity(pos, placer);
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        EnumFacing facing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
         if(facing.getAxis() == EnumFacing.Axis.Y) {
             facing = EnumFacing.NORTH;
         }

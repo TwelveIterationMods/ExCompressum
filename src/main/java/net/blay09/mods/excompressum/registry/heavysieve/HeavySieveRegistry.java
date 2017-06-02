@@ -352,7 +352,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
         if(tryGetBoolean(defaults, "excompressum:compressed_dust", true)) {
             ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
-            if(dustBlock != null) {
+            if(!dustBlock.isEmpty()) {
                 ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DUST.ordinal());
                 addGeneratedEntry(itemStack, dustBlock, COMPRESSION_SIZE - defaultLoss);
 
@@ -361,7 +361,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
         if(tryGetBoolean(defaults, "excompressum:compressed_nether_gravel", true)) {
             ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
-            if(netherGravelBlock != null) {
+            if(!netherGravelBlock.isEmpty()) {
                 ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal());
                 addGeneratedEntry(itemStack, netherGravelBlock, COMPRESSION_SIZE - defaultLoss);
             }
@@ -369,7 +369,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
         if(tryGetBoolean(defaults, "excompressum:compressed_ender_gravel", true)) {
             ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
-            if(enderGravelBlock != null) {
+            if(!enderGravelBlock.isEmpty()) {
                 ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal());
                 addGeneratedEntry(itemStack, enderGravelBlock, COMPRESSION_SIZE - defaultLoss);
             }

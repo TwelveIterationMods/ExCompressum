@@ -15,7 +15,7 @@ import java.util.List;
 
 public class GuiAutoSieve extends GuiContainer {
 
-    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoSieve.png");
+    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/auto_sieve.png");
     private TileAutoSieveBase tileEntity;
 
     public GuiAutoSieve(InventoryPlayer inventoryPlayer, TileAutoSieveBase tileEntity) {
@@ -42,7 +42,7 @@ public class GuiAutoSieve extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         // Render No Mesh / Incorrect Mesh overlay
-        if(tileEntity.getMeshStack() == null) {
+        if(tileEntity.getMeshStack().isEmpty()) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, 0, 300);
             drawRect(58, 16, 144, 71, 0x99000000);

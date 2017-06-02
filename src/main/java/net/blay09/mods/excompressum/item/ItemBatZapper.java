@@ -27,13 +27,13 @@ public class ItemBatZapper extends Item {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        return zapBatter(world, player, itemStack, (int) player.posX, (int) player.posY, (int) player.posZ, hand).getType();
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        return zapBatter(world, player, player.getHeldItem(hand), (int) player.posX, (int) player.posY, (int) player.posZ, hand).getType();
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
-        return zapBatter(world, player, itemStack, (int) player.posX, (int) player.posY, (int) player.posZ, hand);
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        return zapBatter(world, player, player.getHeldItem(hand), (int) player.posX, (int) player.posY, (int) player.posZ, hand);
     }
 
     public ActionResult<ItemStack> zapBatter(World world, EntityPlayer entityPlayer, ItemStack itemStack, int x, int y, int z, EnumHand hand) {

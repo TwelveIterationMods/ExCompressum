@@ -84,9 +84,9 @@ public class BlockCompressed extends Block implements IRegisterModel {
 		return state.getValue(VARIANT).ordinal();
 	}
 
-	@Nullable
+	@Nonnull
 	@Override
-	protected ItemStack createStackedBlock(IBlockState state) {
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
 		return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
 	}
 
@@ -96,7 +96,7 @@ public class BlockCompressed extends Block implements IRegisterModel {
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs creativeTab, List<ItemStack> list) {
+	public void getSubBlocks(Item item, CreativeTabs creativeTab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < Type.values().length; i++) {
 			list.add(new ItemStack(item, 1, i));
 		}

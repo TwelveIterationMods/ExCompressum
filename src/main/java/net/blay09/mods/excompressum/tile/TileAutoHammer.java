@@ -27,6 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
@@ -79,7 +80,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
         }
     };
 
-    private ItemStack currentStack;
+    private ItemStack currentStack = ItemStack.EMPTY;
 
     private int ticksSinceUpdate;
     private boolean isDirty;
@@ -91,12 +92,12 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
     public void update() {
         int effectiveEnergy = getEffectiveEnergy();
         if (energyStorage.getEnergyStored() >= effectiveEnergy) {
-            if (currentStack == null) {
+            if (currentStack.isEmpty()) {
                 ItemStack inputStack = inputSlots.getStackInSlot(0);
-                if (inputStack != null && isRegistered(inputStack)) {
+                if (!inputStack.isEmpty() && isRegistered(inputStack)) {
                     boolean foundSpace = false;
                     for(int i = 0; i < outputSlots.getSlots(); i++) {
-                        if(outputSlots.getStackInSlot(i) == null) {
+                        if(outputSlots.getStackInSlot(i).isEmpty()) {
                             foundSpace = true;
                         }
                     }
@@ -104,8 +105,8 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
                         return;
                     }
                     currentStack = inputStack.splitStack(1);
-                    if (inputStack.stackSize == 0) {
-                        inputSlots.setStackInSlot(0, null);
+                    if (inputStack.getCount() == 0) {
+                        inputSlots.setStackInSlot(0, ItemStack.EMPTY);
                     }
                     energyStorage.extractEnergy(effectiveEnergy, false);
                     VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -116,37 +117,37 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
                 progress += getEffectiveSpeed();
                 isDirty = true;
                 if (progress >= 1) {
-                    if (!worldObj.isRemote) {
-                        if(worldObj.rand.nextFloat() <= ProcessingConfig.autoHammerDecay) {
+                    if (!world.isRemote) {
+                        if(world.rand.nextFloat() <= ProcessingConfig.autoHammerDecay) {
                             ItemStack firstHammer = hammerSlots.getStackInSlot(0);
-                            if (firstHammer != null) {
-                                if(firstHammer.attemptDamageItem(1, worldObj.rand)) {
-                                    hammerSlots.setStackInSlot(0, null);
+                            if (!firstHammer.isEmpty()) {
+                                if(firstHammer.attemptDamageItem(1, world.rand)) {
+                                    hammerSlots.setStackInSlot(0, ItemStack.EMPTY);
                                 }
                             }
                             ItemStack secondHammer = hammerSlots.getStackInSlot(1);
-                            if (secondHammer != null) {
-                                if(secondHammer.attemptDamageItem(1, worldObj.rand)) {
-                                    hammerSlots.setStackInSlot(1, null);
+                            if (!secondHammer.isEmpty()) {
+                                if(secondHammer.attemptDamageItem(1, world.rand)) {
+                                    hammerSlots.setStackInSlot(1, ItemStack.EMPTY);
                                 }
                             }
                         }
-                        Collection<ItemStack> rewards = rollHammerRewards(currentStack, getMiningLevel(), getEffectiveLuck(), worldObj.rand);
+                        Collection<ItemStack> rewards = rollHammerRewards(currentStack, getMiningLevel(), getEffectiveLuck(), world.rand);
                         for (ItemStack itemStack : rewards) {
                             if (!addItemToOutput(itemStack)) {
-                                EntityItem entityItem = new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
+                                EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
                                 double motion = 0.05;
-                                entityItem.motionX = worldObj.rand.nextGaussian() * motion;
+                                entityItem.motionX = world.rand.nextGaussian() * motion;
                                 entityItem.motionY = 0.2;
-                                entityItem.motionZ = worldObj.rand.nextGaussian() * motion;
-                                worldObj.spawnEntityInWorld(entityItem);
+                                entityItem.motionZ = world.rand.nextGaussian() * motion;
+                                world.spawnEntity(entityItem);
                             }
                         }
                     } else {
                         spawnCrushParticles();
                     }
                     progress = 0f;
-                    currentStack = null;
+                    currentStack = ItemStack.EMPTY;
                 }
             }
         }
@@ -166,13 +167,13 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
         int firstEmptySlot = -1;
         for (int i = 0; i < outputSlots.getSlots(); i++) {
             ItemStack slotStack = outputSlots.getStackInSlot(i);
-            if (slotStack == null) {
+            if (slotStack.isEmpty()) {
                 if(firstEmptySlot == -1){
                     firstEmptySlot = i;
                 }
             } else {
-                if (slotStack.stackSize + itemStack.stackSize <= slotStack.getMaxStackSize() && slotStack.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(slotStack, itemStack)) {
-                    slotStack.stackSize += itemStack.stackSize;
+                if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && slotStack.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(slotStack, itemStack)) {
+                    slotStack.setCount(slotStack.getCount() + itemStack.getCount());
                     return true;
                 }
             }
@@ -193,12 +194,12 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
         final float EFFICIENCY_BOOST = 0.5f;
         float boost = 1f;
         ItemStack firstHammer = hammerSlots.getStackInSlot(0);
-        if(firstHammer != null && isHammerUpgrade(firstHammer)) {
+        if(!firstHammer.isEmpty() && isHammerUpgrade(firstHammer)) {
             boost += HAMMER_BOOST;
             boost += EFFICIENCY_BOOST * EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, firstHammer);
         }
         ItemStack secondHammer = hammerSlots.getStackInSlot(1);
-        if(secondHammer != null && isHammerUpgrade(secondHammer)) {
+        if(!secondHammer.isEmpty() && isHammerUpgrade(secondHammer)) {
             boost += HAMMER_BOOST;
             boost += EFFICIENCY_BOOST * EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, secondHammer);
         }
@@ -212,11 +213,11 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
     public float getEffectiveLuck() {
         float luck = 0f;
         ItemStack firstHammer = hammerSlots.getStackInSlot(0);
-        if(firstHammer != null && isHammerUpgrade(firstHammer)) {
+        if(!firstHammer.isEmpty() && isHammerUpgrade(firstHammer)) {
             luck += EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, firstHammer);
         }
         ItemStack secondHammer = hammerSlots.getStackInSlot(1);
-        if(secondHammer != null && isHammerUpgrade(secondHammer)) {
+        if(!secondHammer.isEmpty() && isHammerUpgrade(secondHammer)) {
             luck += EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, secondHammer);
         }
         return luck;
@@ -229,14 +230,14 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
 
     @Override
     protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
-        currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
+    	currentStack = new ItemStack(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
         if(tagCompound.hasKey("EnergyStorage")) {
             CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.getTag("EnergyStorage"));
         }
         if(isSync) {
-            hammerSlots.setStackInSlot(0, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("FirstHammer")));
-            hammerSlots.setStackInSlot(1, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("SecondHammer")));
+        	hammerSlots.setStackInSlot(0, new ItemStack(tagCompound.getCompoundTag("FirstHammer")));
+        	hammerSlots.setStackInSlot(1, new ItemStack(tagCompound.getCompoundTag("SecondHammer")));
         } else {
             itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
         }
@@ -245,19 +246,13 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
     @Override
     protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
         tagCompound.setTag("EnergyStorage", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
-        if (currentStack != null) {
-            tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
-        }
+        tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         tagCompound.setFloat("Progress", progress);
         if(isSync) {
             ItemStack firstHammer = hammerSlots.getStackInSlot(0);
-            if(firstHammer != null) {
-                tagCompound.setTag("FirstHammer", firstHammer.writeToNBT(new NBTTagCompound()));
-            }
+            tagCompound.setTag("FirstHammer", firstHammer.writeToNBT(new NBTTagCompound()));
             ItemStack secondHammer = hammerSlots.getStackInSlot(1);
-            if(secondHammer != null) {
-                tagCompound.setTag("SecondHammer", secondHammer.writeToNBT(new NBTTagCompound()));
-            }
+            tagCompound.setTag("SecondHammer", secondHammer.writeToNBT(new NBTTagCompound()));
         } else {
             tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
         }
@@ -269,7 +264,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
             IBlockState currentBlock = getCurrentBlock();
             if (currentBlock != null) {
                 for (int i = 0; i < 10; i++) {
-                    Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleAutoHammer(worldObj, pos, pos.getX() + 0.7f, pos.getY() + 0.3f, pos.getZ() + 0.5f, (-worldObj.rand.nextDouble() + 0.2f) / 9, 0.2f, (worldObj.rand.nextDouble() - 0.5) / 9, currentBlock));
+                    Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleAutoHammer(world, pos, pos.getX() + 0.7f, pos.getY() + 0.3f, pos.getZ() + 0.5f, (-world.rand.nextDouble() + 0.2f) / 9, 0.2f, (world.rand.nextDouble() - 0.5) / 9, currentBlock));
                 }
             }
         }
@@ -287,21 +282,22 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
         return (float) energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
     }
 
-    @Nullable
+    @Nonnull
     public ItemStack getCurrentStack() {
         return currentStack;
     }
 
-    @Nullable
+	@Nullable
+	@SuppressWarnings("deprecation")
     public IBlockState getCurrentBlock() {
-        if(currentStack == null) {
+        if(currentStack.isEmpty()) {
             return null;
         }
         Block block = Block.getBlockFromItem(currentStack.getItem());
         //noinspection ConstantConditions /// NO IT'S NOT. getBlockFromItem not marked @Nullable
         if(block != null) {
             //noinspection deprecation /// mojang pls
-            return block.getStateFromMeta(currentStack.getMetadata());
+        	return block.getStateFromMeta(currentStack.getMetadata());
         }
         return null;
     }
@@ -333,7 +329,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
         return itemHandler;
     }
 
-    @Nullable
+    @Nonnull
     public ItemStack getUpgradeStack(int i) {
         return hammerSlots.getStackInSlot(i);
     }
@@ -355,7 +351,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
     }
 
     public boolean shouldAnimate() {
-        return currentStack != null && energyStorage.getEnergyStored() >= getEffectiveEnergy();
+        return !currentStack.isEmpty() && energyStorage.getEnergyStored() >= getEffectiveEnergy();
     }
 
     public EnergyStorageModifiable getEnergyStorage() {
