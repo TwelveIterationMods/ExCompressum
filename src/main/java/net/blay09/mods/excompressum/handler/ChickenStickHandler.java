@@ -2,14 +2,11 @@ package net.blay09.mods.excompressum.handler;
 
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.config.ToolsConfig;
-import net.blay09.mods.excompressum.item.ICompressedHammer;
 import net.blay09.mods.excompressum.item.ItemChickenStick;
-import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -17,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 

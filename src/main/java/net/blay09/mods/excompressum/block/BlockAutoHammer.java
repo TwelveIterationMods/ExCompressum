@@ -9,7 +9,6 @@ import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -37,7 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
 
@@ -63,7 +62,6 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing facing = EnumFacing.getFront(meta);
         if(facing.getAxis() == EnumFacing.Axis.Y) {
@@ -79,7 +77,6 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
     }
@@ -95,7 +92,6 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
@@ -114,7 +110,6 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return state.withProperty(HAMMER_MOD, ExNihiloProvider.NihiloMod.NONE); // Property is inventory-only
     }
@@ -159,13 +154,11 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean hasComparatorInputOverride(IBlockState state) {
         return true;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
         return StupidUtils.getComparatorOutput64(world, pos);
     }

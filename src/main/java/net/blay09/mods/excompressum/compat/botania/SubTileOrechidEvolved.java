@@ -6,7 +6,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.LexiconEntry;
 import vazkii.botania.common.block.subtile.functional.SubTileOrechid;
-import vazkii.botania.common.lib.LibBlockNames;
 
 public class SubTileOrechidEvolved extends SubTileOrechid {
 

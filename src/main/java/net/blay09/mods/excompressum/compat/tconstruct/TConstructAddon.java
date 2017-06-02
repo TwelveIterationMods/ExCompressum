@@ -10,7 +10,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import slimeknights.tconstruct.library.TinkerRegistry;
 
-@SuppressWarnings("unused")
 public class TConstructAddon implements IAddon {
 
     private boolean enableModifiers;

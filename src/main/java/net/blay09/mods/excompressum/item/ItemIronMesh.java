@@ -1,14 +1,9 @@
 package net.blay09.mods.excompressum.item;
 
-import exnihiloomnia.items.meshs.ISieveMesh;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.client.ClientProxy;
 import net.blay09.mods.excompressum.compat.Compat;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Optional.Interface(iface = "exnihiloomnia.items.meshs.ISieveMesh", modid = Compat.EXNIHILO_OMNIA)
 public class ItemIronMesh extends Item {// implements ISieveMesh { //TODO reenable Ex Nihilo Omnia support if/when it updates

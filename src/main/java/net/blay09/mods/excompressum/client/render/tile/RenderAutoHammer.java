@@ -21,7 +21,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 
 public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> {

@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.container;
 
 import net.blay09.mods.excompressum.client.ClientProxy;
-import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum;
 
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.excompressum.compat.IAddon;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;

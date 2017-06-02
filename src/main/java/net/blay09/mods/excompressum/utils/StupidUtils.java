@@ -4,8 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -70,6 +68,7 @@ public class StupidUtils {
 	 * @return
 	 */
 	@Nullable
+	@SuppressWarnings("deprecation")
 	public static IBlockState getStateFromItemStack(ItemStack itemStack) {
 		if(itemStack.getItem() instanceof ItemBlock) {
 			Block block = ((ItemBlock) itemStack.getItem()).block;

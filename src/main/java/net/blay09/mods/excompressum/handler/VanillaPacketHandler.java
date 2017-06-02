@@ -13,7 +13,7 @@ public class VanillaPacketHandler {
         if(tileEntity.getWorld().isRemote) {
             return;
         }
-        List playerList = tileEntity.getWorld().playerEntities;
+        List<EntityPlayer> playerList = tileEntity.getWorld().playerEntities;
         SPacketUpdateTileEntity updatePacket = tileEntity.getUpdatePacket();
         if(updatePacket == null) {
             return;

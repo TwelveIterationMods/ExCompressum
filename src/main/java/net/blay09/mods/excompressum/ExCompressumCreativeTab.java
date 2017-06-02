@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 

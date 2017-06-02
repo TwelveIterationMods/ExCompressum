@@ -27,6 +27,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -38,8 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nullable;
-import java.util.List;
+import javax.annotation.Nonnull;
 import java.util.Locale;
 
 public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
@@ -74,7 +74,6 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return BOUNDING_BOX;
 	}
@@ -85,7 +84,6 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
 		if (meta < 0 || meta >= Type.values.length) {
 			return getDefaultState();
@@ -122,13 +120,11 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
@@ -139,7 +135,6 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		return state.withProperty(WITH_MESH, false); // Property is inventory-only
 	}

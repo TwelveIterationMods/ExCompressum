@@ -21,8 +21,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
-
 public class BlockAutoCompressor extends BlockContainer {
 
     public BlockAutoCompressor() {
@@ -82,13 +80,11 @@ public class BlockAutoCompressor extends BlockContainer {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean hasComparatorInputOverride(IBlockState state) {
         return true;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
         return StupidUtils.getComparatorOutput64(world, pos);
     }

@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.registry.woodencrucible;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class WoodenCrucibleRegistryEntry {
 	private final ItemStack itemStack;

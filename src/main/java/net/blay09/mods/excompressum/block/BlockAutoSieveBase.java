@@ -8,7 +8,6 @@ import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -35,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public abstract class BlockAutoSieveBase extends BlockContainer {
@@ -62,7 +61,6 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
 		EnumFacing facing = EnumFacing.getFront(meta);
 		if(facing.getAxis() == EnumFacing.Axis.Y) {
@@ -88,13 +86,11 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
@@ -195,13 +191,11 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean hasComparatorInputOverride(IBlockState state) {
 		return true;
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
 		return StupidUtils.getComparatorOutput64(world, pos);
 	}

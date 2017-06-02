@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.registry.compressor;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -14,6 +15,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
@@ -86,7 +88,7 @@ public class CompressedRecipeRegistry {
         }
     }
 
-    @Nullable
+    @Nonnull
     private static ItemStack getRecipeSource(ShapedRecipes recipe) {
         for(ItemStack itemStack : recipe.recipeItems) {
             if(!itemStack.isEmpty()) {
@@ -96,7 +98,7 @@ public class CompressedRecipeRegistry {
         return ItemStack.EMPTY;
     }
 
-    @Nullable
+    @Nonnull
     private static ItemStack getRecipeSource(ShapelessRecipes recipe) {
         for(ItemStack obj : recipe.recipeItems) {
             if(!obj.isEmpty()) {

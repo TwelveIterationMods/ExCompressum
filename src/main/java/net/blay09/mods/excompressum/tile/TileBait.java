@@ -33,7 +33,6 @@ import net.minecraft.world.WorldServer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.List;
 
 public class TileBait extends TileEntity implements ITickable {
 

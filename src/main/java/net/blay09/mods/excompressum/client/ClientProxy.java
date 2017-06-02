@@ -43,7 +43,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.Locale;
 import java.util.Set;
 
-@SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
 
 	private final Set<GameProfile> skinRequested = Sets.newHashSet();
