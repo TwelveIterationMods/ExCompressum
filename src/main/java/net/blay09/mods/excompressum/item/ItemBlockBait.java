@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.BlockBait;
-import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -12,8 +11,9 @@ import java.util.List;
 
 public class ItemBlockBait extends ItemBlock {
 
-    public ItemBlockBait(Block block) {
+    public ItemBlockBait(BlockBait block) {
         super(block);
+        setRegistryName(block.getRegistryNameString());
         setHasSubtypes(true);
         setMaxStackSize(1);
     }

@@ -3,17 +3,16 @@ package net.blay09.mods.excompressum.item;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
 
-public class ItemDoubleCompressedDiamondHammer extends Item {
+public class ItemDoubleCompressedDiamondHammer extends ItemCompressum {
 
     public ItemDoubleCompressedDiamondHammer() {
         setRegistryName("double_compressed_diamond_hammer");
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
         setCreativeTab(ExCompressum.creativeTab);
         setMaxStackSize(1);
     }

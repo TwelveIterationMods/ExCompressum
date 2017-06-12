@@ -1,13 +1,14 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.minecraft.block.Block;
+import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 public class ItemBlockHeavySieve extends ItemBlock {
-    public ItemBlockHeavySieve(Block block) {
+    public ItemBlockHeavySieve(BlockHeavySieve block) {
         super(block);
+        setRegistryName(block.getRegistryNameString());
         setHasSubtypes(true);
     }
 

@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ChickenStickHandler {
 
 	@SubscribeEvent

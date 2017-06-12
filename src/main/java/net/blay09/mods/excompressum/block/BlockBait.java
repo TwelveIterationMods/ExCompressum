@@ -4,7 +4,6 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.tile.TileBait;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -39,7 +38,7 @@ import javax.annotation.Nullable;
 import java.util.Locale;
 import java.util.Random;
 
-public class BlockBait extends BlockContainer implements IRegisterModel {
+public class BlockBait extends BlockCompressumContainer implements IRegisterModel {
 
     public enum Type implements IStringSerializable {
         WOLF,
@@ -82,6 +81,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         if(meta < 0 || meta >= Type.values.length) {
             return getDefaultState();
@@ -105,22 +105,25 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return BOUNDING_BOX;
     }
 
     @Nullable
-    //@Override // TODO missing override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return null;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }

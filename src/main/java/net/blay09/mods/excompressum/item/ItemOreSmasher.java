@@ -12,10 +12,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,7 +25,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class ItemOreSmasher extends ItemTool {
+public class ItemOreSmasher extends ItemCompressumTool {
 
 	// CLEANUP this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
 	private static final String[] ORE_BLOCKS = new String[] {
@@ -58,7 +58,7 @@ public class ItemOreSmasher extends ItemTool {
     public ItemOreSmasher() {
         super(0f, 0f, ToolMaterial.DIAMOND, new HashSet<Block>());
 		setRegistryName("ore_smasher");
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
         setCreativeTab(ExCompressum.creativeTab);
     }
 
@@ -130,8 +130,11 @@ public class ItemOreSmasher extends ItemTool {
 	}
 
 	private boolean isOreItem(ItemStack itemStack) {
-		String registryName = itemStack.getItem().getRegistryName().toString();
-		if (ArrayUtils.contains(ORE_ITEMS, registryName)) {
+		ResourceLocation registryName = itemStack.getItem().getRegistryName();
+		if(registryName == null) {
+			return false;
+		}
+		if (ArrayUtils.contains(ORE_ITEMS, registryName.toString())) {
 			return true;
 		}
 		int[] oreIDs = OreDictionary.getOreIDs(itemStack);
@@ -147,8 +150,11 @@ public class ItemOreSmasher extends ItemTool {
 	}
 
 	private boolean isOreBlock(ItemStack itemStack) {
-		String registryName = itemStack.getItem().getRegistryName().toString();
-		if (ArrayUtils.contains(ORE_BLOCKS, registryName)) {
+		ResourceLocation registryName = itemStack.getItem().getRegistryName();
+		if(registryName == null) {
+			return false;
+		}
+		if (ArrayUtils.contains(ORE_BLOCKS, registryName.toString())) {
 			return true;
 		}
 		int[] oreIDs = OreDictionary.getOreIDs(itemStack);

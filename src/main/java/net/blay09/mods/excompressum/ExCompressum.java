@@ -44,14 +44,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;required-after:forge@[13.20.0.2310,)")
 @SuppressWarnings("unused")
 public class ExCompressum {
-
-	// TODO check container merge methods
 
 	public static final Logger logger = LogManager.getLogger();
 	public static final String MOD_ID = "excompressum";

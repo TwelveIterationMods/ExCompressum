@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import vazkii.botania.api.BotaniaAPI;
@@ -17,14 +16,14 @@ import vazkii.botania.api.mana.ManaItemHandler;
 
 import java.util.HashSet;
 
-public class ItemManaHammer extends ItemTool implements IManaUsingItem, IHammer {
+public class ItemManaHammer extends ItemCompressumTool implements IManaUsingItem, IHammer {
 
 	private static final int MANA_PER_DAMAGE = 60;
 
 	protected ItemManaHammer() {
 		super(6f, -3.2f, BotaniaAPI.manasteelToolMaterial, new HashSet<Block>());
 		setRegistryName("hammer_mana");
-		setUnlocalizedName(getRegistryName().toString());
+		setUnlocalizedName(getRegistryNameString());
 		setCreativeTab(ExCompressum.creativeTab);
 	}
 

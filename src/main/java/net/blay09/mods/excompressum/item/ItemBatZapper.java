@@ -4,7 +4,6 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
@@ -16,11 +15,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemBatZapper extends Item {
+public class ItemBatZapper extends ItemCompressum {
 
     public ItemBatZapper() {
         setRegistryName("bat_zapper");
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
         setMaxDamage(ToolMaterial.STONE.getMaxUses());
         setMaxStackSize(1);
         setCreativeTab(ExCompressum.creativeTab);

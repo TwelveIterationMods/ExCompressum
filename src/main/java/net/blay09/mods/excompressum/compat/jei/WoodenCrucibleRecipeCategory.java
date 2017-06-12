@@ -70,8 +70,10 @@ public class WoodenCrucibleRecipeCategory extends BlankRecipeCategory<WoodenCruc
 		if(FluidRegistry.isUniversalBucketEnabled()) {
 			fluidItem = new ItemStack(Items.BUCKET);
 			IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(fluidItem);
-			fluidHandler.fill(ingredients.getOutputs(FluidStack.class).get(0).get(0), true);
-			fluidItem = fluidHandler.getContainer();
+			if(fluidHandler != null) {
+				fluidHandler.fill(ingredients.getOutputs(FluidStack.class).get(0).get(0), true);
+				fluidItem = fluidHandler.getContainer();
+			}
 		} else {
 			//TODO: Figure out a way to make a filled bucket without using the universal bucket
 			//return;
@@ -81,7 +83,7 @@ public class WoodenCrucibleRecipeCategory extends BlankRecipeCategory<WoodenCruc
 		recipeLayout.getItemStacks().set(0, fluidItem);
 
 		IFocus<?> focus = recipeLayout.getFocus();
-		boolean hasFocus = focus.getMode() == IFocus.Mode.INPUT;
+		boolean hasFocus = focus != null && focus.getMode() == IFocus.Mode.INPUT;
 		hasHighlight = false;
 		final List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
 		final int INPUT_SLOTS = 1;
@@ -91,15 +93,17 @@ public class WoodenCrucibleRecipeCategory extends BlankRecipeCategory<WoodenCruc
 			final int slotY = 36 + (slotNumber / 9 * 18);
 			recipeLayout.getItemStacks().init(INPUT_SLOTS + slotNumber, true, slotX, slotY);
 			recipeLayout.getItemStacks().set(INPUT_SLOTS + slotNumber, input);
-			Object focusValue = focus.getValue();
-			if (hasFocus && focusValue instanceof ItemStack) {
-				ItemStack focusStack = (ItemStack) focus.getValue();
-				for (ItemStack inputVariant : input) {
-					if (focusStack.getItem() == inputVariant.getItem() && focusStack.getItemDamage() == inputVariant.getItemDamage()) {
-						hasHighlight = true;
-						highlightX = slotX;
-						highlightY = slotY;
-						break;
+			if(focus != null) {
+				Object focusValue = focus.getValue();
+				if (hasFocus && focusValue instanceof ItemStack) {
+					ItemStack focusStack = (ItemStack) focus.getValue();
+					for (ItemStack inputVariant : input) {
+						if (focusStack.getItem() == inputVariant.getItem() && focusStack.getItemDamage() == inputVariant.getItemDamage()) {
+							hasHighlight = true;
+							highlightX = slotX;
+							highlightY = slotY;
+							break;
+						}
 					}
 				}
 			}

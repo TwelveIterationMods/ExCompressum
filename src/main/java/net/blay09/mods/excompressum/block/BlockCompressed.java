@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -25,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-public class BlockCompressed extends Block implements IRegisterModel {
+public class BlockCompressed extends BlockCompressum implements IRegisterModel {
 
 	public enum Type implements IStringSerializable {
 		DUST,
@@ -58,7 +57,7 @@ public class BlockCompressed extends Block implements IRegisterModel {
 	public BlockCompressed() {
 		super(Material.ROCK);
 		setRegistryName("compressed_block");
-		setUnlocalizedName("compressed_block");
+		setUnlocalizedName(getRegistryNameString());
 		setHardness(4f);
 		setResistance(6f);
 		setSoundType(SoundType.STONE);

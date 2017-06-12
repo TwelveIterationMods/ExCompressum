@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
@@ -19,12 +18,12 @@ import net.minecraftforge.fml.common.Optional;
 import java.util.HashSet;
 
 @Optional.Interface(iface = "exnihiloadscensio.items.tools.ICrook", modid = Compat.EXNIHILO_ADSCENSIO)
-public class ItemCompressedCrook extends ItemTool implements ICompressedCrook, ICrook {
+public class ItemCompressedCrook extends ItemCompressumTool implements ICompressedCrook, ICrook {
 
     public ItemCompressedCrook() {
         super(0f, 0f, ToolMaterial.WOOD, new HashSet<Block>());
         setRegistryName("compressed_crook");
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
         setMaxDamage((int) (ToolMaterial.WOOD.getMaxUses() * 2 * ToolsConfig.compressedCrookDurabilityMultiplier));
         setCreativeTab(ExCompressum.creativeTab);
     }

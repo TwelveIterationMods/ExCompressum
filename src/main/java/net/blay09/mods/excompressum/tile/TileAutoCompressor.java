@@ -19,6 +19,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
+
 public class TileAutoCompressor extends TileEntityBase implements ITickable {
 
     private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
@@ -193,6 +195,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
         tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         tagCompound.setFloat("Progress", progress);
         tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
+        //noinspection ConstantConditions // TODO add serializeNBT to EnergyStorageModifiable
         tagCompound.setTag("EnergyStorage", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
     }
 
@@ -217,7 +220,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
                 || capability == CapabilityEnergy.ENERGY
                 || super.hasCapability(capability, facing);
@@ -225,7 +228,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return (T) itemHandlerAutomation;
         }

@@ -66,7 +66,7 @@ public class CompressedHammerRecipeCategory extends BlankRecipeCategory<Compress
 		recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
 
 		IFocus<?> focus = recipeLayout.getFocus();
-		hasHighlight = focus.getMode() == IFocus.Mode.OUTPUT;
+		hasHighlight = focus != null && focus.getMode() == IFocus.Mode.OUTPUT;
 
 		final List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
 		final int INPUT_SLOTS = 1;
@@ -76,12 +76,14 @@ public class CompressedHammerRecipeCategory extends BlankRecipeCategory<Compress
 			final int slotY = 36;
 			recipeLayout.getItemStacks().init(INPUT_SLOTS + slotNumber, false, slotX, slotY);
 			recipeLayout.getItemStacks().set(INPUT_SLOTS + slotNumber, output);
-			Object focusValue = focus.getValue(); // why you gotta do this to me JEI
-			if (focus.getMode() == IFocus.Mode.OUTPUT && focusValue instanceof ItemStack) {
-				ItemStack focusStack = (ItemStack) focusValue;
-				if (focusStack.getItem() == output.get(0).getItem() && focusStack.getItemDamage() == output.get(0).getItemDamage()) {
-					highlightX = slotX;
-					highlightY = slotY;
+			if(focus != null) {
+				Object focusValue = focus.getValue();
+				if (focus.getMode() == IFocus.Mode.OUTPUT && focusValue instanceof ItemStack) {
+					ItemStack focusStack = (ItemStack) focusValue;
+					if (focusStack.getItem() == output.get(0).getItem() && focusStack.getItemDamage() == output.get(0).getItemDamage()) {
+						highlightX = slotX;
+						highlightY = slotY;
+					}
 				}
 			}
 			slotNumber++;

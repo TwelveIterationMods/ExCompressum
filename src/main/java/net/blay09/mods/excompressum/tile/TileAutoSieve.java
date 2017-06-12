@@ -6,6 +6,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 
+import javax.annotation.Nullable;
+
 public class TileAutoSieve extends TileAutoSieveBase {
 
     private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
@@ -21,6 +23,7 @@ public class TileAutoSieve extends TileAutoSieveBase {
     @Override
     protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
         super.writeToNBTSynced(tagCompound, isSync);
+        //noinspection ConstantConditions // TODO add serializeNBT to EnergyStorageModifiable
         tagCompound.setTag("EnergyStorage", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
     }
 
@@ -57,7 +60,7 @@ public class TileAutoSieve extends TileAutoSieveBase {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == CapabilityEnergy.ENERGY) {
             return (T) energyStorage;
         }
@@ -65,7 +68,7 @@ public class TileAutoSieve extends TileAutoSieveBase {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityEnergy.ENERGY
                 || super.hasCapability(capability, facing);
     }

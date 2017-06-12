@@ -15,7 +15,7 @@ public class BlockAutoSieve extends BlockAutoSieveBase {
     public BlockAutoSieve(String registryName) {
         super(Material.IRON);
         setRegistryName(registryName);
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
     }
 
     @Override

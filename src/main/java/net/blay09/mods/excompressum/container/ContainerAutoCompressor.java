@@ -76,8 +76,8 @@ public class ContainerAutoCompressor extends Container {
     public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int slotNumber) {
         ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(slotNumber);
-        ItemStack slotStack = slot != null ? slot.getStack() : ItemStack.EMPTY;
-        if(!slotStack.isEmpty()) {
+        if(slot != null && slot.getHasStack()) {
+            ItemStack slotStack = slot.getStack();
             itemStack = slotStack.copy();
             if(slotNumber < 24) {
                 if (!mergeItemStack(slotStack, 24, 60, true)) {
@@ -88,7 +88,7 @@ public class ContainerAutoCompressor extends Container {
                     return ItemStack.EMPTY;
                 }
             }
-            if(slotStack.getCount() == 0) {
+            if(slotStack.isEmpty()) {
                 slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();

@@ -10,7 +10,7 @@ public class ExCompressumAPI {
 	}
 
 	public static void helloReaderJustUseInternalClassesICantBeBotheredRightNow() {
-
+		// TODO actually add the API if there's gonna be a 1.11.2+ release
 	}
 
 }

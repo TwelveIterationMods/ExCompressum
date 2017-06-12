@@ -9,7 +9,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -25,12 +24,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.HashSet;
 import java.util.List;
 
-public class ItemChickenStick extends ItemTool {
+public class ItemChickenStick extends ItemCompressumTool {
 
     public ItemChickenStick() {
         super(0f, 0f, ToolMaterial.DIAMOND, new HashSet<Block>());
         setRegistryName("chicken_stick");
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
         setCreativeTab(ExCompressum.creativeTab);
         setMaxDamage(0);
         damageVsEntity = 0f;

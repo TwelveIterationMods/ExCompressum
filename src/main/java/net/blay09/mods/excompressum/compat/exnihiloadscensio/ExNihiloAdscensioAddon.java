@@ -29,7 +29,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.asm.transformers.ItemStackTransformer;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -73,7 +72,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.IRON_MESH, findItem("itemMesh", 3));
 
 		itemMap.put(NihiloItems.DUST, findBlock("blockDust", 0));
-		itemMap.put(NihiloItems.SIEVE, findBlock("blockSieve", 0)); // NOTE Adscensio only has an Oak Sieve at the moment
+		itemMap.put(NihiloItems.SIEVE, findBlock("blockSieve", 0));
 		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("blockInfestedLeaves", 0));
 		itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("blockNetherrackCrushed", 0));
 		itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("blockEndstoneCrushed", 0));

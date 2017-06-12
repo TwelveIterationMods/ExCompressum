@@ -1,10 +1,8 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.tile.TileAutoCompressor;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,14 +20,14 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class BlockAutoCompressor extends BlockContainer {
+public class BlockAutoCompressor extends BlockCompressumContainer {
 
     public BlockAutoCompressor() {
         super(Material.IRON);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
         setRegistryName("auto_compressor");
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
     }
 
     @Override
@@ -54,7 +52,7 @@ public class BlockAutoCompressor extends BlockContainer {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if(tileEntity != null) {
-            IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+            IItemHandler itemHandler = ((TileAutoCompressor) tileEntity).getItemHandler();
             for (int i = 0; i < itemHandler.getSlots(); i++) {
                 ItemStack itemStack = itemHandler.getStackInSlot(i);
                 if (!itemStack.isEmpty()) {

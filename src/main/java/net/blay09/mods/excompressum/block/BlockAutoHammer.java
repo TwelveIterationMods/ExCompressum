@@ -2,12 +2,10 @@ package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
-import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -37,7 +35,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
+public class BlockAutoHammer extends BlockCompressumContainer implements IRegisterModel {
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyEnum<ExNihiloProvider.NihiloMod> HAMMER_MOD = PropertyEnum.create("hammer_mod", ExNihiloProvider.NihiloMod.class);
@@ -47,7 +45,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
         setRegistryName(registryName);
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
     }
 
     @Override
@@ -61,6 +59,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         EnumFacing facing = EnumFacing.getFront(meta);
         if(facing.getAxis() == EnumFacing.Axis.Y) {
@@ -75,6 +74,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
     }
@@ -90,6 +90,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
@@ -108,6 +109,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return state.withProperty(HAMMER_MOD, ExNihiloProvider.NihiloMod.NONE); // Property is inventory-only
     }
@@ -116,7 +118,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if(tileEntity != null) {
-            IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+            IItemHandler itemHandler = ((TileAutoHammer) tileEntity).getItemHandler();
             for (int i = 0; i < itemHandler.getSlots(); i++) {
                 ItemStack itemStack = itemHandler.getStackInSlot(i);
                 if (!itemStack.isEmpty()) {
@@ -132,6 +134,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         EnumFacing facing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
         if(facing.getAxis() == EnumFacing.Axis.Y) {
@@ -170,7 +173,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
             @Override
             public ModelResourceLocation getModelLocation(ItemStack stack) {
-                return new ModelResourceLocation(getRegistryName(), "facing=north,hammer_mod=" + ExRegistro.getNihiloMod().getName());
+                return new ModelResourceLocation(getRegistryNameString(), "facing=north,hammer_mod=" + ExRegistro.getNihiloMod().getName());
             }
         });
     }

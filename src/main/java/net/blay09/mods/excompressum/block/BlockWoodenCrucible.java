@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.tile.TileWoodenCrucible;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -30,7 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Locale;
 
-public class BlockWoodenCrucible extends BlockContainer implements IRegisterModel {
+public class BlockWoodenCrucible extends BlockCompressumContainer implements IRegisterModel {
 
     public enum Type implements IStringSerializable {
         OAK,
@@ -53,7 +52,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     public BlockWoodenCrucible() {
         super(Material.WOOD);
         setRegistryName("wooden_crucible");
-        setUnlocalizedName("wooden_crucible");
+        setUnlocalizedName(getRegistryNameString());
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
     }
@@ -141,7 +140,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
             public ModelResourceLocation getModelLocation(ItemStack itemStack) {
                 Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
                 if(type != null) {
-                    return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName());
+                    return new ModelResourceLocation(getRegistryNameString(), "variant=" + type.getName());
                 } else {
                     return new ModelResourceLocation("missingno");
                 }

@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Collection;
 
+@SuppressWarnings("unused")
 public class CompressedCrookHandler {
 
 	@SubscribeEvent

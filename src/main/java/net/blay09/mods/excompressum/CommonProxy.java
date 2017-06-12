@@ -13,8 +13,4 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {}
     public void postInit(FMLPostInitializationEvent event) {}
     public void preloadSkin(GameProfile customSkin) {}
-
-    public void addScheduledTask(Runnable runnable) {
-        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(runnable);
-    }
 }

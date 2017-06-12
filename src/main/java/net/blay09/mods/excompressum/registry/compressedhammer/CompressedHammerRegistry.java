@@ -282,12 +282,9 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			}
 		}
 
-		if(Loader.isModLoaded(Compat.EXTRAUTILS2) || Loader.isModLoaded(Compat.EXTRAUTILS2_LEGACY)) {
+		if(Loader.isModLoaded(Compat.EXTRAUTILS2)) {
 			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedCobblestone", true)) {
 				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedcobblestone");
-				if (!Block.REGISTRY.containsKey(location)) {
-					location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedCobblestone"); // Thanks for doing this mid-version, ExUtils
-				}
 				if (Block.REGISTRY.containsKey(location)) {
 					Block exUtilsBlock = Block.REGISTRY.getObject(location);
 					CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);
@@ -298,9 +295,6 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 
 			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
 				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedgravel");
-				if (!Block.REGISTRY.containsKey(location)) {
-					location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedGravel"); // Thanks for doing this mid-version, ExUtils
-				}
 				if (Block.REGISTRY.containsKey(location)) {
 					Block exUtilsBlock = Block.REGISTRY.getObject(location);
 					CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);
@@ -313,9 +307,6 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 				ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
 				if (!dustBlock.isEmpty()) {
 					ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedsand");
-					if (!Block.REGISTRY.containsKey(location)) {
-						location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedSand"); // Thanks for doing this mid-version, ExUtils
-					}
 					if (Block.REGISTRY.containsKey(location)) {
 						Block exUtilsBlock = Block.REGISTRY.getObject(location);
 						CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(exUtilsBlock.getDefaultState(), false);

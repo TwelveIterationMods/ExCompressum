@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Optional.Interface(modid = "MineTweaker3", iface = "minetweaker.util.IEventHandler", striprefs = true)
+@SuppressWarnings("unused")
 public class MineTweakerAddon implements IEventHandler<MineTweakerImplementationAPI.ReloadEvent>, IAddon {
     public MineTweakerAddon() {
         MineTweakerImplementationAPI.onPostReload(this);

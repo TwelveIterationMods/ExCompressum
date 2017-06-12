@@ -5,7 +5,6 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -36,7 +35,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
 
-public abstract class BlockAutoSieveBase extends BlockContainer {
+public abstract class BlockAutoSieveBase extends BlockCompressumContainer {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
@@ -60,6 +59,7 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
 		EnumFacing facing = EnumFacing.getFront(meta);
 		if(facing.getAxis() == EnumFacing.Axis.Y) {
@@ -84,11 +84,13 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
@@ -133,7 +135,7 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity != null) {
-			IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			IItemHandler itemHandler = ((TileAutoSieveBase) tileEntity).getItemHandler();
 			for (int i = 0; i < itemHandler.getSlots(); i++) {
 				ItemStack itemStack = itemHandler.getStackInSlot(i);
 				if (!itemStack.isEmpty()) {
@@ -159,6 +161,7 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		EnumFacing facing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
 		if(facing.getAxis() == EnumFacing.Axis.Y) {

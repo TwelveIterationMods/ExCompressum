@@ -8,7 +8,6 @@ import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
@@ -41,7 +40,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.Locale;
 
-public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
+public class BlockHeavySieve extends BlockCompressumContainer implements IRegisterModel {
 
 	public static final SieveModelBounds SIEVE_BOUNDS = new SieveModelBounds(0.5625f, 0.0625f, 0.88f, 0.5f);
 
@@ -188,9 +187,9 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 				Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
 				if (type != null) {
 					if (ExRegistro.doMeshesHaveDurability()) {
-						return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName() + ",with_mesh=false");
+						return new ModelResourceLocation(getRegistryNameString(), "variant=" + type.getName() + ",with_mesh=false");
 					} else {
-						return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName() + ",with_mesh=false"); // NOTE it's false here too because it was a dumb idea based on wrong thinking; don't want to remove it now though
+						return new ModelResourceLocation(getRegistryNameString(), "variant=" + type.getName() + ",with_mesh=false"); // it's false here too because it was a dumb idea based on wrong thinking; don't want to remove it now though
 					}
 				} else {
 					return new ModelResourceLocation("missingno");

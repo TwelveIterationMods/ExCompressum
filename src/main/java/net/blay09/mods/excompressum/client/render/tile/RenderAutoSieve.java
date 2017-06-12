@@ -31,6 +31,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase> {
@@ -143,7 +144,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
         RenderHelper.enableStandardItemLighting();
     }
 
-    private void bindPlayerTexture(GameProfile customSkin) {
+    private void bindPlayerTexture(@Nullable GameProfile customSkin) {
         ResourceLocation resourceLocation = DefaultPlayerSkin.getDefaultSkinLegacy();
         if (customSkin != null) {
             Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = Minecraft.getMinecraft().getSkinManager().loadSkinFromCache(customSkin);
