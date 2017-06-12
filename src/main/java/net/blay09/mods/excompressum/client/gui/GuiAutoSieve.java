@@ -46,13 +46,13 @@ public class GuiAutoSieve extends GuiContainer {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, 0, 300);
             drawRect(58, 16, 144, 71, 0x99000000);
-            drawCenteredString(fontRendererObj, I18n.format("gui.excompressum:autoSieve.noMesh"), 101, 43 - fontRendererObj.FONT_HEIGHT / 2, 0xFFFFFFFF);
+            drawCenteredString(fontRenderer, I18n.format("gui.excompressum:autoSieve.noMesh"), 101, 43 - fontRenderer.FONT_HEIGHT / 2, 0xFFFFFFFF);
             GlStateManager.popMatrix();
         } else if(!tileEntity.isCorrectSieveMesh()) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, 0, 300);
             drawRect(58, 16, 144, 71, 0x99000000);
-            drawCenteredString(fontRendererObj, I18n.format("gui.excompressum:autoSieve.incorrectMesh"), 101, 43 - fontRendererObj.FONT_HEIGHT / 2, 0xFFFFFFFF);
+            drawCenteredString(fontRenderer, I18n.format("gui.excompressum:autoSieve.incorrectMesh"), 101, 43 - fontRenderer.FONT_HEIGHT / 2, 0xFFFFFFFF);
             GlStateManager.popMatrix();
         }
 
