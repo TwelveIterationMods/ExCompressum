@@ -32,7 +32,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
@@ -127,7 +126,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 						return;
 					}
 					currentStack = inputStack.splitStack(1);
-					if (inputStack.getCount() == 0) {
+					if (inputStack.isEmpty()) {
 						inputSlots.setStackInSlot(0, ItemStack.EMPTY);
 					}
 					extractEnergy(effectiveEnergy, false);
@@ -160,7 +159,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 								if (!meshStack.isEmpty()) {
 									if(meshStack.attemptDamageItem(1, world.rand)) {
 										getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
-										meshStack.setCount(meshStack.getCount() - 1);
+										meshStack.shrink(1);
 										meshSlots.setStackInSlot(0, ItemStack.EMPTY);
 									}
 								}
@@ -227,7 +226,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 				}
 			} else {
 				if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && slotStack.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(slotStack, itemStack)) {
-					slotStack.setCount(slotStack.getCount() + itemStack.getCount());
+					slotStack.grow(itemStack.getCount());
 					return true;
 				}
 			}
@@ -335,7 +334,6 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		return progress;
 	}
 
-	@Nonnull
 	public ItemStack getCurrentStack() {
 		return currentStack;
 	}
@@ -400,14 +398,14 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
 				|| super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return (T) itemHandlerAutomation;
 		}
@@ -427,7 +425,6 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		return null;
 	}
 
-	@Nonnull
 	public ItemStack getMeshStack() {
 		return meshSlots.getStackInSlot(0);
 	}

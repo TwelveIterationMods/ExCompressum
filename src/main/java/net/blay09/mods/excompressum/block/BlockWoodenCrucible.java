@@ -28,7 +28,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import java.util.Locale;
 
 public class BlockWoodenCrucible extends BlockContainer implements IRegisterModel {
@@ -54,7 +53,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     public BlockWoodenCrucible() {
         super(Material.WOOD);
         setRegistryName("wooden_crucible");
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName("wooden_crucible");
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
     }
@@ -65,6 +64,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         if(meta < 0 || meta >= Type.values.length) {
             return getDefaultState();
@@ -77,7 +77,6 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
         return state.getValue(VARIANT).ordinal();
     }
 
-    @Nonnull
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state) {
         return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
@@ -101,6 +100,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }

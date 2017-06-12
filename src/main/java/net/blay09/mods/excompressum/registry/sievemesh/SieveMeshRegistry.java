@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class SieveMeshRegistry {
@@ -26,6 +27,7 @@ public class SieveMeshRegistry {
 		return entries;
 	}
 
+	@Nullable
 	public static SieveMeshRegistryEntry getEntry(ItemStack itemStack) {
 		RegistryKey key = new RegistryKey(itemStack);
 		SieveMeshRegistryEntry entry = entries.get(key);

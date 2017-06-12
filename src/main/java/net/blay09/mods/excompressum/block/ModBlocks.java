@@ -8,6 +8,7 @@ import net.blay09.mods.excompressum.item.*;
 import net.blay09.mods.excompressum.tile.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.model.ModelLoader;
@@ -86,7 +87,7 @@ public class ModBlocks {
     public static void registerModels() {
         for(Block block : modBlocks) {
             Item itemBlock = Item.getItemFromBlock(block);
-            if(itemBlock != null) {
+            if(itemBlock != Items.AIR) {
                 if (block instanceof IRegisterModel) {
                     ((IRegisterModel) block).registerModel(itemBlock);
                 } else {

@@ -9,7 +9,6 @@ import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.monster.EntityZombie;
-//import net.minecraft.entity.monster.SkeletonType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -28,7 +27,7 @@ public class CompressedEnemyHandler {
     @SubscribeEvent
     public void onSpawnEntity(EntityJoinWorldEvent event) {
         if(!event.getWorld().isRemote && (event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast)) {
-            String entityName = EntityList.getEntityString(event.getEntity());
+            String entityName = EntityList.getEntityString(event.getEntity()); // TODO update to ResourceLocation
             if(CompressedMobsConfig.compressedMobs.contains(entityName)) {
                 if (event.getEntity().world.rand.nextFloat() <= CompressedMobsConfig.compressedMobChance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
                     event.getEntity().setAlwaysRenderNameTag(true);

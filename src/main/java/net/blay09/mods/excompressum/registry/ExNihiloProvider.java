@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Random;
@@ -43,7 +42,6 @@ public interface ExNihiloProvider {
 		SIEVE
 	}
 
-	@Nonnull
 	ItemStack getNihiloItem(NihiloItems type);
 	boolean isHammerable(IBlockState state);
 	Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand);

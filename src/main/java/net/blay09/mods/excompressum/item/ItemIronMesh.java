@@ -5,8 +5,8 @@ import net.blay09.mods.excompressum.compat.Compat;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Optional;
 
-@Optional.Interface(iface = "exnihiloomnia.items.meshs.ISieveMesh", modid = Compat.EXNIHILO_OMNIA)
-public class ItemIronMesh extends Item {// implements ISieveMesh { //TODO reenable Ex Nihilo Omnia support if/when it updates
+//@Optional.Interface(iface = "exnihiloomnia.items.meshs.ISieveMesh", modid = Compat.EXNIHILO_OMNIA)
+public class ItemIronMesh extends Item {// implements ISieveMesh { // TODO awaiting Ex Nihilo Omnia port
 
     public ItemIronMesh() {
         setRegistryName("iron_mesh");
@@ -21,7 +21,7 @@ public class ItemIronMesh extends Item {// implements ISieveMesh { //TODO reenab
         return 30;
     }
 
-    //@Override
+    //@Override // TODO awaiting Ex Nihilo Omnia port
     //@SideOnly(Side.CLIENT)
     //public TextureAtlasSprite getMeshTexture() {
     //    return ClientProxy.ironMeshSprite;

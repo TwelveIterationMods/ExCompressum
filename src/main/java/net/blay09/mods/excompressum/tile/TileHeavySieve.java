@@ -25,7 +25,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
@@ -130,7 +129,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
                             meshStack = ItemStack.EMPTY;
                         } else {
                             meshStack.damageItem(1, player);
-                            if (meshStack.getCount() == 0) {
+                            if (meshStack.isEmpty()) {
                                 getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
                                 meshStack = ItemStack.EMPTY;
                             }
@@ -184,12 +183,10 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         readFromNBT(packet.getNbtCompound());
     }
 
-    @Nonnull
     public ItemStack getCurrentStack() {
         return currentStack;
     }
 
-    @Nonnull
     public ItemStack getMeshStack() {
         return meshStack;
     }
@@ -206,7 +203,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
         return null;
     }
 
-    public void setMeshStack(@Nonnull ItemStack meshStack) {
+    public void setMeshStack(ItemStack meshStack) {
         this.meshStack = meshStack;
         VanillaPacketHandler.sendTileEntityUpdate(this);
     }

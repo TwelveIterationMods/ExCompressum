@@ -124,7 +124,6 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (!currentStack.isEmpty()) {
             IBlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
-            //noinspection ConstantConditions /// Forge needs @Nullable
             if(contentState != null) {
                 float progress = tileEntity.getProgress();
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);

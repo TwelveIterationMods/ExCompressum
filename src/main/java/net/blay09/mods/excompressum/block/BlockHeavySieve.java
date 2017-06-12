@@ -39,7 +39,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nonnull;
 import java.util.Locale;
 
 public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
@@ -74,6 +73,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return BOUNDING_BOX;
 	}
@@ -84,6 +84,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
 		if (meta < 0 || meta >= Type.values.length) {
 			return getDefaultState();
@@ -96,7 +97,6 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 		return state.getValue(VARIANT).ordinal();
 	}
 
-	@Nonnull
 	@Override
 	protected ItemStack getSilkTouchDrop(IBlockState state) {
 		return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
@@ -120,11 +120,13 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
@@ -135,6 +137,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		return state.withProperty(WITH_MESH, false); // Property is inventory-only
 	}
@@ -162,7 +165,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 						if (player.inventory.addItemStackToInventory(meshStack)) {
 							world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, meshStack));
 						}
-						tileEntity.setMeshStack(null);
+						tileEntity.setMeshStack(ItemStack.EMPTY);
 					}
 				}
 			}

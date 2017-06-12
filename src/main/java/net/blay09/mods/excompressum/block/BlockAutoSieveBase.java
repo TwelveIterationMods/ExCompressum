@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum.block;
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
-import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
 import net.minecraft.block.BlockContainer;
@@ -33,8 +32,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 public abstract class BlockAutoSieveBase extends BlockContainer {
@@ -69,7 +68,6 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 		return getDefaultState().withProperty(FACING, facing);
 	}
 
-	@Nonnull
 	@Override
 	protected ItemStack getSilkTouchDrop(IBlockState state) {
 		return new ItemStack(this, 1, state.getValue(FACING).ordinal());
@@ -118,7 +116,7 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 					} else if (heldItem.getItem() == Items.NAME_TAG && heldItem.hasDisplayName()) {
 						tileEntity.setCustomSkin(new GameProfile(null, heldItem.getDisplayName()));
 						if (!player.capabilities.isCreativeMode) {
-							heldItem.setCount(heldItem.getCount() - 1);
+							heldItem.shrink(1);
 						}
 						return true;
 					}
@@ -135,11 +133,11 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity != null) {
-			//noinspection ConstantConditions /// thanks lex
 			IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 			for (int i = 0; i < itemHandler.getSlots(); i++) {
-				if (!itemHandler.getStackInSlot(i).isEmpty()) {
-					EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
+				ItemStack itemStack = itemHandler.getStackInSlot(i);
+				if (!itemStack.isEmpty()) {
+					EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemStack);
 					double motion = 0.05;
 					entityItem.motionX = world.rand.nextGaussian() * motion;
 					entityItem.motionY = 0.2;
@@ -191,13 +189,16 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean hasComparatorInputOverride(IBlockState state) {
 		return true;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
-		return StupidUtils.getComparatorOutput64(world, pos);
+		TileEntity tileEntity = world.getTileEntity(pos);
+		return tileEntity != null ? ItemHandlerHelper.calcRedstoneFromInventory(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) : 0;
 	}
 
 	@Override

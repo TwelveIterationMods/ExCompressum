@@ -51,6 +51,8 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class ExCompressum {
 
+	// TODO check container merge methods
+
 	public static final Logger logger = LogManager.getLogger();
 	public static final String MOD_ID = "excompressum";
 
@@ -83,7 +85,7 @@ public class ExCompressum {
 		ModItems.init();
 		ModBlocks.init();
 
-		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "AngryChicken"), EntityAngryChicken.class, "AngryChicken", 0, ExCompressum.instance, 64, 10, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "angry_chicken"), EntityAngryChicken.class, "AngryChicken", 0, ExCompressum.instance, 64, 10, true);
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		MinecraftForge.EVENT_BUS.register(this);

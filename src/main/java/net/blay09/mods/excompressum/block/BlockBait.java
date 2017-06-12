@@ -35,7 +35,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Locale;
 import java.util.Random;
@@ -95,7 +94,6 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
         return state.getValue(VARIANT).ordinal();
     }
 
-    @Nonnull
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state) {
         return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
@@ -112,6 +110,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
     }
 
     @Nullable
+    //@Override // TODO missing override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
         return null;
     }
@@ -161,7 +160,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
                 if (!world.isRemote) {
                     ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
                     chatComponent.getStyle().setColor(environmentStatus != TileBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
-                    ((EntityPlayer) placer).sendMessage(chatComponent);
+                    placer.sendMessage(chatComponent);
                 }
             }
         }

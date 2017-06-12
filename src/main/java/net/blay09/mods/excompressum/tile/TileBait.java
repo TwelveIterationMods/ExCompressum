@@ -30,7 +30,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
@@ -119,7 +118,6 @@ public class TileBait extends TileEntity implements ITickable {
 		}
 	}
 
-	@Nonnull
 	private static ItemStack getBaitDisplayItem(int metadata, int i) {
 		BlockBait.Type type = BlockBait.Type.fromId(metadata);
 		if(type != null) {
@@ -213,7 +211,6 @@ public class TileBait extends TileEntity implements ITickable {
 		return 0;
 	}
 
-	@Nonnull
 	public ItemStack getRenderItem(int i) {
 		return i == 0 ? renderItemMain : renderItemSub;
 	}

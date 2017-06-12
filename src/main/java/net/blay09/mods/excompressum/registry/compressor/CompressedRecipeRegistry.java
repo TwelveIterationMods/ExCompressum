@@ -15,7 +15,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
@@ -53,9 +52,8 @@ public class CompressedRecipeRegistry {
         }
     }
 
-    private static void addCompressedRecipe(IRecipe recipe, @Nonnull ItemStack sourceStack) {
-        //noinspection ConstantConditions /// Forge missing @Nullable
-        if(!sourceStack.isEmpty() && sourceStack.getItem() != null) { // .getItem() != null is needed because some mod is registering a broken recipe
+    private static void addCompressedRecipe(IRecipe recipe, ItemStack sourceStack) {
+        if(!sourceStack.isEmpty()) {
             sourceStack = sourceStack.copy();
             if(recipe.getRecipeSize() == 4) {
                 matcherSmall.fill(sourceStack);
@@ -88,7 +86,6 @@ public class CompressedRecipeRegistry {
         }
     }
 
-    @Nonnull
     private static ItemStack getRecipeSource(ShapedRecipes recipe) {
         for(ItemStack itemStack : recipe.recipeItems) {
             if(!itemStack.isEmpty()) {
@@ -98,7 +95,6 @@ public class CompressedRecipeRegistry {
         return ItemStack.EMPTY;
     }
 
-    @Nonnull
     private static ItemStack getRecipeSource(ShapelessRecipes recipe) {
         for(ItemStack obj : recipe.recipeItems) {
             if(!obj.isEmpty()) {

@@ -19,8 +19,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nonnull;
-
 public class TileAutoCompressor extends TileEntityBase implements ITickable {
 
     private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
@@ -95,7 +93,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
                             ItemStack slotStack = inputSlots.getStackInSlot(i);
                             if (!slotStack.isEmpty() && isItemEqualWildcard(slotStack, sourceStack)) {
                                 if (slotStack.getCount() >= count) {
-                                    slotStack.setCount(slotStack.getCount() - count);
+                                    slotStack.shrink(count);
                                     if (slotStack.getCount() == 0) {
                                         inputSlots.setStackInSlot(i, ItemStack.EMPTY);
                                     }
@@ -155,7 +153,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
                 }
             } else {
                 if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && isItemEqualWildcard(slotStack, itemStack)) {
-                    slotStack.setCount(slotStack.getCount() + itemStack.getCount());
+                    slotStack.grow(itemStack.getCount());
                     return true;
                 }
             }
@@ -214,7 +212,6 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
         return (float) energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
     }
 
-    @Nonnull
     public ItemStack getCurrentStack() {
         return currentStack;
     }

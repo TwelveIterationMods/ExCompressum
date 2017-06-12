@@ -55,7 +55,6 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> 
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (!currentStack.isEmpty()) {
             IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
-            //noinspection ConstantConditions /// Forge needs @Nullable
             if(state != null) {
                 float progress = tileEntity.getProgress();
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);

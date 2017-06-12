@@ -31,8 +31,8 @@ public class ChickenStickHandler {
 			if(!heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
 				event.getTarget().setDead();
 				if(!event.getTarget().world.isRemote) {
-					heldItem.setCount(heldItem.getCount() - 1);
-					if(heldItem.getCount() <= 0) {
+					heldItem.shrink(1);
+					if(heldItem.isEmpty()) {
 						event.getEntityPlayer().setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 					}
 					EntityAngryChicken angryChicken = new EntityAngryChicken(event.getTarget().world);

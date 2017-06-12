@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
@@ -23,7 +22,6 @@ public abstract class ExRegistro {
 		return !nihiloStack.isEmpty() && itemStack.getItem() == nihiloStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || nihiloStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || itemStack.getItemDamage() == nihiloStack.getItemDamage());
 	}
 
-	@Nonnull
 	public static ItemStack getNihiloItem(ExNihiloProvider.NihiloItems type) {
 		return instance.getNihiloItem(type);
 	}

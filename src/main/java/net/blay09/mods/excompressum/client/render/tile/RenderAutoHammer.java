@@ -96,7 +96,6 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (!currentStack.isEmpty()) {
             IBlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
-            //noinspection ConstantConditions /// Forge needs @Nullable
             if(contentState != null) {
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
                 mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

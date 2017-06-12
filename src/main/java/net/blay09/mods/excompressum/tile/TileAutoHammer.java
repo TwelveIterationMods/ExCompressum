@@ -15,6 +15,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,7 +28,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
@@ -105,7 +105,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
                         return;
                     }
                     currentStack = inputStack.splitStack(1);
-                    if (inputStack.getCount() == 0) {
+                    if (inputStack.isEmpty()) {
                         inputSlots.setStackInSlot(0, ItemStack.EMPTY);
                     }
                     energyStorage.extractEnergy(effectiveEnergy, false);
@@ -173,7 +173,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
                 }
             } else {
                 if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && slotStack.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(slotStack, itemStack)) {
-                    slotStack.setCount(slotStack.getCount() + itemStack.getCount());
+                    slotStack.grow(itemStack.getCount());
                     return true;
                 }
             }
@@ -282,7 +282,6 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
         return (float) energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
     }
 
-    @Nonnull
     public ItemStack getCurrentStack() {
         return currentStack;
     }
@@ -294,9 +293,8 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
             return null;
         }
         Block block = Block.getBlockFromItem(currentStack.getItem());
-        //noinspection ConstantConditions /// NO IT'S NOT. getBlockFromItem not marked @Nullable
-        if(block != null) {
-            //noinspection deprecation /// mojang pls
+        if(block != Blocks.AIR) {
+            //noinspection deprecation
         	return block.getStateFromMeta(currentStack.getMetadata());
         }
         return null;
@@ -307,7 +305,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
                 || capability == CapabilityEnergy.ENERGY
                 || super.hasCapability(capability, facing);
@@ -315,7 +313,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return (T) itemHandlerAutomation;
         }
@@ -329,7 +327,6 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
         return itemHandler;
     }
 
-    @Nonnull
     public ItemStack getUpgradeStack(int i) {
         return hammerSlots.getStackInSlot(i);
     }

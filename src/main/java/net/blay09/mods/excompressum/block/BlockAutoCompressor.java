@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 public class BlockAutoCompressor extends BlockContainer {
 
@@ -80,13 +81,16 @@ public class BlockAutoCompressor extends BlockContainer {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean hasComparatorInputOverride(IBlockState state) {
         return true;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
-        return StupidUtils.getComparatorOutput64(world, pos);
+        TileEntity tileEntity = world.getTileEntity(pos);
+        return tileEntity != null ? ItemHandlerHelper.calcRedstoneFromInventory(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) : 0;
     }
 
 }

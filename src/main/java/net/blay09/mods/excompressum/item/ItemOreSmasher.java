@@ -91,9 +91,9 @@ public class ItemOreSmasher extends ItemTool {
 							ItemStack resultStack = recipe.getResultStack().copy();
 							resultStack.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 							world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
-							if(resultStack.getCount() <= 0) {
-								inventoryStack.setCount(inventoryStack.getCount() - recipe.getSourceStack().getCount());
-								if (inventoryStack.getCount() <= 0) {
+							if(resultStack.isEmpty()) {
+								inventoryStack.shrink(recipe.getSourceStack().getCount());
+								if (inventoryStack.isEmpty()) {
 									player.inventory.mainInventory.remove(i);
 								}
 								player.swingArm(hand);
@@ -106,7 +106,7 @@ public class ItemOreSmasher extends ItemTool {
 					IBlockState oldState = world.getBlockState(pos);
 					inventoryStack.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 					world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
-					if (inventoryStack.getCount() <= 0) {
+					if (inventoryStack.isEmpty()) {
 						player.inventory.mainInventory.remove(i);
 					}
 					player.swingArm(hand);

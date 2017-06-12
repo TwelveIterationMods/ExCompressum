@@ -22,7 +22,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
@@ -59,7 +58,7 @@ public class BlockCompressed extends Block implements IRegisterModel {
 	public BlockCompressed() {
 		super(Material.ROCK);
 		setRegistryName("compressed_block");
-		setUnlocalizedName(getRegistryName().toString());
+		setUnlocalizedName("compressed_block");
 		setHardness(4f);
 		setResistance(6f);
 		setSoundType(SoundType.STONE);
@@ -72,6 +71,7 @@ public class BlockCompressed extends Block implements IRegisterModel {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
 		if(meta < 0 || meta >= Type.values.length) {
 			return getDefaultState();
@@ -84,7 +84,6 @@ public class BlockCompressed extends Block implements IRegisterModel {
 		return state.getValue(VARIANT).ordinal();
 	}
 
-	@Nonnull
 	@Override
 	protected ItemStack getSilkTouchDrop(IBlockState state) {
 		return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
