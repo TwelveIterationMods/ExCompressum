@@ -71,33 +71,33 @@ public class ContainerAutoSieve extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int slotNumber) {
-        ItemStack itemStack = null;
+        ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(slotNumber);
-        ItemStack slotStack = slot != null ? slot.getStack() : null;
-        if (slotStack != null) {
+        if(slot != null && slot.getHasStack()) {
+            ItemStack slotStack = slot.getStack();
             itemStack = slotStack.copy();
             if (slotNumber <= 21) {
                 if (!mergeItemStack(slotStack, 21, 57, true)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (tileEntity.getItemHandler().isItemValid(0, slotStack)) {
                 if (!mergeItemStack(slotStack, 0, 1, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             } else if (tileEntity.getItemHandler().isItemValid(21, slotStack)) {
                 if (!mergeItemStack(slotStack, 1, 2, false)) {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
-            if (slotStack.stackSize == 0) {
-                slot.putStack(null);
+            if (slotStack.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
-            if (slotStack.stackSize == itemStack.stackSize) {
-                return null;
+            if (slotStack.getCount() == itemStack.getCount()) {
+                return ItemStack.EMPTY;
             }
-            slot.onPickupFromSlot(entityPlayer, slotStack);
+            slot.onTake(entityPlayer, slotStack);
         }
         return itemStack;
     }

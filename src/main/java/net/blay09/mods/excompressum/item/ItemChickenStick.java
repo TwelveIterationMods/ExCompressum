@@ -3,16 +3,12 @@ package net.blay09.mods.excompressum.item;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ToolsConfig;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
-import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -22,20 +18,18 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-public class ItemChickenStick extends ItemTool {
+public class ItemChickenStick extends ItemCompressumTool {
 
     public ItemChickenStick() {
         super(0f, 0f, ToolMaterial.DIAMOND, new HashSet<Block>());
         setRegistryName("chicken_stick");
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
         setCreativeTab(ExCompressum.creativeTab);
         setMaxDamage(0);
         damageVsEntity = 0f;
@@ -57,15 +51,15 @@ public class ItemChickenStick extends ItemTool {
 
     @Override
     public boolean hitEntity(ItemStack itemStack, EntityLivingBase attacker, EntityLivingBase target) {
-        playChickenSound(attacker.worldObj, new BlockPos(attacker.posX, attacker.posY, attacker.posZ));
+        playChickenSound(attacker.world, new BlockPos(attacker.posX, attacker.posY, attacker.posZ));
         return super.hitEntity(itemStack, attacker, target);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         playChickenSound(world, new BlockPos(player.posX, player.posY, player.posZ));
         player.swingArm(hand);
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
 
     @Override

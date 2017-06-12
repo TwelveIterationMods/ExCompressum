@@ -25,12 +25,15 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
+@SuppressWarnings("unused")
 public class TheOneProbeAddon implements Function<ITheOneProbe, Void> {
 
 	@Nullable
 	@Override
-	public Void apply(ITheOneProbe top) {
-		top.registerProvider(new ProbeInfoProvider());
+	public Void apply(@Nullable ITheOneProbe top) {
+		if(top != null) {
+			top.registerProvider(new ProbeInfoProvider());
+		}
 		return null;
 	}
 
@@ -103,7 +106,7 @@ public class TheOneProbeAddon implements Function<ITheOneProbe, Void> {
 				info.progress((int) (tileEntity.getProgress() * 100), 100); // because a simple progress(float) isn't cool enough ..
 			}
 			ItemStack meshStack = tileEntity.getMeshStack();
-			if (meshStack != null) {
+			if (!meshStack.isEmpty()) {
 				if(ExRegistro.doMeshesHaveDurability()) {
 					info.text(String.format("%s %d/%d", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getItemDamage(), meshStack.getMaxDamage()));
 				} else {
@@ -116,6 +119,7 @@ public class TheOneProbeAddon implements Function<ITheOneProbe, Void> {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Nullable
 	private static <T extends TileEntity> T tryGetTileEntity(World world, BlockPos pos, Class<T> tileClass) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity != null && tileClass.isAssignableFrom(tileEntity.getClass())) {

@@ -12,10 +12,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,7 +25,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class ItemOreSmasher extends ItemTool {
+public class ItemOreSmasher extends ItemCompressumTool {
 
 	// CLEANUP this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
 	private static final String[] ORE_BLOCKS = new String[] {
@@ -58,7 +58,7 @@ public class ItemOreSmasher extends ItemTool {
     public ItemOreSmasher() {
         super(0f, 0f, ToolMaterial.DIAMOND, new HashSet<Block>());
 		setRegistryName("ore_smasher");
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
         setCreativeTab(ExCompressum.creativeTab);
     }
 
@@ -76,25 +76,25 @@ public class ItemOreSmasher extends ItemTool {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(!world.checkNoEntityCollision(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
 			return EnumActionResult.FAIL;
 		}
-        for(int i = 0; i < player.inventory.mainInventory.length; i++) {
-            ItemStack inventoryStack = player.inventory.mainInventory[i];
-            if(inventoryStack != null) {
+        for(int i = 0; i < player.inventory.mainInventory.size(); i++) {
+            ItemStack inventoryStack = player.inventory.mainInventory.get(i);
+            if(!inventoryStack.isEmpty()) {
                 if(isOreItem(inventoryStack)) {
 					CompressedRecipe recipe = CompressedRecipeRegistry.getRecipe(inventoryStack);
-					if(recipe != null && recipe.getResultStack().stackSize == 1) {
-						if(inventoryStack.stackSize >= recipe.getSourceStack().stackSize) {
+					if(recipe != null && recipe.getResultStack().getCount() == 1) {
+						if(inventoryStack.getCount() >= recipe.getSourceStack().getCount()) {
 							IBlockState oldState = world.getBlockState(pos);
 							ItemStack resultStack = recipe.getResultStack().copy();
-							resultStack.getItem().onItemUse(resultStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
+							resultStack.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 							world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
-							if(resultStack.stackSize <= 0) {
-								inventoryStack.stackSize -= recipe.getSourceStack().stackSize;
-								if (inventoryStack.stackSize <= 0) {
-									player.inventory.mainInventory[i] = null;
+							if(resultStack.isEmpty()) {
+								inventoryStack.shrink(recipe.getSourceStack().getCount());
+								if (inventoryStack.isEmpty()) {
+									player.inventory.mainInventory.remove(i);
 								}
 								player.swingArm(hand);
 								return EnumActionResult.SUCCESS;
@@ -104,10 +104,10 @@ public class ItemOreSmasher extends ItemTool {
                 }
 				if (isOreBlock(inventoryStack)) {
 					IBlockState oldState = world.getBlockState(pos);
-					inventoryStack.getItem().onItemUse(inventoryStack, player, world, pos, hand, facing, hitX, hitY, hitZ);
+					inventoryStack.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
 					world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
-					if (inventoryStack.stackSize <= 0) {
-						player.inventory.mainInventory[i] = null;
+					if (inventoryStack.isEmpty()) {
+						player.inventory.mainInventory.remove(i);
 					}
 					player.swingArm(hand);
 					return EnumActionResult.SUCCESS;
@@ -123,15 +123,18 @@ public class ItemOreSmasher extends ItemTool {
 			world.setBlockToAir(pos);
 			Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, toolMaterial.getHarvestLevel(), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);
 			for(ItemStack rewardStack : rewards) {
-				world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
+				world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
 			}
 		}
 		return super.onBlockDestroyed(itemStack, world, state, pos, entityLiving);
 	}
 
 	private boolean isOreItem(ItemStack itemStack) {
-		String registryName = itemStack.getItem().getRegistryName().toString();
-		if (ArrayUtils.contains(ORE_ITEMS, registryName)) {
+		ResourceLocation registryName = itemStack.getItem().getRegistryName();
+		if(registryName == null) {
+			return false;
+		}
+		if (ArrayUtils.contains(ORE_ITEMS, registryName.toString())) {
 			return true;
 		}
 		int[] oreIDs = OreDictionary.getOreIDs(itemStack);
@@ -147,8 +150,11 @@ public class ItemOreSmasher extends ItemTool {
 	}
 
 	private boolean isOreBlock(ItemStack itemStack) {
-		String registryName = itemStack.getItem().getRegistryName().toString();
-		if (ArrayUtils.contains(ORE_BLOCKS, registryName)) {
+		ResourceLocation registryName = itemStack.getItem().getRegistryName();
+		if(registryName == null) {
+			return false;
+		}
+		if (ArrayUtils.contains(ORE_BLOCKS, registryName.toString())) {
 			return true;
 		}
 		int[] oreIDs = OreDictionary.getOreIDs(itemStack);

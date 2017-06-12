@@ -31,7 +31,7 @@ public class CompressedMobsConfig {
 				"Cow",
 				"Pig",
 				"Ghast",
-//                "Wither" okay, calm down Blay
-		}, "A list of entity names that can spawn as compressed entities."));
+//              "Wither" okay, calm down Blay
+		}, "A list of entity names that can spawn as compressed entities.")); // TODO update to ResourceLocation
 	}
 }

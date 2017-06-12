@@ -21,13 +21,12 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 
 public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> {
 
     private final boolean isCompressed;
-    private ItemStack hammerItemStack;
+    private ItemStack hammerItemStack = ItemStack.EMPTY;
 
     public RenderAutoHammer(boolean isCompressed) {
         this.isCompressed = isCompressed;
@@ -35,19 +34,19 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
 
     @Override
     public void renderTileEntityAt(TileAutoHammer tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
-        if(!tileEntity.hasWorldObj()) {
+        if(!tileEntity.hasWorld()) {
             return;
         }
         IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
         if(!(state.getBlock() instanceof BlockAutoHammer)) {
             return;
         }
-        if (hammerItemStack == null) {
+        if (hammerItemStack.isEmpty()) {
             if (isCompressed) {
                 hammerItemStack = new ItemStack(ModItems.compressedHammerDiamond);
             } else {
                 hammerItemStack = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
-                if (hammerItemStack == null) {
+                if (hammerItemStack.isEmpty()) {
                     hammerItemStack = new ItemStack(Items.FISH); // This should never happen
                 }
             }
@@ -75,7 +74,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         GlStateManager.scale(0.5f, 0.5f, 0.5f);
         itemRenderer.renderItem(hammerItemStack, ItemCameraTransforms.TransformType.FIXED);
         ItemStack firstHammer = tileEntity.getUpgradeStack(0);
-        if(firstHammer != null) {
+        if(!firstHammer.isEmpty()) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0f, 0f, 0.33f);
             GlStateManager.rotate(10f, 0f, 1f, 0f);
@@ -83,7 +82,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
             GlStateManager.popMatrix();
         }
         ItemStack secondHammer = tileEntity.getUpgradeStack(1);
-        if(secondHammer != null) {
+        if(!secondHammer.isEmpty()) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0f, 0f, -0.33f);
             GlStateManager.rotate(-10f, 0f, 1f, 0f);
@@ -95,9 +94,8 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         RenderHelper.disableStandardItemLighting();
 
         ItemStack currentStack = tileEntity.getCurrentStack();
-        if (currentStack != null) {
+        if (!currentStack.isEmpty()) {
             IBlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
-            //noinspection ConstantConditions /// Forge needs @Nullable
             if(contentState != null) {
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
                 mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

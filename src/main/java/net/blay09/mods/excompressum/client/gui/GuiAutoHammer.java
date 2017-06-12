@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GuiAutoHammer extends GuiContainer {
 
-    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoHammer.png");
+    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/auto_hammer.png");
     private TileAutoHammer tileEntity;
 
     public GuiAutoHammer(InventoryPlayer inventoryPlayer, TileAutoHammer tileEntity) {

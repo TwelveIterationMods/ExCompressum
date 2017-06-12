@@ -77,7 +77,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		}
 	};
 
-	private ItemStack currentStack;
+	private ItemStack currentStack = ItemStack.EMPTY;
 	private GameProfile customSkin;
 
 	private int ticksSinceSync;
@@ -112,13 +112,13 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 		int effectiveEnergy = getEffectiveEnergy();
 		if (getEnergyStored() >= effectiveEnergy) {
-			if (currentStack == null) {
+			if (currentStack.isEmpty()) {
 				ItemStack inputStack = inputSlots.getStackInSlot(0);
 				SieveMeshRegistryEntry sieveMesh = getSieveMesh();
-				if (inputStack != null && sieveMesh != null && isSiftableWithMesh(inputStack, sieveMesh)) {
+				if (!inputStack.isEmpty() && sieveMesh != null && isSiftableWithMesh(inputStack, sieveMesh)) {
 					boolean foundSpace = false;
 					for (int i = 0; i < outputSlots.getSlots(); i++) {
-						if (outputSlots.getStackInSlot(i) == null) {
+						if (outputSlots.getStackInSlot(i).isEmpty()) {
 							foundSpace = true;
 						}
 					}
@@ -126,8 +126,8 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 						return;
 					}
 					currentStack = inputStack.splitStack(1);
-					if (inputStack.stackSize == 0) {
-						inputSlots.setStackInSlot(0, null);
+					if (inputStack.isEmpty()) {
+						inputSlots.setStackInSlot(0, ItemStack.EMPTY);
 					}
 					extractEnergy(effectiveEnergy, false);
 					VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -135,6 +135,9 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 				}
 			} else {
 				extractEnergy(effectiveEnergy, false);
+				if (getEffectiveSpeed() < 0f) {
+					System.out.println("WUT");
+				}
 				progress += getEffectiveSpeed();
 
 				particleTicks = PARTICLE_TICKS;
@@ -142,38 +145,38 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 				isDirty = true;
 				if (progress >= 1) {
-					if (!worldObj.isRemote) {
+					if (!world.isRemote) {
 						SieveMeshRegistryEntry sieveMesh = getSieveMesh();
 						if(sieveMesh != null) {
-							Collection<ItemStack> rewards = rollSieveRewards(currentStack, sieveMesh, getEffectiveLuck(), worldObj.rand);
+							Collection<ItemStack> rewards = rollSieveRewards(currentStack, sieveMesh, getEffectiveLuck(), world.rand);
 							for (ItemStack itemStack : rewards) {
 								if (!addItemToOutput(itemStack)) {
-									worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
+									world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
 								}
 							}
 							if(ExRegistro.doMeshesHaveDurability()) {
 								ItemStack meshStack = meshSlots.getStackInSlot(0);
-								if (meshStack != null) {
-									if(meshStack.attemptDamageItem(1, worldObj.rand)) {
+								if (!meshStack.isEmpty()) {
+									if(meshStack.attemptDamageItem(1, world.rand)) {
 										getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
-										meshStack.stackSize--;
-										meshSlots.setStackInSlot(0, null);
+										meshStack.shrink(1);
+										meshSlots.setStackInSlot(0, ItemStack.EMPTY);
 									}
 								}
 							}
 						} else {
 							if (!addItemToOutput(currentStack)) {
-								worldObj.spawnEntityInWorld(new EntityItem(worldObj, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, currentStack));
+								world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, currentStack));
 							}
 						}
 					}
 					progress = 0f;
-					currentStack = null;
+					currentStack = ItemStack.EMPTY;
 				}
 			}
 		}
 
-		if(particleTicks > 0 && worldObj.isRemote) {
+		if(particleTicks > 0 && world.isRemote) {
 			particleTicks--;
 			if(particleTicks <= 0) {
 				particleCount = 0;
@@ -184,13 +187,13 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 	@SideOnly(Side.CLIENT)
 	public void spawnParticles() {
-		if(currentStack != null && !ExCompressumConfig.disableParticles) {
+		if(!currentStack.isEmpty() && !ExCompressumConfig.disableParticles) {
 			int metadata = getBlockMetadata();
 			IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
 			if (state != null) {
 				for(int i = 0; i < particleCount; i++) {
-					double particleX = 0.5 + worldObj.rand.nextFloat() * 0.4 - 0.2;
-					double particleZ = 0.5 + worldObj.rand.nextFloat() * 0.4 - 0.2;
+					double particleX = 0.5 + world.rand.nextFloat() * 0.4 - 0.2;
+					double particleZ = 0.5 + world.rand.nextFloat() * 0.4 - 0.2;
 					switch(EnumFacing.getFront(metadata)) {
 						case WEST:
 							particleZ -= 0.125f;
@@ -204,8 +207,10 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 						case SOUTH:
 							particleX -= 0.125f;
 							break;
+					default:
+						break;
 					}
-					Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(worldObj, pos, particleX, 0.2, particleZ, 0.5f, state));
+					Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(world, pos, particleX, 0.2, particleZ, 0.5f, state));
 				}
 			}
 		}
@@ -215,13 +220,13 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		int firstEmptySlot = -1;
 		for (int i = 0; i < outputSlots.getSlots(); i++) {
 			ItemStack slotStack = outputSlots.getStackInSlot(i);
-			if (slotStack == null) {
+			if (slotStack.isEmpty()) {
 				if (firstEmptySlot == -1) {
 					firstEmptySlot = i;
 				}
 			} else {
-				if (slotStack.stackSize + itemStack.stackSize <= slotStack.getMaxStackSize() && slotStack.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(slotStack, itemStack)) {
-					slotStack.stackSize += itemStack.stackSize;
+				if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && slotStack.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(slotStack, itemStack)) {
+					slotStack.grow(itemStack.getCount());
 					return true;
 				}
 			}
@@ -243,7 +248,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 	public float getEffectiveLuck() {
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
-		if (meshStack != null) {
+		if (!meshStack.isEmpty()) {
 			return ExRegistro.getMeshFortune(meshStack);
 		}
 		return 0f;
@@ -272,7 +277,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 	@Override
 	protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
-		currentStack = ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("CurrentStack"));
+		currentStack = new ItemStack(tagCompound.getCompoundTag("CurrentStack"));
 		progress = tagCompound.getFloat("Progress");
 		if (tagCompound.hasKey("CustomSkin")) {
 			customSkin = NBTUtil.readGameProfileFromNBT(tagCompound.getCompoundTag("CustomSkin"));
@@ -285,7 +290,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		particleTicks = tagCompound.getInteger("ParticleTicks");
 		particleCount = tagCompound.getInteger("ParticleCount");
 		if(isSync) {
-			meshSlots.setStackInSlot(0, ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("MeshStack")));
+			meshSlots.setStackInSlot(0, new ItemStack(tagCompound.getCompoundTag("MeshStack")));
 		} else {
 			itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
 		}
@@ -293,9 +298,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 	@Override
 	protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
-		if (currentStack != null) {
-			tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
-		}
+		tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
 		tagCompound.setFloat("Progress", progress);
 		if (customSkin != null) {
 			NBTTagCompound customSkinTag = new NBTTagCompound();
@@ -308,9 +311,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		tagCompound.setInteger("ParticleCount", particleCount);
 		if(isSync) {
 			ItemStack meshStack = meshSlots.getStackInSlot(0);
-			if(meshStack != null) {
-				tagCompound.setTag("MeshStack", meshStack.writeToNBT(new NBTTagCompound()));
-			}
+			tagCompound.setTag("MeshStack", meshStack.writeToNBT(new NBTTagCompound()));
 		} else {
 			tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
 		}
@@ -333,7 +334,6 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		return progress;
 	}
 
-	@Nullable
 	public ItemStack getCurrentStack() {
 		return currentStack;
 	}
@@ -352,7 +352,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 	private void grabProfile() {
 		try {
-			if (!worldObj.isRemote && customSkin != null && !StringUtils.isNullOrEmpty(customSkin.getName())) {
+			if (!world.isRemote && customSkin != null && !StringUtils.isNullOrEmpty(customSkin.getName())) {
 				if (!customSkin.isComplete() || !customSkin.getProperties().containsKey("textures")) {
 					GameProfile gameProfile = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache().getGameProfileForUsername(customSkin.getName());
 					if (gameProfile != null) {
@@ -377,7 +377,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		final float EFFICIENCY_BOOST = 0.25f;
 		float boost = 1f;
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
-		if(meshStack != null) {
+		if(!meshStack.isEmpty()) {
 			boost += EFFICIENCY_BOOST * ExRegistro.getMeshEfficiency(meshStack);
 		}
 		return boost * getFoodBoost();
@@ -398,14 +398,14 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
 				|| super.hasCapability(capability, facing);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return (T) itemHandlerAutomation;
 		}
@@ -419,13 +419,12 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	@Nullable
 	public SieveMeshRegistryEntry getSieveMesh() {
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
-		if(meshStack != null) {
+		if(!meshStack.isEmpty()) {
 			return SieveMeshRegistry.getEntry(meshStack);
 		}
 		return null;
 	}
 
-	@Nullable
 	public ItemStack getMeshStack() {
 		return meshSlots.getStackInSlot(0);
 	}
@@ -433,10 +432,10 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	public boolean isCorrectSieveMesh() {
 		ItemStack inputStack = inputSlots.getStackInSlot(0);
 		SieveMeshRegistryEntry sieveMesh = getSieveMesh();
-		return inputStack == null || sieveMesh == null || isSiftableWithMesh(inputStack, sieveMesh);
+		return inputStack.isEmpty() || sieveMesh == null || isSiftableWithMesh(inputStack, sieveMesh);
 	}
 
 	public boolean shouldAnimate() {
-		return currentStack != null && getEnergyStored() >= getEffectiveEnergy();
+		return !currentStack.isEmpty() && getEnergyStored() >= getEffectiveEnergy();
 	}
 }

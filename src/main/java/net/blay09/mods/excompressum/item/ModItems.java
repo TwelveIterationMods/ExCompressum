@@ -91,6 +91,7 @@ public class ModItems {
             if (item instanceof IRegisterModel) {
                 ((IRegisterModel) item).registerModel(item);
             } else {
+                //noinspection ConstantConditions
                 ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
             }
         }

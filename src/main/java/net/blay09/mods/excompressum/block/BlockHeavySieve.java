@@ -8,7 +8,6 @@ import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
@@ -27,6 +26,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -38,11 +38,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Locale;
 
-public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
+public class BlockHeavySieve extends BlockCompressumContainer implements IRegisterModel {
 
 	public static final SieveModelBounds SIEVE_BOUNDS = new SieveModelBounds(0.5625f, 0.0625f, 0.88f, 0.5f);
 
@@ -98,9 +96,8 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 		return state.getValue(VARIANT).ordinal();
 	}
 
-	@Nullable
 	@Override
-	protected ItemStack createStackedBlock(IBlockState state) {
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
 		return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
 	}
 
@@ -110,7 +107,7 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < BlockWoodenCrucible.Type.values.length; i++) {
 			list.add(new ItemStack(item, 1, i));
 		}
@@ -145,12 +142,13 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileHeavySieve tileEntity = (TileHeavySieve) world.getTileEntity(pos);
 		if (tileEntity != null) {
-			if (heldItem != null) {
+			ItemStack heldItem = player.getHeldItem(hand);
+			if (!heldItem.isEmpty()) {
 				SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
-				if (sieveMesh != null && tileEntity.getMeshStack() == null) {
+				if (sieveMesh != null && tileEntity.getMeshStack().isEmpty()) {
 					tileEntity.setMeshStack(player.capabilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.splitStack(1));
 					return true;
 				}
@@ -162,11 +160,11 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 			} else {
 				if(!world.isRemote && player.isSneaking()) {
 					ItemStack meshStack = tileEntity.getMeshStack();
-					if(meshStack != null) {
+					if(!meshStack.isEmpty()) {
 						if (player.inventory.addItemStackToInventory(meshStack)) {
-							world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, meshStack));
+							world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, meshStack));
 						}
-						tileEntity.setMeshStack(null);
+						tileEntity.setMeshStack(ItemStack.EMPTY);
 					}
 				}
 			}
@@ -189,9 +187,9 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 				Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
 				if (type != null) {
 					if (ExRegistro.doMeshesHaveDurability()) {
-						return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName() + ",with_mesh=false");
+						return new ModelResourceLocation(getRegistryNameString(), "variant=" + type.getName() + ",with_mesh=false");
 					} else {
-						return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName() + ",with_mesh=false"); // NOTE it's false here too because it was a dumb idea based on wrong thinking; don't want to remove it now though
+						return new ModelResourceLocation(getRegistryNameString(), "variant=" + type.getName() + ",with_mesh=false"); // it's false here too because it was a dumb idea based on wrong thinking; don't want to remove it now though
 					}
 				} else {
 					return new ModelResourceLocation("missingno");
@@ -205,8 +203,8 @@ public class BlockHeavySieve extends BlockContainer implements IRegisterModel {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity instanceof TileHeavySieve) {
 			TileHeavySieve tileHeavySieve = (TileHeavySieve) tileEntity;
-			if(tileHeavySieve.getMeshStack() != null) {
-				world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tileHeavySieve.getMeshStack()));
+			if(!tileHeavySieve.getMeshStack().isEmpty()) {
+				world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tileHeavySieve.getMeshStack()));
 			}
 		}
 		super.breakBlock(world, pos, state);

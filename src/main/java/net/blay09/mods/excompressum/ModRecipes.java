@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModAPIManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
@@ -59,7 +58,7 @@ public class ModRecipes {
 
 		if (BlockConfig.isEnabled("Auto Hammer")) {
 			ItemStack hammerDiamond = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
-			if(hammerDiamond != null) {
+			if(!hammerDiamond.isEmpty()) {
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoHammer), "IPI", "IHI", "IPI", 'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, 'H', hammerDiamond, 'I', "ingotIron"));
 			} else {
 				ExCompressum.logger.warn("No diamond hammer found - Auto Hammer recipe will be disabled.");
@@ -76,7 +75,7 @@ public class ModRecipes {
 
 		if (BlockConfig.isEnabled("Auto Sieve")) {
 			ItemStack sieveBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SIEVE);
-			if(sieveBlock != null) {
+			if(!sieveBlock.isEmpty()) {
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.autoSieve), "BGB", "GSG", "IGI", 'B', "blockIron", 'S', sieveBlock, 'G', "paneGlassColorless", 'I', "ingotIron"));
 			} else {
 				ExCompressum.logger.warn("No Sieve found - Auto Sieve recipe will be disabled.");
@@ -97,7 +96,7 @@ public class ModRecipes {
 				ResourceLocation manaSteelLocation = new ResourceLocation(Compat.BOTANIA, "storage");
 				if(Block.REGISTRY.containsKey(manaSteelLocation)) {
 					ItemStack sieveBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SIEVE);
-					if(sieveBlock != null) {
+					if(!sieveBlock.isEmpty()) {
 						ItemStack manaSteelBlockStack = new ItemStack(Block.REGISTRY.getObject(manaSteelLocation));
 						GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModBlocks.manaSieve), "BGB", "GSG", "IGI", 'B', manaSteelBlockStack, 'S', sieveBlock, 'G', "paneGlassColorless", 'I', "ingotManasteel"));
 					} else {
@@ -112,7 +111,7 @@ public class ModRecipes {
 	}
 
 	private static void registerItems() {
-		if(ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.IRON_MESH) == null) {
+		if(ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.IRON_MESH).isEmpty()) {
 			GameRegistry.addRecipe(new ItemStack(ModItems.ironMesh), "##", "##", '#', Blocks.IRON_BARS);
 		}
 
@@ -120,7 +119,7 @@ public class ModRecipes {
 
 		if(ItemConfig.isEnabled("Compressed Crook")) {
 			ItemStack itemCrook = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.CROOK_WOODEN);
-			if(itemCrook != null) {
+			if(!itemCrook.isEmpty()) {
 				GameRegistry.addRecipe(new ItemStack(ModItems.compressedCrook), "## ", " # ", " # ", '#', itemCrook);
 			} else {
 				ExCompressum.logger.warn("No Crook found - Compressed Crook recipe will be disabled.");
@@ -153,7 +152,7 @@ public class ModRecipes {
 	private static void registerCompressedHammers() {
 		if (ItemConfig.isEnabled("Compressed Wooden Hammer")) {
 			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_WOODEN);
-			if (nihiloHammer != null) {
+			if (!nihiloHammer.isEmpty()) {
 				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
 					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
 				}
@@ -165,7 +164,7 @@ public class ModRecipes {
 
 		if (ItemConfig.isEnabled("Compressed Stone Hammer")) {
 			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_STONE);
-			if (nihiloHammer != null) {
+			if (!nihiloHammer.isEmpty()) {
 				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
 					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
 				}
@@ -177,7 +176,7 @@ public class ModRecipes {
 
 		if (ItemConfig.isEnabled("Compressed Iron Hammer")) {
 			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_IRON);
-			if (nihiloHammer != null) {
+			if (!nihiloHammer.isEmpty()) {
 				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
 					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
 				}
@@ -189,7 +188,7 @@ public class ModRecipes {
 
 		if (ItemConfig.isEnabled("Compressed Gold Hammer")) {
 			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_GOLD);
-			if (nihiloHammer != null) {
+			if (!nihiloHammer.isEmpty()) {
 				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
 					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
 				}
@@ -201,7 +200,7 @@ public class ModRecipes {
 
 		if (ItemConfig.isEnabled("Compressed Diamond Hammer")) {
 			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
-			if (nihiloHammer != null) {
+			if (!nihiloHammer.isEmpty()) {
 				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
 					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
 				}
@@ -216,7 +215,7 @@ public class ModRecipes {
 		if (BlockConfig.isEnabled("Compressed Dust")) {
 			OreDictionary.registerOre("compressed1xDust", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DUST.ordinal()));
 			ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
-			if(dustBlock != null) {
+			if(!dustBlock.isEmpty()) {
 				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, 0), "###", "###", "###", '#', dustBlock);
 				GameRegistry.addShapelessRecipe(ItemHandlerHelper.copyStackWithSize(dustBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, 0));
 			} else {
@@ -250,7 +249,7 @@ public class ModRecipes {
 		}
 		if (BlockConfig.isEnabled("Compressed Ender Gravel")) {
 			ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
-			if(enderGravelBlock != null) {
+			if(!enderGravelBlock.isEmpty()) {
 				OreDictionary.registerOre("compressed1xEnderGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()));
 				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()), "###", "###", "###", '#', enderGravelBlock);
 				GameRegistry.addShapelessRecipe(ItemHandlerHelper.copyStackWithSize(enderGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()));
@@ -260,7 +259,7 @@ public class ModRecipes {
 		}
 		if (BlockConfig.isEnabled("Compressed Nether Gravel")) {
 			ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
-			if(netherGravelBlock != null) {
+			if(!netherGravelBlock.isEmpty()) {
 				OreDictionary.registerOre("compressed1xNetherGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()));
 				GameRegistry.addRecipe(new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()), "###", "###", "###", '#', netherGravelBlock);
 				GameRegistry.addShapelessRecipe(ItemHandlerHelper.copyStackWithSize(netherGravelBlock, 9), new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()));
@@ -304,7 +303,7 @@ public class ModRecipes {
 		}
 		if (BlockConfig.isEnabled("Sheep Bait")) {
 			ItemStack grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
-			if(grassSeeds != null) {
+			if(grassSeeds != null && !grassSeeds.isEmpty()) {
 				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SHEEP.ordinal()), grassSeeds, Items.WHEAT);
 			} else {
 				GameRegistry.addShapelessRecipe(new ItemStack(ModBlocks.bait, 1, BlockBait.Type.SHEEP.ordinal()), Items.WHEAT_SEEDS, Items.WHEAT);

@@ -2,18 +2,14 @@ package net.blay09.mods.excompressum.compat.exnihiloadscensio;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import exnihiloadscensio.registries.CompostRegistry;
 import exnihiloadscensio.registries.CrookRegistry;
 import exnihiloadscensio.registries.HammerRegistry;
-import exnihiloadscensio.registries.RegistryReloadedEvent;
+// TODO import exnihiloadscensio.registries.RegistryReloadedEvent;
 import exnihiloadscensio.registries.SieveRegistry;
 import exnihiloadscensio.registries.types.CrookReward;
 import exnihiloadscensio.registries.types.Siftable;
-import exnihiloadscensio.texturing.Color;
 import exnihiloadscensio.util.BlockInfo;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
-import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
@@ -27,7 +23,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,12 +30,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -61,37 +54,6 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 
 		bounds = new SieveModelBounds(0.8125f, 0.0625f, 0.88f, 0.15625f);
 
-		/*if(ExCompressumConfig.enableWoodChippings) { // won't be using this since it only creates these entries if Ex Compressum was present during the first run.
-			RegistryManager.registerHammerDefaultRecipeHandler(new IHammerDefaultRegistryProvider() {
-				@Override
-				public void registerHammerRecipeDefaults() {
-					for(IBlockState state : Blocks.LOG.getBlockState().getValidStates()) {
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
-					}
-
-					for(IBlockState state : Blocks.LOG2.getBlockState().getValidStates()) {
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 1f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f);
-						HammerRegistry.register(state, new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f);
-					}
-				}
-			});
-
-			RegistryManager.registerCompostDefaultRecipeHandler(new ICompostDefaultRegistryProvider() {
-				@Override
-				public void registerCompostRecipeDefaults() {
-					List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
-					for(ItemStack itemStack : oreDictStacks) {
-						CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
-					}
-				}
-			});
-		}*/
-
 		ExRegistro.instance = this;
 	}
 
@@ -110,14 +72,14 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.IRON_MESH, findItem("itemMesh", 3));
 
 		itemMap.put(NihiloItems.DUST, findBlock("blockDust", 0));
-		itemMap.put(NihiloItems.SIEVE, findBlock("blockSieve", 0)); // NOTE Adscensio only has an Oak Sieve at the moment
+		itemMap.put(NihiloItems.SIEVE, findBlock("blockSieve", 0));
 		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("blockInfestedLeaves", 0));
 		itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("blockNetherrackCrushed", 0));
 		itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("blockEndstoneCrushed", 0));
 
 
 		ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
-		if(stringMeshItem != null) {
+		if(!stringMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry stringMesh = new SieveMeshRegistryEntry(stringMeshItem);
 			stringMesh.setMeshLevel(1);
 			stringMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/string_mesh"));
@@ -125,7 +87,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		}
 
 		ItemStack flintMeshItem = findItem("itemMesh", 2);
-		if(flintMeshItem != null) {
+		if(!flintMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry flintMesh = new SieveMeshRegistryEntry(flintMeshItem);
 			flintMesh.setMeshLevel(2);
 			flintMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/flint_mesh"));
@@ -133,7 +95,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		}
 
 		ItemStack ironMeshItem = getNihiloItem(NihiloItems.IRON_MESH);
-		if(ironMeshItem != null) {
+		if(!ironMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(ironMeshItem);
 			ironMesh.setMeshLevel(3);
 			ironMesh.setHeavy(true);
@@ -142,7 +104,7 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		}
 
 		ItemStack diamondMeshItem = findItem("itemMesh", 4);
-		if(diamondMeshItem != null) {
+		if(!diamondMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry diamondMesh = new SieveMeshRegistryEntry(diamondMeshItem);
 			diamondMesh.setMeshLevel(4);
 			diamondMesh.setHeavy(true);
@@ -151,25 +113,25 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		}
 	}
 
-	@SubscribeEvent
-	public void onRegistryReload(RegistryReloadedEvent event) {
-		if(ExCompressumConfig.enableWoodChippings) {
-			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
-			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
-			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
-			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
-
-			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
-			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
-			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
-			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
-
-			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
-			for (ItemStack itemStack : oreDictStacks) {
-				CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
-			}
-		}
-	}
+//	@SubscribeEvent TODO Wood Chippings won't work in Adscensio until it ports the RegistryReloadedEvent to 1.11.2
+//	public void onRegistryReload(RegistryReloadedEvent event) {
+//		if(ExCompressumConfig.enableWoodChippings) {
+//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
+//
+//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
+//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
+//
+//			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
+//			for (ItemStack itemStack : oreDictStacks) {
+//				CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
+//			}
+//		}
+//	}
 
 	@Override
 	public SieveModelBounds getSieveBounds() {
@@ -195,29 +157,27 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		return Collections.emptyList();
 	}
 
-	@Nullable
 	private ItemStack findItem(String name, int withMetadata) {
 		ResourceLocation location = new ResourceLocation(Compat.EXNIHILO_ADSCENSIO, name);
 		Item item = Item.REGISTRY.getObject(location);
 		if(item != null) {
 			return new ItemStack(item, 1, withMetadata);
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
-	@Nullable
 	private ItemStack findBlock(String name, int withMetadata) {
 		ResourceLocation location = new ResourceLocation(Compat.EXNIHILO_ADSCENSIO, name);
 		if(Block.REGISTRY.containsKey(location)) {
 			return new ItemStack(Block.REGISTRY.getObject(location), 1, withMetadata);
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
-	@Nullable
 	@Override
 	public ItemStack getNihiloItem(NihiloItems type) {
-		return itemMap.get(type);
+		ItemStack itemStack = itemMap.get(type);
+		return itemStack != null ? itemStack : ItemStack.EMPTY;
 	}
 
 	@Override
@@ -255,7 +215,6 @@ public class ExNihiloAdscensioAddon implements ExNihiloProvider, IAddon {
 		if(rewards != null) {
 			List<ItemStack> list = Lists.newArrayList();
 			for(Siftable reward : rewards) {
-				//noinspection ConstantConditions /// @Nullable
 				if(reward.getDrop().getItem() == null) {
 					ExCompressum.logger.error("Tried to roll sieve rewards from a null reward entry: {} (base chance: {}, mesh level: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getMeshLevel());
 					continue;

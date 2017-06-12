@@ -4,7 +4,6 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.tile.TileBait;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -22,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -35,11 +35,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class BlockBait extends BlockContainer implements IRegisterModel {
+public class BlockBait extends BlockCompressumContainer implements IRegisterModel {
 
     public enum Type implements IStringSerializable {
         WOLF,
@@ -95,9 +94,8 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
         return state.getValue(VARIANT).ordinal();
     }
 
-    @Nullable
     @Override
-    protected ItemStack createStackedBlock(IBlockState state) {
+    protected ItemStack getSilkTouchDrop(IBlockState state) {
         return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
     }
 
@@ -114,8 +112,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
 
     @Nullable
     @Override
-    @SuppressWarnings("deprecation")
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return null;
     }
 
@@ -132,7 +129,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for (int i = 0; i < Type.values.length; i++) {
             list.add(new ItemStack(item, 1, i));
         }
@@ -144,14 +141,14 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileBait tileEntity = (TileBait) world.getTileEntity(pos);
         if(tileEntity != null) {
             TileBait.EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
             if (!world.isRemote) {
                 ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
                 chatComponent.getStyle().setColor(environmentStatus != TileBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
-                player.addChatComponentMessage(chatComponent);
+                player.sendMessage(chatComponent);
             }
         }
         return true;
@@ -166,7 +163,7 @@ public class BlockBait extends BlockContainer implements IRegisterModel {
                 if (!world.isRemote) {
                     ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
                     chatComponent.getStyle().setColor(environmentStatus != TileBait.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
-                    ((EntityPlayer) placer).addChatComponentMessage(chatComponent);
+                    placer.sendMessage(chatComponent);
                 }
             }
         }

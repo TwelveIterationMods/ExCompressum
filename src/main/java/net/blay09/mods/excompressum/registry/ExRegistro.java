@@ -5,13 +5,10 @@ import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
@@ -22,10 +19,9 @@ public abstract class ExRegistro {
 
 	public static boolean isNihiloItem(ItemStack itemStack, ExNihiloProvider.NihiloItems type) {
 		ItemStack nihiloStack = instance.getNihiloItem(type);
-		return nihiloStack != null && itemStack.getItem() == nihiloStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || nihiloStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || itemStack.getItemDamage() == nihiloStack.getItemDamage());
+		return !nihiloStack.isEmpty() && itemStack.getItem() == nihiloStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || nihiloStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || itemStack.getItemDamage() == nihiloStack.getItemDamage());
 	}
 
-	@Nullable
 	public static ItemStack getNihiloItem(ExNihiloProvider.NihiloItems type) {
 		return instance.getNihiloItem(type);
 	}

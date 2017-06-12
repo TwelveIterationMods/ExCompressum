@@ -14,13 +14,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -68,19 +66,24 @@ public class WoodenCrucibleRecipeCategory extends BlankRecipeCategory<WoodenCruc
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, final WoodenCrucibleRecipe recipeWrapper, final IIngredients ingredients) {
-		ItemStack fluidItem;
+		ItemStack fluidItem = ItemStack.EMPTY;
 		if(FluidRegistry.isUniversalBucketEnabled()) {
 			fluidItem = new ItemStack(Items.BUCKET);
-			IFluidHandler fluidHandler = fluidItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
-			fluidHandler.fill(ingredients.getOutputs(FluidStack.class).get(0), true);
+			IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(fluidItem);
+			if(fluidHandler != null) {
+				fluidHandler.fill(ingredients.getOutputs(FluidStack.class).get(0).get(0), true);
+				fluidItem = fluidHandler.getContainer();
+			}
 		} else {
-			fluidItem = FluidContainerRegistry.fillFluidContainer(ingredients.getOutputs(FluidStack.class).get(0), FluidContainerRegistry.EMPTY_BUCKET);
+			//TODO: Figure out a way to make a filled bucket without using the universal bucket
+			//return;
+			//fluidItem = FluidContainerRegistry.fillFluidContainer(ingredients.getOutputs(FluidStack.class).get(0), FluidContainerRegistry.EMPTY_BUCKET);
 		}
 		recipeLayout.getItemStacks().init(0, false, 74, 9);
 		recipeLayout.getItemStacks().set(0, fluidItem);
 
 		IFocus<?> focus = recipeLayout.getFocus();
-		boolean hasFocus = focus.getMode() == IFocus.Mode.INPUT;
+		boolean hasFocus = focus != null && focus.getMode() == IFocus.Mode.INPUT;
 		hasHighlight = false;
 		final List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
 		final int INPUT_SLOTS = 1;
@@ -90,15 +93,17 @@ public class WoodenCrucibleRecipeCategory extends BlankRecipeCategory<WoodenCruc
 			final int slotY = 36 + (slotNumber / 9 * 18);
 			recipeLayout.getItemStacks().init(INPUT_SLOTS + slotNumber, true, slotX, slotY);
 			recipeLayout.getItemStacks().set(INPUT_SLOTS + slotNumber, input);
-			Object focusValue = focus.getValue();
-			if (hasFocus && focusValue instanceof ItemStack) {
-				ItemStack focusStack = (ItemStack) focus.getValue();
-				for (ItemStack inputVariant : input) {
-					if (focusStack.getItem() == inputVariant.getItem() && focusStack.getItemDamage() == inputVariant.getItemDamage()) {
-						hasHighlight = true;
-						highlightX = slotX;
-						highlightY = slotY;
-						break;
+			if(focus != null) {
+				Object focusValue = focus.getValue();
+				if (hasFocus && focusValue instanceof ItemStack) {
+					ItemStack focusStack = (ItemStack) focus.getValue();
+					for (ItemStack inputVariant : input) {
+						if (focusStack.getItem() == inputVariant.getItem() && focusStack.getItemDamage() == inputVariant.getItemDamage()) {
+							hasHighlight = true;
+							highlightX = slotX;
+							highlightY = slotY;
+							break;
+						}
 					}
 				}
 			}
@@ -109,7 +114,7 @@ public class WoodenCrucibleRecipeCategory extends BlankRecipeCategory<WoodenCruc
 			public void onTooltip(int slotIndex, boolean input, ItemStack ingredient, List<String> tooltip) {
 				if(input) {
 					WoodenCrucibleRegistryEntry entry = recipeWrapper.getEntryAt(slotIndex - INPUT_SLOTS);
-					tooltip.add(recipeWrapper.getFluid().getLocalizedName(ingredients.getOutputs(FluidStack.class).get(0)));
+					tooltip.add(recipeWrapper.getFluid().getLocalizedName(ingredients.getOutputs(FluidStack.class).get(0).get(0)));
 					tooltip.add(" * " + entry.getAmount() + " mB");
 				}
 			}

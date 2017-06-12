@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiManaSieve extends GuiAutoSieve {
 
-    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/manaSieve.png");
+    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/mana_sieve.png");
 
     public GuiManaSieve(InventoryPlayer inventoryPlayer, TileAutoSieveBase tileEntity) {
         super(inventoryPlayer, tileEntity);

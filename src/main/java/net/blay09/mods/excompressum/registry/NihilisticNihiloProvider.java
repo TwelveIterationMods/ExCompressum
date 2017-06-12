@@ -7,7 +7,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
@@ -15,10 +14,9 @@ import java.util.Random;
 public class NihilisticNihiloProvider implements ExNihiloProvider {
 	private final SieveModelBounds nullBounds = new SieveModelBounds(0f, 0f, 0f, 0f);
 
-	@Nullable
 	@Override
 	public ItemStack getNihiloItem(NihiloItems type) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

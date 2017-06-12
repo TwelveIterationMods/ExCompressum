@@ -7,17 +7,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
 
-public class ItemCompressedHammer extends ItemTool implements ICompressedHammer {
+public class ItemCompressedHammer extends ItemCompressumTool implements ICompressedHammer {
 
     public ItemCompressedHammer(ToolMaterial material, String name) {
         super(6f, -3.2f, material, new HashSet<Block>());
         setRegistryName("compressed_hammer_" + name);
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
         setCreativeTab(ExCompressum.creativeTab);
     }
 

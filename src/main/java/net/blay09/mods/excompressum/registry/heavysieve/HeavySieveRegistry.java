@@ -16,7 +16,6 @@ import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.RegistryKey;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -352,7 +351,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
         if(tryGetBoolean(defaults, "excompressum:compressed_dust", true)) {
             ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
-            if(dustBlock != null) {
+            if(!dustBlock.isEmpty()) {
                 ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DUST.ordinal());
                 addGeneratedEntry(itemStack, dustBlock, COMPRESSION_SIZE - defaultLoss);
 
@@ -361,7 +360,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
         if(tryGetBoolean(defaults, "excompressum:compressed_nether_gravel", true)) {
             ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
-            if(netherGravelBlock != null) {
+            if(!netherGravelBlock.isEmpty()) {
                 ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal());
                 addGeneratedEntry(itemStack, netherGravelBlock, COMPRESSION_SIZE - defaultLoss);
             }
@@ -369,18 +368,15 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
         if(tryGetBoolean(defaults, "excompressum:compressed_ender_gravel", true)) {
             ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
-            if(enderGravelBlock != null) {
+            if(!enderGravelBlock.isEmpty()) {
                 ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal());
                 addGeneratedEntry(itemStack, enderGravelBlock, COMPRESSION_SIZE - defaultLoss);
             }
         }
 
-        if (Loader.isModLoaded(Compat.EXTRAUTILS2) || Loader.isModLoaded(Compat.EXTRAUTILS2_LEGACY)) {
+        if (Loader.isModLoaded(Compat.EXTRAUTILS2)) {
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedgravel");
-                if (!Block.REGISTRY.containsKey(location)) {
-                    location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedGravel"); // Thanks for doing this mid-version, ExUtils
-                }
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
                     ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
@@ -390,9 +386,6 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedSand", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedsand");
-                if (!Block.REGISTRY.containsKey(location)) {
-                    location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedSand"); // Thanks for doing this mid-version, ExUtils
-                }
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
                     ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
@@ -402,9 +395,6 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedDirt", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compresseddirt");
-                if (!Block.REGISTRY.containsKey(location)) {
-                    location = new ResourceLocation(Compat.EXTRAUTILS2_LEGACY, "CompressedDirt"); // Thanks for doing this mid-version, ExUtils
-                }
                 Item exUtilsBlock = Item.REGISTRY.getObject(location);
                 if (exUtilsBlock != null) {
                     ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);

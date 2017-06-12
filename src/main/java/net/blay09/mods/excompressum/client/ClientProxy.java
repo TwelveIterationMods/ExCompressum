@@ -43,7 +43,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.Locale;
 import java.util.Set;
 
-@SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
 
 	private final Set<GameProfile> skinRequested = Sets.newHashSet();
@@ -108,6 +107,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@SubscribeEvent
+	@SuppressWarnings("unused")
 	public void onTextureStitch(TextureStitchEvent.Pre event) {
 		if (event.getMap() == Minecraft.getMinecraft().getTextureMapBlocks()) {
 			iconEmptyBookSlot = event.getMap().registerSprite(new ResourceLocation(ExCompressum.MOD_ID, "items/empty_enchanted_book_slot"));
@@ -122,6 +122,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@SubscribeEvent
+	@SuppressWarnings("unused")
 	public void afterTextureStitch(TextureStitchEvent.Post event) {
 		for (int i = 0; i < destroyBlockIcons.length; i++) {
 			destroyBlockIcons[i] = event.getMap().getAtlasSprite("minecraft:blocks/destroy_stage_" + i);
@@ -133,8 +134,4 @@ public class ClientProxy extends CommonProxy {
 		addon.clientInit();
 	}
 
-	@Override
-	public void addScheduledTask(Runnable runnable) {
-		Minecraft.getMinecraft().addScheduledTask(runnable);
-	}
 }

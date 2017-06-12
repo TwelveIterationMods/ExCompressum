@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.handler;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -12,7 +13,7 @@ public class VanillaPacketHandler {
         if(tileEntity.getWorld().isRemote) {
             return;
         }
-        List playerList = tileEntity.getWorld().playerEntities;
+        List<EntityPlayer> playerList = tileEntity.getWorld().playerEntities;
         SPacketUpdateTileEntity updatePacket = tileEntity.getUpdatePacket();
         if(updatePacket == null) {
             return;

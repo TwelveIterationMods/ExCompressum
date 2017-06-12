@@ -22,6 +22,7 @@ import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegist
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
@@ -43,10 +44,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-@Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;required-after:Forge@[12.18.1.2080,)")
+@Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;required-after:forge@[13.20.0.2310,)")
 @SuppressWarnings("unused")
 public class ExCompressum {
 
@@ -82,7 +82,7 @@ public class ExCompressum {
 		ModItems.init();
 		ModBlocks.init();
 
-		EntityRegistry.registerModEntity(EntityAngryChicken.class, "AngryChicken", 0, this, 64, 3, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "angry_chicken"), EntityAngryChicken.class, "AngryChicken", 0, ExCompressum.instance, 64, 10, true);
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		MinecraftForge.EVENT_BUS.register(this);
@@ -186,10 +186,10 @@ public class ExCompressum {
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
 		if (AbstractRegistry.registryErrors.size() > 0) {
-			event.player.addChatComponentMessage(new TextComponentString(TextFormatting.RED + "There were errors loading the Ex Compressum registries:"));
+			event.player.sendMessage(new TextComponentString(TextFormatting.RED + "There were errors loading the Ex Compressum registries:"));
 			TextFormatting lastFormatting = TextFormatting.WHITE;
 			for (String error : AbstractRegistry.registryErrors) {
-				event.player.addChatMessage(new TextComponentString(lastFormatting + "* " + error));
+				event.player.sendMessage(new TextComponentString(lastFormatting + "* " + error));
 				lastFormatting = lastFormatting == TextFormatting.GRAY ? TextFormatting.WHITE : TextFormatting.GRAY;
 			}
 		}

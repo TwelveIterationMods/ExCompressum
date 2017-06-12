@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.registry.compressor;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -51,33 +52,32 @@ public class CompressedRecipeRegistry {
         }
     }
 
-    private static void addCompressedRecipe(IRecipe recipe, @Nullable ItemStack sourceStack) {
-        //noinspection ConstantConditions /// Forge missing @Nullable
-        if(sourceStack != null && sourceStack.getItem() != null) { // .getItem() != null is needed because some mod is registering a broken recipe
+    private static void addCompressedRecipe(IRecipe recipe, ItemStack sourceStack) {
+        if(!sourceStack.isEmpty()) {
             sourceStack = sourceStack.copy();
             if(recipe.getRecipeSize() == 4) {
                 matcherSmall.fill(sourceStack);
                 if(recipe.matches(matcherSmall, null)) {
-                    sourceStack.stackSize = 4;
+                    sourceStack.setCount(4);
                     ItemStack result = recipe.getCraftingResult(matcherSmall);
-                    if(result != null) {
+                    if(!result.isEmpty()) {
                         recipesSmall.add(new CompressedRecipe(sourceStack, result.copy()));
                     }
                 }
             } else if(recipe.getRecipeSize() == 9) {
                 matcher.fill(sourceStack);
                 if(recipe.matches(matcher, null)) {
-                    sourceStack.stackSize = 9;
+                    sourceStack.setCount(9);
                     ItemStack result = recipe.getCraftingResult(matcher);
-                    if(result != null) {
+                    if(!result.isEmpty()) {
                         recipes.add(new CompressedRecipe(sourceStack, result.copy()));
                     }
                 } else { // Fallback for stupid mods that register 2x2 recipes in a 3x3 shaped grid
                     matcherSmallStupid.fill(sourceStack);
                     if(recipe.matches(matcherSmallStupid, null)) {
-                        sourceStack.stackSize = 4;
+                        sourceStack.setCount(4);
                         ItemStack result = recipe.getCraftingResult(matcherSmallStupid);
-                        if(result != null) {
+                        if(!result.isEmpty()) {
                             recipesSmall.add(new CompressedRecipe(sourceStack, result.copy()));
                         }
                     }
@@ -86,24 +86,22 @@ public class CompressedRecipeRegistry {
         }
     }
 
-    @Nullable
     private static ItemStack getRecipeSource(ShapedRecipes recipe) {
         for(ItemStack itemStack : recipe.recipeItems) {
-            if(itemStack != null) {
+            if(!itemStack.isEmpty()) {
                 return itemStack;
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
-    @Nullable
     private static ItemStack getRecipeSource(ShapelessRecipes recipe) {
-        for(Object obj : recipe.recipeItems) {
-            if(obj != null) {
-                return (ItemStack) obj;
+        for(ItemStack obj : recipe.recipeItems) {
+            if(!obj.isEmpty()) {
+                return obj;
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @SuppressWarnings("unchecked")

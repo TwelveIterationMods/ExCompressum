@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.tile.TileWoodenCrucible;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -14,27 +13,23 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Locale;
 
-public class BlockWoodenCrucible extends BlockContainer implements IRegisterModel {
+public class BlockWoodenCrucible extends BlockCompressumContainer implements IRegisterModel {
 
     public enum Type implements IStringSerializable {
         OAK,
@@ -57,7 +52,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     public BlockWoodenCrucible() {
         super(Material.WOOD);
         setRegistryName("wooden_crucible");
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
     }
@@ -81,9 +76,8 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
         return state.getValue(VARIANT).ordinal();
     }
 
-    @Nullable
     @Override
-    protected ItemStack createStackedBlock(IBlockState state) {
+    protected ItemStack getSilkTouchDrop(IBlockState state) {
         return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
     }
 
@@ -93,7 +87,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         for(int i = 0; i < Type.values.length; i++) {
             list.add(new ItemStack(item, 1, i));
         }
@@ -116,25 +110,24 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileWoodenCrucible tileEntity = (TileWoodenCrucible) world.getTileEntity(pos);
         if (tileEntity != null) {
+        	ItemStack heldItem = player.getHeldItem(hand);
             ItemStack outputStack = tileEntity.getItemHandler().extractItem(0, 64, false);
-            if (outputStack != null) {
+            if (!outputStack.isEmpty()) {
                 if (!player.inventory.addItemStackToInventory(outputStack)) {
-                    world.spawnEntityInWorld(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, outputStack));
+                    world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, outputStack));
                 }
                 return true;
             }
 
-            if (heldItem != null) {
+            if (!heldItem.isEmpty()) {
                 if (tileEntity.addItem(heldItem)) {
                     return true;
                 }
             }
-
-            IFluidHandler fluidHandler = tileEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
-            FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, player);
+            FluidUtil.interactWithFluidHandler(player, hand, world, pos, side);
         }
         return true;
     }
@@ -147,7 +140,7 @@ public class BlockWoodenCrucible extends BlockContainer implements IRegisterMode
             public ModelResourceLocation getModelLocation(ItemStack itemStack) {
                 Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
                 if(type != null) {
-                    return new ModelResourceLocation(getRegistryName(), "variant=" + type.getName());
+                    return new ModelResourceLocation(getRegistryNameString(), "variant=" + type.getName());
                 } else {
                     return new ModelResourceLocation("missingno");
                 }

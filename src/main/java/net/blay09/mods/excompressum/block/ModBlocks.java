@@ -8,11 +8,11 @@ import net.blay09.mods.excompressum.item.*;
 import net.blay09.mods.excompressum.tile.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModAPIManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.List;
@@ -32,16 +32,16 @@ public class ModBlocks {
 
     public static void init() {
         compressedBlock = new BlockCompressed();
-        registerBlock(compressedBlock, new ItemBlockCompressed(compressedBlock).setRegistryName(compressedBlock.getRegistryName()));
+        registerBlock(compressedBlock, new ItemBlockCompressed(compressedBlock));
 
         heavySieve = new BlockHeavySieve();
-        registerBlock(heavySieve, new ItemBlockHeavySieve(heavySieve).setRegistryName(heavySieve.getRegistryName()));
+        registerBlock(heavySieve, new ItemBlockHeavySieve(heavySieve));
 
         woodenCrucible = new BlockWoodenCrucible();
-        registerBlock(woodenCrucible, new ItemBlockWoodenCrucible(woodenCrucible).setRegistryName(woodenCrucible.getRegistryName()));
+        registerBlock(woodenCrucible, new ItemBlockWoodenCrucible(woodenCrucible));
 
         bait = new BlockBait();
-        registerBlock(bait, new ItemBlockBait(bait).setRegistryName(bait.getRegistryName()));
+        registerBlock(bait, new ItemBlockBait(bait));
 
         autoHammer = new BlockAutoHammer("auto_hammer");
         autoCompressedHammer = new BlockAutoCompressedHammer();
@@ -75,6 +75,7 @@ public class ModBlocks {
     }
 
     private static void registerDefaultBlock(Block block) {
+        //noinspection ConstantConditions
         registerBlock(block, new ItemBlock(block).setRegistryName(block.getRegistryName()));
     }
 
@@ -87,10 +88,11 @@ public class ModBlocks {
     public static void registerModels() {
         for(Block block : modBlocks) {
             Item itemBlock = Item.getItemFromBlock(block);
-            if(itemBlock != null) {
+            if(itemBlock != Items.AIR) {
                 if (block instanceof IRegisterModel) {
                     ((IRegisterModel) block).registerModel(itemBlock);
                 } else {
+                    //noinspection ConstantConditions
                     ModelLoader.setCustomModelResourceLocation(itemBlock, 0, new ModelResourceLocation(itemBlock.getRegistryName(), "inventory"));
                 }
             }

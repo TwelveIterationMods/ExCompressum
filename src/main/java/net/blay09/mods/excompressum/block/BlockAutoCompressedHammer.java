@@ -37,6 +37,6 @@ public class BlockAutoCompressedHammer extends BlockAutoHammer {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerModel(Item item) {
-        ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(getRegistryNameString(), "inventory"));
     }
 }

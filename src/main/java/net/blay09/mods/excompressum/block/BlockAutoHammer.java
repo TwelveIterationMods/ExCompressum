@@ -2,14 +2,11 @@ package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
-import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -36,10 +33,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nullable;
-
-public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
+public class BlockAutoHammer extends BlockCompressumContainer implements IRegisterModel {
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyEnum<ExNihiloProvider.NihiloMod> HAMMER_MOD = PropertyEnum.create("hammer_mod", ExNihiloProvider.NihiloMod.class);
@@ -49,7 +45,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
         setRegistryName(registryName);
-        setUnlocalizedName(getRegistryName().toString());
+        setUnlocalizedName(getRegistryNameString());
     }
 
     @Override
@@ -72,9 +68,8 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         return getDefaultState().withProperty(FACING, facing);
     }
 
-    @Nullable
     @Override
-    protected ItemStack createStackedBlock(IBlockState state) {
+    protected ItemStack getSilkTouchDrop(IBlockState state) {
         return new ItemStack(this, 1, state.getValue(FACING).ordinal());
     }
 
@@ -106,7 +101,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!player.isSneaking() && !world.isRemote) {
             player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_HAMMER, world, pos.getX(), pos.getY(), pos.getZ());
         }
@@ -123,24 +118,25 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if(tileEntity != null) {
-            //noinspection ConstantConditions /// Forge needs jesus
-            IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+            IItemHandler itemHandler = ((TileAutoHammer) tileEntity).getItemHandler();
             for (int i = 0; i < itemHandler.getSlots(); i++) {
-                if (itemHandler.getStackInSlot(i) != null) {
-                    world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i)));
+                ItemStack itemStack = itemHandler.getStackInSlot(i);
+                if (!itemStack.isEmpty()) {
+                    world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemStack));
                 }
             }
             ItemStack currentStack = ((TileAutoHammer) tileEntity).getCurrentStack();
-            if (currentStack != null) {
-                world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
+            if (!currentStack.isEmpty()) {
+                world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
             }
         }
         super.breakBlock(world, pos, state);
     }
 
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        EnumFacing facing = BlockPistonBase.getFacingFromEntity(pos, placer);
+    @SuppressWarnings("deprecation")
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        EnumFacing facing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
         if(facing.getAxis() == EnumFacing.Axis.Y) {
             facing = EnumFacing.NORTH;
         }
@@ -167,7 +163,8 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
     @Override
     @SuppressWarnings("deprecation")
     public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
-        return StupidUtils.getComparatorOutput64(world, pos);
+        TileEntity tileEntity = world.getTileEntity(pos);
+        return tileEntity != null ? ItemHandlerHelper.calcRedstoneFromInventory(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) : 0;
     }
 
     @Override
@@ -176,7 +173,7 @@ public class BlockAutoHammer extends BlockContainer implements IRegisterModel {
         ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
             @Override
             public ModelResourceLocation getModelLocation(ItemStack stack) {
-                return new ModelResourceLocation(getRegistryName(), "facing=north,hammer_mod=" + ExRegistro.getNihiloMod().getName());
+                return new ModelResourceLocation(getRegistryNameString(), "facing=north,hammer_mod=" + ExRegistro.getNihiloMod().getName());
             }
         });
     }

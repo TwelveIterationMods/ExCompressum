@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.IRegisterModel;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -16,16 +15,16 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Locale;
 
-public class BlockCompressed extends Block implements IRegisterModel {
+public class BlockCompressed extends BlockCompressum implements IRegisterModel {
 
 	public enum Type implements IStringSerializable {
 		DUST,
@@ -58,7 +57,7 @@ public class BlockCompressed extends Block implements IRegisterModel {
 	public BlockCompressed() {
 		super(Material.ROCK);
 		setRegistryName("compressed_block");
-		setUnlocalizedName(getRegistryName().toString());
+		setUnlocalizedName(getRegistryNameString());
 		setHardness(4f);
 		setResistance(6f);
 		setSoundType(SoundType.STONE);
@@ -84,9 +83,8 @@ public class BlockCompressed extends Block implements IRegisterModel {
 		return state.getValue(VARIANT).ordinal();
 	}
 
-	@Nullable
 	@Override
-	protected ItemStack createStackedBlock(IBlockState state) {
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
 		return new ItemStack(this, 1, state.getValue(VARIANT).ordinal());
 	}
 
@@ -96,7 +94,7 @@ public class BlockCompressed extends Block implements IRegisterModel {
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs creativeTab, List<ItemStack> list) {
+	public void getSubBlocks(Item item, CreativeTabs creativeTab, NonNullList<ItemStack> list) {
 		for (int i = 0; i < Type.values().length; i++) {
 			list.add(new ItemStack(item, 1, i));
 		}

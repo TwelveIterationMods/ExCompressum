@@ -23,6 +23,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nullable;
+
 public class TileWoodenCrucible extends TileEntity implements ITickable {
 
 	private static final int RAIN_FILL_INTERVAL = 20;
@@ -35,7 +37,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 			ItemStack copy = stack.copy();
 			if (addItem(copy)) {
-				return copy.stackSize == 0 ? null : copy;
+				return copy.isEmpty() ? ItemStack.EMPTY : copy;
 			}
 			return stack;
 		}
@@ -58,7 +60,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 
 		@Override
 		public boolean canFill() {
-			return itemHandler.getStackInSlot(0) == null;
+			return itemHandler.getStackInSlot(0).isEmpty();
 		}
 
 		@Override
@@ -84,7 +86,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 		// CLEANUP This should be registryfied:
 		// When inserting dust, turn it into clay if we have enough liquid
 		if (fluidTank.getFluidAmount() >= Fluid.BUCKET_VOLUME && ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.DUST)) {
-			itemStack.stackSize--;
+			itemStack.shrink(1);
 			itemHandler.setStackInSlot(0, new ItemStack(Blocks.CLAY));
 			fluidTank.setFluid(null);
 			VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -97,7 +99,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 			if(fluidTank.getFluid() == null || fluidTank.getFluidAmount() == 0 || fluidTank.getFluid().getFluid() == meltable.getFluid()) {
 				int capacityLeft = fluidTank.getCapacity() - fluidTank.getFluidAmount() - solidVolume;
 				if (capacityLeft > 0) {
-					itemStack.stackSize--;
+					itemStack.shrink(1);
 					currentMeltable = meltable;
 					solidVolume += Math.min(capacityLeft, meltable.getAmount());
 					VanillaPacketHandler.sendTileEntityUpdate(this);
@@ -110,9 +112,9 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			// Fill the crucible from rain
-			if (worldObj.getWorldInfo().isRaining() && worldObj.canBlockSeeSky(pos) && worldObj.getBiomeForCoordsBody(pos).getRainfall() > 0f) {
+			if (world.getWorldInfo().isRaining() && world.canBlockSeeSky(pos) && world.getBiomeForCoordsBody(pos).getRainfall() > 0f) {
 				ticksSinceRain++;
 				if (ticksSinceRain >= RAIN_FILL_INTERVAL) {
 					fluidTank.fill(new FluidStack(FluidRegistry.WATER, RAIN_FILL_SPEED), true);
@@ -151,7 +153,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 		fluidTank.readFromNBT(tagCompound.getCompoundTag("FluidTank"));
 		itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
 		if (tagCompound.hasKey("Content")) {
-			currentMeltable = WoodenCrucibleRegistry.getEntry(ItemStack.loadItemStackFromNBT(tagCompound.getCompoundTag("Content")));
+			currentMeltable = WoodenCrucibleRegistry.getEntry(new ItemStack(tagCompound.getCompoundTag("Content")));
 		}
 	}
 
@@ -183,7 +185,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
 				|| capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
 				|| super.hasCapability(capability, facing);
@@ -191,7 +193,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
 			return (T) fluidTank;
 		}

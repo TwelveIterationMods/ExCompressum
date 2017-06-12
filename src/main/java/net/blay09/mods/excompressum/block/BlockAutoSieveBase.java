@@ -3,12 +3,9 @@ package net.blay09.mods.excompressum.block;
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
-import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -34,15 +31,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class BlockAutoSieveBase extends BlockContainer {
+public abstract class BlockAutoSieveBase extends BlockCompressumContainer {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-	private ItemStack lastHoverStack;
+	private ItemStack lastHoverStack = ItemStack.EMPTY;
 	private String currentRandomName;
 
 	protected BlockAutoSieveBase(Material material) {
@@ -71,9 +68,8 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 		return getDefaultState().withProperty(FACING, facing);
 	}
 
-	@Nullable
 	@Override
-	protected ItemStack createStackedBlock(IBlockState state) {
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
 		return new ItemStack(this, 1, state.getValue(FACING).ordinal());
 	}
 
@@ -100,9 +96,10 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if(!world.isRemote) {
-			if (heldItem != null) {
+			ItemStack heldItem = player.getHeldItem(hand);
+			if (!heldItem.isEmpty()) {
 				TileAutoSieveBase tileEntity = (TileAutoSieveBase) world.getTileEntity(pos);
 				if (tileEntity != null) {
 					if (heldItem.getItem() instanceof ItemFood) {
@@ -121,7 +118,7 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 					} else if (heldItem.getItem() == Items.NAME_TAG && heldItem.hasDisplayName()) {
 						tileEntity.setCustomSkin(new GameProfile(null, heldItem.getDisplayName()));
 						if (!player.capabilities.isCreativeMode) {
-							heldItem.stackSize--;
+							heldItem.shrink(1);
 						}
 						return true;
 					}
@@ -138,34 +135,35 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if(tileEntity != null) {
-			//noinspection ConstantConditions /// thanks lex
-			IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			IItemHandler itemHandler = ((TileAutoSieveBase) tileEntity).getItemHandler();
 			for (int i = 0; i < itemHandler.getSlots(); i++) {
-				if (itemHandler.getStackInSlot(i) != null) {
-					EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemHandler.getStackInSlot(i));
+				ItemStack itemStack = itemHandler.getStackInSlot(i);
+				if (!itemStack.isEmpty()) {
+					EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemStack);
 					double motion = 0.05;
 					entityItem.motionX = world.rand.nextGaussian() * motion;
 					entityItem.motionY = 0.2;
 					entityItem.motionZ = world.rand.nextGaussian() * motion;
-					world.spawnEntityInWorld(entityItem);
+					world.spawnEntity(entityItem);
 				}
 			}
 			ItemStack currentStack = ((TileAutoSieveBase) tileEntity).getCurrentStack();
-			if (currentStack != null) {
+			if (!currentStack.isEmpty()) {
 				EntityItem entityItem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack);
 				double motion = 0.05;
 				entityItem.motionX = world.rand.nextGaussian() * motion;
 				entityItem.motionY = 0.2;
 				entityItem.motionZ = world.rand.nextGaussian() * motion;
-				world.spawnEntityInWorld(entityItem);
+				world.spawnEntity(entityItem);
 			}
 		}
 		super.breakBlock(world, pos, state);
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		EnumFacing facing = BlockPistonBase.getFacingFromEntity(pos, placer);
+	@SuppressWarnings("deprecation")
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		EnumFacing facing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
 		if(facing.getAxis() == EnumFacing.Axis.Y) {
 			facing = EnumFacing.NORTH;
 		}
@@ -202,7 +200,8 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 	@Override
 	@SuppressWarnings("deprecation")
 	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
-		return StupidUtils.getComparatorOutput64(world, pos);
+		TileEntity tileEntity = world.getTileEntity(pos);
+		return tileEntity != null ? ItemHandlerHelper.calcRedstoneFromInventory(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) : 0;
 	}
 
 	@Override

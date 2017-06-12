@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GuiAutoCompressor extends GuiContainer {
 
-    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/autoCompressor.png");
+    private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/auto_compressor.png");
     private TileAutoCompressor tileEntity;
 
     public GuiAutoCompressor(InventoryPlayer inventoryPlayer, TileAutoCompressor tileEntity) {
