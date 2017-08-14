@@ -5,14 +5,14 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeCategory;
+import mezz.jei.api.recipe.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
-public class ChickenStickRecipeCategory extends BlankRecipeCategory<ChickenStickRecipe> {
+public class ChickenStickRecipeCategory implements IRecipeCategory<ChickenStickRecipe> {
 
 	public static final String UID = "excompressum:chickenStick";
 	private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_chicken_stick.png");
@@ -35,6 +35,11 @@ public class ChickenStickRecipeCategory extends BlankRecipeCategory<ChickenStick
 		return I18n.format("jei." + UID);
 	}
 
+	@Override
+	public String getModName() {
+		return "Ex Compressum";
+	}
+
 	@Nonnull
 	@Override
 	public IDrawable getBackground() {
@@ -47,4 +52,5 @@ public class ChickenStickRecipeCategory extends BlankRecipeCategory<ChickenStick
 		recipeLayout.getItemStacks().init(1, false, 130, 20);
 		recipeLayout.getItemStacks().set(ingredients);
 	}
+
 }

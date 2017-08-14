@@ -1,14 +1,12 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.tile.TileWoodenCrucible;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,16 +18,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Locale;
 
-public class BlockWoodenCrucible extends BlockCompressumContainer implements IRegisterModel {
+public class BlockWoodenCrucible extends BlockContainer {
+
+    public static final String name = "mana_sieve";
+    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public enum Type implements IStringSerializable {
         OAK,
@@ -51,8 +50,7 @@ public class BlockWoodenCrucible extends BlockCompressumContainer implements IRe
 
     public BlockWoodenCrucible() {
         super(Material.WOOD);
-        setRegistryName("wooden_crucible");
-        setUnlocalizedName(getRegistryNameString());
+        setUnlocalizedName(registryName.toString());
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
     }
@@ -87,9 +85,9 @@ public class BlockWoodenCrucible extends BlockCompressumContainer implements IRe
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
         for(int i = 0; i < Type.values.length; i++) {
-            list.add(new ItemStack(item, 1, i));
+            items.add(new ItemStack(this, 1, i));
         }
     }
 
@@ -132,20 +130,18 @@ public class BlockWoodenCrucible extends BlockCompressumContainer implements IRe
         return true;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerModel(Item item) {
-        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
-            @Override
-            public ModelResourceLocation getModelLocation(ItemStack itemStack) {
-                Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
-                if(type != null) {
-                    return new ModelResourceLocation(getRegistryNameString(), "variant=" + type.getName());
-                } else {
-                    return new ModelResourceLocation("missingno");
-                }
-            }
-        });
+    public void registerModel(Item item) { // TODO move me
+//        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
+//            @Override
+//            public ModelResourceLocation getModelLocation(ItemStack itemStack) {
+//                Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
+//                if(type != null) {
+//                    return new ModelResourceLocation(registryName, "variant=" + type.getName());
+//                } else {
+//                    return new ModelResourceLocation("missingno");
+//                }
+//            }
+//        });
     }
 
 }

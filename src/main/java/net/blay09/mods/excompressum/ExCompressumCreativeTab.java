@@ -9,7 +9,6 @@ import net.minecraft.util.NonNullList;
 import java.util.List;
 
 public class ExCompressumCreativeTab extends CreativeTabs {
-
     private final List<ItemStack> additionalItems = Lists.newArrayList();
 
     public ExCompressumCreativeTab() {

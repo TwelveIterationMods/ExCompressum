@@ -1,100 +1,104 @@
 package net.blay09.mods.excompressum.item;
 
-import com.google.common.collect.Lists;
-import net.blay09.mods.excompressum.IRegisterModel;
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistry;
 
-import java.util.List;
-
+@GameRegistry.ObjectHolder(ExCompressum.MOD_ID)
 public class ModItems {
 
-    private static final List<Item> modItems = Lists.newArrayList();
-    public static ItemChickenStick chickenStick;
-    public static ItemCompressedHammer compressedHammerWood;
-    public static ItemCompressedHammer compressedHammerStone;
-    public static ItemCompressedHammer compressedHammerIron;
-    public static ItemCompressedHammer compressedHammerGold;
-    public static ItemCompressedHammer compressedHammerDiamond;
-    public static ItemDoubleCompressedDiamondHammer doubleCompressedDiamondHammer;
-    public static ItemCompressedCrook compressedCrook;
-    public static ItemIronMesh ironMesh;
-    public static ItemWoodChipping woodChipping;
-    public static ItemUncompressedCoal uncompressedCoal;
-    public static ItemBatZapper batZapper;
-    public static ItemOreSmasher oreSmasher;
+	@GameRegistry.ObjectHolder(ItemChickenStick.name)
+	public static Item chickenStick = Items.AIR;
 
-    public static Item itemManaHammer;
+	@GameRegistry.ObjectHolder(ItemCompressedHammer.namePrefix + "wood")
+	public static Item compressedHammerWood = Items.AIR;
 
-    public static void init() {
-        chickenStick = new ItemChickenStick();
-        register(chickenStick);
+	@GameRegistry.ObjectHolder(ItemCompressedHammer.namePrefix + "stone")
+	public static Item compressedHammerStone = Items.AIR;
 
-        compressedHammerWood = new ItemCompressedHammer(Item.ToolMaterial.WOOD, "wood");
-        register(compressedHammerWood);
-        compressedHammerStone = new ItemCompressedHammer(Item.ToolMaterial.STONE, "stone");
-        register(compressedHammerStone);
-        compressedHammerIron = new ItemCompressedHammer(Item.ToolMaterial.IRON, "iron");
-        register(compressedHammerIron);
-        compressedHammerGold = new ItemCompressedHammer(Item.ToolMaterial.GOLD, "gold");
-        register(compressedHammerGold);
-        compressedHammerDiamond = new ItemCompressedHammer(Item.ToolMaterial.DIAMOND, "diamond");
-        register(compressedHammerDiamond);
+	@GameRegistry.ObjectHolder(ItemCompressedHammer.namePrefix + "iron")
+	public static Item compressedHammerIron = Items.AIR;
 
-        doubleCompressedDiamondHammer = new ItemDoubleCompressedDiamondHammer();
-        register(doubleCompressedDiamondHammer);
+	@GameRegistry.ObjectHolder(ItemCompressedHammer.namePrefix + "gold")
+	public static Item compressedHammerGold = Items.AIR;
 
-        compressedCrook = new ItemCompressedCrook();
-        register(compressedCrook);
+	@GameRegistry.ObjectHolder(ItemCompressedHammer.namePrefix + "diamond")
+	public static Item compressedHammerDiamond = Items.AIR;
 
-        ironMesh = new ItemIronMesh();
-        register(ironMesh);
+	@GameRegistry.ObjectHolder(ItemDoubleCompressedDiamondHammer.name)
+	public static Item doubleCompressedDiamondHammer = Items.AIR;
 
-        woodChipping = new ItemWoodChipping();
-        register(woodChipping);
-        OreDictionary.registerOre("dustWood", new ItemStack(woodChipping));
+	@GameRegistry.ObjectHolder(ItemCompressedCrook.name)
+	public static Item compressedCrook = Items.AIR;
 
-        uncompressedCoal = new ItemUncompressedCoal();
-        register(uncompressedCoal);
+	@GameRegistry.ObjectHolder(ItemIronMesh.name)
+	public static Item ironMesh = Items.AIR;
 
-        batZapper = new ItemBatZapper();
-        register(batZapper);
+	@GameRegistry.ObjectHolder(ItemWoodChipping.name)
+	public static Item woodChipping = Items.AIR;
 
-        oreSmasher = new ItemOreSmasher();
-        register(oreSmasher);
+	@GameRegistry.ObjectHolder(ItemUncompressedCoal.name)
+	public static Item uncompressedCoal = Items.AIR;
 
-        // TODO move this to addon preInit
-        if(Loader.isModLoaded(Compat.BOTANIA)) try {
-            itemManaHammer = (Item) Class.forName("net.blay09.mods.excompressum.item.ItemManaHammer").newInstance();
-            register(itemManaHammer);
-        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+	@GameRegistry.ObjectHolder(ItemBatZapper.name)
+	public static Item batZapper = Items.AIR;
 
-    public static void register(Item item) {
-        GameRegistry.register(item);
-        modItems.add(item);
-    }
+	@GameRegistry.ObjectHolder(ItemOreSmasher.name)
+	public static Item oreSmasher = Items.AIR;
 
-    @SideOnly(Side.CLIENT)
-    public static void registerModels() {
-        for(Item item : modItems) {
-            if (item instanceof IRegisterModel) {
-                ((IRegisterModel) item).registerModel(item);
-            } else {
-                //noinspection ConstantConditions
-                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-            }
-        }
-    }
+	@GameRegistry.ObjectHolder(ItemManaHammer.name)
+	public static Item itemManaHammer = Items.AIR;
+
+	public static void register(IForgeRegistry<Item> registry) {
+		registry.registerAll(
+				new ItemChickenStick().setRegistryName(ItemChickenStick.name),
+				new ItemCompressedHammer(Item.ToolMaterial.WOOD, "wood").setRegistryName(ItemCompressedHammer.namePrefix + "wood"),
+				new ItemCompressedHammer(Item.ToolMaterial.STONE, "stone").setRegistryName(ItemCompressedHammer.namePrefix + "stone"),
+				new ItemCompressedHammer(Item.ToolMaterial.IRON, "iron").setRegistryName(ItemCompressedHammer.namePrefix + "iron"),
+				new ItemCompressedHammer(Item.ToolMaterial.GOLD, "gold").setRegistryName(ItemCompressedHammer.namePrefix + "gold"),
+				new ItemCompressedHammer(Item.ToolMaterial.DIAMOND, "diamond").setRegistryName(ItemCompressedHammer.namePrefix + "diamond"),
+				new ItemDoubleCompressedDiamondHammer().setRegistryName(ItemDoubleCompressedDiamondHammer.name),
+				new ItemCompressedCrook().setRegistryName(ItemCompressedCrook.name),
+				new ItemIronMesh().setRegistryName(ItemIronMesh.name),
+				new ItemWoodChipping().setRegistryName(ItemWoodChipping.name),
+				new ItemUncompressedCoal().setRegistryName(ItemUncompressedCoal.name),
+				new ItemBatZapper().setRegistryName(ItemBatZapper.name),
+				new ItemOreSmasher().setRegistryName(ItemOreSmasher.name)
+				);
+
+		// TODO move this to addon preInit
+		if (Loader.isModLoaded(Compat.BOTANIA)) {
+			try {
+				registry.register(((Item) Class.forName("net.blay09.mods.excompressum.item.ItemManaHammer").newInstance()).setRegistryName("mana_hammer"));
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	public static void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(chickenStick, 0, new ModelResourceLocation(ItemChickenStick.registryName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(compressedHammerWood, 0, new ModelResourceLocation(ExCompressum.MOD_ID + ":" + ItemCompressedHammer.namePrefix + "wood", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(compressedHammerStone, 0, new ModelResourceLocation(ExCompressum.MOD_ID + ":" + ItemCompressedHammer.namePrefix + "stone", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(compressedHammerIron, 0, new ModelResourceLocation(ExCompressum.MOD_ID + ":" + ItemCompressedHammer.namePrefix + "iron", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(compressedHammerGold, 0, new ModelResourceLocation(ExCompressum.MOD_ID + ":" + ItemCompressedHammer.namePrefix + "gold", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(compressedHammerDiamond, 0, new ModelResourceLocation(ExCompressum.MOD_ID + ":" + ItemCompressedHammer.namePrefix + "diamond", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(doubleCompressedDiamondHammer, 0, new ModelResourceLocation(ItemDoubleCompressedDiamondHammer.registryName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(compressedCrook, 0, new ModelResourceLocation(ItemCompressedCrook.registryName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(ironMesh, 0, new ModelResourceLocation(ItemIronMesh.registryName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(woodChipping, 0, new ModelResourceLocation(ItemWoodChipping.registryName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(uncompressedCoal, 0, new ModelResourceLocation(ItemUncompressedCoal.registryName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(batZapper, 0, new ModelResourceLocation(ItemBatZapper.registryName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(oreSmasher, 0, new ModelResourceLocation(ItemOreSmasher.registryName, "inventory"));
+	}
 
 }

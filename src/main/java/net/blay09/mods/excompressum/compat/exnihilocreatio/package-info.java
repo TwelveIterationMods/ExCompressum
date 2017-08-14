@@ -1,6 +1,6 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package net.blay09.mods.excompressum.compat.minetweaker;
+package net.blay09.mods.excompressum.compat.exnihilocreatio;
 
 import mcp.MethodsReturnNonnullByDefault;
 

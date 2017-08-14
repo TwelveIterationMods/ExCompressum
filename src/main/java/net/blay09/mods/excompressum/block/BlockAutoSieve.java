@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.block;
 
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.TileAutoSieve;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -7,15 +8,18 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockAutoSieve extends BlockAutoSieveBase {
 
-    public BlockAutoSieve(String registryName) {
+    public static final String name = "auto_sieve";
+    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
+
+    public BlockAutoSieve() {
         super(Material.IRON);
-        setRegistryName(registryName);
-        setUnlocalizedName(getRegistryNameString());
+        setUnlocalizedName(registryName.toString());
     }
 
     @Override

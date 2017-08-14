@@ -3,12 +3,13 @@ package net.blay09.mods.excompressum.item;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ToolsConfig;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -18,18 +19,19 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 
-public class ItemChickenStick extends ItemCompressumTool {
+public class ItemChickenStick extends ItemTool {
+
+    public static final String name = "chicken_stick";
+    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public ItemChickenStick() {
-        super(0f, 0f, ToolMaterial.DIAMOND, new HashSet<Block>());
-        setRegistryName("chicken_stick");
-        setUnlocalizedName(getRegistryNameString());
+        super(0f, 0f, ToolMaterial.DIAMOND, new HashSet<>());
+        setUnlocalizedName(registryName.toString());
         setCreativeTab(ExCompressum.creativeTab);
         setMaxDamage(0);
         damageVsEntity = 0f;
@@ -42,10 +44,9 @@ public class ItemChickenStick extends ItemCompressumTool {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List<String> list, boolean flag) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
         if(ToolsConfig.getChickenStickName() != null) {
-            list.add(TextFormatting.GRAY + I18n.format("item.excompressum:chicken_stick.name"));
+            tooltip.add(TextFormatting.GRAY + I18n.format("item.excompressum:chicken_stick.name"));
         }
     }
 

@@ -3,18 +3,15 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
-import net.blay09.mods.excompressum.IRegisterModel;
-import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,20 +24,21 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.Locale;
 
-public class BlockHeavySieve extends BlockCompressumContainer implements IRegisterModel {
+public class BlockHeavySieve extends BlockContainer {
+
+	public static final String name = "heavy_sieve";
+	public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
 	public static final SieveModelBounds SIEVE_BOUNDS = new SieveModelBounds(0.5625f, 0.0625f, 0.88f, 0.5f);
 
@@ -68,7 +66,6 @@ public class BlockHeavySieve extends BlockCompressumContainer implements IRegist
 		super(Material.WOOD);
 		setCreativeTab(ExCompressum.creativeTab);
 		setHardness(2f);
-		setRegistryName("heavy_sieve");
 	}
 
 	@Override
@@ -107,9 +104,9 @@ public class BlockHeavySieve extends BlockCompressumContainer implements IRegist
 	}
 
 	@Override
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
 		for (int i = 0; i < BlockWoodenCrucible.Type.values.length; i++) {
-			list.add(new ItemStack(item, 1, i));
+			items.add(new ItemStack(this, 1, i));
 		}
 	}
 
@@ -178,24 +175,22 @@ public class BlockHeavySieve extends BlockCompressumContainer implements IRegist
 		return true;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerModel(Item item) {
-		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
-			@Override
-			public ModelResourceLocation getModelLocation(ItemStack itemStack) {
-				Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
-				if (type != null) {
-					if (ExRegistro.doMeshesHaveDurability()) {
-						return new ModelResourceLocation(getRegistryNameString(), "variant=" + type.getName() + ",with_mesh=false");
-					} else {
-						return new ModelResourceLocation(getRegistryNameString(), "variant=" + type.getName() + ",with_mesh=false"); // it's false here too because it was a dumb idea based on wrong thinking; don't want to remove it now though
-					}
-				} else {
-					return new ModelResourceLocation("missingno");
-				}
-			}
-		});
+	public void registerModel(Item item) { // TODO move to registerModels
+//		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
+//			@Override
+//			public ModelResourceLocation getModelLocation(ItemStack itemStack) {
+//				Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
+//				if (type != null) {
+//					if (ExRegistro.doMeshesHaveDurability()) {
+//						return new ModelResourceLocation(registryName, "variant=" + type.getName() + ",with_mesh=false");
+//					} else {
+//						return new ModelResourceLocation(registryName, "variant=" + type.getName() + ",with_mesh=false"); // it's false here too because it was a dumb idea based on wrong thinking; don't want to remove it now though
+//					}
+//				} else {
+//					return new ModelResourceLocation("missingno");
+//				}
+//			}
+//		});
 	}
 
 	@Override

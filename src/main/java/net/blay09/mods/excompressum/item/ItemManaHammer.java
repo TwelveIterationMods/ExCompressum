@@ -1,29 +1,35 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.mana.IManaUsingItem;
 import vazkii.botania.api.mana.ManaItemHandler;
 
 import java.util.HashSet;
 
-public class ItemManaHammer extends ItemCompressumTool implements IManaUsingItem, IHammer {
+@Optional.Interface(modid = Compat.BOTANIA, iface = "vazkii.botania.api.mana.IManaUsingItem")
+public class ItemManaHammer extends ItemTool implements IManaUsingItem, IHammer {
+
+	public static final String name = "hammer_mana";
+	public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
 	private static final int MANA_PER_DAMAGE = 60;
 
 	protected ItemManaHammer() {
-		super(6f, -3.2f, BotaniaAPI.manasteelToolMaterial, new HashSet<Block>());
-		setRegistryName("hammer_mana");
-		setUnlocalizedName(getRegistryNameString());
+		super(6f, -3.2f, BotaniaAPI.manasteelToolMaterial, new HashSet<>());
+		setUnlocalizedName(registryName.toString());
 		setCreativeTab(ExCompressum.creativeTab);
 	}
 
@@ -81,4 +87,5 @@ public class ItemManaHammer extends ItemCompressumTool implements IManaUsingItem
 	public int getHammerLevel(ItemStack itemStack, World world, IBlockState state, EntityPlayer entityPlayer) {
 		return toolMaterial.getHarvestLevel();
 	}
+
 }

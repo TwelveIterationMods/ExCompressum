@@ -2,13 +2,14 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.BlockCompressed;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 public class ItemBlockCompressed extends ItemBlock {
-    public ItemBlockCompressed(BlockCompressed block) {
+
+    public ItemBlockCompressed(Block block) {
         super(block);
-        setRegistryName(block.getRegistryNameString());
         setHasSubtypes(true);
     }
 

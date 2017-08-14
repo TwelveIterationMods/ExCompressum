@@ -3,10 +3,10 @@ package net.blay09.mods.excompressum.client.render.tile;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.tile.TileWoodenCrucible;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -21,10 +21,10 @@ import org.lwjgl.opengl.GL11;
 public class RenderWoodenCrucible extends TileEntitySpecialRenderer<TileWoodenCrucible> {
 
 	@Override
-	public void renderTileEntityAt(TileWoodenCrucible tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileWoodenCrucible tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		Minecraft mc = Minecraft.getMinecraft();
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer renderer = tessellator.getBuffer();
+		BufferBuilder renderer = tessellator.getBuffer();
 
 		RenderHelper.disableStandardItemLighting();
 		mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

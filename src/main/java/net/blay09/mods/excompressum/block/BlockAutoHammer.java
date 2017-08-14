@@ -1,19 +1,16 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
-import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,27 +22,27 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class BlockAutoHammer extends BlockCompressumContainer implements IRegisterModel {
+public class BlockAutoHammer extends BlockContainer {
+
+    public static final String name = "auto_hammer";
+    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyEnum<ExNihiloProvider.NihiloMod> HAMMER_MOD = PropertyEnum.create("hammer_mod", ExNihiloProvider.NihiloMod.class);
 
-    public BlockAutoHammer(String registryName) {
+    public BlockAutoHammer() {
         super(Material.IRON);
+        setUnlocalizedName(registryName.toString());
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
-        setRegistryName(registryName);
-        setUnlocalizedName(getRegistryNameString());
     }
 
     @Override
@@ -167,14 +164,13 @@ public class BlockAutoHammer extends BlockCompressumContainer implements IRegist
         return tileEntity != null ? ItemHandlerHelper.calcRedstoneFromInventory(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) : 0;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerModel(Item item) {
-        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
-            @Override
-            public ModelResourceLocation getModelLocation(ItemStack stack) {
-                return new ModelResourceLocation(getRegistryNameString(), "facing=north,hammer_mod=" + ExRegistro.getNihiloMod().getName());
-            }
-        });
+    public void registerModel(Item item) { // TODO move to registerModels
+//        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
+//            @Override
+//            public ModelResourceLocation getModelLocation(ItemStack stack) {
+//                return new ModelResourceLocation(getRegistryNameString(), "facing=north,hammer_mod=" + ExRegistro.getNihiloMod().getName());
+//            }
+//        });
     }
+
 }

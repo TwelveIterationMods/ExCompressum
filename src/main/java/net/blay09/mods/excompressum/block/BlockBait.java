@@ -1,16 +1,15 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.IRegisterModel;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.tile.TileBait;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,15 +29,16 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class BlockBait extends BlockCompressumContainer implements IRegisterModel {
+public class BlockBait extends BlockContainer {
+
+    public static final String name = "bait";
+    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public enum Type implements IStringSerializable {
         WOLF,
@@ -50,7 +50,7 @@ public class BlockBait extends BlockCompressumContainer implements IRegisterMode
         SQUID,
         RABBIT,
         HORSE,
-        DONKEY;
+        DONKEY; // TODO add missing animals
 
         public static Type[] values = values();
 
@@ -72,7 +72,6 @@ public class BlockBait extends BlockCompressumContainer implements IRegisterMode
         super(Material.GROUND);
         setHardness(0.1f);
         setCreativeTab(ExCompressum.creativeTab);
-        setRegistryName("bait");
     }
 
     @Override
@@ -112,6 +111,7 @@ public class BlockBait extends BlockCompressumContainer implements IRegisterMode
 
     @Nullable
     @Override
+    @SuppressWarnings("deprecation")
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
         return null;
     }
@@ -129,9 +129,9 @@ public class BlockBait extends BlockCompressumContainer implements IRegisterMode
     }
 
     @Override
-    public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
         for (int i = 0; i < Type.values.length; i++) {
-            list.add(new ItemStack(item, 1, i));
+            items.add(new ItemStack(this, 1, i));
         }
     }
 
@@ -182,23 +182,29 @@ public class BlockBait extends BlockCompressumContainer implements IRegisterMode
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerModel(Item item) {
-        ResourceLocation[] variants = new ResourceLocation[Type.values.length];
-        for(int i = 0; i < variants.length; i++) {
-            variants[i] = new ResourceLocation(ExCompressum.MOD_ID, "bait_" + Type.values[i].getName());
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+        BlockBait.Type type = BlockBait.Type.fromId(stack.getItemDamage());
+        if(type == BlockBait.Type.SQUID) {
+            tooltip.add(I18n.format("info.excompressum:baitPlaceInWater"));
         }
-        ModelBakery.registerItemVariants(item, variants);
-        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
-            @Override
-            public ModelResourceLocation getModelLocation(ItemStack itemStack) {
-                Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
-                if(type != null) {
-                    return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "bait_" + type.getName()), "inventory");
-                } else {
-                    return new ModelResourceLocation("missingno");
-                }
-            }
-        });
+    }
+
+    public void registerModel(Item item) { // TODO move me to registerModels
+//        ResourceLocation[] variants = new ResourceLocation[Type.values.length];
+//        for(int i = 0; i < variants.length; i++) {
+//            variants[i] = new ResourceLocation(ExCompressum.MOD_ID, "bait_" + Type.values[i].getName());
+//        }
+//        ModelBakery.registerItemVariants(item, variants);
+//        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
+//            @Override
+//            public ModelResourceLocation getModelLocation(ItemStack itemStack) {
+//                Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
+//                if(type != null) {
+//                    return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "bait_" + type.getName()), "inventory");
+//                } else {
+//                    return new ModelResourceLocation("missingno");
+//                }
+//            }
+//        });
     }
 }

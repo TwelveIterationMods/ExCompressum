@@ -51,8 +51,8 @@ public class ContainerAutoCompressor extends Container {
 
         if(tileEntity.getProgress() != lastProgress || tileEntity.getEnergyStorage().getEnergyStored() != lastEnergy) {
             for (IContainerListener listener : listeners) {
-                listener.sendProgressBarUpdate(this, 0, (int) (100 * tileEntity.getProgress()));
-                listener.sendProgressBarUpdate(this, 1, tileEntity.getEnergyStorage().getEnergyStored());
+                listener.sendWindowProperty(this, 0, (int) (100 * tileEntity.getProgress()));
+                listener.sendWindowProperty(this, 1, tileEntity.getEnergyStorage().getEnergyStored());
             }
         }
         lastProgress = tileEntity.getProgress();

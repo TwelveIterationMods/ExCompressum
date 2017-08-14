@@ -19,6 +19,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -121,13 +122,13 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
                         if(world.rand.nextFloat() <= ProcessingConfig.autoHammerDecay) {
                             ItemStack firstHammer = hammerSlots.getStackInSlot(0);
                             if (!firstHammer.isEmpty()) {
-                                if(firstHammer.attemptDamageItem(1, world.rand)) {
+                                if(firstHammer.attemptDamageItem(1, world.rand, null)) {
                                     hammerSlots.setStackInSlot(0, ItemStack.EMPTY);
                                 }
                             }
                             ItemStack secondHammer = hammerSlots.getStackInSlot(1);
                             if (!secondHammer.isEmpty()) {
-                                if(secondHammer.attemptDamageItem(1, world.rand)) {
+                                if(secondHammer.attemptDamageItem(1, world.rand, null)) {
                                     hammerSlots.setStackInSlot(1, ItemStack.EMPTY);
                                 }
                             }
@@ -245,7 +246,10 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
 
     @Override
     protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
-        tagCompound.setTag("EnergyStorage", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
+        NBTBase energyStorageNBT = CapabilityEnergy.ENERGY.writeNBT(energyStorage, null);
+        if(energyStorageNBT != null) {
+            tagCompound.setTag("EnergyStorage", energyStorageNBT);
+        }
         tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         tagCompound.setFloat("Progress", progress);
         if(isSync) {

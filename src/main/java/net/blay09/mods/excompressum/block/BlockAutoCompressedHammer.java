@@ -1,22 +1,22 @@
 package net.blay09.mods.excompressum.block;
 
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockAutoCompressedHammer extends BlockAutoHammer {
 
+    public static final String name = "auto_compressed_hammer";
+    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
+
     public BlockAutoCompressedHammer() {
-        super("auto_compressed_hammer");
+        setUnlocalizedName(registryName.toString());
     }
 
     @Override
@@ -34,9 +34,4 @@ public class BlockAutoCompressedHammer extends BlockAutoHammer {
         return state;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerModel(Item item) {
-        ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(getRegistryNameString(), "inventory"));
-    }
 }

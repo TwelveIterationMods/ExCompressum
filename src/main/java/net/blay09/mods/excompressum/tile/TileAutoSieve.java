@@ -8,7 +8,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 
 import javax.annotation.Nullable;
 
-public class TileAutoSieve extends TileAutoSieveBase {
+public class TileAutoSieve extends TileAutoSieveBase { // TODO re-add RF support
 
     private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
         @Override

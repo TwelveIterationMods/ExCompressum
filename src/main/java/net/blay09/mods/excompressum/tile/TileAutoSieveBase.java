@@ -157,7 +157,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 							if(ExRegistro.doMeshesHaveDurability()) {
 								ItemStack meshStack = meshSlots.getStackInSlot(0);
 								if (!meshStack.isEmpty()) {
-									if(meshStack.attemptDamageItem(1, world.rand)) {
+									if(meshStack.attemptDamageItem(1, world.rand, null)) {
 										getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
 										meshStack.shrink(1);
 										meshSlots.setStackInSlot(0, ItemStack.EMPTY);

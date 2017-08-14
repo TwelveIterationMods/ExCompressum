@@ -1,13 +1,13 @@
 package net.blay09.mods.excompressum.compat.jei;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ChickenStickRecipe extends BlankRecipeWrapper {
+public class ChickenStickRecipe implements IRecipeWrapper {
 
 	private final ItemStack input;
 	private final ItemStack output;

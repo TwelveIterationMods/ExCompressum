@@ -49,8 +49,8 @@ public class CompressedEnemyHandler {
     public void onEntityDeath(LivingDeathEvent event) {
         if(!event.getEntity().world.isRemote && event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
             if(event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast) {
-                if(event.getSource().getEntity() instanceof EntityPlayer && !(event.getSource().getEntity() instanceof FakePlayer)) {
-                    if(StupidUtils.hasSilkTouchModifier((EntityLivingBase) event.getSource().getEntity())) {
+                if(event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
+                    if(StupidUtils.hasSilkTouchModifier((EntityLivingBase) event.getSource().getTrueSource())) {
                         return;
                     }
                     int entityId = EntityList.getID(event.getEntityLiving().getClass());

@@ -3,8 +3,8 @@ package net.blay09.mods.excompressum.client.render;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumBlockRenderType;
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 
 public class RenderUtils {
 
-	public static void renderQuadUp(VertexBuffer renderer, float x, float y, float z, float x2, float y2, float z2, int color, int brightness, TextureAtlasSprite sprite) {
+	public static void renderQuadUp(BufferBuilder renderer, float x, float y, float z, float x2, float y2, float z2, int color, int brightness, TextureAtlasSprite sprite) {
 		float d = 0.005f;
 		float d2 = 1 - (d * 2);
 		double minU = sprite.getInterpolatedU(d % 1d * 16f);
@@ -36,7 +36,7 @@ public class RenderUtils {
 	/**
 	 * This is terrible don't use it
 	 */
-	public static void renderBlockWithTranslate(Minecraft mc, IBlockState state, World world, BlockPos pos, VertexBuffer renderer) {
+	public static void renderBlockWithTranslate(Minecraft mc, IBlockState state, World world, BlockPos pos, BufferBuilder renderer) {
 		GlStateManager.translate(-pos.getX(), -pos.getY(), -pos.getZ());
 		BlockRendererDispatcher dispatcher = mc.getBlockRendererDispatcher();
 		try {

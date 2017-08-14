@@ -2,10 +2,8 @@ package net.blay09.mods.excompressum.compat.tconstruct;
 
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.compat.IAddon;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import slimeknights.tconstruct.library.TinkerRegistry;
@@ -31,7 +29,7 @@ public class TConstructAddon implements IAddon {
             ModSmashingII smashingII = new ModSmashingII();
             smashingII.addItem(ModItems.doubleCompressedDiamondHammer);
             TinkerRegistry.registerModifier(smashingII);
-            GameRegistry.addRecipe(new ItemStack(ModItems.doubleCompressedDiamondHammer), "##", "##", '#', ModItems.compressedHammerDiamond);
+            //GameRegistry.addRecipe(new ItemStack(ModItems.doubleCompressedDiamondHammer), "##", "##", '#', ModItems.compressedHammerDiamond); TODO move to json
         }
     }
 
@@ -43,4 +41,5 @@ public class TConstructAddon implements IAddon {
 
     @Override
     public void serverStarted(FMLServerStartedEvent event) {}
+
 }

@@ -48,8 +48,8 @@ public class ContainerAutoSieve extends Container {
 
         if(lastProgress != tileEntity.getProgress() || lastEnergy != tileEntity.getEnergyStored()) {
             for (IContainerListener listener : listeners) {
-                listener.sendProgressBarUpdate(this, 0, (int) (100 * tileEntity.getProgress()));
-                listener.sendProgressBarUpdate(this, 1, tileEntity.getEnergyStored());
+                listener.sendWindowProperty(this, 0, (int) (100 * tileEntity.getProgress()));
+                listener.sendWindowProperty(this, 1, tileEntity.getEnergyStored());
             }
         }
         lastProgress = tileEntity.getProgress();

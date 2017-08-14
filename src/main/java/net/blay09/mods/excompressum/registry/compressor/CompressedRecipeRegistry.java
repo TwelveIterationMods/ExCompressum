@@ -34,28 +34,28 @@ public class CompressedRecipeRegistry {
         cachedResults.clear();
         recipesSmall.clear();
         recipes.clear();
-        for(Object obj : CraftingManager.getInstance().getRecipeList()) {
-            IRecipe recipe = (IRecipe) obj;
-            if(obj instanceof ShapedRecipes) {
-                addCompressedRecipe(recipe, getRecipeSource((ShapedRecipes) obj));
-            } else if(obj instanceof ShapelessRecipes) {
-                addCompressedRecipe(recipe, getRecipeSource((ShapelessRecipes) obj));
-            } else if(obj instanceof ShapedOreRecipe) {
-                for(ItemStack itemStack : getRecipeSources((ShapedOreRecipe) obj)) {
-                    addCompressedRecipe(recipe, itemStack);
-                }
-            } else if(obj instanceof ShapelessOreRecipe) {
-                for(ItemStack itemStack : getRecipeSources((ShapelessOreRecipe) obj)) {
-                    addCompressedRecipe(recipe, itemStack);
-                }
-            }
+        for(IRecipe recipe : CraftingManager.REGISTRY) {
+            // TODO fixme
+//            if(obj instanceof ShapedRecipes) {
+//                addCompressedRecipe(recipe, getRecipeSource((ShapedRecipes) obj));
+//            } else if(obj instanceof ShapelessRecipes) {
+//                addCompressedRecipe(recipe, getRecipeSource((ShapelessRecipes) obj));
+//            } else if(obj instanceof ShapedOreRecipe) {
+//                for(ItemStack itemStack : getRecipeSources((ShapedOreRecipe) obj)) {
+//                    addCompressedRecipe(recipe, itemStack);
+//                }
+//            } else if(obj instanceof ShapelessOreRecipe) {
+//                for(ItemStack itemStack : getRecipeSources((ShapelessOreRecipe) obj)) {
+//                    addCompressedRecipe(recipe, itemStack);
+//                }
+//            }
         }
     }
 
     private static void addCompressedRecipe(IRecipe recipe, ItemStack sourceStack) {
         if(!sourceStack.isEmpty()) {
             sourceStack = sourceStack.copy();
-            if(recipe.getRecipeSize() == 4) {
+            if(recipe.canFit(2, 2)) {
                 matcherSmall.fill(sourceStack);
                 if(recipe.matches(matcherSmall, null)) {
                     sourceStack.setCount(4);
@@ -64,7 +64,7 @@ public class CompressedRecipeRegistry {
                         recipesSmall.add(new CompressedRecipe(sourceStack, result.copy()));
                     }
                 }
-            } else if(recipe.getRecipeSize() == 9) {
+            } else if(recipe.canFit(3, 3)) {
                 matcher.fill(sourceStack);
                 if(recipe.matches(matcher, null)) {
                     sourceStack.setCount(9);
@@ -86,59 +86,59 @@ public class CompressedRecipeRegistry {
         }
     }
 
-    private static ItemStack getRecipeSource(ShapedRecipes recipe) {
-        for(ItemStack itemStack : recipe.recipeItems) {
-            if(!itemStack.isEmpty()) {
-                return itemStack;
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
-    private static ItemStack getRecipeSource(ShapelessRecipes recipe) {
-        for(ItemStack obj : recipe.recipeItems) {
-            if(!obj.isEmpty()) {
-                return obj;
-            }
-        }
-        return ItemStack.EMPTY;
-    }
-
-    @SuppressWarnings("unchecked")
-    private static List<ItemStack> getRecipeSources(ShapedOreRecipe recipe) {
-        for(Object obj : recipe.getInput()) {
-            if(obj != null) {
-                if(obj instanceof List) {
-                    return (List<ItemStack>) obj;
-                } else if(obj instanceof ItemStack) {
-                    return Collections.singletonList((ItemStack) obj);
-                } else if(obj instanceof Block) {
-                    return Collections.singletonList(new ItemStack((Block) obj));
-                } else if(obj instanceof Item) {
-                    return Collections.singletonList(new ItemStack((Item) obj));
-                }
-            }
-        }
-        return Collections.emptyList();
-    }
-
-    @SuppressWarnings("unchecked")
-    private static List<ItemStack> getRecipeSources(ShapelessOreRecipe recipe) {
-        for(Object obj : recipe.getInput()) {
-            if(obj != null) {
-                if(obj instanceof List) {
-                    return (List<ItemStack>) obj;
-                } else if(obj instanceof ItemStack) {
-                    return Collections.singletonList((ItemStack) obj);
-                } else if(obj instanceof Block) {
-                    return Collections.singletonList(new ItemStack((Block) obj));
-                } else if(obj instanceof Item) {
-                    return Collections.singletonList(new ItemStack((Item) obj));
-                }
-            }
-        }
-        return Collections.emptyList();
-    }
+//    private static ItemStack getRecipeSource(ShapedRecipes recipe) {
+//        for(ItemStack itemStack : recipe.recipeItems) {
+//            if(!itemStack.isEmpty()) {
+//                return itemStack;
+//            }
+//        }
+//        return ItemStack.EMPTY;
+//    }
+//
+//    private static ItemStack getRecipeSource(ShapelessRecipes recipe) {
+//        for(ItemStack obj : recipe.recipeItems) {
+//            if(!obj.isEmpty()) {
+//                return obj;
+//            }
+//        }
+//        return ItemStack.EMPTY;
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    private static List<ItemStack> getRecipeSources(ShapedOreRecipe recipe) {
+//        for(Object obj : recipe.getInput()) {
+//            if(obj != null) {
+//                if(obj instanceof List) {
+//                    return (List<ItemStack>) obj;
+//                } else if(obj instanceof ItemStack) {
+//                    return Collections.singletonList((ItemStack) obj);
+//                } else if(obj instanceof Block) {
+//                    return Collections.singletonList(new ItemStack((Block) obj));
+//                } else if(obj instanceof Item) {
+//                    return Collections.singletonList(new ItemStack((Item) obj));
+//                }
+//            }
+//        }
+//        return Collections.emptyList();
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    private static List<ItemStack> getRecipeSources(ShapelessOreRecipe recipe) {
+//        for(Object obj : recipe.getInput()) {
+//            if(obj != null) {
+//                if(obj instanceof List) {
+//                    return (List<ItemStack>) obj;
+//                } else if(obj instanceof ItemStack) {
+//                    return Collections.singletonList((ItemStack) obj);
+//                } else if(obj instanceof Block) {
+//                    return Collections.singletonList(new ItemStack((Block) obj));
+//                } else if(obj instanceof Item) {
+//                    return Collections.singletonList(new ItemStack((Item) obj));
+//                }
+//            }
+//        }
+//        return Collections.emptyList();
+//    }
 
     @Nullable
     public static CompressedRecipe getRecipe(ItemStack itemStack) {

@@ -2,25 +2,31 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDoubleCompressedDiamondHammer extends ItemCompressum {
+public class ItemDoubleCompressedDiamondHammer extends Item {
+
+    public static final String name = "double_compressed_diamond_hammer";
+    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public ItemDoubleCompressedDiamondHammer() {
-        setRegistryName("double_compressed_diamond_hammer");
-        setUnlocalizedName(getRegistryNameString());
+        setUnlocalizedName(registryName.toString());
         setCreativeTab(ExCompressum.creativeTab);
         setMaxStackSize(1);
     }
 
     @Override
-    public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List<String> list, boolean flag) {
-        list.add(TextFormatting.DARK_AQUA + I18n.format("tooltip.excompressum:double_compressed_diamond_hammer"));
-        list.add(TextFormatting.DARK_AQUA + I18n.format("tooltip.excompressum:best_with_blasting"));
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+        tooltip.add(TextFormatting.DARK_AQUA + I18n.format("tooltip.excompressum:double_compressed_diamond_hammer"));
+        tooltip.add(TextFormatting.DARK_AQUA + I18n.format("tooltip.excompressum:best_with_blasting"));
     }
 
 }

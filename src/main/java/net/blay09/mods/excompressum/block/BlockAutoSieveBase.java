@@ -5,12 +5,14 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,15 +29,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class BlockAutoSieveBase extends BlockCompressumContainer {
+public abstract class BlockAutoSieveBase extends BlockContainer {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
@@ -205,23 +206,22 @@ public abstract class BlockAutoSieveBase extends BlockCompressumContainer {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemStack, EntityPlayer entityPlayer, List<String> list, boolean flag) {
-		NBTTagCompound tagCompound = itemStack.getTagCompound();
+	public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+		NBTTagCompound tagCompound = stack.getTagCompound();
 		if(tagCompound != null && tagCompound.hasKey("CustomSkin")) {
 			GameProfile customSkin = NBTUtil.readGameProfileFromNBT(tagCompound.getCompoundTag("CustomSkin"));
 			if(customSkin != null) {
-				list.add(TextFormatting.GRAY + I18n.format("tooltip." + getRegistryName(), customSkin.getName()));
+				tooltip.add(TextFormatting.GRAY + I18n.format("tooltip." + getRegistryName(), customSkin.getName()));
 			}
 		} else {
 			if(currentRandomName == null) {
 				currentRandomName = AutoSieveSkinRegistry.getRandomSkin();
 			}
-			list.add(TextFormatting.GRAY + I18n.format("tooltip." + getRegistryName(), currentRandomName));
+			tooltip.add(TextFormatting.GRAY + I18n.format("tooltip." + getRegistryName(), currentRandomName));
 		}
-		if(lastHoverStack != itemStack) {
+		if(lastHoverStack != stack) {
 			currentRandomName = AutoSieveSkinRegistry.getRandomSkin();
-			lastHoverStack = itemStack;
+			lastHoverStack = stack;
 		}
 	}
 

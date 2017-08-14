@@ -10,11 +10,11 @@ import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -33,7 +33,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
     }
 
     @Override
-    public void renderTileEntityAt(TileAutoHammer tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileAutoHammer tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if(!tileEntity.hasWorld()) {
             return;
         }
@@ -55,7 +55,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         Minecraft mc = Minecraft.getMinecraft();
         RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer renderer = tessellator.getBuffer();
+        BufferBuilder renderer = tessellator.getBuffer();
 
         RenderHelper.disableStandardItemLighting();
 

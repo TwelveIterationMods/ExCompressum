@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import com.google.common.collect.Lists;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.Collections;
 import java.util.List;
 
-public class WoodenCrucibleRecipe extends BlankRecipeWrapper {
+public class WoodenCrucibleRecipe implements IRecipeWrapper {
 
 	private final Fluid fluid;
 	private final List<WoodenCrucibleRegistryEntry> entries;

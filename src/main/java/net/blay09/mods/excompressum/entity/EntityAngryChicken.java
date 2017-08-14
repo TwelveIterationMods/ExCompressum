@@ -12,6 +12,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
@@ -56,7 +57,7 @@ public class EntityAngryChicken extends EntityMob {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound() {
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundEvents.ENTITY_CHICKEN_HURT;
 	}
 
@@ -90,9 +91,11 @@ public class EntityAngryChicken extends EntityMob {
 		}
 
 		EntityItem chickenStick = dropItem(ModItems.chickenStick, 1);
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		tagCompound.setBoolean("IsAngry", true);
-		chickenStick.getEntityItem().setTagCompound(tagCompound);
+		if(chickenStick != null) {
+			NBTTagCompound tagCompound = new NBTTagCompound();
+			tagCompound.setBoolean("IsAngry", true);
+			chickenStick.getItem().setTagCompound(tagCompound);
+		}
 	}
 
 	@Override

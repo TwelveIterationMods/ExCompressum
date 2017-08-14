@@ -2,10 +2,11 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import mezz.jei.api.BlankModPlugin;
 import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
+import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.config.BlockConfig;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
@@ -27,20 +28,13 @@ import java.util.Collection;
 import java.util.List;
 
 @JEIPlugin
-public class JEIAddon extends BlankModPlugin {
+public class JEIAddon implements IModPlugin {
 
 	public static IJeiHelpers jeiHelpers;
 
 	@Override
 	public void register(IModRegistry registry) {
 		jeiHelpers = registry.getJeiHelpers();
-
-		registry.addRecipeCategories(
-				new HeavySieveRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
-				new CompressedHammerRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
-				new WoodenCrucibleRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
-				new ChickenStickRecipeCategory(registry.getJeiHelpers().getGuiHelper())
-				);
 
 		List<HeavySieveRecipe> heavySieveRecipes = Lists.newArrayList();
 		if(ExRegistro.doMeshesSplitLootTables()) {
@@ -76,14 +70,14 @@ public class JEIAddon extends BlankModPlugin {
 		registry.addRecipes(woodenCrucibleRecipes, WoodenCrucibleRecipeCategory.UID);
 
 		registry.addRecipes(Lists.newArrayList(new ChickenStickRecipe()), ChickenStickRecipeCategory.UID);
-		
-		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.heavySieve), HeavySieveRecipeCategory.UID);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(ModBlocks.woodenCrucible), WoodenCrucibleRecipeCategory.UID);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(ModItems.compressedHammerDiamond), CompressedHammerRecipeCategory.UID);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(ModItems.compressedHammerGold), CompressedHammerRecipeCategory.UID);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(ModItems.compressedHammerIron), CompressedHammerRecipeCategory.UID);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(ModItems.compressedHammerStone), CompressedHammerRecipeCategory.UID);
-		registry.addRecipeCategoryCraftingItem(new ItemStack(ModItems.compressedHammerWood), CompressedHammerRecipeCategory.UID);
+
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.heavySieve), HeavySieveRecipeCategory.UID);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.woodenCrucible), WoodenCrucibleRecipeCategory.UID);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerDiamond), CompressedHammerRecipeCategory.UID);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerGold), CompressedHammerRecipeCategory.UID);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerIron), CompressedHammerRecipeCategory.UID);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerStone), CompressedHammerRecipeCategory.UID);
+		registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerWood), CompressedHammerRecipeCategory.UID);
 
 		for(BlockConfig.Entry entry : BlockConfig.getEntries()) {
 			if(!entry.isEnabled()) {
@@ -102,4 +96,12 @@ public class JEIAddon extends BlankModPlugin {
 		}
 	}
 
+	@Override
+	public void registerCategories(IRecipeCategoryRegistration registry) {
+		registry.addRecipeCategories(
+				new HeavySieveRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
+				new CompressedHammerRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
+				new WoodenCrucibleRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
+				new ChickenStickRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
+	}
 }

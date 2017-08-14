@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 public class RenderBait extends TileEntitySpecialRenderer<TileBait> {
 
     @Override
-    public void renderTileEntityAt(TileBait tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileBait tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
         GlStateManager.pushMatrix();
         GlStateManager.color(1f, 1f, 1f, 1f);

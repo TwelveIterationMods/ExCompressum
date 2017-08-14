@@ -22,6 +22,7 @@ import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegist
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -40,18 +41,18 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.List;
 
-@Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;required-after:forge@[13.20.0.2310,)")
-@SuppressWarnings("unused")
+@Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;after:exnihilocreatio;", acceptedMinecraftVersions = "[1.12]")
 public class ExCompressum {
 
-	public static final Logger logger = LogManager.getLogger();
 	public static final String MOD_ID = "excompressum";
+	public static final Logger logger = LogManager.getLogger(MOD_ID);
 
 	@Mod.Instance
 	public static ExCompressum instance;
@@ -79,8 +80,7 @@ public class ExCompressum {
 
 		ExCompressumConfig.preInit(config);
 
-		ModItems.init();
-		ModBlocks.init();
+		OreDictionary.registerOre("dustWood", new ItemStack(ModItems.woodChipping)); // TODO move this into registerItems if it's too early here
 
 		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "angry_chicken"), EntityAngryChicken.class, "AngryChicken", 0, ExCompressum.instance, 64, 10, true);
 
@@ -94,7 +94,8 @@ public class ExCompressum {
 
 		registerAddon(Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
 		registerAddon(Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
-		registerAddon(Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
+//		registerAddon(Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
+		registerAddon(Compat.EXNIHILO_CREATIO, "net.blay09.mods.excompressum.compat.exnihilocreatio.ExNihiloCreatioAddon");
 		if (ExRegistro.instance == null) {
 			ExCompressum.logger.warn("No Ex Nihilo mod installed - many things will be disabled. Why would you run Ex Compressum without Ex Nihilo? Pfft.");
 			ExRegistro.instance = new NihilisticNihiloProvider();

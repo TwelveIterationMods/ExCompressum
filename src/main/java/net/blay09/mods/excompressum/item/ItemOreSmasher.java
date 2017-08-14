@@ -4,7 +4,6 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,6 +11,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -25,9 +25,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class ItemOreSmasher extends ItemCompressumTool {
+public class ItemOreSmasher extends ItemTool {
 
-	// CLEANUP this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
+	// TODO this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
 	private static final String[] ORE_BLOCKS = new String[] {
 			"exnihiloomnia:ore_gravel",
 			"exnihiloomnia:ore_gravel_ender",
@@ -41,7 +41,7 @@ public class ItemOreSmasher extends ItemCompressumTool {
 			"oreSand"
 	};
 
-	// CLEANUP this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
+	// TODO this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
 	private static final String[] ORE_ITEMS = new String[] {
 			"exnihiloomnia:ore_broken",
 			"exnihiloomnia:ore_broken_nether",
@@ -55,10 +55,12 @@ public class ItemOreSmasher extends ItemCompressumTool {
 			"oreCrushed"
 	};
 
+	public static final String name = "ore_smasher";
+	public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
+
     public ItemOreSmasher() {
-        super(0f, 0f, ToolMaterial.DIAMOND, new HashSet<Block>());
-		setRegistryName("ore_smasher");
-        setUnlocalizedName(getRegistryNameString());
+        super(0f, 0f, ToolMaterial.DIAMOND, new HashSet<>());
+        setUnlocalizedName(registryName.toString());
         setCreativeTab(ExCompressum.creativeTab);
     }
 
@@ -70,7 +72,7 @@ public class ItemOreSmasher extends ItemCompressumTool {
 	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state) {
 		if (isOreBlock(new ItemStack(state.getBlock()))) {
-			return efficiencyOnProperMaterial; // Note: Omnia's ore blocks break instantly at the moment. Not sure if intended, but it's not an issue on our side.
+			return efficiencyOnProperMaterial;
 		}
 		return 0.8f;
 	}

@@ -1,14 +1,14 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.block.BlockWoodenCrucible;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 public class ItemBlockWoodenCrucible extends ItemBlock {
-    public ItemBlockWoodenCrucible(BlockWoodenCrucible block) {
+
+    public ItemBlockWoodenCrucible(Block block) {
         super(block);
-        setRegistryName(block.getRegistryNameString());
         setHasSubtypes(true);
     }
 
@@ -20,4 +20,5 @@ public class ItemBlockWoodenCrucible extends ItemBlock {
     public int getMetadata(int damage) {
         return damage;
     }
+
 }

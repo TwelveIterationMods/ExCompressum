@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.compat.jei;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-public class HeavySieveRecipe extends BlankRecipeWrapper {
+public class HeavySieveRecipe implements IRecipeWrapper {
 
 	private final HeavySieveRegistryEntry entry;
 	private final List<Object> inputs;

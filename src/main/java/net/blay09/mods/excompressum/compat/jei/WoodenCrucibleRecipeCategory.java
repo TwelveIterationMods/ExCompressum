@@ -4,10 +4,9 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IDrawableStatic;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.gui.ITooltipCallback;
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.minecraft.client.Minecraft;
@@ -23,7 +22,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class WoodenCrucibleRecipeCategory extends BlankRecipeCategory<WoodenCrucibleRecipe> {
+public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCrucibleRecipe> {
 
 	public static final String UID = "excompressum:woodenCrucible";
 	private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_wooden_crucible.png");
@@ -49,6 +48,11 @@ public class WoodenCrucibleRecipeCategory extends BlankRecipeCategory<WoodenCruc
 	@Override
 	public String getTitle() {
 		return I18n.format("jei." + UID);
+	}
+
+	@Override
+	public String getModName() {
+		return "Ex Compressum";
 	}
 
 	@Nonnull
@@ -109,14 +113,11 @@ public class WoodenCrucibleRecipeCategory extends BlankRecipeCategory<WoodenCruc
 			}
 			slotNumber++;
 		}
-		recipeLayout.getItemStacks().addTooltipCallback(new ITooltipCallback<ItemStack>() {
-			@Override
-			public void onTooltip(int slotIndex, boolean input, ItemStack ingredient, List<String> tooltip) {
-				if(input) {
-					WoodenCrucibleRegistryEntry entry = recipeWrapper.getEntryAt(slotIndex - INPUT_SLOTS);
-					tooltip.add(recipeWrapper.getFluid().getLocalizedName(ingredients.getOutputs(FluidStack.class).get(0).get(0)));
-					tooltip.add(" * " + entry.getAmount() + " mB");
-				}
+		recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+			if(input) {
+				WoodenCrucibleRegistryEntry entry = recipeWrapper.getEntryAt(slotIndex - INPUT_SLOTS);
+				tooltip.add(recipeWrapper.getFluid().getLocalizedName(ingredients.getOutputs(FluidStack.class).get(0).get(0)));
+				tooltip.add(" * " + entry.getAmount() + " mB");
 			}
 		});
 	}
