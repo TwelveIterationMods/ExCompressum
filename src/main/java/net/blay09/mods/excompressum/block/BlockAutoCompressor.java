@@ -63,9 +63,10 @@ public class BlockAutoCompressor extends BlockContainer {
                     world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), itemStack));
                 }
             }
-            ItemStack currentStack = ((TileAutoCompressor) tileEntity).getCurrentStack();
-            if (!currentStack.isEmpty()) {
-                world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
+            for(ItemStack currentStack : ((TileAutoCompressor) tileEntity).getCurrentBuffer()) {
+                if (!currentStack.isEmpty()) {
+                    world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
+                }
             }
         }
         super.breakBlock(world, pos, state);

@@ -14,7 +14,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -162,15 +161,6 @@ public class BlockAutoHammer extends BlockContainer {
     public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
         TileEntity tileEntity = world.getTileEntity(pos);
         return tileEntity != null ? ItemHandlerHelper.calcRedstoneFromInventory(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) : 0;
-    }
-
-    public void registerModel(Item item) { // TODO move to registerModels
-//        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
-//            @Override
-//            public ModelResourceLocation getModelLocation(ItemStack stack) {
-//                return new ModelResourceLocation(getRegistryNameString(), "facing=north,hammer_mod=" + ExRegistro.getNihiloMod().getName());
-//            }
-//        });
     }
 
 }

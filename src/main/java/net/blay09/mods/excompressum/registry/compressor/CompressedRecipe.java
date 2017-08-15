@@ -1,18 +1,25 @@
 package net.blay09.mods.excompressum.registry.compressor;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 public class CompressedRecipe {
-    private final ItemStack sourceStack;
+    private final Ingredient ingredient;
+    private final int count;
     private final ItemStack resultStack;
 
-    public CompressedRecipe(ItemStack sourceStack, ItemStack resultStack) {
-        this.sourceStack = sourceStack;
+    public CompressedRecipe(Ingredient ingredient, int count, ItemStack resultStack) {
+        this.ingredient = ingredient;
+        this.count = count;
         this.resultStack = resultStack;
     }
 
-    public ItemStack getSourceStack() {
-        return sourceStack;
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
+    public int getCount() {
+        return count;
     }
 
     public ItemStack getResultStack() {

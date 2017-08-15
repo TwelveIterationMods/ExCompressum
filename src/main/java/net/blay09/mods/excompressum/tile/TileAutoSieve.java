@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -23,8 +24,10 @@ public class TileAutoSieve extends TileAutoSieveBase { // TODO re-add RF support
     @Override
     protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
         super.writeToNBTSynced(tagCompound, isSync);
-        //noinspection ConstantConditions // TODO add serializeNBT to EnergyStorageModifiable
-        tagCompound.setTag("EnergyStorage", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
+        NBTBase energyStorageNBT = CapabilityEnergy.ENERGY.writeNBT(energyStorage, null);
+        if(energyStorageNBT != null) {
+            tagCompound.setTag("EnergyStorage", energyStorageNBT);
+        }
     }
 
     @Override

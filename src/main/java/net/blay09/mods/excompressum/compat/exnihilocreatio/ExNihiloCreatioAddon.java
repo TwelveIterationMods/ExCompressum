@@ -14,7 +14,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -32,11 +32,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Collection;
@@ -45,7 +41,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Random;
 
-@SuppressWarnings("unused")
 public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 
 	private final EnumMap<NihiloItems, ItemStack> itemMap = Maps.newEnumMap(NihiloItems.class);
@@ -120,7 +115,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 
 //	@SubscribeEvent // TODO
 	public void onRegistryReload(/*RegistryReloaded*/Event event) { // TODO
-		if(ExCompressumConfig.enableWoodChippings) {
+		if(ModConfig.general.enableWoodChippings) {
 			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
 			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
 			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
@@ -150,7 +145,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 			List<HeavySieveReward> rewards = Lists.newArrayList();
 			for (Siftable siftable : siftables) {
 				if(siftable.getDrop().getItem() == null) {
-					ExCompressum.logger.error("Tried to generate Heavy Sieve rewards from a null reward entry: {}", sourceStack.getItem().getRegistryName());
+//					ExCompressum.logger.error("Tried to generate Heavy Sieve rewards from a null reward entry: {}", sourceStack.getItem().getRegistryName());
 					continue;
 				}
 				for (int i = 0; i < count; i++) {
@@ -242,9 +237,8 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		if(rewards != null) {
 			List<ItemStack> list = Lists.newArrayList();
 			for (CrookReward reward : rewards) {
-				//noinspection ConstantConditions /// @Nullable
 				if(reward.getStack().getItem() == null) {
-					ExCompressum.logger.error("Tried to roll crook rewards from a null reward entry: {} (base chance: {}, luck: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getFortuneChance());
+//					ExCompressum.logger.error("Tried to roll crook rewards from a null reward entry: {} (base chance: {}, luck: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getFortuneChance());
 					continue;
 				}
 				if(rand.nextFloat() <= reward.getChance() + reward.getFortuneChance() * luck) {
@@ -257,22 +251,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 	}
 
 	@Override
-	public void loadConfig(Configuration config) {
-	}
-
-	@Override
 	public void postInit() {
-
-	}
-
-	@Override
-	public void serverStarted(FMLServerStartedEvent event) {
-
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void clientInit() {
 
 	}
 

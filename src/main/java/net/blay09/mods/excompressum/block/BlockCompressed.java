@@ -8,7 +8,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -93,31 +92,6 @@ public class BlockCompressed extends Block {
 		for (int i = 0; i < Type.values().length; i++) {
 			items.add(new ItemStack(this, 1, i));
 		}
-	}
-
-	public void registerModel(Item item) { // TODO move to registerModels
-//		ResourceLocation[] variants = new ResourceLocation[Type.values.length];
-//		for(int i = 0; i < variants.length; i++) {
-//			variants[i] = new ResourceLocation(ExCompressum.MOD_ID, "compressed_" + Type.values[i].getName());
-//		}
-//		ModelBakery.registerItemVariants(item, variants);
-//		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
-//			@Override
-//			public ModelResourceLocation getModelLocation(ItemStack itemStack) {
-//				Type type = Type.fromId(itemStack.getItemDamage());
-//				if(type != null) {
-//					return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "compressed_" + type.getName()), "inventory");
-//				} else {
-//					return new ModelResourceLocation("missingno");
-//				}
-//			}
-//		});
-//		ModelLoader.setCustomStateMapper(this, new StateMapperBase() {
-//			@Override
-//			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-//				return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "compressed_" + state.getValue(VARIANT).getName()), "normal");
-//			}
-//		});
 	}
 
 }

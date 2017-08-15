@@ -1,0 +1,120 @@
+[
+  {
+    "name": "WORKBENCH",
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "workbench"
+    }
+  },
+  {
+    "name": "DIAMOND",
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    }
+  },
+  {
+    "name": "CHEST",
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "chestWood"
+    }
+  },
+  {
+    "name": "IRON_INGOT",
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  {
+    "name": "SLAB_WOOD",
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "slabWood"
+    }
+  },
+  {
+    "name": "GLASS",
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "blockGlass"
+    }
+  },
+  {
+    "name": "PLANKS",
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    }
+  },
+  {
+    "name": "STONE",
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    }
+  },
+  {
+    "name": "IRON_NUGGET",
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetIron"
+    }
+  },
+  {
+    "name": "WOODEN_HAMMER",
+    "ingredient": {
+      "type": "excompressum:item_list",
+      "items": [
+        {
+          "item": "exnihilocreatio:wooden_hammer"
+        }
+      ]
+    }
+  },
+  {
+    "name": "STONE_HAMMER",
+    "ingredient": {
+      "type": "excompressum:item_list",
+      "items": [
+        {
+          "item": "exnihilocreatio:stone_hammer"
+        }
+      ]
+    }
+  },
+  {
+    "name": "IRON_HAMMER",
+    "ingredient": {
+      "type": "excompressum:item_list",
+      "items": [
+        {
+          "item": "exnihilocreatio:iron_hammer"
+        }
+      ]
+    }
+  },
+  {
+    "name": "GOLD_HAMMER",
+    "ingredient": {
+      "type": "excompressum:item_list",
+      "items": [
+        {
+          "item": "exnihilocreatio:gold_hammer"
+        }
+      ]
+    }
+  },
+  {
+    "name": "DIAMOND_HAMMER",
+    "ingredient": {
+      "type": "excompressum:item_list",
+      "items": [
+        {
+          "item": "exnihilocreatio:diamond_hammer"
+        }
+      ]
+    }
+  }
+]

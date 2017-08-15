@@ -5,7 +5,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.client.render.ParticleSieve;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -187,7 +187,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 	@SideOnly(Side.CLIENT)
 	public void spawnParticles() {
-		if(!currentStack.isEmpty() && !ExCompressumConfig.disableParticles) {
+		if(!currentStack.isEmpty() && !ModConfig.client.disableParticles) {
 			int metadata = getBlockMetadata();
 			IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
 			if (state != null) {

@@ -10,9 +10,12 @@ import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
 import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -54,14 +57,15 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
         }
     };
 
-    private ItemStack currentStack = ItemStack.EMPTY;
+    private NonNullList<ItemStack> currentBuffer = NonNullList.create();
+    private CompressedRecipe currentRecipe = null;
     private float progress;
 
     @Override
     public void update() {
         int effectiveEnergy = getEffectiveEnergy();
         if (energyStorage.getEnergyStored() > effectiveEnergy) {
-            if (currentStack.isEmpty()) {
+            if (currentRecipe == null) {
                 inputItems.clear();
                 for (int i = 0; i < inputSlots.getSlots(); i++) {
                     ItemStack slotStack = inputSlots.getStackInSlot(i);
@@ -73,8 +77,8 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
                     }
                 }
                 for (CompressedRecipe compressedRecipe : inputItems.elementSet()) {
-                    ItemStack sourceStack = compressedRecipe.getSourceStack();
-                    if (inputItems.count(compressedRecipe) >= sourceStack.getCount()) {
+                    Ingredient ingredient = compressedRecipe.getIngredient();
+                    if (inputItems.count(compressedRecipe) >= compressedRecipe.getCount()) {
                         int space = 0;
                         for(int i = 0; i < outputSlots.getSlots(); i++) {
                             ItemStack slotStack = outputSlots.getStackInSlot(i);
@@ -90,25 +94,26 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
                         if(space < compressedRecipe.getResultStack().getCount()) {
                             continue;
                         }
-                        int count = sourceStack.getCount();
+                        int count = compressedRecipe.getCount();
                         for (int i = 0; i < inputSlots.getSlots(); i++) {
                             ItemStack slotStack = inputSlots.getStackInSlot(i);
-                            if (!slotStack.isEmpty() && isItemEqualWildcard(slotStack, sourceStack)) {
+                            if (!slotStack.isEmpty() && ingredient.apply(slotStack)) {
                                 if (slotStack.getCount() >= count) {
-                                    slotStack.shrink(count);
-                                    if (slotStack.getCount() == 0) {
+                                    currentBuffer.add(slotStack.splitStack(count));
+                                    if (slotStack.isEmpty()) {
                                         inputSlots.setStackInSlot(i, ItemStack.EMPTY);
                                     }
                                     count = 0;
                                     break;
                                 } else {
+                                    currentBuffer.add(slotStack.copy());
                                     count -= slotStack.getCount();
                                     inputSlots.setStackInSlot(i, ItemStack.EMPTY);
                                 }
                             }
                         }
                         if (count <= 0) {
-                            currentStack = sourceStack.copy();
+                            currentRecipe = compressedRecipe;
                             progress = 0f;
                         }
                         break;
@@ -119,7 +124,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
                 progress = Math.min(1f, progress + getEffectiveSpeed());
                 if (progress >= 1) {
                     if (!world.isRemote) {
-                        CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(currentStack);
+                        CompressedRecipe compressedRecipe = currentRecipe;
                         if (compressedRecipe != null) {
                             ItemStack resultStack = compressedRecipe.getResultStack().copy();
                             if (!addItemToOutput(resultStack)) {
@@ -132,7 +137,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
                             }
                         }
                     }
-                    currentStack = ItemStack.EMPTY;
+                    currentRecipe = null;
                     progress = 0f;
                 }
             }
@@ -181,8 +186,18 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
     }
 
     @Override
+    public void readFromNBT(NBTTagCompound tagCompound) {
+        super.readFromNBT(tagCompound);
+        if(tagCompound.hasKey("CurrentRecipeResult")) {
+            ItemStack itemStack = new ItemStack(tagCompound.getCompoundTag("CurrentRecipeResult"));
+            if(!itemStack.isEmpty()) {
+                currentRecipe = new CompressedRecipe(Ingredient.EMPTY, 0, itemStack);
+            }
+        }
+    }
+
+    @Override
     protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
-    	currentStack = new ItemStack(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
         itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
         if(tagCompound.hasKey("EnergyStorage")) {
@@ -191,12 +206,21 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
     }
 
     @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
+        if(currentRecipe != null) {
+            tagCompound.setTag("CurrentRecipeResult", currentRecipe.getResultStack().writeToNBT(new NBTTagCompound()));
+        }
+        return super.writeToNBT(tagCompound);
+    }
+
+    @Override
     protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
-        tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         tagCompound.setFloat("Progress", progress);
         tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
-        //noinspection ConstantConditions // TODO add serializeNBT to EnergyStorageModifiable
-        tagCompound.setTag("EnergyStorage", CapabilityEnergy.ENERGY.writeNBT(energyStorage, null));
+        NBTBase energyStorageNBT = CapabilityEnergy.ENERGY.writeNBT(energyStorage, null);
+        if(energyStorageNBT != null) {
+            tagCompound.setTag("EnergyStorage", energyStorageNBT);
+        }
     }
 
     public boolean isProcessing() {
@@ -215,8 +239,8 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
         return (float) energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
     }
 
-    public ItemStack getCurrentStack() {
-        return currentStack;
+    public NonNullList<ItemStack> getCurrentBuffer() {
+        return currentBuffer; // not saved currently which can cause item loss if you break an Auto Compressor that was reload in between a single run (which is so unlikely to happen I won't bother)
     }
 
     @Override

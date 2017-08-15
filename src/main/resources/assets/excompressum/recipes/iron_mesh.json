@@ -1,0 +1,20 @@
+{
+  "result": {
+    "item": "excompressum:iron_mesh"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:iron_mesh_recipe"
+    }
+  ]
+}

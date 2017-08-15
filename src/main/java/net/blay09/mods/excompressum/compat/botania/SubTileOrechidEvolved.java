@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.compat.botania;
 
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -11,12 +12,12 @@ public class SubTileOrechidEvolved extends SubTileOrechid {
 
     @Override
     public int getCost() {
-        return BotaniaAddon.evolvedOrechidCost;
+        return ModConfig.compat.evolvedOrechidCost;
     }
 
     @Override
     public int getDelay() {
-        return BotaniaAddon.evolvedOrechidDelay;
+        return ModConfig.compat.evolvedOrechidDelay;
     }
 
     @Override

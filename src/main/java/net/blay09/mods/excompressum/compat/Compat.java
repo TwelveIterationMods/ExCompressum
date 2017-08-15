@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.compat;
 
-public class Compat {
+public class Compat { // TODO update mod ids
 
 	public static final String BOTANIA = "botania";
 	public static final String EXNIHILO_OMNIA = "exnihiloomnia";

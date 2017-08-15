@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.tile;
 
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
@@ -264,7 +264,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
 
     @SideOnly(Side.CLIENT)
     private void spawnCrushParticles() {
-        if(!ExCompressumConfig.disableParticles) {
+        if(!ModConfig.client.disableParticles) {
             IBlockState currentBlock = getCurrentBlock();
             if (currentBlock != null) {
                 for (int i = 0; i < 10; i++) {
@@ -298,7 +298,6 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
         }
         Block block = Block.getBlockFromItem(currentStack.getItem());
         if(block != Blocks.AIR) {
-            //noinspection deprecation
         	return block.getStateFromMeta(currentStack.getMetadata());
         }
         return null;

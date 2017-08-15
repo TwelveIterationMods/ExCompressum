@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "excompressum:compressed_hammer_stone"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "#STONE_HAMMER"
+    }
+  }
+}

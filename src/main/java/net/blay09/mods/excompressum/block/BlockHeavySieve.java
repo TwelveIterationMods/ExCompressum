@@ -16,7 +16,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -173,24 +172,6 @@ public class BlockHeavySieve extends BlockContainer {
 			}
 		}
 		return true;
-	}
-
-	public void registerModel(Item item) { // TODO move to registerModels
-//		ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
-//			@Override
-//			public ModelResourceLocation getModelLocation(ItemStack itemStack) {
-//				Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
-//				if (type != null) {
-//					if (ExRegistro.doMeshesHaveDurability()) {
-//						return new ModelResourceLocation(registryName, "variant=" + type.getName() + ",with_mesh=false");
-//					} else {
-//						return new ModelResourceLocation(registryName, "variant=" + type.getName() + ",with_mesh=false"); // it's false here too because it was a dumb idea based on wrong thinking; don't want to remove it now though
-//					}
-//				} else {
-//					return new ModelResourceLocation("missingno");
-//				}
-//			}
-//		});
 	}
 
 	@Override

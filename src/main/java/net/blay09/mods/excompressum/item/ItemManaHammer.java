@@ -27,7 +27,7 @@ public class ItemManaHammer extends ItemTool implements IManaUsingItem, IHammer 
 
 	private static final int MANA_PER_DAMAGE = 60;
 
-	protected ItemManaHammer() {
+	public ItemManaHammer() {
 		super(6f, -3.2f, BotaniaAPI.manasteelToolMaterial, new HashSet<>());
 		setUnlocalizedName(registryName.toString());
 		setCreativeTab(ExCompressum.creativeTab);

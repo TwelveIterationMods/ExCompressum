@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.compat.Compat;
-import net.blay09.mods.excompressum.compat.botania.BotaniaAddon;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.Optional;
 import vazkii.botania.api.mana.IManaReceiver;
@@ -13,12 +13,12 @@ public class TileAutoSieveMana extends TileAutoSieveBase implements IManaReceive
 
     @Override
     public int getEffectiveEnergy() {
-        return BotaniaAddon.manaSieveCost;
+        return ModConfig.compat.manaSieveCost;
     }
 
     @Override
     public int getMaxEnergyStored() {
-        return BotaniaAddon.manaSieveCost * 1600;
+        return ModConfig.compat.manaSieveCost * 1600;
     }
 
     @Override

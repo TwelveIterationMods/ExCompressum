@@ -15,13 +15,13 @@ public abstract class TileEntityBase extends TileEntity {
 	}
 
 	@Override
-	public final void readFromNBT(NBTTagCompound tagCompound) {
+	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		readFromNBTSynced(tagCompound, false);
 	}
 
 	@Override
-	public final NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		writeToNBTSynced(tagCompound, false);
 		return tagCompound;

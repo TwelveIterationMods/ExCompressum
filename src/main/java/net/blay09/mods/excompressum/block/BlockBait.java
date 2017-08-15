@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.tile.TileBait;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -13,7 +13,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -171,7 +170,7 @@ public class BlockBait extends BlockContainer {
 
     @Override
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-        if(!ExCompressumConfig.disableParticles) {
+        if(!ModConfig.client.disableParticles) {
             TileBait tileEntity = (TileBait) world.getTileEntity(pos);
             if (tileEntity != null && tileEntity.checkSpawnConditions(false) == TileBait.EnvironmentalCondition.CanSpawn) {
                 if (rand.nextFloat() <= 0.2f) {
@@ -189,22 +188,4 @@ public class BlockBait extends BlockContainer {
         }
     }
 
-    public void registerModel(Item item) { // TODO move me to registerModels
-//        ResourceLocation[] variants = new ResourceLocation[Type.values.length];
-//        for(int i = 0; i < variants.length; i++) {
-//            variants[i] = new ResourceLocation(ExCompressum.MOD_ID, "bait_" + Type.values[i].getName());
-//        }
-//        ModelBakery.registerItemVariants(item, variants);
-//        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
-//            @Override
-//            public ModelResourceLocation getModelLocation(ItemStack itemStack) {
-//                Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
-//                if(type != null) {
-//                    return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "bait_" + type.getName()), "inventory");
-//                } else {
-//                    return new ModelResourceLocation("missingno");
-//                }
-//            }
-//        });
-    }
 }

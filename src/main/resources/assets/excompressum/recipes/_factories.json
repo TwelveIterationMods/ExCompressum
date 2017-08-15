@@ -1,0 +1,8 @@
+{
+  "ingredients": {
+    "item_list": "net.blay09.mods.excompressum.crafting.ItemListIngredient"
+  },
+  "conditions": {
+    "iron_mesh_recipe": "net.blay09.mods.excompressum.crafting.IronMeshRecipeCondition"
+  }
+}

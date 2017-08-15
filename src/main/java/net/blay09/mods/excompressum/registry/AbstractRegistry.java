@@ -11,7 +11,7 @@ import com.google.gson.stream.JsonWriter;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.RegistryType;
 import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -194,7 +194,7 @@ public abstract class AbstractRegistry {
 	protected final void logWarning(String format, Object... args) {
 		String s = String.format(format, args);
 		ExCompressum.logger.error(s);
-		if(ExCompressumConfig.showRegistryWarnings) {
+		if(ModConfig.client.showRegistryWarnings) {
 			registryErrors.add(s);
 		}
 	}

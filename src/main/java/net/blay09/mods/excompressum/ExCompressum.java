@@ -1,12 +1,10 @@
 package net.blay09.mods.excompressum;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.handler.ChickenStickHandler;
 import net.blay09.mods.excompressum.handler.CompressedCrookHandler;
@@ -15,19 +13,25 @@ import net.blay09.mods.excompressum.handler.CompressedHammerHandler;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.handler.HammerHandler;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.registry.*;
+import net.blay09.mods.excompressum.registry.AbstractRegistry;
+import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
+import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.NihilisticNihiloProvider;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
-import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
-import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -47,9 +51,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
+@Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID)
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;after:exnihilocreatio;", acceptedMinecraftVersions = "[1.12]")
 public class ExCompressum {
+
+	// TODO iron_mesh recipe is currently hardcoded to only check for creatio iron mesh, create a custom condition if another Nihilo pops up
 
 	public static final String MOD_ID = "excompressum";
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
@@ -61,7 +69,6 @@ public class ExCompressum {
 	public static CommonProxy proxy;
 
 	public static File configDir;
-	private Configuration config;
 
 	public static final ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
 
@@ -75,12 +82,8 @@ public class ExCompressum {
 		if (!configDir.exists() && !configDir.mkdirs()) {
 			throw new RuntimeException("Couldn't create Ex Compressum configuration directory");
 		}
-		config = new Configuration(new File(configDir, "ExCompressum.cfg"));
-		config.load();
 
-		ExCompressumConfig.preInit(config);
-
-		OreDictionary.registerOre("dustWood", new ItemStack(ModItems.woodChipping)); // TODO move this into registerItems if it's too early here
+		ModBlocks.registerTileEntities();
 
 		EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "angry_chicken"), EntityAngryChicken.class, "AngryChicken", 0, ExCompressum.instance, 64, 10, true);
 
@@ -101,21 +104,15 @@ public class ExCompressum {
 			ExRegistro.instance = new NihilisticNihiloProvider();
 		}
 
-		proxy.preInit(event);
-
-		for (IAddon addon : addons) {
-			proxy.preInitAddon(addon);
-		}
+		MinecraftForge.EVENT_BUS.register(proxy);
 	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		ExCompressumConfig.init(config);
+		OreDictionary.registerOre("dustWood", new ItemStack(ModItems.woodChipping));
 
 		FMLInterModComms.sendFunctionMessage(Compat.THEONEPROBE, "getTheOneProbe", "net.blay09.mods.excompressum.compat.top.TheOneProbeAddon");
 		FMLInterModComms.sendMessage(Compat.WAILA, "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
-
-		proxy.init(event);
 
 		for (IAddon addon : addons) {
 			addon.init();
@@ -131,8 +128,6 @@ public class ExCompressum {
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-
-
 		CompressedRecipeRegistry.reload();
 
 		SieveMeshRegistry.registerDefaults();
@@ -142,34 +137,25 @@ public class ExCompressum {
 		registerAddon(Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
 
 		for (IAddon addon : addons) {
-			addon.loadConfig(config);
 			addon.postInit();
 		}
-
-		if (config.hasChanged()) {
-			config.save();
-		}
-
-		proxy.postInit(event);
 	}
 
-	private Optional<?> buildSoftDependProxy(String modId, String className, Object... arguments) {
+	private Optional<?> buildSoftDependProxy(String modId, String className) {
 		if (Loader.isModLoaded(modId)) {
 			try {
 				Class<?> clz = Class.forName(className, true, Loader.instance().getModClassLoader());
-				return Optional.fromNullable(clz.newInstance());
+				return Optional.ofNullable(clz.newInstance());
 			} catch (Exception e) {
-				return Optional.absent();
+				return Optional.empty();
 			}
 		}
-		return Optional.absent();
+		return Optional.empty();
 	}
 
 	private void registerAddon(String modid, String className) {
 		Optional<?> optional = buildSoftDependProxy(modid, className);
-		if (optional.isPresent()) {
-			addons.add((IAddon) optional.get());
-		}
+		optional.ifPresent(o -> addons.add((IAddon) o));
 	}
 
 	@Mod.EventHandler
@@ -177,10 +163,10 @@ public class ExCompressum {
 		event.registerServerCommand(new CommandExCompressum());
 	}
 
-	@Mod.EventHandler
+	@Mod.EventHandler // TODO removeme
 	public void serverStarted(FMLServerStartedEvent event) {
 		for (IAddon addon : addons) {
-			addon.serverStarted(event);
+//			addon.serverStarted(event);
 		}
 	}
 
@@ -196,4 +182,33 @@ public class ExCompressum {
 		}
 	}
 
+	@SubscribeEvent
+	public static void registerBlocks(RegistryEvent.Register<Block> event) {
+		ModBlocks.register(event.getRegistry());
+
+		for(IAddon addon : instance.addons) {
+			addon.registerBlocks(event.getRegistry());
+		}
+	}
+
+	@SubscribeEvent
+	public static void registerItems(RegistryEvent.Register<Item> event) {
+		ModBlocks.registerItemBlocks(event.getRegistry());
+		ModItems.register(event.getRegistry());
+
+		for(IAddon addon : instance.addons) {
+			addon.registerItems(event.getRegistry());
+		}
+	}
+
+	@SubscribeEvent
+	public static void registerModels(ModelRegistryEvent event) {
+		proxy.registerModels();
+		ModBlocks.registerModels();
+		ModItems.registerModels();
+
+		for(IAddon addon : instance.addons) {
+			addon.registerModels();
+		}
+	}
 }

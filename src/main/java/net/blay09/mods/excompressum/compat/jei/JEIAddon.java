@@ -9,8 +9,8 @@ import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.config.BlockConfig;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.config.ItemConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
@@ -91,7 +91,7 @@ public class JEIAddon implements IModPlugin {
 			}
 		}
 
-		if(!ExCompressumConfig.enableWoodChippings) {
+		if(!ModConfig.general.enableWoodChippings) {
 			registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModItems.woodChipping));
 		}
 	}

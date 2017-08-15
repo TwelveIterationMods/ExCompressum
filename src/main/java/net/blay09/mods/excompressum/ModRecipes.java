@@ -1,32 +1,9 @@
 package net.blay09.mods.excompressum;
 
-import net.blay09.mods.excompressum.block.BlockBait;
-import net.blay09.mods.excompressum.block.BlockCompressed;
-import net.blay09.mods.excompressum.block.ModBlocks;
-import net.blay09.mods.excompressum.compat.Compat;
-import net.blay09.mods.excompressum.config.BlockConfig;
-import net.blay09.mods.excompressum.config.ItemConfig;
-import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.registry.ExNihiloProvider;
-import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.IFuelHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-
 public class ModRecipes {
 
 	public static void init() {
 		// TODO move recipes to json
-//		registerItems();
 //
 //		if (BlockConfig.isEnabled("Heavy Sieve")) {
 //			for (int i = 0; i < 4; i++) {
@@ -112,12 +89,6 @@ public class ModRecipes {
 	}
 
 	private static void registerItems() {
-//		if(ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.IRON_MESH).isEmpty()) {
-//			GameRegistry.addRecipe(new ItemStack(ModItems.ironMesh), "##", "##", '#', Blocks.IRON_BARS);
-//		}
-//
-//		registerCompressedHammers();
-//
 //		if(ItemConfig.isEnabled("Compressed Crook")) {
 //			ItemStack itemCrook = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.CROOK_WOODEN);
 //			if(!itemCrook.isEmpty()) {
@@ -131,15 +102,7 @@ public class ModRecipes {
 //			GameRegistry.addShapelessRecipe(new ItemStack(ModItems.uncompressedCoal, 8), Items.COAL);
 //			GameRegistry.addShapelessRecipe(new ItemStack(Items.COAL), new ItemStack(ModItems.uncompressedCoal), new ItemStack(ModItems.uncompressedCoal), new ItemStack(ModItems.uncompressedCoal), new ItemStack(ModItems.uncompressedCoal), new ItemStack(ModItems.uncompressedCoal), new ItemStack(ModItems.uncompressedCoal), new ItemStack(ModItems.uncompressedCoal), new ItemStack(ModItems.uncompressedCoal));
 //		}
-		GameRegistry.registerFuelHandler(new IFuelHandler() {
-			@Override
-			public int getBurnTime(ItemStack itemStack) {
-				if(itemStack.getItem() == ModItems.uncompressedCoal) {
-					return 200;
-				}
-				return 0;
-			}
-		});
+
 
 //		if(ItemConfig.isEnabled("Bat Zapper")) {
 //			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.batZapper), " RG", " SR", "S  ", 'R', Items.REDSTONE, 'G', Items.GLOWSTONE_DUST, 'S', "stickWood"));
@@ -147,68 +110,6 @@ public class ModRecipes {
 //
 //		if(ItemConfig.isEnabled("Ore Smasher")) {
 //			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ModItems.oreSmasher), " CD", " SC", "S  ", 'C', Blocks.CRAFTING_TABLE, 'D', Items.DIAMOND, 'S', "stickWood"));
-//		}
-	}
-
-	private static void registerCompressedHammers() {
-//		if (ItemConfig.isEnabled("Compressed Wooden Hammer")) {
-//			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_WOODEN);
-//			if (!nihiloHammer.isEmpty()) {
-//				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-//					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
-//				}
-//				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerWood), "###", "###", "###", '#', nihiloHammer);
-//			} else {
-//				ExCompressum.logger.warn("No Wooden Hammer found - Compressed Wooden Hammer recipe will be disabled.");
-//			}
-//		}
-//
-//		if (ItemConfig.isEnabled("Compressed Stone Hammer")) {
-//			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_STONE);
-//			if (!nihiloHammer.isEmpty()) {
-//				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-//					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
-//				}
-//				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerStone), "###", "###", "###", '#', nihiloHammer);
-//			} else {
-//				ExCompressum.logger.warn("No Stone Hammer found - Compressed Stone Hammer recipe will be disabled.");
-//			}
-//		}
-//
-//		if (ItemConfig.isEnabled("Compressed Iron Hammer")) {
-//			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_IRON);
-//			if (!nihiloHammer.isEmpty()) {
-//				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-//					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
-//				}
-//				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerIron), "###", "###", "###", '#', nihiloHammer);
-//			} else {
-//				ExCompressum.logger.warn("No Iron Hammer found - Compressed Iron Hammer recipe will be disabled.");
-//			}
-//		}
-//
-//		if (ItemConfig.isEnabled("Compressed Gold Hammer")) {
-//			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_GOLD);
-//			if (!nihiloHammer.isEmpty()) {
-//				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-//					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
-//				}
-//				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerGold), "###", "###", "###", '#', nihiloHammer);
-//			} else {
-//				ExCompressum.logger.warn("No Gold Hammer found - Compressed Gold Hammer recipe will be disabled.");
-//			}
-//		}
-//
-//		if (ItemConfig.isEnabled("Compressed Diamond Hammer")) {
-//			ItemStack nihiloHammer = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
-//			if (!nihiloHammer.isEmpty()) {
-//				if(nihiloHammer.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-//					nihiloHammer = new ItemStack(nihiloHammer.getItem(), 1, 0);
-//				}
-//				GameRegistry.addRecipe(new ItemStack(ModItems.compressedHammerDiamond), "###", "###", "###", '#', nihiloHammer);
-//			} else {
-//				ExCompressum.logger.warn("No Diamond Hammer found - Compressed Diamond Hammer recipe will be disabled.");
-//			}
 //		}
 	}
 

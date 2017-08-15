@@ -1,16 +1,15 @@
 package net.blay09.mods.excompressum.compat;
 
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraftforge.registries.IForgeRegistry;
 
-// TODO register all of these in preInit instead of special-casing botania
 public interface IAddon {
-    void loadConfig(Configuration config);
-    void init();
+    default void init() {}
     void postInit();
-    void serverStarted(FMLServerStartedEvent event);
-    @SideOnly(Side.CLIENT)
-    void clientInit(); // thanks botania
+//    void serverStarted(FMLServerStartedEvent event);
+
+    default void registerModels() {}
+    default void registerItems(IForgeRegistry<Item> registry) {}
+    default void registerBlocks(IForgeRegistry<Block> registry) {}
 }

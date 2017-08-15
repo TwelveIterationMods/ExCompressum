@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.client.render.ParticleSieve;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -88,7 +88,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
 
     @SideOnly(Side.CLIENT)
     public void spawnParticles() {
-        if(!currentStack.isEmpty() && !ExCompressumConfig.disableParticles) {
+        if(!currentStack.isEmpty() && !ModConfig.client.disableParticles) {
             IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
             if (state != null) {
                 for(int i = 0; i < particleCount; i++) {

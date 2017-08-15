@@ -10,7 +10,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -128,20 +127,6 @@ public class BlockWoodenCrucible extends BlockContainer {
             FluidUtil.interactWithFluidHandler(player, hand, world, pos, side);
         }
         return true;
-    }
-
-    public void registerModel(Item item) { // TODO move me
-//        ModelLoader.setCustomMeshDefinition(item, new ItemMeshDefinition() {
-//            @Override
-//            public ModelResourceLocation getModelLocation(ItemStack itemStack) {
-//                Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < Type.values.length ? Type.values[itemStack.getItemDamage()] : null;
-//                if(type != null) {
-//                    return new ModelResourceLocation(registryName, "variant=" + type.getName());
-//                } else {
-//                    return new ModelResourceLocation("missingno");
-//                }
-//            }
-//        });
     }
 
 }
