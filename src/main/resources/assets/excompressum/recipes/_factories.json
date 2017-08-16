@@ -1,8 +1,10 @@
 {
   "ingredients": {
-    "item_list": "net.blay09.mods.excompressum.crafting.ItemListIngredient"
+    "item_list": "net.blay09.mods.excompressum.crafting.ItemListIngredient",
+    "nihilo_item": "net.blay09.mods.excompressum.crafting.NihiloItemIngredient"
   },
   "conditions": {
-    "iron_mesh_recipe": "net.blay09.mods.excompressum.crafting.IronMeshRecipeCondition"
+    "has_nihilo_item": "net.blay09.mods.excompressum.crafting.HasNihiloItemCondition",
+    "has_oredict_item": "net.blay09.mods.excompressum.crafting.HasOreDictItemCondition"
   }
 }

@@ -73,7 +73,7 @@ public class BlockConfig {
 		addEntry("Auto Sieve", new ItemStack(ModBlocks.autoSieve), true);
 		addEntry("Auto Heavy Sieve", new ItemStack(ModBlocks.autoHeavySieve), true);
 
-		addEntry("Mana Sieve", new ItemStack(ModBlocks.manaSieve), true);
+//		addEntry("Mana Sieve", new ItemStack(ModBlocks.manaSieve), true);
 
 		addEntry("Compressed Dust", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DUST.ordinal()), true);
 		addEntry("Compressed Soul Sand", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SOUL_SAND.ordinal()), true);

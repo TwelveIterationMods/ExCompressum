@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "excompressum:wooden_crucible",
+    "data": 0
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "p p",
+    "p p",
+    "psp"
+  ],
+  "key": {
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "slabWood"
+    },
+    "p": {
+      "item": "minecraft:log",
+      "data": 0
+    }
+  }
+}

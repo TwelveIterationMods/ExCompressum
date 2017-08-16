@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "excompressum:bait",
+    "data": 5
+  },
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "type": "excompressum:nihilo_item",
+      "value": "SEEDS_GRASS"
+    }
+  ],
+  "conditions": [
+    {
+      "type": "excompressum:has_nihilo_item",
+      "value": "SEEDS_GRASS"
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum;
 
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
+import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
@@ -39,7 +40,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -56,8 +56,6 @@ import java.util.Optional;
 @Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID)
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;after:exnihilocreatio;", acceptedMinecraftVersions = "[1.12]")
 public class ExCompressum {
-
-	// TODO iron_mesh recipe is currently hardcoded to only check for creatio iron mesh, create a custom condition if another Nihilo pops up
 
 	public static final String MOD_ID = "excompressum";
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
@@ -110,6 +108,17 @@ public class ExCompressum {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		OreDictionary.registerOre("dustWood", new ItemStack(ModItems.woodChipping));
+		OreDictionary.registerOre("compressed1xDust", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DUST.ordinal()));
+		OreDictionary.registerOre("compressed1xCobblestone", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.COBBLESTONE.ordinal()));
+		OreDictionary.registerOre("compressed1xGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal()));
+		OreDictionary.registerOre("compressed1xSand", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal()));
+		OreDictionary.registerOre("compressed1xDirt", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()));
+		OreDictionary.registerOre("compressed1xFlint", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.FLINT.ordinal()));
+		OreDictionary.registerOre("compressed1xEnderGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()));
+		OreDictionary.registerOre("compressed1xNetherGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()));
+		OreDictionary.registerOre("compressed1xSoulsand", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SOUL_SAND.ordinal()));
+		OreDictionary.registerOre("compressed1xNetherrack", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHERRACK.ordinal()));
+		OreDictionary.registerOre("compressed1xEndStone", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.END_STONE.ordinal()));
 
 		FMLInterModComms.sendFunctionMessage(Compat.THEONEPROBE, "getTheOneProbe", "net.blay09.mods.excompressum.compat.top.TheOneProbeAddon");
 		FMLInterModComms.sendMessage(Compat.WAILA, "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
@@ -117,8 +126,6 @@ public class ExCompressum {
 		for (IAddon addon : addons) {
 			addon.init();
 		}
-
-		ModRecipes.init();
 
 		ChickenStickRegistry.INSTANCE.load(configDir);
 		WoodenCrucibleRegistry.INSTANCE.load(configDir);
@@ -133,7 +140,7 @@ public class ExCompressum {
 		SieveMeshRegistry.registerDefaults();
 		AutoSieveSkinRegistry.load();
 
-		registerAddon(Compat.MINETWEAKER, "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
+		registerAddon(Compat.CRAFTTWEAKER, "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
 		registerAddon(Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
 
 		for (IAddon addon : addons) {
@@ -163,13 +170,6 @@ public class ExCompressum {
 		event.registerServerCommand(new CommandExCompressum());
 	}
 
-	@Mod.EventHandler // TODO removeme
-	public void serverStarted(FMLServerStartedEvent event) {
-		for (IAddon addon : addons) {
-//			addon.serverStarted(event);
-		}
-	}
-
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
 		if (AbstractRegistry.registryErrors.size() > 0) {
@@ -186,7 +186,7 @@ public class ExCompressum {
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 		ModBlocks.register(event.getRegistry());
 
-		for(IAddon addon : instance.addons) {
+		for (IAddon addon : instance.addons) {
 			addon.registerBlocks(event.getRegistry());
 		}
 	}
@@ -196,7 +196,7 @@ public class ExCompressum {
 		ModBlocks.registerItemBlocks(event.getRegistry());
 		ModItems.register(event.getRegistry());
 
-		for(IAddon addon : instance.addons) {
+		for (IAddon addon : instance.addons) {
 			addon.registerItems(event.getRegistry());
 		}
 	}
@@ -207,7 +207,7 @@ public class ExCompressum {
 		ModBlocks.registerModels();
 		ModItems.registerModels();
 
-		for(IAddon addon : instance.addons) {
+		for (IAddon addon : instance.addons) {
 			addon.registerModels();
 		}
 	}

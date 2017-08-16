@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "excompressum:bat_zapper"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " RG",
+    " SR",
+    "S  "
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "R": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "dustGlowstone"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "excompressum:heavy_sieve",
+    "data": 2
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "p p",
+    "ppp",
+    "s s"
+  ],
+  "key": {
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "p": {
+      "item": "minecraft:log",
+      "data": 2
+    }
+  }
+}

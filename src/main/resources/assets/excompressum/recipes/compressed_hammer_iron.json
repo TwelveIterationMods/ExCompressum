@@ -10,7 +10,14 @@
   ],
   "key": {
     "#": {
-      "item": "#IRON_HAMMER"
+      "type": "excompressum:nihilo_item",
+      "value": "HAMMER_IRON"
     }
-  }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:nihilo_item",
+      "value": "HAMMER_IRON"
+    }
+  ]
 }

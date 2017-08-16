@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "excompressum:auto_compressor"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "CIC",
+    "IBI",
+    "CIC"
+  ],
+  "key": {
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "workbench"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "blockIron"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  }
+}

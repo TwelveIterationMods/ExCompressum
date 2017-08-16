@@ -1,0 +1,44 @@
+{
+  "result": {
+    "item": "excompressum:mana_sieve"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "BGB",
+    "GSG",
+    "IGI"
+  ],
+  "key": {
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "paneGlassColorless"
+    },
+    "S": {
+      "type": "excompressum:nihilo_item",
+      "ore": "SIEVE"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotManasteel"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "blockManasteel"
+    }
+  },
+  "conditions": [
+    {
+      "type": "forge:and",
+      "value": [
+        {
+          "type": "forge:mod_loaded",
+          "value": "botania"
+        },
+        {
+          "type": "excompressum:has_nihilo_item",
+          "value": "SIEVE"
+        }
+      ]
+    }
+  ]
+}

@@ -12,7 +12,6 @@ public class TConstructAddon implements IAddon {
             ModSmashingII smashingII = new ModSmashingII();
             smashingII.addItem(ModItems.doubleCompressedDiamondHammer);
             TinkerRegistry.registerModifier(smashingII);
-            //GameRegistry.addRecipe(new ItemStack(ModItems.doubleCompressedDiamondHammer), "##", "##", '#', ModItems.compressedHammerDiamond); TODO move to json
         }
     }
 }

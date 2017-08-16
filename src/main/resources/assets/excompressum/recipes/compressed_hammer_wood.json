@@ -10,7 +10,14 @@
   ],
   "key": {
     "#": {
-      "item": "#WOODEN_HAMMER"
+      "type": "excompressum:nihilo_item",
+      "value": "HAMMER_WOODEN"
     }
-  }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:nihilo_item",
+      "value": "HAMMER_WOODEN"
+    }
+  ]
 }

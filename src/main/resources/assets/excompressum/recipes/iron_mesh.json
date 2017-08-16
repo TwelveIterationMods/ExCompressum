@@ -14,7 +14,8 @@
   },
   "conditions": [
     {
-      "type": "excompressum:iron_mesh_recipe"
+      "type": "excompressum:has_nihilo_item",
+      "value": "IRON_MESH"
     }
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "result": {
+    "item": "excompressum:bait",
+    "data": 8
+  },
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:golden_apple",
+      "data": 0
+    },
+    {
+      "item": "minecraft:golden_apple",
+      "data": 0
+    }
+  ]
+}

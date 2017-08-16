@@ -1,0 +1,17 @@
+{
+  "result": {
+    "item": "excompressum:compressed_block",
+    "data": 10
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:end_stone"
+    }
+  }
+}

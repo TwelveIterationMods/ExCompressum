@@ -32,10 +32,6 @@ public class BotaniaAddon implements IAddon {
 
     public static LexiconEntry lexiconOrechidEvolved;
 
-//    @GameRegistry.ObjectHolder(Compat.BOTANIA + ":runealtar") // TODO check name and we can't use ObjectHolder because it loads the class
-    public static Block runicAltar;
-
-//    @GameRegistry.ObjectHolder(ExCompressum.MOD_ID + ":" + ItemManaHammer.name)
     public static Item manaHammer;
 
     public BotaniaAddon() {
@@ -44,7 +40,7 @@ public class BotaniaAddon implements IAddon {
 
     @Override
     public void registerItems(IForgeRegistry<Item> registry) {
-        registry.register(new ItemManaHammer().setRegistryName("mana_hammer"));
+        registry.register(manaHammer = new ItemManaHammer().setRegistryName("mana_hammer"));
     }
 
     @Override
@@ -63,7 +59,7 @@ public class BotaniaAddon implements IAddon {
             lexiconOrechidEvolved = new LexiconEntry(LEXICON_ORECHID_EVOLVED, BotaniaAPI.categoryFunctionalFlowers) {
                 @Override
                 public String getWebLink() {
-                    return "http://blay09.net/mods/ex-compressum/evolved-orechid/"; // TODO fix this link
+                    return "http://blay09.net/mods/excompressum/";
                 }
 
                 @Override

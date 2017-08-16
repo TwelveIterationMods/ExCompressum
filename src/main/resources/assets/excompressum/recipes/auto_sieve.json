@@ -1,0 +1,35 @@
+{
+  "result": {
+    "item": "excompressum:auto_sieve"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "BGB",
+    "GSG",
+    "IGI"
+  ],
+  "key": {
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "paneGlassColorless"
+    },
+    "S": {
+      "type": "excompressum:nihilo_item",
+      "ore": "SIEVE"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "blockIron"
+    }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:has_nihilo_item",
+      "value": "SIEVE"
+    }
+  ]
+}

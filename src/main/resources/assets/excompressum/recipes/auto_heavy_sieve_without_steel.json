@@ -1,0 +1,47 @@
+{
+  "result": {
+    "item": "excompressum:auto_heavy_sieve"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "BGB",
+    "GSG",
+    "IGI"
+  ],
+  "key": {
+    "G": {
+      "type": "forge:ore_dict",
+      "ore": "paneGlassColorless"
+    },
+    "S": {
+      "item": "excompressum:heavy_sieve",
+      "data": 32767
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "blockIron"
+    }
+  },
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:and",
+        "value": [
+          {
+            "type": "excompressum:has_oredict_item",
+            "value": "ingotSteel"
+          },
+          {
+            "type": "excompressum:has_oredict_item",
+            "value": "blockSteel"
+          }
+        ]
+      }
+    }
+  ]
+}

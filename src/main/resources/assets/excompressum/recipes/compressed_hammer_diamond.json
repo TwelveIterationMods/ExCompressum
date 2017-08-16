@@ -10,7 +10,14 @@
   ],
   "key": {
     "#": {
-      "item": "#DIAMOND_HAMMER"
+      "type": "excompressum:nihilo_item",
+      "value": "HAMMER_DIAMOND"
     }
-  }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:nihilo_item",
+      "value": "HAMMER_DIAMOND"
+    }
+  ]
 }

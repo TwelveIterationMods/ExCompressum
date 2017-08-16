@@ -54,9 +54,6 @@ public class ModItems {
 	@GameRegistry.ObjectHolder(ItemOreSmasher.name)
 	public static Item oreSmasher = Items.AIR;
 
-	@GameRegistry.ObjectHolder(ItemManaHammer.name)
-	public static Item itemManaHammer = Items.AIR;
-
 	public static void register(IForgeRegistry<Item> registry) {
 		registry.registerAll(
 				new ItemChickenStick().setRegistryName(ItemChickenStick.name),
@@ -73,16 +70,6 @@ public class ModItems {
 				new ItemBatZapper().setRegistryName(ItemBatZapper.name),
 				new ItemOreSmasher().setRegistryName(ItemOreSmasher.name)
 				);
-
-		// TODO move this to addon preInit
-		if (Loader.isModLoaded(Compat.BOTANIA)) {
-			try {
-				registry.register(((Item) Class.forName("net.blay09.mods.excompressum.item.ItemManaHammer").newInstance()).setRegistryName("mana_hammer"));
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-
 	}
 
 	public static void registerModels() {

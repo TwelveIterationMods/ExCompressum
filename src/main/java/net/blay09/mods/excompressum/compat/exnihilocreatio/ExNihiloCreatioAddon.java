@@ -113,8 +113,8 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		}
 	}
 
-//	@SubscribeEvent // TODO
-	public void onRegistryReload(/*RegistryReloaded*/Event event) { // TODO
+//	@SubscribeEvent // TODO waiting for creatio update
+	public void onRegistryReload(/*RegistryReloaded*/Event event) {
 		if(ModConfig.general.enableWoodChippings) {
 			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
 			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);

@@ -46,9 +46,6 @@ public class ModBlocks {
 	@GameRegistry.ObjectHolder(BlockAutoSieve.name)
 	public static final Block autoSieve = Blocks.AIR;
 
-	@GameRegistry.ObjectHolder(BlockManaSieve.name)
-	public static final Block manaSieve = Blocks.AIR;
-
 	@GameRegistry.ObjectHolder(BlockAutoCompressor.name)
 	public static final Block autoCompressor = Blocks.AIR;
 
@@ -62,8 +59,7 @@ public class ModBlocks {
 				new BlockAutoSieve().setRegistryName(BlockAutoSieve.name),
 				new BlockAutoCompressedHammer().setRegistryName(BlockAutoCompressedHammer.name),
 				new BlockAutoHeavySieve().setRegistryName(BlockAutoHeavySieve.name),
-				new BlockAutoCompressor().setRegistryName(BlockAutoCompressor.name),
-				new BlockManaSieve().setRegistryName(BlockManaSieve.name)
+				new BlockAutoCompressor().setRegistryName(BlockAutoCompressor.name)
 		);
 	}
 
@@ -77,22 +73,15 @@ public class ModBlocks {
 				new ItemBlock(autoCompressedHammer).setRegistryName(BlockAutoCompressedHammer.name),
 				new ItemBlock(autoSieve).setRegistryName(BlockAutoSieve.name),
 				new ItemBlock(autoHeavySieve).setRegistryName(BlockAutoHeavySieve.name),
-				new ItemBlock(autoCompressor).setRegistryName(BlockAutoCompressor.name),
-				new ItemBlock(manaSieve).setRegistryName(BlockManaSieve.name)
+				new ItemBlock(autoCompressor).setRegistryName(BlockAutoCompressor.name)
 		);
 	}
 
 	public static void registerModels() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(compressedBlock), 0, new ModelResourceLocation(BlockCompressed.registryName, "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(heavySieve), 0, new ModelResourceLocation(BlockHeavySieve.registryName, "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(woodenCrucible), 0, new ModelResourceLocation(BlockWoodenCrucible.registryName, "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(bait), 0, new ModelResourceLocation(BlockBait.registryName, "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoHammer), 0, new ModelResourceLocation(BlockAutoHammer.registryName, "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoCompressedHammer), 0, new ModelResourceLocation(BlockAutoCompressedHammer.registryName, "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoSieve), 0, new ModelResourceLocation(BlockAutoSieve.registryName, "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoHeavySieve), 0, new ModelResourceLocation(BlockAutoHeavySieve.registryName, "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoCompressor), 0, new ModelResourceLocation(BlockAutoCompressor.registryName, "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(manaSieve), 0, new ModelResourceLocation(BlockManaSieve.registryName, "inventory"));
 
 		// Baits
 		ResourceLocation[] baitVariants = new ResourceLocation[BlockBait.Type.values.length];
@@ -170,9 +159,5 @@ public class ModBlocks {
 		GameRegistry.registerTileEntity(TileAutoSieve.class, ExCompressum.MOD_ID + ":auto_sieve");
 		GameRegistry.registerTileEntity(TileAutoHeavySieve.class, ExCompressum.MOD_ID + ":auto_heavy_sieve");
 		GameRegistry.registerTileEntity(TileAutoCompressor.class, ExCompressum.MOD_ID + ":auto_compressor");
-
-		if (Loader.isModLoaded(Compat.BOTANIA)) {
-			GameRegistry.registerTileEntity(TileAutoSieveMana.class, ExCompressum.MOD_ID + ":mana_sieve");
-		}
 	}
 }

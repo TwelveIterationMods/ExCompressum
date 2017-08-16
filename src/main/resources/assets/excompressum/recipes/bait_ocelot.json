@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "excompressum:bait",
+    "data": 1
+  },
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:gunpowder"
+    },
+    [
+      {
+        "item": "minecraft:fish",
+        "data": 32767
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "listAllfishraw"
+      }
+    ]
+  ]
+}

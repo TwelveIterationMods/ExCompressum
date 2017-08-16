@@ -1,0 +1,17 @@
+{
+  "result": {
+    "item": "excompressum:compressed_block",
+    "data": 9
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:netherrack"
+    }
+  }
+}

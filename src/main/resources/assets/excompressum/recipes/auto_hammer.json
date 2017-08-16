@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "excompressum:auto_hammer"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "IPI",
+    "IHI",
+    "IPI"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:heavy_weighted_pressure_plate"
+    },
+    "H": {
+      "type": "excompressum:nihilo_item",
+      "ore": "HAMMMER_DIAMOND"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:has_nihilo_item",
+      "value": "HAMMER_DIAMOND"
+    }
+  ]
+}

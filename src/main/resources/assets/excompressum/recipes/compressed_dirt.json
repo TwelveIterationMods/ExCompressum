@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "excompressum:compressed_block",
+    "data": 4
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:dirt",
+      "data": 0
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "excompressum:compressed_block",
+    "data": 3
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:sand",
+      "data": 0
+    }
+  }
+}

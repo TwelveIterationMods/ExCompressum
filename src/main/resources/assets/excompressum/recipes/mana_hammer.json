@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "excompressum:mana_hammer"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " I ",
+    " SI",
+    "S  "
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "stickMagicalWood"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotManasteel"
+    }
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "value": "botania"
+    }
+  ]
+}

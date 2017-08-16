@@ -1,0 +1,33 @@
+{
+  "result": {
+    "item": "minecraft:coal",
+    "data": 0
+  },
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "excompressum:uncompressed_coal"
+    },
+    {
+      "item": "excompressum:uncompressed_coal"
+    },
+    {
+      "item": "excompressum:uncompressed_coal"
+    },
+    {
+      "item": "excompressum:uncompressed_coal"
+    },
+    {
+      "item": "excompressum:uncompressed_coal"
+    },
+    {
+      "item": "excompressum:uncompressed_coal"
+    },
+    {
+      "item": "excompressum:uncompressed_coal"
+    },
+    {
+      "item": "excompressum:uncompressed_coal"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "excompressum:compressed_crook"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "excompressum:nihilo_item",
+      "value": "CROOK_WOODEN"
+    }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:has_nihilo_item",
+      "value": "CROOK_WOODEN"
+    }
+  ]
+}

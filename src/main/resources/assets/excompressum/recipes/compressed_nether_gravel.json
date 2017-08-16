@@ -1,0 +1,24 @@
+{
+  "result": {
+    "item": "excompressum:compressed_block",
+    "data": 6
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "excompressum:nihilo_item",
+      "value": "NETHER_GRAVEL"
+    }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:has_nihilo_item",
+      "value": "NETHER_GRAVEL"
+    }
+  ]
+}

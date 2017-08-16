@@ -7,7 +7,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 public interface IAddon {
     default void init() {}
     void postInit();
-//    void serverStarted(FMLServerStartedEvent event);
 
     default void registerModels() {}
     default void registerItems(IForgeRegistry<Item> registry) {}

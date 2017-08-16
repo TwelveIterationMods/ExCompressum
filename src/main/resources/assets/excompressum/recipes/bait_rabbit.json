@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "excompressum:bait",
+    "data": 7
+  },
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:carrot"
+    },
+    {
+      "item": "minecraft:melon_seeds"
+    }
+  ]
+}

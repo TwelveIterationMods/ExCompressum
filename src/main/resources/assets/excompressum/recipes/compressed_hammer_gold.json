@@ -1,6 +1,6 @@
 {
   "result": {
-    "item": "excompressum:compressed_hammer_iron"
+    "item": "excompressum:compressed_hammer_gold"
   },
   "type": "forge:ore_shaped",
   "pattern": [
@@ -10,7 +10,14 @@
   ],
   "key": {
     "#": {
-      "item": "#GOLD_HAMMER"
+      "type": "excompressum:nihilo_item",
+      "value": "HAMMER_GOLD"
     }
-  }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:nihilo_item",
+      "value": "HAMMER_GOLD"
+    }
+  ]
 }

@@ -26,7 +26,7 @@ import java.util.Locale;
 
 public class BlockWoodenCrucible extends BlockContainer {
 
-    public static final String name = "mana_sieve";
+    public static final String name = "wooden_crucible";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public enum Type implements IStringSerializable {

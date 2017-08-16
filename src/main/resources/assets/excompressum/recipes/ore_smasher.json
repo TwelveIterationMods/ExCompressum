@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "excompressum:ore_smasher"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " CD",
+    " SC",
+    "S  "
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "workbench"
+    },
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "result": {
+    "item": "excompressum:auto_hammer"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "BPB",
+    "IHI",
+    "BPB"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:heavy_weighted_pressure_plate"
+    },
+    "H": {
+      "item": "excompressum:compressed_hammer_diamond"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "B": {
+      "type": "forge:ore_dict",
+      "ore": "blockIron"
+    }
+  },
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "excompressum:has_oredict_item",
+        "value": "ingotSteel"
+      }
+    }
+  ]
+}

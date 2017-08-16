@@ -106,9 +106,6 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 					} else {
 						s = String.format("%1.1f%%", reward.getBaseChance() * 100f);
 					}
-//						if(reward.getLuckMultiplier() > 0f) {
-//							s += TextFormatting.BLUE + String.format(" (+ %1.1f " + I18n.format("jei.excompressum:compressedHammer.luck") + ")", reward.getLuckMultiplier());
-//						}
 					condensedTooltips.add(s);
 				}
 				tooltip.add(I18n.format("jei.excompressum:heavySieve.dropChance"));

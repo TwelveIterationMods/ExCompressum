@@ -17,7 +17,8 @@ public interface ExNihiloProvider {
 	enum NihiloMod implements IStringSerializable {
 		NONE,
 		OMNIA,
-		ADSCENSIO;
+		ADSCENSIO,
+		CREATIO;
 
 		public String getName() {
 			return name().toLowerCase(Locale.ENGLISH);

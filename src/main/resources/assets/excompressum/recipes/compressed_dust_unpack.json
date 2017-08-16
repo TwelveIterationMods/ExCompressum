@@ -1,0 +1,20 @@
+{
+  "result": {
+    "type": "excompressum:nihilo_item",
+    "value": "DUST",
+    "count": 9
+  },
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "excompressum:compressed_block",
+      "data": 0
+    }
+  ],
+  "conditions": [
+    {
+      "type": "excompressum:has_nihilo_item",
+      "value": "DUST"
+    }
+  ]
+}

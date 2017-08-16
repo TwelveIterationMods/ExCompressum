@@ -13,7 +13,6 @@ import net.minecraftforge.common.crafting.JsonContext;
 import javax.annotation.Nonnull;
 
 public class ItemListIngredient implements IIngredientFactory {
-	@Nonnull
 	@Override
 	public Ingredient parse(JsonContext context, JsonObject json) {
 		JsonArray itemsArray = json.getAsJsonArray("items");
@@ -24,6 +23,9 @@ public class ItemListIngredient implements IIngredientFactory {
 			} catch (JsonSyntaxException ignored) {
 				// ignore missing items
 			}
+		}
+		if(items.size() == 0) {
+			return Ingredient.EMPTY;
 		}
 		return Ingredient.fromStacks(items.toArray(new ItemStack[items.size()]));
 	}

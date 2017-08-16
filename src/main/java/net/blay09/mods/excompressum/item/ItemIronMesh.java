@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 
 //@Optional.Interface(iface = "exnihiloomnia.items.meshs.ISieveMesh", modid = Compat.EXNIHILO_OMNIA)
-public class ItemIronMesh extends Item {// implements ISieveMesh { // TODO awaiting Ex Nihilo Omnia port
+public class ItemIronMesh extends Item {// implements ISieveMesh { awaiting Ex Nihilo Omnia port
 
     public static final String name = "iron_mesh";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
@@ -22,7 +22,7 @@ public class ItemIronMesh extends Item {// implements ISieveMesh { // TODO await
         return 30;
     }
 
-    //@Override // TODO awaiting Ex Nihilo Omnia port
+    //@Override awaiting Ex Nihilo Omnia port
     //@SideOnly(Side.CLIENT)
     //public TextureAtlasSprite getMeshTexture() {
     //    return ClientProxy.ironMeshSprite;
