@@ -7,7 +7,7 @@ dependencies {
     deobfCompile "baubles:Baubles:1.12:1.5.1" // CurseForge
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.20-B35_1.12"
     deobfCompile "mezz.jei:jei_1.12.1:4.7.5.87"
-    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.17-9"
+    provided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.17-9"
     deobfCompile "cofh:RedstoneFlux:1.12-2.0.1.2:universal"
     provided "hosted-api:Botania_1.11.2:r1.9-343"
 }
