@@ -4,6 +4,7 @@ import net.blay09.mods.excompressum.item.ICompressedCrook;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -27,8 +28,9 @@ public class CompressedCrookHandler {
 
 				// Roll drops twice when breaking leaves
 				if(event.getState().getBlock() instanceof BlockLeaves) {
-					//noinspection deprecation
-					event.getDrops().addAll(event.getState().getBlock().getDrops(event.getWorld(), event.getPos(), event.getState(), fortune));
+					NonNullList<ItemStack> list = NonNullList.create();
+					event.getState().getBlock().getDrops(list, event.getWorld(), event.getPos(), event.getState(), fortune);
+					event.getDrops().addAll(list);
 				}
 			}
 		}

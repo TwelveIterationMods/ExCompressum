@@ -56,6 +56,21 @@
         "textures": {
           "particle": "minecraft:items/carrot_golden"
         }
+      },
+      "llama": {
+        "textures": {
+          "particle": "minecraft:items/sugar"
+        }
+      },
+      "polar_bear": {
+        "textures": {
+          "particle": "minecraft:items/snowball"
+        }
+      },
+      "parrot": {
+        "textures": {
+          "particle": "minecraft:items/dye_powder_red"
+        }
       }
     }
   }

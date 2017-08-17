@@ -85,6 +85,21 @@ public class ModConfig {
 		@Config.RangeDouble(min = 0.002f, max = 1f)
 		public float donkeyChance = 0.01f;
 
+		@Config.Name("Parrot Bait Chance")
+		@Config.Comment("The chance (per second) that a parrot bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float parrotChance = 0.01f;
+
+		@Config.Name("Polar Bear Bait Chance")
+		@Config.Comment("The chance (per second) that a polar bear bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float polarBearChance = 0.01f;
+
+		@Config.Name("Llama Bait Chance")
+		@Config.Comment("The chance (per second) that a llama bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float llamaChance = 0.01f;
+
 		@Config.Name("Bait Child Chance")
 		@Config.Comment("The chance (per second) that an animal spawned from a bait will result in a child.")
 		@Config.RangeDouble(min = 0.0f, max = 1f)

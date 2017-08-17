@@ -46,14 +46,14 @@ public class ContainerAutoSieve extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        if(lastProgress != tileEntity.getProgress() || lastEnergy != tileEntity.getEnergyStored()) {
+        if(lastProgress != tileEntity.getProgress() || lastEnergy != tileEntity.getEnergyStored(null)) {
             for (IContainerListener listener : listeners) {
                 listener.sendWindowProperty(this, 0, (int) (100 * tileEntity.getProgress()));
-                listener.sendWindowProperty(this, 1, tileEntity.getEnergyStored());
+                listener.sendWindowProperty(this, 1, tileEntity.getEnergyStored(null));
             }
         }
         lastProgress = tileEntity.getProgress();
-        lastEnergy = tileEntity.getEnergyStored();
+        lastEnergy = tileEntity.getEnergyStored(null);
     }
 
     @Override

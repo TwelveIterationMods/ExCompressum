@@ -3,8 +3,11 @@ package net.blay09.mods.excompressum.tile;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.Optional;
 import vazkii.botania.api.mana.IManaReceiver;
+
+import javax.annotation.Nullable;
 
 @Optional.Interface(modid = Compat.BOTANIA, iface = "vazkii.botania.api.mana.IManaReceiver", striprefs = true)
 public class TileAutoSieveMana extends TileAutoSieveBase implements IManaReceiver {
@@ -22,7 +25,7 @@ public class TileAutoSieveMana extends TileAutoSieveBase implements IManaReceive
     }
 
     @Override
-    public int getEnergyStored() {
+    public int getEnergyStored(@Nullable EnumFacing from) {
         return manaStored;
     }
 

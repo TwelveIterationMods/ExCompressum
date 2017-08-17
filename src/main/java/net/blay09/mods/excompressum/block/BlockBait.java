@@ -21,11 +21,14 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityDonkey;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntitySheep;
@@ -34,6 +37,7 @@ import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -73,8 +77,10 @@ public class BlockBait extends BlockContainer {
 		SQUID(new ItemStack(Items.FISH), new ItemStack(Items.FISH), EntitySquid::new, () -> ModConfig.baits.squidChance),
 		RABBIT(new ItemStack(Items.CARROT), new ItemStack(Items.MELON_SEEDS), EntityRabbit::new, () -> ModConfig.baits.rabbitChance),
 		HORSE(new ItemStack(Items.GOLDEN_APPLE), new ItemStack(Items.GOLDEN_APPLE), EntityHorse::new, () -> ModConfig.baits.horseChance),
-		DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), EntityDonkey::new, () -> ModConfig.baits.donkeyChance);
-		// TODO add missing animals
+		DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), EntityDonkey::new, () -> ModConfig.baits.donkeyChance),
+		POLAR_BEAR(new ItemStack(Items.SNOWBALL), new ItemStack(Items.FISH), EntityPolarBear::new, () -> ModConfig.baits.polarBearChance),
+		LLAMA(new ItemStack(Items.WHEAT), new ItemStack(Items.SUGAR), EntityLlama::new, () -> ModConfig.baits.llamaChance),
+		PARROT(new ItemStack(Items.DYE, 1, EnumDyeColor.RED.getDyeDamage()), new ItemStack(Items.DYE, 1, EnumDyeColor.GREEN.getDyeDamage()), EntityParrot::new, () -> ModConfig.baits.parrotChance);
 
 		public static Type[] values = values();
 
@@ -125,7 +131,7 @@ public class BlockBait extends BlockContainer {
 
 		public Collection<TileBait.BaitBlockCondition> getEnvironmentConditions() {
 			if (environmentConditions == null) {
-				if (this == OCELOT) {
+				if (this == OCELOT || this == PARROT) {
 					environmentConditions = Lists.newArrayList(
 							new TileBait.BaitBlockCondition(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE), false),
 							new TileBait.BaitBlockCondition(Blocks.VINE.getDefaultState(), true),
@@ -136,6 +142,14 @@ public class BlockBait extends BlockContainer {
 					environmentConditions = Lists.newArrayList(
 							new TileBait.BaitBlockCondition(Blocks.WATER.getDefaultState(), true),
 							new TileBait.BaitBlockCondition(Blocks.FLOWING_WATER.getDefaultState(), true)
+					);
+				} else if(this == POLAR_BEAR) {
+					environmentConditions = Lists.newArrayList(
+							new TileBait.BaitBlockCondition(Blocks.WATER.getDefaultState(), true),
+							new TileBait.BaitBlockCondition(Blocks.FLOWING_WATER.getDefaultState(), true),
+							new TileBait.BaitBlockCondition(Blocks.SNOW.getDefaultState(), true),
+							new TileBait.BaitBlockCondition(Blocks.WATER.getDefaultState(), true),
+							new TileBait.BaitBlockCondition(Blocks.SNOW_LAYER.getDefaultState(), true)
 					);
 				} else {
 					BlockPlanks.EnumType[] acceptedTrees = new BlockPlanks.EnumType[]{BlockPlanks.EnumType.OAK, BlockPlanks.EnumType.BIRCH, BlockPlanks.EnumType.SPRUCE, BlockPlanks.EnumType.ACACIA, BlockPlanks.EnumType.DARK_OAK};
