@@ -10,8 +10,6 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 
-import javax.annotation.Nonnull;
-
 public class ItemListIngredient implements IIngredientFactory {
 	@Override
 	public Ingredient parse(JsonContext context, JsonObject json) {

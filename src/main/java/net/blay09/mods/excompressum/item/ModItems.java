@@ -1,15 +1,11 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.compat.Compat;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 @GameRegistry.ObjectHolder(ExCompressum.MOD_ID)

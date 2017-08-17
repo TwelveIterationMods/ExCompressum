@@ -57,6 +57,8 @@ import java.util.Optional;
 @Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;after:exnihilocreatio;", acceptedMinecraftVersions = "[1.12]")
 public class ExCompressum {
 
+	// TODO fix all configs
+
 	public static final String MOD_ID = "excompressum";
 	public static final Logger logger = LogManager.getLogger(MOD_ID);
 

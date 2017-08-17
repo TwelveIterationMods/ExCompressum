@@ -33,7 +33,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -218,7 +217,6 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 			List<ItemStack> list = Lists.newArrayList();
 			for(Siftable reward : rewards) {
 				if(reward.getDrop().getItem() == null) {
-					ExCompressum.logger.error("Tried to roll sieve rewards from a null reward entry: {} (base chance: {}, mesh level: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getMeshLevel());
 					continue;
 				}
 				int tries = rand.nextInt((int) luck + 1) + 1;
@@ -239,10 +237,6 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		if(rewards != null) {
 			List<ItemStack> list = Lists.newArrayList();
 			for (CrookReward reward : rewards) {
-				if(reward.getStack().getItem() == null) {
-//					ExCompressum.logger.error("Tried to roll crook rewards from a null reward entry: {} (base chance: {}, luck: {})", state.getBlock().getRegistryName(), reward.getChance(), reward.getFortuneChance());
-					continue;
-				}
 				if(rand.nextFloat() <= reward.getChance() + reward.getFortuneChance() * luck) {
 					list.add(reward.getStack().copy());
 				}

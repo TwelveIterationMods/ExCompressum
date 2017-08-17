@@ -9,7 +9,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Collection;
 
-@SuppressWarnings("unused")
 public class CompressedCrookHandler {
 
 	@SubscribeEvent
@@ -28,6 +27,7 @@ public class CompressedCrookHandler {
 
 				// Roll drops twice when breaking leaves
 				if(event.getState().getBlock() instanceof BlockLeaves) {
+					//noinspection deprecation
 					event.getDrops().addAll(event.getState().getBlock().getDrops(event.getWorld(), event.getPos(), event.getState(), fortune));
 				}
 			}
