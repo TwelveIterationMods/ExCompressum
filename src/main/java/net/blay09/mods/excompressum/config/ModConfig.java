@@ -7,6 +7,7 @@ import net.minecraftforge.common.config.Config;
 public class ModConfig {
 
 	public static General general = new General();
+	public static Baits baits = new Baits();
 	public static Client client = new Client();
 	public static Compat compat = new Compat();
 
@@ -28,6 +29,63 @@ public class ModConfig {
 		@Config.Name("Disable Particles")
 		@Config.Comment("If you're playing on a potato, setting this to true will disable particles from the Sieves and Auto Hammers from Ex Compressum.")
 		public boolean disableParticles = false;
+	}
+
+	public static class Baits {
+		@Config.Name("Wolf Bait Chance")
+		@Config.Comment("The chance (per second) that a wolf bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float wolfChance = 0.01f;
+
+		@Config.Name("Ocelot Bait Chance")
+		@Config.Comment("The chance (per second) that a ocelot bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float ocelotChance = 0.01f;
+
+		@Config.Name("Cow Bait Chance")
+		@Config.Comment("The chance (per second) that a cow bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float cowChance = 0.01f;
+
+		@Config.Name("Pig Bait Chance")
+		@Config.Comment("The chance (per second) that a pig bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float pigChance = 0.01f;
+
+		@Config.Name("Chicken Bait Chance")
+		@Config.Comment("The chance (per second) that a chicken bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float chickenChance = 0.01f;
+
+		@Config.Name("Sheep Bait Chance")
+		@Config.Comment("The chance (per second) that a sheep bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float sheepChance = 0.01f;
+
+		@Config.Name("Squid Bait Chance")
+		@Config.Comment("The chance (per second) that a squid bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float squidChance = 0.01f;
+
+		@Config.Name("Rabbit Bait Chance")
+		@Config.Comment("The chance (per second) that a rabbit bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float rabbitChance = 0.01f;
+
+		@Config.Name("Horse Bait Chance")
+		@Config.Comment("The chance (per second) that a horse bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float horseChance = 0.01f;
+
+		@Config.Name("Donkey Bait Chance")
+		@Config.Comment("The chance (per second) that a donkey bait will result in a spawn.")
+		@Config.RangeDouble(min = 0.002f, max = 1f)
+		public float donkeyChance = 0.01f;
+
+		@Config.Name("Bait Child Chance")
+		@Config.Comment("The chance (per second) that an animal spawned from a bait will result in a child.")
+		@Config.RangeDouble(min = 0.0f, max = 1f)
+		public float childChance = 0.5f;
 	}
 
 	public static class Compat {

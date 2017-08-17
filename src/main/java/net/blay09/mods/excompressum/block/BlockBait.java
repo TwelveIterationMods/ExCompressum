@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.block;
 
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.BaitConfig;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -65,16 +64,16 @@ public class BlockBait extends BlockContainer {
 	public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
 	public enum Type implements IStringSerializable {
-		WOLF(new ItemStack(Items.BEEF), new ItemStack(Items.BONE), EntityWolf::new, () -> BaitConfig.baitWolfChance),
-		OCELOT(new ItemStack(Items.GUNPOWDER), new ItemStack(Items.FISH), EntityOcelot::new, () -> BaitConfig.baitOcelotChance),
-		COW(new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT), EntityCow::new, () -> BaitConfig.baitCowChance),
-		PIG(new ItemStack(Items.CARROT), new ItemStack(Items.CARROT), EntityPig::new, () -> BaitConfig.baitPigChance),
-		CHICKEN(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT_SEEDS), EntityChicken::new, () -> BaitConfig.baitChickenChance),
-		SHEEP(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT), EntitySheep::new, () -> BaitConfig.baitSheepChance),
-		SQUID(new ItemStack(Items.FISH), new ItemStack(Items.FISH), EntitySquid::new, () -> BaitConfig.baitSquidChance),
-		RABBIT(new ItemStack(Items.CARROT), new ItemStack(Items.MELON_SEEDS), EntityRabbit::new, () -> BaitConfig.baitRabbitChance),
-		HORSE(new ItemStack(Items.GOLDEN_APPLE), new ItemStack(Items.GOLDEN_APPLE), EntityHorse::new, () -> BaitConfig.baitHorseChance),
-		DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), EntityDonkey::new, () -> BaitConfig.baitDonkeyChance);
+		WOLF(new ItemStack(Items.BEEF), new ItemStack(Items.BONE), EntityWolf::new, () -> ModConfig.baits.wolfChance),
+		OCELOT(new ItemStack(Items.GUNPOWDER), new ItemStack(Items.FISH), EntityOcelot::new, () -> ModConfig.baits.ocelotChance),
+		COW(new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT), EntityCow::new, () -> ModConfig.baits.cowChance),
+		PIG(new ItemStack(Items.CARROT), new ItemStack(Items.CARROT), EntityPig::new, () -> ModConfig.baits.pigChance),
+		CHICKEN(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT_SEEDS), EntityChicken::new, () -> ModConfig.baits.chickenChance),
+		SHEEP(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT), EntitySheep::new, () -> ModConfig.baits.sheepChance),
+		SQUID(new ItemStack(Items.FISH), new ItemStack(Items.FISH), EntitySquid::new, () -> ModConfig.baits.squidChance),
+		RABBIT(new ItemStack(Items.CARROT), new ItemStack(Items.MELON_SEEDS), EntityRabbit::new, () -> ModConfig.baits.rabbitChance),
+		HORSE(new ItemStack(Items.GOLDEN_APPLE), new ItemStack(Items.GOLDEN_APPLE), EntityHorse::new, () -> ModConfig.baits.horseChance),
+		DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), EntityDonkey::new, () -> ModConfig.baits.donkeyChance);
 		// TODO add missing animals
 
 		public static Type[] values = values();

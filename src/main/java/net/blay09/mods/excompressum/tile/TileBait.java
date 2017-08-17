@@ -1,8 +1,8 @@
 package net.blay09.mods.excompressum.tile;
 
-import net.blay09.mods.excompressum.config.BaitConfig;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.BlockBait;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
@@ -90,7 +90,7 @@ public class TileBait extends TileEntity implements ITickable {
 					if (world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty()) {
 						EntityLiving entityLiving = getBaitEntityLiving(world, metadata);
 						if (entityLiving != null) {
-							if (entityLiving instanceof EntityAgeable && world.rand.nextFloat() <= BaitConfig.baitChildChance) {
+							if (entityLiving instanceof EntityAgeable && world.rand.nextFloat() <= ModConfig.baits.childChance) {
 								((EntityAgeable) entityLiving).setGrowingAge(-24000);
 							}
 							entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
