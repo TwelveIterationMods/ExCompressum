@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.client.render.ParticleSieve;
 import net.blay09.mods.excompressum.config.ModConfig;
-import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
@@ -104,7 +103,7 @@ public class TileHeavySieve extends TileEntity implements ITickable {
                 progress = 1f;
             } else {
                 clicksSinceSecond++;
-                if (clicksSinceSecond <= ProcessingConfig.heavySieveClicksPerSecond) {
+                if (clicksSinceSecond <= ModConfig.automation.heavySieveClicksPerSecond) {
                     int efficiency = ExRegistro.getMeshEfficiency(meshStack);
                     progress = Math.min(1f, progress + PROCESSING_INTERVAL * (1f + efficiency * EFFICIENCY_BOOST));
                 }

@@ -6,7 +6,6 @@ import com.mojang.authlib.properties.Property;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.client.render.ParticleSieve;
 import net.blay09.mods.excompressum.config.ModConfig;
-import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
@@ -239,11 +238,11 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	}
 
 	public int getEffectiveEnergy() {
-		return ProcessingConfig.autoSieveEnergy;
+		return ModConfig.automation.autoSieveEnergy;
 	}
 
 	public float getEffectiveSpeed() {
-		return ProcessingConfig.autoSieveSpeed * getSpeedMultiplier();
+		return ModConfig.automation.autoSieveSpeed * getSpeedMultiplier();
 	}
 
 	public float getEffectiveLuck() {

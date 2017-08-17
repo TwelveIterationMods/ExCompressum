@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.config.ModConfig;
-import net.blay09.mods.excompressum.config.ProcessingConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihiloProvider;
@@ -119,7 +118,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
                 isDirty = true;
                 if (progress >= 1) {
                     if (!world.isRemote) {
-                        if(world.rand.nextFloat() <= ProcessingConfig.autoHammerDecay) {
+                        if(world.rand.nextFloat() <= ModConfig.automation.autoHammerDecay) {
                             ItemStack firstHammer = hammerSlots.getStackInSlot(0);
                             if (!firstHammer.isEmpty()) {
                                 if(firstHammer.attemptDamageItem(1, world.rand, null)) {
@@ -187,7 +186,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
     }
 
     public int getEffectiveEnergy() {
-        return ProcessingConfig.autoHammerEnergy;
+        return ModConfig.automation.autoHammerEnergy;
     }
 
     public float getSpeedMultiplier() {
@@ -208,7 +207,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
     }
 
     public float getEffectiveSpeed() {
-        return ProcessingConfig.autoHammerSpeed * getSpeedMultiplier();
+        return ModConfig.automation.autoHammerSpeed * getSpeedMultiplier();
     }
 
     public float getEffectiveLuck() {

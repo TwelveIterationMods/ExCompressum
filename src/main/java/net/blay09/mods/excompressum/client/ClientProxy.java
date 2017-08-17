@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.client;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.excompressum.CommonProxy;
@@ -10,8 +11,9 @@ import net.blay09.mods.excompressum.client.render.tile.RenderAutoSieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderBait;
 import net.blay09.mods.excompressum.client.render.tile.RenderHeavySieve;
 import net.blay09.mods.excompressum.client.render.tile.RenderWoodenCrucible;
-import net.blay09.mods.excompressum.config.ToolsConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
+import net.blay09.mods.excompressum.handler.ChickenStickHandler;
 import net.blay09.mods.excompressum.tile.TileAutoCompressedHammer;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.blay09.mods.excompressum.tile.TileBait;
@@ -30,7 +32,9 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 public class ClientProxy extends CommonProxy {
@@ -72,12 +76,12 @@ public class ClientProxy extends CommonProxy {
 
 	@SubscribeEvent
 	public void onPlayerConnected(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-		String customName = ToolsConfig.chickenStickNames.get(Minecraft.getMinecraft().getSession().getUsername().toLowerCase(Locale.ENGLISH));
+		String customName = getChickenStickName(null);
 		if (customName == null) {
-			customName = ToolsConfig.chickenStickNames.get("*");
+			customName = getChickenStickName("*");
 		}
 		if (customName != null) {
-			ToolsConfig.setChickenStickName(customName);
+			ChickenStickHandler.chickenStickName = customName;
 		}
 	}
 
@@ -100,6 +104,24 @@ public class ClientProxy extends CommonProxy {
 		for (int i = 0; i < destroyBlockIcons.length; i++) {
 			destroyBlockIcons[i] = event.getMap().getAtlasSprite("minecraft:blocks/destroy_stage_" + i);
 		}
+	}
+
+	private static Map<String, String> customChickenStickNames;
+	@Nullable
+	public static String getChickenStickName(@Nullable String key) {
+		if(key == null) {
+			key = Minecraft.getMinecraft().getSession().getUsername().toLowerCase(Locale.ENGLISH);
+		}
+		if (customChickenStickNames == null) {
+			customChickenStickNames = Maps.newHashMap();
+			for (String name : ModConfig.tools.chickenStickNames) {
+				String[] s = name.split("=");
+				if (s.length >= 2) {
+					customChickenStickNames.put(s[0].toLowerCase(Locale.ENGLISH), s[1]);
+				}
+			}
+		}
+		return customChickenStickNames.get(key);
 	}
 
 }

@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.item;
 import exnihilocreatio.items.tools.ICrook;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.Compat;
-import net.blay09.mods.excompressum.config.ToolsConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -28,7 +28,7 @@ public class ItemCompressedCrook extends ItemTool implements ICompressedCrook, I
         super(0f, 0f, ToolMaterial.WOOD, new HashSet<>());
         setUnlocalizedName(registryName.toString());
         setCreativeTab(ExCompressum.creativeTab);
-        setMaxDamage((int) (ToolMaterial.WOOD.getMaxUses() * 2 * ToolsConfig.compressedCrookDurabilityMultiplier));
+        setMaxDamage((int) (ToolMaterial.WOOD.getMaxUses() * 2 * ModConfig.tools.compressedCrookDurabilityMultiplier));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ItemCompressedCrook extends ItemTool implements ICompressedCrook, I
 
     @Override
     public float getStrVsBlock(ItemStack item, IBlockState block) {
-        return block.getMaterial() == Material.LEAVES ? toolMaterial.getEfficiencyOnProperMaterial() * ToolsConfig.compressedCrookSpeedMultiplier : 0f;
+        return block.getMaterial() == Material.LEAVES ? toolMaterial.getEfficiencyOnProperMaterial() * ModConfig.tools.compressedCrookSpeedMultiplier : 0f;
     }
 
     @Override

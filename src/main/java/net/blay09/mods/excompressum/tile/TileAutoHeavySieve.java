@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.tile;
 
-import net.blay09.mods.excompressum.config.ProcessingConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.item.ItemStack;
@@ -27,11 +27,11 @@ public class TileAutoHeavySieve extends TileAutoSieve {
 
     @Override
     public int getEffectiveEnergy() {
-        return ProcessingConfig.autoHeavySieveEnergy;
+        return ModConfig.automation.autoHeavySieveEnergy;
     }
 
     public float getEffectiveSpeed() {
-        return ProcessingConfig.autoHeavySieveSpeed * getSpeedMultiplier();
+        return ModConfig.automation.autoHeavySieveSpeed * getSpeedMultiplier();
     }
 
 }

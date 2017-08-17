@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.handler;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.CompressedMobsConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.entity.*;
 import net.minecraft.entity.monster.EntityGhast;
@@ -21,6 +21,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import org.apache.commons.lang3.ArrayUtils;
 
 @SuppressWarnings("unused")
 public class CompressedEnemyHandler {
@@ -34,8 +35,8 @@ public class CompressedEnemyHandler {
             EntityEntry entry = EntityRegistry.getEntry(event.getEntity().getClass());
             ResourceLocation registryName = entry != null ? entry.getRegistryName() : null;
             String entityName = EntityList.getEntityString(event.getEntity());
-            if(registryName != null && CompressedMobsConfig.compressedMobs.contains(registryName.toString())) {
-                if (event.getEntity().world.rand.nextFloat() <= CompressedMobsConfig.compressedMobChance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
+            if(registryName != null && ArrayUtils.contains(ModConfig.compressedMobs.allowedMobs, registryName.toString())) {
+                if (event.getEntity().world.rand.nextFloat() <= ModConfig.compressedMobs.chance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
                     event.getEntity().setAlwaysRenderNameTag(true);
                     event.getEntity().setCustomNameTag("Compressed " + event.getEntity().getName());
                     NBTTagCompound tagCompound = new NBTTagCompound();
@@ -59,7 +60,7 @@ public class CompressedEnemyHandler {
                         return;
                     }
                     int entityId = EntityList.getID(event.getEntityLiving().getClass());
-                    for(int i = 0; i < CompressedMobsConfig.compressedMobSize; i++) {
+                    for(int i = 0; i < ModConfig.compressedMobs.size; i++) {
                         EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByID(entityId, event.getEntity().world);
                         if(entity == null) {
                             return;

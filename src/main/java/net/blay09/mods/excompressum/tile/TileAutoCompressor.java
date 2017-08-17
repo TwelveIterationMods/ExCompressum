@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.tile;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import net.blay09.mods.excompressum.config.ProcessingConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
@@ -173,11 +173,11 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
     }
 
     public int getEffectiveEnergy() {
-        return ProcessingConfig.autoCompressorEnergy;
+        return ModConfig.automation.autoCompressorEnergy;
     }
 
     public float getEffectiveSpeed() {
-        return ProcessingConfig.autoCompressorSpeed;
+        return ModConfig.automation.autoCompressorSpeed;
     }
 
     @Override

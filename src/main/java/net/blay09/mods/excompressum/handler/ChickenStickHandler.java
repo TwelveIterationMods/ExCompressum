@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.handler;
 
 import com.google.common.collect.Lists;
-import net.blay09.mods.excompressum.config.ToolsConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.item.ItemChickenStick;
 import net.blay09.mods.excompressum.entity.EntityAngryChicken;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -19,21 +19,22 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class ChickenStickHandler {
+
+	public static String chickenStickName;
 
 	@SubscribeEvent
 	public void onAttack(AttackEntityEvent event) {
-		if(!ToolsConfig.allowChickenStickCreation) {
+		if (!ModConfig.tools.allowChickenStickCreation) {
 			return;
 		}
-		if(event.getTarget() instanceof EntityChicken && !((EntityChicken) event.getTarget()).isChild()) {
+		if (event.getTarget() instanceof EntityChicken && !((EntityChicken) event.getTarget()).isChild()) {
 			ItemStack heldItem = event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
-			if(!heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
+			if (!heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
 				event.getTarget().setDead();
-				if(!event.getTarget().world.isRemote) {
+				if (!event.getTarget().world.isRemote) {
 					heldItem.shrink(1);
-					if(heldItem.isEmpty()) {
+					if (heldItem.isEmpty()) {
 						event.getEntityPlayer().setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 					}
 					EntityAngryChicken angryChicken = new EntityAngryChicken(event.getTarget().world);
@@ -48,19 +49,19 @@ public class ChickenStickHandler {
 
 	@SubscribeEvent
 	public void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
-		if(event.getHarvester() != null) {
+		if (event.getHarvester() != null) {
 			ItemStack heldItem = event.getHarvester().getHeldItemMainhand();
-			if(!heldItem.isEmpty() && heldItem.getItem() instanceof ItemChickenStick && ChickenStickRegistry.isHammerable(event.getState())) {
+			if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemChickenStick && ChickenStickRegistry.isHammerable(event.getState())) {
 				final int fortune = 0;
 				List<ItemStack> rewards = Lists.newArrayList(CompressedHammerRegistry.rollHammerRewards(event.getState(), fortune, event.getWorld().rand));
 				rewards.addAll(ExRegistro.rollHammerRewards(event.getState(), 0, fortune, event.getWorld().rand));
-				if(!rewards.isEmpty()) {
+				if (!rewards.isEmpty()) {
 					event.setDropChance(1f);
 					event.getDrops().clear();
 					event.getDrops().addAll(rewards);
 
 					((ItemChickenStick) heldItem.getItem()).playChickenSound(event.getWorld(), event.getPos());
-					if (event.getWorld().rand.nextFloat() <= ToolsConfig.chickenStickSpawnChance) {
+					if (event.getWorld().rand.nextFloat() <= ModConfig.tools.chickenStickSpawnChance) {
 						EntityChicken entityChicken = new EntityChicken(event.getWorld());
 						entityChicken.setPosition(event.getPos().getX() + 0.5, event.getPos().getY() + 0.5, event.getPos().getZ() + 0.5);
 						event.getWorld().spawnEntity(entityChicken);

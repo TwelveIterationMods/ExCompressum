@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.SieveModelBounds;
-import net.blay09.mods.excompressum.config.ProcessingConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
@@ -165,7 +165,7 @@ public class BlockHeavySieve extends BlockContainer {
 				}
 			}
 
-			if (ProcessingConfig.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
+			if (ModConfig.automation.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
 				if (tileEntity.processContents(player)) {
 					world.playSound(null, pos, SoundEvents.BLOCK_SAND_STEP, SoundCategory.BLOCKS, 0.3f, 0.6f);
 				}

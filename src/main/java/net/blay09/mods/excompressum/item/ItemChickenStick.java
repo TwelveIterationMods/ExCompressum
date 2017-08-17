@@ -1,7 +1,8 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ToolsConfig;
+import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.handler.ChickenStickHandler;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -39,13 +40,13 @@ public class ItemChickenStick extends ItemTool {
 
     @Override
     public String getItemStackDisplayName(ItemStack itemStack) {
-        String chickenStickName = ToolsConfig.getChickenStickName();
+        String chickenStickName = ChickenStickHandler.chickenStickName;
         return chickenStickName != null ? chickenStickName : super.getItemStackDisplayName(itemStack);
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-        if(ToolsConfig.getChickenStickName() != null) {
+        if(ChickenStickHandler.chickenStickName != null) {
             tooltip.add(TextFormatting.GRAY + I18n.format("item.excompressum:chicken_stick.name"));
         }
     }
@@ -85,10 +86,10 @@ public class ItemChickenStick extends ItemTool {
     }
 
     public void playChickenSound(World world, BlockPos pos) {
-        if(world.rand.nextFloat() <= ToolsConfig.chickenStickSoundChance) {
+        if(world.rand.nextFloat() <= ModConfig.tools.chickenStickSoundChance) {
             ResourceLocation location = null;
-            if(ToolsConfig.chickenStickSounds.length > 0) {
-                location = ToolsConfig.chickenStickSounds[world.rand.nextInt(ToolsConfig.chickenStickSounds.length)];
+            if(ModConfig.tools.chickenStickSounds.length > 0) {
+                location = new ResourceLocation(ModConfig.tools.chickenStickSounds[world.rand.nextInt(ModConfig.tools.chickenStickSounds.length)]);
             }
             if(location != null) {
                 SoundEvent soundEvent = SoundEvent.REGISTRY.getObject(location);
