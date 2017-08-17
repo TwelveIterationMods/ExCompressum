@@ -60,23 +60,23 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public void init() {
-		sieveEfficiency = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sieveEfficiency");
-		sieveFortune = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sieveFortune");
+		sieveEfficiency = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sieveefficiency");
+		sieveFortune = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sievefortune");
 
-		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammerWood", OreDictionary.WILDCARD_VALUE));
-		itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammerStone", OreDictionary.WILDCARD_VALUE));
-		itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammerIron", OreDictionary.WILDCARD_VALUE));
-		itemMap.put(NihiloItems.HAMMER_GOLD, findItem("hammerGold", OreDictionary.WILDCARD_VALUE));
-		itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammerDiamond", OreDictionary.WILDCARD_VALUE));
-		itemMap.put(NihiloItems.CROOK_WOODEN, findItem("crookWood", 0));
-		itemMap.put(NihiloItems.SILK_MESH, findItem("itemMesh", 1));
-		itemMap.put(NihiloItems.IRON_MESH, findItem("itemMesh", 3));
+		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammer_stone", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammer_iron", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_GOLD, findItem("hammer_gold", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammer_diamond", OreDictionary.WILDCARD_VALUE));
+		itemMap.put(NihiloItems.CROOK_WOODEN, findItem("crook_wood", 0));
+		itemMap.put(NihiloItems.SILK_MESH, findItem("item_mesh", 1));
+		itemMap.put(NihiloItems.IRON_MESH, findItem("item_mesh", 3));
 
-		itemMap.put(NihiloItems.DUST, findBlock("blockDust", 0));
-		itemMap.put(NihiloItems.SIEVE, findBlock("blockSieve", 0));
-		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("blockInfestedLeaves", 0));
-		itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("blockNetherrackCrushed", 0));
-		itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("blockEndstoneCrushed", 0));
+		itemMap.put(NihiloItems.DUST, findBlock("block_dust", 0));
+		itemMap.put(NihiloItems.SIEVE, findBlock("block_sieve", 0));
+		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("block_infested_leaves", 0));
+		itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("block_netherrack_crushed", 0));
+		itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("block_endstone_crushed", 0));
 
 
 		ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
@@ -87,7 +87,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 			SieveMeshRegistry.add(stringMesh);
 		}
 
-		ItemStack flintMeshItem = findItem("itemMesh", 2);
+		ItemStack flintMeshItem = findItem("item_mesh", 2);
 		if(!flintMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry flintMesh = new SieveMeshRegistryEntry(flintMeshItem);
 			flintMesh.setMeshLevel(2);
@@ -104,7 +104,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 			SieveMeshRegistry.add(ironMesh);
 		}
 
-		ItemStack diamondMeshItem = findItem("itemMesh", 4);
+		ItemStack diamondMeshItem = findItem("item_mesh", 4);
 		if(!diamondMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry diamondMesh = new SieveMeshRegistryEntry(diamondMeshItem);
 			diamondMesh.setMeshLevel(4);
@@ -263,7 +263,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public NihiloMod getNihiloMod() {
-		return NihiloMod.ADSCENSIO;
+		return NihiloMod.CREATIO;
 	}
 
 	@Override

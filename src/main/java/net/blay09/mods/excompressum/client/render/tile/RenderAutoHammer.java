@@ -69,8 +69,9 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
 
         // Render the hammers
         GlStateManager.pushMatrix();
+        GlStateManager.rotate(180f, 0f, 1f, 0f);
         GlStateManager.rotate((float) Math.sin(tileEntity.hammerAngle) * 15, 0f, 0f, 1f);
-        GlStateManager.translate(-0.15f, 0.6f, 0f);
+        GlStateManager.translate(0.15f, 0.6f, 0f);
         GlStateManager.scale(0.5f, 0.5f, 0.5f);
         itemRenderer.renderItem(hammerItemStack, ItemCameraTransforms.TransformType.FIXED);
         ItemStack firstHammer = tileEntity.getUpgradeStack(0);
@@ -103,9 +104,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
                 GlStateManager.translate(-0.09375f, 0.0625f, -0.25);
                 GlStateManager.scale(0.5, 0.5, 0.5);
                 RenderUtils.renderBlockWithTranslate(mc, contentState, tileEntity.getWorld(), tileEntity.getPos(), renderer);
-                RenderUtils.preBlockDamage();
                 mc.getBlockRendererDispatcher().renderBlockDamage(contentState, tileEntity.getPos(), ClientProxy.destroyBlockIcons[Math.min(9, (int) (tileEntity.getProgress() * 9f))], tileEntity.getWorld());
-                RenderUtils.postBlockDamage();
                 tessellator.draw();
                 GlStateManager.popMatrix();
             }
