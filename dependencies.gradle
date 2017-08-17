@@ -1,5 +1,5 @@
 dependencies {
-    provided "ex-nihilo-creatio:exnihilocreatio:1.12:0.1.0" // CurseForge
+    provided "ex-nihilo-creatio:exnihilocreatio:1.12:0.1.1" // CurseForge
     deobfCompile "crafttweaker:CraftTweaker2:1.12:4.0.3" // CurseForge
     provided "extra-utilities:extrautils2:1.12:1.5.2" // CurseForge
     deobfCompile "tinkers-construct:TConstruct:1.12:2.7.2.19" // CurseForge

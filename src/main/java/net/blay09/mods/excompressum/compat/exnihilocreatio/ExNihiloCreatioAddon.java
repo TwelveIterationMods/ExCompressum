@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import exnihilocreatio.registries.CompostRegistry;
 import exnihilocreatio.registries.CrookRegistry;
 import exnihilocreatio.registries.HammerRegistry;
+import exnihilocreatio.registries.RegistryReloadedEvent;
 import exnihilocreatio.registries.SieveRegistry;
 import exnihilocreatio.registries.types.CrookReward;
 import exnihilocreatio.registries.types.Siftable;
@@ -33,6 +34,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Collection;
@@ -113,8 +115,8 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		}
 	}
 
-//	@SubscribeEvent // TODO waiting for creatio update
-	public void onRegistryReload(/*RegistryReloaded*/Event event) {
+	@SubscribeEvent
+	public void onRegistryReload(RegistryReloadedEvent event) {
 		if(ModConfig.general.enableWoodChippings) {
 			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
 			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);

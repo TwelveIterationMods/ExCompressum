@@ -83,7 +83,6 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 	private int solidVolume;
 
 	public boolean addItem(ItemStack itemStack) {
-		// TODO this should be registryfied:
 		// When inserting dust, turn it into clay if we have enough liquid
 		if (fluidTank.getFluidAmount() >= Fluid.BUCKET_VOLUME && ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.DUST)) {
 			itemStack.shrink(1);

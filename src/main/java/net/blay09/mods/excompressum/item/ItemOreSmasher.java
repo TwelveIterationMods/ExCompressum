@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.item;
 
+import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
@@ -20,40 +21,17 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 public class ItemOreSmasher extends ItemTool {
 
-	// TODO this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
-	private static final String[] ORE_BLOCKS = new String[] {
-			"exnihiloomnia:ore_gravel",
-			"exnihiloomnia:ore_gravel_ender",
-			"exnihiloomnia:ore_gravel_nether",
-			"exnihiloomnia:ore_sand"
-	};
-
-	private static final String[] ORE_BLOCKS_OREDICT = new String[] {
-			"oreGravel",
-			"oreNetherGravel",
-			"oreSand"
-	};
-
-	// TODO this probably shouldn't be hardcoded here, and go into the OmniaAddon instead
-	private static final String[] ORE_ITEMS = new String[] {
-			"exnihiloomnia:ore_broken",
-			"exnihiloomnia:ore_broken_nether",
-			"exnihiloomnia:ore_broken_ender",
-			"exnihiloomnia:ore_crushed"
-	};
-
-	private static final String[] ORE_ITEMS_OREDICT = new String[] {
-			"oreBroken",
-			"oreNetherBroken",
-			"oreCrushed"
-	};
+	private static final List<String> ORE_BLOCKS = Lists.newArrayList();
+	private static final List<String> ORE_ITEMS = Lists.newArrayList();
+	private static final List<String> ORE_BLOCKS_OREDICT = Lists.newArrayList("oreGravel", "oreNetherGravel", "oreSand");
+	private static final List<String> ORE_ITEMS_OREDICT =  Lists.newArrayList("oreBroken", "oreNetherBroken", "oreCrushed");
 
 	public static final String name = "ore_smasher";
 	public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
@@ -136,7 +114,7 @@ public class ItemOreSmasher extends ItemTool {
 		if(registryName == null) {
 			return false;
 		}
-		if (ArrayUtils.contains(ORE_ITEMS, registryName.toString())) {
+		if (ORE_ITEMS.contains(registryName.toString())) {
 			return true;
 		}
 		int[] oreIDs = OreDictionary.getOreIDs(itemStack);
@@ -156,7 +134,7 @@ public class ItemOreSmasher extends ItemTool {
 		if(registryName == null) {
 			return false;
 		}
-		if (ArrayUtils.contains(ORE_BLOCKS, registryName.toString())) {
+		if (ORE_BLOCKS.contains(registryName.toString())) {
 			return true;
 		}
 		int[] oreIDs = OreDictionary.getOreIDs(itemStack);

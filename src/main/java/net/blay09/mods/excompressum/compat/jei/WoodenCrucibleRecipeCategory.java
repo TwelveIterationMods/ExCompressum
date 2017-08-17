@@ -70,7 +70,7 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, final WoodenCrucibleRecipe recipeWrapper, final IIngredients ingredients) {
-		ItemStack fluidItem = ItemStack.EMPTY;
+		ItemStack fluidItem;
 		if(FluidRegistry.isUniversalBucketEnabled()) {
 			fluidItem = new ItemStack(Items.BUCKET);
 			IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(fluidItem);
@@ -79,9 +79,7 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
 				fluidItem = fluidHandler.getContainer();
 			}
 		} else {
-			//TODO: Figure out a way to make a filled bucket without using the universal bucket
-			//return;
-			//fluidItem = FluidContainerRegistry.fillFluidContainer(ingredients.getOutputs(FluidStack.class).get(0), FluidContainerRegistry.EMPTY_BUCKET);
+			fluidItem = new ItemStack(Items.WATER_BUCKET); // just fallback to water
 		}
 		recipeLayout.getItemStacks().init(0, false, 74, 9);
 		recipeLayout.getItemStacks().set(0, fluidItem);

@@ -14,10 +14,13 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 @SuppressWarnings("unused")
 public class CompressedEnemyHandler {
@@ -28,8 +31,10 @@ public class CompressedEnemyHandler {
     @SubscribeEvent
     public void onSpawnEntity(EntityJoinWorldEvent event) {
         if(!event.getWorld().isRemote && (event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast)) {
-            String entityName = EntityList.getEntityString(event.getEntity()); // TODO update to ResourceLocation
-            if(CompressedMobsConfig.compressedMobs.contains(entityName)) {
+            EntityEntry entry = EntityRegistry.getEntry(event.getEntity().getClass());
+            ResourceLocation registryName = entry != null ? entry.getRegistryName() : null;
+            String entityName = EntityList.getEntityString(event.getEntity());
+            if(registryName != null && CompressedMobsConfig.compressedMobs.contains(registryName.toString())) {
                 if (event.getEntity().world.rand.nextFloat() <= CompressedMobsConfig.compressedMobChance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
                     event.getEntity().setAlwaysRenderNameTag(true);
                     event.getEntity().setCustomNameTag("Compressed " + event.getEntity().getName());

@@ -91,6 +91,20 @@ public class ExNihiloOmniaAddon implements ExNihiloProvider, IAddon {
 			SieveMeshRegistry.add(silkMesh);
 		}
 
+        ItemOreSmasher.ORE_BLOCKS.addAll(new String[] {
+                "exnihiloomnia:ore_gravel",
+                "exnihiloomnia:ore_gravel_ender",
+                "exnihiloomnia:ore_gravel_nether",
+                "exnihiloomnia:ore_sand"
+        };
+
+        ItemOreSmasher.ORE_ITEMS.addAll(new String[] {
+                "exnihiloomnia:ore_broken",
+                "exnihiloomnia:ore_broken_nether",
+                "exnihiloomnia:ore_broken_ender",
+                "exnihiloomnia:ore_crushed"
+        };
+
 		ExRegistro.instance = this;
 	}
 

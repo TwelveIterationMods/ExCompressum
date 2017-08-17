@@ -16,22 +16,21 @@ public class CompressedMobsConfig {
 		compressedMobChance = config.getFloat("Spawn Chance", CATEGORY, 0.01f, 0f, 1f, "The chance for mobs to spawn as Compressed Mobs. Set to 0 to disable.");
 		compressedMobSize = config.getInt("Decompression Size", CATEGORY, 9, 1, 9, "The amount of mobs that will spawn upon death of a compressed mob.");
 		Collections.addAll(compressedMobs, config.getStringList("Allowed Mobs", CATEGORY, new String[] {
-				"Zombie",
-				"Creeper",
-				"Skeleton",
-				"Spider",
-				"CaveSpider",
-				"Silverfish",
-				"Witch",
-				"Enderman",
-				"PigZombie",
-				"Blaze",
-				"Chicken",
-				"Sheep",
-				"Cow",
-				"Pig",
-				"Ghast",
-//              "Wither" okay, calm down Blay
-		}, "A list of entity names that can spawn as compressed entities.")); // TODO update to ResourceLocation
+				"minecraft:zombie",
+				"minecraft:creeper",
+				"minecraft:skeleton",
+				"minecraft:spider",
+				"minecraft:cave_cpider",
+				"minecraft:silverfish",
+				"minecraft:witch",
+				"minecraft:enderman",
+				"minecraft:pig_zombie",
+				"minecraft:blaze",
+				"minecraft:chicken",
+				"minecraft:sheep",
+				"minecraft:cow",
+				"minecraft:pig",
+				"minecraft:ghast"
+		}, "A list of entity registry names that can spawn as compressed entities."));
 	}
 }
