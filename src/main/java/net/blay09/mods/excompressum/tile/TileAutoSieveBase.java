@@ -110,7 +110,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		}
 
 		int effectiveEnergy = getEffectiveEnergy();
-		if (getEnergyStored() >= effectiveEnergy) {
+		if (getEnergyStored(null) >= effectiveEnergy) {
 			if (currentStack.isEmpty()) {
 				ItemStack inputStack = inputSlots.getStackInSlot(0);
 				SieveMeshRegistryEntry sieveMesh = getSieveMesh();
@@ -317,12 +317,12 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	}
 
 	public abstract int getMaxEnergyStored();
-	public abstract int getEnergyStored();
+	public abstract int getEnergyStored(@Nullable EnumFacing from);
 	public abstract int extractEnergy(int maxExtract, boolean simulate);
 	public abstract void setEnergyStored(int energy);
 
 	public float getEnergyPercentage() {
-		return (float) getEnergyStored() / (float) getMaxEnergyStored();
+		return (float) getEnergyStored(null) / (float) getMaxEnergyStored();
 	}
 
 	public boolean isProcessing() {
@@ -435,6 +435,6 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	}
 
 	public boolean shouldAnimate() {
-		return !currentStack.isEmpty() && getEnergyStored() >= getEffectiveEnergy();
+		return !currentStack.isEmpty() && getEnergyStored(null) >= getEffectiveEnergy();
 	}
 }

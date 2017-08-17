@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.tile;
 
+import cofh.redstoneflux.api.IEnergyReceiver;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
@@ -24,6 +25,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -32,7 +34,8 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
-public class TileAutoHammer extends TileEntityBase implements ITickable {
+@Optional.Interface(modid = "redstoneflux", iface = "cofh.redstoneflux.api.IEnergyReceiver")
+public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergyReceiver {
 
     private static final int UPDATE_INTERVAL = 20;
 
@@ -91,7 +94,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
     @Override
     public void update() {
         int effectiveEnergy = getEffectiveEnergy();
-        if (energyStorage.getEnergyStored() >= effectiveEnergy) {
+        if (getEnergyStored(null) >= effectiveEnergy) {
             if (currentStack.isEmpty()) {
                 ItemStack inputStack = inputSlots.getStackInSlot(0);
                 if (!inputStack.isEmpty() && isRegistered(inputStack)) {
@@ -282,7 +285,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
     }
 
     public float getEnergyPercentage() {
-        return (float) energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
+        return (float) getEnergyStored(null) / (float) getMaxEnergyStored(null);
     }
 
     public ItemStack getCurrentStack() {
@@ -350,10 +353,30 @@ public class TileAutoHammer extends TileEntityBase implements ITickable {
     }
 
     public boolean shouldAnimate() {
-        return !currentStack.isEmpty() && energyStorage.getEnergyStored() >= getEffectiveEnergy();
+        return !currentStack.isEmpty() && getEnergyStored(null) >= getEffectiveEnergy();
     }
 
     public EnergyStorageModifiable getEnergyStorage() {
         return energyStorage;
+    }
+
+    @Override
+    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
+        return energyStorage.receiveEnergy(maxReceive, simulate);
+    }
+
+    @Override
+    public int getEnergyStored(@Nullable EnumFacing from) {
+        return energyStorage.getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(@Nullable EnumFacing from) {
+        return energyStorage.getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canConnectEnergy(EnumFacing from) {
+        return true;
     }
 }

@@ -1,5 +1,5 @@
 dependencies {
-    provided "ex-nihilo-creatio:exnihilocreatio:1.12:0.1.1" // CurseForge
+    deobfCompile "ex-nihilo-creatio:exnihilocreatio:1.12:0.1.1" // CurseForge
     deobfCompile "crafttweaker:CraftTweaker2:1.12:4.0.3" // CurseForge
     provided "extra-utilities:extrautils2:1.12:1.5.2" // CurseForge
     deobfCompile "tinkers-construct:TConstruct:1.12:2.7.2.19" // CurseForge
@@ -8,5 +8,6 @@ dependencies {
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.20-B35_1.12"
     deobfCompile "mezz.jei:jei_1.12.1:4.7.5.87"
     deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.17-9"
+    deobfCompile "cofh:RedstoneFlux:1.12-2.0.1.2:universal"
     provided "hosted-api:Botania_1.11.2:r1.9-343"
 }

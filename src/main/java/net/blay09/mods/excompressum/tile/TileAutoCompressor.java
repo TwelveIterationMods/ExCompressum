@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.tile;
 
+import cofh.redstoneflux.api.IEnergyReceiver;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import net.blay09.mods.excompressum.config.ModConfig;
@@ -18,13 +19,15 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 
-public class TileAutoCompressor extends TileEntityBase implements ITickable {
+@Optional.Interface(modid = "redstoneflux", iface = "cofh.redstoneflux.api.IEnergyReceiver")
+public class TileAutoCompressor extends TileEntityBase implements ITickable, IEnergyReceiver {
 
     private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
         @Override
@@ -64,7 +67,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
     @Override
     public void update() {
         int effectiveEnergy = getEffectiveEnergy();
-        if (energyStorage.getEnergyStored() > effectiveEnergy) {
+        if (getEnergyStored(null) > effectiveEnergy) {
             if (currentRecipe == null) {
                 inputItems.clear();
                 for (int i = 0; i < inputSlots.getSlots(); i++) {
@@ -236,7 +239,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
     }
 
     public float getEnergyPercentage() {
-        return (float) energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored();
+        return (float) getEnergyStored(null) / (float) getMaxEnergyStored(null);
     }
 
     public NonNullList<ItemStack> getCurrentBuffer() {
@@ -268,5 +271,25 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable {
 
     public EnergyStorageModifiable getEnergyStorage() {
         return energyStorage;
+    }
+
+    @Override
+    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
+        return energyStorage.receiveEnergy(maxReceive, simulate);
+    }
+
+    @Override
+    public int getEnergyStored(@Nullable EnumFacing from) {
+        return energyStorage.getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored(@Nullable EnumFacing from) {
+        return energyStorage.getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canConnectEnergy(EnumFacing from) {
+        return true;
     }
 }

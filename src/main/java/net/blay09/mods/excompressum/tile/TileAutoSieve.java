@@ -1,15 +1,18 @@
 package net.blay09.mods.excompressum.tile;
 
+import cofh.redstoneflux.api.IEnergyReceiver;
 import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nullable;
 
-public class TileAutoSieve extends TileAutoSieveBase { // TODO re-add RF support
+@Optional.Interface(modid = "redstoneflux", iface = "cofh.redstoneflux.api.IEnergyReceiver")
+public class TileAutoSieve extends TileAutoSieveBase implements IEnergyReceiver {
 
     private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
         @Override
@@ -39,7 +42,7 @@ public class TileAutoSieve extends TileAutoSieveBase { // TODO re-add RF support
     }
 
     @Override
-    public int getEnergyStored() {
+    public int getEnergyStored(@Nullable EnumFacing from) {
         return energyStorage.getEnergyStored();
     }
 
@@ -78,5 +81,20 @@ public class TileAutoSieve extends TileAutoSieveBase { // TODO re-add RF support
 
     public EnergyStorageModifiable getEnergyStorage() {
         return energyStorage;
+    }
+
+    @Override
+    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
+        return energyStorage.receiveEnergy(maxReceive, simulate);
+    }
+
+    @Override
+    public int getMaxEnergyStored(EnumFacing from) {
+        return energyStorage.getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canConnectEnergy(EnumFacing from) {
+        return true;
     }
 }
