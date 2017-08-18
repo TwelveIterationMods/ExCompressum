@@ -1,6 +1,12 @@
 package net.blay09.mods.excompressum.compat;
 
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
 public class Compat {
+
+	@GameRegistry.ObjectHolder("tconstruct:hammer")
+	public static Item TCONSTRUCT_HAMMER;
 
 	public static final String BOTANIA = "botania";
 	public static final String EXNIHILO_OMNIA = "exnihiloomnia";
@@ -13,4 +19,6 @@ public class Compat {
 	public static final String JEI = "jei";
 	public static final String THEONEPROBE = "theoneprobe";
 
+	public static final String TCONSTRUCT_TRAIT_SMASHING = "exnihilo_smashing";
+	public static final String TCONSTRUCT_TRAIT_SMASHINGII = "excompressum:smashingii";
 }

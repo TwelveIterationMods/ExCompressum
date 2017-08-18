@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.compat.tconstruct;
 
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.enchantment.Enchantment;
@@ -13,16 +14,13 @@ import slimeknights.tconstruct.library.utils.ToolHelper;
 
 import java.util.Collection;
 
-// FUTURE This one needs a cool graphic!
 public class ModSmashingII extends ModifierTrait {
-
-	public static final String ID = "excompressum:smashingii";
 
 	private static final float SPEED_DECREASE = 0.5f;
 	private static final float DAMAGE_INCREASE = 3;
 
 	public ModSmashingII() {
-		super(ID, 0xFF0000);
+		super(Compat.TCONSTRUCT_TRAIT_SMASHINGII, 0xFF0000);
 	}
 
 	@Override

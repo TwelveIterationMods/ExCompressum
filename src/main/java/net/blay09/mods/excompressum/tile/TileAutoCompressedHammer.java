@@ -1,9 +1,15 @@
 package net.blay09.mods.excompressum.tile;
 
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.Collection;
 import java.util.Random;
@@ -32,7 +38,21 @@ public class TileAutoCompressedHammer extends TileAutoHammer {
 
     @Override
     public boolean isHammerUpgrade(ItemStack itemStack) {
-        return itemStack.getItem() == ModItems.compressedHammerDiamond;
+        if(itemStack.getItem() == ModItems.compressedHammerDiamond) {
+            return true;
+        }
+        if(itemStack.getItem() == Compat.TCONSTRUCT_HAMMER) {
+            NBTTagCompound tagCompound = itemStack.getTagCompound();
+            if(tagCompound != null) {
+                NBTTagList traits = tagCompound.getTagList("Traits", Constants.NBT.TAG_STRING);
+                for (NBTBase tag : traits) {
+                    if (((NBTTagString) tag).getString().equalsIgnoreCase(Compat.TCONSTRUCT_TRAIT_SMASHINGII)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

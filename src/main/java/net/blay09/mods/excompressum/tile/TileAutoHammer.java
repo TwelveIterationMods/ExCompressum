@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.tile;
 
 import cofh.redstoneflux.api.IEnergyReceiver;
 import net.blay09.mods.excompressum.block.BlockAutoHammer;
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
@@ -22,11 +23,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
@@ -341,6 +345,17 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     public boolean isHammerUpgrade(ItemStack itemStack) {
+        if(itemStack.getItem() == Compat.TCONSTRUCT_HAMMER) {
+            NBTTagCompound tagCompound = itemStack.getTagCompound();
+            if(tagCompound != null) {
+                NBTTagList traits = tagCompound.getTagList("Traits", Constants.NBT.TAG_STRING);
+                for (NBTBase tag : traits) {
+                    if (((NBTTagString) tag).getString().equalsIgnoreCase(Compat.TCONSTRUCT_TRAIT_SMASHING)) {
+                        return true;
+                    }
+                }
+            }
+        }
         return ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
     }
 

@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
 import net.blay09.mods.excompressum.client.render.RenderUtils;
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.client.ClientProxy;
@@ -65,7 +66,9 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
 
         // Render the hammers
         GlStateManager.pushMatrix();
-        GlStateManager.rotate(180f, 0f, 1f, 0f);
+        if(hammerItemStack.getItem() != Compat.TCONSTRUCT_HAMMER) {
+            GlStateManager.rotate(180f, 0f, 1f, 0f);
+        }
         GlStateManager.rotate((float) Math.sin(tileEntity.hammerAngle) * 15, 0f, 0f, 1f);
         GlStateManager.translate(0.15f, 0.6f, 0f);
         GlStateManager.scale(0.5f, 0.5f, 0.5f);

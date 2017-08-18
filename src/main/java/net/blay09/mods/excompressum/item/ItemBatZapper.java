@@ -38,16 +38,13 @@ public class ItemBatZapper extends Item {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        // Debug code for free energy
+        // Debug code for free energy TODO comment me out before release
         TileEntity tileEntity = world.getTileEntity(pos);
         if(tileEntity != null) {
             IEnergyStorage energy = tileEntity.getCapability(CapabilityEnergy.ENERGY, null);
             if (energy != null) {
                 energy.receiveEnergy(Integer.MAX_VALUE, false);
             }
-        }
-        if(tileEntity instanceof TileAutoHammer) {
-            world.setBlockState(pos, ModBlocks.autoHammer.getDefaultState().withProperty(UGLY, true), 3);
         }
         return zapBatter(world, player, player.getHeldItem(hand), (int) player.posX, (int) player.posY, (int) player.posZ, hand).getType();
     }
