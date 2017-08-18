@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum;
 
+import net.blay09.mods.excompressum.compat.ExCompressumReloadEvent;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
@@ -14,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -49,6 +51,7 @@ public class CommandExCompressum extends CommandBase {
 					lastFormatting = lastFormatting == TextFormatting.GRAY ? TextFormatting.WHITE : TextFormatting.GRAY;
 				}
 			}
+			MinecraftForge.EVENT_BUS.post(new ExCompressumReloadEvent());
 		} else {
 			throw new WrongUsageException(getUsage(sender));
 		}

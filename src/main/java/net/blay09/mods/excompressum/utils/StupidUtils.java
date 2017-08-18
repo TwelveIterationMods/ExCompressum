@@ -4,12 +4,21 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.items.ItemHandlerHelper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class StupidUtils {
@@ -28,7 +37,7 @@ public class StupidUtils {
 	@Nullable
 	@SuppressWarnings("deprecation")
 	public static IBlockState getStateFromItemStack(ItemStack itemStack) {
-		if(itemStack.getItem() instanceof ItemBlock) {
+		if (itemStack.getItem() instanceof ItemBlock) {
 			Block block = ((ItemBlock) itemStack.getItem()).getBlock();
 			try {
 				int meta = itemStack.getItem().getMetadata(itemStack.getItemDamage());
@@ -43,9 +52,10 @@ public class StupidUtils {
 
 	public static ItemStack getItemStackFromState(IBlockState state) {
 		Item item = Item.getItemFromBlock(state.getBlock());
-		if(item != Items.AIR) {
+		if (item != Items.AIR) {
 			return new ItemStack(item, 1, state.getBlock().damageDropped(state));
 		}
 		return ItemStack.EMPTY;
 	}
+
 }

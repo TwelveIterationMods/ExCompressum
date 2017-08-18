@@ -36,7 +36,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 		@Override
 		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 			ItemStack copy = stack.copy();
-			if (addItem(copy)) {
+			if (addItem(copy, true)) {
 				return copy.isEmpty() ? ItemStack.EMPTY : copy;
 			}
 			return stack;
@@ -82,7 +82,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 	private WoodenCrucibleRegistryEntry currentMeltable;
 	private int solidVolume;
 
-	public boolean addItem(ItemStack itemStack) {
+	public boolean addItem(ItemStack itemStack, boolean isAutomated) {
 		// When inserting dust, turn it into clay if we have enough liquid
 		if (fluidTank.getFluidAmount() >= Fluid.BUCKET_VOLUME && ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.DUST)) {
 			itemStack.shrink(1);
@@ -97,7 +97,7 @@ public class TileWoodenCrucible extends TileEntity implements ITickable {
 		if (meltable != null) {
 			if(fluidTank.getFluid() == null || fluidTank.getFluidAmount() == 0 || fluidTank.getFluid().getFluid() == meltable.getFluid()) {
 				int capacityLeft = fluidTank.getCapacity() - fluidTank.getFluidAmount() - solidVolume;
-				if (capacityLeft > 0) {
+				if ((isAutomated && capacityLeft >= meltable.getAmount()) || (!isAutomated && capacityLeft > 0)) {
 					itemStack.shrink(1);
 					currentMeltable = meltable;
 					solidVolume += Math.min(capacityLeft, meltable.getAmount());

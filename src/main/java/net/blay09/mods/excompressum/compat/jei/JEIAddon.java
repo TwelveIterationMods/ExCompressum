@@ -8,6 +8,7 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.blay09.mods.excompressum.block.ModBlocks;
+import net.blay09.mods.excompressum.compat.ExCompressumReloadEvent;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
@@ -19,7 +20,9 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
 import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Collection;
 import java.util.List;
@@ -85,4 +88,5 @@ public class JEIAddon implements IModPlugin {
 				new WoodenCrucibleRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
 				new ChickenStickRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
 	}
+
 }
