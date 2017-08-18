@@ -1,9 +1,9 @@
-package net.blay09.mods.excompressum.registry.heavysieve;
+package net.blay09.mods.excompressum.api.heavysieve;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.api.ExCompressumAPI;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.state.IBlockState;
 
 import java.util.Collection;
@@ -34,7 +34,7 @@ public class HeavySieveRegistryEntry {
 	}
 
 	public List<HeavySieveReward> getRewardsForMesh(SieveMeshRegistryEntry sieveMesh) {
-		if(!ExRegistro.doMeshesSplitLootTables()) {
+		if(!ExCompressumAPI.getExNihilo().doMeshesSplitLootTables()) {
 			return rewards;
 		}
 		return meshRewards.get(sieveMesh.getMeshLevel());
@@ -42,14 +42,14 @@ public class HeavySieveRegistryEntry {
 
 	public void addReward(HeavySieveReward reward) {
 		rewards.add(reward);
-		if(ExRegistro.doMeshesSplitLootTables()){
+		if(ExCompressumAPI.getExNihilo().doMeshesSplitLootTables()){
 			meshRewards.put(reward.getMeshLevel(), reward);
 		}
 	}
 
 	public void addRewards(Collection<HeavySieveReward> rewards) {
 		this.rewards.addAll(rewards);
-		if(ExRegistro.doMeshesSplitLootTables()) {
+		if(ExCompressumAPI.getExNihilo().doMeshesSplitLootTables()) {
 			for (HeavySieveReward reward : rewards) {
 				meshRewards.put(reward.getMeshLevel(), reward);
 			}

@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.compat.exnihilocreatio;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import exnihilocreatio.blocks.BlockSieve;
 import exnihilocreatio.registries.CompostRegistry;
 import exnihilocreatio.registries.CrookRegistry;
 import exnihilocreatio.registries.HammerRegistry;
@@ -14,14 +15,14 @@ import exnihilocreatio.util.BlockInfo;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
-import net.blay09.mods.excompressum.compat.SieveModelBounds;
+import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
-import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -41,6 +42,8 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Random;
+
+import static net.minecraft.block.Block.getBlockFromItem;
 
 public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 
@@ -274,5 +277,18 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public int getMeshEfficiency(ItemStack meshStack) {
 		return EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, meshStack) + EnchantmentHelper.getEnchantmentLevel(sieveEfficiency, meshStack);
+	}
+
+	@Override
+	public IBlockState getSieveRenderState() {
+		ItemStack itemStack = getNihiloItem(NihiloItems.SIEVE);
+		if(!itemStack.isEmpty()) {
+			Block block = getBlockFromItem(itemStack.getItem());
+			if(block instanceof BlockSieve) {
+				// apparently Creatio thinks "default state" means "invalid state"
+				return block.getDefaultState().withProperty(BlockSieve.MESH, BlockSieve.MeshType.NONE);
+			}
+		}
+		return Blocks.AIR.getDefaultState();
 	}
 }

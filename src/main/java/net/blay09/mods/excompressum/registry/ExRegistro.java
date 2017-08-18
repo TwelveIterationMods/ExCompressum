@@ -1,9 +1,10 @@
 package net.blay09.mods.excompressum.registry;
 
-import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.api.ExNihiloProvider;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
-import net.blay09.mods.excompressum.compat.SieveModelBounds;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.api.SieveModelBounds;
+import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -99,5 +100,9 @@ public abstract class ExRegistro {
 
 	public static int getMeshEfficiency(ItemStack meshStack) {
 		return instance.getMeshEfficiency(meshStack);
+	}
+
+	public static IBlockState getSieveRenderState() {
+		return instance.getSieveRenderState();
 	}
 }

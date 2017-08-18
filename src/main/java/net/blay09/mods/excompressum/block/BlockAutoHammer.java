@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.handler.GuiHandler;
-import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;

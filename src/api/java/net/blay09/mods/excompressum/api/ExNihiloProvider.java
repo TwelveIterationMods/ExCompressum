@@ -1,10 +1,12 @@
-package net.blay09.mods.excompressum.registry;
+package net.blay09.mods.excompressum.api;
 
-import net.blay09.mods.excompressum.compat.SieveModelBounds;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveReward;
-import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.api.SieveModelBounds;
+import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
@@ -57,5 +59,12 @@ public interface ExNihiloProvider {
 	NihiloMod getNihiloMod();
 	int getMeshFortune(ItemStack meshStack);
 	int getMeshEfficiency(ItemStack meshStack);
+	default IBlockState getSieveRenderState() {
+		ItemStack itemStack = getNihiloItem(NihiloItems.SIEVE);
+		if(!itemStack.isEmpty()) {
+			return Block.getBlockFromItem(itemStack.getItem()).getDefaultState();
+		}
+		return Blocks.AIR.getDefaultState();
+	}
 
 }

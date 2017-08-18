@@ -9,7 +9,6 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.RegistryType;
 import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.util.ResourceLocation;
@@ -79,14 +78,14 @@ public abstract class AbstractRegistry {
 				ExCompressum.logger.error("Failed to save updated {} registry: {}", registryName, e);
 			}
 		}
-		MinecraftForge.EVENT_BUS.post(new ReloadRegistryEvent(getRegistryType()));
+		MinecraftForge.EVENT_BUS.post(getRegistryEvent());
 	}
 
 	protected abstract void clear();
 	protected abstract JsonObject create();
 	protected abstract void loadCustom(JsonObject entry);
 	protected abstract void registerDefaults(JsonObject defaults);
-	protected abstract RegistryType getRegistryType();
+	protected abstract ReloadRegistryEvent getRegistryEvent();
 
 	protected void loadOptions(JsonObject entry) {}
 	protected boolean hasOptions() {

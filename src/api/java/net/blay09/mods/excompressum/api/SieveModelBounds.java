@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.compat;
+package net.blay09.mods.excompressum.api;
 
 public class SieveModelBounds {
 	public float meshY;

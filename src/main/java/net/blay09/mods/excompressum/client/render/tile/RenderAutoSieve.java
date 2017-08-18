@@ -7,14 +7,12 @@ import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.client.render.model.ModelTinyHuman;
-import net.blay09.mods.excompressum.compat.SieveModelBounds;
-import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
-import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
 import net.blay09.mods.excompressum.utils.StupidUtils;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -56,10 +54,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
         if(sieveState == null) {
             sieveState = ModBlocks.heavySieve.getDefaultState();
             if(!isHeavy) {
-                ItemStack nihiloSieve = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SIEVE);
-                if(!nihiloSieve.isEmpty()) {
-                    sieveState = Block.getBlockFromItem(nihiloSieve.getItem()).getDefaultState();
-                }
+                sieveState = ExRegistro.getSieveRenderState();
             }
         }
 

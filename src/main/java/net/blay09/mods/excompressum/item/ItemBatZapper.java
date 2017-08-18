@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
@@ -16,6 +17,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public class ItemBatZapper extends Item {
 
@@ -31,6 +34,14 @@ public class ItemBatZapper extends Item {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        // Debug code for free energy
+//        TileEntity tileEntity = world.getTileEntity(pos);
+//        if(tileEntity != null) {
+//            IEnergyStorage energy = tileEntity.getCapability(CapabilityEnergy.ENERGY, null);
+//            if (energy != null) {
+//                energy.receiveEnergy(Integer.MAX_VALUE, false);
+//            }
+//        }
         return zapBatter(world, player, player.getHeldItem(hand), (int) player.posX, (int) player.posY, (int) player.posZ, hand).getType();
     }
 

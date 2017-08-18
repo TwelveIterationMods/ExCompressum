@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry.sievemesh;
+package net.blay09.mods.excompressum.api.sievemesh;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

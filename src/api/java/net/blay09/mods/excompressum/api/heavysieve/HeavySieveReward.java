@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry.heavysieve;
+package net.blay09.mods.excompressum.api.heavysieve;
 
 import net.minecraft.item.ItemStack;
 

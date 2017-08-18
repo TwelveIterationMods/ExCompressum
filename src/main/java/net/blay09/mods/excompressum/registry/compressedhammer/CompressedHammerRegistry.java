@@ -6,13 +6,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.RegistryType;
+import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
+import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerRegistryEntry;
+import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
-import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.block.Block;
@@ -48,8 +50,8 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 	public void add(CompressedHammerRegistryEntry entry) {
 		RegistryKey key = new RegistryKey(entry.getInputState(), entry.isWildcard());
 		CompressedHammerRegistryEntry previousEntry = entries.get(key);
-		if(previousEntry != null) {
-			for(CompressedHammerReward reward : entry.getRewards()) {
+		if (previousEntry != null) {
+			for (CompressedHammerReward reward : entry.getRewards()) {
 				previousEntry.addReward(reward);
 			}
 		} else {
@@ -61,7 +63,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 	public static CompressedHammerRegistryEntry getEntryForBlockState(IBlockState state) {
 		RegistryKey key = new RegistryKey(state, false);
 		CompressedHammerRegistryEntry entry = INSTANCE.entries.get(key);
-		if(entry == null) {
+		if (entry == null) {
 			return INSTANCE.entries.get(key.withWildcard());
 		}
 		return entry;
@@ -78,11 +80,11 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 
 	public static Collection<ItemStack> rollHammerRewards(IBlockState state, float luck, Random rand) {
 		CompressedHammerRegistryEntry entry = getEntryForBlockState(state);
-		if(entry != null) {
+		if (entry != null) {
 			List<ItemStack> list = Lists.newArrayList();
-			for(CompressedHammerReward reward : entry.getRewards()) {
+			for (CompressedHammerReward reward : entry.getRewards()) {
 				float chance = reward.getBaseChance() + reward.getLuckMultiplier() * luck;
-				if(rand.nextFloat() < chance) {
+				if (rand.nextFloat() < chance) {
 					list.add(reward.getItemStack().copy());
 				}
 			}
@@ -93,7 +95,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 
 	public static Collection<ItemStack> rollHammerRewards(ItemStack itemStack, float luck, Random rand) {
 		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
-		if(state != null) {
+		if (state != null) {
 			return rollHammerRewards(state, luck, rand);
 		}
 		return Collections.emptyList();
@@ -155,30 +157,30 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 	@Override
 	protected void loadCustom(JsonObject entry) {
 		String name = tryGetString(entry, "name", "");
-		if(name.isEmpty()) {
+		if (name.isEmpty()) {
 			return;
 		}
 		ResourceLocation location = new ResourceLocation(name);
 		JsonArray rewards = tryGetArray(entry, "rewards");
 		List<CompressedHammerReward> rewardList = Lists.newArrayListWithCapacity(rewards.size());
-		for(int i = 0; i < rewards.size(); i++) {
+		for (int i = 0; i < rewards.size(); i++) {
 			JsonElement element = rewards.get(i);
-			if(element.isJsonObject()) {
+			if (element.isJsonObject()) {
 				JsonObject reward = element.getAsJsonObject();
 				String rewardName = tryGetString(reward, "name", "");
-				if(rewardName.isEmpty()) {
+				if (rewardName.isEmpty()) {
 					continue;
 				}
 				ResourceLocation rewardLocation = new ResourceLocation(rewardName);
 				Item item = Item.REGISTRY.getObject(rewardLocation);
-				if(item == null) {
+				if (item == null) {
 					logUnknownItem(rewardLocation);
 					continue;
 				}
 				int count = tryGetInt(reward, "count", 1);
 				int metadata = tryGetInt(reward, "metadata", 0);
 				float chance = tryGetFloat(reward, "chance", 1f);
-				if(chance > 1f) {
+				if (chance > 1f) {
 					logError("Reward chance is out of range for %s in %s, capping at 1.0...", rewardLocation, registryName);
 					chance = 1f;
 				}
@@ -189,13 +191,13 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 				return;
 			}
 		}
-		if(location.getResourceDomain().equals("ore")) {
-			if(!addOre(location.getResourcePath(), rewardList)) {
+		if (location.getResourceDomain().equals("ore")) {
+			if (!addOre(location.getResourcePath(), rewardList)) {
 				logUnknownOre(location);
 			}
 		} else {
 			Item item = Item.REGISTRY.getObject(location);
-			if(item == null) {
+			if (item == null) {
 				logUnknownItem(location);
 				return;
 			}
@@ -207,9 +209,9 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 				itemStack = new ItemStack(item, 1, tryParseInt(metadata));
 			}
 			IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
-			if(state != null) {
+			if (state != null) {
 				CompressedHammerRegistryEntry newEntry = new CompressedHammerRegistryEntry(state, itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE);
-				for(CompressedHammerReward reward : rewardList) {
+				for (CompressedHammerReward reward : rewardList) {
 					newEntry.addReward(reward);
 				}
 				add(newEntry);
@@ -221,11 +223,11 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 
 	private boolean addOre(String oreName, List<CompressedHammerReward> rewards) {
 		List<ItemStack> list = OreDictionary.getOres(oreName, false);
-		for(ItemStack itemStack : list) {
+		for (ItemStack itemStack : list) {
 			IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
-			if(state != null) {
+			if (state != null) {
 				CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(state, itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE);
-				for(CompressedHammerReward reward : rewards) {
+				for (CompressedHammerReward reward : rewards) {
 					entry.addReward(reward);
 				}
 				add(entry);
@@ -238,23 +240,23 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 
 	@Override
 	protected void registerDefaults(JsonObject defaults) {
-		if(tryGetBoolean(defaults, "excompressum:compressed_cobblestone", true)) {
+		if (tryGetBoolean(defaults, "excompressum:compressed_cobblestone", true)) {
 			CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(ModBlocks.compressedBlock.getDefaultState()
 					.withProperty(BlockCompressed.VARIANT, BlockCompressed.Type.COBBLESTONE), false);
 			entry.addReward(new CompressedHammerReward(new ItemStack(Blocks.GRAVEL, 9), 1f, 0f));
 			add(entry);
 		}
 
-		if(tryGetBoolean(defaults, "excompressum:compressed_gravel", true)) {
+		if (tryGetBoolean(defaults, "excompressum:compressed_gravel", true)) {
 			CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(ModBlocks.compressedBlock.getDefaultState()
 					.withProperty(BlockCompressed.VARIANT, BlockCompressed.Type.GRAVEL), false);
 			entry.addReward(new CompressedHammerReward(new ItemStack(Blocks.SAND, 9), 1f, 0f));
 			add(entry);
 		}
 
-		if(tryGetBoolean(defaults, "excompressum:compressed_sand", true)) {
+		if (tryGetBoolean(defaults, "excompressum:compressed_sand", true)) {
 			ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
-			if(!dustBlock.isEmpty()) {
+			if (!dustBlock.isEmpty()) {
 				CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(ModBlocks.compressedBlock.getDefaultState()
 						.withProperty(BlockCompressed.VARIANT, BlockCompressed.Type.SAND), false);
 				entry.addReward(new CompressedHammerReward(ItemHandlerHelper.copyStackWithSize(dustBlock, 9), 1f, 0f));
@@ -262,9 +264,9 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			}
 		}
 
-		if(tryGetBoolean(defaults, "excompressum:compressed_netherrack", true)) {
+		if (tryGetBoolean(defaults, "excompressum:compressed_netherrack", true)) {
 			ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
-			if(!netherGravelBlock.isEmpty()) {
+			if (!netherGravelBlock.isEmpty()) {
 				CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(ModBlocks.compressedBlock.getDefaultState()
 						.withProperty(BlockCompressed.VARIANT, BlockCompressed.Type.NETHERRACK), false);
 				entry.addReward(new CompressedHammerReward(ItemHandlerHelper.copyStackWithSize(netherGravelBlock, 9), 1f, 0f));
@@ -272,9 +274,9 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			}
 		}
 
-		if(tryGetBoolean(defaults, "excompressum:compressed_end_stone", true)) {
+		if (tryGetBoolean(defaults, "excompressum:compressed_end_stone", true)) {
 			ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
-			if(!enderGravelBlock.isEmpty()) {
+			if (!enderGravelBlock.isEmpty()) {
 				CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(ModBlocks.compressedBlock.getDefaultState()
 						.withProperty(BlockCompressed.VARIANT, BlockCompressed.Type.END_STONE), false);
 				entry.addReward(new CompressedHammerReward(ItemHandlerHelper.copyStackWithSize(enderGravelBlock, 9), 1f, 0f));
@@ -282,7 +284,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 			}
 		}
 
-		if(Loader.isModLoaded(Compat.EXTRAUTILS2)) {
+		if (Loader.isModLoaded(Compat.EXTRAUTILS2)) {
 			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedCobblestone", true)) {
 				ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedcobblestone");
 				if (Block.REGISTRY.containsKey(location)) {
@@ -318,7 +320,7 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 
 			if (tryGetBoolean(defaults, "ExtraUtils2:CompressedNetherrack", true)) {
 				ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
-				if(!netherGravelBlock.isEmpty()) {
+				if (!netherGravelBlock.isEmpty()) {
 					ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressednetherrack");
 					if (Block.REGISTRY.containsKey(location)) {
 						Block exUtilsBlock = Block.REGISTRY.getObject(location);
@@ -332,8 +334,8 @@ public class CompressedHammerRegistry extends AbstractRegistry {
 	}
 
 	@Override
-	protected RegistryType getRegistryType() {
-		return RegistryType.CompressedHammer;
+	protected ReloadRegistryEvent getRegistryEvent() {
+		return new ReloadRegistryEvent.CompressedHammer();
 	}
 
 }

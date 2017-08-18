@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.registry.chickenstick;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.blay09.mods.excompressum.api.RegistryType;
+import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.block.state.IBlockState;
@@ -57,8 +57,8 @@ public class ChickenStickRegistry extends AbstractRegistry {
     }
 
     @Override
-    protected RegistryType getRegistryType() {
-        return RegistryType.ChickenStick;
+    protected ReloadRegistryEvent getRegistryEvent() {
+        return new ReloadRegistryEvent.ChickenStick();
     }
 
     @Override

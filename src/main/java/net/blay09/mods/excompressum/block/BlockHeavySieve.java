@@ -1,10 +1,10 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.compat.SieveModelBounds;
+import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
-import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.tile.TileHeavySieve;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

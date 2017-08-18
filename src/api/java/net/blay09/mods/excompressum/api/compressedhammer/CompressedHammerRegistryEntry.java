@@ -1,8 +1,10 @@
-package net.blay09.mods.excompressum.registry.compressedhammer;
+package net.blay09.mods.excompressum.api.compressedhammer;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.state.IBlockState;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class CompressedHammerRegistryEntry {
@@ -29,5 +31,9 @@ public class CompressedHammerRegistryEntry {
 
 	public void addReward(CompressedHammerReward reward) {
 		rewards.add(reward);
+	}
+
+	public void addRewards(Collection<CompressedHammerReward> rewards) {
+		this.rewards.addAll(rewards);
 	}
 }

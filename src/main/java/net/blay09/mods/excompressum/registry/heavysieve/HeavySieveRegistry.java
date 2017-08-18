@@ -6,14 +6,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.RegistryType;
-import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
+import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
+import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
-import net.blay09.mods.excompressum.registry.ExNihiloProvider;
+import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.block.state.IBlockState;
@@ -405,8 +407,8 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     @Override
-    protected RegistryType getRegistryType() {
-        return RegistryType.HeavySieve;
+    protected ReloadRegistryEvent getRegistryEvent() {
+        return new ReloadRegistryEvent.HeavySieve();
     }
 
     private boolean addOre(String oreName, List<HeavySieveReward> rewards) {

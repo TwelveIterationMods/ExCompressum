@@ -3,8 +3,8 @@ package net.blay09.mods.excompressum.compat.jei;
 import com.google.common.collect.Lists;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistryEntry;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerReward;
+import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerRegistryEntry;
+import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.item.ItemStack;
 

@@ -74,7 +74,8 @@ public class ExCompressum {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		ExCompressumAPI.__setupAPI(new InternalMethods());
+		//noinspection deprecation
+		ExCompressumAPI.__internalMethods = new InternalMethods();
 
 		configDir = new File(event.getModConfigurationDirectory(), "ExCompressum");
 		if (!configDir.exists() && !configDir.mkdirs()) {

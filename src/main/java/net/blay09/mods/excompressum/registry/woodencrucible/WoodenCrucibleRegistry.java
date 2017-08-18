@@ -4,7 +4,8 @@ import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.RegistryType;
+import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
+import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.init.Blocks;
@@ -43,7 +44,7 @@ public class WoodenCrucibleRegistry extends AbstractRegistry {
 		return entries;
 	}
 
-	private static void add(WoodenCrucibleRegistryEntry entry) {
+	public void add(WoodenCrucibleRegistryEntry entry) {
 		RegistryKey key = new RegistryKey(entry.getItemStack());
 		if(INSTANCE.entries.containsKey(key)) {
 			ExCompressum.logger.error("Duplicate entry for " + key + " in " + INSTANCE.registryName + ", overwriting...");
@@ -155,8 +156,8 @@ public class WoodenCrucibleRegistry extends AbstractRegistry {
 	}
 
 	@Override
-	protected RegistryType getRegistryType() {
-		return RegistryType.WoodenCrucible;
+	protected ReloadRegistryEvent getRegistryEvent() {
+		return new ReloadRegistryEvent.WoodenCrucible();
 	}
 
 	private boolean addOre(String oreName, Fluid fluid, int amount) {

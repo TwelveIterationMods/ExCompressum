@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry.compressedhammer;
+package net.blay09.mods.excompressum.api.compressedhammer;
 
 import net.minecraft.item.ItemStack;
 
