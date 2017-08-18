@@ -63,6 +63,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
     private NonNullList<ItemStack> currentBuffer = NonNullList.create();
     private CompressedRecipe currentRecipe = null;
     private float progress;
+    private boolean isDisabledByRedstone;
 
     public boolean shouldCompress(Multiset<CompressedRecipe> inputItems, CompressedRecipe compressedRecipe) {
         return inputItems.count(compressedRecipe) >= compressedRecipe.getCount();
@@ -71,7 +72,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
     @Override
     public void update() {
         int effectiveEnergy = getEffectiveEnergy();
-        if (getEnergyStored(null) > effectiveEnergy) {
+        if (!world.isRemote && !isDisabledByRedstone() && getEnergyStored(null) > effectiveEnergy) {
             if (currentRecipe == null) {
                 inputItems.clear();
                 for (int i = 0; i < inputSlots.getSlots(); i++) {
@@ -201,6 +202,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
                 currentRecipe = new CompressedRecipe(Ingredient.EMPTY, 0, itemStack);
             }
         }
+        isDisabledByRedstone = tagCompound.getBoolean("IsDisabledByRedstone");
     }
 
     @Override
@@ -217,6 +219,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
         if(currentRecipe != null) {
             tagCompound.setTag("CurrentRecipeResult", currentRecipe.getResultStack().writeToNBT(new NBTTagCompound()));
         }
+        tagCompound.setBoolean("IsDisabledByRedstone", isDisabledByRedstone);
         return super.writeToNBT(tagCompound);
     }
 
@@ -295,5 +298,13 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
         return true;
+    }
+
+    public boolean isDisabledByRedstone() {
+        return isDisabledByRedstone;
+    }
+
+    public void setDisabledByRedstone(boolean disabledByRedstone) {
+        isDisabledByRedstone = disabledByRedstone;
     }
 }

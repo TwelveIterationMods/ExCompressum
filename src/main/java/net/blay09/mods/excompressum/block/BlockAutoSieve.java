@@ -1,7 +1,10 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.blay09.mods.excompressum.tile.TileAutoSieve;
+import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -41,4 +44,21 @@ public class BlockAutoSieve extends BlockAutoSieveBase {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
     }
 
+    @Override
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        updateRedstoneState(world, pos);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        updateRedstoneState(world, pos);
+    }
+
+    private void updateRedstoneState(World world, BlockPos pos) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if(tileEntity instanceof TileAutoSieveBase) {
+            ((TileAutoSieveBase) tileEntity).setDisabledByRedstone(world.isBlockPowered(pos));
+        }
+    }
 }

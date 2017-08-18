@@ -4,7 +4,9 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.item.ModItems;
+import net.blay09.mods.excompressum.tile.TileAutoCompressor;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -182,4 +184,21 @@ public class BlockAutoHammer extends BlockContainer implements IUglyfiable {
         return false;
     }
 
+    @Override
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        updateRedstoneState(world, pos);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        updateRedstoneState(world, pos);
+    }
+
+    private void updateRedstoneState(World world, BlockPos pos) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if(tileEntity instanceof TileAutoHammer) {
+            ((TileAutoHammer) tileEntity).setDisabledByRedstone(world.isBlockPowered(pos));
+        }
+    }
 }

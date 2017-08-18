@@ -40,6 +40,9 @@ public class GuiAutoHammer extends GuiContainer {
         if (tileEntity.isProcessing()) {
             drawTexturedModalRect(guiLeft + 32, guiTop + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 15);
         }
+        if(tileEntity.isDisabledByRedstone()) {
+            drawTexturedModalRect(guiLeft + 44, guiTop + 48, 176, 14, 15, 16);
+        }
 
         float energyPercentage = tileEntity.getEnergyPercentage();
         drawTexturedModalRect(guiLeft + 152, guiTop + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70));

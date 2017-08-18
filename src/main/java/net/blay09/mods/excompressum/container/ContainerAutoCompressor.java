@@ -16,6 +16,7 @@ public class ContainerAutoCompressor extends Container {
 
     private float lastProgress;
     private int lastEnergy;
+    private boolean lastDisabledByRedstone;
 
     public ContainerAutoCompressor(InventoryPlayer inventoryPlayer, TileAutoCompressor tileEntity) {
         this.tileEntity = tileEntity;
@@ -49,21 +50,24 @@ public class ContainerAutoCompressor extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        if(tileEntity.getProgress() != lastProgress || tileEntity.getEnergyStorage().getEnergyStored() != lastEnergy) {
+        if(tileEntity.getProgress() != lastProgress || tileEntity.getEnergyStorage().getEnergyStored() != lastEnergy || tileEntity.isDisabledByRedstone()) {
             for (IContainerListener listener : listeners) {
                 listener.sendWindowProperty(this, 0, (int) (100 * tileEntity.getProgress()));
                 listener.sendWindowProperty(this, 1, tileEntity.getEnergyStorage().getEnergyStored());
+                listener.sendWindowProperty(this, 2, tileEntity.isDisabledByRedstone() ? 1 : 0);
             }
         }
         lastProgress = tileEntity.getProgress();
         lastEnergy = tileEntity.getEnergyStorage().getEnergyStored();
+        lastDisabledByRedstone = tileEntity.isDisabledByRedstone();
     }
 
     @Override
     public void updateProgressBar(int var, int val) {
         switch(var) {
-            case 0: tileEntity.setProgress((float) val / 100f);
-            case 1: tileEntity.getEnergyStorage().setEnergyStored(val);
+            case 0: tileEntity.setProgress((float) val / 100f); break;
+            case 1: tileEntity.getEnergyStorage().setEnergyStored(val); break;
+            case 2: tileEntity.setDisabledByRedstone(val == 1); break;
         }
     }
 

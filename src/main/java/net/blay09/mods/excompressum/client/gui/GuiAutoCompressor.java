@@ -38,9 +38,13 @@ public class GuiAutoCompressor extends GuiContainer {
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
         if (tileEntity.isProcessing()) {
-            drawTexturedModalRect(guiLeft + 69, guiTop + 9, 176, 0, (int) (tileEntity.getProgress() * 15f), 15);
-            drawTexturedModalRect(guiLeft + 69, guiTop + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 15);
-            drawTexturedModalRect(guiLeft + 69, guiTop + 63, 176, 0, (int) (tileEntity.getProgress() * 15f), 15);
+            drawTexturedModalRect(guiLeft + 69, guiTop + 9, 176, 0, (int) (tileEntity.getProgress() * 15f), 14);
+            drawTexturedModalRect(guiLeft + 69, guiTop + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 14);
+            drawTexturedModalRect(guiLeft + 69, guiTop + 63, 176, 0, (int) (tileEntity.getProgress() * 15f), 14);
+        }
+        if(tileEntity.isDisabledByRedstone()) {
+            drawTexturedModalRect(guiLeft + 72, guiTop + 24, 176, 14, 15, 16);
+            drawTexturedModalRect(guiLeft + 72, guiTop + 51, 176, 14, 15, 16);
         }
         float energyPercentage = tileEntity.getEnergyPercentage();
         drawTexturedModalRect(guiLeft + 152, guiTop + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70));

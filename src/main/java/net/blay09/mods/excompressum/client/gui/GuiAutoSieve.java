@@ -39,7 +39,10 @@ public class GuiAutoSieve extends GuiContainer {
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
         if (tileEntity.isProcessing()) {
-            drawTexturedModalRect(guiLeft + 32, guiTop + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 15);
+            drawTexturedModalRect(guiLeft + 32, guiTop + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 14);
+        }
+        if(tileEntity.isDisabledByRedstone()) {
+            drawTexturedModalRect(guiLeft + 34, guiTop + 52, 176, 14, 15, 16);
         }
 
        renderEnergyBar();

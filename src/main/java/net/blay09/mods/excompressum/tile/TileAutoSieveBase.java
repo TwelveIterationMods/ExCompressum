@@ -46,9 +46,9 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 22) {
 		@Override
 		public boolean isItemValid(int slot, ItemStack itemStack) {
-			if(inputSlots.isInside(slot)) {
+			if (inputSlots.isInside(slot)) {
 				return isSiftable(itemStack);
-			} else if(meshSlots.isInside(slot)) {
+			} else if (meshSlots.isInside(slot)) {
 				return isMesh(itemStack);
 			}
 			return true;
@@ -58,7 +58,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		protected void onContentsChanged(int slot) {
 			super.onContentsChanged(slot);
 			// Make sure the mesh slot is always synced.
-			if(meshSlots.isInside(slot)) {
+			if (meshSlots.isInside(slot)) {
 				isDirty = true;
 			}
 		}
@@ -95,6 +95,8 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	private int particleTicks;
 	private int particleCount;
 
+	private boolean isDisabledByRedstone;
+
 	@Override
 	public void update() {
 		if (foodBoostTicks > 0) {
@@ -104,17 +106,19 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 			}
 		}
 
-		ticksSinceSync++;
-		if (ticksSinceSync > UPDATE_INTERVAL) {
-			if (isDirty) {
-				VanillaPacketHandler.sendTileEntityUpdate(this);
-				isDirty = false;
+		if(!world.isRemote) {
+			ticksSinceSync++;
+			if (ticksSinceSync > UPDATE_INTERVAL) {
+				if (isDirty) {
+					VanillaPacketHandler.sendTileEntityUpdate(this);
+					isDirty = false;
+				}
+				ticksSinceSync = 0;
 			}
-			ticksSinceSync = 0;
 		}
 
 		int effectiveEnergy = getEffectiveEnergy();
-		if (getEnergyStored(null) >= effectiveEnergy) {
+		if (!isDisabledByRedstone() && getEnergyStored(null) >= effectiveEnergy) {
 			if (currentStack.isEmpty()) {
 				ItemStack inputStack = inputSlots.getStackInSlot(0);
 				SieveMeshRegistryEntry sieveMesh = getSieveMesh();
@@ -150,17 +154,17 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 				if (progress >= 1) {
 					if (!world.isRemote) {
 						SieveMeshRegistryEntry sieveMesh = getSieveMesh();
-						if(sieveMesh != null) {
+						if (sieveMesh != null) {
 							Collection<ItemStack> rewards = rollSieveRewards(currentStack, sieveMesh, getEffectiveLuck(), world.rand);
 							for (ItemStack itemStack : rewards) {
 								if (!addItemToOutput(itemStack)) {
 									world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
 								}
 							}
-							if(ExRegistro.doMeshesHaveDurability()) {
+							if (ExRegistro.doMeshesHaveDurability()) {
 								ItemStack meshStack = meshSlots.getStackInSlot(0);
 								if (!meshStack.isEmpty()) {
-									if(meshStack.attemptDamageItem(1, world.rand, null)) {
+									if (meshStack.attemptDamageItem(1, world.rand, null)) {
 										getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
 										meshStack.shrink(1);
 										meshSlots.setStackInSlot(0, ItemStack.EMPTY);
@@ -179,9 +183,9 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 			}
 		}
 
-		if(particleTicks > 0 && world.isRemote) {
+		if (particleTicks > 0 && world.isRemote) {
 			particleTicks--;
-			if(particleTicks <= 0) {
+			if (particleTicks <= 0) {
 				particleCount = 0;
 			}
 			spawnParticles();
@@ -190,14 +194,14 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 	@SideOnly(Side.CLIENT)
 	public void spawnParticles() {
-		if(!currentStack.isEmpty() && !ModConfig.client.disableParticles && !isUgly()) {
+		if (!currentStack.isEmpty() && !ModConfig.client.disableParticles && !isUgly()) {
 			int metadata = getBlockMetadata();
 			IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
 			if (state != null) {
-				for(int i = 0; i < particleCount; i++) {
+				for (int i = 0; i < particleCount; i++) {
 					double particleX = 0.5 + world.rand.nextFloat() * 0.4 - 0.2;
 					double particleZ = 0.5 + world.rand.nextFloat() * 0.4 - 0.2;
-					switch(EnumFacing.getFront(metadata)) {
+					switch (EnumFacing.getFront(metadata)) {
 						case WEST:
 							particleZ -= 0.125f;
 							break;
@@ -210,8 +214,8 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 						case SOUTH:
 							particleX -= 0.125f;
 							break;
-					default:
-						break;
+						default:
+							break;
 					}
 					Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSieve(world, pos, particleX, 0.2, particleZ, 0.5f, state));
 				}
@@ -284,7 +288,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		progress = tagCompound.getFloat("Progress");
 		if (tagCompound.hasKey("CustomSkin")) {
 			customSkin = NBTUtil.readGameProfileFromNBT(tagCompound.getCompoundTag("CustomSkin"));
-			if(customSkin != null) {
+			if (customSkin != null) {
 				ExCompressum.proxy.preloadSkin(customSkin);
 			}
 		}
@@ -292,11 +296,12 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		foodBoostTicks = tagCompound.getInteger("FoodBoostTicks");
 		particleTicks = tagCompound.getInteger("ParticleTicks");
 		particleCount = tagCompound.getInteger("ParticleCount");
-		if(isSync) {
+		if (isSync) {
 			meshSlots.setStackInSlot(0, new ItemStack(tagCompound.getCompoundTag("MeshStack")));
 		} else {
 			itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
 		}
+		isDisabledByRedstone = tagCompound.getBoolean("IsDisabledByRedstone");
 	}
 
 	@Override
@@ -312,17 +317,21 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		tagCompound.setInteger("FoodBoostTicks", foodBoostTicks);
 		tagCompound.setInteger("ParticleTicks", particleTicks);
 		tagCompound.setInteger("ParticleCount", particleCount);
-		if(isSync) {
+		if (isSync) {
 			ItemStack meshStack = meshSlots.getStackInSlot(0);
 			tagCompound.setTag("MeshStack", meshStack.writeToNBT(new NBTTagCompound()));
 		} else {
 			tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
 		}
+		tagCompound.setBoolean("IsDisabledByRedstone", isDisabledByRedstone());
 	}
 
 	public abstract int getMaxEnergyStored();
+
 	public abstract int getEnergyStored(@Nullable EnumFacing from);
+
 	public abstract int extractEnergy(int maxExtract, boolean simulate);
+
 	public abstract void setEnergyStored(int energy);
 
 	public float getEnergyPercentage() {
@@ -380,7 +389,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		final float EFFICIENCY_BOOST = 0.25f;
 		float boost = 1f;
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
-		if(!meshStack.isEmpty()) {
+		if (!meshStack.isEmpty()) {
 			boost += EFFICIENCY_BOOST * ExRegistro.getMeshEfficiency(meshStack);
 		}
 		return boost * getFoodBoost();
@@ -409,7 +418,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return (T) itemHandlerAutomation;
 		}
 		return super.getCapability(capability, facing);
@@ -422,7 +431,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	@Nullable
 	public SieveMeshRegistryEntry getSieveMesh() {
 		ItemStack meshStack = meshSlots.getStackInSlot(0);
-		if(!meshStack.isEmpty()) {
+		if (!meshStack.isEmpty()) {
 			return SieveMeshRegistry.getEntry(meshStack);
 		}
 		return null;
@@ -439,7 +448,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	}
 
 	public boolean shouldAnimate() {
-		return !currentStack.isEmpty() && getEnergyStored(null) >= getEffectiveEnergy();
+		return !currentStack.isEmpty() && getEnergyStored(null) >= getEffectiveEnergy() && !isDisabledByRedstone();
 	}
 
 	@Override
@@ -449,22 +458,32 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	}
 
 	public boolean isUgly() {
-		if(cachedState == null) {
+		if (cachedState == null) {
 			cachedState = world.getBlockState(pos);
 		}
-		if(cachedState.getBlock() instanceof BlockAutoHammer) {
+		if (cachedState.getBlock() instanceof BlockAutoHammer) {
 			return cachedState.getValue(BlockAutoHammer.UGLY);
 		}
 		return false;
 	}
 
 	public EnumFacing getFacing() {
-		if(cachedState == null) {
+		if (cachedState == null) {
 			cachedState = world.getBlockState(pos);
 		}
-		if(cachedState.getBlock() instanceof BlockAutoHammer) {
+		if (cachedState.getBlock() instanceof BlockAutoHammer) {
 			return cachedState.getValue(BlockAutoHammer.FACING);
 		}
 		return EnumFacing.NORTH;
+	}
+
+	public boolean isDisabledByRedstone() {
+		return isDisabledByRedstone;
+	}
+
+	public void setDisabledByRedstone(boolean disabledByRedstone) {
+		isDisabledByRedstone = disabledByRedstone;
+		isDirty = true;
+		ticksSinceSync = UPDATE_INTERVAL;
 	}
 }

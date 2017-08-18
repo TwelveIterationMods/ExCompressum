@@ -99,78 +99,82 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     private IBlockState cachedState;
     public float hammerAngle;
 
+    private boolean isDisabledByRedstone;
+
     @Override
     public void update() {
-        int effectiveEnergy = getEffectiveEnergy();
-        if (getEnergyStored(null) >= effectiveEnergy) {
-            if (currentStack.isEmpty()) {
-                ItemStack inputStack = inputSlots.getStackInSlot(0);
-                if (!inputStack.isEmpty() && isRegistered(inputStack)) {
-                    boolean foundSpace = false;
-                    for(int i = 0; i < outputSlots.getSlots(); i++) {
-                        if(outputSlots.getStackInSlot(i).isEmpty()) {
-                            foundSpace = true;
+        if(!world.isRemote) {
+            int effectiveEnergy = getEffectiveEnergy();
+            if (!isDisabledByRedstone() && getEnergyStored(null) >= effectiveEnergy) {
+                if (currentStack.isEmpty()) {
+                    ItemStack inputStack = inputSlots.getStackInSlot(0);
+                    if (!inputStack.isEmpty() && isRegistered(inputStack)) {
+                        boolean foundSpace = false;
+                        for (int i = 0; i < outputSlots.getSlots(); i++) {
+                            if (outputSlots.getStackInSlot(i).isEmpty()) {
+                                foundSpace = true;
+                            }
                         }
+                        if (!foundSpace) {
+                            return;
+                        }
+                        currentStack = inputStack.splitStack(1);
+                        if (inputStack.isEmpty()) {
+                            inputSlots.setStackInSlot(0, ItemStack.EMPTY);
+                        }
+                        energyStorage.extractEnergy(effectiveEnergy, false);
+                        VanillaPacketHandler.sendTileEntityUpdate(this);
+                        progress = 0f;
                     }
-                    if(!foundSpace) {
-                        return;
-                    }
-                    currentStack = inputStack.splitStack(1);
-                    if (inputStack.isEmpty()) {
-                        inputSlots.setStackInSlot(0, ItemStack.EMPTY);
-                    }
+                } else {
                     energyStorage.extractEnergy(effectiveEnergy, false);
-                    VanillaPacketHandler.sendTileEntityUpdate(this);
-                    progress = 0f;
-                }
-            } else {
-                energyStorage.extractEnergy(effectiveEnergy, false);
-                progress += getEffectiveSpeed();
-                isDirty = true;
-                if (progress >= 1) {
-                    if (!world.isRemote) {
-                        if(world.rand.nextFloat() <= ModConfig.automation.autoHammerDecay) {
-                            ItemStack firstHammer = hammerSlots.getStackInSlot(0);
-                            if (!firstHammer.isEmpty()) {
-                                if(firstHammer.attemptDamageItem(1, world.rand, null)) {
-                                    hammerSlots.setStackInSlot(0, ItemStack.EMPTY);
+                    progress += getEffectiveSpeed();
+                    isDirty = true;
+                    if (progress >= 1) {
+                        if (!world.isRemote) {
+                            if (world.rand.nextFloat() <= ModConfig.automation.autoHammerDecay) {
+                                ItemStack firstHammer = hammerSlots.getStackInSlot(0);
+                                if (!firstHammer.isEmpty()) {
+                                    if (firstHammer.attemptDamageItem(1, world.rand, null)) {
+                                        hammerSlots.setStackInSlot(0, ItemStack.EMPTY);
+                                    }
+                                }
+                                ItemStack secondHammer = hammerSlots.getStackInSlot(1);
+                                if (!secondHammer.isEmpty()) {
+                                    if (secondHammer.attemptDamageItem(1, world.rand, null)) {
+                                        hammerSlots.setStackInSlot(1, ItemStack.EMPTY);
+                                    }
                                 }
                             }
-                            ItemStack secondHammer = hammerSlots.getStackInSlot(1);
-                            if (!secondHammer.isEmpty()) {
-                                if(secondHammer.attemptDamageItem(1, world.rand, null)) {
-                                    hammerSlots.setStackInSlot(1, ItemStack.EMPTY);
+                            Collection<ItemStack> rewards = rollHammerRewards(currentStack, getMiningLevel(), getEffectiveLuck(), world.rand);
+                            for (ItemStack itemStack : rewards) {
+                                if (!addItemToOutput(itemStack)) {
+                                    EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
+                                    double motion = 0.05;
+                                    entityItem.motionX = world.rand.nextGaussian() * motion;
+                                    entityItem.motionY = 0.2;
+                                    entityItem.motionZ = world.rand.nextGaussian() * motion;
+                                    world.spawnEntity(entityItem);
                                 }
                             }
+                        } else {
+                            spawnCrushParticles();
                         }
-                        Collection<ItemStack> rewards = rollHammerRewards(currentStack, getMiningLevel(), getEffectiveLuck(), world.rand);
-                        for (ItemStack itemStack : rewards) {
-                            if (!addItemToOutput(itemStack)) {
-                                EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
-                                double motion = 0.05;
-                                entityItem.motionX = world.rand.nextGaussian() * motion;
-                                entityItem.motionY = 0.2;
-                                entityItem.motionZ = world.rand.nextGaussian() * motion;
-                                world.spawnEntity(entityItem);
-                            }
-                        }
-                    } else {
-                        spawnCrushParticles();
+                        progress = 0f;
+                        currentStack = ItemStack.EMPTY;
                     }
-                    progress = 0f;
-                    currentStack = ItemStack.EMPTY;
                 }
             }
-        }
 
-        // Sync to clients
-        ticksSinceUpdate++;
-        if (ticksSinceUpdate > UPDATE_INTERVAL) {
-            if (isDirty) {
-                VanillaPacketHandler.sendTileEntityUpdate(this);
-                isDirty = false;
+            // Sync to clients
+            ticksSinceUpdate++;
+            if (ticksSinceUpdate > UPDATE_INTERVAL) {
+                if (isDirty) {
+                    VanillaPacketHandler.sendTileEntityUpdate(this);
+                    isDirty = false;
+                }
+                ticksSinceUpdate = 0;
             }
-            ticksSinceUpdate = 0;
         }
     }
 
@@ -252,6 +256,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         } else {
             itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
         }
+        isDisabledByRedstone = tagCompound.getBoolean("IsDisabledByRedstone");
     }
 
     @Override
@@ -270,6 +275,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         } else {
             tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
         }
+        tagCompound.setBoolean("IsDisabledByRedstone", isDisabledByRedstone);
     }
 
     @SideOnly(Side.CLIENT)
@@ -372,7 +378,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     public boolean shouldAnimate() {
-        return !currentStack.isEmpty() && getEnergyStored(null) >= getEffectiveEnergy();
+        return !currentStack.isEmpty() && getEnergyStored(null) >= getEffectiveEnergy() && !isDisabledByRedstone();
     }
 
     public EnergyStorageModifiable getEnergyStorage() {
@@ -423,5 +429,15 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
             return cachedState.getValue(BlockAutoHammer.FACING);
         }
         return EnumFacing.NORTH;
+    }
+
+    public boolean isDisabledByRedstone() {
+        return isDisabledByRedstone;
+    }
+
+    public void setDisabledByRedstone(boolean disabledByRedstone) {
+        isDisabledByRedstone = disabledByRedstone;
+        isDirty = true;
+        ticksSinceUpdate = UPDATE_INTERVAL;
     }
 }

@@ -66,7 +66,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
 
         // Render the hammers
         GlStateManager.pushMatrix();
-        if(hammerItemStack.getItem() != Compat.TCONSTRUCT_HAMMER) {
+        if(hammerItemStack.getItem() != Compat.TCONSTRUCT_HAMMER) { // TODO this isn't working
             GlStateManager.rotate(180f, 0f, 1f, 0f);
         }
         GlStateManager.rotate((float) Math.sin(tileEntity.hammerAngle) * 15, 0f, 0f, 1f);
