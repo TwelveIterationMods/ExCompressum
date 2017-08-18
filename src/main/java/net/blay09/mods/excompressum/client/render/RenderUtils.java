@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
@@ -47,6 +48,21 @@ public class RenderUtils {
 				dispatcher.getBlockModelRenderer().renderModel(world, model, state, pos, renderer, false);
 			}
 		} catch (Throwable ignored) {
+		}
+	}
+
+	public static float getRotationAngle(EnumFacing facing) {
+		switch(facing) {
+			case NORTH:
+				return 0;
+			case EAST:
+				return -90;
+			case SOUTH:
+				return 180;
+			case WEST:
+				return 90;
+			default:
+				return -90;
 		}
 	}
 }

@@ -29,10 +29,10 @@
   "conditions": [
     {
       "type": "forge:and",
-      "value": [
+      "values": [
         {
           "type": "forge:mod_loaded",
-          "value": "botania"
+          "modid": "botania"
         },
         {
           "type": "excompressum:has_nihilo_item",

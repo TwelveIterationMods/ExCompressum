@@ -29,7 +29,7 @@
   "conditions": [
     {
       "type": "forge:and",
-      "value": [
+      "values": [
         {
           "type": "excompressum:has_oredict_item",
           "value": "ingotSteel"

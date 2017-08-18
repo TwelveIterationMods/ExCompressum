@@ -2,7 +2,10 @@
   "forge_marker": 1,
   "defaults": {
     "model": "excompressum:auto_hammer",
-    "transform": "forge:default-block"
+    "transform": "forge:default-block",
+    "textures": {
+      "texture_glass": "excompressum:blocks/auto_frame_glass"
+    }
   },
   "variants": {
     "normal": [{}],
@@ -41,6 +44,15 @@
       },
       "east": {
         "y": -90
+      }
+    },
+    "ugly": {
+      "true": {
+        "textures": {
+          "texture_glass": "excompressum:blocks/auto_frame_glass_ugly"
+        }
+      },
+      "false": {
       }
     }
   }

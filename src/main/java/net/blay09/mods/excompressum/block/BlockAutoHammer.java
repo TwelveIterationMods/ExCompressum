@@ -3,10 +3,12 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -29,12 +31,13 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class BlockAutoHammer extends BlockContainer {
+public class BlockAutoHammer extends BlockContainer implements IUglyfiable {
 
     public static final String name = "auto_hammer";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final PropertyBool UGLY = PropertyBool.create("ugly");
     public static final PropertyEnum<ExNihiloProvider.NihiloMod> HAMMER_MOD = PropertyEnum.create("hammer_mod", ExNihiloProvider.NihiloMod.class);
 
     public BlockAutoHammer() {
@@ -46,22 +49,26 @@ public class BlockAutoHammer extends BlockContainer {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, HAMMER_MOD);
+        return new BlockStateContainer(this, FACING, HAMMER_MOD, UGLY);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).ordinal();
+        int i = state.getValue(FACING).ordinal();
+        if(state.getValue(UGLY)) {
+            i |= 8;
+        }
+        return i;
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
-        EnumFacing facing = EnumFacing.getFront(meta);
+        EnumFacing facing = EnumFacing.getFront(meta & 7);
         if(facing.getAxis() == EnumFacing.Axis.Y) {
             facing = EnumFacing.NORTH;
         }
-        return getDefaultState().withProperty(FACING, facing);
+        return getDefaultState().withProperty(FACING, facing).withProperty(UGLY, (meta & 8) == 8);
     }
 
     @Override
@@ -126,6 +133,9 @@ public class BlockAutoHammer extends BlockContainer {
                 world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
             }
         }
+        if(state.getValue(UGLY)) {
+            world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.uglySteelPlating)));
+        }
         super.breakBlock(world, pos, state);
     }
 
@@ -161,6 +171,15 @@ public class BlockAutoHammer extends BlockContainer {
     public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
         TileEntity tileEntity = world.getTileEntity(pos);
         return tileEntity != null ? ItemHandlerHelper.calcRedstoneFromInventory(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) : 0;
+    }
+
+    @Override
+    public boolean uglify(EntityPlayer player, World world, BlockPos pos, IBlockState state, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(!state.getValue(UGLY)) {
+            world.setBlockState(pos, state.withProperty(UGLY, true), 3);
+            return true;
+        }
+        return false;
     }
 
 }

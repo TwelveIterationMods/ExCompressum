@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "excompressum:ugly_steel_plating"
+  },
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " I ",
+    "IPI",
+    " I "
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:potato"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:has_oredict_item",
+      "value": "ingotSteel"
+    }
+  ]
+}

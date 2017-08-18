@@ -15,7 +15,7 @@
   "conditions": [
     {
       "type": "forge:mod_loaded",
-      "value": "tconstruct"
+      "modid": "tconstruct"
     }
   ]
 }

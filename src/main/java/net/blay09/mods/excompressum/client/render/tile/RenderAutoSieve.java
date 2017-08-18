@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.blay09.mods.excompressum.block.BlockHeavySieve;
 import net.blay09.mods.excompressum.block.ModBlocks;
-import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.client.render.model.ModelTinyHuman;
 import net.blay09.mods.excompressum.api.SieveModelBounds;
@@ -25,7 +24,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -44,11 +42,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
 
     @Override
     public void render(TileAutoSieveBase tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        if(!tileEntity.hasWorld()) {
-            return;
-        }
-        IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
-        if(!(state.getBlock() instanceof BlockAutoSieveBase)) {
+        if(!tileEntity.hasWorld() || tileEntity.isUgly()) {
             return;
         }
         if(sieveState == null) {
@@ -67,7 +61,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
         GlStateManager.pushMatrix();
         GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
-        GlStateManager.rotate(getRotationAngle(state.getValue(BlockAutoSieveBase.FACING)), 0f, 1f, 0f);
+        GlStateManager.rotate(RenderUtils.getRotationAngle(tileEntity.getFacing()), 0f, 1f, 0f);
 
         // Render the tiny human
         GlStateManager.pushMatrix();
@@ -148,20 +142,5 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
             }
         }
         bindTexture(resourceLocation);
-    }
-
-    private float getRotationAngle(EnumFacing facing) {
-        switch(facing) {
-            case NORTH:
-                return 0;
-            case EAST:
-                return -90;
-            case SOUTH:
-                return 180;
-            case WEST:
-                return 90;
-            default:
-                return -90;
-        }
     }
 }

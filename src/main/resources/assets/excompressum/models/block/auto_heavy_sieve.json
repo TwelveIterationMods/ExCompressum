@@ -2,7 +2,6 @@
 "__comment": "Designed by Blay09 with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
 "textures": {
     "texture_top": "excompressum:blocks/auto_heavy_frame_top",
-    "texture_glass": "excompressum:blocks/auto_frame_glass",
     "texture_side": "excompressum:blocks/auto_heavy_frame_side",
     "particle": "excompressum:blocks/auto_heavy_frame_side"
 },
@@ -79,7 +78,7 @@
 },
 {
     "__comment": "SideNorth",
-    "from": [ 1, 1, 1 ],
+    "from": [ 1, 1, 0.9 ],
     "to": [ 15, 15, 1.5 ],
     "faces": {
         "north": { "uv": [ 1, 1, 15, 15 ], "texture": "#texture_glass" }
@@ -88,14 +87,14 @@
 {
     "__comment": "SideSouth",
     "from": [ 1, 1, 14.5 ],
-    "to": [ 15, 15, 15 ],
+    "to": [ 15, 15, 15.1 ],
     "faces": {
         "south": { "uv": [ 1, 1, 15, 15 ], "texture": "#texture_glass" }
     }
 },
 {
     "__comment": "SideWest",
-    "from": [ 1, 1, 1 ],
+    "from": [ 0.9, 1, 1 ],
     "to": [ 1.5, 15, 15 ],
     "faces": {
         "west":  { "uv": [ 1, 1, 15, 15 ], "texture": "#texture_glass" }
@@ -104,7 +103,7 @@
 {
     "__comment": "SideEast",
     "from": [ 14.5, 1, 1 ],
-    "to": [ 15, 15, 15 ],
+    "to": [ 15.1, 15, 15 ],
     "faces": {
         "east":  { "uv": [ 1, 1, 15, 15 ], "texture": "#texture_glass" }
     }

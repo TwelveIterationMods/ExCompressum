@@ -16,7 +16,7 @@
   },
   "conditions": [
     {
-      "type": "excompressum:nihilo_item",
+      "type": "excompressum:has_nihilo_item",
       "value": "HAMMER_DIAMOND"
     }
   ]

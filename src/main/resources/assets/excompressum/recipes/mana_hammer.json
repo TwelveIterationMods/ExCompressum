@@ -21,7 +21,7 @@
   "conditions": [
     {
       "type": "forge:mod_loaded",
-      "value": "botania"
+      "modid": "botania"
     }
   ]
 }

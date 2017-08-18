@@ -26,7 +26,7 @@ public class BlockAutoCompressedHammer extends BlockAutoHammer {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
+        return new BlockStateContainer(this, FACING, UGLY);
     }
 
     @Override

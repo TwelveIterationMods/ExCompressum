@@ -2,12 +2,14 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
 import net.blay09.mods.excompressum.handler.GuiHandler;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -26,8 +28,10 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -36,9 +40,10 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class BlockAutoSieveBase extends BlockContainer {
+public abstract class BlockAutoSieveBase extends BlockContainer implements IUglyfiable {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+	public static final PropertyBool UGLY = PropertyBool.create("ugly");
 
 	private ItemStack lastHoverStack = ItemStack.EMPTY;
 	private String currentRandomName;
@@ -51,22 +56,26 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING);
+		return new BlockStateContainer(this, FACING, UGLY);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).ordinal();
+		int i = state.getValue(FACING).ordinal();
+		if(state.getValue(UGLY)) {
+			i |= 8;
+		}
+		return i;
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing facing = EnumFacing.getFront(meta);
+		EnumFacing facing = EnumFacing.getFront(meta & 7);
 		if(facing.getAxis() == EnumFacing.Axis.Y) {
 			facing = EnumFacing.NORTH;
 		}
-		return getDefaultState().withProperty(FACING, facing);
+		return getDefaultState().withProperty(FACING, facing).withProperty(UGLY, (meta & 8) == 8);
 	}
 
 	@Override
@@ -158,6 +167,9 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 				world.spawnEntity(entityItem);
 			}
 		}
+		if(state.getValue(UGLY)) {
+			world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.uglySteelPlating)));
+		}
 		super.breakBlock(world, pos, state);
 	}
 
@@ -225,4 +237,12 @@ public abstract class BlockAutoSieveBase extends BlockContainer {
 		}
 	}
 
+	@Override
+	public boolean uglify(EntityPlayer player, World world, BlockPos pos, IBlockState state, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if(!state.getValue(UGLY)) {
+			world.setBlockState(pos, state.withProperty(UGLY, true), 3);
+			return true;
+		}
+		return false;
+	}
 }

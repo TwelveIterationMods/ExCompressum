@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.tile;
 
 import cofh.redstoneflux.api.IEnergyReceiver;
+import net.blay09.mods.excompressum.block.BlockAutoHammer;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
@@ -23,6 +24,8 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.Optional;
@@ -89,6 +92,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     private boolean isDirty;
     private float progress;
 
+    private IBlockState cachedState;
     public float hammerAngle;
 
     @Override
@@ -266,7 +270,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
 
     @SideOnly(Side.CLIENT)
     private void spawnCrushParticles() {
-        if(!ModConfig.client.disableParticles) {
+        if(!ModConfig.client.disableParticles && !isUgly()) {
             IBlockState currentBlock = getCurrentBlock();
             if (currentBlock != null) {
                 for (int i = 0; i < 10; i++) {
@@ -378,5 +382,31 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
         return true;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+        cachedState = null;
+        return oldState.getBlock() != newState.getBlock();
+    }
+
+    public boolean isUgly() {
+        if(cachedState == null) {
+            cachedState = world.getBlockState(pos);
+        }
+        if(cachedState.getBlock() instanceof BlockAutoHammer) {
+            return cachedState.getValue(BlockAutoHammer.UGLY);
+        }
+        return false;
+    }
+
+    public EnumFacing getFacing() {
+        if(cachedState == null) {
+            cachedState = world.getBlockState(pos);
+        }
+        if(cachedState.getBlock() instanceof BlockAutoHammer) {
+            return cachedState.getValue(BlockAutoHammer.FACING);
+        }
+        return EnumFacing.NORTH;
     }
 }

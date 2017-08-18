@@ -1,6 +1,8 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.block.ModBlocks;
+import net.blay09.mods.excompressum.tile.TileAutoHammer;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -19,6 +21,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import static net.blay09.mods.excompressum.block.BlockAutoHammer.UGLY;
 
 public class ItemBatZapper extends Item {
 
@@ -41,6 +45,9 @@ public class ItemBatZapper extends Item {
             if (energy != null) {
                 energy.receiveEnergy(Integer.MAX_VALUE, false);
             }
+        }
+        if(tileEntity instanceof TileAutoHammer) {
+            world.setBlockState(pos, ModBlocks.autoHammer.getDefaultState().withProperty(UGLY, true), 3);
         }
         return zapBatter(world, player, player.getHeldItem(hand), (int) player.posX, (int) player.posY, (int) player.posZ, hand).getType();
     }

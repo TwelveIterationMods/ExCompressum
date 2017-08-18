@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum.client.render.tile;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.block.BlockAutoHammer;
 import net.blay09.mods.excompressum.client.ClientProxy;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -34,11 +33,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
 
     @Override
     public void render(TileAutoHammer tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        if(!tileEntity.hasWorld()) {
-            return;
-        }
-        IBlockState state = tileEntity.getWorld().getBlockState(tileEntity.getPos());
-        if(!(state.getBlock() instanceof BlockAutoHammer)) {
+        if(!tileEntity.hasWorld() || tileEntity.isUgly()) {
             return;
         }
         if (hammerItemStack.isEmpty()) {
@@ -62,6 +57,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         GlStateManager.pushMatrix();
         GlStateManager.color(1f, 1f, 1f, 1f);
         GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
+        GlStateManager.rotate(RenderUtils.getRotationAngle(tileEntity.getFacing()), 0f, 1f, 0f);
 
         if(tileEntity.shouldAnimate()) {
             tileEntity.hammerAngle += 0.4f * partialTicks;

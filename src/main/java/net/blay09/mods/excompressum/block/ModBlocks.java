@@ -144,7 +144,7 @@ public class ModBlocks {
 		});
 
 		// Auto Hammer
-		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(autoHammer), stack -> new ModelResourceLocation(BlockAutoHammer.registryName, "facing=north,hammer_mod=" + ExRegistro.getNihiloMod().getName()));
+		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(autoHammer), stack -> new ModelResourceLocation(BlockAutoHammer.registryName, "facing=north,hammer_mod=" + ExRegistro.getNihiloMod().getName() + ",ugly=" + ((stack.getItemDamage() & 8) == 8)));
 	}
 
 	public static void registerTileEntities() {

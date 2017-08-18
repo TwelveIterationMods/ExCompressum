@@ -4,6 +4,7 @@ import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.block.BlockAutoHammer;
 import net.blay09.mods.excompressum.client.render.ParticleSieve;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
@@ -25,6 +26,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.StringUtils;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -87,6 +90,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	private float foodBoost;
 	private int foodBoostTicks;
 
+	private IBlockState cachedState;
 	public float armAngle;
 	private int particleTicks;
 	private int particleCount;
@@ -186,7 +190,7 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 	@SideOnly(Side.CLIENT)
 	public void spawnParticles() {
-		if(!currentStack.isEmpty() && !ModConfig.client.disableParticles) {
+		if(!currentStack.isEmpty() && !ModConfig.client.disableParticles && !isUgly()) {
 			int metadata = getBlockMetadata();
 			IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
 			if (state != null) {
@@ -436,5 +440,31 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 
 	public boolean shouldAnimate() {
 		return !currentStack.isEmpty() && getEnergyStored(null) >= getEffectiveEnergy();
+	}
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		cachedState = null;
+		return oldState.getBlock() != newState.getBlock();
+	}
+
+	public boolean isUgly() {
+		if(cachedState == null) {
+			cachedState = world.getBlockState(pos);
+		}
+		if(cachedState.getBlock() instanceof BlockAutoHammer) {
+			return cachedState.getValue(BlockAutoHammer.UGLY);
+		}
+		return false;
+	}
+
+	public EnumFacing getFacing() {
+		if(cachedState == null) {
+			cachedState = world.getBlockState(pos);
+		}
+		if(cachedState.getBlock() instanceof BlockAutoHammer) {
+			return cachedState.getValue(BlockAutoHammer.FACING);
+		}
+		return EnumFacing.NORTH;
 	}
 }
