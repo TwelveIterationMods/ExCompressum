@@ -76,6 +76,7 @@ tile.excompressum:auto_compressed_hammer.name=Auto Compressed Hammer
 tile.excompressum:auto_sieve.name=Auto Sieve
 tile.excompressum:mana_sieve.name=Mana Sieve
 tile.excompressum:auto_heavy_sieve.name=Auto Heavy Sieve
+tile.excompressum:auto_compressor_rationing.name=Auto Compressor (Rationing)
 
 entity.excompressum.AngryChicken.name=Angry Chicken
 

@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "excompressum:auto_compressor",
+    "textures": {
+      "up": "excompressum:blocks/auto_compressor_top_rationing"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}

@@ -21,32 +21,35 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class ModBlocks {
 
 	@GameRegistry.ObjectHolder(BlockCompressed.name)
-	public static final Block compressedBlock = Blocks.AIR;
+	public static Block compressedBlock;
 
 	@GameRegistry.ObjectHolder(BlockHeavySieve.name)
-	public static final Block heavySieve = Blocks.AIR;
+	public static Block heavySieve;
 
 	@GameRegistry.ObjectHolder(BlockWoodenCrucible.name)
-	public static final Block woodenCrucible = Blocks.AIR;
+	public static Block woodenCrucible;
 
 	@GameRegistry.ObjectHolder(BlockBait.name)
-	public static final Block bait = Blocks.AIR;
+	public static Block bait;
 
 	@GameRegistry.ObjectHolder(BlockAutoHammer.name)
-	public static final Block autoHammer = Blocks.AIR;
+	public static Block autoHammer;
 
 	@GameRegistry.ObjectHolder(BlockAutoCompressedHammer.name)
-	public static final Block autoCompressedHammer = Blocks.AIR;
+	public static Block autoCompressedHammer;
 
 	@GameRegistry.ObjectHolder(BlockAutoHeavySieve.name)
-	public static final Block autoHeavySieve = Blocks.AIR;
+	public static Block autoHeavySieve;
 
 	@GameRegistry.ObjectHolder(BlockAutoSieve.name)
-	public static final Block autoSieve = Blocks.AIR;
+	public static Block autoSieve;
 
 	@GameRegistry.ObjectHolder(BlockAutoCompressor.name)
-	public static final Block autoCompressor = Blocks.AIR;
+	public static Block autoCompressor;
 
+	@GameRegistry.ObjectHolder(BlockAutoCompressorRationing.name)
+	public static Block autoCompressorRationing;
+	
 	public static void register(IForgeRegistry<Block> registry) {
 		registry.registerAll(
 				new BlockCompressed().setRegistryName(BlockCompressed.name),
@@ -57,7 +60,8 @@ public class ModBlocks {
 				new BlockAutoSieve().setRegistryName(BlockAutoSieve.name),
 				new BlockAutoCompressedHammer().setRegistryName(BlockAutoCompressedHammer.name),
 				new BlockAutoHeavySieve().setRegistryName(BlockAutoHeavySieve.name),
-				new BlockAutoCompressor().setRegistryName(BlockAutoCompressor.name)
+				new BlockAutoCompressor().setRegistryName(BlockAutoCompressor.name),
+				new BlockAutoCompressorRationing().setRegistryName(BlockAutoCompressorRationing.name)
 		);
 	}
 
@@ -71,7 +75,8 @@ public class ModBlocks {
 				new ItemBlock(autoCompressedHammer).setRegistryName(BlockAutoCompressedHammer.name),
 				new ItemBlock(autoSieve).setRegistryName(BlockAutoSieve.name),
 				new ItemBlock(autoHeavySieve).setRegistryName(BlockAutoHeavySieve.name),
-				new ItemBlock(autoCompressor).setRegistryName(BlockAutoCompressor.name)
+				new ItemBlock(autoCompressor).setRegistryName(BlockAutoCompressor.name),
+				new ItemBlock(autoCompressorRationing).setRegistryName(BlockAutoCompressorRationing.name)
 		);
 	}
 
@@ -80,6 +85,7 @@ public class ModBlocks {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoSieve), 0, new ModelResourceLocation(BlockAutoSieve.registryName, "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoHeavySieve), 0, new ModelResourceLocation(BlockAutoHeavySieve.registryName, "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoCompressor), 0, new ModelResourceLocation(BlockAutoCompressor.registryName, "inventory"));
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoCompressorRationing), 0, new ModelResourceLocation(BlockAutoCompressorRationing.registryName, "inventory"));
 
 		// Baits
 		ResourceLocation[] baitVariants = new ResourceLocation[BlockBait.Type.values.length];
@@ -157,5 +163,6 @@ public class ModBlocks {
 		GameRegistry.registerTileEntity(TileAutoSieve.class, ExCompressum.MOD_ID + ":auto_sieve");
 		GameRegistry.registerTileEntity(TileAutoHeavySieve.class, ExCompressum.MOD_ID + ":auto_heavy_sieve");
 		GameRegistry.registerTileEntity(TileAutoCompressor.class, ExCompressum.MOD_ID + ":auto_compressor");
+		GameRegistry.registerTileEntity(TileAutoCompressorRationing.class, ExCompressum.MOD_ID + ":auto_compressor_rationing");
 	}
 }

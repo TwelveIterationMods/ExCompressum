@@ -64,6 +64,10 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
     private CompressedRecipe currentRecipe = null;
     private float progress;
 
+    public boolean shouldCompress(Multiset<CompressedRecipe> inputItems, CompressedRecipe compressedRecipe) {
+        return inputItems.count(compressedRecipe) >= compressedRecipe.getCount();
+    }
+
     @Override
     public void update() {
         int effectiveEnergy = getEffectiveEnergy();
@@ -81,7 +85,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
                 }
                 for (CompressedRecipe compressedRecipe : inputItems.elementSet()) {
                     Ingredient ingredient = compressedRecipe.getIngredient();
-                    if (inputItems.count(compressedRecipe) >= compressedRecipe.getCount()) {
+                    if (shouldCompress(inputItems, compressedRecipe)) {
                         int space = 0;
                         for(int i = 0; i < outputSlots.getSlots(); i++) {
                             ItemStack slotStack = outputSlots.getStackInSlot(i);
