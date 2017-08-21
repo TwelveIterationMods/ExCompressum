@@ -32,7 +32,15 @@ public class CompressedRecipeRegistry {
                 Ingredient first = ingredients.get(0);
                 boolean passes = true;
                 for(int i = 1; i < count; i++) {
-                    if(first.getValidItemStacksPacked() != ingredients.get(i).getValidItemStacksPacked()) {
+                    Ingredient other = ingredients.get(i);
+                    boolean passesInner = false;
+                    for(ItemStack itemStack : other.getMatchingStacks()) {
+                        if(first.apply(itemStack)) {
+                            passesInner = true;
+                            break;
+                        }
+                    }
+                    if(!passesInner) {
                         passes = false;
                         break;
                     }
@@ -42,7 +50,9 @@ public class CompressedRecipeRegistry {
                         recipesSmall.add(new CompressedRecipe(first, 4, recipe.getRecipeOutput().copy()));
                     }
                 } else if(count == 9 && recipe.canFit(3, 3)) {
-                    recipes.add(new CompressedRecipe(first, 9, recipe.getRecipeOutput().copy()));
+                    if(passes) {
+                        recipes.add(new CompressedRecipe(first, 9, recipe.getRecipeOutput().copy()));
+                    }
                 }
             }
         }
