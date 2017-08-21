@@ -4,35 +4,14 @@
     "model": "excompressum:auto_hammer",
     "transform": "forge:default-block",
     "textures": {
-      "texture_glass": "excompressum:blocks/auto_frame_glass"
+      "texture_glass": "excompressum:blocks/auto_frame_glass",
+      "hammer": "excompressum:items/hammer_diamond"
     }
   },
   "variants": {
     "normal": [{}],
     "inventory": [{
     }],
-    "hammer_mod": {
-      "none": {
-      },
-      "omnia": {
-        "model": "excompressum:auto_hammer_inventory",
-        "textures": {
-          "hammer": "exnihiloomnia:items/hammer_diamond"
-        }
-      },
-      "adscensio": {
-        "model": "excompressum:auto_hammer_inventory",
-        "textures": {
-          "hammer": "exnihiloadscensio:items/hammer_diamond"
-        }
-      },
-      "creatio": {
-        "model": "excompressum:auto_hammer_inventory",
-        "textures": {
-          "hammer": "exnihilocreatio:items/hammerdiamond"
-        }
-      }
-    },
     "facing": {
       "north": {
       },

@@ -32,7 +32,8 @@ public class BotaniaAddon implements IAddon {
 
     public static Item manaHammer;
 
-    public BotaniaAddon() {
+    @Override
+    public void preInit() {
         BotaniaAPI.registerSubTile(SUBTILE_ORECHID_EVOLVED, SubTileOrechidEvolved.class);
     }
 

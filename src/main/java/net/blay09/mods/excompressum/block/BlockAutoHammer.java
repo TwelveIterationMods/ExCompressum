@@ -40,7 +40,6 @@ public class BlockAutoHammer extends BlockContainer implements IUglyfiable {
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool UGLY = PropertyBool.create("ugly");
-    public static final PropertyEnum<ExNihiloProvider.NihiloMod> HAMMER_MOD = PropertyEnum.create("hammer_mod", ExNihiloProvider.NihiloMod.class);
 
     public BlockAutoHammer() {
         super(Material.IRON);
@@ -51,7 +50,7 @@ public class BlockAutoHammer extends BlockContainer implements IUglyfiable {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, HAMMER_MOD, UGLY);
+        return new BlockStateContainer(this, FACING, UGLY);
     }
 
     @Override
@@ -111,12 +110,6 @@ public class BlockAutoHammer extends BlockContainer implements IUglyfiable {
             player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_HAMMER, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return state.withProperty(HAMMER_MOD, ExNihiloProvider.NihiloMod.NONE); // Property is inventory-only
     }
 
     @Override

@@ -95,7 +95,6 @@ public class ExCompressum {
 		MinecraftForge.EVENT_BUS.register(new CompressedEnemyHandler());
 		MinecraftForge.EVENT_BUS.register(new ChickenStickHandler());
 
-		registerAddon(Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
 		registerAddon(Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
 		registerAddon(Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
 		registerAddon(Compat.EXNIHILO_CREATIO, "net.blay09.mods.excompressum.compat.exnihilocreatio.ExNihiloCreatioAddon");
@@ -104,7 +103,14 @@ public class ExCompressum {
 			ExRegistro.instance = new NihilisticNihiloProvider();
 		}
 
+//		registerAddon(Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon"); TODO disabled until Botania release
+		registerAddon(Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
+
 		MinecraftForge.EVENT_BUS.register(proxy);
+
+		for(IAddon addon : addons) {
+			addon.preInit();
+		}
 	}
 
 	@Mod.EventHandler
@@ -141,9 +147,6 @@ public class ExCompressum {
 
 		SieveMeshRegistry.registerDefaults();
 		AutoSieveSkinRegistry.load();
-
-		registerAddon(Compat.CRAFTTWEAKER, "net.blay09.mods.excompressum.compat.minetweaker.MineTweakerAddon");
-		registerAddon(Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
 
 		for (IAddon addon : addons) {
 			addon.postInit();

@@ -1,7 +1,11 @@
 {
-  "result": {
+  "result_soon": {
     "type": "excompressum:nihilo_item",
     "value": "DUST",
+    "count": 9
+  },
+  "result": {
+    "item": "exnihilocreatio:block_dust",
     "count": 9
   },
   "type": "forge:ore_shapeless",

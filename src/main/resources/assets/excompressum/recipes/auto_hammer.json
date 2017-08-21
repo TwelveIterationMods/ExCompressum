@@ -14,7 +14,7 @@
     },
     "H": {
       "type": "excompressum:nihilo_item",
-      "ore": "HAMMMER_DIAMOND"
+      "value": "HAMMER_DIAMOND"
     },
     "I": {
       "type": "forge:ore_dict",

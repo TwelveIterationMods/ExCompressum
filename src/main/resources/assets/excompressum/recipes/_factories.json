@@ -1,7 +1,4 @@
 {
-  "recipes": {
-    "nihilo_recipe": "net.blay09.mods.excompressum.crafting.NihiloRecipe"
-  },
   "ingredients": {
     "nihilo_item": "net.blay09.mods.excompressum.crafting.NihiloItemIngredient"
   },
