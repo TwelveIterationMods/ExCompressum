@@ -4,7 +4,7 @@ import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.block.BlockAutoHammer;
+import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
 import net.blay09.mods.excompressum.client.render.ParticleSieve;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
@@ -461,8 +461,8 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		if (cachedState == null) {
 			cachedState = world.getBlockState(pos);
 		}
-		if (cachedState.getBlock() instanceof BlockAutoHammer) {
-			return cachedState.getValue(BlockAutoHammer.UGLY);
+		if (cachedState.getBlock() instanceof BlockAutoSieveBase) {
+			return cachedState.getValue(BlockAutoSieveBase.UGLY);
 		}
 		return false;
 	}
@@ -471,8 +471,8 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 		if (cachedState == null) {
 			cachedState = world.getBlockState(pos);
 		}
-		if (cachedState.getBlock() instanceof BlockAutoHammer) {
-			return cachedState.getValue(BlockAutoHammer.FACING);
+		if (cachedState.getBlock() instanceof BlockAutoSieveBase) {
+			return cachedState.getValue(BlockAutoSieveBase.FACING);
 		}
 		return EnumFacing.NORTH;
 	}

@@ -42,7 +42,7 @@ public class CompressedRecipeRegistry {
                         recipesSmall.add(new CompressedRecipe(first, 4, recipe.getRecipeOutput().copy()));
                     }
                 } else if(count == 9 && recipe.canFit(3, 3)) {
-                    recipesSmall.add(new CompressedRecipe(first, 9, recipe.getRecipeOutput().copy()));
+                    recipes.add(new CompressedRecipe(first, 9, recipe.getRecipeOutput().copy()));
                 }
             }
         }

@@ -7,9 +7,14 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import slimeknights.tconstruct.library.modifiers.IToolMod;
 import slimeknights.tconstruct.library.modifiers.ModifierTrait;
+import slimeknights.tconstruct.library.utils.TagUtil;
 import slimeknights.tconstruct.library.utils.ToolHelper;
 
 import java.util.Collection;
@@ -52,6 +57,23 @@ public class ModSmashingII extends ModifierTrait {
 		event.setDropChance(1f);
 		for (ItemStack itemStack : rewards) {
 			event.getDrops().add(itemStack);
+		}
+	}
+
+
+	@Override
+	public void apply(NBTTagCompound root) {
+		super.apply(root);
+		NBTTagList traits = TagUtil.getTraitsTagList(root);
+		int compressingIndex = -1;
+		for(int i = 0; i < traits.tagCount(); ++i) {
+			if(traits.getStringTagAt(i).equals(Compat.TCONSTRUCT_TRAIT_COMPRESSING)) {
+				compressingIndex = i;
+			}
+		}
+		if(compressingIndex != -1) {
+			traits.appendTag(traits.removeTag(compressingIndex));
+			TagUtil.setTraitsTagList(root, traits);
 		}
 	}
 

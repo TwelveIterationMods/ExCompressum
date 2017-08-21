@@ -21,4 +21,5 @@ public class Compat {
 
 	public static final String TCONSTRUCT_TRAIT_SMASHING = "exnihilo_smashing";
 	public static final String TCONSTRUCT_TRAIT_SMASHINGII = "excompressum:smashingii";
+	public static final String TCONSTRUCT_TRAIT_COMPRESSING = "excompressum:compressing";
 }

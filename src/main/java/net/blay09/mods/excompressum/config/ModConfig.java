@@ -184,7 +184,11 @@ public class ModConfig {
 	public static class Compat {
 		@Config.Name("Enable Smashing II Modifier (TConstruct)")
 		@Config.Comment("If set to true, adding a double compressed diamond hammer will add the Smashing II modifier to a Tinkers Construct tool, which allows smashing of compressed blocks.")
-		public boolean enableModifiers = true;
+		public boolean enableSmashingModifier = true;
+
+		@Config.Name("Enable Compressing Modifier (TConstruct)")
+		@Config.Comment("If set to true, adding an auto compressor will add the Compressing modifier to a Tinkers Construct tool, which will automatically compress hammered compressed blocks.")
+		public boolean enableCompressingModifier = true;
 
 		@Config.Name("Enable Evolved Orechid (Botania)")
 		@Config.Comment("Setting this to false will disable the Evolved Orechid.")

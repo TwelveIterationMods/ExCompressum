@@ -36,6 +36,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -62,10 +63,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 	}
 
 	@Override
-	public void init() {
-		sieveEfficiency = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sieveefficiency");
-		sieveFortune = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sievefortune");
-
+	public void registriesComplete() {
 		itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood", OreDictionary.WILDCARD_VALUE));
 		itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammer_stone", OreDictionary.WILDCARD_VALUE));
 		itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammer_iron", OreDictionary.WILDCARD_VALUE));
@@ -80,7 +78,12 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("block_infested_leaves", 0));
 		itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("block_netherrack_crushed", 0));
 		itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("block_endstone_crushed", 0));
+	}
 
+	@Override
+	public void init() {
+		sieveEfficiency = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sieveefficiency");
+		sieveFortune = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sievefortune");
 
 		ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
 		if(!stringMeshItem.isEmpty()) {

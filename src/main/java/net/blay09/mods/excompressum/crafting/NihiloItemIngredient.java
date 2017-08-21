@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.crafting;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.item.ItemStack;
@@ -12,6 +13,9 @@ import net.minecraftforge.items.ItemHandlerHelper;
 public class NihiloItemIngredient implements IIngredientFactory {
 	@Override
 	public Ingredient parse(JsonContext context, JsonObject json) {
+		if(!json.has("value")) {
+			throw new JsonSyntaxException("Missing key 'value', expected string");
+		}
 		String key = json.get("value").getAsString();
 		ExNihiloProvider.NihiloItems nihiloItem = ExNihiloProvider.NihiloItems.valueOf(key);
 		ItemStack itemStack = ExRegistro.getNihiloItem(nihiloItem);

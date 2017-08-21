@@ -36,7 +36,7 @@ tooltip.excompressum:auto_sieve=%s in a Box™
 tooltip.excompressum:auto_heavy_sieve=%s in a Heavy Box™
 tooltip.excompressum:mana_sieve=%s in a Magical Box™
 tooltip.excompressum:consumingEnergy=Consuming %d FE/t
-tooltip.excompressum:ugly_steel_plating=Apply on Auto Sieve or Auto Hammer to make them visually unappealing.
+tooltip.excompressum:ugly_steel_plating=Apply on machine to make it visually unappealing.
 
 info.excompressum:baitCanSpawn=This bait will work in this environment. Move out of range so you don't scare the animals away!
 info.excompressum:baitNearbyBait=There's too many baits in this area. Way too suspicious.
@@ -90,6 +90,8 @@ tile.botania:flower.excompressum.orechidEvolved.name=Evolved Orechid
 tile.botania:flower.excompressum.orechidEvolved.reference=Orechid: Evolved: Skyblock: The Movie
 
 modifier.excompressum:smashingii.name=Smashing II
+modifier.excompressum:compressing.name=Compressing
+gui.error.invalid_trait_order=
 
 waila.excompressum:baitTooClose=You are too close.
 waila.excompressum:baitTooClose2=The animals are scared away.

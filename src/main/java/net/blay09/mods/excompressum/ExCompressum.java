@@ -25,6 +25,7 @@ import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -199,6 +200,16 @@ public class ExCompressum {
 
 		for (IAddon addon : instance.addons) {
 			addon.registerItems(event.getRegistry());
+		}
+	}
+
+	@SubscribeEvent
+	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
+		// We're not actually registering enchantments. We just need a hook that runs in between registerItems/Blocks and loadRecipes.
+		// Sadly the Forge peoples ignored my concern about load order in regards to the registry events, and there's no other hook in between.
+		// So this is the best we can get.
+		for (IAddon addon : instance.addons) {
+			addon.registriesComplete();
 		}
 	}
 
