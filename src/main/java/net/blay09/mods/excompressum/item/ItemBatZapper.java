@@ -38,14 +38,14 @@ public class ItemBatZapper extends Item {
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        // Debug code for free energy TODO comment me out before release
-        TileEntity tileEntity = world.getTileEntity(pos);
-        if(tileEntity != null) {
-            IEnergyStorage energy = tileEntity.getCapability(CapabilityEnergy.ENERGY, null);
-            if (energy != null) {
-                energy.receiveEnergy(Integer.MAX_VALUE, false);
-            }
-        }
+        // Debug code for free energy
+//        TileEntity tileEntity = world.getTileEntity(pos);
+//        if(tileEntity != null) {
+//            IEnergyStorage energy = tileEntity.getCapability(CapabilityEnergy.ENERGY, null);
+//            if (energy != null) {
+//                energy.receiveEnergy(Integer.MAX_VALUE, false);
+//            }
+//        }
         return zapBatter(world, player, player.getHeldItem(hand), (int) player.posX, (int) player.posY, (int) player.posZ, hand).getType();
     }
 

@@ -66,9 +66,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
 
         // Render the hammers
         GlStateManager.pushMatrix();
-        if(hammerItemStack.getItem() != Compat.TCONSTRUCT_HAMMER) { // TODO this isn't working
-            GlStateManager.rotate(180f, 0f, 1f, 0f);
-        }
+        GlStateManager.rotate(180f, 0f, 1f, 0f);
         GlStateManager.rotate((float) Math.sin(tileEntity.hammerAngle) * 15, 0f, 0f, 1f);
         GlStateManager.translate(0.15f, 0.6f, 0f);
         GlStateManager.scale(0.5f, 0.5f, 0.5f);
@@ -77,7 +75,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         if(!firstHammer.isEmpty()) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0f, 0f, 0.33f);
-            GlStateManager.rotate(10f, 0f, 1f, 0f);
+            GlStateManager.rotate(170f, 0f, 1f, 0f);
             itemRenderer.renderItem(firstHammer, ItemCameraTransforms.TransformType.FIXED);
             GlStateManager.popMatrix();
         }
@@ -85,7 +83,7 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
         if(!secondHammer.isEmpty()) {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0f, 0f, -0.33f);
-            GlStateManager.rotate(-10f, 0f, 1f, 0f);
+            GlStateManager.rotate(190f, 0f, 1f, 0f);
             itemRenderer.renderItem(secondHammer, ItemCameraTransforms.TransformType.FIXED);
             GlStateManager.popMatrix();
         }
