@@ -13,13 +13,11 @@ public class TConstructAddon implements IAddon {
         if(ModConfig.compat.enableSmashingModifier) {
             ModSmashingII smashingII = new ModSmashingII();
             smashingII.addItem(ModItems.doubleCompressedDiamondHammer);
-            TinkerRegistry.registerModifier(smashingII);
         }
 
         if(ModConfig.compat.enableCompressingModifier) {
             ModCompressing compressing = new ModCompressing();
             compressing.addItem(Item.getItemFromBlock(ModBlocks.autoCompressor));
-            TinkerRegistry.registerModifier(compressing);
         }
     }
 }
