@@ -82,8 +82,8 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public void init() {
-		sieveEfficiency = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sieveefficiency");
-		sieveFortune = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sievefortune");
+		sieveEfficiency = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sieve_efficiency");
+		sieveFortune = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sieve_fortune");
 
 		ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
 		if(!stringMeshItem.isEmpty()) {
