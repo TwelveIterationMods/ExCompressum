@@ -59,12 +59,18 @@ public class CompressedEnemyHandler {
                     if(StupidUtils.hasSilkTouchModifier((EntityLivingBase) event.getSource().getTrueSource())) {
                         return;
                     }
-                    int entityId = EntityList.getID(event.getEntityLiving().getClass());
+
+                    ResourceLocation resourceLocation = EntityList.getKey(event.getEntity());
+                    if(resourceLocation == null) {
+                        return;
+                    }
+
                     for(int i = 0; i < ModConfig.compressedMobs.size; i++) {
-                        EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByID(entityId, event.getEntity().world);
+                        EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByIDFromName(resourceLocation, event.getEntity().world);
                         if(entity == null) {
                             return;
                         }
+
                         if(((EntityLivingBase) event.getEntity()).isChild()) {
                             if(entity instanceof EntityZombie) {
                                 ((EntityZombie) entity).setChild(true);
