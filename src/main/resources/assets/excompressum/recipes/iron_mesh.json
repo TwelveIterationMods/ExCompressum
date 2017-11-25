@@ -14,8 +14,11 @@
   },
   "conditions": [
     {
-      "type": "excompressum:has_nihilo_item",
-      "value": "IRON_MESH"
+      "type": "forge:not",
+      "value": {
+        "type": "excompressum:has_nihilo_item",
+        "value": "IRON_MESH"
+      }
     }
   ]
 }
