@@ -363,26 +363,29 @@ public abstract class TileAutoSieveBase extends TileEntityBase implements ITicka
 	}
 
 	private void grabProfile() {
-		try {
-			if (!world.isRemote && customSkin != null && !StringUtils.isNullOrEmpty(customSkin.getName())) {
-				if (!customSkin.isComplete() || !customSkin.getProperties().containsKey("textures")) {
-					GameProfile gameProfile = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache().getGameProfileForUsername(customSkin.getName());
-					if (gameProfile != null) {
-						Property property = Iterables.getFirst(gameProfile.getProperties().get("textures"), null);
-						if (property == null) {
-							gameProfile = FMLCommonHandler.instance().getMinecraftServerInstance().getMinecraftSessionService().fillProfileProperties(gameProfile, true);
+		// I hope this doesn't break anything lol
+		new Thread(() -> {
+			try {
+				if (!world.isRemote && customSkin != null && !StringUtils.isNullOrEmpty(customSkin.getName())) {
+					if (!customSkin.isComplete() || !customSkin.getProperties().containsKey("textures")) {
+						GameProfile gameProfile = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache().getGameProfileForUsername(customSkin.getName());
+						if (gameProfile != null) {
+							Property property = Iterables.getFirst(gameProfile.getProperties().get("textures"), null);
+							if (property == null) {
+								gameProfile = FMLCommonHandler.instance().getMinecraftServerInstance().getMinecraftSessionService().fillProfileProperties(gameProfile, true);
+							}
+							customSkin = gameProfile;
+							isDirty = true;
+							markDirty();
 						}
-						customSkin = gameProfile;
-						isDirty = true;
-						markDirty();
 					}
 				}
+			} catch (ClassCastException ignored) {
+				// This is really dumb
+				// Vanilla's Yggdrasil can fail with a "com.google.gson.JsonPrimitive cannot be cast to com.google.gson.JsonObject" exception, likely their server was derping or whatever. I have no idea
+				// And there doesn't seem to be safety checks for that in Vanilla code so I have to do it here.
 			}
-		} catch (ClassCastException ignored) {
-			// This is really dumb
-			// Vanilla's Yggdrasil can fail with a "com.google.gson.JsonPrimitive cannot be cast to com.google.gson.JsonObject" exception, likely their server was derping or whatever. I have no idea
-			// And there doesn't seem to be safety checks for that in Vanilla code so I have to do it here.
-		}
+		}).start();
 	}
 
 	public float getSpeedMultiplier() {
