@@ -18,6 +18,10 @@ public class ModConfig {
 		@Config.Name("Enable Wood Chippings")
 		@Config.Comment("If set to true, wood can be hammered into wood chippings, which can be composted into dirt.")
 		public boolean enableWoodChippings = true;
+
+		@Config.Name("Disable Creatio Wooden Crucible")
+		@Config.Comment("Set to false if you need the Ex Nihilo Creatio wooden crucible for some reason. Note it'll cause a recipe conflict you'll have to fix via other means.")
+		public boolean disableCreatioWoodenCrucible = true;
 	}
 
 	public static class Client {

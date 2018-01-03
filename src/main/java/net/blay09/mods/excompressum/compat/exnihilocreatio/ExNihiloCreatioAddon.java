@@ -25,6 +25,7 @@ import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -32,11 +33,18 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.GameData;
+import net.minecraftforge.registries.RegistryManager;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -53,6 +61,8 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 	private final SieveModelBounds bounds;
 	private Enchantment sieveEfficiency;
 	private Enchantment sieveFortune;
+
+	private ItemStack woodenCrucible;
 
 	public ExNihiloCreatioAddon() {
 		MinecraftForge.EVENT_BUS.register(this);
@@ -78,6 +88,8 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("block_infested_leaves", 0));
 		itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("block_netherrack_crushed", 0));
 		itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("block_endstone_crushed", 0));
+
+		woodenCrucible = findBlock("block_crucible_wood", 0);
 	}
 
 	@Override
@@ -86,7 +98,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		sieveFortune = Enchantment.getEnchantmentByLocation(Compat.EXNIHILO_CREATIO + ":sieve_fortune");
 
 		ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
-		if(!stringMeshItem.isEmpty()) {
+		if (!stringMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry stringMesh = new SieveMeshRegistryEntry(stringMeshItem);
 			stringMesh.setMeshLevel(1);
 			stringMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/string_mesh"));
@@ -94,7 +106,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		}
 
 		ItemStack flintMeshItem = findItem("item_mesh", 2);
-		if(!flintMeshItem.isEmpty()) {
+		if (!flintMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry flintMesh = new SieveMeshRegistryEntry(flintMeshItem);
 			flintMesh.setMeshLevel(2);
 			flintMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/flint_mesh"));
@@ -102,7 +114,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		}
 
 		ItemStack ironMeshItem = getNihiloItem(NihiloItems.IRON_MESH);
-		if(!ironMeshItem.isEmpty()) {
+		if (!ironMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(ironMeshItem);
 			ironMesh.setMeshLevel(3);
 			ironMesh.setHeavy(true);
@@ -111,7 +123,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		}
 
 		ItemStack diamondMeshItem = findItem("item_mesh", 4);
-		if(!diamondMeshItem.isEmpty()) {
+		if (!diamondMeshItem.isEmpty()) {
 			SieveMeshRegistryEntry diamondMesh = new SieveMeshRegistryEntry(diamondMeshItem);
 			diamondMesh.setMeshLevel(4);
 			diamondMesh.setHeavy(true);
@@ -120,9 +132,28 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 		}
 	}
 
+	@Override
+	public void postInit() {
+	}
+
+	@SubscribeEvent
+	public void onRegisterRecipes(RegistryEvent.Register<IRecipe> event) {
+		if (ModConfig.general.disableCreatioWoodenCrucible) {
+			RegistryManager.ACTIVE.getRegistry(GameData.RECIPES).remove(new ResourceLocation(Compat.EXNIHILO_CREATIO, "crucible_wood"));
+		}
+	}
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onItemTooltip(ItemTooltipEvent event) {
+		if (ModConfig.general.disableCreatioWoodenCrucible && event.getItemStack().getItem() == woodenCrucible.getItem()) {
+			event.getToolTip().add(TextFormatting.RED + I18n.format("tooltip.excompressum:disableFakeWoodenCrucible"));
+		}
+	}
+
 	@SubscribeEvent
 	public void onRegistryReload(RegistryReloadedEvent event) {
-		if(ModConfig.general.enableWoodChippings) {
+		if (ModConfig.general.enableWoodChippings) {
 			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
 			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
 			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
@@ -148,10 +179,10 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count) {
 		List<Siftable> siftables = SieveRegistry.getDrops(sourceStack);
-		if(siftables != null) {
+		if (siftables != null) {
 			List<HeavySieveReward> rewards = Lists.newArrayList();
 			for (Siftable siftable : siftables) {
-				if(siftable.getDrop().getItem() == null) {
+				if (siftable.getDrop().getItem() == null) {
 //					ExCompressum.logger.error("Tried to generate Heavy Sieve rewards from a null reward entry: {}", sourceStack.getItem().getRegistryName());
 					continue;
 				}
@@ -167,7 +198,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 	private ItemStack findItem(String name, int withMetadata) {
 		ResourceLocation location = new ResourceLocation(Compat.EXNIHILO_CREATIO, name);
 		Item item = Item.REGISTRY.getObject(location);
-		if(item != null) {
+		if (item != null) {
 			return new ItemStack(item, 1, withMetadata);
 		}
 		return ItemStack.EMPTY;
@@ -175,7 +206,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 
 	private ItemStack findBlock(String name, int withMetadata) {
 		ResourceLocation location = new ResourceLocation(Compat.EXNIHILO_CREATIO, name);
-		if(Block.REGISTRY.containsKey(location)) {
+		if (Block.REGISTRY.containsKey(location)) {
 			return new ItemStack(Block.REGISTRY.getObject(location), 1, withMetadata);
 		}
 		return ItemStack.EMPTY;
@@ -206,9 +237,9 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public boolean isSiftableWithMesh(IBlockState state, SieveMeshRegistryEntry sieveMesh) {
 		List<Siftable> siftables = SieveRegistry.getDrops(new BlockInfo(state));
-		if(siftables != null) {
-			for(Siftable siftable : siftables) {
-				if(siftable.getMeshLevel() == sieveMesh.getMeshLevel()) {
+		if (siftables != null) {
+			for (Siftable siftable : siftables) {
+				if (siftable.getMeshLevel() == sieveMesh.getMeshLevel()) {
 					return true;
 				}
 			}
@@ -219,14 +250,14 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
 		List<Siftable> rewards = SieveRegistry.getDrops(new BlockInfo(state));
-		if(rewards != null) {
+		if (rewards != null) {
 			List<ItemStack> list = Lists.newArrayList();
-			for(Siftable reward : rewards) {
-				if(reward.getDrop().getItem() == null) {
+			for (Siftable reward : rewards) {
+				if (reward.getDrop().getItem() == null) {
 					continue;
 				}
 				int tries = rand.nextInt((int) luck + 1) + 1;
-				for(int i = 0; i < tries; i++) {
+				for (int i = 0; i < tries; i++) {
 					if (sieveMesh.getMeshLevel() == reward.getMeshLevel() && rand.nextDouble() < (double) reward.getChance()) {
 						list.add(reward.getDrop().getItemStack());
 					}
@@ -240,21 +271,16 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand) {
 		List<CrookReward> rewards = CrookRegistry.getRewards(state);
-		if(rewards != null) {
+		if (rewards != null) {
 			List<ItemStack> list = Lists.newArrayList();
 			for (CrookReward reward : rewards) {
-				if(rand.nextFloat() <= reward.getChance() + reward.getFortuneChance() * luck) {
+				if (rand.nextFloat() <= reward.getChance() + reward.getFortuneChance() * luck) {
 					list.add(reward.getStack().copy());
 				}
 			}
 			return list;
 		}
 		return Collections.emptyList();
-	}
-
-	@Override
-	public void postInit() {
-
 	}
 
 	@Override
@@ -285,9 +311,9 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 	@Override
 	public IBlockState getSieveRenderState() {
 		ItemStack itemStack = getNihiloItem(NihiloItems.SIEVE);
-		if(!itemStack.isEmpty()) {
+		if (!itemStack.isEmpty()) {
 			Block block = getBlockFromItem(itemStack.getItem());
-			if(block instanceof BlockSieve) {
+			if (block instanceof BlockSieve) {
 				// apparently Creatio thinks "default state" means "invalid state"
 				return block.getDefaultState().withProperty(BlockSieve.MESH, BlockSieve.MeshType.NONE);
 			}
