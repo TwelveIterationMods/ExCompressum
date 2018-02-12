@@ -11,7 +11,8 @@
   "key": {
     "#": {
       "type": "excompressum:nihilo_item",
-      "value": "HAMMER_STONE"
+      "value": "HAMMER_STONE",
+      "data": 0
     }
   },
   "conditions": [

@@ -1,10 +1,12 @@
 package net.blay09.mods.excompressum.compat.botania;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.block.BlockManaSieve;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.item.ItemManaHammer;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,11 +32,18 @@ public class BotaniaAddon implements IAddon {
 
     public static LexiconEntry lexiconOrechidEvolved;
 
+    public static Block manaSieve;
+
     public static Item manaHammer;
 
     @Override
     public void preInit() {
         BotaniaAPI.registerSubTile(SUBTILE_ORECHID_EVOLVED, SubTileOrechidEvolved.class);
+    }
+
+    @Override
+    public void registerBlocks(IForgeRegistry<Block> registry) {
+        registry.register(manaSieve = new BlockManaSieve().setRegistryName("mana_sieve"));
     }
 
     @Override
