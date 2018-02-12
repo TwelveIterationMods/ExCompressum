@@ -120,7 +120,7 @@ public class BlockWoodenCrucible extends BlockContainer {
             }
 
             if (!heldItem.isEmpty()) {
-                if (tileEntity.addItem(heldItem, false)) {
+                if (tileEntity.addItem(heldItem, false, false)) {
                     return true;
                 }
             }
