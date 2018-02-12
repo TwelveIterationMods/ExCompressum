@@ -145,6 +145,7 @@ public class TileAutoCompressor extends TileEntityBase implements ITickable, IEn
                             }
                         }
                     }
+                    currentBuffer.clear();
                     currentRecipe = null;
                     progress = 0f;
                 }

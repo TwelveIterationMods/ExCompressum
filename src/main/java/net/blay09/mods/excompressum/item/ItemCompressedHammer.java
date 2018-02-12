@@ -27,9 +27,9 @@ public class ItemCompressedHammer extends ItemTool implements ICompressedHammer 
     }
 
     @Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
         if ((CompressedHammerRegistry.isHammerable(state) || ExRegistro.isHammerable(state)) && state.getBlock().getHarvestLevel(state) <= toolMaterial.getHarvestLevel()) {
-            return efficiencyOnProperMaterial * 0.75f;
+            return efficiency * 0.75f;
         }
         return 0.8f;
     }

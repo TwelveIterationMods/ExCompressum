@@ -39,9 +39,9 @@ public class ItemManaHammer extends ItemTool implements IManaUsingItem, IHammer 
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
+	public float getDestroySpeed(ItemStack stack, IBlockState state) {
 		if (ExRegistro.isHammerable(state) && state.getBlock().getHarvestLevel(state) <= toolMaterial.getHarvestLevel()) {
-			return efficiencyOnProperMaterial * 0.75f;
+			return efficiency * 0.75f;
 		}
 		return 0.8f;
 	}

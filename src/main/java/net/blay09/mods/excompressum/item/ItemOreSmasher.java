@@ -48,9 +48,9 @@ public class ItemOreSmasher extends ItemTool {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
+	public float getDestroySpeed(ItemStack stack, IBlockState state) {
 		if (isOreBlock(new ItemStack(state.getBlock()))) {
-			return efficiencyOnProperMaterial;
+			return efficiency;
 		}
 		return 0.8f;
 	}

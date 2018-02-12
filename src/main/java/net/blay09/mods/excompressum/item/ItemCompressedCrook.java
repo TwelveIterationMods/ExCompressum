@@ -63,8 +63,8 @@ public class ItemCompressedCrook extends ItemTool implements ICompressedCrook, I
     }
 
     @Override
-    public float getStrVsBlock(ItemStack item, IBlockState block) {
-        return block.getMaterial() == Material.LEAVES ? toolMaterial.getEfficiencyOnProperMaterial() * ModConfig.tools.compressedCrookSpeedMultiplier : 0f;
+    public float getDestroySpeed(ItemStack item, IBlockState block) {
+        return block.getMaterial() == Material.LEAVES ? toolMaterial.getEfficiency() * ModConfig.tools.compressedCrookSpeedMultiplier : 0f;
     }
 
     @Override

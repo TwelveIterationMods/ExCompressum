@@ -35,7 +35,7 @@ public class ItemChickenStick extends ItemTool {
         setUnlocalizedName(registryName.toString());
         setCreativeTab(ExCompressum.creativeTab);
         setMaxDamage(0);
-        damageVsEntity = 0f;
+        attackDamage = 0f;
     }
 
     @Override
@@ -70,12 +70,12 @@ public class ItemChickenStick extends ItemTool {
     }
 
     @Override
-    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, IBlockState state) {
         if ((ChickenStickRegistry.isHammerable(state))) {
             if(isAngry(stack)) {
-                return efficiencyOnProperMaterial * 1.5f;
+                return efficiency * 1.5f;
             }
-            return efficiencyOnProperMaterial;
+            return efficiency;
         }
         return 0.8f;
     }
