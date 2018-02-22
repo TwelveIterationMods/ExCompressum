@@ -1,13 +1,14 @@
 dependencies {
-    deobfCompile "ex-nihilo-creatio:exnihilocreatio:1.12:0.1.5" // CurseForge
-    deobfCompile "crafttweaker:CraftTweaker2:1.12:4.0.3" // CurseForge
-    provided "extra-utilities:extrautils2:1.12:1.5.2" // CurseForge
-    deobfCompile "tinkers-construct:TConstruct:1.12:2.7.2.19" // CurseForge
-    deobfCompile "mantle:Mantle:1.12:1.3.1.18" // CurseForge
-    deobfCompile "baubles:Baubles:1.12:1.5.1" // CurseForge
-    deobfCompile "mcp.mobius.waila:Hwyla:1.8.20-B35_1.12"
-    deobfCompile "mezz.jei:jei_1.12.1:4.7.5.87"
-    provided "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.17-9"
-    deobfCompile "cofh:RedstoneFlux:1.12-2.0.1.2:universal"
-    provided "hosted-api:Botania_1.11.2:r1.9-343"
+    deobfCompile "ex-nihilo-creatio:exnihilocreatio:1.12:0.1.5"
+    deobfCompile "crafttweaker:CraftTweaker2:1.12:4.0.3"
+    deobfCompile "extra-utilities:extrautils2:1.12:1.5.2"
+    deobfCompile "tinkers-construct:TConstruct:1.12:2.7.2.19"
+    deobfCompile "mantle:Mantle:1.12:1.3.1.18"
+    deobfCompile "baubles:Baubles:1.12:1.5.1"
+    deobfCompile "jei:jei_1.12.2:4.8.5.157"
+	deobfCompile "redstone-flux:RedstoneFlux-1.12:2.0.1.2:universal"
+    provided "the-one-probe:theoneprobe:1.12:1.4.19"
+	provided "hwyla:Hwyla:1.8.23:B38_1.12"
+	
+	deobfCompile "vazkii.botania:Botania:r1.10-353" // ModMaven
 }
