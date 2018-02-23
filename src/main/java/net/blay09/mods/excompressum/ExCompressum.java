@@ -103,7 +103,7 @@ public class ExCompressum {
 			ExRegistro.instance = new NihilisticNihiloProvider();
 		}
 
-//		registerAddon(Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon"); TODO disabled until Botania release
+		registerAddon(Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
 		registerAddon(Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
 
 		MinecraftForge.EVENT_BUS.register(proxy);

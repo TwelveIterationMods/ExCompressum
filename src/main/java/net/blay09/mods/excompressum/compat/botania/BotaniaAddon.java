@@ -1,16 +1,21 @@
 package net.blay09.mods.excompressum.compat.botania;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.block.BlockAutoSieve;
+import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.BlockManaSieve;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.item.ItemBlockCompressed;
 import net.blay09.mods.excompressum.item.ItemManaHammer;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -43,17 +48,22 @@ public class BotaniaAddon implements IAddon {
 
     @Override
     public void registerBlocks(IForgeRegistry<Block> registry) {
-        registry.register(manaSieve = new BlockManaSieve().setRegistryName("mana_sieve"));
+        registry.register(manaSieve = new BlockManaSieve().setRegistryName(BlockManaSieve.registryName));
     }
 
     @Override
     public void registerItems(IForgeRegistry<Item> registry) {
-        registry.register(manaHammer = new ItemManaHammer().setRegistryName("mana_hammer"));
+        registry.register(new ItemBlock(manaSieve).setRegistryName(BlockManaSieve.name));
+
+        registry.register(manaHammer = new ItemManaHammer().setRegistryName(ItemManaHammer.registryName));
     }
 
     @Override
     @SideOnly(Side.CLIENT) // account for unnecessary SideOnly in BotaniaAPIClient
     public void registerModels() {
+        ModelLoader.setCustomModelResourceLocation(manaHammer, 0, new ModelResourceLocation(ItemManaHammer.registryName, "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(manaSieve), 0, new ModelResourceLocation(BlockManaSieve.registryName, "inventory"));
+
         BotaniaAPIClient.registerSubtileModel(SubTileOrechidEvolved.class, new ModelResourceLocation(new ResourceLocation(Compat.BOTANIA, "orechid"), "normal"));
     }
 

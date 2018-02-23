@@ -2,7 +2,6 @@
 "__comment": "Designed by Blay09 with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
 "textures": {
     "texture": "excompressum:blocks/mana_frame_top",
-    "texture_glass": "excompressum:blocks/mana_frame_glass",
     "texture_side": "excompressum:blocks/mana_frame_side",
     "particle": "excompressum:blocks/mana_frame_side"
 },
