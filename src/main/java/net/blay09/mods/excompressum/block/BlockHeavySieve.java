@@ -150,6 +150,17 @@ public class BlockHeavySieve extends BlockContainer {
 				}
 
 				if (tileEntity.addSiftable(player, heldItem)) {
+					int posX = (int) Math.ceil(pos.getX());
+					int posZ = (int) Math.ceil(pos.getZ());
+					for (int x = posX - 2; x <= posX + 2; x++) {
+						for (int z = posZ - 2; z <= posZ + 2; z++) {
+							BlockPos testPos = new BlockPos(x, pos.getY(), z);
+							TileHeavySieve otherEntity = (TileHeavySieve) world.getTileEntity(testPos);
+							if (otherEntity != null && !heldItem.isEmpty()) {
+								otherEntity.addSiftable(player, heldItem);
+							}
+						}
+					}
 					world.playSound(null, pos, SoundEvents.BLOCK_GRAVEL_STEP, SoundCategory.BLOCKS, 0.5f, 1f);
 					return true;
 				}
@@ -168,6 +179,17 @@ public class BlockHeavySieve extends BlockContainer {
 			if (ModConfig.automation.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
 				if (tileEntity.processContents(player)) {
 					world.playSound(null, pos, SoundEvents.BLOCK_SAND_STEP, SoundCategory.BLOCKS, 0.3f, 0.6f);
+				}
+				int posX = (int) Math.ceil(pos.getX());
+				int posZ = (int) Math.ceil(pos.getZ());
+				for (int x = posX - 2; x <= posX + 2; x++) {
+					for (int z = posZ - 2; z <= posZ + 2; z++) {
+						BlockPos testPos = new BlockPos(x, pos.getY(), z);
+						TileHeavySieve otherEntity = (TileHeavySieve) world.getTileEntity(testPos);
+						if (otherEntity != null  && !testPos.equals(pos)) {
+							otherEntity.processContents(player);
+						}
+					}
 				}
 			}
 		}
