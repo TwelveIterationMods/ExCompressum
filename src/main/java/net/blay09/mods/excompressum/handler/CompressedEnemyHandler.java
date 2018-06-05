@@ -31,12 +31,17 @@ public class CompressedEnemyHandler {
 
     @SubscribeEvent
     public void onSpawnEntity(EntityJoinWorldEvent event) {
-        if(!event.getWorld().isRemote && (event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast)) {
+        if (!event.getWorld().isRemote && (event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast)) {
             EntityEntry entry = EntityRegistry.getEntry(event.getEntity().getClass());
             ResourceLocation registryName = entry != null ? entry.getRegistryName() : null;
             String entityName = EntityList.getEntityString(event.getEntity());
-            if(registryName != null && ArrayUtils.contains(ModConfig.compressedMobs.allowedMobs, registryName.toString())) {
-                if (event.getEntity().world.rand.nextFloat() <= ModConfig.compressedMobs.chance && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(NOCOMPRESS) && !event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
+            if (registryName != null && ArrayUtils.contains(ModConfig.compressedMobs.allowedMobs, registryName.toString())) {
+                NBTTagCompound baseTag = event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID);
+                if (baseTag.hasKey(NOCOMPRESS) || baseTag.hasKey(COMPRESSED)) {
+                    return;
+                }
+
+                if (event.getEntity().world.rand.nextFloat() <= ModConfig.compressedMobs.chance) {
                     event.getEntity().setAlwaysRenderNameTag(true);
                     event.getEntity().setCustomNameTag("Compressed " + event.getEntity().getName());
                     NBTTagCompound tagCompound = new NBTTagCompound();
@@ -53,36 +58,36 @@ public class CompressedEnemyHandler {
 
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event) {
-        if(!event.getEntity().world.isRemote && event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
-            if(event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast) {
-                if(event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
-                    if(StupidUtils.hasSilkTouchModifier((EntityLivingBase) event.getSource().getTrueSource())) {
+        if (!event.getEntity().world.isRemote && event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
+            if (event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast) {
+                if (event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
+                    if (StupidUtils.hasSilkTouchModifier((EntityLivingBase) event.getSource().getTrueSource())) {
                         return;
                     }
 
                     ResourceLocation resourceLocation = EntityList.getKey(event.getEntity());
-                    if(resourceLocation == null) {
+                    if (resourceLocation == null) {
                         return;
                     }
 
-                    for(int i = 0; i < ModConfig.compressedMobs.size; i++) {
+                    for (int i = 0; i < ModConfig.compressedMobs.size; i++) {
                         EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByIDFromName(resourceLocation, event.getEntity().world);
-                        if(entity == null) {
+                        if (entity == null) {
                             return;
                         }
 
-                        if(((EntityLivingBase) event.getEntity()).isChild()) {
-                            if(entity instanceof EntityZombie) {
+                        if (((EntityLivingBase) event.getEntity()).isChild()) {
+                            if (entity instanceof EntityZombie) {
                                 ((EntityZombie) entity).setChild(true);
-                            } else if(entity instanceof EntityAgeable && event.getEntity() instanceof EntityAgeable) {
+                            } else if (entity instanceof EntityAgeable && event.getEntity() instanceof EntityAgeable) {
                                 ((EntityAgeable) entity).setGrowingAge(((EntityAgeable) event.getEntity()).getGrowingAge());
                             }
                         }
-                        if(entity instanceof EntityPigZombie) {
+                        if (entity instanceof EntityPigZombie) {
                             entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
-                        } else if(entity instanceof EntitySkeleton) {
+                        } else if (entity instanceof EntitySkeleton) {
                             entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-                        } else if(entity instanceof EntityWitherSkeleton) {
+                        } else if (entity instanceof EntityWitherSkeleton) {
                             entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
                         }
                         NBTTagCompound tagCompound = new NBTTagCompound();
