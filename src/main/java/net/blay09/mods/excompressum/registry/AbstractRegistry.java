@@ -192,7 +192,7 @@ public abstract class AbstractRegistry {
 
 	protected final void logWarning(String format, Object... args) {
 		String s = String.format(format, args);
-		ExCompressum.logger.error(s);
+		ExCompressum.logger.warn(s);
 		if(ModConfig.client.showRegistryWarnings) {
 			registryErrors.add(s);
 		}
