@@ -8,6 +8,7 @@ import exnihilocreatio.registries.CrookRegistry;
 import exnihilocreatio.registries.HammerRegistry;
 import exnihilocreatio.registries.RegistryReloadedEvent;
 import exnihilocreatio.registries.SieveRegistry;
+import exnihilocreatio.registries.manager.ExNihiloRegistryManager;
 import exnihilocreatio.registries.types.CrookReward;
 import exnihilocreatio.registries.types.Siftable;
 import exnihilocreatio.texturing.Color;
@@ -220,7 +221,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
 
 	@Override
 	public boolean isHammerable(IBlockState state) {
-		return HammerRegistry.registered(state.getBlock());
+		return ExNihiloRegistryManager.HAMMER_REGISTRY.isRegistered(state);
 	}
 
 	@Override
