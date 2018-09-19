@@ -1,0 +1,116 @@
+item.excompressum:compressed_hammer_wood.name=Komprimierter Holzhammer
+item.excompressum:compressed_hammer_stone.name=Komprimierter Steinhammer
+item.excompressum:compressed_hammer_iron.name=Komprimierter Eisenhammer
+item.excompressum:compressed_hammer_gold.name=Komprimierter Goldhammer
+item.excompressum:compressed_hammer_diamond.name=Komprimierter Diamandhammer
+item.excompressum:double_compressed_diamond_hammer.name=Doppelt komprimierter Diamanthammer 
+item.excompressum:compressed_crook.name=Komprimierter Gauner
+item.excompressum:chicken_stick.name=Hühnerstab
+item.excompressum:iron_mesh.name=Eisengitter
+item.excompressum:bait_wolf.name=Wolfsköder
+item.excompressum:bait_ocelot.name=Ozelot Köder
+item.excompressum:bait_cow.name=Kuh Köder
+item.excompressum:bait_pig.name=Schweine Köder
+item.excompressum:bait_chicken.name=Hühner Köder
+item.excompressum:bait_sheep.name=Schafsköder
+item.excompressum:bait_squid.name=Tintenfisch Köder
+item.excompressum:bait_rabbit.name=Hasen Köder
+item.excompressum:bait_horse.name=Pferde Köder
+item.excompressum:bait_donkey.name=Esel Köder
+item.excompressum:bait_llama.name=Lama Köder
+item.excompressum:bait_polar_bear.name=Polarbär Köder
+item.excompressum:bait_parrot.name=Papageien Köder
+item.excompressum:wood_chippings.name=Holzspäne
+item.excompressum:uncompressed_coal.name=Unkomprimierte Kohle
+item.excompressum:bat_zapper.name=Fliegenklatsche
+item.excompressum:ore_smasher.name=Erzsammler
+item.excompressum:hammer_mana.name=Mana Hammer
+item.excompressum:ugly_steel_plating.name=Hässlicher Stahlüberzug
+
+gui.excompressum:autoSieve.noMesh=Kein Gitter
+gui.excompressum:autoSieve.incorrectMesh=Falsches Gitter
+
+tooltip.excompressum:double_compressed_diamond_hammer=Tinkers Construct Modifikator
+tooltip.excompressum:best_with_blasting=Kombiniere mit Blasting für die besten Ergebnisse
+tooltip.excompressum:auto_sieve=%s in einer Box™
+tooltip.excompressum:auto_heavy_sieve=%s in einer schweren Box™
+tooltip.excompressum:mana_sieve=%s in einer magischen Box™
+tooltip.excompressum:consumingEnergy=Verbraucht %d FE/t
+tooltip.excompressum:ugly_steel_plating=Auf die Maschine auftragen, um sie optisch unattraktiv zu machen.
+
+info.excompressum:baitCanSpawn=Dieser Köder wird in dieser Umgebung funktionieren. Bewege dich außerhalb der Reichweite, damit du die Tiere nicht erschreckst!
+info.excompressum:baitNearbyBait=Es gibt zu viele Köder in diesem Bereich. Viel zu auffällig.
+info.excompressum:baitWrongEnv=Platziere mehr Blöcke vom Heimatbiom der Tiere.
+info.excompressum:baitNearbyAnimal=Tiere sind schüchtern. Hier sind zu viele von ihnen.
+info.excompressum:baitNoWater=In diesem Bereich gibt es kein Wasser.
+info.excompressum:baitPlaceInWater=Muss im Wasser plaziert werden.
+
+commands.excompressum:reload.success=Ex Compressum Einträge aktualisiert
+
+tile.excompressum:compressed_dust.name=Komprimierter Staub
+tile.excompressum:compressed_cobblestone.name=Komprimiertes Kopfsteinpflaster
+tile.excompressum:compressed_sand.name=Komprimierter Sand
+tile.excompressum:compressed_dirt.name=Komprimierte Erde
+tile.excompressum:compressed_gravel.name=Komprimierter Kies
+tile.excompressum:compressed_flint.name=Komprimierter Feuerstein
+tile.excompressum:compressed_ender_gravel.name=Komprimierter Ender Kies
+tile.excompressum:compressed_nether_gravel.name=Komprimierter Nether Kies
+tile.excompressum:compressed_soul_sand.name=Komprimierter Seelensand
+tile.excompressum:compressed_netherrack.name=Komprimierter Netherrack
+tile.excompressum:compressed_end_stone.name=Komprimierter Endstein
+tile.excompressum:heavy_sieve_0.name=Schweres Eichensieb
+tile.excompressum:heavy_sieve_1.name=Schweres Fichtensieb
+tile.excompressum:heavy_sieve_2.name=Schweres Birkensieb
+tile.excompressum:heavy_sieve_3.name=Schweres Junglesieb
+tile.excompressum:heavy_sieve_4.name=Schweres Akaziensieb
+tile.excompressum:heavy_sieve_5.name=Schweres dunkles Eichensieb
+tile.excompressum:wooden_crucible_0.name=Eichentiegel
+tile.excompressum:wooden_crucible_1.name=Spruce Crucible
+tile.excompressum:wooden_crucible_2.name=Fichtentiegel
+tile.excompressum:wooden_crucible_3.name=Jungletiegel
+tile.excompressum:wooden_crucible_4.name=Akazientiegel
+tile.excompressum:wooden_crucible_5.name=Dunkler Eichentiegel
+tile.excompressum:auto_compressor.name=Auto Komprimierer
+tile.excompressum:auto_hammer.name=Auto Hammer
+tile.excompressum:auto_compressed_hammer.name=Automatisch komprimierter Hammer
+tile.excompressum:auto_sieve.name=Automatische Sieb
+tile.excompressum:mana_sieve.name=Mana Sieb
+tile.excompressum:auto_heavy_sieve.name=Automatisches schweres Sieb
+tile.excompressum:auto_compressor_rationing.name=Automatischer Kompressor (Rationierung)
+
+entity.excompressum.AngryChicken.name=Aggressives Hühnchen
+
+itemGroup.excompressum=Ex Compressum
+
+botania.entry.excompressum.orechidEvolved=Weiterentwickelter Orechid
+botania.tagline.excompressum.orechidEvolved=Erzeugt Erze aus Stein
+botania.page.excompressum.orechidEvolved0=Du hast wahrscheinlich schon bemerkt, dass du keine Erze in dieser Welt abbauen kannst. Der &1weiterentwickelte Orechid&0 wird &4Mana&0 benutzen, um &4Erze&0 in umliegende &1Steine&0 zu verwandeln, schneller and billieger als der &1Orechid&0.<br>Die Erze die generiert werden sind zuffällig, scheinen jedoch auf eher gebräuchliche Erze ausgerichtet zu sein als auf seltenere.
+botania.page.excompressum.orechidEvolved1=&oImmer noch keine Drachenkacke&r.
+tile.botania:flower.excompressum.orechidEvolved.name=Entwickelter Orechid
+tile.botania:flower.excompressum.orechidEvolved.reference=Orechid: Evolved: Skyblock: Der Film
+
+modifier.excompressum:smashingii.name=Zerschlagung II
+modifier.excompressum:compressing.name=Komprimieren
+gui.error.invalid_trait_order=
+
+waila.excompressum:baitTooClose=Du bist zu nah.
+waila.excompressum:baitTooClose2=Die Tiere sind verschreckt.
+waila.excompressum:speedBoost=Geschindigkeits Boost: %s
+waila.excompressum:luckBonus=Glücksbonus: %s
+waila.excompressum:sieveSkin=Skin: %s
+waila.excompressum:sieveProgress=Vortschritt: %s
+waila.excompressum:sieveMesh=%s %d/%d
+waila.excompressum:sieveNoMesh=Kein Gitter
+waila.excompressum:solidVolume=Solides Volumen: %s
+waila.excompressum:fluidVolume=Flüssiges Volumen: %s
+
+jei.excompressum:heavySieve=Schweres Sieb
+jei.excompressum:compressedHammer=Komprimierter Hammer
+jei.excompressum:woodenCrucible=Holztiegel
+jei.excompressum:chickenStick=Hühnerstab
+jei.excompressum:compressedHammer.dropChance=Drop Chance:
+jei.excompressum:heavySieve.dropChance=Drop Chance:
+jei.excompressum:compressedHammer.luck=Glück
+jei.excompressum:heavySieve.luck=Glück
+
+tooltip.excompressum:disableFakeWoodenCrucible=Deaktiviert von Ex Compressum, benutze den Holztiegel
