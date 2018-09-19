@@ -24,7 +24,7 @@ public class AutoSieveSkinRegistry {
 			availableSkins.clear();
 			Thread loadAutoSieveSkins = new Thread(() -> {
 				try {
-					URL remoteURL = new URL("http://blay09.net/mods/control-panel/api/skins.php");
+					URL remoteURL = new URL("http://blay09.net/mods/control-panel/api/skins_v2.php");
 					InputStream in = remoteURL.openStream();
 					Gson gson = new Gson();
 					JsonReader reader = new JsonReader(new InputStreamReader(in));
