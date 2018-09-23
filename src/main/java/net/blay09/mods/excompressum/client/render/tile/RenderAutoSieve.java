@@ -82,6 +82,7 @@ public class RenderAutoSieve extends TileEntitySpecialRenderer<TileAutoSieveBase
         GlStateManager.pushMatrix();
         renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        GlStateManager.translate(0f, 0.01f, 0f);
         RenderUtils.renderBlockWithTranslate(mc, sieveState, tileEntity.getWorld(), tileEntity.getPos(), renderer);
         tessellator.draw();
         GlStateManager.popMatrix();
