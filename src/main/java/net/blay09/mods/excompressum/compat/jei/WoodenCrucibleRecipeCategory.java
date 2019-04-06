@@ -34,7 +34,7 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
 	private int highlightY;
 
 	public WoodenCrucibleRecipeCategory(IGuiHelper guiHelper) {
-		this.background = guiHelper.createDrawable(texture, 0, 0, 166, 130);
+		this.background = guiHelper.createDrawable(texture, 0, 0, 166, 129);
 		this.slotHighlight = guiHelper.createDrawable(texture, 166, 0, 18, 18);
 	}
 
@@ -81,6 +81,7 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
 		} else {
 			fluidItem = new ItemStack(Items.WATER_BUCKET); // just fallback to water
 		}
+
 		recipeLayout.getItemStacks().init(0, false, 74, 9);
 		recipeLayout.getItemStacks().set(0, fluidItem);
 
@@ -111,6 +112,7 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
 			}
 			slotNumber++;
 		}
+
 		recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
 			if(input) {
 				WoodenCrucibleRegistryEntry entry = recipeWrapper.getEntryAt(slotIndex - INPUT_SLOTS);

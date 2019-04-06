@@ -32,7 +32,7 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 	private int highlightY;
 
 	public HeavySieveRecipeCategory(IGuiHelper guiHelper) {
-		this.background = guiHelper.createDrawable(texture, 0, 0, 166, 130);
+		this.background = guiHelper.createDrawable(texture, 0, 0, 166, 129);
 		this.slotHighlight = guiHelper.createDrawable(texture, 166, 0, 18, 18);
 	}
 
