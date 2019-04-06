@@ -1,12 +1,12 @@
 package net.blay09.mods.excompressum.tile;
 
 import cofh.redstoneflux.api.IEnergyReceiver;
+import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.block.BlockAutoHammer;
+import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ModConfig;
-import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
 import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
@@ -49,7 +49,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
-            if(!simulate) {
+            if (!simulate) {
                 isDirty = true;
             }
             return super.receiveEnergy(maxReceive, simulate);
@@ -58,9 +58,9 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 23) {
         @Override
         public boolean isItemValid(int slot, ItemStack itemStack) {
-            if(slot == 0) {
+            if (slot == 0) {
                 return isRegistered(itemStack);
-            } else if(slot == 21 || slot == 22) {
+            } else if (slot == 21 || slot == 22) {
                 return isHammerUpgrade(itemStack);
             }
             return true;
@@ -70,7 +70,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         protected void onContentsChanged(int slot) {
             super.onContentsChanged(slot);
             // Make sure the hammer slots are always synced.
-            if(hammerSlots.isInside(slot)) {
+            if (hammerSlots.isInside(slot)) {
                 isDirty = true;
             }
         }
@@ -103,7 +103,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
 
     @Override
     public void update() {
-        if(!world.isRemote) {
+        if (!world.isRemote) {
             int effectiveEnergy = getEffectiveEnergy();
             if (!isDisabledByRedstone() && getEnergyStored(null) >= effectiveEnergy) {
                 if (currentStack.isEmpty()) {
@@ -183,7 +183,7 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         for (int i = 0; i < outputSlots.getSlots(); i++) {
             ItemStack slotStack = outputSlots.getStackInSlot(i);
             if (slotStack.isEmpty()) {
-                if(firstEmptySlot == -1){
+                if (firstEmptySlot == -1) {
                     firstEmptySlot = i;
                 }
             } else {
@@ -209,12 +209,12 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         final float EFFICIENCY_BOOST = 0.5f;
         float boost = 1f;
         ItemStack firstHammer = hammerSlots.getStackInSlot(0);
-        if(!firstHammer.isEmpty() && isHammerUpgrade(firstHammer)) {
+        if (!firstHammer.isEmpty() && isHammerUpgrade(firstHammer)) {
             boost += HAMMER_BOOST;
             boost += EFFICIENCY_BOOST * EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, firstHammer);
         }
         ItemStack secondHammer = hammerSlots.getStackInSlot(1);
-        if(!secondHammer.isEmpty() && isHammerUpgrade(secondHammer)) {
+        if (!secondHammer.isEmpty() && isHammerUpgrade(secondHammer)) {
             boost += HAMMER_BOOST;
             boost += EFFICIENCY_BOOST * EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, secondHammer);
         }
@@ -228,11 +228,11 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     public float getEffectiveLuck() {
         float luck = 0f;
         ItemStack firstHammer = hammerSlots.getStackInSlot(0);
-        if(!firstHammer.isEmpty() && isHammerUpgrade(firstHammer)) {
+        if (!firstHammer.isEmpty() && isHammerUpgrade(firstHammer)) {
             luck += EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, firstHammer);
         }
         ItemStack secondHammer = hammerSlots.getStackInSlot(1);
-        if(!secondHammer.isEmpty() && isHammerUpgrade(secondHammer)) {
+        if (!secondHammer.isEmpty() && isHammerUpgrade(secondHammer)) {
             luck += EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, secondHammer);
         }
         return luck;
@@ -245,29 +245,32 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
 
     @Override
     protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
-    	currentStack = new ItemStack(tagCompound.getCompoundTag("CurrentStack"));
+        currentStack = new ItemStack(tagCompound.getCompoundTag("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
-        if(tagCompound.hasKey("EnergyStorage")) {
+        if (tagCompound.hasKey("EnergyStorage")) {
             CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.getTag("EnergyStorage"));
         }
-        if(isSync) {
-        	hammerSlots.setStackInSlot(0, new ItemStack(tagCompound.getCompoundTag("FirstHammer")));
-        	hammerSlots.setStackInSlot(1, new ItemStack(tagCompound.getCompoundTag("SecondHammer")));
+
+        if (isSync) {
+            hammerSlots.setStackInSlot(0, new ItemStack(tagCompound.getCompoundTag("FirstHammer")));
+            hammerSlots.setStackInSlot(1, new ItemStack(tagCompound.getCompoundTag("SecondHammer")));
         } else {
             itemHandler.deserializeNBT(tagCompound.getCompoundTag("ItemHandler"));
         }
+
         isDisabledByRedstone = tagCompound.getBoolean("IsDisabledByRedstone");
     }
 
     @Override
     protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
         NBTBase energyStorageNBT = CapabilityEnergy.ENERGY.writeNBT(energyStorage, null);
-        if(energyStorageNBT != null) {
+        if (energyStorageNBT != null) {
             tagCompound.setTag("EnergyStorage", energyStorageNBT);
         }
+
         tagCompound.setTag("CurrentStack", currentStack.writeToNBT(new NBTTagCompound()));
         tagCompound.setFloat("Progress", progress);
-        if(isSync) {
+        if (isSync) {
             ItemStack firstHammer = hammerSlots.getStackInSlot(0);
             tagCompound.setTag("FirstHammer", firstHammer.writeToNBT(new NBTTagCompound()));
             ItemStack secondHammer = hammerSlots.getStackInSlot(1);
@@ -275,12 +278,13 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         } else {
             tagCompound.setTag("ItemHandler", itemHandler.serializeNBT());
         }
+
         tagCompound.setBoolean("IsDisabledByRedstone", isDisabledByRedstone);
     }
 
     @SideOnly(Side.CLIENT)
     private void spawnCrushParticles() {
-        if(!ModConfig.client.disableParticles && !isUgly()) {
+        if (!ModConfig.client.disableParticles && !isUgly()) {
             IBlockState currentBlock = getCurrentBlock();
             if (currentBlock != null) {
                 for (int i = 0; i < 10; i++) {
@@ -306,15 +310,15 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
         return currentStack;
     }
 
-	@Nullable
-	@SuppressWarnings("deprecation")
+    @Nullable
+    @SuppressWarnings("deprecation")
     public IBlockState getCurrentBlock() {
-        if(currentStack.isEmpty()) {
+        if (currentStack.isEmpty()) {
             return null;
         }
         Block block = Block.getBlockFromItem(currentStack.getItem());
-        if(block != Blocks.AIR) {
-        	return block.getStateFromMeta(currentStack.getMetadata());
+        if (block != Blocks.AIR) {
+            return block.getStateFromMeta(currentStack.getMetadata());
         }
         return null;
     }
@@ -333,10 +337,10 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return (T) itemHandlerAutomation;
         }
-        if(capability == CapabilityEnergy.ENERGY) {
+        if (capability == CapabilityEnergy.ENERGY) {
             return (T) energyStorage;
         }
         return super.getCapability(capability, facing);
@@ -351,9 +355,9 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     public boolean isHammerUpgrade(ItemStack itemStack) {
-        if(itemStack.getItem() == Compat.TCONSTRUCT_HAMMER) {
+        if (itemStack.getItem() == Compat.TCONSTRUCT_HAMMER) {
             NBTTagCompound tagCompound = itemStack.getTagCompound();
-            if(tagCompound != null) {
+            if (tagCompound != null) {
                 NBTTagList traits = tagCompound.getTagList("Traits", Constants.NBT.TAG_STRING);
                 for (NBTBase tag : traits) {
                     if (((NBTTagString) tag).getString().equalsIgnoreCase(Compat.TCONSTRUCT_TRAIT_SMASHING)) {
@@ -412,20 +416,20 @@ public class TileAutoHammer extends TileEntityBase implements ITickable, IEnergy
     }
 
     public boolean isUgly() {
-        if(cachedState == null) {
+        if (cachedState == null) {
             cachedState = world.getBlockState(pos);
         }
-        if(cachedState.getBlock() instanceof BlockAutoHammer) {
+        if (cachedState.getBlock() instanceof BlockAutoHammer) {
             return cachedState.getValue(BlockAutoHammer.UGLY);
         }
         return false;
     }
 
     public EnumFacing getFacing() {
-        if(cachedState == null) {
+        if (cachedState == null) {
             cachedState = world.getBlockState(pos);
         }
-        if(cachedState.getBlock() instanceof BlockAutoHammer) {
+        if (cachedState.getBlock() instanceof BlockAutoHammer) {
             return cachedState.getValue(BlockAutoHammer.FACING);
         }
         return EnumFacing.NORTH;

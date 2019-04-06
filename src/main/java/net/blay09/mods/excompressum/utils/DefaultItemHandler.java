@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.utils;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -28,5 +29,13 @@ public class DefaultItemHandler extends ItemStackHandler {
 
 	public boolean isItemValid(int slot, ItemStack itemStack) {
 		return true;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound nbt) {
+		// Always force correct size, to prevent access errors if something for some unknown magical reason has changed the stored size in NBT.
+		nbt.setInteger("Size", getSlots());
+
+		super.deserializeNBT(nbt);
 	}
 }
