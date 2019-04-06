@@ -1,0 +1,15 @@
+{
+  "result": {
+    "item": "excompressum:bait",
+    "data": 11
+  },
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ]
+}
