@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "excompressum:bait",
+    "data": 10
+  },
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:fish",
+      "data": 0
+    },
+    {
+      "item": "minecraft:snowball"
+    }
+  ]
+}
