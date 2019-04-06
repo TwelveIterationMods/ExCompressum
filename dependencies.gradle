@@ -1,5 +1,5 @@
 dependencies {
-    deobfCompile "ex-nihilo-creatio:exnihilocreatio:1.12:0.2.4"
+    deobfCompile "ex-nihilo-creatio:exnihilocreatio:1.12.2:0.4.1.2"
     deobfCompile "crafttweaker:CraftTweaker2:1.12:4.0.3"
     provided "extra-utilities:extrautils2:1.12:1.5.2"
     deobfCompile "tinkers-construct:TConstruct:1.12:2.7.2.19"
