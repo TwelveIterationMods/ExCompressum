@@ -41,7 +41,7 @@ public class CompressedEnemyHandler {
                     return;
                 }
 
-                if (event.getEntity().world.rand.nextFloat() <= ModConfig.compressedMobs.chance) {
+                if (event.getEntity().world.rand.nextFloat() < ModConfig.compressedMobs.chance) {
                     event.getEntity().setAlwaysRenderNameTag(true);
                     event.getEntity().setCustomNameTag("Compressed " + event.getEntity().getName());
                     NBTTagCompound tagCompound = new NBTTagCompound();
