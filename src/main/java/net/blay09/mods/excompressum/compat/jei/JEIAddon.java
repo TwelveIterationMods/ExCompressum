@@ -12,6 +12,7 @@ import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.blay09.mods.excompressum.block.ModBlocks;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
@@ -40,7 +41,7 @@ public class JEIAddon implements IModPlugin {
             Collection<HeavySieveRegistryEntry> entries = HeavySieveRegistry.INSTANCE.getEntries().values();
             for (SieveMeshRegistryEntry sieveMesh : SieveMeshRegistry.getEntries().values()) {
                 for (HeavySieveRegistryEntry entry : entries) {
-                    if (!entry.getRewardsForMesh(sieveMesh).isEmpty()) {
+                    if (!entry.getRewardsForMesh(sieveMesh, ModConfig.general.flattenSieveRecipes).isEmpty()) {
                         heavySieveRecipes.add(new HeavySieveRecipe(entry, sieveMesh));
                     }
                 }

@@ -4,7 +4,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.block.state.IBlockState;
 
 import java.util.Collection;
@@ -35,12 +34,20 @@ public class HeavySieveRegistryEntry {
         return rewards;
     }
 
+    /**
+     * @deprecated Use {{@link #getRewardsForMesh(SieveMeshRegistryEntry, boolean)}} with boolean parameter.
+     */
+    @Deprecated
     public List<HeavySieveReward> getRewardsForMesh(SieveMeshRegistryEntry sieveMesh) {
+        return getRewardsForMesh(sieveMesh, false);
+    }
+
+    public List<HeavySieveReward> getRewardsForMesh(SieveMeshRegistryEntry sieveMesh, boolean flattenSieveRecipes) {
         if (!ExCompressumAPI.getExNihilo().doMeshesSplitLootTables()) {
             return rewards;
         }
 
-        if (ModConfig.general.flattenSieveRecipes) {
+        if (flattenSieveRecipes) {
             return rewards.stream().filter(it -> sieveMesh.getMeshLevel() >= it.getMeshLevel()).collect(Collectors.toList());
         }
 

@@ -14,6 +14,7 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.BlockCompressed;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.RegistryKey;
@@ -55,11 +56,11 @@ public class HeavySieveRegistry extends AbstractRegistry {
         if (ExRegistro.doMeshesSplitLootTables()) {
             RegistryKey key = new RegistryKey(state, false);
             HeavySieveRegistryEntry entry = INSTANCE.entries.get(key);
-            if (entry != null && !entry.getRewardsForMesh(sieveMesh).isEmpty()) {
+            if (entry != null && !entry.getRewardsForMesh(sieveMesh, ModConfig.general.flattenSieveRecipes).isEmpty()) {
                 return true;
             }
             HeavySieveRegistryEntry wildcardEntry = INSTANCE.entries.get(key.withWildcard());
-            return wildcardEntry != null && !wildcardEntry.getRewardsForMesh(sieveMesh).isEmpty();
+            return wildcardEntry != null && !wildcardEntry.getRewardsForMesh(sieveMesh, ModConfig.general.flattenSieveRecipes).isEmpty();
         }
         return isSiftable(state);
     }
@@ -113,7 +114,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     private static void rollSieveRewardsToList(HeavySieveRegistryEntry entry, List<ItemStack> list, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        for (HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh)) {
+        for (HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh, ModConfig.general.flattenSieveRecipes)) {
             int tries = rand.nextInt((int) luck + 1) + 1;
             for (int i = 0; i < tries; i++) {
                 if (rand.nextFloat() < reward.getBaseChance()) {

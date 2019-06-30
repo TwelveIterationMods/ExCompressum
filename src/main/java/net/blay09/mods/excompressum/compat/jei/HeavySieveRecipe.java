@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
@@ -33,7 +34,7 @@ public class HeavySieveRecipe implements IRecipeWrapper {
 		rewards = ArrayListMultimap.create();
 		if(sieveMesh != null) {
 			inputs.add(sieveMesh.getItemStack());
-			for(HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh)) {
+			for(HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh, ModConfig.general.flattenSieveRecipes)) {
 				rewards.put(new RegistryKey(reward.getItemStack()), reward);
 			}
 		} else {
