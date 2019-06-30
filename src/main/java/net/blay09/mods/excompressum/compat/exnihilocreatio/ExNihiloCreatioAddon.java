@@ -247,9 +247,10 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
                     continue;
                 }
 
+                boolean meshMatches = ModConfig.general.flattenSieveRecipes ? sieveMesh.getMeshLevel() >= reward.getMeshLevel() : sieveMesh.getMeshLevel() == reward.getMeshLevel();
                 int tries = rand.nextInt((int) luck + 1) + 1;
                 for (int i = 0; i < tries; i++) {
-                    if (sieveMesh.getMeshLevel() == reward.getMeshLevel() && rand.nextDouble() < (double) reward.getChance()) {
+                    if (meshMatches && rand.nextDouble() < (double) reward.getChance()) {
                         list.add(reward.getDrop().getItemStack());
                     }
                 }

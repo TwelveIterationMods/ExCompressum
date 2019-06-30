@@ -22,6 +22,10 @@ public class ModConfig {
 		@Config.Name("Disable Creatio Wooden Crucible")
 		@Config.Comment("Set to false if you need the Ex Nihilo Creatio wooden crucible for some reason. Note it'll cause a recipe conflict you'll have to fix via other means.")
 		public boolean disableCreatioWoodenCrucible = true;
+
+		@Config.Name("Flatten Sieve Recipes")
+		@Config.Comment("If enabled, all meshes can obtain the results from the lower tier meshes. Note if the same item is registered in multiple tiers, then the higher tier will have a chance to drop multiples.")
+		public boolean flattenSieveRecipes = false;
 	}
 
 	public static class Client {
