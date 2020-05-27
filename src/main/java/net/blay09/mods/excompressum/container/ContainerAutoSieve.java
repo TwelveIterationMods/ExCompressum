@@ -81,7 +81,7 @@ public class ContainerAutoSieve extends Container {
             ItemStack slotStack = slot.getStack();
             itemStack = slotStack.copy();
             if (slotNumber <= 21) {
-                if (!mergeItemStack(slotStack, 21, 57, true)) {
+                if (!mergeItemStack(slotStack, 22, 57, true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (tileEntity.getItemHandler().isItemValid(0, slotStack)) {

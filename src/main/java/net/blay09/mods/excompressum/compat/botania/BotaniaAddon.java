@@ -9,6 +9,7 @@ import net.blay09.mods.excompressum.compat.IAddon;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.item.ItemBlockCompressed;
 import net.blay09.mods.excompressum.item.ItemManaHammer;
+import net.blay09.mods.excompressum.tile.TileAutoSieveMana;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -16,6 +17,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -44,6 +46,8 @@ public class BotaniaAddon implements IAddon {
     @Override
     public void preInit() {
         BotaniaAPI.registerSubTile(SUBTILE_ORECHID_EVOLVED, SubTileOrechidEvolved.class);
+
+        GameRegistry.registerTileEntity( TileAutoSieveMana.class, ExCompressum.MOD_ID + ":mana_sieve" );
     }
 
     @Override
