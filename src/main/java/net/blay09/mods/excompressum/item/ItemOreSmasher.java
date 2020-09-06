@@ -5,7 +5,8 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
-import net.minecraft.block.state.IBlockState;
+
+import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.item.ToolItem;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -26,7 +28,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-public class ItemOreSmasher extends ItemTool {
+public class ItemOreSmasher extends ToolItem {
 
     private static final List<String> ORE_BLOCKS = Lists.newArrayList();
     private static final List<String> ORE_ITEMS = Lists.newArrayList();
@@ -43,12 +45,12 @@ public class ItemOreSmasher extends ItemTool {
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
+    public boolean canHarvestBlock(BlockState state, ItemStack stack) {
         return isOreBlock(new ItemStack(state.getBlock()));
     }
 
     @Override
-    public float getDestroySpeed(ItemStack stack, IBlockState state) {
+    public float getDestroySpeed(ItemStack stack, BlockState state) {
         if (isOreBlock(new ItemStack(state.getBlock()))) {
             return efficiency;
         }
@@ -69,7 +71,7 @@ public class ItemOreSmasher extends ItemTool {
                     CompressedRecipe recipe = CompressedRecipeRegistry.getRecipe(inventoryStack);
                     if (recipe != null && recipe.getResultStack().getCount() == 1) {
                         if (inventoryStack.getCount() >= recipe.getCount()) {
-                            IBlockState oldState = world.getBlockState(pos);
+                            BlockState oldState = world.getBlockState(pos);
                             ItemStack resultStack = recipe.getResultStack().copy();
                             resultStack.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
                             world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
@@ -86,7 +88,7 @@ public class ItemOreSmasher extends ItemTool {
                 }
 
                 if (isOreBlock(inventoryStack)) {
-                    IBlockState oldState = world.getBlockState(pos);
+                    BlockState oldState = world.getBlockState(pos);
                     inventoryStack.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
                     world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
                     if (inventoryStack.isEmpty()) {
@@ -102,7 +104,7 @@ public class ItemOreSmasher extends ItemTool {
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+    public boolean onBlockDestroyed(ItemStack itemStack, World world, BlockState state, BlockPos pos, EntityLivingBase entityLiving) {
         if (!world.isRemote && canHarvestBlock(state, itemStack) && ExRegistro.isHammerable(state)) {
             world.setBlockToAir(pos);
             Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, toolMaterial.getHarvestLevel(), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);

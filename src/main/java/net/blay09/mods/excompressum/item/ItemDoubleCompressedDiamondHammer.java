@@ -17,10 +17,8 @@ public class ItemDoubleCompressedDiamondHammer extends Item {
     public static final String name = "double_compressed_diamond_hammer";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public ItemDoubleCompressedDiamondHammer() {
-        setUnlocalizedName(registryName.toString());
-        setCreativeTab(ExCompressum.creativeTab);
-        setMaxStackSize(1);
+    public ItemDoubleCompressedDiamondHammer(Item.Properties properties) {
+        super(properties.maxStackSize(1));
     }
 
     @Override

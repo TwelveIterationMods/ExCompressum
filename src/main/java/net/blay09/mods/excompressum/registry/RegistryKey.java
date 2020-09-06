@@ -1,9 +1,9 @@
 package net.blay09.mods.excompressum.registry;
 
-import net.minecraft.block.state.IBlockState;
+
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 
@@ -23,7 +23,7 @@ public class RegistryKey {
 		this.metadata = itemStack.getItemDamage();
 	}
 
-	public RegistryKey(IBlockState state, boolean isWildcard) {
+	public RegistryKey(BlockState state, boolean isWildcard) {
 		this.registryName = state.getBlock().getRegistryName();
 		this.metadata = isWildcard ? WILDCARD_VALUE : state.getBlock().getMetaFromState(state);
 	}

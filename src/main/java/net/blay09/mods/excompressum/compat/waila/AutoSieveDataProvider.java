@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.compat.waila;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
-import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
+import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -28,8 +28,8 @@ public class AutoSieveDataProvider implements IWailaDataProvider {
 
     @Override
     public List<String> getWailaBody(ItemStack itemStack, List<String> list, IWailaDataAccessor accessor, IWailaConfigHandler config) {
-        if(accessor.getTileEntity() instanceof TileAutoSieveBase) {
-            TileAutoSieveBase tileEntity = (TileAutoSieveBase) accessor.getTileEntity();
+        if(accessor.getTileEntity() instanceof AutoSieveTileEntityBase) {
+            AutoSieveTileEntityBase tileEntity = (AutoSieveTileEntityBase) accessor.getTileEntity();
             if(tileEntity.getCustomSkin() != null) {
                 list.add(I18n.format("waila.excompressum:sieveSkin", tileEntity.getCustomSkin().getName()));
             }

@@ -6,3 +6,4 @@
 *.ipr
 *.iws
 /src/main/resources/META-INF/nei_at.cfg
+.idea

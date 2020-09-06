@@ -9,14 +9,14 @@ import mcjty.theoneprobe.api.ProbeMode;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
 import net.blay09.mods.excompressum.block.BlockBait;
-import net.blay09.mods.excompressum.block.BlockHeavySieve;
-import net.blay09.mods.excompressum.block.BlockWoodenCrucible;
+import net.blay09.mods.excompressum.block.HeavySieveBlock;
+import net.blay09.mods.excompressum.block.WoodenCrucibleBlock;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
-import net.blay09.mods.excompressum.tile.TileBait;
-import net.blay09.mods.excompressum.tile.TileHeavySieve;
-import net.blay09.mods.excompressum.tile.TileWoodenCrucible;
-import net.minecraft.block.state.IBlockState;
+import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
+import net.blay09.mods.excompressum.tile.BaitTileEntity;
+import net.blay09.mods.excompressum.tile.HeavySieveTileEntity;
+import net.blay09.mods.excompressum.tile.WoodenCrucibleTileEntity;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -44,32 +44,32 @@ public class TheOneProbeAddon implements Function<ITheOneProbe, Void> {
 		}
 
 		@Override
-		public void addProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, IBlockState state, IProbeHitData data) {
+		public void addProbeInfo(ProbeMode mode, IProbeInfo info, EntityPlayer player, World world, BlockState state, IProbeHitData data) {
 			// NOTE It seems like TheOneProbe does not have localization support o_O
 			if(state.getBlock() instanceof BlockAutoSieveBase) {
-				TileAutoSieveBase tileEntity = tryGetTileEntity(world, data.getPos(), TileAutoSieveBase.class);
+				AutoSieveTileEntityBase tileEntity = tryGetTileEntity(world, data.getPos(), AutoSieveTileEntityBase.class);
 				if(tileEntity != null) {
 					addAutoSieveInfo(tileEntity, mode, info);
 				}
 			} else if(state.getBlock() instanceof BlockBait) {
-				TileBait tileEntity = tryGetTileEntity(world, data.getPos(), TileBait.class);
+				BaitTileEntity tileEntity = tryGetTileEntity(world, data.getPos(), BaitTileEntity.class);
 				if(tileEntity != null) {
 					addBaitInfo(tileEntity, mode, info);
 				}
-			} else if(state.getBlock() instanceof BlockWoodenCrucible) {
-				TileWoodenCrucible tileEntity = tryGetTileEntity(world, data.getPos(), TileWoodenCrucible.class);
+			} else if(state.getBlock() instanceof WoodenCrucibleBlock) {
+				WoodenCrucibleTileEntity tileEntity = tryGetTileEntity(world, data.getPos(), WoodenCrucibleTileEntity.class);
 				if(tileEntity != null) {
 					addWoodenCrucibleInfo(tileEntity, mode, info);
 				}
-			} else if(state.getBlock() instanceof BlockHeavySieve) {
-				TileHeavySieve tileEntity = tryGetTileEntity(world, data.getPos(), TileHeavySieve.class);
+			} else if(state.getBlock() instanceof HeavySieveBlock) {
+				HeavySieveTileEntity tileEntity = tryGetTileEntity(world, data.getPos(), HeavySieveTileEntity.class);
 				if(tileEntity != null) {
 					addHeavySieveInfo(tileEntity, mode, info);
 				}
 			}
 		}
 
-		private void addAutoSieveInfo(TileAutoSieveBase tileEntity, ProbeMode mode, IProbeInfo info) {
+		private void addAutoSieveInfo(AutoSieveTileEntityBase tileEntity, ProbeMode mode, IProbeInfo info) {
 			if(tileEntity.getCustomSkin() != null) {
 				info.text(String.format("Skin: %s", tileEntity.getCustomSkin().getName()));
 			}
@@ -81,9 +81,9 @@ public class TheOneProbeAddon implements Function<ITheOneProbe, Void> {
 			}
 		}
 
-		private void addBaitInfo(TileBait tileEntity, ProbeMode mode, IProbeInfo info) {
-			TileBait.EnvironmentalCondition environmentalStatus = tileEntity.checkSpawnConditions(true);
-			if(environmentalStatus == TileBait.EnvironmentalCondition.CanSpawn) {
+		private void addBaitInfo(BaitTileEntity tileEntity, ProbeMode mode, IProbeInfo info) {
+			BaitTileEntity.EnvironmentalCondition environmentalStatus = tileEntity.checkSpawnConditions(true);
+			if(environmentalStatus == BaitTileEntity.EnvironmentalCondition.CanSpawn) {
 				info.text("You are too close.");
 				info.text("The animals are scared away.");
 			} else {
@@ -92,7 +92,7 @@ public class TheOneProbeAddon implements Function<ITheOneProbe, Void> {
 			}
 		}
 
-		private void addWoodenCrucibleInfo(TileWoodenCrucible tileEntity, ProbeMode mode, IProbeInfo info) {
+		private void addWoodenCrucibleInfo(WoodenCrucibleTileEntity tileEntity, ProbeMode mode, IProbeInfo info) {
 			if(tileEntity.getSolidVolume() > 0f) {
 				info.text(String.format("Solid Volume: %d", tileEntity.getSolidVolume()));
 			}
@@ -101,7 +101,7 @@ public class TheOneProbeAddon implements Function<ITheOneProbe, Void> {
 			}
 		}
 
-		private void addHeavySieveInfo(TileHeavySieve tileEntity, ProbeMode mode, IProbeInfo info) {
+		private void addHeavySieveInfo(HeavySieveTileEntity tileEntity, ProbeMode mode, IProbeInfo info) {
 			if(tileEntity.getProgress() > 0f) {
 				info.progress((int) (tileEntity.getProgress() * 100), 100); // because a simple progress(float) isn't cool enough ..
 			}

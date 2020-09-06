@@ -20,7 +20,7 @@ import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -208,23 +208,23 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
     }
 
     @Override
-    public boolean isHammerable(IBlockState state) {
+    public boolean isHammerable(BlockState state) {
         return ExNihiloRegistryManager.HAMMER_REGISTRY.isRegistered(state);
     }
 
     @Override
-    public Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand) {
+    public Collection<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand) {
         return ExNihiloRegistryManager.HAMMER_REGISTRY.getRewardDrops(rand, state, miningLevel, (int) luck);
     }
 
     @Override
-    public boolean isSiftable(IBlockState state) {
+    public boolean isSiftable(BlockState state) {
         Collection<Siftable> siftables = ExNihiloRegistryManager.SIEVE_REGISTRY.getDrops(new BlockInfo(state));
         return siftables != null && !siftables.isEmpty();
     }
 
     @Override
-    public boolean isSiftableWithMesh(IBlockState state, SieveMeshRegistryEntry sieveMesh) {
+    public boolean isSiftableWithMesh(BlockState state, SieveMeshRegistryEntry sieveMesh) {
         List<Siftable> siftables = ExNihiloRegistryManager.SIEVE_REGISTRY.getDrops(new BlockInfo(state));
         if (siftables != null) {
             for (Siftable siftable : siftables) {
@@ -237,7 +237,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
     }
 
     @Override
-    public Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+    public Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
         List<Siftable> rewards = ExNihiloRegistryManager.SIEVE_REGISTRY.getDrops(new BlockInfo(state));
         if (rewards != null) {
             List<ItemStack> list = Lists.newArrayList();
@@ -261,7 +261,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
     }
 
     @Override
-    public Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand) {
+    public Collection<ItemStack> rollCrookRewards(EntityLivingBase player, BlockState state, float luck, Random rand) {
         List<CrookReward> rewards = ExNihiloRegistryManager.CROOK_REGISTRY.getRewards(state);
         if (rewards != null) {
             List<ItemStack> list = Lists.newArrayList();
@@ -303,7 +303,7 @@ public class ExNihiloCreatioAddon implements ExNihiloProvider, IAddon {
     }
 
     @Override
-    public IBlockState getSieveRenderState() {
+    public BlockState getSieveRenderState() {
         ItemStack itemStack = getNihiloItem(NihiloItems.SIEVE);
         if (!itemStack.isEmpty()) {
             Block block = getBlockFromItem(itemStack.getItem());

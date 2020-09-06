@@ -12,27 +12,27 @@ import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 
 import java.util.List;
 
 public class InternalMethods implements IInternalMethods {
 	@Override
-	public void registerChickenStickHammerable(IBlockState state, boolean isWildcard) {
+	public void registerChickenStickHammerable(BlockState state, boolean isWildcard) {
 		ChickenStickRegistry.INSTANCE.add(state, isWildcard);
 	}
 
 	@Override
-	public void registerCompressedHammerEntry(IBlockState state, boolean isWildcard, List<CompressedHammerReward> rewards) {
+	public void registerCompressedHammerEntry(BlockState state, boolean isWildcard, List<CompressedHammerReward> rewards) {
 		CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(state, isWildcard);
 		entry.addRewards(rewards);
 		CompressedHammerRegistry.INSTANCE.add(entry);
 	}
 
 	@Override
-	public void registerHeavySieveEntry(IBlockState state, boolean isWildcard, List<HeavySieveReward> rewards) {
+	public void registerHeavySieveEntry(BlockState state, boolean isWildcard, List<HeavySieveReward> rewards) {
 		HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state, isWildcard);
 		entry.addRewards(rewards);
 		HeavySieveRegistry.INSTANCE.add(entry);

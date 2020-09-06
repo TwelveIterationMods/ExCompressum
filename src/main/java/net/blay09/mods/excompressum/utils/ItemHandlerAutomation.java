@@ -55,4 +55,9 @@ public class ItemHandlerAutomation implements IItemHandlerModifiable {
 		return 64;
 	}
 
+	@Override
+	public boolean isItemValid(int slot, ItemStack stack) {
+		return true;
+	}
+
 }

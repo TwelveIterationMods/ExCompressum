@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.utils;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -32,9 +32,9 @@ public class DefaultItemHandler extends ItemStackHandler {
 	}
 
 	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
+	public void deserializeNBT(CompoundNBT nbt) {
 		// Always force correct size, to prevent access errors if something for some unknown magical reason has changed the stored size in NBT.
-		nbt.setInteger("Size", getSlots());
+		nbt.putInt("Size", getSlots());
 
 		super.deserializeNBT(nbt);
 	}

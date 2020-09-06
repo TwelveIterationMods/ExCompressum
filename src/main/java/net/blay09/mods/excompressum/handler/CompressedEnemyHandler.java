@@ -4,101 +4,93 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.entity.*;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntityWitherSkeleton;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.monster.*;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.ArrayUtils;
 
-@SuppressWarnings("unused")
+@Mod.EventBusSubscriber
 public class CompressedEnemyHandler {
 
     private static final String COMPRESSED = "Compressed";
     private static final String NOCOMPRESS = "NoCompress";
 
     @SubscribeEvent
-    public void onSpawnEntity(EntityJoinWorldEvent event) {
-        if (!event.getWorld().isRemote && (event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast)) {
-            EntityEntry entry = EntityRegistry.getEntry(event.getEntity().getClass());
-            ResourceLocation registryName = entry != null ? entry.getRegistryName() : null;
-            String entityName = EntityList.getEntityString(event.getEntity());
+    public static void onSpawnEntity(EntityJoinWorldEvent event) {
+        if (!event.getWorld().isRemote && (event.getEntity() instanceof CreatureEntity || event.getEntity() instanceof GhastEntity)) {
+            ResourceLocation registryName = event.getEntity().getType().getRegistryName();
             if (registryName != null && ArrayUtils.contains(ModConfig.compressedMobs.allowedMobs, registryName.toString())) {
-                NBTTagCompound baseTag = event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID);
-                if (baseTag.hasKey(NOCOMPRESS) || baseTag.hasKey(COMPRESSED)) {
+                CompoundNBT baseTag = event.getEntity().getPersistentData().getCompound(ExCompressum.MOD_ID);
+                if (baseTag.contains(NOCOMPRESS) || baseTag.contains(COMPRESSED)) {
                     return;
                 }
 
                 if (event.getEntity().world.rand.nextFloat() < ModConfig.compressedMobs.chance) {
-                    event.getEntity().setAlwaysRenderNameTag(true);
-                    event.getEntity().setCustomNameTag("Compressed " + event.getEntity().getName());
-                    NBTTagCompound tagCompound = new NBTTagCompound();
-                    tagCompound.setBoolean(COMPRESSED, true);
-                    event.getEntity().getEntityData().setTag(ExCompressum.MOD_ID, tagCompound);
+                    event.getEntity().setCustomNameVisible(true);
+                    event.getEntity().setCustomName(new TranslationTextComponent("excompressum.compressedMob", event.getEntity().getName()));
+                    CompoundNBT tagCompound = new CompoundNBT();
+                    tagCompound.putBoolean(COMPRESSED, true);
+                    event.getEntity().getPersistentData().put(ExCompressum.MOD_ID, tagCompound);
                 } else {
-                    NBTTagCompound tagCompound = new NBTTagCompound();
-                    tagCompound.setBoolean(NOCOMPRESS, true);
-                    event.getEntity().getEntityData().setTag(ExCompressum.MOD_ID, tagCompound);
+                    CompoundNBT tagCompound = new CompoundNBT();
+                    tagCompound.putBoolean(NOCOMPRESS, true);
+                    event.getEntity().getPersistentData().put(ExCompressum.MOD_ID, tagCompound);
                 }
             }
         }
     }
 
     @SubscribeEvent
-    public void onEntityDeath(LivingDeathEvent event) {
-        if (!event.getEntity().world.isRemote && event.getEntity().getEntityData().getCompoundTag(ExCompressum.MOD_ID).hasKey(COMPRESSED)) {
-            if (event.getEntity() instanceof EntityCreature || event.getEntity() instanceof EntityGhast) {
-                if (event.getSource().getTrueSource() instanceof EntityPlayer && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
-                    if (StupidUtils.hasSilkTouchModifier((EntityLivingBase) event.getSource().getTrueSource())) {
+    public static void onEntityDeath(LivingDeathEvent event) {
+        if (!event.getEntity().world.isRemote && event.getEntity().getPersistentData().getCompound(ExCompressum.MOD_ID).contains(COMPRESSED)) {
+            if (event.getEntity() instanceof CreatureEntity || event.getEntity() instanceof GhastEntity) {
+                if (event.getSource().getTrueSource() instanceof PlayerEntity && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
+                    if (StupidUtils.hasSilkTouchModifier((LivingEntity) event.getSource().getTrueSource())) {
                         return;
                     }
 
-                    ResourceLocation resourceLocation = EntityList.getKey(event.getEntity());
-                    if (resourceLocation == null) {
-                        return;
-                    }
+                    @SuppressWarnings("unchecked") final EntityType<? extends LivingEntity> entityType = (EntityType<? extends LivingEntity>) event.getEntity().getType();
 
                     for (int i = 0; i < ModConfig.compressedMobs.size; i++) {
-                        EntityLivingBase entity = (EntityLivingBase) EntityList.createEntityByIDFromName(resourceLocation, event.getEntity().world);
+                        LivingEntity entity = entityType.create(((ServerWorld) event.getEntity().world), null, null, null, event.getEntity().getPosition(), SpawnReason.CONVERSION, false, false);
                         if (entity == null) {
                             return;
                         }
 
-                        if (((EntityLivingBase) event.getEntity()).isChild()) {
-                            if (entity instanceof EntityZombie) {
-                                ((EntityZombie) entity).setChild(true);
-                            } else if (entity instanceof EntityAgeable && event.getEntity() instanceof EntityAgeable) {
-                                ((EntityAgeable) entity).setGrowingAge(((EntityAgeable) event.getEntity()).getGrowingAge());
+                        if (((LivingEntity) event.getEntity()).isChild()) {
+                            if (entity instanceof ZombieEntity) {
+                                ((ZombieEntity) entity).setChild(true);
+                            } else if (entity instanceof AgeableEntity && event.getEntity() instanceof AgeableEntity) {
+                                ((AgeableEntity) entity).setGrowingAge(((AgeableEntity) event.getEntity()).getGrowingAge());
                             }
                         }
-                        if (entity instanceof EntityPigZombie) {
-                            entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
-                        } else if (entity instanceof EntitySkeleton) {
-                            entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-                        } else if (entity instanceof EntityWitherSkeleton) {
-                            entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+
+                        if (entity instanceof ZombifiedPiglinEntity) {
+                            entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
+                        } else if (entity instanceof SkeletonEntity) {
+                            entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+                        } else if (entity instanceof WitherSkeletonEntity) {
+                            entity.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
                         }
-                        NBTTagCompound tagCompound = new NBTTagCompound();
-                        tagCompound.setBoolean(NOCOMPRESS, true);
-                        entity.getEntityData().setTag(ExCompressum.MOD_ID, tagCompound);
-                        entity.setLocationAndAngles(event.getEntity().posX, event.getEntity().posY + 1, event.getEntity().posZ, (float) Math.random(), (float) Math.random());
+
+                        CompoundNBT tagCompound = new CompoundNBT();
+                        tagCompound.putBoolean(NOCOMPRESS, true);
+                        entity.getPersistentData().put(ExCompressum.MOD_ID, tagCompound);
+                        entity.setLocationAndAngles(event.getEntity().getPosX(), event.getEntity().getPosY() + 1, event.getEntity().getPosZ(), (float) Math.random(), (float) Math.random());
                         double motion = 0.01;
-                        entity.motionX = (event.getEntity().world.rand.nextGaussian() - 0.5) * motion;
-                        entity.motionY = 0;
-                        entity.motionZ = (event.getEntity().world.rand.nextGaussian() - 0.5) * motion;
-                        event.getEntity().world.spawnEntity(entity);
+                        entity.setMotion((event.getEntity().world.rand.nextGaussian() - 0.5) * motion, 0, (event.getEntity().world.rand.nextGaussian() - 0.5) * motion);
+                        event.getEntity().world.addEntity(entity);
                     }
                 }
             }

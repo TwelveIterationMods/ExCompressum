@@ -1,16 +1,13 @@
 package net.blay09.mods.excompressum.handler;
 
-import net.blay09.mods.excompressum.item.IHammer;
-import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.blay09.mods.excompressum.ExCompressum;
+import net.minecraftforge.fml.common.Mod;
 
-@SuppressWarnings("unused")
+@Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID)
 public class HammerHandler {
 
-	@SubscribeEvent
-	public void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
+	/* TODO global loot modifiers @SubscribeEvent
+	public static void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
 		if(!event.isSilkTouching() && event.getHarvester() != null) {
 			ItemStack heldItem = event.getHarvester().getHeldItemMainhand();
 			if(!heldItem.isEmpty() && heldItem.getItem() instanceof IHammer && ((IHammer) heldItem.getItem()).canHammer(heldItem, event.getWorld(), event.getState(), event.getHarvester())) {
@@ -20,6 +17,6 @@ public class HammerHandler {
 				event.getDrops().addAll(ExRegistro.rollHammerRewards(event.getState(), ((IHammer) heldItem.getItem()).getHammerLevel(heldItem, event.getWorld(), event.getState(), event.getHarvester()), fortune, event.getWorld().rand));
 			}
 		}
-	}
+	}*/
 
 }

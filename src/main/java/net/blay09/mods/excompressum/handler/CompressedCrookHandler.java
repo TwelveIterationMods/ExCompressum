@@ -1,18 +1,8 @@
 package net.blay09.mods.excompressum.handler;
 
-import net.blay09.mods.excompressum.item.ICompressedCrook;
-import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.Collection;
-
 public class CompressedCrookHandler {
 
-	@SubscribeEvent
+	/* TODO global loot modifiers @SubscribeEvent
 	public void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
 		if(!event.isSilkTouching() && event.getHarvester() != null) {
 			ItemStack heldItem = event.getHarvester().getHeldItemMainhand();
@@ -34,6 +24,6 @@ public class CompressedCrookHandler {
 				}
 			}
 		}
-	}
+	}*/
 
 }

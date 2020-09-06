@@ -7,7 +7,7 @@ public class WailaProvider {
     public static void register(IWailaRegistrar registrar) {
         registrar.registerBodyProvider(new AutoSieveDataProvider(), BlockAutoSieveBase.class);
         registrar.registerBodyProvider(new BaitDataProvider(), BlockBait.class);
-        registrar.registerBodyProvider(new WoodenCrucibleDataProvider(), BlockWoodenCrucible.class);
-        registrar.registerBodyProvider(new HeavySieveDataProvider(), BlockHeavySieve.class);
+        registrar.registerBodyProvider(new WoodenCrucibleDataProvider(), WoodenCrucibleBlock.class);
+        registrar.registerBodyProvider(new HeavySieveDataProvider(), HeavySieveBlock.class);
     }
 }

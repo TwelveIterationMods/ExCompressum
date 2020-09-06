@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.client.render.model;
 
-import net.blay09.mods.excompressum.tile.TileAutoSieveBase;
+import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -11,7 +11,7 @@ public class ModelTinyHuman extends ModelPlayer {
 		isChild = true;
 	}
 
-	public void renderAll(TileAutoSieveBase tileEntity, float partialTicks) {
+	public void renderAll(AutoSieveTileEntityBase tileEntity, float partialTicks) {
 		if(tileEntity.shouldAnimate()) {
 			tileEntity.armAngle += 0.5f * (Math.max(1f, tileEntity.getSpeedMultiplier() / 4f)) * partialTicks;
 			bipedRightArm.rotateAngleX = tileEntity.armAngle;

@@ -2,17 +2,13 @@ package net.blay09.mods.excompressum;
 
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
-import net.blay09.mods.excompressum.block.BlockCompressed;
+import net.blay09.mods.excompressum.block.CompressedBlockType;
 import net.blay09.mods.excompressum.block.ModBlocks;
+import net.blay09.mods.excompressum.client.ClientProxy;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.IAddon;
-import net.blay09.mods.excompressum.entity.EntityAngryChicken;
-import net.blay09.mods.excompressum.handler.ChickenStickHandler;
-import net.blay09.mods.excompressum.handler.CompressedCrookHandler;
-import net.blay09.mods.excompressum.handler.CompressedEnemyHandler;
-import net.blay09.mods.excompressum.handler.CompressedHammerHandler;
+import net.blay09.mods.excompressum.entity.AngryChickenEntity;
 import net.blay09.mods.excompressum.handler.GuiHandler;
-import net.blay09.mods.excompressum.handler.HammerHandler;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
@@ -36,6 +32,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -58,17 +56,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID)
-@Mod(modid = ExCompressum.MOD_ID, name = "Ex Compressum", dependencies = "after:exnihiloomnia;after:exnihiloadscensio;after:exnihilocreatio;", acceptedMinecraftVersions = "[1.12]")
+@Mod(ExCompressum.MOD_ID)
 public class ExCompressum {
 
     public static final String MOD_ID = "excompressum";
     public static final Logger logger = LogManager.getLogger(MOD_ID);
 
-    @Mod.Instance
-    public static ExCompressum instance;
-
-    @SidedProxy(serverSide = "net.blay09.mods.excompressum.CommonProxy", clientSide = "net.blay09.mods.excompressum.client.ClientProxy")
-    public static CommonProxy proxy;
+    public static CommonProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public static File configDir;
 
@@ -76,31 +70,23 @@ public class ExCompressum {
 
     public final List<IAddon> addons = Lists.newArrayList();
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
+    public ExCompressum() {
         //noinspection deprecation
         ExCompressumAPI.__internalMethods = new InternalMethods();
 
-        configDir = new File(event.getModConfigurationDirectory(), "ExCompressum");
-        if (!configDir.exists() && !configDir.mkdirs()) {
-            throw new RuntimeException("Couldn't create Ex Compressum configuration directory");
-        }
 
+    }
+
+    public void preInit(FMLPreInitializationEvent event) {
         ModBlocks.registerTileEntities();
+        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "angry_chicken"), AngryChickenEntity.class, "AngryChicken", 0, ExCompressum.instance, 64, 10, true);
 
-        EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "angry_chicken"), EntityAngryChicken.class, "AngryChicken", 0, ExCompressum.instance, 64, 10, true);
-
-        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(new HammerHandler());
-        MinecraftForge.EVENT_BUS.register(new CompressedHammerHandler());
-        MinecraftForge.EVENT_BUS.register(new CompressedCrookHandler());
-        MinecraftForge.EVENT_BUS.register(new CompressedEnemyHandler());
-        MinecraftForge.EVENT_BUS.register(new ChickenStickHandler());
 
         registerAddon(Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
         registerAddon(Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
         registerAddon(Compat.EXNIHILO_CREATIO, "net.blay09.mods.excompressum.compat.exnihilocreatio.ExNihiloCreatioAddon");
+
         if (ExRegistro.instance == null) {
             ExCompressum.logger.warn("No Ex Nihilo mod installed - many things will be disabled. Why would you run Ex Compressum without Ex Nihilo? Pfft.");
             ExRegistro.instance = new NihilisticNihiloProvider();
@@ -116,10 +102,9 @@ public class ExCompressum {
         }
     }
 
-    @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        FMLInterModComms.sendFunctionMessage(Compat.THEONEPROBE, "getTheOneProbe", "net.blay09.mods.excompressum.compat.top.TheOneProbeAddon");
-        FMLInterModComms.sendMessage(Compat.WAILA, "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
+        // FMLInterModComms.sendFunctionMessage(Compat.THEONEPROBE, "getTheOneProbe", "net.blay09.mods.excompressum.compat.top.TheOneProbeAddon");
+        // FMLInterModComms.sendMessage(Compat.WAILA, "register", "net.blay09.mods.excompressum.compat.waila.WailaProvider.register");
 
         for (IAddon addon : addons) {
             addon.init();
@@ -131,7 +116,6 @@ public class ExCompressum {
         HeavySieveRegistry.INSTANCE.load(configDir);
     }
 
-    @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         CompressedRecipeRegistry.reload();
 
@@ -144,9 +128,9 @@ public class ExCompressum {
     }
 
     private Optional<?> buildSoftDependProxy(String modId, String className) {
-        if (Loader.isModLoaded(modId)) {
+        if (ModList.get().isLoaded(modId)) {
             try {
-                Class<?> clz = Class.forName(className, true, Loader.instance().getModClassLoader());
+                Class<?> clz = Class.forName(className, true, getClass().getClassLoader());
                 return Optional.ofNullable(clz.newInstance());
             } catch (Exception e) {
                 return Optional.empty();
@@ -160,11 +144,6 @@ public class ExCompressum {
         optional.ifPresent(o -> addons.add((IAddon) o));
     }
 
-    @Mod.EventHandler
-    public void serverStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandExCompressum());
-    }
-
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (AbstractRegistry.registryErrors.size() > 0) {
@@ -174,13 +153,6 @@ public class ExCompressum {
                 event.player.sendMessage(new TextComponentString(lastFormatting + "* " + error));
                 lastFormatting = lastFormatting == TextFormatting.GRAY ? TextFormatting.WHITE : TextFormatting.GRAY;
             }
-        }
-    }
-
-    @SubscribeEvent
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals(MOD_ID)) {
-            ConfigManager.sync(MOD_ID, Config.Type.INSTANCE);
         }
     }
 
@@ -203,17 +175,17 @@ public class ExCompressum {
         }
 
         OreDictionary.registerOre("dustWood", new ItemStack(ModItems.woodChipping));
-        OreDictionary.registerOre("compressed1xDust", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DUST.ordinal()));
-        OreDictionary.registerOre("compressed1xCobblestone", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.COBBLESTONE.ordinal()));
-        OreDictionary.registerOre("compressed1xGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal()));
-        OreDictionary.registerOre("compressed1xSand", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal()));
-        OreDictionary.registerOre("compressed1xDirt", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal()));
-        OreDictionary.registerOre("compressed1xFlint", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.FLINT.ordinal()));
-        OreDictionary.registerOre("compressed1xEnderGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal()));
-        OreDictionary.registerOre("compressed1xNetherGravel", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal()));
-        OreDictionary.registerOre("compressed1xSoulsand", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SOUL_SAND.ordinal()));
-        OreDictionary.registerOre("compressed1xNetherrack", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHERRACK.ordinal()));
-        OreDictionary.registerOre("compressed1xEndStone", new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.END_STONE.ordinal()));
+        OreDictionary.registerOre("compressed1xDust", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.DUST.ordinal()));
+        OreDictionary.registerOre("compressed1xCobblestone", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.COBBLESTONE.ordinal()));
+        OreDictionary.registerOre("compressed1xGravel", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.GRAVEL.ordinal()));
+        OreDictionary.registerOre("compressed1xSand", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.SAND.ordinal()));
+        OreDictionary.registerOre("compressed1xDirt", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.DIRT.ordinal()));
+        OreDictionary.registerOre("compressed1xFlint", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.FLINT.ordinal()));
+        OreDictionary.registerOre("compressed1xEnderGravel", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.ENDER_GRAVEL.ordinal()));
+        OreDictionary.registerOre("compressed1xNetherGravel", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.NETHER_GRAVEL.ordinal()));
+        OreDictionary.registerOre("compressed1xSoulsand", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.SOUL_SAND.ordinal()));
+        OreDictionary.registerOre("compressed1xNetherrack", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.NETHERRACK.ordinal()));
+        OreDictionary.registerOre("compressed1xEndStone", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.END_STONE.ordinal()));
     }
 
     @SubscribeEvent

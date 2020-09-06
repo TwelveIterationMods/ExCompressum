@@ -1,19 +1,8 @@
 package net.blay09.mods.excompressum.handler;
 
-import com.google.common.collect.Lists;
-import net.blay09.mods.excompressum.item.ICompressedHammer;
-import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.List;
-
-@SuppressWarnings("unused")
 public class CompressedHammerHandler {
 
-	@SubscribeEvent
+	/* TODO global loot modifiers @SubscribeEvent
 	public void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
 		if(!event.isSilkTouching() && event.getHarvester() != null) {
 			ItemStack heldItem = event.getHarvester().getHeldItemMainhand();
@@ -28,6 +17,6 @@ public class CompressedHammerHandler {
 				}
 			}
 		}
-	}
+	}*/
 
 }

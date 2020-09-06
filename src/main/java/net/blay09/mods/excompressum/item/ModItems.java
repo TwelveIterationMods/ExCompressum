@@ -65,7 +65,7 @@ public class ModItems {
 				new ItemCompressedCrook().setRegistryName(ItemCompressedCrook.name),
 				new ItemIronMesh().setRegistryName(ItemIronMesh.name),
 				(woodChipping = new ItemWoodChipping().setRegistryName(ItemWoodChipping.name)), // immediately set woodChipping because we need it for the Ore Dictionary ... I should stop using ObjectHolder
-				new ItemUncompressedCoal().setRegistryName(ItemUncompressedCoal.name),
+				new ItemUncompressedCoal(new Item.Properties()).setRegistryName(ItemUncompressedCoal.name),
 				new ItemBatZapper().setRegistryName(ItemBatZapper.name),
 				new ItemOreSmasher().setRegistryName(ItemOreSmasher.name),
 				new ItemUglySteelPlating().setRegistryName(ItemUglySteelPlating.name)

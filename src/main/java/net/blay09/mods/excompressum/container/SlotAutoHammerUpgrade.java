@@ -1,25 +1,17 @@
 package net.blay09.mods.excompressum.container;
 
-import net.blay09.mods.excompressum.client.ClientProxy;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.blay09.mods.excompressum.ExCompressum;
+import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class SlotAutoHammerUpgrade extends SlotItemHandler {
 
-    private final boolean isCompressed;
-
     public SlotAutoHammerUpgrade(IItemHandler itemHandler, int index, int xPosition, int yPosition, boolean isCompressed) {
         super(itemHandler, index, xPosition, yPosition);
-        this.isCompressed = isCompressed;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public TextureAtlasSprite getBackgroundSprite() {
-        return isCompressed ? ClientProxy.iconEmptyCompressedHammerSlot : ClientProxy.iconEmptyHammerSlot;
+        ResourceLocation backgroundIcon = new ResourceLocation(ExCompressum.MOD_ID, isCompressed ? "items/empty_hammer_slot" : "items/empty_compressed_hammer_slot");
+        setBackground(PlayerContainer.LOCATION_BLOCKS_TEXTURE, backgroundIcon);
     }
 
 }

@@ -1,34 +1,37 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.client.ClientProxy;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.tile.TileAutoHammer;
+import net.blay09.mods.excompressum.tile.AutoHammerTileEntity;
 import net.blay09.mods.excompressum.utils.StupidUtils;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.init.Items;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.vector.Quaternion;
 import org.lwjgl.opengl.GL11;
 
-public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> {
+public class RenderAutoHammer extends TileEntityRenderer<AutoHammerTileEntity> {
 
     private final boolean isCompressed;
     private ItemStack hammerItemStack = ItemStack.EMPTY;
 
-    public RenderAutoHammer(boolean isCompressed) {
+    public RenderAutoHammer(TileEntityRendererDispatcher dispatcher, boolean isCompressed) {
+        super(dispatcher);
         this.isCompressed = isCompressed;
     }
 
     @Override
-    public void render(TileAutoHammer tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(AutoHammerTileEntity tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
         if (!tileEntity.hasWorld() || tileEntity.isUgly()) {
             return;
         }
@@ -38,75 +41,82 @@ public class RenderAutoHammer extends TileEntitySpecialRenderer<TileAutoHammer> 
             } else {
                 hammerItemStack = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
                 if (hammerItemStack.isEmpty()) {
-                    hammerItemStack = new ItemStack(Items.FISH); // This should never happen
+                    hammerItemStack = new ItemStack(Items.COD); // This should never happen
                 }
             }
         }
 
-        Minecraft mc = Minecraft.getMinecraft();
-        RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
+        Minecraft mc = Minecraft.getInstance();
+        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder renderer = tessellator.getBuffer();
 
         RenderHelper.disableStandardItemLighting();
 
-        GlStateManager.pushMatrix();
-        GlStateManager.color(1f, 1f, 1f, 1f);
-        GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
-        GlStateManager.rotate(RenderUtils.getRotationAngle(tileEntity.getFacing()), 0f, 1f, 0f);
+        matrixStack.push();
+        matrixStack.translate(0.5f, 0f, +0.5f);
+        matrixStack.rotate(new Quaternion(RenderUtils.getRotationAngle(tileEntity.getFacing()), 1f, 0f, true));
 
         if (tileEntity.shouldAnimate()) {
             tileEntity.hammerAngle += 0.4f * partialTicks;
         }
 
         // Render the hammers
-        GlStateManager.pushMatrix();
-        GlStateManager.rotate(180f, 0f, 1f, 0f);
-        GlStateManager.rotate((float) Math.sin(tileEntity.hammerAngle) * 15, 0f, 0f, 1f);
-        GlStateManager.translate(0.15f, 0.6f, 0f);
-        GlStateManager.scale(0.5f, 0.5f, 0.5f);
-        itemRenderer.renderItem(hammerItemStack, ItemCameraTransforms.TransformType.FIXED);
+        matrixStack.push();
+        matrixStack.rotate(new Quaternion(0, 180f, 0f, true));
+        matrixStack.rotate(new Quaternion(0, 0, (float) Math.sin(tileEntity.hammerAngle) * 15, true));
+        matrixStack.translate(0.15f, 0.6f, 0f);
+        matrixStack.scale(0.5f, 0.5f, 0.5f);
+        itemRenderer.renderItem(hammerItemStack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
         ItemStack firstHammer = tileEntity.getUpgradeStack(0);
         if (!firstHammer.isEmpty()) {
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(0f, 0f, 0.33f);
-            GlStateManager.rotate(170f, 0f, 1f, 0f);
-            itemRenderer.renderItem(firstHammer, ItemCameraTransforms.TransformType.FIXED);
-            GlStateManager.popMatrix();
+            matrixStack.push();
+            matrixStack.translate(0f, 0f, 0.33f);
+            matrixStack.rotate(new Quaternion(0f, 170f, 0f, true));
+            itemRenderer.renderItem(firstHammer, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
+            matrixStack.pop();
         }
 
         ItemStack secondHammer = tileEntity.getUpgradeStack(1);
         if (!secondHammer.isEmpty()) {
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(0f, 0f, -0.33f);
-            GlStateManager.rotate(190f, 0f, 1f, 0f);
-            itemRenderer.renderItem(secondHammer, ItemCameraTransforms.TransformType.FIXED);
-            GlStateManager.popMatrix();
+            matrixStack.push();
+            matrixStack.translate(0f, 0f, -0.33f);
+            matrixStack.rotate(new Quaternion(0f, 190f,  0f, true));
+            itemRenderer.renderItem(secondHammer, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
+            matrixStack.pop();
         }
 
-        GlStateManager.popMatrix();
+        matrixStack.pop();
 
         RenderHelper.disableStandardItemLighting();
 
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (!currentStack.isEmpty()) {
-            IBlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
+            BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
             if (contentState != null) {
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-                mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-                GlStateManager.pushMatrix();
-                GlStateManager.translate(-0.09375f, 0.0625f, -0.25);
-                GlStateManager.scale(0.5, 0.5, 0.5);
+                mc.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+                matrixStack.push();
+                matrixStack.translate(-0.09375f, 0.0625f, -0.25);
+                matrixStack.scale(0.5f, 0.5f, 0.5f);
                 RenderUtils.renderBlockWithTranslate(mc, contentState, tileEntity.getWorld(), tileEntity.getPos(), renderer);
-                mc.getBlockRendererDispatcher().renderBlockDamage(contentState, tileEntity.getPos(), ClientProxy.destroyBlockIcons[Math.min(9, (int) (tileEntity.getProgress() * 9f))], tileEntity.getWorld());
+                // TODO mc.getBlockRendererDispatcher().renderBlockDamage(contentState, tileEntity.getPos(), ModSprites.destroyBlockIcons[Math.min(9, (int) (tileEntity.getProgress() * 9f))], tileEntity.getWorld());
                 tessellator.draw();
-                GlStateManager.popMatrix();
+                matrixStack.pop();
             }
         }
 
-        GlStateManager.popMatrix();
+        matrixStack.pop();
 
         RenderHelper.enableStandardItemLighting();
+    }
+
+    public static RenderAutoHammer normal(TileEntityRendererDispatcher dispatcher) {
+        return new RenderAutoHammer(dispatcher, false);
+    }
+
+    public static RenderAutoHammer compressed(TileEntityRendererDispatcher dispatcher) {
+        return new RenderAutoHammer(dispatcher, true);
     }
 
 }

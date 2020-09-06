@@ -1,23 +1,22 @@
 package net.blay09.mods.excompressum.api.compressedhammer;
 
 import com.google.common.collect.Lists;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class CompressedHammerRegistryEntry {
-	private final IBlockState inputState;
+	private final BlockState inputState;
 	private final boolean isWildcard;
 	private final List<CompressedHammerReward> rewards = Lists.newArrayList();
 
-	public CompressedHammerRegistryEntry(IBlockState inputState, boolean isWildcard) {
+	public CompressedHammerRegistryEntry(BlockState inputState, boolean isWildcard) {
 		this.inputState = inputState;
 		this.isWildcard = isWildcard;
 	}
 
-	public IBlockState getInputState() {
+	public BlockState getInputState() {
 		return inputState;
 	}
 

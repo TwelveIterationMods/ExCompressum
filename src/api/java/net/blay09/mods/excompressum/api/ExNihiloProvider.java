@@ -1,11 +1,9 @@
 package net.blay09.mods.excompressum.api;
 
-import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
-import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
@@ -21,7 +19,8 @@ public interface ExNihiloProvider {
 		ADSCENSIO,
 		CREATIO;
 
-		public String getName() {
+		@Override
+		public String getString() {
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 	}
@@ -45,12 +44,12 @@ public interface ExNihiloProvider {
 	}
 
 	ItemStack getNihiloItem(NihiloItems type);
-	boolean isHammerable(IBlockState state);
-	Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand);
-	boolean isSiftable(IBlockState state);
-	boolean isSiftableWithMesh(IBlockState state, SieveMeshRegistryEntry sieveMesh);
-	Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand);
-	Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand);
+	boolean isHammerable(BlockState state);
+	Collection<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand);
+	boolean isSiftable(BlockState state);
+	boolean isSiftableWithMesh(BlockState state, SieveMeshRegistryEntry sieveMesh);
+	Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand);
+	Collection<ItemStack> rollCrookRewards(LivingEntity player, BlockState state, float luck, Random rand);
 	SieveModelBounds getSieveBounds();
 	Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count);
 	boolean doMeshesHaveDurability();
@@ -58,7 +57,7 @@ public interface ExNihiloProvider {
 	NihiloMod getNihiloMod();
 	int getMeshFortune(ItemStack meshStack);
 	int getMeshEfficiency(ItemStack meshStack);
-	default IBlockState getSieveRenderState() {
+	default BlockState getSieveRenderState() {
 		ItemStack itemStack = getNihiloItem(NihiloItems.SIEVE);
 		if(!itemStack.isEmpty()) {
 			return Block.getBlockFromItem(itemStack.getItem()).getDefaultState();

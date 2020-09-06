@@ -1,54 +1,49 @@
 package net.blay09.mods.excompressum.handler;
 
-import com.google.common.collect.Lists;
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ModConfig;
-import net.blay09.mods.excompressum.item.ItemChickenStick;
-import net.blay09.mods.excompressum.entity.EntityAngryChicken;
-import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.blay09.mods.excompressum.entity.AngryChickenEntity;
+import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.Items;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
-import java.util.List;
-
+@Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID)
 public class ChickenStickHandler {
 
-	public static String chickenStickName;
+    public static String chickenStickName;
 
-	@SubscribeEvent
-	public void onAttack(AttackEntityEvent event) {
-		if (!ModConfig.tools.allowChickenStickCreation) {
-			return;
-		}
-		if (event.getTarget() instanceof EntityChicken && !((EntityChicken) event.getTarget()).isChild()) {
-			ItemStack heldItem = event.getEntityPlayer().getHeldItem(EnumHand.MAIN_HAND);
-			if (!heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
-				event.getTarget().setDead();
-				if (!event.getTarget().world.isRemote) {
-					heldItem.shrink(1);
-					if (heldItem.isEmpty()) {
-						event.getEntityPlayer().setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
-					}
-					EntityAngryChicken angryChicken = new EntityAngryChicken(event.getTarget().world);
-					angryChicken.setLocationAndAngles(event.getTarget().posX, event.getTarget().posY, event.getTarget().posZ, event.getTarget().rotationYaw, event.getTarget().rotationPitch);
-					event.getTarget().world.spawnEntity(angryChicken);
-					event.getTarget().world.playSound(angryChicken.posX, angryChicken.posY, angryChicken.posZ, SoundEvents.ENTITY_CHICKEN_HURT, SoundCategory.NEUTRAL, 1f, 0.5f, false);
-				}
-				event.setCanceled(true);
-			}
-		}
-	}
+    @SubscribeEvent
+    public static void onAttack(AttackEntityEvent event) {
+        if (!ModConfig.tools.allowChickenStickCreation) {
+            return;
+        }
+        if (event.getTarget() instanceof ChickenEntity && !((ChickenEntity) event.getTarget()).isChild()) {
+            ItemStack heldItem = event.getPlayer().getHeldItem(Hand.MAIN_HAND);
+            if (!heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
+                event.getTarget().remove();
+                if (!event.getTarget().world.isRemote) {
+                    heldItem.shrink(1);
+                    if (heldItem.isEmpty()) {
+                        event.getPlayer().setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                    }
+                    AngryChickenEntity angryChicken = new AngryChickenEntity(event.getTarget().world);
+                    angryChicken.setLocationAndAngles(event.getTarget().getPosX(), event.getTarget().getPosY(), event.getTarget().getPosZ(), event.getTarget().rotationYaw, event.getTarget().rotationPitch);
+                    event.getTarget().world.addEntity(angryChicken);
+                    event.getTarget().world.playSound(angryChicken.getPosX(), angryChicken.getPosY(), angryChicken.getPosZ(), SoundEvents.ENTITY_CHICKEN_HURT, SoundCategory.NEUTRAL, 1f, 0.5f, false);
+                }
+                event.setCanceled(true);
+            }
+        }
+    }
 
-	@SubscribeEvent
-	public void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
+	/* TODO global loot modifiers @SubscribeEvent
+	public static void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
 		if (event.getHarvester() != null) {
 			ItemStack heldItem = event.getHarvester().getHeldItemMainhand();
 			if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemChickenStick && ChickenStickRegistry.isHammerable(event.getState())) {
@@ -69,6 +64,6 @@ public class ChickenStickHandler {
 				}
 			}
 		}
-	}
+	}*/
 
 }

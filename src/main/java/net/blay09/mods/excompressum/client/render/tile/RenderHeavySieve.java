@@ -1,37 +1,40 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
-import net.blay09.mods.excompressum.utils.StupidUtils;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
-import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.tile.TileHeavySieve;
-import net.minecraft.block.state.IBlockState;
+import net.blay09.mods.excompressum.tile.HeavySieveTileEntity;
+import net.blay09.mods.excompressum.utils.StupidUtils;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
-public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> {
+public class RenderHeavySieve extends TileEntityRenderer<HeavySieveTileEntity> {
+
+    public RenderHeavySieve(TileEntityRendererDispatcher dispatcher) {
+        super(dispatcher);
+    }
 
     @Override
-    public void render(TileHeavySieve tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        Minecraft mc = Minecraft.getMinecraft();
+    public void render(HeavySieveTileEntity tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        Minecraft mc = Minecraft.getInstance();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder renderer = tessellator.getBuffer();
 
         RenderHelper.disableStandardItemLighting();
 
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, z);
-        GlStateManager.color(1f, 1f, 1f, 1f);
-        mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        matrixStack.push();
 
         // Render mesh
         ItemStack meshStack = tileEntity.getMeshStack();
@@ -54,22 +57,22 @@ public class RenderHeavySieve extends TileEntitySpecialRenderer<TileHeavySieve> 
 
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (!currentStack.isEmpty()) {
-            IBlockState state = StupidUtils.getStateFromItemStack(currentStack);
-            if(state != null) {
+            BlockState state = StupidUtils.getStateFromItemStack(currentStack);
+            if (state != null) {
                 float progress = tileEntity.getProgress();
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-                mc.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-                GlStateManager.pushMatrix();
-                GlStateManager.translate(0.0625f, 0.5625f, 0.0625f);
+                mc.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+                matrixStack.push();
+                matrixStack.translate(0.0625f, 0.5625f, 0.0625f);
                 float tt = 0.42f;
-                GlStateManager.scale(0.88f, tt - progress * tt, 0.88f);
+                matrixStack.scale(0.88f, tt - progress * tt, 0.88f);
                 RenderUtils.renderBlockWithTranslate(mc, state, tileEntity.getWorld(), tileEntity.getPos(), renderer);
                 tessellator.draw();
-                GlStateManager.popMatrix();
+                matrixStack.pop();
             }
         }
 
-        GlStateManager.popMatrix();
+        matrixStack.pop();
 
         RenderHelper.enableStandardItemLighting();
     }

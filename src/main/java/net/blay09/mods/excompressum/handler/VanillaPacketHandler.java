@@ -1,8 +1,8 @@
 package net.blay09.mods.excompressum.handler;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 
 import java.util.List;
@@ -13,13 +13,13 @@ public class VanillaPacketHandler {
         if(tileEntity.getWorld().isRemote) {
             return;
         }
-        List<EntityPlayer> playerList = tileEntity.getWorld().playerEntities;
-        SPacketUpdateTileEntity updatePacket = tileEntity.getUpdatePacket();
+        List<? extends PlayerEntity> playerList = tileEntity.getWorld().getPlayers();
+        SUpdateTileEntityPacket updatePacket = tileEntity.getUpdatePacket();
         if(updatePacket == null) {
             return;
         }
         for(Object obj : playerList) {
-            EntityPlayerMP entityPlayer = (EntityPlayerMP) obj;
+            ServerPlayerEntity entityPlayer = (ServerPlayerEntity) obj;
             if (Math.hypot(entityPlayer.posX - tileEntity.getPos().getX() + 0.5, entityPlayer.posZ - tileEntity.getPos().getZ() + 0.5) < 64) {
                 entityPlayer.connection.sendPacket(updatePacket);
             }

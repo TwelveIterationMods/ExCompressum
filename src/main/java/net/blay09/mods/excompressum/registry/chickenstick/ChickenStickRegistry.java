@@ -6,12 +6,11 @@ import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.RegistryKey;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public class ChickenStickRegistry extends AbstractRegistry {
         super("ChickenStickRegistry");
     }
 
-    public void add(IBlockState state, boolean isWildcard) {
+    public void add(BlockState state, boolean isWildcard) {
         entries.add(new RegistryKey(state, isWildcard));
     }
 
@@ -36,7 +35,7 @@ public class ChickenStickRegistry extends AbstractRegistry {
         return entries;
     }
 
-    public static boolean isHammerable(IBlockState state) {
+    public static boolean isHammerable(BlockState state) {
         RegistryKey key = new RegistryKey(state, false);
         return INSTANCE.entries.contains(key) || INSTANCE.entries.contains(key.withWildcard());
     }
@@ -102,7 +101,7 @@ public class ChickenStickRegistry extends AbstractRegistry {
             return;
         }
         ResourceLocation location = new ResourceLocation(name);
-        if(location.getResourceDomain().equals("ore")) {
+        if(location.getNamespace().equals("ore")) {
             if(!addOre(location.getResourcePath())) {
                 logUnknownOre(location);
             }

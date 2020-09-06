@@ -4,7 +4,7 @@ import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.minecraft.block.state.IBlockState;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
@@ -21,32 +21,32 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public boolean isHammerable(IBlockState state) {
+	public boolean isHammerable(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand) {
+	public Collection<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public boolean isSiftable(IBlockState state) {
+	public boolean isSiftable(BlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isSiftableWithMesh(IBlockState state, SieveMeshRegistryEntry sieveMesh) {
+	public boolean isSiftableWithMesh(BlockState state, SieveMeshRegistryEntry sieveMesh) {
 		return false;
 	}
 
 	@Override
-	public Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+	public Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand) {
+	public Collection<ItemStack> rollCrookRewards(EntityLivingBase player, BlockState state, float luck, Random rand) {
 		return Collections.emptyList();
 	}
 

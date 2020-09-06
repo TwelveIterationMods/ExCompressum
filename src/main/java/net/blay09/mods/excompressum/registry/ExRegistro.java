@@ -5,7 +5,7 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
-import net.minecraft.block.state.IBlockState;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -27,21 +27,21 @@ public abstract class ExRegistro {
 		return instance.getNihiloItem(type);
 	}
 
-	public static boolean isHammerable(IBlockState state) {
+	public static boolean isHammerable(BlockState state) {
 		return instance.isHammerable(state);
 	}
 
 	public static boolean isHammerable(ItemStack itemStack) {
-		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		return state != null && instance.isHammerable(state);
 	}
 
-	public static Collection<ItemStack> rollHammerRewards(IBlockState state, int miningLevel, float luck, Random rand) {
+	public static Collection<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand) {
 		return instance.rollHammerRewards(state, miningLevel, luck, rand);
 	}
 
 	public static Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
-		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		if(state != null) {
 			return instance.rollHammerRewards(state, miningLevel, luck, rand);
 		}
@@ -49,28 +49,28 @@ public abstract class ExRegistro {
 	}
 
 	public static boolean isSiftable(ItemStack itemStack) {
-		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		return state != null && instance.isSiftable(state);
 	}
 
 	public static boolean isSiftableWithMesh(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
-		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		return state != null && instance.isSiftableWithMesh(state, sieveMesh);
 	}
 
-	public static Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+	public static Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
 		return instance.rollSieveRewards(state, sieveMesh, luck, rand);
 	}
 
 	public static Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-		IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		if(state != null) {
 			return instance.rollSieveRewards(state, sieveMesh, luck, rand);
 		}
 		return Collections.emptyList();
 	}
 
-	public static Collection<ItemStack> rollCrookRewards(EntityLivingBase player, IBlockState state, float luck, Random rand) {
+	public static Collection<ItemStack> rollCrookRewards(EntityLivingBase player, BlockState state, float luck, Random rand) {
 		return instance.rollCrookRewards(player, state, luck, rand);
 	}
 
@@ -102,7 +102,7 @@ public abstract class ExRegistro {
 		return instance.getMeshEfficiency(meshStack);
 	}
 
-	public static IBlockState getSieveRenderState() {
+	public static BlockState getSieveRenderState() {
 		return instance.getSieveRenderState();
 	}
 }

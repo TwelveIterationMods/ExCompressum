@@ -1,32 +1,25 @@
 package net.blay09.mods.excompressum.item;
 
-import exnihilocreatio.items.tools.ICrook;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ToolItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Optional;
 
 import java.util.HashSet;
 
-@Optional.Interface(iface = "exnihilocreatio.items.tools.ICrook", modid = Compat.EXNIHILO_CREATIO)
-public class ItemCompressedCrook extends ItemTool implements ICompressedCrook, ICrook {
+public class ItemCompressedCrook extends ToolItem implements ICompressedCrook {
 
     public static final String name = "compressed_crook";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public ItemCompressedCrook() {
         super(0f, 0f, ToolMaterial.WOOD, new HashSet<>());
-        setUnlocalizedName(registryName.toString());
         setCreativeTab(ExCompressum.creativeTab);
         setMaxDamage((int) (ToolMaterial.WOOD.getMaxUses() * 2 * ModConfig.tools.compressedCrookDurabilityMultiplier));
     }
@@ -58,17 +51,17 @@ public class ItemCompressedCrook extends ItemTool implements ICompressedCrook, I
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState block) {
+    public boolean canHarvestBlock(BlockState block) {
         return block.getMaterial() == Material.LEAVES;
     }
 
     @Override
-    public float getDestroySpeed(ItemStack item, IBlockState block) {
+    public float getDestroySpeed(ItemStack item, BlockState block) {
         return block.getMaterial() == Material.LEAVES ? toolMaterial.getEfficiency() * ModConfig.tools.compressedCrookSpeedMultiplier : 0f;
     }
 
     @Override
-    public boolean canCrook(ItemStack itemStack, World world, IBlockState state, EntityPlayer entityPlayer) {
+    public boolean canCrook(ItemStack itemStack, World world, BlockState state, EntityPlayer entityPlayer) {
         return true;
     }
 

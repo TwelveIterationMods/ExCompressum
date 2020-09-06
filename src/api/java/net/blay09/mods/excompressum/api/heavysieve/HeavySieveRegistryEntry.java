@@ -2,9 +2,7 @@ package net.blay09.mods.excompressum.api.heavysieve;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import net.blay09.mods.excompressum.api.ExCompressumAPI;
-import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,17 +10,17 @@ import java.util.stream.Collectors;
 
 public class HeavySieveRegistryEntry {
 
-    private final IBlockState inputState;
+    private final BlockState inputState;
     private final boolean isWildcard;
     private final List<HeavySieveReward> rewards = Lists.newArrayList();
     private final ArrayListMultimap<Integer, HeavySieveReward> meshRewards = ArrayListMultimap.create();
 
-    public HeavySieveRegistryEntry(IBlockState input, boolean isWildcard) {
+    public HeavySieveRegistryEntry(BlockState input, boolean isWildcard) {
         this.inputState = input;
         this.isWildcard = isWildcard;
     }
 
-    public IBlockState getInputState() {
+    public BlockState getInputState() {
         return inputState;
     }
 

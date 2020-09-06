@@ -10,7 +10,6 @@ public class ItemWoodChipping extends Item {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public ItemWoodChipping() {
-        setUnlocalizedName(registryName.toString());
         setCreativeTab(ExCompressum.creativeTab);
     }
 

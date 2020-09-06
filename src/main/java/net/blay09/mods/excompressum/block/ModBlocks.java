@@ -1,62 +1,32 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.item.*;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.tile.*;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelBakery;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.init.Blocks;
+
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@GameRegistry.ObjectHolder(ExCompressum.MOD_ID)
 public class ModBlocks {
 
-	@GameRegistry.ObjectHolder(BlockCompressed.name)
 	public static Block compressedBlock;
-
-	@GameRegistry.ObjectHolder(BlockHeavySieve.name)
 	public static Block heavySieve;
-
-	@GameRegistry.ObjectHolder(BlockWoodenCrucible.name)
 	public static Block woodenCrucible;
-
-	@GameRegistry.ObjectHolder(BlockBait.name)
 	public static Block bait;
-
-	@GameRegistry.ObjectHolder(BlockAutoHammer.name)
 	public static Block autoHammer;
-
-	@GameRegistry.ObjectHolder(BlockAutoCompressedHammer.name)
 	public static Block autoCompressedHammer;
-
-	@GameRegistry.ObjectHolder(BlockAutoHeavySieve.name)
 	public static Block autoHeavySieve;
-
-	@GameRegistry.ObjectHolder(BlockAutoSieve.name)
 	public static Block autoSieve;
-
-	@GameRegistry.ObjectHolder(BlockAutoCompressor.name)
 	public static Block autoCompressor;
-
-	@GameRegistry.ObjectHolder(BlockAutoCompressorRationing.name)
 	public static Block autoCompressorRationing;
 	
 	public static void register(IForgeRegistry<Block> registry) {
 		registry.registerAll(
-				new BlockCompressed().setRegistryName(BlockCompressed.name),
-				new BlockHeavySieve().setRegistryName(BlockHeavySieve.name),
-				new BlockWoodenCrucible().setRegistryName(BlockWoodenCrucible.name),
+				new CompressedBlock().setRegistryName(CompressedBlock.name),
+				new HeavySieveBlock().setRegistryName(HeavySieveBlock.name),
+				new WoodenCrucibleBlock().setRegistryName(WoodenCrucibleBlock.name),
 				new BlockBait().setRegistryName(BlockBait.name),
 				new BlockAutoHammer().setRegistryName(BlockAutoHammer.name),
 				new BlockAutoSieve().setRegistryName(BlockAutoSieve.name),
@@ -69,9 +39,9 @@ public class ModBlocks {
 
 	public static void registerItemBlocks(IForgeRegistry<Item> registry) {
 		registry.registerAll(
-				new ItemBlockCompressed(compressedBlock).setRegistryName(BlockCompressed.name),
-				new ItemBlockHeavySieve(heavySieve).setRegistryName(BlockHeavySieve.name),
-				new ItemBlockWoodenCrucible(woodenCrucible).setRegistryName(BlockWoodenCrucible.name),
+				new ItemBlockCompressed(compressedBlock).setRegistryName(CompressedBlock.name),
+				new ItemBlockHeavySieve(heavySieve).setRegistryName(HeavySieveBlock.name),
+				new ItemBlockWoodenCrucible(woodenCrucible).setRegistryName(WoodenCrucibleBlock.name),
 				new ItemBlockBait(bait).setRegistryName(BlockBait.name),
 				new ItemBlock(autoHammer).setRegistryName(BlockAutoHammer.name),
 				new ItemBlock(autoCompressedHammer).setRegistryName(BlockAutoCompressedHammer.name),
@@ -82,8 +52,7 @@ public class ModBlocks {
 		);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static void registerModels() {
+	/*public static void registerModels() {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoCompressedHammer), 0, new ModelResourceLocation(BlockAutoCompressedHammer.registryName, "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoSieve), 0, new ModelResourceLocation(BlockAutoSieve.registryName, "inventory"));
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoHeavySieve), 0, new ModelResourceLocation(BlockAutoHeavySieve.registryName, "inventory"));
@@ -91,14 +60,14 @@ public class ModBlocks {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoCompressorRationing), 0, new ModelResourceLocation(BlockAutoCompressorRationing.registryName, "inventory"));
 
 		// Baits
-		ResourceLocation[] baitVariants = new ResourceLocation[BlockBait.Type.values.length];
+		ResourceLocation[] baitVariants = new ResourceLocation[BaitType.values.length];
         for(int i = 0; i < baitVariants.length; i++) {
-            baitVariants[i] = new ResourceLocation(ExCompressum.MOD_ID, "bait_" + BlockBait.Type.values[i].getName());
+            baitVariants[i] = new ResourceLocation(ExCompressum.MOD_ID, "bait_" + BaitType.values[i].getName());
         }
         Item baitItem = Item.getItemFromBlock(bait);
         ModelBakery.registerItemVariants(baitItem, baitVariants);
         ModelLoader.setCustomMeshDefinition(baitItem, itemStack -> {
-			BlockBait.Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < BlockBait.Type.values.length ? BlockBait.Type.values[itemStack.getItemDamage()] : null;
+			BaitType type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < BaitType.values.length ? BaitType.values[itemStack.getItemDamage()] : null;
 			if(type != null) {
 				return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "bait_" + type.getName()), "inventory");
 			} else {
@@ -107,14 +76,14 @@ public class ModBlocks {
 		});
 
         // Compressed Blocks
-		ResourceLocation[] variants = new ResourceLocation[BlockCompressed.Type.values.length];
+		ResourceLocation[] variants = new ResourceLocation[CompressedBlockType.values.length];
 		for(int i = 0; i < variants.length; i++) {
-			variants[i] = new ResourceLocation(ExCompressum.MOD_ID, "compressed_" + BlockCompressed.Type.values[i].getName());
+			variants[i] = new ResourceLocation(ExCompressum.MOD_ID, "compressed_" + CompressedBlockType.values[i].getName());
 		}
 		Item compressedBlockItem = Item.getItemFromBlock(compressedBlock);
 		ModelBakery.registerItemVariants(compressedBlockItem, variants);
 		ModelLoader.setCustomMeshDefinition(compressedBlockItem, itemStack -> {
-			BlockCompressed.Type type = BlockCompressed.Type.fromId(itemStack.getItemDamage());
+			CompressedBlockType type = CompressedBlockType.fromId(itemStack.getItemDamage());
 			if(type != null) {
 				return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "compressed_" + type.getName()), "inventory");
 			} else {
@@ -123,16 +92,16 @@ public class ModBlocks {
 		});
 		ModelLoader.setCustomStateMapper(compressedBlock, new StateMapperBase() {
 			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-				return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "compressed_" + state.getValue(BlockCompressed.VARIANT).getName()), "normal");
+			protected ModelResourceLocation getModelResourceLocation(BlockState state) {
+				return new ModelResourceLocation(new ResourceLocation(ExCompressum.MOD_ID, "compressed_" + state.getValue(CompressedBlock.VARIANT).getName()), "normal");
 			}
 		});
 
 		// Wooden Crucible
 		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(woodenCrucible), itemStack -> {
-			BlockWoodenCrucible.Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < BlockWoodenCrucible.Type.values.length ? BlockWoodenCrucible.Type.values[itemStack.getItemDamage()] : null;
+			WoodenCrucibleType type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < WoodenCrucibleType.values.length ? WoodenCrucibleType.values[itemStack.getItemDamage()] : null;
 			if(type != null) {
-				return new ModelResourceLocation(BlockWoodenCrucible.registryName, "variant=" + type.getName());
+				return new ModelResourceLocation(WoodenCrucibleBlock.registryName, "variant=" + type.getName());
 			} else {
 				return new ModelResourceLocation("missingno");
 			}
@@ -140,12 +109,12 @@ public class ModBlocks {
 
 		// Heavy Sieve
 		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(heavySieve), itemStack -> {
-			BlockHeavySieve.Type type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < BlockHeavySieve.Type.values.length ? BlockHeavySieve.Type.values[itemStack.getItemDamage()] : null;
+			HeavySieveType type = itemStack.getItemDamage() >= 0 && itemStack.getItemDamage() < HeavySieveType.values.length ? HeavySieveType.values[itemStack.getItemDamage()] : null;
 			if (type != null) {
 				if (ExRegistro.doMeshesHaveDurability()) {
-					return new ModelResourceLocation(BlockHeavySieve.registryName, "variant=" + type.getName() + ",with_mesh=false");
+					return new ModelResourceLocation(HeavySieveBlock.registryName, "variant=" + type.getName() + ",with_mesh=false");
 				} else {
-					return new ModelResourceLocation(BlockHeavySieve.registryName, "variant=" + type.getName() + ",with_mesh=false"); // it's false here too because it was a dumb idea based on wrong thinking; don't want to remove it now though
+					return new ModelResourceLocation(HeavySieveBlock.registryName, "variant=" + type.getName() + ",with_mesh=false"); // it's false here too because it was a dumb idea based on wrong thinking; don't want to remove it now though
 				}
 			} else {
 				return new ModelResourceLocation("missingno");
@@ -154,18 +123,6 @@ public class ModBlocks {
 
 		// Auto Hammer
 		ModelLoader.setCustomMeshDefinition(Item.getItemFromBlock(autoHammer), stack -> new ModelResourceLocation(BlockAutoHammer.registryName, "facing=north,ugly=" + ((stack.getItemDamage() & 8) == 8)));
-	}
+	}*/
 
-	public static void registerTileEntities() {
-		GameRegistry.registerTileEntity(TileWoodenCrucible.class, ExCompressum.MOD_ID + ":wooden_crucible");
-		GameRegistry.registerTileEntity(TileHeavySieve.class, ExCompressum.MOD_ID + ":heavy_sieve");
-		GameRegistry.registerTileEntity(TileBait.class, ExCompressum.MOD_ID + ":bait");
-
-		GameRegistry.registerTileEntity(TileAutoHammer.class, ExCompressum.MOD_ID + ":auto_hammer");
-		GameRegistry.registerTileEntity(TileAutoCompressedHammer.class, ExCompressum.MOD_ID + ":auto_compressed_hammer.json");
-		GameRegistry.registerTileEntity(TileAutoSieve.class, ExCompressum.MOD_ID + ":auto_sieve");
-		GameRegistry.registerTileEntity(TileAutoHeavySieve.class, ExCompressum.MOD_ID + ":auto_heavy_sieve");
-		GameRegistry.registerTileEntity(TileAutoCompressor.class, ExCompressum.MOD_ID + ":auto_compressor");
-		GameRegistry.registerTileEntity(TileAutoCompressorRationing.class, ExCompressum.MOD_ID + ":auto_compressor_rationing");
-	}
 }

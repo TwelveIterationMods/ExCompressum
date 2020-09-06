@@ -11,7 +11,7 @@ import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.block.BlockCompressed;
+import net.blay09.mods.excompressum.block.CompressedBlockType;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ModConfig;
@@ -19,7 +19,7 @@ import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.blay09.mods.excompressum.utils.StupidUtils;
-import net.minecraft.block.state.IBlockState;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,16 +43,16 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     @Nullable
-    public static HeavySieveRegistryEntry getEntryForBlockState(IBlockState state, boolean withWildcard) {
+    public static HeavySieveRegistryEntry getEntryForBlockState(BlockState state, boolean withWildcard) {
         return INSTANCE.entries.get(new RegistryKey(state, withWildcard));
     }
 
-    public static boolean isSiftable(IBlockState state) {
+    public static boolean isSiftable(BlockState state) {
         RegistryKey key = new RegistryKey(state, false);
         return INSTANCE.entries.get(key) != null || INSTANCE.entries.get(key.withWildcard()) != null;
     }
 
-    public static boolean isSiftableWithMesh(IBlockState state, SieveMeshRegistryEntry sieveMesh) {
+    public static boolean isSiftableWithMesh(BlockState state, SieveMeshRegistryEntry sieveMesh) {
         if (ExRegistro.doMeshesSplitLootTables()) {
             RegistryKey key = new RegistryKey(state, false);
             HeavySieveRegistryEntry entry = INSTANCE.entries.get(key);
@@ -66,12 +66,12 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     public static boolean isSiftableWithMesh(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
-        IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+        BlockState state = StupidUtils.getStateFromItemStack(itemStack);
         return state != null && isSiftableWithMesh(state, sieveMesh);
     }
 
     public static boolean isSiftable(ItemStack itemStack) {
-        IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+        BlockState state = StupidUtils.getStateFromItemStack(itemStack);
         return state != null && isSiftable(state);
     }
 
@@ -91,7 +91,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         return entries;
     }
 
-    public static Collection<ItemStack> rollSieveRewards(IBlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+    public static Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
         List<ItemStack> list = Lists.newArrayList();
         RegistryKey key = new RegistryKey(state, false);
         HeavySieveRegistryEntry entry = INSTANCE.entries.get(key);
@@ -106,7 +106,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     public static Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+        BlockState state = StupidUtils.getStateFromItemStack(itemStack);
         if (state != null) {
             return rollSieveRewards(state, sieveMesh, luck, rand);
         }
@@ -311,7 +311,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
                         }
 
                         ItemStack itemStack = new ItemStack(item, 1, metadataVal);
-                        IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+                        BlockState state = StupidUtils.getStateFromItemStack(itemStack);
                         if (state != null) {
                             HeavySieveRegistryEntry newEntry = new HeavySieveRegistryEntry(state, itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE);
                             for (HeavySieveReward reward : rewardList) {
@@ -339,29 +339,29 @@ public class HeavySieveRegistry extends AbstractRegistry {
         final ItemStack SOUL_SAND = new ItemStack(Blocks.SOUL_SAND);
         final int COMPRESSION_SIZE = 9;
         if (tryGetBoolean(defaults, "excompressum:compressed_gravel", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.GRAVEL.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.GRAVEL.ordinal());
             addGeneratedEntry(itemStack, GRAVEL, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_sand", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SAND.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.SAND.ordinal());
             addGeneratedEntry(itemStack, SAND, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_dirt", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DIRT.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.DIRT.ordinal());
             addGeneratedEntry(itemStack, DIRT, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_soul_sand", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.SOUL_SAND.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.SOUL_SAND.ordinal());
             addGeneratedEntry(itemStack, SOUL_SAND, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_dust", true)) {
             ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
             if (!dustBlock.isEmpty()) {
-                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.DUST.ordinal());
+                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.DUST.ordinal());
                 addGeneratedEntry(itemStack, dustBlock, COMPRESSION_SIZE - defaultLoss);
 
             }
@@ -370,7 +370,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         if (tryGetBoolean(defaults, "excompressum:compressed_nether_gravel", true)) {
             ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
             if (!netherGravelBlock.isEmpty()) {
-                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.NETHER_GRAVEL.ordinal());
+                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.NETHER_GRAVEL.ordinal());
                 addGeneratedEntry(itemStack, netherGravelBlock, COMPRESSION_SIZE - defaultLoss);
             }
         }
@@ -378,7 +378,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         if (tryGetBoolean(defaults, "excompressum:compressed_ender_gravel", true)) {
             ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
             if (!enderGravelBlock.isEmpty()) {
-                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, BlockCompressed.Type.ENDER_GRAVEL.ordinal());
+                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.ENDER_GRAVEL.ordinal());
                 addGeneratedEntry(itemStack, enderGravelBlock, COMPRESSION_SIZE - defaultLoss);
             }
         }
@@ -421,7 +421,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
     private boolean addOre(String oreName, List<HeavySieveReward> rewards) {
         List<ItemStack> list = OreDictionary.getOres(oreName, false);
         for (ItemStack itemStack : list) {
-            IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+            BlockState state = StupidUtils.getStateFromItemStack(itemStack);
             if (state != null) {
                 HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state, itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE);
                 for (HeavySieveReward reward : rewards) {
@@ -444,7 +444,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     private void addGeneratedEntry(ItemStack itemStack, ItemStack sourceStack, int count) {
-        IBlockState state = StupidUtils.getStateFromItemStack(itemStack);
+        BlockState state = StupidUtils.getStateFromItemStack(itemStack);
         if (state == null) {
             logError("Entry %s could not be generated from %s for %s; it's not a block", itemStack.getItem().getRegistryName(), sourceStack.getItem().getRegistryName(), registryName);
             return;
