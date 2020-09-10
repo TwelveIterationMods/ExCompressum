@@ -6,7 +6,6 @@ import com.mojang.authlib.properties.Property;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
-import net.blay09.mods.excompressum.client.render.ParticleSieve;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -15,23 +14,19 @@ import net.blay09.mods.excompressum.utils.DefaultItemHandler;
 import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.utils.SubItemHandler;
-
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.StringUtils;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -80,6 +75,8 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         }
     };
 
+    private final LazyOptional<ItemHandlerAutomation> itemHandlerAutomationCap = LazyOptional.of(() -> itemHandlerAutomation);
+
     private ItemStack currentStack = ItemStack.EMPTY;
     private GameProfile customSkin;
 
@@ -97,6 +94,10 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     private int particleCount;
 
     private boolean isDisabledByRedstone;
+
+    public AutoSieveTileEntityBase(TileEntityType<?> type) {
+        super(type);
+    }
 
     @Override
     public void tick() {
@@ -119,7 +120,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         }
 
         int effectiveEnergy = getEffectiveEnergy();
-        if (!isDisabledByRedstone() && getEnergyStored(null) >= effectiveEnergy) {
+        if (!isDisabledByRedstone() && getEnergyStored() >= effectiveEnergy) {
             if (currentStack.isEmpty()) {
                 ItemStack inputStack = inputSlots.getStackInSlot(0);
                 SieveMeshRegistryEntry sieveMesh = getSieveMesh();
@@ -190,57 +191,16 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
                 particleCount = 0;
             }
 
-            spawnParticles();
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void spawnParticles() {
-        if (currentStack.isEmpty() || ModConfig.client.disableParticles || isUgly()) {
-            return;
-        }
-
-        int particleSetting = Minecraft.getInstance().gameSettings.particleSetting;
-        if (particleSetting == 2) { // Minimal Particle Settings
-            return;
-        }
-
-        int actualParticleCount = particleCount;
-        if (particleSetting == 1) { // Decreased Particle Settings
-            float half = actualParticleCount / 2f;
-            if (half < 1f && Math.random() <= 0.5f) {
-                return;
-            }
-
-            actualParticleCount = (int) Math.ceil(half);
-        }
-
-        int metadata = getBlockMetadata();
-        BlockState state = StupidUtils.getStateFromItemStack(currentStack);
-        if (state != null) {
-            for (int i = 0; i < actualParticleCount; i++) {
-                double particleX = 0.5 + world.rand.nextFloat() * 0.4 - 0.2;
-                double particleZ = 0.5 + world.rand.nextFloat() * 0.4 - 0.2;
-                switch (Direction.getFront(metadata)) {
-                    case WEST:
-                        particleZ -= 0.125f;
-                        break;
-                    case EAST:
-                        particleZ += 0.125f;
-                        break;
-                    case NORTH:
-                        particleX += 0.125f;
-                        break;
-                    case SOUTH:
-                        particleX -= 0.125f;
-                        break;
-                    default:
-                        break;
+            if (!currentStack.isEmpty() && !isUgly()) {
+                final BlockState state = StupidUtils.getStateFromItemStack(currentStack);
+                if (state != null) {
+                    ExCompressum.proxy.spawnSieveParticles(world, pos, state, particleCount);
                 }
-                Minecraft.getInstance().effectRenderer.addEffect(new ParticleSieve(world, pos, particleX, 0.2, particleZ, 0.5f, state));
             }
         }
     }
+
+    protected abstract int extractEnergy(int energy, boolean simulate);
 
     private boolean addItemToOutput(ItemStack itemStack) {
         int firstEmptySlot = -1;
@@ -303,10 +263,10 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
 
     @Override
     protected void readFromNBTSynced(CompoundNBT tagCompound, boolean isSync) {
-        currentStack = new ItemStack(tagCompound.getCompound("CurrentStack"));
+        currentStack = ItemStack.read(tagCompound.getCompound("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
         if (tagCompound.contains("CustomSkin")) {
-            customSkin = NBTUtil.readGameProfileFromNBT(tagCompound.getCompound("CustomSkin"));
+            customSkin = NBTUtil.readGameProfile(tagCompound.getCompound("CustomSkin"));
             if (customSkin != null) {
                 ExCompressum.proxy.preloadSkin(customSkin);
             }
@@ -316,7 +276,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         particleTicks = tagCompound.getInt("ParticleTicks");
         particleCount = tagCompound.getInt("ParticleCount");
         if (isSync) {
-            meshSlots.setStackInSlot(0, new ItemStack(tagCompound.getCompound("MeshStack")));
+            meshSlots.setStackInSlot(0, ItemStack.read(tagCompound.getCompound("MeshStack")));
         } else {
             itemHandler.deserializeNBT(tagCompound.getCompound("ItemHandler"));
         }
@@ -325,7 +285,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
 
     @Override
     protected void writeToNBTSynced(CompoundNBT tagCompound, boolean isSync) {
-        tagCompound.put("CurrentStack", currentStack.writeToNBT(new CompoundNBT()));
+        tagCompound.put("CurrentStack", currentStack.write(new CompoundNBT()));
         tagCompound.putFloat("Progress", progress);
         if (customSkin != null) {
             CompoundNBT customSkinTag = new CompoundNBT();
@@ -338,7 +298,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         tagCompound.putInt("ParticleCount", particleCount);
         if (isSync) {
             ItemStack meshStack = meshSlots.getStackInSlot(0);
-            tagCompound.put("MeshStack", meshStack.writeToNBT(new CompoundNBT()));
+            tagCompound.put("MeshStack", meshStack.write(new CompoundNBT()));
         } else {
             tagCompound.put("ItemHandler", itemHandler.serializeNBT());
         }
@@ -346,8 +306,14 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     }
 
     public float getEnergyPercentage() {
-        return (float) getEnergyStored(null) / (float) getMaxEnergyStored();
+        return (float) getEnergyStored() / (float) getMaxEnergyStored();
     }
+
+    protected abstract int getEnergyStored();
+
+    public abstract void setEnergyStored(int energy);
+
+    protected abstract int getMaxEnergyStored();
 
     public boolean isProcessing() {
         return progress > 0f;
@@ -424,18 +390,12 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-                || super.hasCapability(capability, facing);
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) itemHandlerAutomation;
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (LazyOptional<T>) itemHandlerAutomationCap;
         }
-        return super.getCapability(capability, facing);
+        return super.getCapability(cap, side);
     }
 
     public DefaultItemHandler getItemHandler() {
@@ -462,13 +422,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     }
 
     public boolean shouldAnimate() {
-        return !currentStack.isEmpty() && getEnergyStored(null) >= getEffectiveEnergy() && !isDisabledByRedstone();
-    }
-
-    @Override
-    public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-        cachedState = null;
-        return oldState.getBlock() != newState.getBlock();
+        return !currentStack.isEmpty() && getEnergyStored() >= getEffectiveEnergy() && !isDisabledByRedstone();
     }
 
     public boolean isUgly() {

@@ -28,12 +28,12 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class BlockAutoCompressor extends ContainerBlock {
+public class AutoCompressorBlock extends ContainerBlock {
 
     public static final String name = "auto_compressor";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public BlockAutoCompressor() {
+    public AutoCompressorBlock() {
         super(Material.IRON);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);

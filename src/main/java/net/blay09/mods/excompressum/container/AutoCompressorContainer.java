@@ -80,7 +80,7 @@ public class AutoCompressorContainer extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity entityPlayer) {
-        return tileEntity.isUseableByPlayer(entityPlayer);
+        return tileEntity.isUsableByPlayer(entityPlayer);
     }
 
     @Override

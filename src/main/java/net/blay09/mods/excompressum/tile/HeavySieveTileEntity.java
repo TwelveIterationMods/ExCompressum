@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.tile;
 
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.client.render.ParticleSieve;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -9,7 +9,6 @@ import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,8 +19,6 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
@@ -46,6 +43,10 @@ public class HeavySieveTileEntity extends TileEntity implements ITickable {
 
     private int particleTicks;
     private int particleCount;
+
+    public HeavySieveTileEntity() {
+        super(ModTileEntities.heavySieve);
+    }
 
     public boolean addSiftable(PlayerEntity player, ItemStack itemStack) {
         if (!currentStack.isEmpty() || meshStack.isEmpty() || !HeavySieveRegistry.isSiftable(itemStack)) {
@@ -80,37 +81,11 @@ public class HeavySieveTileEntity extends TileEntity implements ITickable {
                 particleCount = 0;
             }
 
-            if (world.isRemote) {
-                spawnParticles();
-            }
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public void spawnParticles() {
-        if (currentStack.isEmpty() || ModConfig.client.disableParticles) {
-            return;
-        }
-
-        int particleSetting = Minecraft.getInstance().gameSettings.particleSetting;
-        if (particleSetting == 2) { // Minimal Particle Settings
-            return;
-        }
-
-        int actualParticleCount = particleCount;
-        if (particleSetting == 1) { // Decreased Particle Settings
-            float half = actualParticleCount / 2f;
-            if (half < 1f && Math.random() <= 0.5f) {
-                return;
-            }
-
-            actualParticleCount = (int) Math.ceil(half);
-        }
-
-        BlockState state = StupidUtils.getStateFromItemStack(currentStack);
-        if (state != null) {
-            for (int i = 0; i < actualParticleCount; i++) {
-                Minecraft.getInstance().effectRenderer.addEffect(new ParticleSieve(world, pos, 0.5 + world.rand.nextFloat() * 0.8 - 0.4, 0.4, 0.5 + world.rand.nextFloat() * 0.8 - 0.4, 1f, state));
+            if (world.isRemote && !currentStack.isEmpty()) {
+                final BlockState state = StupidUtils.getStateFromItemStack(currentStack);
+                if (state != null) {
+                    ExCompressum.proxy.spawnSieveParticles(world, pos, state, particleCount);
+                }
             }
         }
     }
@@ -148,11 +123,10 @@ public class HeavySieveTileEntity extends TileEntity implements ITickable {
                             getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
                             meshStack = ItemStack.EMPTY;
                         } else {
-                            meshStack.damageItem(1, player);
-                            if (meshStack.isEmpty()) {
+                            meshStack.damageItem(1, player, it -> {
                                 getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
                                 meshStack = ItemStack.EMPTY;
-                            }
+                            });
                         }
                     }
                     progress = 0f;
@@ -170,20 +144,20 @@ public class HeavySieveTileEntity extends TileEntity implements ITickable {
     }
 
     @Override
-    public void readFromNBT(CompoundNBT tagCompound) {
-        super.readFromNBT(tagCompound);
-        currentStack = new ItemStack(tagCompound.getCompound("Content"));
-        meshStack = new ItemStack(tagCompound.getCompound("Mesh"));
+    public void read(BlockState state, CompoundNBT tagCompound) {
+        super.read(state, tagCompound);
+        currentStack = ItemStack.read(tagCompound.getCompound("Content"));
+        meshStack = ItemStack.read(tagCompound.getCompound("Mesh"));
         progress = tagCompound.getFloat("Progress");
         particleTicks = tagCompound.getInt("ParticleTicks");
         particleCount = tagCompound.getInt("ParticleCount");
     }
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT tagCompound) {
-        super.writeToNBT(tagCompound);
-        tagCompound.put("Content", currentStack.writeToNBT(new CompoundNBT()));
-        tagCompound.put("Mesh", meshStack.writeToNBT(new CompoundNBT()));
+    public CompoundNBT write(CompoundNBT tagCompound) {
+        super.write(tagCompound);
+        tagCompound.put("Content", currentStack.write(new CompoundNBT()));
+        tagCompound.put("Mesh", meshStack.write(new CompoundNBT()));
         tagCompound.putFloat("Progress", progress);
         tagCompound.putInt("ParticleTicks", particleTicks);
         tagCompound.putInt("ParticleCount", particleCount);
@@ -192,17 +166,17 @@ public class HeavySieveTileEntity extends TileEntity implements ITickable {
 
     @Override
     public CompoundNBT getUpdateTag() {
-        return writeToNBT(new CompoundNBT());
+        return write(new CompoundNBT());
     }
 
     @Override
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(pos, getBlockMetadata(), getUpdateTag());
+        return new SUpdateTileEntityPacket(pos, 0, getUpdateTag());
     }
 
     @Override
     public void onDataPacket(NetworkManager networkManager, SUpdateTileEntityPacket packet) {
-        readFromNBT(packet.getNbtCompound());
+        read(getBlockState(), packet.getNbtCompound());
     }
 
     public ItemStack getCurrentStack() {

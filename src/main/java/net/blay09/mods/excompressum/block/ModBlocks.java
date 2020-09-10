@@ -1,14 +1,15 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.minecraft.block.Block;
 
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
+@Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
 
 	public static Block compressedBlock;
@@ -20,35 +21,39 @@ public class ModBlocks {
 	public static Block autoHeavySieve;
 	public static Block autoSieve;
 	public static Block autoCompressor;
-	public static Block autoCompressorRationing;
-	
-	public static void register(IForgeRegistry<Block> registry) {
+	public static Block rationingAutoCompressor;
+
+	@SubscribeEvent
+	public static void registerBlocks(RegistryEvent.Register<Block> event) {
+		final IForgeRegistry<Block> registry = event.getRegistry();
 		registry.registerAll(
 				new CompressedBlock().setRegistryName(CompressedBlock.name),
 				new HeavySieveBlock().setRegistryName(HeavySieveBlock.name),
 				new WoodenCrucibleBlock().setRegistryName(WoodenCrucibleBlock.name),
-				new BlockBait().setRegistryName(BlockBait.name),
-				new BlockAutoHammer().setRegistryName(BlockAutoHammer.name),
-				new BlockAutoSieve().setRegistryName(BlockAutoSieve.name),
-				new BlockAutoCompressedHammer().setRegistryName(BlockAutoCompressedHammer.name),
-				new BlockAutoHeavySieve().setRegistryName(BlockAutoHeavySieve.name),
-				new BlockAutoCompressor().setRegistryName(BlockAutoCompressor.name),
-				new BlockAutoCompressorRationing().setRegistryName(BlockAutoCompressorRationing.name)
+				new BaitBlock().setRegistryName(BaitBlock.name),
+				new AutoHammerBlock().setRegistryName(AutoHammerBlock.name),
+				new AutoSieveBlock().setRegistryName(AutoSieveBlock.name),
+				new AutoCompressedHammerBlock().setRegistryName(AutoCompressedHammerBlock.name),
+				new AutoHeavySieveBlock().setRegistryName(AutoHeavySieveBlock.name),
+				new AutoCompressorBlock().setRegistryName(AutoCompressorBlock.name),
+				new RationingAutoCompressorBlock().setRegistryName(RationingAutoCompressorBlock.name)
 		);
 	}
 
-	public static void registerItemBlocks(IForgeRegistry<Item> registry) {
+	@SubscribeEvent
+	public static void registerBlockItems(RegistryEvent.Register<Item> event) {
+		final IForgeRegistry<Item> registry = event.getRegistry();
 		registry.registerAll(
 				new ItemBlockCompressed(compressedBlock).setRegistryName(CompressedBlock.name),
 				new ItemBlockHeavySieve(heavySieve).setRegistryName(HeavySieveBlock.name),
 				new ItemBlockWoodenCrucible(woodenCrucible).setRegistryName(WoodenCrucibleBlock.name),
-				new ItemBlockBait(bait).setRegistryName(BlockBait.name),
-				new ItemBlock(autoHammer).setRegistryName(BlockAutoHammer.name),
-				new ItemBlock(autoCompressedHammer).setRegistryName(BlockAutoCompressedHammer.name),
-				new ItemBlock(autoSieve).setRegistryName(BlockAutoSieve.name),
-				new ItemBlock(autoHeavySieve).setRegistryName(BlockAutoHeavySieve.name),
-				new ItemBlock(autoCompressor).setRegistryName(BlockAutoCompressor.name),
-				new ItemBlock(autoCompressorRationing).setRegistryName(BlockAutoCompressorRationing.name)
+				new ItemBlockBait(bait).setRegistryName(BaitBlock.name),
+				new ItemBlock(autoHammer).setRegistryName(AutoHammerBlock.name),
+				new ItemBlock(autoCompressedHammer).setRegistryName(AutoCompressedHammerBlock.name),
+				new ItemBlock(autoSieve).setRegistryName(AutoSieveBlock.name),
+				new ItemBlock(autoHeavySieve).setRegistryName(AutoHeavySieveBlock.name),
+				new ItemBlock(autoCompressor).setRegistryName(AutoCompressorBlock.name),
+				new ItemBlock(rationingAutoCompressor).setRegistryName(RationingAutoCompressorBlock.name)
 		);
 	}
 

@@ -16,7 +16,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class BlockAutoCompressorRationing extends BlockAutoCompressor {
+public class RationingAutoCompressorBlock extends AutoCompressorBlock {
 
     public static final String name = "auto_compressor_rationing";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);

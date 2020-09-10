@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class BlockAutoHeavySieve extends BlockAutoSieve {
+public class AutoHeavySieveBlock extends AutoSieveBlock {
 
     public static final String name = "auto_heavy_sieve";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);

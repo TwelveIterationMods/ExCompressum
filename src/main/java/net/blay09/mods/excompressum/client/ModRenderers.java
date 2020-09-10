@@ -11,7 +11,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class ModRenderers {
 
-    public void register() {
+    public static void register() {
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.heavySieve, RenderHeavySieve::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoSieve, RenderAutoSieve::normal);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.manaSieve, RenderAutoSieve::normal);

@@ -17,12 +17,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockAutoSieve extends BlockAutoSieveBase {
+public class AutoSieveBlock extends BlockAutoSieveBase {
 
     public static final String name = "auto_sieve";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public BlockAutoSieve() {
+    public AutoSieveBlock() {
         super(Material.IRON);
     }
 

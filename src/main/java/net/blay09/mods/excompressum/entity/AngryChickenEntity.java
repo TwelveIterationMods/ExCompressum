@@ -1,9 +1,13 @@
 package net.blay09.mods.excompressum.entity;
 
+import com.sun.deploy.cache.JarSigningData;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -17,8 +21,10 @@ public class AngryChickenEntity extends MobEntity {
 
     public AngryChickenEntity(EntityType<? extends AngryChickenEntity> type, World world) {
         super(type, world);
+    }
 
-        // TODO size? etc. copy from chicken/zombie
+    public static AttributeModifierMap.MutableAttribute createEntityAttributes() {
+        return ChickenEntity.func_234187_eI_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5);
     }
 
     @Override

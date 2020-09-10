@@ -1,38 +1,30 @@
 package net.blay09.mods.excompressum.tile;
 
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.block.BlockAutoHammer;
-import net.blay09.mods.excompressum.client.render.ParticleAutoHammer;
+import net.blay09.mods.excompressum.block.AutoHammerBlock;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.utils.DefaultItemHandler;
-import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
-import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
-import net.blay09.mods.excompressum.utils.SubItemHandler;
-import net.minecraft.block.Block;
-
+import net.blay09.mods.excompressum.utils.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
@@ -52,6 +44,8 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
             return super.receiveEnergy(maxReceive, simulate);
         }
     };
+
+
     private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 23) {
         @Override
         public boolean isItemValid(int slot, ItemStack itemStack) {
@@ -87,6 +81,9 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
         }
     };
 
+    private final LazyOptional<EnergyStorage> energyStorageCap = LazyOptional.of(() -> energyStorage);
+    private final LazyOptional<ItemHandlerAutomation> itemHandlerAutomationCap = LazyOptional.of(() -> itemHandlerAutomation);
+
     private ItemStack currentStack = ItemStack.EMPTY;
 
     private int ticksSinceUpdate;
@@ -98,11 +95,19 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
 
     private boolean isDisabledByRedstone;
 
+    public AutoHammerTileEntity() {
+        this(ModTileEntities.autoHammer);
+    }
+
+    public AutoHammerTileEntity(TileEntityType<?> type) {
+        super(type);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         if (!world.isRemote) {
             int effectiveEnergy = getEffectiveEnergy();
-            if (!isDisabledByRedstone() && getEnergyStored(null) >= effectiveEnergy) {
+            if (!isDisabledByRedstone() && getEnergyStored() >= effectiveEnergy) {
                 if (currentStack.isEmpty()) {
                     ItemStack inputStack = inputSlots.getStackInSlot(0);
                     if (!inputStack.isEmpty() && isRegistered(inputStack)) {
@@ -153,7 +158,10 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
                                 }
                             }
                         } else {
-                            spawnCrushParticles();
+                            final BlockState currentBlock = getCurrentBlock();
+                            if (!isUgly() && currentBlock != null) {
+                                ExCompressum.proxy.spawnCrushParticles(world, pos, currentBlock);
+                            }
                         }
                         progress = 0f;
                         currentStack = ItemStack.EMPTY;
@@ -171,6 +179,14 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
                 ticksSinceUpdate = 0;
             }
         }
+    }
+
+    public int getEnergyStored() {
+        return energyStorage.getEnergyStored();
+    }
+
+    public int getMaxEnergyStored() {
+        return energyStorage.getMaxEnergyStored();
     }
 
     private boolean addItemToOutput(ItemStack itemStack) {
@@ -240,15 +256,15 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
 
     @Override
     protected void readFromNBTSynced(CompoundNBT tagCompound, boolean isSync) {
-        currentStack = new ItemStack(tagCompound.getCompound("CurrentStack"));
+        currentStack = ItemStack.read(tagCompound.getCompound("CurrentStack"));
         progress = tagCompound.getFloat("Progress");
         if (tagCompound.contains("EnergyStorage")) {
             CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.get("EnergyStorage"));
         }
 
         if (isSync) {
-            hammerSlots.setStackInSlot(0, new ItemStack(tagCompound.getCompound("FirstHammer")));
-            hammerSlots.setStackInSlot(1, new ItemStack(tagCompound.getCompound("SecondHammer")));
+            hammerSlots.setStackInSlot(0, ItemStack.read(tagCompound.getCompound("FirstHammer")));
+            hammerSlots.setStackInSlot(1, ItemStack.read(tagCompound.getCompound("SecondHammer")));
         } else {
             itemHandler.deserializeNBT(tagCompound.getCompound("ItemHandler"));
         }
@@ -263,30 +279,18 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
             tagCompound.put("EnergyStorage", energyStorageNBT);
         }
 
-        tagCompound.put("CurrentStack", currentStack.writeToNBT(new CompoundNBT()));
+        tagCompound.put("CurrentStack", currentStack.write(new CompoundNBT()));
         tagCompound.putFloat("Progress", progress);
         if (isSync) {
             ItemStack firstHammer = hammerSlots.getStackInSlot(0);
-            tagCompound.put("FirstHammer", firstHammer.writeToNBT(new CompoundNBT()));
+            tagCompound.put("FirstHammer", firstHammer.write(new CompoundNBT()));
             ItemStack secondHammer = hammerSlots.getStackInSlot(1);
-            tagCompound.put("SecondHammer", secondHammer.writeToNBT(new CompoundNBT()));
+            tagCompound.put("SecondHammer", secondHammer.write(new CompoundNBT()));
         } else {
             tagCompound.put("ItemHandler", itemHandler.serializeNBT());
         }
 
         tagCompound.putBoolean("IsDisabledByRedstone", isDisabledByRedstone);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private void spawnCrushParticles() {
-        if (!ModConfig.client.disableParticles && !isUgly()) {
-            BlockState currentBlock = getCurrentBlock();
-            if (currentBlock != null) {
-                for (int i = 0; i < 10; i++) {
-                    Minecraft.getInstance().effectRenderer.addEffect(new ParticleAutoHammer(world, pos, pos.getX() + 0.7f, pos.getY() + 0.3f, pos.getZ() + 0.5f, (-world.rand.nextDouble() + 0.2f) / 9, 0.2f, (world.rand.nextDouble() - 0.5) / 9, currentBlock));
-                }
-            }
-        }
     }
 
     public boolean isProcessing() {
@@ -298,7 +302,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
     }
 
     public float getEnergyPercentage() {
-        return (float) getEnergyStored(null) / (float) getMaxEnergyStored(null);
+        return (float) getEnergyStored() / (float) getMaxEnergyStored();
     }
 
     public ItemStack getCurrentStack() {
@@ -306,16 +310,8 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
     }
 
     @Nullable
-    @SuppressWarnings("deprecation")
     public BlockState getCurrentBlock() {
-        if (currentStack.isEmpty()) {
-            return null;
-        }
-        Block block = Block.getBlockFromItem(currentStack.getItem());
-        if (block != Blocks.AIR) {
-            return block.getStateFromMeta(currentStack.getMetadata());
-        }
-        return null;
+        return StupidUtils.getStateFromItemStack(currentStack);
     }
 
     public void setProgress(float progress) {
@@ -323,22 +319,14 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-                || capability == CapabilityEnergy.ENERGY
-                || super.hasCapability(capability, facing);
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) itemHandlerAutomation;
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (LazyOptional<T>) itemHandlerAutomationCap;
+        } else if (cap == CapabilityEnergy.ENERGY) {
+            return (LazyOptional<T>) energyStorageCap;
         }
-        if (capability == CapabilityEnergy.ENERGY) {
-            return (T) energyStorage;
-        }
-        return super.getCapability(capability, facing);
+        return super.getCapability(cap, side);
     }
 
     public DefaultItemHandler getItemHandler() {
@@ -373,29 +361,23 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
     }
 
     public int getMiningLevel() {
-        return Item.ToolMaterial.DIAMOND.getHarvestLevel();
+        return ItemTier.DIAMOND.getHarvestLevel();
     }
 
     public boolean shouldAnimate() {
-        return !currentStack.isEmpty() && getEnergyStored(null) >= getEffectiveEnergy() && !isDisabledByRedstone();
+        return !currentStack.isEmpty() && getEnergyStored() >= getEffectiveEnergy() && !isDisabledByRedstone();
     }
 
     public EnergyStorageModifiable getEnergyStorage() {
         return energyStorage;
     }
 
-    @Override
-    public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newState) {
-        cachedState = null;
-        return oldState.getBlock() != newState.getBlock();
-    }
-
     public boolean isUgly() {
         if (cachedState == null) {
             cachedState = world.getBlockState(pos);
         }
-        if (cachedState.getBlock() instanceof BlockAutoHammer) {
-            return cachedState.get(BlockAutoHammer.UGLY);
+        if (cachedState.getBlock() instanceof AutoHammerBlock) {
+            return cachedState.get(AutoHammerBlock.UGLY);
         }
         return false;
     }
@@ -404,8 +386,8 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
         if (cachedState == null) {
             cachedState = world.getBlockState(pos);
         }
-        if (cachedState.getBlock() instanceof BlockAutoHammer) {
-            return cachedState.get(BlockAutoHammer.FACING);
+        if (cachedState.getBlock() instanceof AutoHammerBlock) {
+            return cachedState.get(AutoHammerBlock.FACING);
         }
         return Direction.NORTH;
     }

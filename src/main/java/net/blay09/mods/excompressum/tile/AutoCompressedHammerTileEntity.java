@@ -15,6 +15,10 @@ import java.util.Random;
 
 public class AutoCompressedHammerTileEntity extends AutoHammerTileEntity {
 
+    public AutoCompressedHammerTileEntity() {
+        super(ModTileEntities.autoCompressedHammer);
+    }
+
     @Override
     public int getEffectiveEnergy() {
         return ModConfig.automation.autoCompressedHammerEnergy;

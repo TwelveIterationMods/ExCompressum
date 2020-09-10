@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockBait extends SomeBlock {
+public class BaitBlock extends SomeBlock {
 
 	public static final String name = "bait";
 	public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
@@ -29,7 +29,7 @@ public class BlockBait extends SomeBlock {
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 0.1, 1);
 	public static final EnumProperty<BaitType> VARIANT = EnumProperty.create("variant", BaitType.class);
 
-	public BlockBait() {
+	public BaitBlock() {
 		super(Material.GROUND);
 		setHardness(0.1f);
 		setCreativeTab(ExCompressum.creativeTab);

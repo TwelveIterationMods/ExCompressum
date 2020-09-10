@@ -72,7 +72,7 @@ public class BaitTileEntity extends TileEntity implements ITickable {
     private int ticksSinceSpawnCheck;
 
     @Override
-    public void update() {
+    public void tick() {
         if (renderItemMain.isEmpty()) {
             renderItemMain = getBaitDisplayItem(getBlockMetadata(), 0);
         }
@@ -96,7 +96,7 @@ public class BaitTileEntity extends TileEntity implements ITickable {
                             }
                             entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                             world.addEntity(entityLiving);
-                            ((ServerWorld) world).spawnParticle(ParticleTypes.EXPLOSION_LARGE, false, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1, 0, 0, 0, 0.0);
+                            ((ServerWorld) world).spawnParticle(ParticleTypes.EXPLOSION, false, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1, 0, 0, 0, 0.0);
                             world.playSound(null, pos, SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.BLOCKS, 1f, 1f);
                         }
                         world.removeBlock(pos);

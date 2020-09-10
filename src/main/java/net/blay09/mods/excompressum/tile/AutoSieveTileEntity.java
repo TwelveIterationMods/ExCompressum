@@ -3,12 +3,11 @@ package net.blay09.mods.excompressum.tile;
 import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Direction;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 
 import javax.annotation.Nullable;
 
@@ -24,6 +23,12 @@ public class AutoSieveTileEntity extends AutoSieveTileEntityBase {
         }
     };
 
+    private final LazyOptional<EnergyStorage> energyStorageCap = LazyOptional.of(() -> energyStorage);
+
+    public AutoSieveTileEntity() {
+        super(ModTileEntities.autoSieve);
+    }
+
     @Override
     protected void writeToNBTSynced(CompoundNBT tagCompound, boolean isSync) {
         super.writeToNBTSynced(tagCompound, isSync);
@@ -31,6 +36,21 @@ public class AutoSieveTileEntity extends AutoSieveTileEntityBase {
         if (energyStorageNBT != null) {
             tagCompound.put("EnergyStorage", energyStorageNBT);
         }
+    }
+
+    @Override
+    protected int getEnergyStored() {
+        return energyStorage.getEnergyStored();
+    }
+
+    @Override
+    public void setEnergyStored(int energy) {
+        energyStorage.setEnergyStored(energy);
+    }
+
+    @Override
+    protected int getMaxEnergyStored() {
+        return energyStorage.getMaxEnergyStored();
     }
 
     @Override
@@ -46,22 +66,17 @@ public class AutoSieveTileEntity extends AutoSieveTileEntityBase {
         if (!simulate) {
             isDirty = true;
         }
+
         return energyStorage.extractEnergy(maxExtract, simulate);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (capability == CapabilityEnergy.ENERGY) {
-            return (T) energyStorage;
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityEnergy.ENERGY) {
+            return (LazyOptional<T>) energyStorageCap;
         }
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-        return capability == CapabilityEnergy.ENERGY
-                || super.hasCapability(capability, facing);
+        return super.getCapability(cap, side);
     }
 
     public EnergyStorageModifiable getEnergyStorage() {

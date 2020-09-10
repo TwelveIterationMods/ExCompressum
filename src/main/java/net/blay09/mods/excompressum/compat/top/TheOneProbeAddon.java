@@ -8,7 +8,7 @@ import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
-import net.blay09.mods.excompressum.block.BlockBait;
+import net.blay09.mods.excompressum.block.BaitBlock;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.WoodenCrucibleBlock;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -51,7 +51,7 @@ public class TheOneProbeAddon implements Function<ITheOneProbe, Void> {
 				if(tileEntity != null) {
 					addAutoSieveInfo(tileEntity, mode, info);
 				}
-			} else if(state.getBlock() instanceof BlockBait) {
+			} else if(state.getBlock() instanceof BaitBlock) {
 				BaitTileEntity tileEntity = tryGetTileEntity(world, data.getPos(), BaitTileEntity.class);
 				if(tileEntity != null) {
 					addBaitInfo(tileEntity, mode, info);

@@ -1,13 +1,16 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.config.ModConfig;
-import net.minecraft.util.Direction;
-
-import javax.annotation.Nullable;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.TileEntityType;
 
 public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
 
     private int manaStored;
+
+    public ManaSieveTileEntity(TileEntityType<?> type) {
+        super(type);
+    }
 
     @Override
     public int getEffectiveEnergy() {
@@ -20,7 +23,7 @@ public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
     }
 
     @Override
-    public int getEnergyStored(@Nullable Direction from) {
+    public int getEnergyStored() {
         return manaStored;
     }
 
@@ -39,39 +42,19 @@ public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
     }
 
     @Override
-    protected void writeToNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
+    protected void writeToNBTSynced(CompoundNBT tagCompound, boolean isSync) {
         super.writeToNBTSynced(tagCompound, isSync);
         if(!isSync) {
-            tagCompound.setInteger("ManaStored", manaStored);
+            tagCompound.putInt("ManaStored", manaStored);
         }
     }
 
     @Override
-    protected void readFromNBTSynced(NBTTagCompound tagCompound, boolean isSync) {
+    protected void readFromNBTSynced(CompoundNBT tagCompound, boolean isSync) {
         super.readFromNBTSynced(tagCompound, isSync);
         if(!isSync) {
-            manaStored = tagCompound.getInteger("ManaStored");
+            manaStored = tagCompound.getInt("ManaStored");
         }
-    }
-
-    @Override
-    public boolean isFull() {
-        return manaStored >= getMaxEnergyStored();
-    }
-
-    @Override
-    public void recieveMana(int mana) {
-        manaStored += mana;
-    }
-
-    @Override
-    public boolean canRecieveManaFromBursts() {
-        return !isFull();
-    }
-
-    @Override
-    public int getCurrentMana() {
-        return manaStored;
     }
 
 }

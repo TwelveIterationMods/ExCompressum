@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class BlockAutoCompressedHammer extends BlockAutoHammer {
+public class AutoCompressedHammerBlock extends AutoHammerBlock {
 
     public static final String name = "auto_compressed_hammer";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);

@@ -8,16 +8,20 @@ import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
 import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
 import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
 
@@ -28,12 +32,13 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
     private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
-            if(!simulate) {
+            if (!simulate) {
                 markDirty();
             }
             return super.receiveEnergy(maxReceive, simulate);
         }
     };
+
 
     private final Multiset<CompressedRecipe> inputItems = HashMultiset.create();
     private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 24) {
@@ -56,17 +61,28 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
         }
     };
 
+    private final LazyOptional<EnergyStorage> energyStorageCap = LazyOptional.of(() -> energyStorage);
+    private final LazyOptional<ItemHandlerAutomation> itemHandlerAutomationCap = LazyOptional.of(() -> itemHandlerAutomation);
+
     private NonNullList<ItemStack> currentBuffer = NonNullList.create();
     private CompressedRecipe currentRecipe = null;
     private float progress;
     private boolean isDisabledByRedstone;
+
+    public AutoCompressorTileEntity() {
+        this(ModTileEntities.autoCompressor);
+    }
+
+    public AutoCompressorTileEntity(TileEntityType<?> type) {
+        super(type);
+    }
 
     public boolean shouldCompress(Multiset<CompressedRecipe> inputItems, CompressedRecipe compressedRecipe) {
         return inputItems.count(compressedRecipe) >= compressedRecipe.getCount();
     }
 
     @Override
-    public void update() {
+    public void tick() {
         int effectiveEnergy = getEffectiveEnergy();
         if (!world.isRemote && !isDisabledByRedstone() && energyStorage.getEnergyStored() > effectiveEnergy) {
             if (currentRecipe == null) {
@@ -84,18 +100,18 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
                     Ingredient ingredient = compressedRecipe.getIngredient();
                     if (shouldCompress(inputItems, compressedRecipe)) {
                         int space = 0;
-                        for(int i = 0; i < outputSlots.getSlots(); i++) {
+                        for (int i = 0; i < outputSlots.getSlots(); i++) {
                             ItemStack slotStack = outputSlots.getStackInSlot(i);
-                            if(slotStack.isEmpty()) {
+                            if (slotStack.isEmpty()) {
                                 space = 64;
-                            } else if(isItemEqualWildcard(slotStack, compressedRecipe.getResultStack())) {
+                            } else if (isItemEqualWildcard(slotStack, compressedRecipe.getResultStack())) {
                                 space += slotStack.getMaxStackSize() - slotStack.getCount();
                             }
-                            if(space >= compressedRecipe.getResultStack().getCount()) {
+                            if (space >= compressedRecipe.getResultStack().getCount()) {
                                 break;
                             }
                         }
-                        if(space < compressedRecipe.getResultStack().getCount()) {
+                        if (space < compressedRecipe.getResultStack().getCount()) {
                             continue;
                         }
                         int count = compressedRecipe.getCount();
@@ -149,8 +165,7 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
 
     private boolean isItemEqualWildcard(ItemStack itemStack, ItemStack otherStack) {
         return ItemStack.areItemStackTagsEqual(itemStack, otherStack) && (itemStack.isItemEqual(otherStack)
-                || itemStack.getItem() == otherStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE
-                || otherStack.getItemDamage() == OreDictionary.WILDCARD_VALUE));
+                || itemStack.getItem() == otherStack.getItem());
     }
 
     private boolean addItemToOutput(ItemStack itemStack) {
@@ -189,11 +204,11 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
     }
 
     @Override
-    public void readFromNBT(CompoundNBT tagCompound) {
-        super.readFromNBT(tagCompound);
-        if(tagCompound.contains("CurrentRecipeResult")) {
-            ItemStack itemStack = new ItemStack(tagCompound.getCompound("CurrentRecipeResult"));
-            if(!itemStack.isEmpty()) {
+    public void read(BlockState state, CompoundNBT tagCompound) {
+        super.read(state, tagCompound);
+        if (tagCompound.contains("CurrentRecipeResult")) {
+            ItemStack itemStack = ItemStack.read(tagCompound.getCompound("CurrentRecipeResult"));
+            if (!itemStack.isEmpty()) {
                 currentRecipe = new CompressedRecipe(Ingredient.EMPTY, 0, itemStack);
             }
         }
@@ -204,18 +219,18 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
     protected void readFromNBTSynced(CompoundNBT tagCompound, boolean isSync) {
         progress = tagCompound.getFloat("Progress");
         itemHandler.deserializeNBT(tagCompound.getCompound("ItemHandler"));
-        if(tagCompound.contains("EnergyStorage")) {
-            CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.contains("EnergyStorage"));
+        if (tagCompound.contains("EnergyStorage")) {
+            CapabilityEnergy.ENERGY.readNBT(energyStorage, null, tagCompound.get("EnergyStorage"));
         }
     }
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT tagCompound) {
-        if(currentRecipe != null) {
-            tagCompound.put("CurrentRecipeResult", currentRecipe.getResultStack().writeToNBT(new CompoundNBT()));
+    public CompoundNBT write(CompoundNBT tagCompound) {
+        if (currentRecipe != null) {
+            tagCompound.put("CurrentRecipeResult", currentRecipe.getResultStack().write(new CompoundNBT()));
         }
         tagCompound.putBoolean("IsDisabledByRedstone", isDisabledByRedstone);
-        return super.writeToNBT(tagCompound);
+        return super.write(tagCompound);
     }
 
     @Override
@@ -223,7 +238,7 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
         tagCompound.putFloat("Progress", progress);
         tagCompound.put("ItemHandler", itemHandler.serializeNBT());
         INBT energyStorageNBT = CapabilityEnergy.ENERGY.writeNBT(energyStorage, null);
-        if(energyStorageNBT != null) {
+        if (energyStorageNBT != null) {
             tagCompound.put("EnergyStorage", energyStorageNBT);
         }
     }
@@ -249,22 +264,14 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable Direction facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-                || capability == CapabilityEnergy.ENERGY
-                || super.hasCapability(capability, facing);
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
-    public <T> T getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) itemHandlerAutomation;
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (LazyOptional<T>) itemHandlerAutomationCap;
+        } else if (cap == CapabilityEnergy.ENERGY) {
+            return (LazyOptional<T>) energyStorageCap;
         }
-        if(capability == CapabilityEnergy.ENERGY) {
-            return (T) energyStorage;
-        }
-        return super.getCapability(capability, facing);
+        return super.getCapability(cap, side);
     }
 
     public DefaultItemHandler getItemHandler() {

@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum;
 
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.api.IInternalMethods;
+import net.blay09.mods.excompressum.api.InternalMethods;
 import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerRegistryEntry;
 import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
@@ -18,7 +18,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public class InternalMethods implements IInternalMethods {
+public class InternalMethodsImpl implements InternalMethods {
 	@Override
 	public void registerChickenStickHammerable(BlockState state, boolean isWildcard) {
 		ChickenStickRegistry.INSTANCE.add(state, isWildcard);

@@ -25,7 +25,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class BlockAutoHammer extends ContainerBlock implements IUglyfiable {
+public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
 
     public static final String name = "auto_hammer";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
@@ -33,7 +33,7 @@ public class BlockAutoHammer extends ContainerBlock implements IUglyfiable {
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final BooleanProperty UGLY = BooleanProperty.create("ugly");
 
-    public BlockAutoHammer() {
+    public AutoHammerBlock() {
         super(Material.IRON);
         setCreativeTab(ExCompressum.creativeTab);
         setHardness(2f);
