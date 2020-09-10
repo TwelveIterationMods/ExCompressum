@@ -8,21 +8,14 @@ import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry
 
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
+import net.minecraft.item.ItemTier;
 import net.minecraft.item.ToolItem;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -38,10 +31,8 @@ public class ItemOreSmasher extends ToolItem {
     public static final String name = "ore_smasher";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public ItemOreSmasher() {
-        super(0f, 0f, ToolMaterial.DIAMOND, new HashSet<>());
-        setUnlocalizedName(registryName.toString());
-        setCreativeTab(ExCompressum.creativeTab);
+    public ItemOreSmasher(Properties properties) {
+        super(0f, 0f, ItemTier.DIAMOND, new HashSet<>(), properties);
     }
 
     @Override
@@ -59,7 +50,7 @@ public class ItemOreSmasher extends ToolItem {
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!world.checkNoEntityCollision(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
             return EnumActionResult.FAIL;
         }

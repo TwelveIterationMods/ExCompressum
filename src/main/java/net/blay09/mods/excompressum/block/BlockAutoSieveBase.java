@@ -46,7 +46,7 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
 
     protected BlockAutoSieveBase(Material material) {
         super(material);
-        setCreativeTab(ExCompressum.creativeTab);
+        setCreativeTab(ExCompressum.itemGroup);
         setHardness(2f);
     }
 

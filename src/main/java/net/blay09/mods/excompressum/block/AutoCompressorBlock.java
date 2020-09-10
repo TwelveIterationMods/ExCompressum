@@ -35,7 +35,7 @@ public class AutoCompressorBlock extends ContainerBlock {
 
     public AutoCompressorBlock() {
         super(Material.IRON);
-        setCreativeTab(ExCompressum.creativeTab);
+        setCreativeTab(ExCompressum.itemGroup);
         setHardness(2f);
     }
 

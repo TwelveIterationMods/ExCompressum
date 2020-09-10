@@ -192,9 +192,9 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
             }
 
             if (!currentStack.isEmpty() && !isUgly()) {
-                final BlockState state = StupidUtils.getStateFromItemStack(currentStack);
-                if (state != null) {
-                    ExCompressum.proxy.spawnSieveParticles(world, pos, state, particleCount);
+                final BlockState processingState = StupidUtils.getStateFromItemStack(currentStack);
+                if (processingState != null) {
+                    ExCompressum.proxy.spawnAutoSieveParticles(world, pos, getBlockState(), processingState, particleCount);
                 }
             }
         }

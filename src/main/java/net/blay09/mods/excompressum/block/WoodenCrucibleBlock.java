@@ -30,7 +30,7 @@ public class WoodenCrucibleBlock extends ContainerBlock {
 
     public WoodenCrucibleBlock(WoodenCrucibleType type) {
         super(Material.WOOD);
-        setCreativeTab(ExCompressum.creativeTab);
+        setCreativeTab(ExCompressum.itemGroup);
         setHardness(2f);
     }
 

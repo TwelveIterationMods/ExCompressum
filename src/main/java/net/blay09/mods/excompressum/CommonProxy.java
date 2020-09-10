@@ -12,5 +12,6 @@ public class CommonProxy {
     public void spawnCrushParticles(World world, BlockPos pos, BlockState state) {
     }
 
-    public void spawnSieveParticles(World world, BlockPos pos, BlockState particleState, int particleCount) {}
+    public void spawnAutoSieveParticles(World world, BlockPos pos, BlockState emitterState, BlockState particleState, int particleCount) {}
+    public void spawnHeavySieveParticles(World world, BlockPos pos, BlockState particleState, int particleCount) {}
 }

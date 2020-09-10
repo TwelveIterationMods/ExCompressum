@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.ParticleStatus;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,7 +43,37 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void spawnSieveParticles(World world, BlockPos pos, BlockState particleState, int particleCount) {
+    public void spawnAutoSieveParticles(World world, BlockPos pos, BlockState emitterState, BlockState particleState, int particleCount) {
+        float offsetX = 0;
+        float offsetZ = 0;
+        if (emitterState.hasProperty(HorizontalBlock.HORIZONTAL_FACING)) {
+            switch (emitterState.get(HorizontalBlock.HORIZONTAL_FACING)) {
+                case WEST:
+                    offsetZ -= 0.125f;
+                    break;
+                case EAST:
+                    offsetZ += 0.125f;
+                    break;
+                case NORTH:
+                    offsetX += 0.125f;
+                    break;
+                case SOUTH:
+                    offsetX -= 0.125f;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        spawnSieveParticles(world, pos, particleState, particleCount, new Vector3f(offsetX, 0.2f, offsetZ), 0.5f);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void spawnHeavySieveParticles(World world, BlockPos pos, BlockState particleState, int particleCount) {
+        spawnSieveParticles(world, pos, particleState, particleCount, new Vector3f(0f, 0.4f, 0f), 1f);
+    }
+
+    private void spawnSieveParticles(World world, BlockPos pos, BlockState particleState, int particleCount, Vector3f particleOffset, float scale) {
         // Do not render sieve particles if particles are disabled in the config.
         if (ModConfig.client.disableParticles) {
             return;
@@ -66,38 +97,12 @@ public class ClientProxy extends CommonProxy {
         }
 
         for (int i = 0; i < actualParticleCount; i++) {
-            double particleX = 0.5 + world.rand.nextFloat() * 0.4 - 0.2;
-            double particleZ = 0.5 + world.rand.nextFloat() * 0.4 - 0.2;
-            if (particleState.hasProperty(HorizontalBlock.HORIZONTAL_FACING)) {
-                switch (particleState.get(HorizontalBlock.HORIZONTAL_FACING)) {
-                    case WEST:
-                        particleZ -= 0.125f;
-                        break;
-                    case EAST:
-                        particleZ += 0.125f;
-                        break;
-                    case NORTH:
-                        particleX += 0.125f;
-                        break;
-                    case SOUTH:
-                        particleX -= 0.125f;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            Minecraft.getInstance().particles.addEffect(new SievingParticle((ClientWorld) world, pos, particleX, 0.2, particleZ, 0.5f, particleState));
-        }
-    }
-
-
-    @OnlyIn(Dist.CLIENT)
-    public void spawnHeavySieveParticles() {
-        BlockState state = StupidUtils.getStateFromItemStack(currentStack);
-        if (state != null) {
-            for (int i = 0; i < actualParticleCount; i++) {
-                Minecraft.getInstance().effectRenderer.addEffect(new SievingParticle(world, pos, 0.5 + world.rand.nextFloat() * 0.8 - 0.4, 0.4, 0.5 + world.rand.nextFloat() * 0.8 - 0.4, 1f, state));
-            }
+            double spread = 0.8 * scale;
+            double min = 0.4 * scale;
+            double particleX = particleOffset.getX() + world.rand.nextFloat() * spread - min;
+            double particleY = particleOffset.getY();
+            double particleZ = particleOffset.getZ() + world.rand.nextFloat() * spread - min;
+            Minecraft.getInstance().particles.addEffect(new SievingParticle((ClientWorld) world, pos, particleX, particleY, particleZ, scale, particleState));
         }
     }
 }

@@ -22,8 +22,8 @@ public class ItemUglySteelPlating extends Item {
     public static final String name = "ugly_steel_plating";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public ItemUglySteelPlating() {
-        setCreativeTab(ExCompressum.creativeTab);
+    public ItemUglySteelPlating(Properties properties) {
+        super(properties);
     }
 
     @Override

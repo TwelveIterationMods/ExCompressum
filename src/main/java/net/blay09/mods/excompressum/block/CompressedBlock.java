@@ -17,7 +17,7 @@ public class CompressedBlock extends Block {
 		setHardness(4f);
 		setResistance(6f);
 		setSoundType(SoundType.STONE);
-		setCreativeTab(ExCompressum.creativeTab);
+		setCreativeTab(ExCompressum.itemGroup);
 	}
 
 }

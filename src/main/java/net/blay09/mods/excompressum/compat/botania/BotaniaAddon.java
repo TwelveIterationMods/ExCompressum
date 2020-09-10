@@ -74,7 +74,7 @@ public class BotaniaAddon implements IAddon {
         if(ModConfig.compat.enableEvolvedOrechid) {
             BotaniaAPI.registerSubTileSignature(SubTileOrechidEvolved.class, new SubTileOrechidEvolvedSignature());
             ItemStack orechidEvolved = ItemBlockSpecialFlower.ofType(SUBTILE_ORECHID_EVOLVED);
-            ExCompressum.creativeTab.addAdditionalItem(orechidEvolved);
+            ExCompressum.itemGroup.addAdditionalItem(orechidEvolved);
             RecipePetals recipeOrechidEvolved = BotaniaAPI.registerPetalRecipe(orechidEvolved, "petalGray", "petalGray", "petalYellow", "petalYellow", "petalGreen", "petalGreen", "petalRed", "petalRed");
             lexiconOrechidEvolved = new LexiconEntry(LEXICON_ORECHID_EVOLVED, BotaniaAPI.categoryFunctionalFlowers) {
                 @Override

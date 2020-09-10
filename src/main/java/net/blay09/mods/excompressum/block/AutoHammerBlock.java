@@ -35,7 +35,7 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
 
     public AutoHammerBlock() {
         super(Material.IRON);
-        setCreativeTab(ExCompressum.creativeTab);
+        setCreativeTab(ExCompressum.itemGroup);
         setHardness(2f);
     }
 

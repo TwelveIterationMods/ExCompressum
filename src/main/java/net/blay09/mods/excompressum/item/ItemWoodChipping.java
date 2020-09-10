@@ -9,8 +9,7 @@ public class ItemWoodChipping extends Item {
     public static final String name = "wood_chippings";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public ItemWoodChipping() {
-        setCreativeTab(ExCompressum.creativeTab);
+    public ItemWoodChipping(Properties properties) {
+        super(properties);
     }
-
 }

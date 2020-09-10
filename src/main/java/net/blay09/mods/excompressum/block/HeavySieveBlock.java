@@ -35,7 +35,7 @@ public class HeavySieveBlock extends ContainerBlock {
 
 	public HeavySieveBlock(HeavySieveType type) {
 		super(Material.WOOD);
-		setCreativeTab(ExCompressum.creativeTab);
+		setCreativeTab(ExCompressum.itemGroup);
 		setHardness(2f);
 	}
 

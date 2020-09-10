@@ -1,9 +1,9 @@
 package net.blay09.mods.excompressum.tile;
 
+import net.blay09.mods.excompressum.block.BaitBlock;
 import net.blay09.mods.excompressum.block.BaitType;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.config.ModConfig;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.texture.ITickable;
@@ -11,6 +11,7 @@ import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
@@ -18,10 +19,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 
 public class BaitTileEntity extends TileEntity implements ITickable {
@@ -33,36 +32,8 @@ public class BaitTileEntity extends TileEntity implements ITickable {
     private static final int SPAWN_CHECK_INTERVAL = 20;
     private static final int MIN_DISTANCE_NO_PLAYERS = 6;
 
-    public enum EnvironmentalCondition {
-        CanSpawn("info.excompressum:baitCanSpawn"),
-        NearbyBait("info.excompressum:baitNearbyBait"),
-        WrongEnv("info.excompressum:baitWrongEnv"),
-        NearbyAnimal("info.excompressum:baitNearbyAnimal"),
-        NoWater("info.excompressum:baitNoWater");
-
-        public final String langKey;
-
-        EnvironmentalCondition(String langKey) {
-            this.langKey = langKey;
-        }
-    }
-
-    public static class BaitBlockCondition {
-        private final BlockState state;
-        private final boolean isWildcard;
-
-        public BaitBlockCondition(BlockState state, boolean isWildcard) {
-            this.state = state;
-            this.isWildcard = isWildcard;
-        }
-
-        public BlockState getState() {
-            return state;
-        }
-
-        public boolean isWildcard() {
-            return isWildcard;
-        }
+    public BaitTileEntity() {
+        super(ModTileEntities.bait);
     }
 
     private ItemStack renderItemMain = ItemStack.EMPTY;
@@ -73,33 +44,32 @@ public class BaitTileEntity extends TileEntity implements ITickable {
 
     @Override
     public void tick() {
+        final BaitType baitType = getBaitType();
         if (renderItemMain.isEmpty()) {
-            renderItemMain = getBaitDisplayItem(getBlockMetadata(), 0);
+            renderItemMain = baitType.getDisplayItemFirst();
         }
         if (renderItemSub.isEmpty()) {
-            renderItemSub = getBaitDisplayItem(getBlockMetadata(), 1);
+            renderItemSub = baitType.getDisplayItemSecond();
         }
 
         ticksSinceEnvironmentalCheck++;
 
         ticksSinceSpawnCheck++;
         if (ticksSinceSpawnCheck >= SPAWN_CHECK_INTERVAL) {
-            int metadata = getBlockMetadata();
-            if (!world.isRemote && world.rand.nextFloat() <= getBaitChance(metadata)) {
+            if (!world.isRemote && world.rand.nextFloat() <= baitType.getChance()) {
                 if (checkSpawnConditions(true) == EnvironmentalCondition.CanSpawn) {
                     final float range = MIN_DISTANCE_NO_PLAYERS;
                     if (world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty()) {
-                        LivingEntity entityLiving = getBaitEntityLiving(world, metadata);
-                        if (entityLiving != null) {
-                            if (entityLiving instanceof AgeableEntity && world.rand.nextFloat() <= ModConfig.baits.childChance) {
-                                ((AgeableEntity) entityLiving).setGrowingAge(-24000);
-                            }
-                            entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-                            world.addEntity(entityLiving);
-                            ((ServerWorld) world).spawnParticle(ParticleTypes.EXPLOSION, false, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1, 0, 0, 0, 0.0);
-                            world.playSound(null, pos, SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.BLOCKS, 1f, 1f);
+                        LivingEntity entityLiving = baitType.createEntity(world);
+                        if (entityLiving instanceof AgeableEntity && world.rand.nextFloat() <= ModConfig.baits.childChance) {
+                            ((AgeableEntity) entityLiving).setGrowingAge(-24000);
                         }
-                        world.removeBlock(pos);
+                        entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                        world.addEntity(entityLiving);
+                        ((ServerWorld) world).spawnParticle(ParticleTypes.EXPLOSION, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 1, 0, 0, 0, 0.0);
+                        world.playSound(null, pos, SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.BLOCKS, 1f, 1f);
+
+                        world.removeBlock(pos, false);
                     }
                 }
             }
@@ -107,37 +77,10 @@ public class BaitTileEntity extends TileEntity implements ITickable {
         }
     }
 
-    private static ItemStack getBaitDisplayItem(int metadata, int i) {
-        BaitType type = BaitType.fromId(metadata);
-        if (type != null) {
-            return i == 0 ? type.getDisplayItemFirst() : type.getDisplayItemSecond();
-        }
-        return ItemStack.EMPTY;
-    }
-
-    @Nullable
-    private static LivingEntity getBaitEntityLiving(World world, int metadata) {
-        BaitType type = BaitType.fromId(metadata);
-        return type != null ? type.createEntity(world) : null;
-    }
-
-    private float getBaitChance(int metadata) {
-        BaitType type = BaitType.fromId(metadata);
-        return type != null ? type.getChance() : 0f;
-    }
-
-    public ItemStack getRenderItem(int i) {
-        return i == 0 ? renderItemMain : renderItemSub;
-    }
-
     public EnvironmentalCondition checkSpawnConditions(boolean checkNow) {
         if (checkNow || ticksSinceEnvironmentalCheck > ENVIRONMENTAL_CHECK_INTERVAL) {
-            int metadata = getBlockMetadata();
-            BaitType baitType = BaitType.fromId(metadata);
-            Collection<BaitBlockCondition> envBlocks = baitType != null ? baitType.getEnvironmentConditions() : null;
-            if (envBlocks == null) {
-                throw new RuntimeException("The bait you placed (metadata " + metadata + ") was not properly defined - this should not happen - please report to the mod developer!");
-            }
+            BaitType baitType = getBaitType();
+            Collection<BaitBlockCondition> envBlocks = baitType.getEnvironmentConditions();
             final int range = 5;
             final int rangeVertical = 3;
             int countBait = 0;
@@ -150,7 +93,7 @@ public class BaitTileEntity extends TileEntity implements ITickable {
                         BlockState state = world.getBlockState(testPos);
                         if (state.getBlock() == ModBlocks.bait) {
                             countBait++;
-                        } else if (state.getBlock() == Blocks.WATER || state.getBlock() == Blocks.FLOWING_WATER) {
+                        } else if (state.getBlock() == Blocks.WATER || state.getFluidState().getFluid() == Fluids.FLOWING_WATER) {
                             foundWater = true;
                         }
 
@@ -160,17 +103,10 @@ public class BaitTileEntity extends TileEntity implements ITickable {
                             // This will hopefully fix itself when baits become data-pack driven in 1.13.
                             if (envBlock == null || envBlock.getState() == null) {
                                 countEnvBlocks++;
-								continue;
+                                continue;
                             }
 
                             if (state.getBlock() == envBlock.getState().getBlock()) {
-                                if (!envBlock.isWildcard()) {
-                                    int meta = state.getBlock().getMetaFromState(state);
-                                    int envMeta = envBlock.getState().getBlock().getMetaFromState(envBlock.getState());
-                                    if (meta != envMeta) {
-                                        continue;
-                                    }
-                                }
                                 countEnvBlocks++;
                             }
                         }
@@ -192,6 +128,10 @@ public class BaitTileEntity extends TileEntity implements ITickable {
         }
 
         return environmentStatus;
+    }
+
+    private BaitType getBaitType() {
+        return ((BaitBlock) getBlockState().getBlock()).getBaitType();
     }
 
 }

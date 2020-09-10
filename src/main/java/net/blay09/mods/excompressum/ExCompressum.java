@@ -25,7 +25,7 @@ public class ExCompressum {
 
     public static CommonProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
-    public static final ExCompressumCreativeTab creativeTab = new ExCompressumCreativeTab();
+    public static final ExCompressumCreativeTab itemGroup = new ExCompressumCreativeTab();
 
     public ExCompressum() {
         ExCompressumAPI.__setupAPI(new InternalMethodsImpl());

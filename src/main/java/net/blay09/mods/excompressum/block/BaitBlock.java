@@ -3,6 +3,8 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.tile.BaitTileEntity;
+import net.blay09.mods.excompressum.tile.EnvironmentalCondition;
+import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
 
 import net.minecraft.client.resources.I18n;
@@ -21,7 +23,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BaitBlock extends SomeBlock {
+public class BaitBlock extends ContainerBlock {
 
 	public static final String name = "bait";
 	public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
@@ -32,7 +34,7 @@ public class BaitBlock extends SomeBlock {
 	public BaitBlock() {
 		super(Material.GROUND);
 		setHardness(0.1f);
-		setCreativeTab(ExCompressum.creativeTab);
+		setCreativeTab(ExCompressum.itemGroup);
 	}
 
 	@Override
@@ -57,10 +59,10 @@ public class BaitBlock extends SomeBlock {
 	public boolean onBlockActivated(World world, BlockPos pos, BlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
 		if (tileEntity != null) {
-			BaitTileEntity.EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
+			EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
 			if (!world.isRemote) {
 				ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
-				chatComponent.getStyle().setColor(environmentStatus != BaitTileEntity.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
+				chatComponent.getStyle().setColor(environmentStatus != EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
 				player.sendMessage(chatComponent);
 			}
 		}
@@ -72,10 +74,10 @@ public class BaitBlock extends SomeBlock {
 		if (placer instanceof EntityPlayer) {
 			BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
 			if (tileEntity != null) {
-				BaitTileEntity.EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
+				EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
 				if (!world.isRemote) {
 					ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
-					chatComponent.getStyle().setColor(environmentStatus != BaitTileEntity.EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
+					chatComponent.getStyle().setColor(environmentStatus != EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
 					placer.sendMessage(chatComponent);
 				}
 			}
@@ -86,7 +88,7 @@ public class BaitBlock extends SomeBlock {
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random rand) {
 		if (!ModConfig.client.disableParticles) {
 			BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
-			if (tileEntity != null && tileEntity.checkSpawnConditions(false) == BaitTileEntity.EnvironmentalCondition.CanSpawn) {
+			if (tileEntity != null && tileEntity.checkSpawnConditions(false) == EnvironmentalCondition.CanSpawn) {
 				if (rand.nextFloat() <= 0.2f) {
 					world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + rand.nextFloat(), pos.getY() + rand.nextFloat() * 0.5f, pos.getZ() + rand.nextFloat(), 0.0, 0.0, 0.0);
 				}
@@ -102,4 +104,7 @@ public class BaitBlock extends SomeBlock {
 		}
 	}
 
+	public BaitType getBaitType() {
+		return baitType;
+	}
 }

@@ -12,10 +12,7 @@ import net.blay09.mods.excompressum.block.BaitBlock;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.WoodenCrucibleBlock;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
-import net.blay09.mods.excompressum.tile.BaitTileEntity;
-import net.blay09.mods.excompressum.tile.HeavySieveTileEntity;
-import net.blay09.mods.excompressum.tile.WoodenCrucibleTileEntity;
+import net.blay09.mods.excompressum.tile.*;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -82,8 +79,8 @@ public class TheOneProbeAddon implements Function<ITheOneProbe, Void> {
 		}
 
 		private void addBaitInfo(BaitTileEntity tileEntity, ProbeMode mode, IProbeInfo info) {
-			BaitTileEntity.EnvironmentalCondition environmentalStatus = tileEntity.checkSpawnConditions(true);
-			if(environmentalStatus == BaitTileEntity.EnvironmentalCondition.CanSpawn) {
+			EnvironmentalCondition environmentalStatus = tileEntity.checkSpawnConditions(true);
+			if(environmentalStatus == EnvironmentalCondition.CanSpawn) {
 				info.text("You are too close.");
 				info.text("The animals are scared away.");
 			} else {

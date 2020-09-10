@@ -3,13 +3,16 @@ package net.blay09.mods.excompressum.item;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.entity.passive.BatEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
+import net.minecraft.item.ItemUseContext;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 public class ItemBatZapper extends Item {
 
@@ -22,14 +25,14 @@ public class ItemBatZapper extends Item {
 
     @Override
     public ActionResultType onItemUse(ItemUseContext context) {
-        // Debug code for free energy
-//        TileEntity tileEntity = world.getTileEntity(pos);
-//        if(tileEntity != null) {
-//            IEnergyStorage energy = tileEntity.getCapability(CapabilityEnergy.ENERGY, null);
-//            if (energy != null) {
-//                energy.receiveEnergy(Integer.MAX_VALUE, false);
-//            }
-//        }
+        // Debug code for free energy when in creative
+        if (context.getPlayer() != null && context.getPlayer().abilities.isCreativeMode) {
+            TileEntity tileEntity = context.getWorld().getTileEntity(context.getPos());
+            if (tileEntity != null) {
+                tileEntity.getCapability(CapabilityEnergy.ENERGY, null).ifPresent(energyStorage -> energyStorage.receiveEnergy(Integer.MAX_VALUE, false));
+            }
+        }
+
         return zapBatter(context.getWorld(), context.getPlayer(), context.getItem(), context.getPos(), context.getHand()).getType();
     }
 
@@ -38,19 +41,20 @@ public class ItemBatZapper extends Item {
         return zapBatter(world, player, player.getHeldItem(hand), player.getPosition(), hand);
     }
 
-    private ActionResult<ItemStack> zapBatter(World world, @Nullable PlayerEntity player, ItemStack itemStack, BlockPos pos, Hand hand) {
-        world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1f, world.rand.nextFloat() * 0.1f + 0.9f, false);
-        if(player != null) {
-            player.swingArm(hand);
-        }
-        if(!world.isRemote) {
+    private ActionResult<ItemStack> zapBatter(World world, PlayerEntity player, ItemStack itemStack, BlockPos pos, Hand hand) {
+        world.playSound(player, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1f, world.rand.nextFloat() * 0.1f + 0.9f);
+        player.swingArm(hand);
+
+        if (!world.isRemote) {
             final int range = 5;
-            for (Object obj : world.getEntitiesWithinAABB(BatEntity.class, new AxisAlignedBB(x - range, y - range, z - range, x + range, y + range, z + range))) {
+            for (Object obj : world.getEntitiesWithinAABB(BatEntity.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range))) {
                 BatEntity entity = (BatEntity) obj;
                 entity.attackEntityFrom(DamageSource.causePlayerDamage(player), Float.MAX_VALUE);
             }
         }
-        itemStack.damageItem(1, player);
+
+        itemStack.damageItem(1, player, it -> {
+        });
         return new ActionResult<>(ActionResultType.SUCCESS, itemStack);
     }
 
