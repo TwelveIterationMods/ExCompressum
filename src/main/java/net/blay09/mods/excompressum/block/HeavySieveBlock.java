@@ -67,7 +67,7 @@ public class HeavySieveBlock extends ContainerBlock {
             if (!heldItem.isEmpty()) {
                 SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(heldItem);
                 if (sieveMesh != null && tileEntity.getMeshStack().isEmpty()) {
-                    tileEntity.setMeshStack(player.abilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.splitStack(1));
+                    tileEntity.setMeshStack(player.abilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(heldItem, 1) : heldItem.split(1));
                     return ActionResultType.SUCCESS;
                 }
 
@@ -98,7 +98,7 @@ public class HeavySieveBlock extends ContainerBlock {
     }
 
     @Override
-    public void breakBlock(World world, BlockPos pos, BlockState state) {
+    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof HeavySieveTileEntity) {
             HeavySieveTileEntity tileHeavySieve = (HeavySieveTileEntity) tileEntity;
@@ -106,7 +106,7 @@ public class HeavySieveBlock extends ContainerBlock {
                 world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, tileHeavySieve.getMeshStack()));
             }
         }
-        super.breakBlock(world, pos, state);
+        super.onReplaced(state, world, pos, newState, isMoving);
     }
 
 }

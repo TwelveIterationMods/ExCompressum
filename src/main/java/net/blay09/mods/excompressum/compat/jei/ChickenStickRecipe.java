@@ -1,13 +1,12 @@
 package net.blay09.mods.excompressum.compat.jei;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IRecipeWrapper;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 
-public class ChickenStickRecipe implements IRecipeWrapper {
+public class ChickenStickRecipe {
 
 	private final ItemStack input;
 	private final ItemStack output;
@@ -15,15 +14,16 @@ public class ChickenStickRecipe implements IRecipeWrapper {
 	public ChickenStickRecipe() {
 		input = new ItemStack(Items.STICK);
 		output = new ItemStack(ModItems.chickenStick);
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		tagCompound.setBoolean("IsAngry", true);
-		output.setTagCompound(tagCompound);
+		CompoundNBT tagCompound = new CompoundNBT();
+		tagCompound.putBoolean("IsAngry", true);
+		output.setTag(tagCompound);
 	}
 
-	@Override
-	public void getIngredients(IIngredients ingredients) {
-		ingredients.setInput(ItemStack.class, input);
-		ingredients.setOutput(ItemStack.class, output);
+	public ItemStack getInput() {
+		return input;
 	}
 
+	public ItemStack getOutput() {
+		return output;
+	}
 }

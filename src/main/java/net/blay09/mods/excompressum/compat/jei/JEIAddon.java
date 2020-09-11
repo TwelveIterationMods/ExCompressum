@@ -2,11 +2,12 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IModPlugin;
-import mezz.jei.api.IModRegistry;
-import mezz.jei.api.JEIPlugin;
-import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
+import mezz.jei.api.registration.IRecipeCategoryRegistration;
+import mezz.jei.api.registration.IRecipeRegistration;
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerRegistryEntry;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
@@ -19,24 +20,22 @@ import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRe
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@JEIPlugin
+@JeiPlugin
 public class JEIAddon implements IModPlugin {
 
-    public static IJeiHelpers jeiHelpers;
-
     @Override
-    public void register(IModRegistry registry) {
-        jeiHelpers = registry.getJeiHelpers();
-
-        List<HeavySieveRecipe> heavySieveRecipes = Lists.newArrayList();
+    public void registerRecipes(IRecipeRegistration registry) {
+        List<HeavySieveRecipe> heavySieveRecipes = new ArrayList<>();
         if (ExRegistro.doMeshesSplitLootTables()) {
             Collection<HeavySieveRegistryEntry> entries = HeavySieveRegistry.INSTANCE.getEntries().values();
             for (SieveMeshRegistryEntry sieveMesh : SieveMeshRegistry.getEntries().values()) {
@@ -53,22 +52,26 @@ public class JEIAddon implements IModPlugin {
         }
         registry.addRecipes(heavySieveRecipes, HeavySieveRecipeCategory.UID);
 
-        List<CompressedHammerRecipe> compressedHammerRecipes = Lists.newArrayList();
+        List<CompressedHammerRecipe> compressedHammerRecipes = new ArrayList<>();
         for (CompressedHammerRegistryEntry entry : CompressedHammerRegistry.INSTANCE.getEntries().values()) {
             compressedHammerRecipes.add(new CompressedHammerRecipe(entry));
         }
         registry.addRecipes(compressedHammerRecipes, CompressedHammerRecipeCategory.UID);
 
-        ArrayListMultimap<String, WoodenCrucibleRegistryEntry> fluidOutputMap = ArrayListMultimap.create();
+        ArrayListMultimap<ResourceLocation, WoodenCrucibleRegistryEntry> fluidOutputMap = ArrayListMultimap.create();
         for (WoodenCrucibleRegistryEntry entry : WoodenCrucibleRegistry.INSTANCE.getEntries().values()) {
             if (!entry.getItemStack().isEmpty()) {
-                fluidOutputMap.put(entry.getFluid().getName(), entry);
+                fluidOutputMap.put(entry.getFluid().getRegistryName(), entry);
             }
         }
 
         List<WoodenCrucibleRecipe> woodenCrucibleRecipes = new ArrayList<>();
-        for (String fluidName : fluidOutputMap.keySet()) {
-            Fluid fluid = FluidRegistry.getFluid(fluidName);
+        for (ResourceLocation fluidName : fluidOutputMap.keySet()) {
+            Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName);
+            if (fluid == null) {
+                continue;
+            }
+
             List<WoodenCrucibleRegistryEntry> entries = fluidOutputMap.get(fluidName);
 
             final int pageSize = 45;
@@ -81,9 +84,16 @@ public class JEIAddon implements IModPlugin {
         registry.addRecipes(woodenCrucibleRecipes, WoodenCrucibleRecipeCategory.UID);
 
         registry.addRecipes(Lists.newArrayList(new ChickenStickRecipe()), ChickenStickRecipeCategory.UID);
+    }
 
-        registry.addRecipeCatalyst(new ItemStack(ModBlocks.heavySieve), HeavySieveRecipeCategory.UID);
-        registry.addRecipeCatalyst(new ItemStack(ModBlocks.woodenCrucible), WoodenCrucibleRecipeCategory.UID);
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registry) {
+        for (Block heavySieve : ModBlocks.heavySieves) {
+            registry.addRecipeCatalyst(new ItemStack(heavySieve), HeavySieveRecipeCategory.UID);
+        }
+        for (Block woodenCrucible : ModBlocks.woodenCrucibles) {
+            registry.addRecipeCatalyst(new ItemStack(woodenCrucible), WoodenCrucibleRecipeCategory.UID);
+        }
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerDiamond), CompressedHammerRecipeCategory.UID);
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerGold), CompressedHammerRecipeCategory.UID);
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerIron), CompressedHammerRecipeCategory.UID);
@@ -92,9 +102,14 @@ public class JEIAddon implements IModPlugin {
     }
 
     @Override
+    public ResourceLocation getPluginUid() {
+        return new ResourceLocation(ExCompressum.MOD_ID, "jei");
+    }
+
+    @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(
-                new HeavySieveRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
+                new HeavySieveRecipeCategory(registry.getJeiHelpers()),
                 new CompressedHammerRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
                 new WoodenCrucibleRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
                 new ChickenStickRecipeCategory(registry.getJeiHelpers().getGuiHelper()));

@@ -66,7 +66,7 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
     }
 
     @Override
-    public void breakBlock(World world, BlockPos pos, BlockState state) {
+    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity != null) {
             IItemHandler itemHandler = ((AutoHammerTileEntity) tileEntity).getItemHandler();
@@ -85,7 +85,7 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
             world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.uglySteelPlating)));
         }
 
-        super.breakBlock(world, pos, state);
+        super.onReplaced(state, world, pos, newState, isMoving);
     }
 
     @Override

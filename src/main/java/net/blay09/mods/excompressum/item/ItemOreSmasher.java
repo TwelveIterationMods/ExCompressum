@@ -5,16 +5,20 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.ToolItem;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 
 import java.util.Collection;
@@ -50,9 +54,16 @@ public class ItemOreSmasher extends ToolItem {
     }
 
     @Override
-    public ActionResultType onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(ItemUseContext context) {
+        final PlayerEntity player = context.getPlayer();
+        if (player == null) {
+            return ActionResultType.FAIL;
+        }
+
+        final World world = context.getWorld();
+        final BlockPos pos = context.getPos();
         if (!world.checkNoEntityCollision(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
-            return EnumActionResult.FAIL;
+            return ActionResultType.FAIL;
         }
 
         for (int i = 0; i < player.inventory.mainInventory.size(); i++) {
@@ -64,15 +75,15 @@ public class ItemOreSmasher extends ToolItem {
                         if (inventoryStack.getCount() >= recipe.getCount()) {
                             BlockState oldState = world.getBlockState(pos);
                             ItemStack resultStack = recipe.getResultStack().copy();
-                            resultStack.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+                            resultStack.getItem().onItemUse(new ItemUseContext(player, context.getHand(), new BlockRayTraceResult(context.getHitVec(), context.getFace(), context.getPos(), context.isInside())));
                             world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
                             if (resultStack.isEmpty()) {
                                 inventoryStack.shrink(recipe.getCount());
                                 if (inventoryStack.isEmpty()) {
                                     player.inventory.mainInventory.remove(i);
                                 }
-                                player.swingArm(hand);
-                                return EnumActionResult.SUCCESS;
+                                player.swingArm(context.getHand());
+                                return ActionResultType.SUCCESS;
                             }
                         }
                     }
@@ -80,27 +91,27 @@ public class ItemOreSmasher extends ToolItem {
 
                 if (isOreBlock(inventoryStack)) {
                     BlockState oldState = world.getBlockState(pos);
-                    inventoryStack.getItem().onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+                    inventoryStack.getItem().onItemUse(new ItemUseContext(player, context.getHand(), new BlockRayTraceResult(context.getHitVec(), context.getFace(), context.getPos(), context.isInside())));
                     world.notifyBlockUpdate(pos, oldState, world.getBlockState(pos), 3);
                     if (inventoryStack.isEmpty()) {
                         player.inventory.mainInventory.remove(i);
                     }
-                    player.swingArm(hand);
-                    return EnumActionResult.SUCCESS;
+                    player.swingArm(context.getHand());
+                    return ActionResultType.SUCCESS;
                 }
             }
         }
 
-        return EnumActionResult.FAIL;
+        return ActionResultType.FAIL;
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, BlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+    public boolean onBlockDestroyed(ItemStack itemStack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (!world.isRemote && canHarvestBlock(state, itemStack) && ExRegistro.isHammerable(state)) {
-            world.setBlockToAir(pos);
+            world.removeBlock(pos, false);
             Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, toolMaterial.getHarvestLevel(), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);
             for (ItemStack rewardStack : rewards) {
-                world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
+                world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
             }
         }
 

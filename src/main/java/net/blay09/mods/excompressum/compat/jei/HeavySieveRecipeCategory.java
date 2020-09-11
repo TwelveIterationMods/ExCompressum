@@ -2,55 +2,64 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IDrawableStatic;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocus;
-import mezz.jei.api.recipe.IRecipeCategory;
-import mezz.jei.gui.Focus;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.block.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
 public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecipe> {
 
-	public static final String UID = "excompressum:heavySieve";
+	public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "heavySieve");
 	private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_heavy_sieve.png");
 
-	private final IDrawableStatic background;
-	private final IDrawableStatic slotHighlight;
+	private final IDrawable background;
+	private final IDrawable slotHighlight;
+	private final IDrawable icon;
+	private final IJeiHelpers jeiHelpers;
 	private boolean hasHighlight;
 	private int highlightX;
 	private int highlightY;
 
-	public HeavySieveRecipeCategory(IGuiHelper guiHelper) {
+	public HeavySieveRecipeCategory(IJeiHelpers jeiHelpers) {
+		this.jeiHelpers = jeiHelpers;
+		final IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 		this.background = guiHelper.createDrawable(texture, 0, 0, 166, 129);
 		this.slotHighlight = guiHelper.createDrawable(texture, 166, 0, 18, 18);
+		this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.heavySieves[0]));
 	}
 
 	@Nonnull
 	@Override
-	public String getUid() {
+	public ResourceLocation getUid() {
 		return UID;
+	}
+
+	@Override
+	public Class<? extends HeavySieveRecipe> getRecipeClass() {
+		return HeavySieveRecipe.class;
 	}
 
 	@Nonnull
 	@Override
 	public String getTitle() {
 		return I18n.format("jei." + UID);
-	}
-
-	@Override
-	public String getModName() {
-		return "Ex Compressum";
 	}
 
 	@Nonnull
@@ -60,22 +69,27 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 	}
 
 	@Override
-	public void drawExtras(@Nonnull Minecraft minecraft) {
+	public IDrawable getIcon() {
+		return icon;
+	}
+
+	@Override
+	public void draw(HeavySieveRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
 		if(hasHighlight) {
-			slotHighlight.draw(minecraft, highlightX, highlightY);
+			slotHighlight.draw(matrixStack, highlightX, highlightY);
 		}
 	}
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, final HeavySieveRecipe recipeWrapper, IIngredients ingredients) {
 		recipeLayout.getItemStacks().init(0, true, 61, 9);
-		recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
+		recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
 		recipeLayout.getItemStacks().init(1, true, 87, 9);
-		recipeLayout.getItemStacks().set(1, ingredients.getInputs(ItemStack.class).get(1));
+		recipeLayout.getItemStacks().set(1, ingredients.getInputs(VanillaTypes.ITEM).get(1));
 
 		IFocus<?> focus = recipeLayout.getFocus();
 		hasHighlight = focus != null && focus.getMode() == IFocus.Mode.OUTPUT;
-		final List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
+		final List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 		final int INPUT_SLOTS = 2;
 		int slotNumber = 0;
 		for (List<ItemStack> output : outputs) {
@@ -85,9 +99,9 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 			recipeLayout.getItemStacks().set(INPUT_SLOTS + slotNumber, output);
 			if(focus != null) {
 				Object focusValue = focus.getValue();
-				if (focus.getMode() == Focus.Mode.OUTPUT && focusValue instanceof ItemStack) {
+				if (focus.getMode() == IFocus.Mode.OUTPUT && focusValue instanceof ItemStack) {
 					ItemStack focusStack = (ItemStack) focusValue;
-					if (focusStack.getItem() == output.get(0).getItem() && focusStack.getItemDamage() == output.get(0).getItemDamage()) {
+					if (focusStack.getItem() == output.get(0).getItem()) {
 						highlightX = slotX;
 						highlightY = slotY;
 					}
@@ -108,11 +122,17 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 					}
 					condensedTooltips.add(s);
 				}
-				tooltip.add(I18n.format("jei.excompressum:heavySieve.dropChance"));
+				tooltip.add(new TranslationTextComponent("jei.excompressum:heavySieve.dropChance"));
 				for(String line : condensedTooltips.elementSet()) {
-					tooltip.add(" * " + condensedTooltips.count(line) + "x " + line);
+					tooltip.add(new StringTextComponent(" * " + condensedTooltips.count(line) + "x " + line));
 				}
 			}
 		});
+	}
+
+	@Override
+	public void setIngredients(HeavySieveRecipe heavySieveRecipe, IIngredients ingredients) {
+		ingredients.setInputLists(VanillaTypes.ITEM, heavySieveRecipe.getInputs());
+		ingredients.setOutputs(VanillaTypes.ITEM, heavySieveRecipe.getOutputs());
 	}
 }

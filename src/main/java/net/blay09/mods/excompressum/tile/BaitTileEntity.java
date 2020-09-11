@@ -2,15 +2,15 @@ package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.block.BaitBlock;
 import net.blay09.mods.excompressum.block.BaitType;
-import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
@@ -60,7 +60,7 @@ public class BaitTileEntity extends TileEntity implements ITickable {
                 if (checkSpawnConditions(true) == EnvironmentalCondition.CanSpawn) {
                     final float range = MIN_DISTANCE_NO_PLAYERS;
                     if (world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty()) {
-                        LivingEntity entityLiving = baitType.createEntity(world);
+                        Entity entityLiving = baitType.createEntity(world);
                         if (entityLiving instanceof AgeableEntity && world.rand.nextFloat() <= ModConfig.baits.childChance) {
                             ((AgeableEntity) entityLiving).setGrowingAge(-24000);
                         }
@@ -80,7 +80,7 @@ public class BaitTileEntity extends TileEntity implements ITickable {
     public EnvironmentalCondition checkSpawnConditions(boolean checkNow) {
         if (checkNow || ticksSinceEnvironmentalCheck > ENVIRONMENTAL_CHECK_INTERVAL) {
             BaitType baitType = getBaitType();
-            Collection<BaitBlockCondition> envBlocks = baitType.getEnvironmentConditions();
+            Collection<BaitEnvironmentCondition> envBlocks = baitType.getEnvironmentConditions();
             final int range = 5;
             final int rangeVertical = 3;
             int countBait = 0;
@@ -90,23 +90,16 @@ public class BaitTileEntity extends TileEntity implements ITickable {
                 for (int y = pos.getY() - rangeVertical; y < pos.getY() + rangeVertical; y++) {
                     for (int z = pos.getZ() - range; z < pos.getZ() + range; z++) {
                         BlockPos testPos = new BlockPos(x, y, z);
-                        BlockState state = world.getBlockState(testPos);
-                        if (state.getBlock() == ModBlocks.bait) {
+                        BlockState blockState = world.getBlockState(testPos);
+                        FluidState fluidState = world.getFluidState(testPos);
+                        if (blockState.getBlock() instanceof BaitBlock) {
                             countBait++;
-                        } else if (state.getBlock() == Blocks.WATER || state.getFluidState().getFluid() == Fluids.FLOWING_WATER) {
+                        } else if (fluidState.getFluid() == Fluids.WATER || fluidState.getFluid() == Fluids.FLOWING_WATER) {
                             foundWater = true;
                         }
 
-                        for (BaitBlockCondition envBlock : envBlocks) {
-                            // There's something really weird happening where something here is null even though it's impossible.
-                            // If that happens, just satisfy the condition no matter what to prevent a crash and prevent baits from not working.
-                            // This will hopefully fix itself when baits become data-pack driven in 1.13.
-                            if (envBlock == null || envBlock.getState() == null) {
-                                countEnvBlocks++;
-                                continue;
-                            }
-
-                            if (state.getBlock() == envBlock.getState().getBlock()) {
+                        for (BaitEnvironmentCondition envBlock : envBlocks) {
+                            if (envBlock.test(blockState, fluidState)) {
                                 countEnvBlocks++;
                             }
                         }

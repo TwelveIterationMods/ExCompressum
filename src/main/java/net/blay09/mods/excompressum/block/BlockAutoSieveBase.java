@@ -4,11 +4,11 @@ import com.mojang.authlib.GameProfile;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
+import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -95,7 +95,7 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
     }
 
     @Override
-    public void breakBlock(World world, BlockPos pos, BlockState state) {
+    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity != null) {
             IItemHandler itemHandler = ((AutoSieveTileEntityBase) tileEntity).getItemHandler();
@@ -120,7 +120,7 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
             world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.uglySteelPlating)));
         }
 
-        super.breakBlock(world, pos, state);
+        super.onReplaced(state, world, pos, newState, isMoving);
     }
 
     @Override
@@ -174,13 +174,13 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
         if (tagCompound != null && tagCompound.contains("CustomSkin")) {
             GameProfile customSkin = NBTUtil.readGameProfile(tagCompound.getCompound("CustomSkin"));
             if (customSkin != null) {
-                tooltip.add(TextFormatting.GRAY + I18n.format("tooltip." + getRegistryName(), customSkin.getName()));
+                tooltip.add(Messages.styledLang("tooltip." + getRegistryName(), TextFormatting.GRAY, customSkin.getName()));
             }
         } else {
             if (currentRandomName == null) {
                 currentRandomName = AutoSieveSkinRegistry.getRandomSkin();
             }
-            tooltip.add(TextFormatting.GRAY + I18n.format("tooltip." + getRegistryName(), currentRandomName));
+            tooltip.add(Messages.styledLang("tooltip." + getRegistryName(), TextFormatting.GRAY, currentRandomName));
         }
         if (lastHoverStack != stack) {
             currentRandomName = AutoSieveSkinRegistry.getRandomSkin();

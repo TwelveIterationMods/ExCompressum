@@ -49,7 +49,7 @@ public class AutoCompressorBlock extends ContainerBlock {
     }
 
     @Override
-    public void breakBlock(World world, BlockPos pos, BlockState state) {
+    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity != null) {
             IItemHandler itemHandler = ((AutoCompressorTileEntity) tileEntity).getItemHandler();
@@ -65,7 +65,7 @@ public class AutoCompressorBlock extends ContainerBlock {
                 }
             }
         }
-        super.breakBlock(world, pos, state);
+        super.onReplaced(state, world, pos, newState, isMoving);
     }
 
     @Override
