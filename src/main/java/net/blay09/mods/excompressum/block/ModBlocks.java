@@ -2,60 +2,91 @@ package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.block.Block;
-
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
+import java.util.Objects;
+import java.util.function.Function;
+
 @Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
 
-	public static Block compressedBlock;
-	public static Block heavySieve;
-	public static Block woodenCrucible;
-	public static Block bait;
-	public static Block autoHammer;
-	public static Block autoCompressedHammer;
-	public static Block autoHeavySieve;
-	public static Block autoSieve;
-	public static Block autoCompressor;
-	public static Block rationingAutoCompressor;
+    public static Block[] compressedBlocks;
+    public static Block[] heavySieves;
+    public static Block[] woodenCrucibles;
+    public static Block[] baits;
+    public static Block autoHammer;
+    public static Block autoCompressedHammer;
+    public static Block autoHeavySieve;
+    public static Block autoSieve;
+    public static Block autoCompressor;
+    public static Block rationingAutoCompressor;
 
-	@SubscribeEvent
-	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		final IForgeRegistry<Block> registry = event.getRegistry();
-		registry.registerAll(
-				new CompressedBlock().setRegistryName(CompressedBlock.name),
-				new HeavySieveBlock().setRegistryName(HeavySieveBlock.name),
-				new WoodenCrucibleBlock().setRegistryName(WoodenCrucibleBlock.name),
-				new BaitBlock().setRegistryName(BaitBlock.name),
-				new AutoHammerBlock().setRegistryName(AutoHammerBlock.name),
-				new AutoSieveBlock().setRegistryName(AutoSieveBlock.name),
-				new AutoCompressedHammerBlock().setRegistryName(AutoCompressedHammerBlock.name),
-				new AutoHeavySieveBlock().setRegistryName(AutoHeavySieveBlock.name),
-				new AutoCompressorBlock().setRegistryName(AutoCompressorBlock.name),
-				new RationingAutoCompressorBlock().setRegistryName(RationingAutoCompressorBlock.name)
-		);
-	}
+    @SubscribeEvent
+    public static void registerBlocks(RegistryEvent.Register<Block> event) {
+        final IForgeRegistry<Block> registry = event.getRegistry();
 
-	@SubscribeEvent
-	public static void registerBlockItems(RegistryEvent.Register<Item> event) {
-		final IForgeRegistry<Item> registry = event.getRegistry();
-		registry.registerAll(
-				new ItemBlockCompressed(compressedBlock).setRegistryName(CompressedBlock.name),
-				new ItemBlockHeavySieve(heavySieve).setRegistryName(HeavySieveBlock.name),
-				new ItemBlockWoodenCrucible(woodenCrucible).setRegistryName(WoodenCrucibleBlock.name),
-				new ItemBlockBait(bait).setRegistryName(BaitBlock.name),
-				new ItemBlock(autoHammer).setRegistryName(AutoHammerBlock.name),
-				new ItemBlock(autoCompressedHammer).setRegistryName(AutoCompressedHammerBlock.name),
-				new ItemBlock(autoSieve).setRegistryName(AutoSieveBlock.name),
-				new ItemBlock(autoHeavySieve).setRegistryName(AutoHeavySieveBlock.name),
-				new ItemBlock(autoCompressor).setRegistryName(AutoCompressorBlock.name),
-				new ItemBlock(rationingAutoCompressor).setRegistryName(RationingAutoCompressorBlock.name)
-		);
-	}
+        compressedBlocks = registerEnumBlock(CompressedBlockType.values(), CompressedBlock::new);
+        heavySieves = registerEnumBlock(HeavySieveType.values(), HeavySieveBlock::new);
+        woodenCrucibles = registerEnumBlock(WoodenCrucibleType.values(), WoodenCrucibleBlock::new);
+        baits = registerEnumBlock(BaitType.values(), BaitBlock::new);
+
+        registry.registerAll(
+                new AutoHammerBlock().setRegistryName(AutoHammerBlock.name),
+                new AutoSieveBlock().setRegistryName(AutoSieveBlock.name),
+                new AutoCompressedHammerBlock().setRegistryName(AutoCompressedHammerBlock.name),
+                new AutoHeavySieveBlock().setRegistryName(AutoHeavySieveBlock.name),
+                new AutoCompressorBlock().setRegistryName(AutoCompressorBlock.name),
+                new RationingAutoCompressorBlock().setRegistryName(RationingAutoCompressorBlock.name)
+        );
+    }
+
+    private static <T extends Enum<T> & IStringSerializable> Block[] registerEnumBlock(T[] types, Function<T, Block> factory) {
+        Block[] blocks = new Block[types.length];
+        for (T type : types) {
+            compressedBlocks[type.ordinal()] = factory.apply(type).setRegistryName(CompressedBlock.namePrefix + type.getString());
+        }
+
+        return blocks;
+    }
+
+    @SubscribeEvent
+    public static void registerBlockItems(RegistryEvent.Register<Item> event) {
+        final IForgeRegistry<Item> registry = event.getRegistry();
+
+        registerEnumBlockItems(registry, compressedBlocks);
+        registerEnumBlockItems(registry, heavySieves);
+        registerEnumBlockItems(registry, woodenCrucibles);
+        registerEnumBlockItems(registry, baits);
+
+        registry.registerAll(
+                blockItem(autoHammer),
+                blockItem(autoCompressedHammer),
+                blockItem(autoSieve),
+                blockItem(autoHeavySieve),
+                blockItem(autoCompressor),
+                blockItem(rationingAutoCompressor)
+        );
+    }
+
+    private static void registerEnumBlockItems(IForgeRegistry<Item> registry, Block[] blocks) {
+        for (Block block : blocks) {
+            registry.register(blockItem(block));
+        }
+    }
+
+    private static Item blockItem(Block block) {
+        return new BlockItem(block, itemProperties()).setRegistryName(Objects.requireNonNull(block.getRegistryName()));
+    }
+
+    private static Item.Properties itemProperties() {
+        return new Item.Properties().group(ExCompressum.itemGroup);
+    }
 
 	/*public static void registerModels() {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoCompressedHammer), 0, new ModelResourceLocation(BlockAutoCompressedHammer.registryName, "inventory"));

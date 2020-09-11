@@ -7,7 +7,6 @@ import net.blay09.mods.excompressum.container.AutoCompressorContainer;
 import net.blay09.mods.excompressum.tile.AutoCompressorTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -58,7 +57,7 @@ public class AutoCompressorScreen extends ContainerScreen<AutoCompressorContaine
         AutoCompressorTileEntity tileEntity = container.getTileEntity();
         if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
             List<ITextComponent> tmpLines = new ArrayList<>();
-            tmpLines.add(new TranslationTextComponent("tooltip.excompressum.consumingEnergyValue", tileEntity.getEnergyStorage().getEnergyStored());
+            tmpLines.add(new TranslationTextComponent("tooltip.excompressum.consumingEnergyValue", tileEntity.getEnergyStorage().getEnergyStored()));
             tmpLines.add(new TranslationTextComponent("tooltip.excompressum:consumingEnergy", tileEntity.getEffectiveEnergy()));
             func_243308_b(matrixStack, tmpLines, mouseX - guiLeft, mouseY - guiTop);
         }

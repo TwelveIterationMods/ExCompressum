@@ -2,6 +2,8 @@ package net.blay09.mods.excompressum.api.heavysieve;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
+import net.blay09.mods.excompressum.api.ExCompressumAPI;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.BlockState;
 
 import java.util.Collection;

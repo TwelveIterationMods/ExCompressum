@@ -7,7 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockReader;
 
 public class AutoCompressedHammerBlock extends AutoHammerBlock {
 
@@ -15,7 +15,7 @@ public class AutoCompressedHammerBlock extends AutoHammerBlock {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     @Override
-    public TileEntity createNewTileEntity(World world, int metadata) {
+    public TileEntity createNewTileEntity(IBlockReader world) {
         return new AutoCompressedHammerTileEntity();
     }
 

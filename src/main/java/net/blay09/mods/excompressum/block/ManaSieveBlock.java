@@ -5,6 +5,7 @@ import net.blay09.mods.excompressum.tile.ManaSieveTileEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class ManaSieveBlock extends BlockAutoSieveBase {
@@ -13,11 +14,11 @@ public class ManaSieveBlock extends BlockAutoSieveBase {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public ManaSieveBlock() {
-        super(Material.IRON);
+        super(Properties.create(Material.IRON));
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int metadata) {
+    public TileEntity createNewTileEntity(IBlockReader world) {
         return new ManaSieveTileEntity();
     }
 

@@ -7,14 +7,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class AutoSieveBlock extends BlockAutoSieveBase {
@@ -27,7 +26,7 @@ public class AutoSieveBlock extends BlockAutoSieveBase {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int metadata) {
+    public TileEntity createNewTileEntity(IBlockReader world) {
         return new AutoSieveTileEntity();
     }
 
@@ -46,13 +45,12 @@ public class AutoSieveBlock extends BlockAutoSieveBase {
     }
 
     @Override
-    public void onBlockAdded(World world, BlockPos pos, BlockState state) {
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving) {
         updateRedstoneState(world, pos);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         updateRedstoneState(world, pos);
     }
 

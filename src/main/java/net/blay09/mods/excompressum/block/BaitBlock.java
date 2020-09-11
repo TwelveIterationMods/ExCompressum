@@ -4,19 +4,29 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.tile.BaitTileEntity;
 import net.blay09.mods.excompressum.tile.EnvironmentalCondition;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
-
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.state.EnumProperty;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -25,86 +35,83 @@ import java.util.Random;
 
 public class BaitBlock extends ContainerBlock {
 
-	public static final String name = "bait";
-	public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
+    public static final String name = "bait";
+    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 0.1, 1);
-	public static final EnumProperty<BaitType> VARIANT = EnumProperty.create("variant", BaitType.class);
+    private static final VoxelShape BOUNDING_BOX = VoxelShapes.create(0, 0, 0, 1, 0.1, 1);
 
-	public BaitBlock() {
-		super(Material.GROUND);
-		setHardness(0.1f);
-		setCreativeTab(ExCompressum.itemGroup);
-	}
+    private final BaitType baitType;
 
-	@Override
-	@SuppressWarnings("deprecation")
-	public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos) {
-		return BOUNDING_BOX;
-	}
+    public BaitBlock(BaitType baitType) {
+        super(Properties.create(Material.CAKE).hardnessAndResistance(0.1f));
+        this.baitType = baitType;
+    }
 
-	@Nullable
-	@Override
-	@SuppressWarnings("deprecation")
-	public AxisAlignedBB getCollisionBoundingBox(BlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return null;
-	}
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return BOUNDING_BOX;
+    }
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new BaitTileEntity();
-	}
+    @Override
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader reader, BlockPos pos) {
+        return VoxelShapes.empty();
+    }
 
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, BlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
-		if (tileEntity != null) {
-			EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
-			if (!world.isRemote) {
-				ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
-				chatComponent.getStyle().setColor(environmentStatus != EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
-				player.sendMessage(chatComponent);
-			}
-		}
-		return true;
-	}
+    @Override
+    public TileEntity createNewTileEntity(IBlockReader world) {
+        return new BaitTileEntity();
+    }
 
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, EntityLivingBase placer, ItemStack stack) {
-		if (placer instanceof EntityPlayer) {
-			BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
-			if (tileEntity != null) {
-				EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
-				if (!world.isRemote) {
-					ITextComponent chatComponent = new TextComponentTranslation(environmentStatus.langKey);
-					chatComponent.getStyle().setColor(environmentStatus != EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
-					placer.sendMessage(chatComponent);
-				}
-			}
-		}
-	}
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
+        if (tileEntity != null) {
+            EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
+            if (!world.isRemote) {
+                TextComponent chatComponent = new TranslationTextComponent(environmentStatus.langKey);
+                chatComponent.mergeStyle(environmentStatus != EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
+                player.sendMessage(chatComponent, Util.DUMMY_UUID);
+            }
+        }
 
-	@Override
-	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random rand) {
-		if (!ModConfig.client.disableParticles) {
-			BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
-			if (tileEntity != null && tileEntity.checkSpawnConditions(false) == EnvironmentalCondition.CanSpawn) {
-				if (rand.nextFloat() <= 0.2f) {
-					world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + rand.nextFloat(), pos.getY() + rand.nextFloat() * 0.5f, pos.getZ() + rand.nextFloat(), 0.0, 0.0, 0.0);
-				}
-			}
-		}
-	}
+        return ActionResultType.SUCCESS;
+    }
 
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-		BaitType type = BaitType.fromId(stack.getItemDamage());
-		if (type == BaitType.SQUID) {
-			tooltip.add(I18n.format("info.excompressum:baitPlaceInWater"));
-		}
-	}
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        if (placer instanceof PlayerEntity) {
+            BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
+            if (tileEntity != null) {
+                EnvironmentalCondition environmentStatus = tileEntity.checkSpawnConditions(true);
+                if (!world.isRemote) {
+                    TextComponent chatComponent = new TranslationTextComponent(environmentStatus.langKey);
+                    chatComponent.mergeStyle(environmentStatus != EnvironmentalCondition.CanSpawn ? TextFormatting.RED : TextFormatting.GREEN);
+                    placer.sendMessage(chatComponent, Util.DUMMY_UUID);
+                }
+            }
+        }
+    }
 
-	public BaitType getBaitType() {
-		return baitType;
-	}
+    @Override
+    public void animateTick(BlockState stateIn, World world, BlockPos pos, Random rand) {
+        if (!ModConfig.client.disableParticles) {
+            BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
+            if (tileEntity != null && tileEntity.checkSpawnConditions(false) == EnvironmentalCondition.CanSpawn) {
+                if (rand.nextFloat() <= 0.2f) {
+                    world.addParticle(ParticleTypes.SMOKE, pos.getX() + rand.nextFloat(), pos.getY() + rand.nextFloat() * 0.5f, pos.getZ() + rand.nextFloat(), 0.0, 0.0, 0.0);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        if (baitType == BaitType.SQUID) {
+            tooltip.add(new TranslationTextComponent("info.excompressum:baitPlaceInWater"));
+        }
+    }
+
+    public BaitType getBaitType() {
+        return baitType;
+    }
 }

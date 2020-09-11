@@ -2,14 +2,13 @@ package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.config.ModConfig;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
 
 public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
 
     private int manaStored;
 
-    public ManaSieveTileEntity(TileEntityType<?> type) {
-        super(type);
+    public ManaSieveTileEntity() {
+        super(ModTileEntities.manaSieve);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
     @Override
     protected void writeToNBTSynced(CompoundNBT tagCompound, boolean isSync) {
         super.writeToNBTSynced(tagCompound, isSync);
-        if(!isSync) {
+        if (!isSync) {
             tagCompound.putInt("ManaStored", manaStored);
         }
     }
@@ -52,7 +51,7 @@ public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
     @Override
     protected void readFromNBTSynced(CompoundNBT tagCompound, boolean isSync) {
         super.readFromNBTSynced(tagCompound, isSync);
-        if(!isSync) {
+        if (!isSync) {
             manaStored = tagCompound.getInt("ManaStored");
         }
     }

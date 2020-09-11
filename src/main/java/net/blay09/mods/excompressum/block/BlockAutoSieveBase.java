@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.block;
 
 import com.mojang.authlib.GameProfile;
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
@@ -9,25 +8,29 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -35,6 +38,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class BlockAutoSieveBase extends ContainerBlock implements IUglyfiable {
 
@@ -44,10 +48,8 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
     private ItemStack lastHoverStack = ItemStack.EMPTY;
     private String currentRandomName;
 
-    protected BlockAutoSieveBase(Material material) {
-        super(material);
-        setCreativeTab(ExCompressum.itemGroup);
-        setHardness(2f);
+    protected BlockAutoSieveBase(Properties properties) {
+        super(properties.hardnessAndResistance(2f));
     }
 
     @Override
@@ -56,39 +58,40 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!world.isRemote) {
-            ItemStack heldItem = player.getHeldItem(hand);
-            if (!heldItem.isEmpty()) {
+            ItemStack heldItemStack = player.getHeldItem(hand);
+            if (!heldItemStack.isEmpty()) {
                 AutoSieveTileEntityBase tileEntity = (AutoSieveTileEntityBase) world.getTileEntity(pos);
                 if (tileEntity != null) {
-                    if (heldItem.getItem() instanceof ItemFood) {
-                        ItemFood itemFood = (ItemFood) heldItem.getItem();
+                    final Item heldItem = heldItemStack.getItem();
+                    if (heldItem.isFood()) {
+                        final Food food = Objects.requireNonNull(heldItem.getFood());
                         if (tileEntity.getFoodBoost() <= 1f) {
-                            tileEntity.setFoodBoost((int) (itemFood.getSaturationModifier(heldItem) * 640), Math.max(1f, itemFood.getHealAmount(heldItem) * 0.75f));
-                            if (!player.capabilities.isCreativeMode) {
-                                ItemStack returnStack = itemFood.onItemUseFinish(heldItem, world, FakePlayerFactory.getMinecraft((WorldServer) world));
-                                if (returnStack != heldItem) {
+                            tileEntity.setFoodBoost((int) (food.getSaturation() * 640), Math.max(1f, food.getHealing() * 0.75f));
+                            if (!player.abilities.isCreativeMode) {
+                                ItemStack returnStack = heldItem.onItemUseFinish(heldItemStack, world, FakePlayerFactory.getMinecraft((ServerWorld) world));
+                                if (returnStack != heldItemStack) {
                                     player.setHeldItem(hand, returnStack);
                                 }
                             }
                             world.playEvent(2005, pos, 0);
                         }
-                        return true;
-                    } else if (heldItem.getItem() == Items.NAME_TAG && heldItem.hasDisplayName()) {
-                        tileEntity.setCustomSkin(new GameProfile(null, heldItem.getDisplayName()));
-                        if (!player.capabilities.isCreativeMode) {
-                            heldItem.shrink(1);
+                        return ActionResultType.SUCCESS;
+                    } else if (heldItem == Items.NAME_TAG && heldItemStack.hasDisplayName()) {
+                        tileEntity.setCustomSkin(new GameProfile(null, heldItemStack.getDisplayName().getString()));
+                        if (!player.abilities.isCreativeMode) {
+                            heldItemStack.shrink(1);
                         }
-                        return true;
+                        return ActionResultType.SUCCESS;
                     }
                 }
             }
             if (!player.isSneaking()) {
-                player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_SIEVE, world, pos.getX(), pos.getY(), pos.getZ());
+                // TODO player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_SIEVE, world, pos.getX(), pos.getY(), pos.getZ());
             }
         }
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -121,13 +124,9 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        EnumFacing facing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
-        if (facing.getAxis() == EnumFacing.Axis.Y) {
-            facing = EnumFacing.NORTH;
-        }
-        return getStateFromMeta(meta).withProperty(FACING, facing);
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        final Direction facing = context.getPlacementHorizontalFacing();
+        return getDefaultState().with(FACING, facing);
     }
 
     @Override
@@ -138,7 +137,7 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
             CompoundNBT tagCompound = stack.getTag();
             if (tagCompound != null) {
                 if (tagCompound.contains("CustomSkin")) {
-                    GameProfile customSkin = NBTUtil.readGameProfileFromNBT(tagCompound.getCompound("CustomSkin"));
+                    GameProfile customSkin = NBTUtil.readGameProfile(tagCompound.getCompound("CustomSkin"));
                     if (customSkin != null) {
                         tileEntity.setCustomSkin(customSkin);
                         useRandomSkin = false;
@@ -161,14 +160,19 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
     @SuppressWarnings("deprecation")
     public int getComparatorInputOverride(BlockState blockState, World world, BlockPos pos) {
         TileEntity tileEntity = world.getTileEntity(pos);
-        return tileEntity != null ? ItemHandlerHelper.calcRedstoneFromInventory(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) : 0;
+        if (tileEntity != null) {
+            final IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).resolve().orElse(null);
+            return ItemHandlerHelper.calcRedstoneFromInventory(itemHandler);
+        } else {
+            return 0;
+        }
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+    public void addInformation(ItemStack stack, @Nullable IBlockReader worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         CompoundNBT tagCompound = stack.getTag();
         if (tagCompound != null && tagCompound.contains("CustomSkin")) {
-            GameProfile customSkin = NBTUtil.readGameProfileFromNBT(tagCompound.getCompound("CustomSkin"));
+            GameProfile customSkin = NBTUtil.readGameProfile(tagCompound.getCompound("CustomSkin"));
             if (customSkin != null) {
                 tooltip.add(TextFormatting.GRAY + I18n.format("tooltip." + getRegistryName(), customSkin.getName()));
             }

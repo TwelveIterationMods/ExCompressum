@@ -5,6 +5,7 @@ import net.blay09.mods.excompressum.tile.AutoHammerTileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
@@ -50,7 +51,7 @@ public class AutoHammerContainer extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        if(lastProgress != tileEntity.getProgress() || lastEnergy != tileEntity.getEnergyStorage().getEnergyStored() || lastDisabledByRedstone != tileEntity.isDisabledByRedstone()) {
+        if (lastProgress != tileEntity.getProgress() || lastEnergy != tileEntity.getEnergyStorage().getEnergyStored() || lastDisabledByRedstone != tileEntity.isDisabledByRedstone()) {
             for (IContainerListener listener : listeners) {
                 listener.sendWindowProperty(this, 0, (int) (100 * tileEntity.getProgress()));
                 listener.sendWindowProperty(this, 1, tileEntity.getEnergyStorage().getEnergyStored());
@@ -64,10 +65,16 @@ public class AutoHammerContainer extends Container {
 
     @Override
     public void updateProgressBar(int var, int val) {
-        switch(var) {
-            case 0: tileEntity.setProgress((float) val / 100f); break;
-            case 1: tileEntity.getEnergyStorage().setEnergyStored(val); break;
-            case 2: tileEntity.setDisabledByRedstone(val == 1); break;
+        switch (var) {
+            case 0:
+                tileEntity.setProgress((float) val / 100f);
+                break;
+            case 1:
+                tileEntity.getEnergyStorage().setEnergyStored(val);
+                break;
+            case 2:
+                tileEntity.setDisabledByRedstone(val == 1);
+                break;
         }
     }
 
@@ -80,32 +87,36 @@ public class AutoHammerContainer extends Container {
     public ItemStack transferStackInSlot(PlayerEntity entityPlayer, int slotNumber) {
         ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(slotNumber);
-        if(slot != null && slot.getHasStack()) {
+        if (slot != null && slot.getHasStack()) {
             ItemStack slotStack = slot.getStack();
             itemStack = slotStack.copy();
-            if(slotNumber <= 20 || slotNumber >= 57) {
-                if(!mergeItemStack(slotStack, 21, 57, true)) {
+            if (slotNumber <= 20 || slotNumber >= 57) {
+                if (!mergeItemStack(slotStack, 21, 57, true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if(tileEntity.getItemHandler().isItemValid(0, slotStack)) {
+            } else if (tileEntity.getItemHandler().isItemValid(0, slotStack)) {
                 if (!mergeItemStack(slotStack, 0, 1, false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if(tileEntity.getItemHandler().isItemValid(21, slotStack)) {
+            } else if (tileEntity.getItemHandler().isItemValid(21, slotStack)) {
                 if (!mergeItemStack(slotStack, 57, 59, false)) {
                     return ItemStack.EMPTY;
                 }
             }
-            if(slotStack.isEmpty()) {
+            if (slotStack.isEmpty()) {
                 slot.putStack(ItemStack.EMPTY);
             } else {
                 slot.onSlotChanged();
             }
-            if(slotStack.getCount() == itemStack.getCount()) {
+            if (slotStack.getCount() == itemStack.getCount()) {
                 return ItemStack.EMPTY;
             }
             slot.onTake(entityPlayer, slotStack);
         }
         return itemStack;
+    }
+
+    public AutoHammerTileEntity getTileEntity() {
+        return tileEntity;
     }
 }

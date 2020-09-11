@@ -1,5 +1,7 @@
 package net.blay09.mods.excompressum.api;
 
+import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
+import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -14,7 +16,7 @@ public class ReloadRegistryEvent extends Event {
 	 */
 	public static class ChickenStick extends ReloadRegistryEvent {
 		public void register(BlockState state, boolean isWildcard) {
-			ExCompressumAPI.__internalMethods.registerChickenStickHammerable(state, isWildcard);
+			ExCompressumAPI.registerChickenStickHammerable(state, isWildcard);
 		}
 	}
 
@@ -26,7 +28,7 @@ public class ReloadRegistryEvent extends Event {
 		 * To add rewards, call addReward() on the returned object, while instantiating new CompressedHammerReward objects
 		 */
 		public void register(BlockState state, boolean isWildcard, List<CompressedHammerReward> rewards) {
-			ExCompressumAPI.__internalMethods.registerCompressedHammerEntry(state, isWildcard, rewards);
+			ExCompressumAPI.registerCompressedHammerEntry(state, isWildcard, rewards);
 		}
 	}
 
@@ -35,7 +37,7 @@ public class ReloadRegistryEvent extends Event {
 	 */
 	public static class HeavySieve extends ReloadRegistryEvent {
 		public void register(BlockState state, boolean isWildcard, List<HeavySieveReward> rewards) {
-			ExCompressumAPI.__internalMethods.registerHeavySieveEntry(state, isWildcard, rewards);
+			ExCompressumAPI.registerHeavySieveEntry(state, isWildcard, rewards);
 		}
 	}
 
@@ -44,7 +46,7 @@ public class ReloadRegistryEvent extends Event {
 	 */
 	public static class WoodenCrucible extends ReloadRegistryEvent {
 		public void register(ItemStack itemStack, Fluid fluid, int amount) {
-			ExCompressumAPI.__internalMethods.registerWoodenCrucibleEntry(itemStack, fluid, amount);
+			ExCompressumAPI.registerWoodenCrucibleEntry(itemStack, fluid, amount);
 		}
 	}
 }

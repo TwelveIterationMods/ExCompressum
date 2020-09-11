@@ -6,7 +6,12 @@ import net.blay09.mods.excompressum.config.ModConfig;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.BaitBlockCondition;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.passive.*;
+import net.minecraft.entity.passive.horse.DonkeyEntity;
+import net.minecraft.entity.passive.horse.HorseEntity;
+import net.minecraft.entity.passive.horse.LlamaEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.IStringSerializable;
@@ -18,33 +23,33 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-public enum BaitType implements IStringSerializable { // TODO shouldn't be an enum, registrify
-    WOLF(new ItemStack(Items.BEEF), new ItemStack(Items.BONE), EntityWolf::new, () -> ModConfig.baits.wolfChance),
-    OCELOT(new ItemStack(Items.GUNPOWDER), new ItemStack(Items.FISH), EntityOcelot::new, () -> ModConfig.baits.ocelotChance),
-    COW(new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT), EntityCow::new, () -> ModConfig.baits.cowChance),
-    PIG(new ItemStack(Items.CARROT), new ItemStack(Items.CARROT), EntityPig::new, () -> ModConfig.baits.pigChance),
-    CHICKEN(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT_SEEDS), EntityChicken::new, () -> ModConfig.baits.chickenChance),
-    SHEEP(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT), EntitySheep::new, () -> ModConfig.baits.sheepChance),
-    SQUID(new ItemStack(Items.FISH), new ItemStack(Items.FISH), EntitySquid::new, () -> ModConfig.baits.squidChance),
-    RABBIT(new ItemStack(Items.CARROT), new ItemStack(Items.MELON_SEEDS), EntityRabbit::new, () -> ModConfig.baits.rabbitChance),
-    HORSE(new ItemStack(Items.GOLDEN_APPLE), new ItemStack(Items.GOLDEN_APPLE), EntityHorse::new, () -> ModConfig.baits.horseChance),
-    DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), EntityDonkey::new, () -> ModConfig.baits.donkeyChance),
-    POLAR_BEAR(new ItemStack(Items.SNOWBALL), new ItemStack(Items.FISH), EntityPolarBear::new, () -> ModConfig.baits.polarBearChance),
-    LLAMA(new ItemStack(Items.WHEAT), new ItemStack(Items.SUGAR), EntityLlama::new, () -> ModConfig.baits.llamaChance),
-    PARROT(new ItemStack(Items.DYE, 1, EnumDyeColor.RED.getDyeDamage()), new ItemStack(Items.DYE, 1, EnumDyeColor.GREEN.getDyeDamage()), EntityParrot::new, () -> ModConfig.baits.parrotChance);
+public enum BaitType implements IStringSerializable {
+    WOLF(new ItemStack(Items.BEEF), new ItemStack(Items.BONE), Entities::new, () -> ModConfig.baits.wolfChance),
+    OCELOT(new ItemStack(Items.GUNPOWDER), new ItemStack(Items.COD), OcelotEntity::new, () -> ModConfig.baits.ocelotChance),
+    COW(new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT), CowEntity::new, () -> ModConfig.baits.cowChance),
+    PIG(new ItemStack(Items.CARROT), new ItemStack(Items.CARROT), PigEntity::new, () -> ModConfig.baits.pigChance),
+    CHICKEN(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT_SEEDS), ChickenEntity::new, () -> ModConfig.baits.chickenChance),
+    SHEEP(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT), SheepEntity::new, () -> ModConfig.baits.sheepChance),
+    SQUID(new ItemStack(Items.COD), new ItemStack(Items.COD), SquidEntity::new, () -> ModConfig.baits.squidChance),
+    RABBIT(new ItemStack(Items.CARROT), new ItemStack(Items.MELON_SEEDS), RabbitEntity::new, () -> ModConfig.baits.rabbitChance),
+    HORSE(new ItemStack(Items.GOLDEN_APPLE), new ItemStack(Items.GOLDEN_APPLE), HorseEntity::new, () -> ModConfig.baits.horseChance),
+    DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), DonkeyEntity::new, () -> ModConfig.baits.donkeyChance),
+    POLAR_BEAR(new ItemStack(Items.SNOWBALL), new ItemStack(Items.COD), PolarBearEntity::new, () -> ModConfig.baits.polarBearChance),
+    LLAMA(new ItemStack(Items.WHEAT), new ItemStack(Items.SUGAR), LlamaEntity::new, () -> ModConfig.baits.llamaChance),
+    PARROT(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), ParrotEntity::new, () -> ModConfig.baits.parrotChance);
 
     public static BaitType[] values = values();
 
     private ItemStack displayItemFirst;
     private ItemStack displayItemSecond;
-    private Function<World, LivingEntity> entityFactory;
+    private EntityType<?> entityType;
     private Supplier<Float> chanceSupplier;
     private List<BaitBlockCondition> environmentConditions;
 
-    BaitType(ItemStack displayItemFirst, ItemStack displayItemSecond, Function<World, EntityLiving> entityFactory, Supplier<Float> chanceSupplier) {
+    BaitType(ItemStack displayItemFirst, ItemStack displayItemSecond, EntityType<?> entityType, Supplier<Float> chanceSupplier) {
         this.displayItemFirst = displayItemFirst;
         this.displayItemSecond = displayItemSecond;
-        this.entityFactory = entityFactory;
+        this.entityType = entityType;
         this.chanceSupplier = chanceSupplier;
     }
 
@@ -54,12 +59,12 @@ public enum BaitType implements IStringSerializable { // TODO shouldn't be an en
     }
 
     @Override
-    public String getName() {
+    public String getString() {
         return name().toLowerCase(Locale.ENGLISH);
     }
 
-    public LivingEntity createEntity(World world) {
-        return entityFactory.apply(world);
+    public Entity createEntity(World world) {
+        return entityType.create(world);
     }
 
     public ItemStack getDisplayItemFirst() {

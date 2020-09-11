@@ -4,6 +4,7 @@ import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
@@ -47,15 +48,15 @@ public class AutoSieveContainer extends Container {
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-        if (lastProgress != tileEntity.getProgress() || lastEnergy != tileEntity.getEnergyStored(null) || lastDisabledByRedstone != tileEntity.isDisabledByRedstone()) {
+        if (lastProgress != tileEntity.getProgress() || lastEnergy != tileEntity.getEnergyStored() || lastDisabledByRedstone != tileEntity.isDisabledByRedstone()) {
             for (IContainerListener listener : listeners) {
                 listener.sendWindowProperty(this, 0, (int) (100 * tileEntity.getProgress()));
-                listener.sendWindowProperty(this, 1, tileEntity.getEnergyStored(null));
+                listener.sendWindowProperty(this, 1, tileEntity.getEnergyStored());
                 listener.sendWindowProperty(this, 2, tileEntity.isDisabledByRedstone() ? 1 : 0);
             }
         }
         lastProgress = tileEntity.getProgress();
-        lastEnergy = tileEntity.getEnergyStored(null);
+        lastEnergy = tileEntity.getEnergyStored();
         lastDisabledByRedstone = tileEntity.isDisabledByRedstone();
     }
 
@@ -110,5 +111,9 @@ public class AutoSieveContainer extends Container {
             slot.onTake(entityPlayer, slotStack);
         }
         return itemStack;
+    }
+
+    public AutoSieveTileEntityBase getTileEntity() {
+        return tileEntity;
     }
 }

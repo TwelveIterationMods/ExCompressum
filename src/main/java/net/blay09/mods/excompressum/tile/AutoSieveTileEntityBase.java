@@ -309,11 +309,11 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         return (float) getEnergyStored() / (float) getMaxEnergyStored();
     }
 
-    protected abstract int getEnergyStored();
+    public abstract int getEnergyStored();
 
     public abstract void setEnergyStored(int energy);
 
-    protected abstract int getMaxEnergyStored();
+    public abstract int getMaxEnergyStored();
 
     public boolean isProcessing() {
         return progress > 0f;

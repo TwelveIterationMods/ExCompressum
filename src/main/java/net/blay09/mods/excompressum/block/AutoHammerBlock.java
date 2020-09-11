@@ -8,22 +8,31 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+
+import javax.annotation.Nullable;
 
 public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
 
@@ -34,9 +43,7 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
     public static final BooleanProperty UGLY = BooleanProperty.create("ugly");
 
     public AutoHammerBlock() {
-        super(Material.IRON);
-        setCreativeTab(ExCompressum.itemGroup);
-        setHardness(2f);
+        super(Properties.create(Material.IRON).hardnessAndResistance(2f));
     }
 
     @Override
@@ -45,17 +52,17 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
     }
 
     @Override
-    public TileEntity createNewTileEntity(World world, int metadata) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new AutoHammerTileEntity();
     }
 
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
         if (!player.isSneaking() && !world.isRemote) {
-            player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_HAMMER, world, pos.getX(), pos.getY(), pos.getZ());
+            // TODO NetworkHooks.openGui(player, null, pos);
         }
 
-        return true;
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -82,17 +89,13 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public BlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        EnumFacing facing = EnumFacing.getDirectionFromEntityLiving(pos, placer);
-        if (facing.getAxis() == EnumFacing.Axis.Y) {
-            facing = EnumFacing.NORTH;
-        }
-        return getStateFromMeta(meta).withProperty(FACING, facing);
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        Direction facing = context.getPlacementHorizontalFacing();
+        return getDefaultState().with(FACING, facing);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         CompoundNBT tagCompound = stack.getTag();
         if (tagCompound != null && tagCompound.contains("EnergyStored")) {
             AutoHammerTileEntity tileEntity = (AutoHammerTileEntity) world.getTileEntity(pos);
@@ -112,26 +115,31 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
     @SuppressWarnings("deprecation")
     public int getComparatorInputOverride(BlockState blockState, World world, BlockPos pos) {
         TileEntity tileEntity = world.getTileEntity(pos);
-        return tileEntity != null ? ItemHandlerHelper.calcRedstoneFromInventory(tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) : 0;
+        if (tileEntity != null) {
+            final IItemHandler itemHandler = tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).resolve().orElse(null);
+            return ItemHandlerHelper.calcRedstoneFromInventory(itemHandler);
+        } else {
+            return 0;
+        }
     }
 
     @Override
-    public boolean uglify(PlayerEntity player, World world, BlockPos pos, BlockState state, Hand hand, Direction facing, Vector3d hitVec) {
+    public boolean uglify(@Nullable PlayerEntity player, World world, BlockPos pos, BlockState state, Hand hand, Direction facing, Vector3d hitVec) {
         if (!state.get(UGLY)) {
             world.setBlockState(pos, state.with(UGLY, true), 3);
             return true;
         }
+
         return false;
     }
 
     @Override
-    public void onBlockAdded(World world, BlockPos pos, BlockState state) {
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving) {
         updateRedstoneState(world, pos);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         updateRedstoneState(world, pos);
     }
 

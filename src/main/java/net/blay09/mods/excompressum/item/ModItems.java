@@ -41,8 +41,8 @@ public class ModItems {
                 woodChipping = new ItemWoodChipping(itemProperties()).setRegistryName(ItemWoodChipping.name),
                 uncompressedCoal = new ItemUncompressedCoal(itemProperties()).setRegistryName(ItemUncompressedCoal.name),
                 batZapper = new ItemBatZapper(itemProperties()).setRegistryName(ItemBatZapper.name),
-                oreSmasher = new ItemOreSmasher().setRegistryName(ItemOreSmasher.name),
-                uglySteelPlating = new ItemUglySteelPlating().setRegistryName(ItemUglySteelPlating.name)
+                oreSmasher = new ItemOreSmasher(itemProperties()).setRegistryName(ItemOreSmasher.name),
+                uglySteelPlating = new ItemUglySteelPlating(itemProperties()).setRegistryName(ItemUglySteelPlating.name)
         );
     }
 

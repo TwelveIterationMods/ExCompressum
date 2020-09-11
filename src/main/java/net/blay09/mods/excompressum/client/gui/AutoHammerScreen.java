@@ -1,61 +1,65 @@
 package net.blay09.mods.excompressum.client.gui;
 
-import com.google.common.collect.Lists;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.AutoHammerContainer;
 import net.blay09.mods.excompressum.tile.AutoHammerTileEntity;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AutoHammerScreen extends GuiContainer {
+public class AutoHammerScreen extends ContainerScreen<AutoHammerContainer> {
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/auto_hammer.png");
-    private AutoHammerTileEntity tileEntity;
 
-    public AutoHammerScreen(InventoryPlayer inventoryPlayer, AutoHammerTileEntity tileEntity) {
-        super(new AutoHammerContainer(inventoryPlayer, tileEntity));
-        this.tileEntity = tileEntity;
+    public AutoHammerScreen(AutoHammerContainer container, PlayerInventory inv, ITextComponent title) {
+        super(container, inv, title);
         xSize = 176;
         ySize = 166;
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        renderHoveredToolTip(mouseX, mouseY);
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        renderBackground(matrixStack);
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        func_230459_a_(matrixStack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        GL11.glColor4f(1f, 1f, 1f, 1f);
-        mc.getTextureManager().bindTexture(texture);
-        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+        RenderSystem.color4f(1f, 1f, 1f, 1f);
+        Minecraft.getInstance().getTextureManager().bindTexture(texture);
+        blit(matrixStack, guiLeft, guiTop, 0, 0, xSize, ySize);
+
+        AutoHammerTileEntity tileEntity = container.getTileEntity();
 
         if (tileEntity.isProcessing()) {
-            drawTexturedModalRect(guiLeft + 32, guiTop + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 14);
+            blit(matrixStack, guiLeft + 32, guiTop + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 14);
         }
-        if(tileEntity.isDisabledByRedstone()) {
-            drawTexturedModalRect(guiLeft + 44, guiTop + 48, 176, 14, 15, 16);
+        if (tileEntity.isDisabledByRedstone()) {
+            blit(matrixStack, guiLeft + 44, guiTop + 48, 176, 14, 15, 16);
         }
 
         float energyPercentage = tileEntity.getEnergyPercentage();
-        drawTexturedModalRect(guiLeft + 152, guiTop + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70));
+        blit(matrixStack, guiLeft + 152, guiTop + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70));
     }
 
-    private static final List<String> tmpLines = Lists.newArrayList();
+
     @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+    protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
         if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
-            tmpLines.clear();
-            tmpLines.add(tileEntity.getEnergyStorage().getEnergyStored() + " FE");
-            tmpLines.add(I18n.format("tooltip.excompressum:consumingEnergy", tileEntity.getEffectiveEnergy()));
-            drawHoveringText(tmpLines, mouseX - guiLeft, mouseY - guiTop);
+            AutoHammerTileEntity tileEntity = container.getTileEntity();
+            List<ITextComponent> tmpLines = new ArrayList<>();
+            tmpLines.add(new TranslationTextComponent("tooltip.excompressum.consumingEnergyValue", tileEntity.getEnergyStorage().getEnergyStored()));
+            tmpLines.add(new TranslationTextComponent("tooltip.excompressum:consumingEnergy", tileEntity.getEffectiveEnergy()));
+            func_243308_b(matrixStack, tmpLines, mouseX - guiLeft, mouseY - guiTop);
         }
     }
 

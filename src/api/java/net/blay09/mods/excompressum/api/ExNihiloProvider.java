@@ -1,5 +1,7 @@
 package net.blay09.mods.excompressum.api;
 
+import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

@@ -8,7 +8,7 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
-import net.blay09.mods.excompressum.client.render.model.ModelTinyHuman;
+import net.blay09.mods.excompressum.client.render.model.TinyHumanModel;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase> {
 
-    private final ModelTinyHuman biped = new ModelTinyHuman();
+    private final TinyHumanModel biped = new TinyHumanModel();
     private final boolean isHeavy;
     private BlockState sieveState;
 

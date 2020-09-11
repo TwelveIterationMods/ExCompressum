@@ -9,15 +9,13 @@ import net.minecraft.util.ResourceLocation;
 
 public class CompressedBlock extends Block {
 
-	public static final String name = "compressed_block";
-	public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
+	public static final String namePrefix = "compressed_block_";
+
+	private final CompressedBlockType type;
 
 	public CompressedBlock(CompressedBlockType type) {
-		super(Material.ROCK);
-		setHardness(4f);
-		setResistance(6f);
-		setSoundType(SoundType.STONE);
-		setCreativeTab(ExCompressum.itemGroup);
+		super(Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(4f, 6f));
+		this.type = type;
 	}
 
 }

@@ -339,29 +339,29 @@ public class HeavySieveRegistry extends AbstractRegistry {
         final ItemStack SOUL_SAND = new ItemStack(Blocks.SOUL_SAND);
         final int COMPRESSION_SIZE = 9;
         if (tryGetBoolean(defaults, "excompressum:compressed_gravel", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.GRAVEL.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.GRAVEL.ordinal());
             addGeneratedEntry(itemStack, GRAVEL, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_sand", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.SAND.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.SAND.ordinal());
             addGeneratedEntry(itemStack, SAND, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_dirt", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.DIRT.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.DIRT.ordinal());
             addGeneratedEntry(itemStack, DIRT, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_soul_sand", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.SOUL_SAND.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.SOUL_SAND.ordinal());
             addGeneratedEntry(itemStack, SOUL_SAND, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_dust", true)) {
             ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
             if (!dustBlock.isEmpty()) {
-                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.DUST.ordinal());
+                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.DUST.ordinal());
                 addGeneratedEntry(itemStack, dustBlock, COMPRESSION_SIZE - defaultLoss);
 
             }
@@ -370,7 +370,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         if (tryGetBoolean(defaults, "excompressum:compressed_nether_gravel", true)) {
             ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
             if (!netherGravelBlock.isEmpty()) {
-                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.NETHER_GRAVEL.ordinal());
+                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.NETHER_GRAVEL.ordinal());
                 addGeneratedEntry(itemStack, netherGravelBlock, COMPRESSION_SIZE - defaultLoss);
             }
         }
@@ -378,7 +378,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         if (tryGetBoolean(defaults, "excompressum:compressed_ender_gravel", true)) {
             ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
             if (!enderGravelBlock.isEmpty()) {
-                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.ENDER_GRAVEL.ordinal());
+                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.ENDER_GRAVEL.ordinal());
                 addGeneratedEntry(itemStack, enderGravelBlock, COMPRESSION_SIZE - defaultLoss);
             }
         }
