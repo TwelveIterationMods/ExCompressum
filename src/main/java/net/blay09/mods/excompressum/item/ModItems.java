@@ -29,20 +29,20 @@ public class ModItems {
     public static void registerItems(RegistryEvent.Register<Item> event) {
         final IForgeRegistry<Item> registry = event.getRegistry();
         registry.registerAll(
-                chickenStick = new ItemChickenStick(itemProperties()).setRegistryName(ItemChickenStick.name),
-                compressedHammerWood = new ItemCompressedHammer(ItemTier.WOOD, "wood").setRegistryName(ItemCompressedHammer.namePrefix + "wood"),
-                compressedHammerStone = new ItemCompressedHammer(ItemTier.STONE, "stone").setRegistryName(ItemCompressedHammer.namePrefix + "stone"),
-                compressedHammerIron = new ItemCompressedHammer(ItemTier.IRON, "iron").setRegistryName(ItemCompressedHammer.namePrefix + "iron"),
-                compressedHammerGold = new ItemCompressedHammer(ItemTier.GOLD, "gold").setRegistryName(ItemCompressedHammer.namePrefix + "gold"),
-                compressedHammerDiamond = new ItemCompressedHammer(ItemTier.DIAMOND, "diamond").setRegistryName(ItemCompressedHammer.namePrefix + "diamond"),
-                doubleCompressedDiamondHammer = new ItemDoubleCompressedDiamondHammer(itemProperties()).setRegistryName(ItemDoubleCompressedDiamondHammer.name),
-                compressedCrook = new ItemCompressedCrook(itemProperties()).setRegistryName(ItemCompressedCrook.name),
-                ironMesh = new ItemIronMesh(itemProperties()).setRegistryName(ItemIronMesh.name),
-                woodChipping = new ItemWoodChipping(itemProperties()).setRegistryName(ItemWoodChipping.name),
-                uncompressedCoal = new ItemUncompressedCoal(itemProperties()).setRegistryName(ItemUncompressedCoal.name),
-                batZapper = new ItemBatZapper(itemProperties()).setRegistryName(ItemBatZapper.name),
-                oreSmasher = new ItemOreSmasher(itemProperties()).setRegistryName(ItemOreSmasher.name),
-                uglySteelPlating = new ItemUglySteelPlating(itemProperties()).setRegistryName(ItemUglySteelPlating.name)
+                chickenStick = new ChickenStickItem(itemProperties()).setRegistryName(ChickenStickItem.name),
+                compressedHammerWood = new CompressedHammerItem(ItemTier.WOOD, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "wood"),
+                compressedHammerStone = new CompressedHammerItem(ItemTier.STONE, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "stone"),
+                compressedHammerIron = new CompressedHammerItem(ItemTier.IRON, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "iron"),
+                compressedHammerGold = new CompressedHammerItem(ItemTier.GOLD, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "gold"),
+                compressedHammerDiamond = new CompressedHammerItem(ItemTier.DIAMOND, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "diamond"),
+                doubleCompressedDiamondHammer = new DoubleCompressedDiamondHammerItem(itemProperties()).setRegistryName(DoubleCompressedDiamondHammerItem.name),
+                compressedCrook = new CompressedCrookItem(itemProperties()).setRegistryName(CompressedCrookItem.name),
+                ironMesh = new IronMeshItem(itemProperties()).setRegistryName(IronMeshItem.name),
+                woodChipping = new WoodChippingItem(itemProperties()).setRegistryName(WoodChippingItem.name),
+                uncompressedCoal = new UncompressedCoalItem(itemProperties()).setRegistryName(UncompressedCoalItem.name),
+                batZapper = new BatZapperItem(itemProperties()).setRegistryName(BatZapperItem.name),
+                oreSmasher = new OreSmasherItem(itemProperties()).setRegistryName(OreSmasherItem.name),
+                uglySteelPlating = new UglySteelPlatingItem(itemProperties()).setRegistryName(UglySteelPlatingItem.name)
         );
     }
 

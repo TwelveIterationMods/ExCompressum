@@ -52,7 +52,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         if (ExRegistro.doMeshesSplitLootTables()) {
             final ResourceLocation registryName = state.getBlock().getRegistryName();
             HeavySieveRegistryEntry entry = INSTANCE.entries.get(registryName);
-            if (entry != null && !entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.general.flattenSieveRecipes).isEmpty()) {
+            if (entry != null && !entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.COMMON.flattenSieveRecipes.get()).isEmpty()) {
                 return true;
             }
         }
@@ -104,7 +104,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     private static void rollSieveRewardsToList(HeavySieveRegistryEntry entry, List<ItemStack> list, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        for (HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.general.flattenSieveRecipes)) {
+        for (HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.COMMON.flattenSieveRecipes.get())) {
             int tries = rand.nextInt((int) luck + 1) + 1;
             for (int i = 0; i < tries; i++) {
                 if (rand.nextFloat() < reward.getBaseChance()) {

@@ -11,15 +11,11 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.blay09.mods.excompressum.block.ModBlocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -71,7 +67,7 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
     }
 
     @Override
-	public void draw(WoodenCrucibleRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(WoodenCrucibleRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
         if (hasHighlight) {
             slotHighlight.draw(matrixStack, highlightX, highlightY);
         }
@@ -79,17 +75,15 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, final WoodenCrucibleRecipe recipe, final IIngredients ingredients) {
-        ItemStack fluidItem;
-        if (FluidRegistry.isUniversalBucketEnabled()) {
+        ItemStack fluidItem = new ItemStack(Items.WATER_BUCKET);
+        /* TODO if (FluidRegistry.isUniversalBucketEnabled()) {
             fluidItem = new ItemStack(Items.BUCKET);
             IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(fluidItem);
             if (fluidHandler != null) {
                 fluidHandler.fill(ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0), IFluidHandler.FluidAction.EXECUTE);
                 fluidItem = fluidHandler.getContainer();
             }
-        } else {
-            fluidItem = new ItemStack(Items.WATER_BUCKET); // just fallback to water
-        }
+        }*/
 
         recipeLayout.getItemStacks().init(0, false, 74, 9);
         recipeLayout.getItemStacks().set(0, fluidItem);
@@ -125,7 +119,7 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
         recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (input) {
                 WoodenCrucibleRegistryEntry entry = recipe.getEntryAt(slotIndex - INPUT_SLOTS);
-                tooltip.add(recipe.getFluid().getLocalizedName(ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0)));
+                // TODO tooltip.add(recipe.getFluid().getLocalizedName(ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0)));
                 tooltip.add(new StringTextComponent(" * " + entry.getAmount() + " mB"));
             }
         });

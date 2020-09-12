@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.block;
 
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.tile.BaitTileEntity;
 import net.blay09.mods.excompressum.tile.EnvironmentalCondition;
@@ -15,7 +14,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -35,8 +33,7 @@ import java.util.Random;
 
 public class BaitBlock extends ContainerBlock {
 
-    public static final String name = "bait";
-    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
+    public static final String namePrefix = "bait_";
 
     private static final VoxelShape BOUNDING_BOX = VoxelShapes.create(0, 0, 0, 1, 0.1, 1);
 
@@ -94,7 +91,7 @@ public class BaitBlock extends ContainerBlock {
 
     @Override
     public void animateTick(BlockState stateIn, World world, BlockPos pos, Random rand) {
-        if (!ExCompressumConfig.client.disableParticles) {
+        if (!ExCompressumConfig.CLIENT.disableParticles.get()) {
             BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
             if (tileEntity != null && tileEntity.checkSpawnConditions(false) == EnvironmentalCondition.CanSpawn) {
                 if (rand.nextFloat() <= 0.2f) {

@@ -16,7 +16,7 @@ public class ReloadRegistryEvent extends Event {
 	 */
 	public static class ChickenStick extends ReloadRegistryEvent {
 		public void register(BlockState state, boolean isWildcard) {
-			ExCompressumAPI.registerChickenStickHammerable(state, isWildcard);
+			ExCompressumAPI.registerChickenStickHammerable(state);
 		}
 	}
 
@@ -28,7 +28,7 @@ public class ReloadRegistryEvent extends Event {
 		 * To add rewards, call addReward() on the returned object, while instantiating new CompressedHammerReward objects
 		 */
 		public void register(BlockState state, boolean isWildcard, List<CompressedHammerReward> rewards) {
-			ExCompressumAPI.registerCompressedHammerEntry(state, isWildcard, rewards);
+			ExCompressumAPI.registerCompressedHammerEntry(state, rewards);
 		}
 	}
 
@@ -37,7 +37,7 @@ public class ReloadRegistryEvent extends Event {
 	 */
 	public static class HeavySieve extends ReloadRegistryEvent {
 		public void register(BlockState state, boolean isWildcard, List<HeavySieveReward> rewards) {
-			ExCompressumAPI.registerHeavySieveEntry(state, isWildcard, rewards);
+			ExCompressumAPI.registerHeavySieveEntry(state, rewards);
 		}
 	}
 

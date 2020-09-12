@@ -4,13 +4,11 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.blay09.mods.excompressum.api.SieveModelBounds;
-import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.client.render.model.TinyHumanModel;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
@@ -19,7 +17,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -50,7 +47,7 @@ public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase>
             return;
         }
         if (sieveState == null) {
-            sieveState = ModBlocks.heavySieve.getDefaultState();
+            sieveState = ModBlocks.heavySieves[0].getDefaultState();
             if (!isHeavy) {
                 sieveState = ExRegistro.getSieveRenderState();
             }
@@ -73,7 +70,7 @@ public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase>
         matrixStack.translate(0, -1.2f, 0.25f);
         matrixStack.scale(0.75f, 0.75f, 0.75f);
         bindPlayerTexture(tileEntity.getCustomSkin());
-        biped.renderAll(tileEntity, partialTicks);
+        // TODO biped.render(matrixStack, bufferIn);
         matrixStack.pop();
 
         // Sieve & Content
@@ -98,7 +95,7 @@ public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase>
         // Render the sieve mesh
         ItemStack meshStack = tileEntity.getMeshStack();
         if (!meshStack.isEmpty()) {
-            SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
+            /* TODO SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
             if (sieveMesh != null) {
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
                 TextureAtlasSprite sprite = sieveMesh.getSpriteLocation() != null ? mc.getTextureMapBlocks().getTextureExtry(sieveMesh.getSpriteLocation().toString()) : null;
@@ -111,7 +108,7 @@ public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase>
                 float meshY = bounds.meshY - 0.025f;
                 RenderUtils.renderQuadUp(renderer, meshXZ, meshY, meshXZ, meshXZ2, meshY, meshXZ2, 0xFFFFFFFF, brightness, sprite);
                 tessellator.draw();
-            }
+            }*/
         }
 
         // Render the content

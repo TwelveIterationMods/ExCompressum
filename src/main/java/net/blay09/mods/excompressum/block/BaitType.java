@@ -25,27 +25,27 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum BaitType implements IStringSerializable {
-    WOLF(new ItemStack(Items.BEEF), new ItemStack(Items.BONE), EntityType.WOLF, () -> ExCompressumConfig.baits.wolfChance),
-    OCELOT(new ItemStack(Items.GUNPOWDER), new ItemStack(Items.COD), EntityType.OCELOT, () -> ExCompressumConfig.baits.ocelotChance),
-    COW(new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT), EntityType.COW, () -> ExCompressumConfig.baits.cowChance),
-    PIG(new ItemStack(Items.CARROT), new ItemStack(Items.CARROT), EntityType.PIG, () -> ExCompressumConfig.baits.pigChance),
-    CHICKEN(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT_SEEDS), EntityType.CHICKEN, () -> ExCompressumConfig.baits.chickenChance),
-    SHEEP(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT), EntityType.SHEEP, () -> ExCompressumConfig.baits.sheepChance),
-    SQUID(new ItemStack(Items.COD), new ItemStack(Items.COD), EntityType.SQUID, () -> ExCompressumConfig.baits.squidChance),
-    RABBIT(new ItemStack(Items.CARROT), new ItemStack(Items.MELON_SEEDS), EntityType.RABBIT, () -> ExCompressumConfig.baits.rabbitChance),
-    HORSE(new ItemStack(Items.GOLDEN_APPLE), new ItemStack(Items.GOLDEN_APPLE), EntityType.HORSE, () -> ExCompressumConfig.baits.horseChance),
-    DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), EntityType.DONKEY, () -> ExCompressumConfig.baits.donkeyChance),
-    POLAR_BEAR(new ItemStack(Items.SNOWBALL), new ItemStack(Items.COD), EntityType.POLAR_BEAR, () -> ExCompressumConfig.baits.polarBearChance),
-    LLAMA(new ItemStack(Items.WHEAT), new ItemStack(Items.SUGAR), EntityType.LLAMA, () -> ExCompressumConfig.baits.llamaChance),
-    PARROT(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), EntityType.PARROT, () -> ExCompressumConfig.baits.parrotChance);
+    WOLF(new ItemStack(Items.BEEF), new ItemStack(Items.BONE), EntityType.WOLF, ExCompressumConfig.COMMON.wolfBaitChance::get),
+    OCELOT(new ItemStack(Items.GUNPOWDER), new ItemStack(Items.COD), EntityType.OCELOT, ExCompressumConfig.COMMON.ocelotBaitChance::get),
+    COW(new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT), EntityType.COW, ExCompressumConfig.COMMON.cowBaitChance::get),
+    PIG(new ItemStack(Items.CARROT), new ItemStack(Items.CARROT), EntityType.PIG, ExCompressumConfig.COMMON.pigBaitChance::get),
+    CHICKEN(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT_SEEDS), EntityType.CHICKEN, ExCompressumConfig.COMMON.chickenBaitChance::get),
+    SHEEP(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT), EntityType.SHEEP, ExCompressumConfig.COMMON.sheepBaitChance::get),
+    SQUID(new ItemStack(Items.COD), new ItemStack(Items.COD), EntityType.SQUID, ExCompressumConfig.COMMON.squidBaitChance::get),
+    RABBIT(new ItemStack(Items.CARROT), new ItemStack(Items.MELON_SEEDS), EntityType.RABBIT, ExCompressumConfig.COMMON.rabbitBaitChance::get),
+    HORSE(new ItemStack(Items.GOLDEN_APPLE), new ItemStack(Items.GOLDEN_APPLE), EntityType.HORSE, ExCompressumConfig.COMMON.horseBaitChance::get),
+    DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), EntityType.DONKEY, ExCompressumConfig.COMMON.donkeyBaitChance::get),
+    POLAR_BEAR(new ItemStack(Items.SNOWBALL), new ItemStack(Items.COD), EntityType.POLAR_BEAR, ExCompressumConfig.COMMON.polarBearBaitChance::get),
+    LLAMA(new ItemStack(Items.WHEAT), new ItemStack(Items.SUGAR), EntityType.LLAMA, ExCompressumConfig.COMMON.llamaBaitChance::get),
+    PARROT(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), EntityType.PARROT, ExCompressumConfig.COMMON.parrotBaitChance::get);
 
     private final ItemStack displayItemFirst;
     private final ItemStack displayItemSecond;
     private final EntityType<?> entityType;
-    private final Supplier<Float> chanceSupplier;
+    private final Supplier<Double> chanceSupplier;
     private List<BaitEnvironmentCondition> environmentConditions;
 
-    BaitType(ItemStack displayItemFirst, ItemStack displayItemSecond, EntityType<?> entityType, Supplier<Float> chanceSupplier) {
+    BaitType(ItemStack displayItemFirst, ItemStack displayItemSecond, EntityType<?> entityType, Supplier<Double> chanceSupplier) {
         this.displayItemFirst = displayItemFirst;
         this.displayItemSecond = displayItemSecond;
         this.entityType = entityType;
@@ -77,7 +77,7 @@ public enum BaitType implements IStringSerializable {
     }
 
     public float getChance() {
-        return chanceSupplier.get();
+        return chanceSupplier.get().floatValue();
     }
 
     public Collection<BaitEnvironmentCondition> getEnvironmentConditions() {

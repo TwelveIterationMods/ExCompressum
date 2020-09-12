@@ -13,12 +13,12 @@ public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
 
     @Override
     public int getEffectiveEnergy() {
-        return ExCompressumConfig.compat.manaSieveCost;
+        return ExCompressumConfig.COMMON.manaSieveCost.get();
     }
 
     @Override
     public int getMaxEnergyStored() {
-        return ExCompressumConfig.compat.manaSieveCost * 1600;
+        return ExCompressumConfig.COMMON.manaSieveCost.get() * 1600;
     }
 
     @Override

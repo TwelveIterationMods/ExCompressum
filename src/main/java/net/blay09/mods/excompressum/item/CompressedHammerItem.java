@@ -12,11 +12,11 @@ import net.minecraft.world.World;
 
 import java.util.HashSet;
 
-public class ItemCompressedHammer extends ToolItem implements ICompressedHammer {
+public class CompressedHammerItem extends ToolItem implements ICompressedHammer {
 
     public static final String namePrefix = "compressed_hammer_";
 
-    public ItemCompressedHammer(ItemTier tier, Properties properties) {
+    public CompressedHammerItem(ItemTier tier, Properties properties) {
         super(6f, -3.2f, tier, new HashSet<>(), properties);
     }
 

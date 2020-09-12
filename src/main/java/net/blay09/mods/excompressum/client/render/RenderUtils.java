@@ -1,12 +1,9 @@
 package net.blay09.mods.excompressum.client.render;
 
 
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -15,6 +12,7 @@ import net.minecraft.world.World;
 public class RenderUtils {
 
     public static void renderQuadUp(BufferBuilder renderer, float x, float y, float z, float x2, float y2, float z2, int color, int brightness, TextureAtlasSprite sprite) {
+        /* TODO
         float d = 0.005f;
         float d2 = 1 - (d * 2);
         double minU = sprite.getInterpolatedU(d % 1d * 16f);
@@ -32,12 +30,14 @@ public class RenderUtils {
         renderer.pos(x, y, z2).color(r, g, b, a).tex(minU, maxV).lightmap(lightX, lightZ).endVertex();
         renderer.pos(x2, y, z2).color(r, g, b, a).tex(maxU, maxV).lightmap(lightX, lightZ).endVertex();
         renderer.pos(x2, y, z).color(r, g, b, a).tex(maxU, minV).lightmap(lightX, lightZ).endVertex();
+        */
     }
 
     /**
      * This is terrible don't use it
      */
     public static void renderBlockWithTranslate(Minecraft mc, BlockState state, World world, BlockPos pos, BufferBuilder renderer) {
+        /* TODO
         GlStateManager.translate(-pos.getX(), -pos.getY(), -pos.getZ());
         BlockRendererDispatcher dispatcher = mc.getBlockRendererDispatcher();
         try {
@@ -48,6 +48,7 @@ public class RenderUtils {
             }
         } catch (Throwable ignored) {
         }
+         */
     }
 
     public static float getRotationAngle(Direction facing) {

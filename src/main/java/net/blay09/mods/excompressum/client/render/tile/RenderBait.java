@@ -23,13 +23,13 @@ public class RenderBait extends TileEntityRenderer<BaitTileEntity> {
         matrixStack.translate(0.45, 0.05, 0.45);
         matrixStack.scale(0.5f, 0.5f, 0.5f);
         matrixStack.rotate(new Quaternion(90f, 0f, 0f, true));
-        if (!tileEntity.getRenderItem(0).isEmpty()) {
+        /* TODO if (!tileEntity.getRenderItem(0).isEmpty()) {
             itemRenderer.renderItem(tileEntity.getRenderItem(0), ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
-        }
+        }*/
         matrixStack.rotate(new Quaternion(-10f, 0f, 0f, true));
-        if (!tileEntity.getRenderItem(1).isEmpty()) {
+        /* TODO if (!tileEntity.getRenderItem(1).isEmpty()) {
             itemRenderer.renderItem(tileEntity.getRenderItem(1), ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
-        }
+        }*/
         matrixStack.pop();
     }
 }

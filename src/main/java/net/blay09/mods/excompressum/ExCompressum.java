@@ -5,12 +5,15 @@ import net.blay09.mods.excompressum.client.ClientProxy;
 import net.blay09.mods.excompressum.client.ModRenderers;
 import net.blay09.mods.excompressum.client.gui.ModScreens;
 import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.NihilisticNihiloProvider;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -29,6 +32,9 @@ public class ExCompressum {
 
     public ExCompressum() {
         ExCompressumAPI.__setupAPI(new InternalMethodsImpl());
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ExCompressumConfig.commonSpec);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ExCompressumConfig.clientSpec);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);

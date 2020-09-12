@@ -20,7 +20,7 @@ public class AutoSieveSkinRegistry {
     private static final List<String> availableSkins = Lists.newArrayList();
 
     public static void load() {
-        if (!ExCompressumConfig.client.skipAutoSieveSkins) {
+        if (!ExCompressumConfig.CLIENT.skipAutoSieveSkins.get()) {
             availableSkins.clear();
             Thread loadAutoSieveSkins = new Thread(() -> {
                 try {

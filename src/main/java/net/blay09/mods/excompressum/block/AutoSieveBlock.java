@@ -22,7 +22,7 @@ public class AutoSieveBlock extends BlockAutoSieveBase {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public AutoSieveBlock() {
-        super(Material.IRON);
+        super(Properties.create(Material.IRON));
     }
 
     @Override

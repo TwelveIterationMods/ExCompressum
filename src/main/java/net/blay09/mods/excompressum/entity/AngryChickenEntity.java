@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.entity;
 
-import com.sun.deploy.cache.JarSigningData;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;

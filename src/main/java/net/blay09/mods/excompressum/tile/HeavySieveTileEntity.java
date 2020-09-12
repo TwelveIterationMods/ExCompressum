@@ -84,7 +84,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickable {
             if (world.isRemote && !currentStack.isEmpty()) {
                 final BlockState state = StupidUtils.getStateFromItemStack(currentStack);
                 if (state != null) {
-                    ExCompressum.proxy.spawnSieveParticles(world, pos, state, particleCount);
+                    ExCompressum.proxy.spawnHeavySieveParticles(world, pos, state, particleCount);
                 }
             }
         }
@@ -96,7 +96,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickable {
                 progress = 1f;
             } else {
                 clicksSinceSecond++;
-                if (clicksSinceSecond <= ExCompressumConfig.automation.heavySieveClicksPerSecond) {
+                if (clicksSinceSecond <= ExCompressumConfig.COMMON.heavySieveClicksPerSecond.get()) {
                     int efficiency = ExRegistro.getMeshEfficiency(meshStack);
                     progress = Math.min(1f, progress + PROCESSING_INTERVAL * (1f + efficiency * EFFICIENCY_BOOST));
                 }

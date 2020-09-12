@@ -1,9 +1,7 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
-import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.tile.HeavySieveTileEntity;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
@@ -12,7 +10,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -39,7 +36,7 @@ public class RenderHeavySieve extends TileEntityRenderer<HeavySieveTileEntity> {
         // Render mesh
         ItemStack meshStack = tileEntity.getMeshStack();
         if (!meshStack.isEmpty()) {
-            SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
+            /* TODO SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
             if (sieveMesh != null) {
                 renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
                 TextureAtlasSprite sprite = sieveMesh.getSpriteLocation() != null ? mc.getTextureMapBlocks().getTextureExtry(sieveMesh.getSpriteLocation().toString()) : null;
@@ -52,7 +49,7 @@ public class RenderHeavySieve extends TileEntityRenderer<HeavySieveTileEntity> {
                 float meshY = 0.56f;
                 RenderUtils.renderQuadUp(renderer, meshXZ, meshY, meshXZ, meshXZ2, meshY, meshXZ2, 0xFFFFFFFF, brightness, sprite);
                 tessellator.draw();
-            }
+            }*/
         }
 
         ItemStack currentStack = tileEntity.getCurrentStack();

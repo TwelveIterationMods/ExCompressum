@@ -16,14 +16,14 @@ import net.minecraft.world.World;
 
 import java.util.HashSet;
 
-public class ItemManaHammer extends ToolItem implements IHammer {
+public class ManaHammerItem extends ToolItem implements IHammer {
 
     public static final String name = "hammer_mana";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     private static final int MANA_PER_DAMAGE = 60;
 
-    public ItemManaHammer(Item.Properties properties) {
+    public ManaHammerItem(Item.Properties properties) {
         super(6f, -3.2f, BotaniaBindings.manaSteelItemTier, new HashSet<>(), properties);
     }
 

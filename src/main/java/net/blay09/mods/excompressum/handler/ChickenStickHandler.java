@@ -19,9 +19,10 @@ public class ChickenStickHandler {
 
     @SubscribeEvent
     public static void onAttack(AttackEntityEvent event) {
-        if (!ExCompressumConfig.tools.allowChickenStickCreation) {
+        if (!ExCompressumConfig.COMMON.allowChickenStickCreation.get()) {
             return;
         }
+
         if (event.getTarget() instanceof ChickenEntity && !((ChickenEntity) event.getTarget()).isChild()) {
             ItemStack heldItem = event.getPlayer().getHeldItem(Hand.MAIN_HAND);
             if (!heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {

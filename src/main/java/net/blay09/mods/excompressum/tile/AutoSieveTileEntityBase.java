@@ -225,11 +225,11 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     }
 
     public int getEffectiveEnergy() {
-        return ExCompressumConfig.automation.autoSieveEnergy;
+        return ExCompressumConfig.COMMON.autoSieveEnergy.get();
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressumConfig.automation.autoSieveSpeed * getSpeedMultiplier();
+        return (float) (ExCompressumConfig.COMMON.autoSieveSpeed.get() * getSpeedMultiplier());
     }
 
     public float getEffectiveLuck() {

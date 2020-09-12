@@ -193,7 +193,7 @@ public abstract class AbstractRegistry {
 	protected final void logWarning(String format, Object... args) {
 		String s = String.format(format, args);
 		ExCompressum.logger.warn(s);
-		if(ExCompressumConfig.client.showRegistryWarnings) {
+		if(ExCompressumConfig.CLIENT.showRegistryWarnings.get()) {
 			registryErrors.add(s);
 		}
 	}
@@ -211,7 +211,7 @@ public abstract class AbstractRegistry {
 	}
 
 	protected final void logUnknownOre(ResourceLocation location) {
-		ExCompressum.logger.warn("No ore dictionary entries found for {} in {}", location.getResourcePath(), registryName);
+		ExCompressum.logger.warn("No ore dictionary entries found for {} in {}", location.getPath(), registryName);
 	}
 
 }

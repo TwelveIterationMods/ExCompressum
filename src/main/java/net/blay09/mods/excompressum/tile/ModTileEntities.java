@@ -35,16 +35,16 @@ public class ModTileEntities {
                 autoCompressor = build(AutoCompressorTileEntity::new, AutoCompressorBlock.registryName, ModBlocks.autoCompressor),
                 rationingAutoCompressor = build(RationingAutoCompressorTileEntity::new, RationingAutoCompressorBlock.registryName, ModBlocks.rationingAutoCompressor),
                 autoSieve = build(AutoSieveTileEntity::new, AutoSieveBlock.registryName, ModBlocks.autoSieve),
-                // TODO manaSieve = build(ManaSieveTileEntity::new, BlockAutoSieve.registryName, ModBlocks.manaSieve),
-                heavySieve = build(HeavySieveTileEntity::new, HeavySieveBlock.registryName, ModBlocks.heavySieve),
+                manaSieve = build(ManaSieveTileEntity::new, ManaSieveBlock.registryName, ModBlocks.manaSieve),
+                heavySieve = build(HeavySieveTileEntity::new, new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve"), ModBlocks.heavySieves),
                 autoHeavySieve = build(AutoHeavySieveTileEntity::new, AutoHeavySieveBlock.registryName, ModBlocks.autoHeavySieve),
-                woodenCrucible = build(WoodenCrucibleTileEntity::new, WoodenCrucibleBlock.registryName, ModBlocks.woodenCrucible),
-                bait = build(BaitTileEntity::new, BaitBlock.registryName, ModBlocks.bait)
+                woodenCrucible = build(WoodenCrucibleTileEntity::new, new ResourceLocation(ExCompressum.MOD_ID, "wooden_crucible"), ModBlocks.woodenCrucibles),
+                bait = build(BaitTileEntity::new, new ResourceLocation(ExCompressum.MOD_ID, "bait"), ModBlocks.baits)
         );
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends TileEntity> TileEntityType<T> build(Supplier<T> factory, ResourceLocation registryName, Block block) {
+    private static <T extends TileEntity> TileEntityType<T> build(Supplier<T> factory, ResourceLocation registryName, Block... block) {
         //noinspection ConstantConditions
         return (TileEntityType<T>) TileEntityType.Builder.create(factory, block).build(null).setRegistryName(registryName);
     }

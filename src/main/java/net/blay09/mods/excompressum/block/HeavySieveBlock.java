@@ -29,8 +29,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 public class HeavySieveBlock extends ContainerBlock {
 
-    public static final String name = "heavy_sieve";
-    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
+    public static final String namePrefix = "heavy_sieve_";
 
     public static final SieveModelBounds SIEVE_BOUNDS = new SieveModelBounds(0.5625f, 0.0625f, 0.88f, 0.5f);
 
@@ -87,7 +86,7 @@ public class HeavySieveBlock extends ContainerBlock {
                 }
             }
 
-            if (ExCompressumConfig.automation.allowHeavySieveAutomation || !(player instanceof FakePlayer)) {
+            if (ExCompressumConfig.COMMON.allowHeavySieveAutomation.get() || !(player instanceof FakePlayer)) {
                 if (tileEntity.processContents(player)) {
                     world.playSound(null, pos, SoundEvents.BLOCK_SAND_STEP, SoundCategory.BLOCKS, 0.3f, 0.6f);
                 }

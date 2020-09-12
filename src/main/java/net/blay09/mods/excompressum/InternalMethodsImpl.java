@@ -20,20 +20,20 @@ import java.util.List;
 
 public class InternalMethodsImpl implements InternalMethods {
 	@Override
-	public void registerChickenStickHammerable(BlockState state, boolean isWildcard) {
+	public void registerChickenStickHammerable(BlockState state) {
 		ChickenStickRegistry.INSTANCE.add(state);
 	}
 
 	@Override
-	public void registerCompressedHammerEntry(BlockState state, boolean isWildcard, List<CompressedHammerReward> rewards) {
+	public void registerCompressedHammerEntry(BlockState state, List<CompressedHammerReward> rewards) {
 		CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(state);
 		entry.addRewards(rewards);
 		CompressedHammerRegistry.INSTANCE.add(entry);
 	}
 
 	@Override
-	public void registerHeavySieveEntry(BlockState state, boolean isWildcard, List<HeavySieveReward> rewards) {
-		HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state, isWildcard);
+	public void registerHeavySieveEntry(BlockState state, List<HeavySieveReward> rewards) {
+		HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state);
 		entry.addRewards(rewards);
 		HeavySieveRegistry.INSTANCE.add(entry);
 	}

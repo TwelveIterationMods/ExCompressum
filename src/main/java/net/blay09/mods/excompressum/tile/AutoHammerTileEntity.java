@@ -134,7 +134,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
                     isDirty = true;
                     if (progress >= 1) {
                         if (!world.isRemote) {
-                            if (world.rand.nextFloat() <= ExCompressumConfig.automation.autoHammerDecay) {
+                            if (world.rand.nextFloat() <= ExCompressumConfig.COMMON.autoHammerDecay.get()) {
                                 ItemStack firstHammer = hammerSlots.getStackInSlot(0);
                                 if (!firstHammer.isEmpty()) {
                                     if (firstHammer.attemptDamageItem(1, world.rand, null)) {
@@ -212,7 +212,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
     }
 
     public int getEffectiveEnergy() {
-        return ExCompressumConfig.automation.autoHammerEnergy;
+        return ExCompressumConfig.COMMON.autoHammerEnergy.get();
     }
 
     public float getSpeedMultiplier() {
@@ -233,7 +233,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressumConfig.automation.autoHammerSpeed * getSpeedMultiplier();
+        return (float) (ExCompressumConfig.COMMON.autoHammerSpeed.get() * getSpeedMultiplier());
     }
 
     public float getEffectiveLuck() {

@@ -21,12 +21,12 @@ public class AutoCompressedHammerTileEntity extends AutoHammerTileEntity {
 
     @Override
     public int getEffectiveEnergy() {
-        return ExCompressumConfig.automation.autoCompressedHammerEnergy;
+        return ExCompressumConfig.COMMON.autoCompressedHammerEnergy.get();
     }
 
     @Override
     public float getEffectiveSpeed() {
-        return ExCompressumConfig.automation.autoCompressedHammerSpeed * getSpeedMultiplier();
+        return (float) (ExCompressumConfig.COMMON.autoCompressedHammerSpeed.get() * getSpeedMultiplier());
     }
 
     @Override

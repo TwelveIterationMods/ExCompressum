@@ -20,7 +20,7 @@ public class VanillaPacketHandler {
         }
         for(Object obj : playerList) {
             ServerPlayerEntity entityPlayer = (ServerPlayerEntity) obj;
-            if (Math.hypot(entityPlayer.posX - tileEntity.getPos().getX() + 0.5, entityPlayer.posZ - tileEntity.getPos().getZ() + 0.5) < 64) {
+            if (Math.hypot(entityPlayer.getPosX() - tileEntity.getPos().getX() + 0.5, entityPlayer.getPosZ() - tileEntity.getPos().getZ() + 0.5) < 64) {
                 entityPlayer.connection.sendPacket(updatePacket);
             }
         }

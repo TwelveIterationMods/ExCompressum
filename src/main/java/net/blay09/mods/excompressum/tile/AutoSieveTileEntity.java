@@ -39,7 +39,7 @@ public class AutoSieveTileEntity extends AutoSieveTileEntityBase {
     }
 
     @Override
-    protected int getEnergyStored() {
+    public int getEnergyStored() {
         return energyStorage.getEnergyStored();
     }
 
@@ -49,7 +49,7 @@ public class AutoSieveTileEntity extends AutoSieveTileEntityBase {
     }
 
     @Override
-    protected int getMaxEnergyStored() {
+    public int getMaxEnergyStored() {
         return energyStorage.getMaxEnergyStored();
     }
 

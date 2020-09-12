@@ -34,7 +34,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void spawnCrushParticles(World world, BlockPos pos, BlockState particleState) {
-        if (!ExCompressumConfig.client.disableParticles) {
+        if (!ExCompressumConfig.CLIENT.disableParticles.get()) {
             for (int i = 0; i < 10; i++) {
                 Minecraft.getInstance().particles.addEffect(new HammeringParticle((ClientWorld) world, pos, pos.getX() + 0.7f, pos.getY() + 0.3f, pos.getZ() + 0.5f, (-world.rand.nextDouble() + 0.2f) / 9, 0.2f, (world.rand.nextDouble() - 0.5) / 9, particleState));
             }
@@ -74,7 +74,7 @@ public class ClientProxy extends CommonProxy {
 
     private void spawnSieveParticles(World world, BlockPos pos, BlockState particleState, int particleCount, Vector3f particleOffset, float scale) {
         // Do not render sieve particles if particles are disabled in the config.
-        if (ExCompressumConfig.client.disableParticles) {
+        if (ExCompressumConfig.CLIENT.disableParticles.get()) {
             return;
         }
 
@@ -84,7 +84,7 @@ public class ClientProxy extends CommonProxy {
             return;
         }
 
-        // Lower the amount of particles and skip some of them if decreated particles are configured.
+        // Lower the amount of particles and skip some of them if decreased particles are configured.
         int actualParticleCount = particleCount;
         if (particleStatus == ParticleStatus.DECREASED) {
             float half = actualParticleCount / 2f;

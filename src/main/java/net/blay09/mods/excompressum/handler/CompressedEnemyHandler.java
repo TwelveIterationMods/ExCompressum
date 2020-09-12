@@ -18,7 +18,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.commons.lang3.ArrayUtils;
 
 @Mod.EventBusSubscriber
 public class CompressedEnemyHandler {
@@ -30,13 +29,13 @@ public class CompressedEnemyHandler {
     public static void onSpawnEntity(EntityJoinWorldEvent event) {
         if (!event.getWorld().isRemote && (event.getEntity() instanceof CreatureEntity || event.getEntity() instanceof GhastEntity)) {
             ResourceLocation registryName = event.getEntity().getType().getRegistryName();
-            if (registryName != null && ArrayUtils.contains(ExCompressumConfig.compressedMobs.allowedMobs, registryName.toString())) {
+            if (registryName != null && ExCompressumConfig.COMMON.compressedMobAllowedMobs.get().contains(registryName.toString())) {
                 CompoundNBT baseTag = event.getEntity().getPersistentData().getCompound(ExCompressum.MOD_ID);
                 if (baseTag.contains(NOCOMPRESS) || baseTag.contains(COMPRESSED)) {
                     return;
                 }
 
-                if (event.getEntity().world.rand.nextFloat() < ExCompressumConfig.compressedMobs.chance) {
+                if (event.getEntity().world.rand.nextFloat() < ExCompressumConfig.COMMON.compressedMobChance.get()) {
                     event.getEntity().setCustomNameVisible(true);
                     event.getEntity().setCustomName(new TranslationTextComponent("excompressum.compressedMob", event.getEntity().getName()));
                     CompoundNBT tagCompound = new CompoundNBT();
@@ -62,7 +61,7 @@ public class CompressedEnemyHandler {
 
                     @SuppressWarnings("unchecked") final EntityType<? extends LivingEntity> entityType = (EntityType<? extends LivingEntity>) event.getEntity().getType();
 
-                    for (int i = 0; i < ExCompressumConfig.compressedMobs.size; i++) {
+                    for (int i = 0; i < ExCompressumConfig.COMMON.compressedMobSize.get(); i++) {
                         LivingEntity entity = entityType.create(((ServerWorld) event.getEntity().world), null, null, null, event.getEntity().getPosition(), SpawnReason.CONVERSION, false, false);
                         if (entity == null) {
                             return;

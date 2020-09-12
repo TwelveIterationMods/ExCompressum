@@ -14,13 +14,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 
-public class ItemBatZapper extends Item {
+public class BatZapperItem extends Item {
 
     public static final String name = "bat_zapper";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public ItemBatZapper(Item.Properties properties) {
-        super(properties.maxDamage(ItemTier.STONE.getMaxUses()).maxStackSize(1));
+    public BatZapperItem(Item.Properties properties) {
+        super(properties.maxDamage(ItemTier.STONE.getMaxUses()));
     }
 
     @Override

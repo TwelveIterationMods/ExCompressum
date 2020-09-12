@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.block;
 
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.WoodenCrucibleTileEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
@@ -11,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
@@ -20,8 +18,7 @@ import net.minecraftforge.fluids.FluidUtil;
 
 public class WoodenCrucibleBlock extends ContainerBlock {
 
-    public static final String name = "wooden_crucible";
-    public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
+    public static final String namePrefix = "wooden_crucible_";
     private final WoodenCrucibleType type;
 
     public WoodenCrucibleBlock(WoodenCrucibleType type) {

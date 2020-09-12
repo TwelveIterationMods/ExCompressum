@@ -27,11 +27,11 @@ public class AutoHeavySieveTileEntity extends AutoSieveTileEntity {
 
     @Override
     public int getEffectiveEnergy() {
-        return ExCompressumConfig.automation.autoHeavySieveEnergy;
+        return ExCompressumConfig.COMMON.autoHeavySieveEnergy.get();
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressumConfig.automation.autoHeavySieveSpeed * getSpeedMultiplier();
+        return (float) (ExCompressumConfig.COMMON.autoHeavySieveSpeed.get() * getSpeedMultiplier());
     }
 
 }

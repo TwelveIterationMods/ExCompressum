@@ -26,13 +26,11 @@ public class StupidUtils {
      * Wish this would just be part of ItemBlock itself.
      */
     @Nullable
-    @SuppressWarnings("deprecation")
     public static BlockState getStateFromItemStack(ItemStack itemStack) {
         if (itemStack.getItem() instanceof BlockItem) {
             Block block = ((BlockItem) itemStack.getItem()).getBlock();
             try {
-                int meta = itemStack.getItem().getMetadata(itemStack.getItemDamage());
-                return block.getStateFromMeta(meta);
+                return block.getDefaultState();
             } catch (Exception e) {
                 // In case of weirdness, don't crash! Just fallback to default.
             }
@@ -44,7 +42,7 @@ public class StupidUtils {
     public static ItemStack getItemStackFromState(BlockState state) {
         Item item = Item.getItemFromBlock(state.getBlock());
         if (item != Items.AIR) {
-            return new ItemStack(item, 1, state.getBlock().damageDropped(state));
+            return new ItemStack(item);
         }
         return ItemStack.EMPTY;
     }

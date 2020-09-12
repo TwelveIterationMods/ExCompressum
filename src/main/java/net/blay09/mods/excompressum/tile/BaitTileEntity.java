@@ -60,7 +60,7 @@ public class BaitTileEntity extends TileEntity implements ITickable {
                     final float range = MIN_DISTANCE_NO_PLAYERS;
                     if (world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty()) {
                         Entity entityLiving = baitType.createEntity(world);
-                        if (entityLiving instanceof AgeableEntity && world.rand.nextFloat() <= ExCompressumConfig.baits.childChance) {
+                        if (entityLiving instanceof AgeableEntity && world.rand.nextFloat() <= ExCompressumConfig.COMMON.childBaitChance.get()) {
                             ((AgeableEntity) entityLiving).setGrowingAge(-24000);
                         }
                         entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);

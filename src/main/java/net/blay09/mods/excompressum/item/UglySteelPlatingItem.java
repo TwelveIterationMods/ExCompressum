@@ -18,12 +18,12 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemUglySteelPlating extends Item {
+public class UglySteelPlatingItem extends Item {
 
     public static final String name = "ugly_steel_plating";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public ItemUglySteelPlating(Properties properties) {
+    public UglySteelPlatingItem(Properties properties) {
         super(properties);
     }
 

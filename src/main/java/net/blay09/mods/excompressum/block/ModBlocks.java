@@ -24,6 +24,7 @@ public class ModBlocks {
     public static Block autoCompressedHammer;
     public static Block autoHeavySieve;
     public static Block autoSieve;
+    public static Block manaSieve;
     public static Block autoCompressor;
     public static Block rationingAutoCompressor;
 
@@ -31,25 +32,26 @@ public class ModBlocks {
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         final IForgeRegistry<Block> registry = event.getRegistry();
 
-        compressedBlocks = registerEnumBlock(CompressedBlockType.values(), CompressedBlock::new);
-        heavySieves = registerEnumBlock(HeavySieveType.values(), HeavySieveBlock::new);
-        woodenCrucibles = registerEnumBlock(WoodenCrucibleType.values(), WoodenCrucibleBlock::new);
-        baits = registerEnumBlock(BaitType.values(), BaitBlock::new);
+        compressedBlocks = registerEnumBlock(CompressedBlockType.values(), CompressedBlock.namePrefix, CompressedBlock::new);
+        heavySieves = registerEnumBlock(HeavySieveType.values(), HeavySieveBlock.namePrefix, HeavySieveBlock::new);
+        woodenCrucibles = registerEnumBlock(WoodenCrucibleType.values(), WoodenCrucibleBlock.namePrefix, WoodenCrucibleBlock::new);
+        baits = registerEnumBlock(BaitType.values(), BaitBlock.namePrefix, BaitBlock::new);
 
         registry.registerAll(
-                new AutoHammerBlock().setRegistryName(AutoHammerBlock.name),
-                new AutoSieveBlock().setRegistryName(AutoSieveBlock.name),
-                new AutoCompressedHammerBlock().setRegistryName(AutoCompressedHammerBlock.name),
-                new AutoHeavySieveBlock().setRegistryName(AutoHeavySieveBlock.name),
-                new AutoCompressorBlock().setRegistryName(AutoCompressorBlock.name),
-                new RationingAutoCompressorBlock().setRegistryName(RationingAutoCompressorBlock.name)
+                autoHammer = new AutoHammerBlock().setRegistryName(AutoHammerBlock.name),
+                autoSieve = new AutoSieveBlock().setRegistryName(AutoSieveBlock.name),
+                manaSieve = new ManaSieveBlock().setRegistryName(ManaSieveBlock.name),
+                autoCompressedHammer = new AutoCompressedHammerBlock().setRegistryName(AutoCompressedHammerBlock.name),
+                autoHeavySieve = new AutoHeavySieveBlock().setRegistryName(AutoHeavySieveBlock.name),
+                autoCompressor = new AutoCompressorBlock().setRegistryName(AutoCompressorBlock.name),
+                rationingAutoCompressor = new RationingAutoCompressorBlock().setRegistryName(RationingAutoCompressorBlock.name)
         );
     }
 
-    private static <T extends Enum<T> & IStringSerializable> Block[] registerEnumBlock(T[] types, Function<T, Block> factory) {
+    private static <T extends Enum<T> & IStringSerializable> Block[] registerEnumBlock(T[] types, String namePrefix, Function<T, Block> factory) {
         Block[] blocks = new Block[types.length];
         for (T type : types) {
-            compressedBlocks[type.ordinal()] = factory.apply(type).setRegistryName(CompressedBlock.namePrefix + type.getString());
+            blocks[type.ordinal()] = factory.apply(type).setRegistryName(namePrefix + type.getString());
         }
 
         return blocks;
@@ -68,6 +70,7 @@ public class ModBlocks {
                 blockItem(autoHammer),
                 blockItem(autoCompressedHammer),
                 blockItem(autoSieve),
+                blockItem(manaSieve),
                 blockItem(autoHeavySieve),
                 blockItem(autoCompressor),
                 blockItem(rationingAutoCompressor)

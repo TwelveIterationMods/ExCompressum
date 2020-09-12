@@ -191,11 +191,11 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
     }
 
     public int getEffectiveEnergy() {
-        return ExCompressumConfig.automation.autoCompressorEnergy;
+        return ExCompressumConfig.COMMON.autoCompressorEnergy.get();
     }
 
     public float getEffectiveSpeed() {
-        return ExCompressumConfig.automation.autoCompressorSpeed;
+        return ExCompressumConfig.COMMON.autoCompressorSpeed.get().floatValue();
     }
 
     @Override

@@ -4,7 +4,6 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,14 +17,14 @@ import net.minecraft.world.World;
 
 import java.util.HashSet;
 
-public class ItemCompressedCrook extends ToolItem implements ICompressedCrook {
+public class CompressedCrookItem extends ToolItem implements ICompressedCrook {
 
     public static final String name = "compressed_crook";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public ItemCompressedCrook(Properties properties) {
-        super(0f, 0f, ItemTier.WOOD, new HashSet<>(), properties);
-        setMaxDamage((int) (ItemTier.WOOD.getMaxUses() * 2 * ExCompressumConfig.tools.compressedCrookDurabilityMultiplier));
+    public CompressedCrookItem(Properties properties) {
+        super(0f, 0f, ItemTier.WOOD, new HashSet<>(), properties
+                .maxDamage((int) (ItemTier.WOOD.getMaxUses() * 2 * ExCompressumConfig.COMMON.compressedCrookDurabilityMultiplier.get())));
     }
 
     @Override
@@ -41,7 +40,7 @@ public class ItemCompressedCrook extends ToolItem implements ICompressedCrook {
     }
 
     private void pushEntity(ItemStack itemStack, PlayerEntity player, Entity entity) {
-        if(!player.world.isRemote) {
+        if (!player.world.isRemote) {
             double distance = Math.sqrt(Math.pow(player.getPosX() - entity.getPosX(), 2) + Math.pow(player.getPosZ() - entity.getPosZ(), 2));
             double scalarX = (player.getPosX() - entity.getPosX()) / distance;
             double scalarZ = (player.getPosZ() - entity.getPosZ()) / distance;
@@ -51,7 +50,8 @@ public class ItemCompressedCrook extends ToolItem implements ICompressedCrook {
             double velZ = 0.0 - scalarZ * strength;
             entity.addVelocity(velX, velY, velZ);
         }
-        itemStack.damageItem(1, player, it -> {});
+        itemStack.damageItem(1, player, it -> {
+        });
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ItemCompressedCrook extends ToolItem implements ICompressedCrook {
 
     @Override
     public float getDestroySpeed(ItemStack item, BlockState block) {
-        return block.getMaterial() == Material.LEAVES ? getTier().getEfficiency() * ExCompressumConfig.tools.compressedCrookSpeedMultiplier : 0f;
+        return block.getMaterial() == Material.LEAVES ? (float) (getTier().getEfficiency() * ExCompressumConfig.COMMON.compressedCrookSpeedMultiplier.get()) : 0f;
     }
 
     @Override

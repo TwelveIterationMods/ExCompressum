@@ -34,7 +34,7 @@ public class HeavySieveRecipe {
         rewards = ArrayListMultimap.create();
         if (sieveMesh != null) {
             inputs.add(Collections.singletonList(sieveMesh.getItemStack()));
-            for (HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.general.flattenSieveRecipes)) {
+            for (HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.COMMON.flattenSieveRecipes.get())) {
                 rewards.put(reward.getItemStack().getItem().getRegistryName(), reward);
             }
         } else {

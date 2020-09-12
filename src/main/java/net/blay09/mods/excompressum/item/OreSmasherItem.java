@@ -24,12 +24,12 @@ import net.minecraft.world.World;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class ItemOreSmasher extends ToolItem {
+public class OreSmasherItem extends ToolItem {
 
     public static final String name = "ore_smasher";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public ItemOreSmasher(Properties properties) {
+    public OreSmasherItem(Properties properties) {
         super(0f, 0f, ItemTier.DIAMOND, new HashSet<>(), properties);
     }
 

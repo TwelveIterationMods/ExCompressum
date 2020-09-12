@@ -15,13 +15,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
+import java.util.List;
 
-public class ItemChickenStick extends ToolItem {
+public class ChickenStickItem extends ToolItem {
 
     public static final String name = "chicken_stick";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public ItemChickenStick(Item.Properties properties) {
+    public ChickenStickItem(Item.Properties properties) {
         super(0f, 0f, ChickenStickTier.INSTANCE, new HashSet<>(), properties);
     }
 
@@ -55,10 +56,11 @@ public class ItemChickenStick extends ToolItem {
     }
 
     private void playChickenSound(World world, BlockPos pos) {
-        if (world.rand.nextFloat() <= ExCompressumConfig.tools.chickenStickSoundChance) {
+        if (world.rand.nextFloat() <= ExCompressumConfig.COMMON.chickenStickSoundChance.get()) {
             ResourceLocation location = null;
-            if (ExCompressumConfig.tools.chickenStickSounds.length > 0) {
-                location = new ResourceLocation(ExCompressumConfig.tools.chickenStickSounds[world.rand.nextInt(ExCompressumConfig.tools.chickenStickSounds.length)]);
+            final List<? extends String> chickenStickSounds = ExCompressumConfig.COMMON.chickenStickSounds.get();
+            if (!chickenStickSounds.isEmpty()) {
+                location = new ResourceLocation(chickenStickSounds.get(world.rand.nextInt(chickenStickSounds.size())));
             }
             if (location != null) {
                 SoundEvent soundEvent = ForgeRegistries.SOUND_EVENTS.getValue(location);

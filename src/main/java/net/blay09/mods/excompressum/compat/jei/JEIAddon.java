@@ -40,7 +40,7 @@ public class JEIAddon implements IModPlugin {
             Collection<HeavySieveRegistryEntry> entries = HeavySieveRegistry.INSTANCE.getEntries().values();
             for (SieveMeshRegistryEntry sieveMesh : SieveMeshRegistry.getEntries().values()) {
                 for (HeavySieveRegistryEntry entry : entries) {
-                    if (!entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.general.flattenSieveRecipes).isEmpty()) {
+                    if (!entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.COMMON.flattenSieveRecipes.get()).isEmpty()) {
                         heavySieveRecipes.add(new HeavySieveRecipe(entry, sieveMesh));
                     }
                 }

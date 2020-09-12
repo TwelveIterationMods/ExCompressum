@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.config;
 
 import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeConfigSpec;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -364,5 +365,24 @@ public class ExCompressumConfig {
                     .define("disableParticles", false);
         }
     }
+
+	public static final ForgeConfigSpec commonSpec;
+	public static final Common COMMON;
+
+	static {
+		final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+		commonSpec = specPair.getRight();
+		COMMON = specPair.getLeft();
+	}
+
+	public static final ForgeConfigSpec clientSpec;
+	public static final Client CLIENT;
+
+	static {
+		final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
+		clientSpec = specPair.getRight();
+		CLIENT = specPair.getLeft();
+	}
+
 
 }

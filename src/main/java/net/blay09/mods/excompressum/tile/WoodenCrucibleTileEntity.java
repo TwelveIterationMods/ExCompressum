@@ -130,7 +130,7 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickable {
             if (currentMeltable != null) {
                 ticksSinceMelt++;
                 if (ticksSinceMelt >= MELT_INTERVAL && fluidTank.getFluidAmount() < fluidTank.getCapacity()) {
-                    int amount = Math.min(ExCompressumConfig.automation.woodenCrucibleSpeed, solidVolume);
+                    int amount = Math.min(ExCompressumConfig.COMMON.woodenCrucibleSpeed.get(), solidVolume);
                     fluidTank.fill(new FluidStack(currentMeltable.getFluid(), amount), IFluidHandler.FluidAction.EXECUTE);
                     solidVolume = Math.max(0, solidVolume - amount);
                     ticksSinceMelt = 0;
