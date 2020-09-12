@@ -1,38 +1,34 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "excompressum:auto_hammer",
-    "transform": "forge:default-block",
-    "textures": {
-      "texture_glass": "excompressum:blocks/auto_frame_glass",
-      "hammer": "excompressum:items/hammer_diamond"
-    }
-  },
   "variants": {
-    "normal": [{}],
-    "inventory": [{
-    }],
-    "facing": {
-      "north": {
-      },
-      "south": {
-        "y": 180
-      },
-      "west": {
-        "y": 90
-      },
-      "east": {
-        "y": -90
-      }
+    "facing=east,ugly=false": {
+      "model": "excompressum:block/auto_hammer",
+      "y": 90
     },
-    "ugly": {
-      "true": {
-        "textures": {
-          "texture_glass": "excompressum:blocks/auto_frame_glass_ugly"
-        }
-      },
-      "false": {
-      }
+    "facing=north,ugly=false": {
+      "model": "excompressum:block/auto_hammer"
+    },
+    "facing=south,ugly=false": {
+      "model": "excompressum:block/auto_hammer",
+      "y": 180
+    },
+    "facing=west,ugly=false": {
+      "model": "excompressum:block/auto_hammer",
+      "y": 270
+    },
+    "facing=east,ugly=true": {
+      "model": "excompressum:block/auto_hammer_ugly",
+      "y": 90
+    },
+    "facing=north,ugly=true": {
+      "model": "excompressum:block/auto_hammer_ugly"
+    },
+    "facing=south,ugly=true": {
+      "model": "excompressum:block/auto_hammer_ugly",
+      "y": 180
+    },
+    "facing=west,ugly=true": {
+      "model": "excompressum:block/auto_hammer_ugly",
+      "y": 270
     }
   }
 }

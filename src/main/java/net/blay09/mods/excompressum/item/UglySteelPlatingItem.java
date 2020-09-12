@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.IUglyfiable;
+import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,7 +30,7 @@ public class UglySteelPlatingItem extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("tooltip.excompressum:ugly_steel_plating"));
+        tooltip.add(Messages.lang("tooltip.ugly_steel_plating"));
     }
 
     @Override

@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class BlockAutoSieveBase extends ContainerBlock implements IUglyfiable {
+public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUglyfiable {
 
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final BooleanProperty UGLY = BooleanProperty.create("ugly");
@@ -48,7 +48,7 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
     private ItemStack lastHoverStack = ItemStack.EMPTY;
     private String currentRandomName;
 
-    protected BlockAutoSieveBase(Properties properties) {
+    protected AutoSieveBaseBlock(Properties properties) {
         super(properties.hardnessAndResistance(2f));
     }
 
@@ -174,13 +174,13 @@ public abstract class BlockAutoSieveBase extends ContainerBlock implements IUgly
         if (tagCompound != null && tagCompound.contains("CustomSkin")) {
             GameProfile customSkin = NBTUtil.readGameProfile(tagCompound.getCompound("CustomSkin"));
             if (customSkin != null) {
-                tooltip.add(Messages.styledLang("tooltip." + getRegistryName(), TextFormatting.GRAY, customSkin.getName()));
+                tooltip.add(Messages.styledLang("tooltip." + getRegistryName().getPath(), TextFormatting.GRAY, customSkin.getName()));
             }
         } else {
             if (currentRandomName == null) {
                 currentRandomName = AutoSieveSkinRegistry.getRandomSkin();
             }
-            tooltip.add(Messages.styledLang("tooltip." + getRegistryName(), TextFormatting.GRAY, currentRandomName));
+            tooltip.add(Messages.styledLang("tooltip." + getRegistryName().getPath(), TextFormatting.GRAY, currentRandomName));
         }
         if (lastHoverStack != stack) {
             currentRandomName = AutoSieveSkinRegistry.getRandomSkin();

@@ -1,0 +1,6 @@
+{
+    "parent": "excompressum:block/wooden_crucible",
+    "textures": {
+        "texture": "minecraft:blocks/acacia_log"
+    }
+}

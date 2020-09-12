@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.AutoCompressorTileEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
@@ -112,5 +113,10 @@ public class AutoCompressorBlock extends ContainerBlock {
         if (tileEntity instanceof AutoCompressorTileEntity) {
             ((AutoCompressorTileEntity) tileEntity).setDisabledByRedstone(world.isBlockPowered(pos));
         }
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 }

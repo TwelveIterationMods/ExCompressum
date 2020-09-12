@@ -7,7 +7,7 @@ import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
+import net.blay09.mods.excompressum.block.AutoSieveBaseBlock;
 import net.blay09.mods.excompressum.block.BaitBlock;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.WoodenCrucibleBlock;

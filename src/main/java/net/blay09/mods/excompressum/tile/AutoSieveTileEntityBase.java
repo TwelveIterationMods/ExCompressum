@@ -5,7 +5,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
+import net.blay09.mods.excompressum.block.AutoSieveBaseBlock;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
@@ -429,8 +429,8 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         if (cachedState == null) {
             cachedState = world.getBlockState(pos);
         }
-        if (cachedState.getBlock() instanceof BlockAutoSieveBase) {
-            return cachedState.get(BlockAutoSieveBase.UGLY);
+        if (cachedState.getBlock() instanceof AutoSieveBaseBlock) {
+            return cachedState.get(AutoSieveBaseBlock.UGLY);
         }
         return false;
     }
@@ -439,8 +439,8 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         if (cachedState == null) {
             cachedState = world.getBlockState(pos);
         }
-        if (cachedState.getBlock() instanceof BlockAutoSieveBase) {
-            return cachedState.get(BlockAutoSieveBase.FACING);
+        if (cachedState.getBlock() instanceof AutoSieveBaseBlock) {
+            return cachedState.get(AutoSieveBaseBlock.FACING);
         }
         return Direction.NORTH;
     }

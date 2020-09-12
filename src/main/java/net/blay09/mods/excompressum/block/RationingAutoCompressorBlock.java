@@ -8,7 +8,7 @@ import net.minecraft.world.IBlockReader;
 
 public class RationingAutoCompressorBlock extends AutoCompressorBlock {
 
-    public static final String name = "auto_compressor_rationing";
+    public static final String name = "rationing_auto_compressor";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     @Override

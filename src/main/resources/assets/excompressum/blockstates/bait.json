@@ -1,77 +1,7 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "excompressum:empty"
-  },
   "variants": {
-    "normal": [{}],
-    "inventory": [{}],
-    "variant": {
-      "wolf": {
-        "textures": {
-          "particle": "minecraft:items/beef_raw"
-        }
-      },
-      "ocelot": {
-        "textures": {
-          "particle": "minecraft:items/fish_cod_raw"
-        }
-      },
-      "cow": {
-        "textures": {
-          "particle": "minecraft:items/wheat"
-        }
-      },
-      "pig": {
-        "textures": {
-          "particle": "minecraft:items/carrot"
-        }
-      },
-      "chicken": {
-        "textures": {
-          "particle": "minecraft:items/seeds_wheat"
-        }
-      },
-      "sheep": {
-        "textures": {
-          "particle": "minecraft:items/wheat"
-        }
-      },
-      "squid": {
-        "textures": {
-          "particle": "minecraft:items/fish_cod_raw"
-        }
-      },
-      "rabbit": {
-        "textures": {
-          "particle": "minecraft:items/carrot"
-        }
-      },
-      "horse": {
-        "textures": {
-          "particle": "minecraft:items/apple_golden"
-        }
-      },
-      "donkey": {
-        "textures": {
-          "particle": "minecraft:items/carrot_golden"
-        }
-      },
-      "llama": {
-        "textures": {
-          "particle": "minecraft:items/sugar"
-        }
-      },
-      "polar_bear": {
-        "textures": {
-          "particle": "minecraft:items/snowball"
-        }
-      },
-      "parrot": {
-        "textures": {
-          "particle": "minecraft:items/dye_powder_red"
-        }
-      }
+    "": {
+      "model": "excompressum:block/bait"
     }
   }
 }

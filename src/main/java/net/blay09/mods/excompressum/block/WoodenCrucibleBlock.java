@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.FluidUtil;
 
 public class WoodenCrucibleBlock extends ContainerBlock {
 
-    public static final String namePrefix = "wooden_crucible_";
+    public static final String nameSuffix = "_crucible";
     private final WoodenCrucibleType type;
 
     public WoodenCrucibleBlock(WoodenCrucibleType type) {

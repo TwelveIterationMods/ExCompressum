@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.tile.BaitTileEntity;
 import net.blay09.mods.excompressum.tile.EnvironmentalCondition;
+import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
@@ -33,7 +34,7 @@ import java.util.Random;
 
 public class BaitBlock extends ContainerBlock {
 
-    public static final String namePrefix = "bait_";
+    public static final String nameSuffix = "_bait";
 
     private static final VoxelShape BOUNDING_BOX = VoxelShapes.create(0, 0, 0, 1, 0.1, 1);
 
@@ -104,7 +105,7 @@ public class BaitBlock extends ContainerBlock {
     @Override
     public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         if (baitType == BaitType.SQUID) {
-            tooltip.add(new TranslationTextComponent("info.excompressum:baitPlaceInWater"));
+            tooltip.add(Messages.lang("tooltip.baitPlaceInWater"));
         }
     }
 

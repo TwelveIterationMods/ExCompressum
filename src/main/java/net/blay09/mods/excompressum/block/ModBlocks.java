@@ -32,10 +32,10 @@ public class ModBlocks {
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         final IForgeRegistry<Block> registry = event.getRegistry();
 
-        compressedBlocks = registerEnumBlock(CompressedBlockType.values(), CompressedBlock.namePrefix, CompressedBlock::new);
-        heavySieves = registerEnumBlock(HeavySieveType.values(), HeavySieveBlock.namePrefix, HeavySieveBlock::new);
-        woodenCrucibles = registerEnumBlock(WoodenCrucibleType.values(), WoodenCrucibleBlock.namePrefix, WoodenCrucibleBlock::new);
-        baits = registerEnumBlock(BaitType.values(), BaitBlock.namePrefix, BaitBlock::new);
+        compressedBlocks = registerEnumBlock(CompressedBlockType.values(), it -> CompressedBlock.namePrefix + it, CompressedBlock::new);
+        heavySieves = registerEnumBlock(HeavySieveType.values(), it -> it + HeavySieveBlock.nameSuffix, HeavySieveBlock::new);
+        woodenCrucibles = registerEnumBlock(WoodenCrucibleType.values(), it -> it + WoodenCrucibleBlock.nameSuffix, WoodenCrucibleBlock::new);
+        baits = registerEnumBlock(BaitType.values(), it -> it + BaitBlock.nameSuffix, BaitBlock::new);
 
         registry.registerAll(
                 autoHammer = new AutoHammerBlock().setRegistryName(AutoHammerBlock.name),
@@ -48,10 +48,10 @@ public class ModBlocks {
         );
     }
 
-    private static <T extends Enum<T> & IStringSerializable> Block[] registerEnumBlock(T[] types, String namePrefix, Function<T, Block> factory) {
+    private static <T extends Enum<T> & IStringSerializable> Block[] registerEnumBlock(T[] types, Function<String, String> nameFactory, Function<T, Block> factory) {
         Block[] blocks = new Block[types.length];
         for (T type : types) {
-            blocks[type.ordinal()] = factory.apply(type).setRegistryName(namePrefix + type.getString());
+            blocks[type.ordinal()] = factory.apply(type).setRegistryName(nameFactory.apply(type.getString()));
         }
 
         return blocks;
@@ -92,12 +92,6 @@ public class ModBlocks {
     }
 
 	/*public static void registerModels() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoCompressedHammer), 0, new ModelResourceLocation(BlockAutoCompressedHammer.registryName, "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoSieve), 0, new ModelResourceLocation(BlockAutoSieve.registryName, "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoHeavySieve), 0, new ModelResourceLocation(BlockAutoHeavySieve.registryName, "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoCompressor), 0, new ModelResourceLocation(BlockAutoCompressor.registryName, "inventory"));
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(autoCompressorRationing), 0, new ModelResourceLocation(BlockAutoCompressorRationing.registryName, "inventory"));
-
 		// Baits
 		ResourceLocation[] baitVariants = new ResourceLocation[BaitType.values.length];
         for(int i = 0; i < baitVariants.length; i++) {

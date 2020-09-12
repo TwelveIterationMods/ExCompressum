@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.block;
 
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
@@ -16,7 +15,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -29,7 +31,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 public class HeavySieveBlock extends ContainerBlock {
 
-    public static final String namePrefix = "heavy_sieve_";
+    public static final String nameSuffix = "_heavy_sieve";
 
     public static final SieveModelBounds SIEVE_BOUNDS = new SieveModelBounds(0.5625f, 0.0625f, 0.88f, 0.5f);
 

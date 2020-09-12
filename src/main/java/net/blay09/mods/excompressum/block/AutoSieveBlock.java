@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
-public class AutoSieveBlock extends BlockAutoSieveBase {
+public class AutoSieveBlock extends AutoSieveBaseBlock {
 
     public static final String name = "auto_sieve";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);

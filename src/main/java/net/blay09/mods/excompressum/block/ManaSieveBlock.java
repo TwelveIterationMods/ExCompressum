@@ -6,9 +6,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
 
-public class ManaSieveBlock extends BlockAutoSieveBase {
+public class ManaSieveBlock extends AutoSieveBaseBlock {
 
     public static final String name = "mana_sieve";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
