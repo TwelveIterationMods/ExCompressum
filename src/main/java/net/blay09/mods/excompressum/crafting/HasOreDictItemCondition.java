@@ -1,18 +1,50 @@
 package net.blay09.mods.excompressum.crafting;
 
 import com.google.gson.JsonObject;
-import net.minecraftforge.common.crafting.IConditionFactory;
-import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.oredict.OreDictionary;
+import net.blay09.mods.excompressum.ExCompressum;
+import net.minecraft.util.JSONUtils;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
-import java.util.function.BooleanSupplier;
+public class HasOreDictItemCondition implements ICondition {
 
-public class HasOreDictItemCondition implements IConditionFactory {
-	@Override
-	public BooleanSupplier parse(JsonContext context, JsonObject json) {
-		return () -> {
-			String key = json.get("value").getAsString();
-			return !OreDictionary.getOres(key, false).isEmpty();
-		};
-	}
+    private static final ResourceLocation NAME = new ResourceLocation(ExCompressum.MOD_ID, "has_ore_dict_item");
+    private final String key;
+
+    public HasOreDictItemCondition(String key) {
+        this.key = key;
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return NAME;
+    }
+
+    @Override
+    public boolean test() {
+        return false; // TODO !OreDictionary.getOres(key, false).isEmpty();
+    }
+
+    public static class Serializer implements IConditionSerializer<HasOreDictItemCondition> {
+
+        public static final Serializer INSTANCE = new Serializer();
+
+        @Override
+        public void write(JsonObject json, HasOreDictItemCondition value) {
+            json.addProperty("value", value.key);
+        }
+
+        @Override
+        public HasOreDictItemCondition read(JsonObject json) {
+            return new HasOreDictItemCondition(JSONUtils.getString(json, "value"));
+        }
+
+        @Override
+        public ResourceLocation getID() {
+            return HasOreDictItemCondition.NAME;
+        }
+
+    }
+
 }

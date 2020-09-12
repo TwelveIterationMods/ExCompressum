@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 
@@ -25,7 +25,7 @@ public class ItemCompressedCrook extends ToolItem implements ICompressedCrook {
 
     public ItemCompressedCrook(Properties properties) {
         super(0f, 0f, ItemTier.WOOD, new HashSet<>(), properties);
-        setMaxDamage((int) (ItemTier.WOOD.getMaxUses() * 2 * ModConfig.tools.compressedCrookDurabilityMultiplier));
+        setMaxDamage((int) (ItemTier.WOOD.getMaxUses() * 2 * ExCompressumConfig.tools.compressedCrookDurabilityMultiplier));
     }
 
     @Override
@@ -61,7 +61,7 @@ public class ItemCompressedCrook extends ToolItem implements ICompressedCrook {
 
     @Override
     public float getDestroySpeed(ItemStack item, BlockState block) {
-        return block.getMaterial() == Material.LEAVES ? getTier().getEfficiency() * ModConfig.tools.compressedCrookSpeedMultiplier : 0f;
+        return block.getMaterial() == Material.LEAVES ? getTier().getEfficiency() * ExCompressumConfig.tools.compressedCrookSpeedMultiplier : 0f;
     }
 
     @Override

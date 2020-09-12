@@ -5,7 +5,8 @@ import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
@@ -46,7 +47,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public Collection<ItemStack> rollCrookRewards(EntityLivingBase player, BlockState state, float luck, Random rand) {
+	public Collection<ItemStack> rollCrookRewards(LivingEntity player, BlockState state, float luck, Random rand) {
 		return Collections.emptyList();
 	}
 
@@ -83,5 +84,15 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	@Override
 	public int getMeshEfficiency(ItemStack meshStack) {
 		return 0;
+	}
+
+	@Override
+	public boolean isCompressableOre(ItemStack itemStack) {
+		return false;
+	}
+
+	@Override
+	public boolean isHammerableOre(ItemStack itemStack) {
+		return false;
 	}
 }

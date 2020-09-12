@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
@@ -55,10 +55,10 @@ public class ItemChickenStick extends ToolItem {
     }
 
     private void playChickenSound(World world, BlockPos pos) {
-        if (world.rand.nextFloat() <= ModConfig.tools.chickenStickSoundChance) {
+        if (world.rand.nextFloat() <= ExCompressumConfig.tools.chickenStickSoundChance) {
             ResourceLocation location = null;
-            if (ModConfig.tools.chickenStickSounds.length > 0) {
-                location = new ResourceLocation(ModConfig.tools.chickenStickSounds[world.rand.nextInt(ModConfig.tools.chickenStickSounds.length)]);
+            if (ExCompressumConfig.tools.chickenStickSounds.length > 0) {
+                location = new ResourceLocation(ExCompressumConfig.tools.chickenStickSounds[world.rand.nextInt(ExCompressumConfig.tools.chickenStickSounds.length)]);
             }
             if (location != null) {
                 SoundEvent soundEvent = ForgeRegistries.SOUND_EVENTS.getValue(location);

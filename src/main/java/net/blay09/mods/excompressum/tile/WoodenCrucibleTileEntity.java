@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
@@ -130,7 +130,7 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickable {
             if (currentMeltable != null) {
                 ticksSinceMelt++;
                 if (ticksSinceMelt >= MELT_INTERVAL && fluidTank.getFluidAmount() < fluidTank.getCapacity()) {
-                    int amount = Math.min(ModConfig.automation.woodenCrucibleSpeed, solidVolume);
+                    int amount = Math.min(ExCompressumConfig.automation.woodenCrucibleSpeed, solidVolume);
                     fluidTank.fill(new FluidStack(currentMeltable.getFluid(), amount), IFluidHandler.FluidAction.EXECUTE);
                     solidVolume = Math.max(0, solidVolume - amount);
                     ticksSinceMelt = 0;

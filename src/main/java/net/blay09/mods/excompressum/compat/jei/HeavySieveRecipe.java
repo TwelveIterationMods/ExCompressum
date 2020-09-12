@@ -5,11 +5,11 @@ import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.config.ModConfig;
-import net.blay09.mods.excompressum.registry.RegistryKey;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class HeavySieveRecipe {
     private final HeavySieveRegistryEntry entry;
     private final List<List<ItemStack>> inputs;
     private final List<ItemStack> outputs;
-    private final ArrayListMultimap<RegistryKey, HeavySieveReward> rewards;
+    private final ArrayListMultimap<ResourceLocation, HeavySieveReward> rewards;
 
     public HeavySieveRecipe(HeavySieveRegistryEntry entry) {
         this(entry, null);
@@ -34,8 +34,8 @@ public class HeavySieveRecipe {
         rewards = ArrayListMultimap.create();
         if (sieveMesh != null) {
             inputs.add(Collections.singletonList(sieveMesh.getItemStack()));
-            for (HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh, ModConfig.general.flattenSieveRecipes)) {
-                rewards.put(new RegistryKey(reward.getItemStack()), reward);
+            for (HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.general.flattenSieveRecipes)) {
+                rewards.put(reward.getItemStack().getItem().getRegistryName(), reward);
             }
         } else {
             List<ItemStack> sieveMeshes = new ArrayList<>();
@@ -44,11 +44,11 @@ public class HeavySieveRecipe {
             }
             inputs.add(sieveMeshes);
             for (HeavySieveReward reward : entry.getRewards()) {
-                rewards.put(new RegistryKey(reward.getItemStack()), reward);
+                rewards.put(reward.getItemStack().getItem().getRegistryName(), reward);
             }
         }
         outputs = Lists.newArrayList();
-        for (RegistryKey key : rewards.keySet()) {
+        for (ResourceLocation key : rewards.keySet()) {
             outputs.add(rewards.get(key).get(0).getItemStack());
         }
         ItemStack inputStack = StupidUtils.getItemStackFromState(entry.getInputState());
@@ -56,7 +56,7 @@ public class HeavySieveRecipe {
     }
 
     public Collection<HeavySieveReward> getRewardsForItemStack(ItemStack itemStack) {
-        return rewards.get(new RegistryKey(itemStack));
+        return rewards.get(itemStack.getItem().getRegistryName());
     }
 
     public HeavySieveRegistryEntry getEntry() {

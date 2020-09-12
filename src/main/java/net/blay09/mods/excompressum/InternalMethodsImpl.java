@@ -21,12 +21,12 @@ import java.util.List;
 public class InternalMethodsImpl implements InternalMethods {
 	@Override
 	public void registerChickenStickHammerable(BlockState state, boolean isWildcard) {
-		ChickenStickRegistry.INSTANCE.add(state, isWildcard);
+		ChickenStickRegistry.INSTANCE.add(state);
 	}
 
 	@Override
 	public void registerCompressedHammerEntry(BlockState state, boolean isWildcard, List<CompressedHammerReward> rewards) {
-		CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(state, isWildcard);
+		CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(state);
 		entry.addRewards(rewards);
 		CompressedHammerRegistry.INSTANCE.add(entry);
 	}

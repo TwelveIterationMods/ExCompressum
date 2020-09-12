@@ -8,20 +8,14 @@ import java.util.List;
 
 public class CompressedHammerRegistryEntry {
 	private final BlockState inputState;
-	private final boolean isWildcard;
 	private final List<CompressedHammerReward> rewards = Lists.newArrayList();
 
-	public CompressedHammerRegistryEntry(BlockState inputState, boolean isWildcard) {
+	public CompressedHammerRegistryEntry(BlockState inputState) {
 		this.inputState = inputState;
-		this.isWildcard = isWildcard;
 	}
 
 	public BlockState getInputState() {
 		return inputState;
-	}
-
-	public boolean isWildcard() {
-		return isWildcard;
 	}
 
 	public List<CompressedHammerReward> getRewards() {

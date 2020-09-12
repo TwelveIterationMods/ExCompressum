@@ -6,9 +6,9 @@ import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -20,7 +20,7 @@ public abstract class ExRegistro {
 
 	public static boolean isNihiloItem(ItemStack itemStack, ExNihiloProvider.NihiloItems type) {
 		ItemStack nihiloStack = instance.getNihiloItem(type);
-		return !nihiloStack.isEmpty() && itemStack.getItem() == nihiloStack.getItem() && (itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || nihiloStack.getItemDamage() == OreDictionary.WILDCARD_VALUE || itemStack.getItemDamage() == nihiloStack.getItemDamage());
+		return !nihiloStack.isEmpty() && itemStack.getItem() == nihiloStack.getItem();
 	}
 
 	public static ItemStack getNihiloItem(ExNihiloProvider.NihiloItems type) {
@@ -70,7 +70,7 @@ public abstract class ExRegistro {
 		return Collections.emptyList();
 	}
 
-	public static Collection<ItemStack> rollCrookRewards(EntityLivingBase player, BlockState state, float luck, Random rand) {
+	public static Collection<ItemStack> rollCrookRewards(LivingEntity player, BlockState state, float luck, Random rand) {
 		return instance.rollCrookRewards(player, state, luck, rand);
 	}
 

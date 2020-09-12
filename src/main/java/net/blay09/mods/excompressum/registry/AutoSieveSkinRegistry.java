@@ -6,7 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,7 +20,7 @@ public class AutoSieveSkinRegistry {
     private static final List<String> availableSkins = Lists.newArrayList();
 
     public static void load() {
-        if (!ModConfig.client.skipAutoSieveSkins) {
+        if (!ExCompressumConfig.client.skipAutoSieveSkins) {
             availableSkins.clear();
             Thread loadAutoSieveSkins = new Thread(() -> {
                 try {

@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.tile;
 
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.minecraft.nbt.CompoundNBT;
 
 public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
@@ -13,12 +13,12 @@ public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
 
     @Override
     public int getEffectiveEnergy() {
-        return ModConfig.compat.manaSieveCost;
+        return ExCompressumConfig.compat.manaSieveCost;
     }
 
     @Override
     public int getMaxEnergyStored() {
-        return ModConfig.compat.manaSieveCost * 1600;
+        return ExCompressumConfig.compat.manaSieveCost * 1600;
     }
 
     @Override

@@ -1,31 +1,34 @@
 package net.blay09.mods.excompressum.registry.compressor;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-import net.blay09.mods.excompressum.registry.RegistryKey;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.CraftingHelper;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CompressedRecipeRegistry {
 
-    private static final List<CompressedRecipe> recipesSmall = Lists.newArrayList();
-    private static final List<CompressedRecipe> recipes = Lists.newArrayList();
+    private static final List<CompressedRecipe> recipesSmall = new ArrayList<>();
+    private static final List<CompressedRecipe> recipes = new ArrayList<>();
 
-    private static final Map<RegistryKey, CompressedRecipe> cachedResults = Maps.newHashMap();
+    private static final Map<ResourceLocation, CompressedRecipe> cachedResults = new HashMap<>();
 
     public static void reload() {
         cachedResults.clear();
         recipesSmall.clear();
         recipes.clear();
-        for(IRecipe recipe : CraftingManager.REGISTRY) {
+
+        final RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+        for(IRecipe<?> recipe : recipeManager.getRecipes()) {
             NonNullList<Ingredient> ingredients = recipe.getIngredients();
             int count = ingredients.size();
             if(count == 4 || count == 9) {
@@ -35,7 +38,7 @@ public class CompressedRecipeRegistry {
                     Ingredient other = ingredients.get(i);
                     boolean passesInner = false;
                     for(ItemStack itemStack : other.getMatchingStacks()) {
-                        if(first.apply(itemStack)) {
+                        if(first.test(itemStack)) {
                             passesInner = true;
                             break;
                         }
@@ -60,27 +63,27 @@ public class CompressedRecipeRegistry {
 
     @Nullable
     public static CompressedRecipe getRecipe(ItemStack itemStack) {
-        if(itemStack.getTagCompound() != null) {
+        if(itemStack.getTag() != null) {
             return null;
         }
-        RegistryKey key = new RegistryKey(itemStack);
-        CompressedRecipe foundRecipe = cachedResults.get(key);
+        final ResourceLocation registryName = itemStack.getItem().getRegistryName();
+        CompressedRecipe foundRecipe = cachedResults.get(registryName);
         if(foundRecipe != null) {
             return foundRecipe;
         }
         for(CompressedRecipe recipe : recipes) {
-            if(recipe.getIngredient().apply(itemStack)) {
-                cachedResults.put(key, recipe);
+            if(recipe.getIngredient().test(itemStack)) {
+                cachedResults.put(registryName, recipe);
                 return recipe;
             }
         }
         for(CompressedRecipe recipe : recipesSmall) {
-            if(recipe.getIngredient().apply(itemStack)) {
-                cachedResults.put(key, recipe);
+            if(recipe.getIngredient().test(itemStack)) {
+                cachedResults.put(registryName, recipe);
                 return recipe;
             }
         }
-        cachedResults.put(key, null);
+        cachedResults.put(registryName, null);
         return null;
     }
 

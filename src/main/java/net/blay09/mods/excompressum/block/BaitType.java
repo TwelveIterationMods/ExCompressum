@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.BaitBlockStateCondition;
 import net.blay09.mods.excompressum.tile.BaitBlockTagCondition;
@@ -25,19 +25,19 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 public enum BaitType implements IStringSerializable {
-    WOLF(new ItemStack(Items.BEEF), new ItemStack(Items.BONE), EntityType.WOLF, () -> ModConfig.baits.wolfChance),
-    OCELOT(new ItemStack(Items.GUNPOWDER), new ItemStack(Items.COD), EntityType.OCELOT, () -> ModConfig.baits.ocelotChance),
-    COW(new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT), EntityType.COW, () -> ModConfig.baits.cowChance),
-    PIG(new ItemStack(Items.CARROT), new ItemStack(Items.CARROT), EntityType.PIG, () -> ModConfig.baits.pigChance),
-    CHICKEN(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT_SEEDS), EntityType.CHICKEN, () -> ModConfig.baits.chickenChance),
-    SHEEP(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT), EntityType.SHEEP, () -> ModConfig.baits.sheepChance),
-    SQUID(new ItemStack(Items.COD), new ItemStack(Items.COD), EntityType.SQUID, () -> ModConfig.baits.squidChance),
-    RABBIT(new ItemStack(Items.CARROT), new ItemStack(Items.MELON_SEEDS), EntityType.RABBIT, () -> ModConfig.baits.rabbitChance),
-    HORSE(new ItemStack(Items.GOLDEN_APPLE), new ItemStack(Items.GOLDEN_APPLE), EntityType.HORSE, () -> ModConfig.baits.horseChance),
-    DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), EntityType.DONKEY, () -> ModConfig.baits.donkeyChance),
-    POLAR_BEAR(new ItemStack(Items.SNOWBALL), new ItemStack(Items.COD), EntityType.POLAR_BEAR, () -> ModConfig.baits.polarBearChance),
-    LLAMA(new ItemStack(Items.WHEAT), new ItemStack(Items.SUGAR), EntityType.LLAMA, () -> ModConfig.baits.llamaChance),
-    PARROT(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), EntityType.PARROT, () -> ModConfig.baits.parrotChance);
+    WOLF(new ItemStack(Items.BEEF), new ItemStack(Items.BONE), EntityType.WOLF, () -> ExCompressumConfig.baits.wolfChance),
+    OCELOT(new ItemStack(Items.GUNPOWDER), new ItemStack(Items.COD), EntityType.OCELOT, () -> ExCompressumConfig.baits.ocelotChance),
+    COW(new ItemStack(Items.WHEAT), new ItemStack(Items.WHEAT), EntityType.COW, () -> ExCompressumConfig.baits.cowChance),
+    PIG(new ItemStack(Items.CARROT), new ItemStack(Items.CARROT), EntityType.PIG, () -> ExCompressumConfig.baits.pigChance),
+    CHICKEN(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT_SEEDS), EntityType.CHICKEN, () -> ExCompressumConfig.baits.chickenChance),
+    SHEEP(new ItemStack(Items.WHEAT_SEEDS), new ItemStack(Items.WHEAT), EntityType.SHEEP, () -> ExCompressumConfig.baits.sheepChance),
+    SQUID(new ItemStack(Items.COD), new ItemStack(Items.COD), EntityType.SQUID, () -> ExCompressumConfig.baits.squidChance),
+    RABBIT(new ItemStack(Items.CARROT), new ItemStack(Items.MELON_SEEDS), EntityType.RABBIT, () -> ExCompressumConfig.baits.rabbitChance),
+    HORSE(new ItemStack(Items.GOLDEN_APPLE), new ItemStack(Items.GOLDEN_APPLE), EntityType.HORSE, () -> ExCompressumConfig.baits.horseChance),
+    DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), EntityType.DONKEY, () -> ExCompressumConfig.baits.donkeyChance),
+    POLAR_BEAR(new ItemStack(Items.SNOWBALL), new ItemStack(Items.COD), EntityType.POLAR_BEAR, () -> ExCompressumConfig.baits.polarBearChance),
+    LLAMA(new ItemStack(Items.WHEAT), new ItemStack(Items.SUGAR), EntityType.LLAMA, () -> ExCompressumConfig.baits.llamaChance),
+    PARROT(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), EntityType.PARROT, () -> ExCompressumConfig.baits.parrotChance);
 
     private final ItemStack displayItemFirst;
     private final ItemStack displayItemSecond;

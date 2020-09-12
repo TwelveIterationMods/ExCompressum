@@ -2,9 +2,8 @@ package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.block.BaitBlock;
 import net.blay09.mods.excompressum.block.BaitType;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
@@ -61,7 +60,7 @@ public class BaitTileEntity extends TileEntity implements ITickable {
                     final float range = MIN_DISTANCE_NO_PLAYERS;
                     if (world.getEntitiesWithinAABB(PlayerEntity.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range)).isEmpty()) {
                         Entity entityLiving = baitType.createEntity(world);
-                        if (entityLiving instanceof AgeableEntity && world.rand.nextFloat() <= ModConfig.baits.childChance) {
+                        if (entityLiving instanceof AgeableEntity && world.rand.nextFloat() <= ExCompressumConfig.baits.childChance) {
                             ((AgeableEntity) entityLiving).setGrowingAge(-24000);
                         }
                         entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);

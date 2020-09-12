@@ -13,21 +13,15 @@ import java.util.stream.Collectors;
 public class HeavySieveRegistryEntry {
 
     private final BlockState inputState;
-    private final boolean isWildcard;
     private final List<HeavySieveReward> rewards = Lists.newArrayList();
     private final ArrayListMultimap<Integer, HeavySieveReward> meshRewards = ArrayListMultimap.create();
 
-    public HeavySieveRegistryEntry(BlockState input, boolean isWildcard) {
+    public HeavySieveRegistryEntry(BlockState input) {
         this.inputState = input;
-        this.isWildcard = isWildcard;
     }
 
     public BlockState getInputState() {
         return inputState;
-    }
-
-    public boolean isWildcard() {
-        return isWildcard;
     }
 
     public List<HeavySieveReward> getRewards() {

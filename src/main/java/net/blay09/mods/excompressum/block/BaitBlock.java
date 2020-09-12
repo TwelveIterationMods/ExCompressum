@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.tile.BaitTileEntity;
 import net.blay09.mods.excompressum.tile.EnvironmentalCondition;
 import net.minecraft.block.BlockState;
@@ -94,7 +94,7 @@ public class BaitBlock extends ContainerBlock {
 
     @Override
     public void animateTick(BlockState stateIn, World world, BlockPos pos, Random rand) {
-        if (!ModConfig.client.disableParticles) {
+        if (!ExCompressumConfig.client.disableParticles) {
             BaitTileEntity tileEntity = (BaitTileEntity) world.getTileEntity(pos);
             if (tileEntity != null && tileEntity.checkSpawnConditions(false) == EnvironmentalCondition.CanSpawn) {
                 if (rand.nextFloat() <= 0.2f) {

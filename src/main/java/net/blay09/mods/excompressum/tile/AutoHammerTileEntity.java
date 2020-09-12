@@ -4,7 +4,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.block.AutoHammerBlock;
 import net.blay09.mods.excompressum.compat.Compat;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.utils.*;
@@ -134,7 +134,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
                     isDirty = true;
                     if (progress >= 1) {
                         if (!world.isRemote) {
-                            if (world.rand.nextFloat() <= ModConfig.automation.autoHammerDecay) {
+                            if (world.rand.nextFloat() <= ExCompressumConfig.automation.autoHammerDecay) {
                                 ItemStack firstHammer = hammerSlots.getStackInSlot(0);
                                 if (!firstHammer.isEmpty()) {
                                     if (firstHammer.attemptDamageItem(1, world.rand, null)) {
@@ -212,7 +212,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
     }
 
     public int getEffectiveEnergy() {
-        return ModConfig.automation.autoHammerEnergy;
+        return ExCompressumConfig.automation.autoHammerEnergy;
     }
 
     public float getSpeedMultiplier() {
@@ -233,7 +233,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickable {
     }
 
     public float getEffectiveSpeed() {
-        return ModConfig.automation.autoHammerSpeed * getSpeedMultiplier();
+        return ExCompressumConfig.automation.autoHammerSpeed * getSpeedMultiplier();
     }
 
     public float getEffectiveLuck() {

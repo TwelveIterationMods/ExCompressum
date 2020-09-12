@@ -16,18 +16,18 @@ public class ItemCompressedHammer extends ToolItem implements ICompressedHammer 
 
     public static final String namePrefix = "compressed_hammer_";
 
-    public ItemCompressedHammer(ItemTier tier, String name) {
-        super(6f, -3.2f, tier, new HashSet<>());
+    public ItemCompressedHammer(ItemTier tier, Properties properties) {
+        super(6f, -3.2f, tier, new HashSet<>(), properties);
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState state, ItemStack stack) {
+    public boolean canHarvestBlock(ItemStack stack, BlockState state) {
         return CompressedHammerRegistry.isHammerable(state) || ExRegistro.isHammerable(state);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if ((CompressedHammerRegistry.isHammerable(state) || ExRegistro.isHammerable(state)) && state.getBlock().getHarvestLevel(state) <= toolMaterial.getHarvestLevel()) {
+        if ((CompressedHammerRegistry.isHammerable(state) || ExRegistro.isHammerable(state)) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
             return efficiency * 0.75f;
         }
         return 0.8f;

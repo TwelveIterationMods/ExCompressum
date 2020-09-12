@@ -5,8 +5,7 @@ import com.mojang.authlib.GameProfile;
 import net.blay09.mods.excompressum.CommonProxy;
 import net.blay09.mods.excompressum.client.render.HammeringParticle;
 import net.blay09.mods.excompressum.client.render.SievingParticle;
-import net.blay09.mods.excompressum.config.ModConfig;
-import net.blay09.mods.excompressum.utils.StupidUtils;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.client.Minecraft;
@@ -35,7 +34,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void spawnCrushParticles(World world, BlockPos pos, BlockState particleState) {
-        if (!ModConfig.client.disableParticles) {
+        if (!ExCompressumConfig.client.disableParticles) {
             for (int i = 0; i < 10; i++) {
                 Minecraft.getInstance().particles.addEffect(new HammeringParticle((ClientWorld) world, pos, pos.getX() + 0.7f, pos.getY() + 0.3f, pos.getZ() + 0.5f, (-world.rand.nextDouble() + 0.2f) / 9, 0.2f, (world.rand.nextDouble() - 0.5) / 9, particleState));
             }
@@ -75,7 +74,7 @@ public class ClientProxy extends CommonProxy {
 
     private void spawnSieveParticles(World world, BlockPos pos, BlockState particleState, int particleCount, Vector3f particleOffset, float scale) {
         // Do not render sieve particles if particles are disabled in the config.
-        if (ModConfig.client.disableParticles) {
+        if (ExCompressumConfig.client.disableParticles) {
             return;
         }
 

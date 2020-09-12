@@ -5,7 +5,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Compat {
 
-	@GameRegistry.ObjectHolder("tconstruct:hammer")
 	public static Item TCONSTRUCT_HAMMER;
 
 	public static final String BOTANIA = "botania";

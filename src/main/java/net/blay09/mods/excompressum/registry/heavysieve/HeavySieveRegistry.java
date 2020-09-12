@@ -1,11 +1,9 @@
 package net.blay09.mods.excompressum.registry.heavysieve;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
@@ -14,18 +12,17 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.CompressedBlockType;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.blay09.mods.excompressum.utils.StupidUtils;
-
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -33,7 +30,7 @@ import java.util.*;
 public class HeavySieveRegistry extends AbstractRegistry {
 
     public static final HeavySieveRegistry INSTANCE = new HeavySieveRegistry();
-    private final Map<RegistryKey, HeavySieveRegistryEntry> entries = Maps.newHashMap();
+    private final Map<ResourceLocation, HeavySieveRegistryEntry> entries = new HashMap<>();
     private static final int DEFAULT_LOSS = 2;
 
     private int defaultLoss;
@@ -44,23 +41,20 @@ public class HeavySieveRegistry extends AbstractRegistry {
 
     @Nullable
     public static HeavySieveRegistryEntry getEntryForBlockState(BlockState state, boolean withWildcard) {
-        return INSTANCE.entries.get(new RegistryKey(state, withWildcard));
+        return INSTANCE.entries.get(state.getBlock().getRegistryName());
     }
 
     public static boolean isSiftable(BlockState state) {
-        RegistryKey key = new RegistryKey(state, false);
-        return INSTANCE.entries.get(key) != null || INSTANCE.entries.get(key.withWildcard()) != null;
+        return INSTANCE.entries.get(state.getBlock().getRegistryName()) != null;
     }
 
     public static boolean isSiftableWithMesh(BlockState state, SieveMeshRegistryEntry sieveMesh) {
         if (ExRegistro.doMeshesSplitLootTables()) {
-            RegistryKey key = new RegistryKey(state, false);
-            HeavySieveRegistryEntry entry = INSTANCE.entries.get(key);
-            if (entry != null && !entry.getRewardsForMesh(sieveMesh, ModConfig.general.flattenSieveRecipes).isEmpty()) {
+            final ResourceLocation registryName = state.getBlock().getRegistryName();
+            HeavySieveRegistryEntry entry = INSTANCE.entries.get(registryName);
+            if (entry != null && !entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.general.flattenSieveRecipes).isEmpty()) {
                 return true;
             }
-            HeavySieveRegistryEntry wildcardEntry = INSTANCE.entries.get(key.withWildcard());
-            return wildcardEntry != null && !wildcardEntry.getRewardsForMesh(sieveMesh, ModConfig.general.flattenSieveRecipes).isEmpty();
         }
         return isSiftable(state);
     }
@@ -76,31 +70,27 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     public void add(HeavySieveRegistryEntry entry) {
-        RegistryKey key = new RegistryKey(entry.getInputState(), entry.isWildcard());
-        HeavySieveRegistryEntry previousEntry = entries.get(key);
+        final ResourceLocation registryName = entry.getInputState().getBlock().getRegistryName();
+        HeavySieveRegistryEntry previousEntry = entries.get(registryName);
         if (previousEntry != null) {
             for (HeavySieveReward reward : entry.getRewards()) {
                 previousEntry.addReward(reward);
             }
         } else {
-            entries.put(key, entry);
+            entries.put(registryName, entry);
         }
     }
 
-    public Map<RegistryKey, HeavySieveRegistryEntry> getEntries() {
+    public Map<ResourceLocation, HeavySieveRegistryEntry> getEntries() {
         return entries;
     }
 
     public static Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        List<ItemStack> list = Lists.newArrayList();
-        RegistryKey key = new RegistryKey(state, false);
-        HeavySieveRegistryEntry entry = INSTANCE.entries.get(key);
+        List<ItemStack> list = new ArrayList<>();
+        final ResourceLocation registryName = state.getBlock().getRegistryName();
+        HeavySieveRegistryEntry entry = INSTANCE.entries.get(registryName);
         if (entry != null) {
             rollSieveRewardsToList(entry, list, sieveMesh, luck, rand);
-        }
-        HeavySieveRegistryEntry wildcardEntry = INSTANCE.entries.get(key.withWildcard());
-        if (wildcardEntry != null) {
-            rollSieveRewardsToList(wildcardEntry, list, sieveMesh, luck, rand);
         }
         return list;
     }
@@ -114,7 +104,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     private static void rollSieveRewardsToList(HeavySieveRegistryEntry entry, List<ItemStack> list, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        for (HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh, ModConfig.general.flattenSieveRecipes)) {
+        for (HeavySieveReward reward : entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.general.flattenSieveRecipes)) {
             int tries = rand.nextInt((int) luck + 1) + 1;
             for (int i = 0; i < tries; i++) {
                 if (rand.nextFloat() < reward.getBaseChance()) {
@@ -227,8 +217,6 @@ public class HeavySieveRegistry extends AbstractRegistry {
             return;
         }
         ResourceLocation location = new ResourceLocation(name);
-        String metadata = tryGetString(entry, "metadata", "0");
-        int metadataVal = metadata.equals("*") ? OreDictionary.WILDCARD_VALUE : tryParseInt(metadata);
 
         String type = tryGetString(entry, "type", "");
         switch (type) {
@@ -238,28 +226,26 @@ public class HeavySieveRegistry extends AbstractRegistry {
                     return;
                 }
                 ResourceLocation sourceLocation = new ResourceLocation(sourceName);
-                Item sourceItem = Item.REGISTRY.getObject(sourceLocation);
+                Item sourceItem = ForgeRegistries.ITEMS.getValue(sourceLocation);
                 if (sourceItem == null) {
                     logUnknownItem(sourceLocation);
                     return;
                 }
-                String sourceMetadata = tryGetString(entry, "sourceMetadata", "0");
-                int sourceMetadataVal = sourceMetadata.equals("*") ? OreDictionary.WILDCARD_VALUE : tryParseInt(sourceMetadata);
-                ItemStack sourceStack = new ItemStack(sourceItem, 1, sourceMetadataVal);
+                ItemStack sourceStack = new ItemStack(sourceItem, 1);
                 int sourceCount = tryGetInt(entry, "sourceCount", 9);
 
-                if (location.getResourceDomain().equals("ore")) {
-                    if (!addOreGenerated(location.getResourcePath(), sourceStack, sourceCount)) {
+                if (location.getNamespace().equals("ore")) {
+                    if (!addOreGenerated(location.getPath(), sourceStack, sourceCount)) {
                         logUnknownOre(location);
                     }
                 } else {
-                    Item item = Item.REGISTRY.getObject(location);
+                    Item item = ForgeRegistries.ITEMS.getValue(location);
                     if (item == null) {
                         logUnknownItem(location);
                         return;
                     }
 
-                    addGeneratedEntry(new ItemStack(item, 1, metadataVal), sourceStack, sourceCount);
+                    addGeneratedEntry(new ItemStack(item, 1), sourceStack, sourceCount);
                 }
                 break;
             case "list":
@@ -277,14 +263,13 @@ public class HeavySieveRegistry extends AbstractRegistry {
                             }
 
                             ResourceLocation rewardLocation = new ResourceLocation(rewardName);
-                            Item item = Item.REGISTRY.getObject(rewardLocation);
+                            Item item = ForgeRegistries.ITEMS.getValue(rewardLocation);
                             if (item == null) {
                                 logUnknownItem(rewardLocation);
                                 continue;
                             }
 
                             int count = tryGetInt(reward, "count", 1);
-                            int rewardMetadata = tryGetInt(reward, "metadata", 0);
                             float chance = tryGetFloat(reward, "chance", 1f);
                             if (chance > 1f) {
                                 logError("Reward chance is out of range for %s in %s, capping at 1.0...", rewardLocation, registryName);
@@ -292,28 +277,28 @@ public class HeavySieveRegistry extends AbstractRegistry {
                             }
 //                        float luckMultiplier = tryGetFloat(reward, "luck", 0f);
                             int meshLevel = tryGetInt(reward, "meshLevel", 1);
-                            rewardList.add(new HeavySieveReward(new ItemStack(item, count, rewardMetadata), chance, meshLevel));
+                            rewardList.add(new HeavySieveReward(new ItemStack(item, count), chance, meshLevel));
                         }
                     } else {
                         logError("Failed to preInit %s registry; rewards must be an array of json objects", registryName);
                         return;
                     }
 
-                    if (location.getResourceDomain().equals("ore")) {
-                        if (!addOre(location.getResourcePath(), rewardList)) {
+                    if (location.getNamespace().equals("ore")) {
+                        if (!addOre(location.getPath(), rewardList)) {
                             logUnknownOre(location);
                         }
                     } else {
-                        Item item = Item.REGISTRY.getObject(location);
+                        Item item = ForgeRegistries.ITEMS.getValue(location);
                         if (item == null) {
                             logUnknownItem(location);
                             return;
                         }
 
-                        ItemStack itemStack = new ItemStack(item, 1, metadataVal);
+                        ItemStack itemStack = new ItemStack(item, 1);
                         BlockState state = StupidUtils.getStateFromItemStack(itemStack);
                         if (state != null) {
-                            HeavySieveRegistryEntry newEntry = new HeavySieveRegistryEntry(state, itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE);
+                            HeavySieveRegistryEntry newEntry = new HeavySieveRegistryEntry(state);
                             for (HeavySieveReward reward : rewardList) {
                                 newEntry.addReward(reward);
                             }
@@ -339,29 +324,29 @@ public class HeavySieveRegistry extends AbstractRegistry {
         final ItemStack SOUL_SAND = new ItemStack(Blocks.SOUL_SAND);
         final int COMPRESSION_SIZE = 9;
         if (tryGetBoolean(defaults, "excompressum:compressed_gravel", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.GRAVEL.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks[CompressedBlockType.GRAVEL.ordinal()]);
             addGeneratedEntry(itemStack, GRAVEL, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_sand", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.SAND.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks[CompressedBlockType.SAND.ordinal()]);
             addGeneratedEntry(itemStack, SAND, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_dirt", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.DIRT.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks[CompressedBlockType.DIRT.ordinal()]);
             addGeneratedEntry(itemStack, DIRT, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_soul_sand", true)) {
-            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.SOUL_SAND.ordinal());
+            ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks[CompressedBlockType.SOUL_SAND.ordinal()]);
             addGeneratedEntry(itemStack, SOUL_SAND, COMPRESSION_SIZE - defaultLoss);
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_dust", true)) {
             ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
             if (!dustBlock.isEmpty()) {
-                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.DUST.ordinal());
+                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks[CompressedBlockType.DUST.ordinal()]);
                 addGeneratedEntry(itemStack, dustBlock, COMPRESSION_SIZE - defaultLoss);
 
             }
@@ -370,7 +355,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         if (tryGetBoolean(defaults, "excompressum:compressed_nether_gravel", true)) {
             ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
             if (!netherGravelBlock.isEmpty()) {
-                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.NETHER_GRAVEL.ordinal());
+                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks[CompressedBlockType.NETHER_GRAVEL.ordinal()]);
                 addGeneratedEntry(itemStack, netherGravelBlock, COMPRESSION_SIZE - defaultLoss);
             }
         }
@@ -378,35 +363,35 @@ public class HeavySieveRegistry extends AbstractRegistry {
         if (tryGetBoolean(defaults, "excompressum:compressed_ender_gravel", true)) {
             ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
             if (!enderGravelBlock.isEmpty()) {
-                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks, 1, CompressedBlockType.ENDER_GRAVEL.ordinal());
+                ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks[CompressedBlockType.ENDER_GRAVEL.ordinal()]);
                 addGeneratedEntry(itemStack, enderGravelBlock, COMPRESSION_SIZE - defaultLoss);
             }
         }
 
-        if (Loader.isModLoaded(Compat.EXTRAUTILS2)) {
+        if (ModList.get().isLoaded(Compat.EXTRAUTILS2)) {
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedGravel", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedgravel");
-                Item exUtilsBlock = Item.REGISTRY.getObject(location);
+                Item exUtilsBlock = ForgeRegistries.ITEMS.getValue(location);
                 if (exUtilsBlock != null) {
-                    ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
+                    ItemStack itemStack = new ItemStack(exUtilsBlock);
                     addGeneratedEntry(itemStack, GRAVEL, COMPRESSION_SIZE - defaultLoss);
                 }
             }
 
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedSand", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compressedsand");
-                Item exUtilsBlock = Item.REGISTRY.getObject(location);
+                Item exUtilsBlock = ForgeRegistries.ITEMS.getValue(location);
                 if (exUtilsBlock != null) {
-                    ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
+                    ItemStack itemStack = new ItemStack(exUtilsBlock);
                     addGeneratedEntry(itemStack, SAND, COMPRESSION_SIZE - defaultLoss);
                 }
             }
 
             if (tryGetBoolean(defaults, "ExtraUtils2:CompressedDirt", true)) {
                 ResourceLocation location = new ResourceLocation(Compat.EXTRAUTILS2, "compresseddirt");
-                Item exUtilsBlock = Item.REGISTRY.getObject(location);
+                Item exUtilsBlock = ForgeRegistries.ITEMS.getValue(location);
                 if (exUtilsBlock != null) {
-                    ItemStack itemStack = new ItemStack(exUtilsBlock, 1, 0);
+                    ItemStack itemStack = new ItemStack(exUtilsBlock);
                     addGeneratedEntry(itemStack, DIRT, COMPRESSION_SIZE - defaultLoss);
                 }
             }
@@ -419,7 +404,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     private boolean addOre(String oreName, List<HeavySieveReward> rewards) {
-        List<ItemStack> list = OreDictionary.getOres(oreName, false);
+        /*List<ItemStack> list = OreDictionary.getOres(oreName, false);
         for (ItemStack itemStack : list) {
             BlockState state = StupidUtils.getStateFromItemStack(itemStack);
             if (state != null) {
@@ -432,15 +417,17 @@ public class HeavySieveRegistry extends AbstractRegistry {
                 ExCompressum.logger.warn("Ore dictionary entry {} in {} could not be registered for {}; it's not a block", itemStack.getItem().getRegistryName(), oreName, registryName);
             }
         }
-        return list.size() > 0;
+        return list.size() > 0;*/
+        return false;
     }
 
     private boolean addOreGenerated(String oreName, ItemStack sourceStack, int sourceCount) {
-        List<ItemStack> list = OreDictionary.getOres(oreName, false);
+        /*List<ItemStack> list = OreDictionary.getOres(oreName, false);
         for (ItemStack itemStack : list) {
             addGeneratedEntry(itemStack, sourceStack, sourceCount);
         }
-        return list.size() > 0;
+        return list.size() > 0;*/
+        return false;
     }
 
     private void addGeneratedEntry(ItemStack itemStack, ItemStack sourceStack, int count) {
@@ -449,7 +436,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
             logError("Entry %s could not be generated from %s for %s; it's not a block", itemStack.getItem().getRegistryName(), sourceStack.getItem().getRegistryName(), registryName);
             return;
         }
-        HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state, itemStack.getItemDamage() == OreDictionary.WILDCARD_VALUE);
+        HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state);
         Collection<HeavySieveReward> rewards = ExRegistro.generateHeavyRewards(sourceStack, count);
         if (rewards.isEmpty()) {
             logWarning("Entry %s could not be generated in %s because %s is not an Ex Nihilo siftable", itemStack.getItem().getRegistryName(), registryName, sourceStack.getItem().getRegistryName());

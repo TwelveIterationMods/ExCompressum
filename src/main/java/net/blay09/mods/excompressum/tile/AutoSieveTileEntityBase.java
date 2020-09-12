@@ -6,7 +6,7 @@ import com.mojang.authlib.properties.Property;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.BlockAutoSieveBase;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
@@ -225,11 +225,11 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     }
 
     public int getEffectiveEnergy() {
-        return ModConfig.automation.autoSieveEnergy;
+        return ExCompressumConfig.automation.autoSieveEnergy;
     }
 
     public float getEffectiveSpeed() {
-        return ModConfig.automation.autoSieveSpeed * getSpeedMultiplier();
+        return ExCompressumConfig.automation.autoSieveSpeed * getSpeedMultiplier();
     }
 
     public float getEffectiveLuck() {

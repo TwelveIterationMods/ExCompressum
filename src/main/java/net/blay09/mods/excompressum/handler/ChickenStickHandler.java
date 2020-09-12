@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.handler;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.AngryChickenEntity;
 import net.blay09.mods.excompressum.entity.ModEntities;
 import net.minecraft.entity.passive.ChickenEntity;
@@ -19,7 +19,7 @@ public class ChickenStickHandler {
 
     @SubscribeEvent
     public static void onAttack(AttackEntityEvent event) {
-        if (!ModConfig.tools.allowChickenStickCreation) {
+        if (!ExCompressumConfig.tools.allowChickenStickCreation) {
             return;
         }
         if (event.getTarget() instanceof ChickenEntity && !((ChickenEntity) event.getTarget()).isChild()) {

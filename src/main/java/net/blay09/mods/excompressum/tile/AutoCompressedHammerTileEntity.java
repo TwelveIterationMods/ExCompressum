@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.compat.Compat;
-import net.blay09.mods.excompressum.config.ModConfig;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.minecraft.item.ItemStack;
@@ -21,12 +21,12 @@ public class AutoCompressedHammerTileEntity extends AutoHammerTileEntity {
 
     @Override
     public int getEffectiveEnergy() {
-        return ModConfig.automation.autoCompressedHammerEnergy;
+        return ExCompressumConfig.automation.autoCompressedHammerEnergy;
     }
 
     @Override
     public float getEffectiveSpeed() {
-        return ModConfig.automation.autoCompressedHammerSpeed * getSpeedMultiplier();
+        return ExCompressumConfig.automation.autoCompressedHammerSpeed * getSpeedMultiplier();
     }
 
     @Override

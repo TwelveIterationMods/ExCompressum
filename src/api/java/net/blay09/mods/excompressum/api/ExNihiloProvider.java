@@ -67,4 +67,7 @@ public interface ExNihiloProvider {
 		return Blocks.AIR.getDefaultState();
 	}
 
+	boolean isCompressableOre(ItemStack itemStack);
+	boolean isHammerableOre(ItemStack itemStack);
+
 }

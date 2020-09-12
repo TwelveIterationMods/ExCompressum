@@ -5,53 +5,53 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
-import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
 public class ChickenStickRegistry extends AbstractRegistry {
 
     public static final ChickenStickRegistry INSTANCE = new ChickenStickRegistry();
-    private final List<RegistryKey> entries = Lists.newArrayList();
+    private final List<ResourceLocation> entries = Lists.newArrayList();
 
     public ChickenStickRegistry() {
         super("ChickenStickRegistry");
     }
 
-    public void add(BlockState state, boolean isWildcard) {
-        entries.add(new RegistryKey(state, isWildcard));
+    public void add(BlockState state) {
+        entries.add(state.getBlock().getRegistryName());
     }
 
     public void add(ItemStack itemStack) {
-        entries.add(new RegistryKey(itemStack));
+        entries.add(itemStack.getItem().getRegistryName());
     }
 
-    public List<RegistryKey> getEntries() {
+    public List<ResourceLocation> getEntries() {
         return entries;
     }
 
     public static boolean isHammerable(BlockState state) {
-        RegistryKey key = new RegistryKey(state, false);
-        return INSTANCE.entries.contains(key) || INSTANCE.entries.contains(key.withWildcard());
+        final ResourceLocation registryName = state.getBlock().getRegistryName();
+        return INSTANCE.entries.contains(registryName);
     }
 
     @Override
     public void registerDefaults(JsonObject defaults) {
-        if(tryGetBoolean(defaults, "minecraft:cobblestone", true)) {
-            add(Blocks.COBBLESTONE.getDefaultState(), false);
+        if (tryGetBoolean(defaults, "minecraft:cobblestone", true)) {
+            add(Blocks.COBBLESTONE.getDefaultState());
         }
 
-        if(tryGetBoolean(defaults, "minecraft:gravel", true)) {
-            add(Blocks.GRAVEL.getDefaultState(), false);
+        if (tryGetBoolean(defaults, "minecraft:gravel", true)) {
+            add(Blocks.GRAVEL.getDefaultState());
         }
 
-        if(tryGetBoolean(defaults, "minecraft:sand", true)) {
-            add(Blocks.SAND.getDefaultState(), false);
+        if (tryGetBoolean(defaults, "minecraft:sand", true)) {
+            add(Blocks.SAND.getDefaultState());
         }
     }
 
@@ -97,36 +97,31 @@ public class ChickenStickRegistry extends AbstractRegistry {
     @Override
     public void loadCustom(JsonObject entry) {
         String name = tryGetString(entry, "name", "");
-        if(name.isEmpty()) {
+        if (name.isEmpty()) {
             return;
         }
         ResourceLocation location = new ResourceLocation(name);
-        if(location.getNamespace().equals("ore")) {
-            if(!addOre(location.getResourcePath())) {
+        if (location.getNamespace().equals("ore")) {
+            if (!addOre(location.getPath())) {
                 logUnknownOre(location);
             }
         } else {
-            Item item = Item.REGISTRY.getObject(location);
-            if(item == null) {
+            Item item = ForgeRegistries.ITEMS.getValue(location);
+            if (item == null) {
                 logUnknownItem(location);
                 return;
             }
-            ItemStack itemStack;
-            String metadata = tryGetString(entry, "metadata", "0");
-            if (metadata.equals("*")) {
-                itemStack = new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE);
-            } else {
-                itemStack = new ItemStack(item, 1, tryParseInt(metadata));
-            }
+            ItemStack itemStack = new ItemStack(item);
             add(itemStack);
         }
     }
 
     private boolean addOre(String oreName) {
-        List<ItemStack> list = OreDictionary.getOres(oreName, false);
+        /*List<ItemStack> list = OreDictionary.getOres(oreName, false);
         for(ItemStack itemStack : list) {
             add(itemStack);
         }
-        return list.size() > 0;
+        return list.size() > 0;*/
+        return false;
     }
 }

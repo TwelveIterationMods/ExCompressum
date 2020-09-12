@@ -1,45 +1,38 @@
 package net.blay09.mods.excompressum.registry.sievemesh;
 
-import com.google.common.collect.Maps;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.registry.RegistryKey;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SieveMeshRegistry {
 
-	private static final Map<RegistryKey, SieveMeshRegistryEntry> entries = Maps.newHashMap();
+    private static final Map<ResourceLocation, SieveMeshRegistryEntry> entries = new HashMap<>();
 
-	public static void registerDefaults() {
-		SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(new ItemStack(ModItems.ironMesh, 1, OreDictionary.WILDCARD_VALUE));
-		ironMesh.setHeavy(true);
-		ironMesh.setMeshLevel(3);
-		ironMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/iron_mesh"));
-		add(ironMesh);
-	}
+    public static void registerDefaults() {
+        SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(new ItemStack(ModItems.ironMesh));
+        ironMesh.setHeavy(true);
+        ironMesh.setMeshLevel(3);
+        ironMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/iron_mesh"));
+        add(ironMesh);
+    }
 
-	public static Map<RegistryKey, SieveMeshRegistryEntry> getEntries() {
-		return entries;
-	}
+    public static Map<ResourceLocation, SieveMeshRegistryEntry> getEntries() {
+        return entries;
+    }
 
-	@Nullable
-	public static SieveMeshRegistryEntry getEntry(ItemStack itemStack) {
-		RegistryKey key = new RegistryKey(itemStack);
-		SieveMeshRegistryEntry entry = entries.get(key);
-		if(entry == null) {
-			return entries.get(key.withWildcard());
-		}
-		return entry;
-	}
+    @Nullable
+    public static SieveMeshRegistryEntry getEntry(ItemStack itemStack) {
+        return entries.get(itemStack.getItem().getRegistryName());
+    }
 
-	public static void add(SieveMeshRegistryEntry sieveMesh) {
-		entries.put(new RegistryKey(sieveMesh.getItemStack()), sieveMesh);
-	}
+    public static void add(SieveMeshRegistryEntry sieveMesh) {
+        entries.put(sieveMesh.getItemStack().getItem().getRegistryName(), sieveMesh);
+    }
 
 }
