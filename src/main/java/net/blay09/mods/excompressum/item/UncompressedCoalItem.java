@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class UncompressedCoalItem extends Item {
@@ -13,8 +14,8 @@ public class UncompressedCoalItem extends Item {
         super(properties);
     }
 
-    /* TODO public int getItemBurnTime(ItemStack itemStack) {
+    @Override
+    public int getBurnTime(ItemStack itemStack) {
         return 200;
-    }*/
-
+    }
 }

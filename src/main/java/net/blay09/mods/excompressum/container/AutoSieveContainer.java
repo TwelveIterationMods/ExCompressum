@@ -30,7 +30,7 @@ public class AutoSieveContainer extends Container {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
-                addSlot(new SlotOutput(itemHandler, 1 + (i * 5) + j, 57 + (j * 18), 8 + (i * 18)));
+                addSlot(new OutputSlot(itemHandler, 1 + (i * 5) + j, 57 + (j * 18), 8 + (i * 18)));
             }
         }
 

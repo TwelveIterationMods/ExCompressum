@@ -5,6 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.AutoCompressorContainer;
 import net.blay09.mods.excompressum.tile.AutoCompressorTileEntity;
+import net.blay09.mods.excompressum.tile.AutoHammerTileEntity;
+import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -54,12 +56,12 @@ public class AutoCompressorScreen extends ContainerScreen<AutoCompressorContaine
 
     @Override
     protected void drawGuiContainerForegroundLayer(MatrixStack matrixStack, int mouseX, int mouseY) {
-        AutoCompressorTileEntity tileEntity = container.getTileEntity();
         if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
-            List<ITextComponent> tmpLines = new ArrayList<>();
-            tmpLines.add(new TranslationTextComponent("tooltip.excompressum.consumingEnergyValue", tileEntity.getEnergyStorage().getEnergyStored()));
-            tmpLines.add(new TranslationTextComponent("tooltip.excompressum:consumingEnergy", tileEntity.getEffectiveEnergy()));
-            func_243308_b(matrixStack, tmpLines, mouseX - guiLeft, mouseY - guiTop);
+            AutoCompressorTileEntity tileEntity = container.getTileEntity();
+            List<ITextComponent> tooltip = new ArrayList<>();
+            tooltip.add(Messages.lang("tooltip.energyStored", tileEntity.getEnergyStorage().getEnergyStored()));
+            tooltip.add(Messages.lang("tooltip.consumingEnergy", tileEntity.getEffectiveEnergy()));
+            func_243308_b(matrixStack, tooltip, mouseX - guiLeft, mouseY - guiTop);
         }
     }
 

@@ -4,10 +4,12 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tile.AutoCompressorTileEntity;
 import net.blay09.mods.excompressum.tile.AutoHammerTileEntity;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
+import net.minecraft.block.Block;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.network.IContainerFactory;
@@ -23,7 +25,8 @@ public class ModContainers {
     public static ContainerType<AutoSieveContainer> manaSieve;
 
     @SubscribeEvent
-    public static void registerContainers(IForgeRegistry<ContainerType<?>> registry) {
+    public static void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
+        final IForgeRegistry<ContainerType<?>> registry = event.getRegistry();
         registry.register(autoCompressor = register("auto_compressor", ((windowId, inv, data) -> {
             BlockPos pos = data.readBlockPos();
             TileEntity tileEntity = inv.player.world.getTileEntity(pos);

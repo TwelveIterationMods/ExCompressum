@@ -9,7 +9,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ExCompressum.MOD_ID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ExCompressum.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModSprites {
 
     public static TextureAtlasSprite iconEmptyBookSlot;

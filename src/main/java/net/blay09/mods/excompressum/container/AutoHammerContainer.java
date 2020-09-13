@@ -29,7 +29,7 @@ public class AutoHammerContainer extends Container {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 5; j++) {
-                addSlot(new SlotOutput(itemHandler, 1 + (i * 5) + j, 57 + (j * 18), 8 + (i * 18)));
+                addSlot(new OutputSlot(itemHandler, 1 + (i * 5) + j, 57 + (j * 18), 8 + (i * 18)));
             }
         }
 
@@ -43,8 +43,8 @@ public class AutoHammerContainer extends Container {
             addSlot(new Slot(inventoryPlayer, i, 8 + i * 18, 142));
         }
 
-        addSlot(new SlotAutoHammerUpgrade(itemHandler, 21, 8, 62, tileEntity instanceof AutoCompressedHammerTileEntity));
-        addSlot(new SlotAutoHammerUpgrade(itemHandler, 22, 32, 62, tileEntity instanceof AutoCompressedHammerTileEntity));
+        addSlot(new AutoHammerUpgradeSlot(itemHandler, 21, 8, 62, tileEntity instanceof AutoCompressedHammerTileEntity));
+        addSlot(new AutoHammerUpgradeSlot(itemHandler, 22, 32, 62, tileEntity instanceof AutoCompressedHammerTileEntity));
     }
 
     @Override

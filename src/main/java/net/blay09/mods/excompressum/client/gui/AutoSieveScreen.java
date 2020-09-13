@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.container.AutoSieveContainer;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
+import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
@@ -58,13 +59,13 @@ public class AutoSieveScreen extends ContainerScreen<AutoSieveContainer> {
             matrixStack.push();
             matrixStack.translate(0, 0, 300);
             fill(matrixStack, 58, 16, 144, 71, 0x99000000);
-            drawCenteredString(matrixStack, font, I18n.format("gui.excompressum:autoSieve.noMesh"), 101, 43 - font.FONT_HEIGHT / 2, 0xFFFFFFFF);
+            drawCenteredString(matrixStack, font, I18n.format("excompressum.gui.autoSieve.noMesh"), 101, 43 - font.FONT_HEIGHT / 2, 0xFFFFFFFF);
             matrixStack.pop();
         } else if (!tileEntity.isCorrectSieveMesh()) {
             matrixStack.push();
             matrixStack.translate(0, 0, 300);
             fill(matrixStack, 58, 16, 144, 71, 0x99000000);
-            drawCenteredString(matrixStack, font, I18n.format("gui.excompressum:autoSieve.incorrectMesh"), 101, 43 - font.FONT_HEIGHT / 2, 0xFFFFFFFF);
+            drawCenteredString(matrixStack, font, I18n.format("excompressum.gui.autoSieve.incorrectMesh"), 101, 43 - font.FONT_HEIGHT / 2, 0xFFFFFFFF);
             matrixStack.pop();
         }
 
@@ -84,10 +85,10 @@ public class AutoSieveScreen extends ContainerScreen<AutoSieveContainer> {
     protected void renderPowerTooltip(MatrixStack matrixStack, int mouseX, int mouseY) {
         if (mouseX >= guiLeft + 152 && mouseX <= guiLeft + 167 && mouseY >= guiTop + 8 && mouseY <= guiTop + 77) {
             AutoSieveTileEntityBase tileEntity = container.getTileEntity();
-            List<ITextComponent> tmpLines = new ArrayList<>();
-            tmpLines.add(new TranslationTextComponent("tooltip.excompressum.consumingEnergyValue", tileEntity.getEnergyStored()));
-            tmpLines.add(new TranslationTextComponent("tooltip.excompressum:consumingEnergy", tileEntity.getEffectiveEnergy()));
-            func_243308_b(matrixStack, tmpLines, mouseX - guiLeft, mouseY - guiTop); // TODO duplicate code for all machines
+            List<ITextComponent> tooltip = new ArrayList<>();
+            tooltip.add(Messages.lang("tooltip.energyStored", tileEntity.getEnergyStored()));
+            tooltip.add(Messages.lang("tooltip.consumingEnergy", tileEntity.getEffectiveEnergy()));
+            func_243308_b(matrixStack, tooltip, mouseX - guiLeft, mouseY - guiTop);
         }
     }
 

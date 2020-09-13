@@ -32,7 +32,7 @@ public class AutoCompressorContainer extends Container {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
-                addSlot(new SlotOutput(itemHandler, 12 + i * 3 + j, 93 + (j * 18), 8 + (i * 18)));
+                addSlot(new OutputSlot(itemHandler, 12 + i * 3 + j, 93 + (j * 18), 8 + (i * 18)));
             }
         }
 
