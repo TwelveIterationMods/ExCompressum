@@ -1,0 +1,23 @@
+{
+  "result_soon": {
+    "type": "excompressum:nihilo_item",
+    "value": "NETHER_GRAVEL",
+    "count": 9
+  },
+  "result": {
+    "item": "exnihilosequentia:nether_gravel",
+    "count": 9
+  },
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "excompressum:compressed_nether_gravel"
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "exnihilosequentia:nether_gravel"
+    }
+  ]
+}

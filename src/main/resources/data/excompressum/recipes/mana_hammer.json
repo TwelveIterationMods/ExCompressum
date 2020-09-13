@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:hammer_mana"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     " I ",
     " SI",
@@ -10,18 +10,28 @@
   ],
   "key": {
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "stickMagicalWood"
+      "tag": "forge:rods/magical_wooden"
     },
     "I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotManasteel"
+      "tag": "forge:ingots/mana_steel"
     }
   },
   "conditions": [
     {
-      "type": "forge:mod_loaded",
-      "modid": "botania"
+      "type": "forge:not",
+      "value": {
+        "type": "forge:or",
+        "values": [
+          {
+            "type": "forge_tag_empty",
+            "tag": "forge:ingots/mana_steel"
+          },
+          {
+            "type": "forge_tag_empty",
+            "tag": "forge:rods/magical_wooden"
+          }
+        ]
+      }
     }
   ]
 }

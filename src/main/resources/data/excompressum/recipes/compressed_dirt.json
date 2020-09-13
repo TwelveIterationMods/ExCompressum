@@ -1,9 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
-    "item": "excompressum:compressed_block",
-    "data": 4
+    "item": "excompressum:compressed_dirt"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "###",
     "###",
@@ -11,8 +10,7 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:dirt",
-      "data": 0
+      "item": "minecraft:dirt"
     }
   }
 }

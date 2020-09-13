@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "excompressum:oak_crucible"
+  },
+  "pattern": [
+    "p p",
+    "p p",
+    "psp"
+  ],
+  "key": {
+    "s": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "p": {
+      "item": "minecraft:oak_log"
+    }
+  }
+}

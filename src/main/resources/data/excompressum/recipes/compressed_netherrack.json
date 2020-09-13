@@ -1,9 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
-    "item": "excompressum:compressed_block",
-    "data": 9
+    "item": "excompressum:compressed_netherrack"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "###",
     "###",

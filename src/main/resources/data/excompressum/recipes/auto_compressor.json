@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:auto_compressor"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "CIC",
     "IBI",
@@ -10,16 +10,13 @@
   ],
   "key": {
     "C": {
-      "type": "forge:ore_dict",
-      "ore": "workbench"
+      "item": "minecraft:crafting_table"
     },
     "B": {
-      "type": "forge:ore_dict",
-      "ore": "blockIron"
+      "tag": "forge:storage_blocks/iron"
     },
     "I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIron"
+      "tag": "forge:ingots/iron"
     }
   }
 }

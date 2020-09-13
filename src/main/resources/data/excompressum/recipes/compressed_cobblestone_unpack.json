@@ -1,13 +1,12 @@
 {
+  "type": "minecraft:crafting_shapeless",
   "result": {
     "item": "minecraft:cobblestone",
     "count": 9
   },
-  "type": "forge:ore_shapeless",
   "ingredients": [
     {
-      "item": "excompressum:compressed_block",
-      "data": 1
+      "item": "excompressum:compressed_cobblestone"
     }
   ]
 }

@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:bat_zapper"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     " RG",
     " SR",
@@ -10,16 +10,13 @@
   ],
   "key": {
     "S": {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
+      "tag": "forge:rods/wooden"
     },
     "R": {
-      "type": "forge:ore_dict",
-      "ore": "dustRedstone"
+      "tag": "forge:dusts/redstone"
     },
     "G": {
-      "type": "forge:ore_dict",
-      "ore": "dustGlowstone"
+      "tag": "forge:dusts/glowstone"
     }
   }
 }

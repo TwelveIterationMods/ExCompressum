@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:mana_sieve"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "BGB",
     "GSG",
@@ -10,20 +10,17 @@
   ],
   "key": {
     "G": {
-      "type": "forge:ore_dict",
-      "ore": "paneGlassColorless"
+      "tag": "forge:glass_panes/colorless"
     },
     "S": {
       "type": "excompressum:nihilo_item",
       "value": "SIEVE"
     },
     "I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotManasteel"
+      "tag": "forge:ingots/mana_steel"
     },
     "B": {
-      "type": "forge:ore_dict",
-      "ore": "blockManasteel"
+      "tag": "forge:storage_blocks/mana_steel"
     }
   },
   "conditions": [
@@ -31,8 +28,18 @@
       "type": "forge:and",
       "values": [
         {
-          "type": "forge:mod_loaded",
-          "modid": "botania"
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:ingots/mana_steel"
+          }
+        },
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "tag": "forge:storage_blocks/mana_steel"
+          }
         },
         {
           "type": "excompressum:has_nihilo_item",

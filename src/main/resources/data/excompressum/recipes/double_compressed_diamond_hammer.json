@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:double_compressed_diamond_hammer"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "##",
     "##"

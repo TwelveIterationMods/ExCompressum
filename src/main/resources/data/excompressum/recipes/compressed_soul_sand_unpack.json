@@ -1,13 +1,12 @@
 {
+  "type": "minecraft:crafting_shapeless",
   "result": {
     "item": "minecraft:soul_sand",
     "count": 9
   },
-  "type": "forge:ore_shapeless",
   "ingredients": [
     {
-      "item": "excompressum:compressed_block",
-      "data": 8
+      "item": "excompressum:compressed_soul_sand"
     }
   ]
 }

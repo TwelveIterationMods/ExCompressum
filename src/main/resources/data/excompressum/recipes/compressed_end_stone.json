@@ -1,9 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
-    "item": "excompressum:compressed_block",
-    "data": 10
+    "item": "excompressum:compressed_end_stone"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "###",
     "###",

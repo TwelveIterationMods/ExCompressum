@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": {
+    "item": "exnihilosequentia:ender_gravel",
+    "count": 9
+  },
+  "ingredients": [
+    {
+      "item": "excompressum:compressed_ender_gravel"
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "exnihilosequentia:ender_gravel"
+    }
+  ]
+}

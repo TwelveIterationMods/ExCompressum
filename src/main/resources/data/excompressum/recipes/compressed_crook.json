@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:compressed_crook"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "## ",
     " # ",

@@ -22,7 +22,7 @@ import java.util.List;
 
 public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCrucibleRecipe> {
 
-    public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "woodenCrucible");
+    public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "wooden_crucible");
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_wooden_crucible.png");
 
     private final IDrawable background;

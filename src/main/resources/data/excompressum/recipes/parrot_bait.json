@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": {
+    "item": "excompressum:parrot_bait"
+  },
+  "ingredients": [
+    {
+      "tag": "forge:dyes/green"
+    },
+    {
+      "tag": "forge:dyes/red"
+    }
+  ]
+}

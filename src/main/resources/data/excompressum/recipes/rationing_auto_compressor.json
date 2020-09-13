@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:auto_compressor_rationing"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     " G ",
     "GCG",
@@ -13,8 +13,7 @@
       "item": "excompressum:auto_compressor"
     },
     "G": {
-      "type": "forge:ore_dict",
-      "ore": "ingotGold"
+      "tag": "forge:ingots/gold"
     }
   }
 }

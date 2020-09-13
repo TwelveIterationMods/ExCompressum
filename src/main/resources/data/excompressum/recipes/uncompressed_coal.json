@@ -1,13 +1,12 @@
 {
+  "type": "minecraft:crafting_shapeless",
   "result": {
     "item": "excompressum:uncompressed_coal",
     "count": 8
   },
-  "type": "forge:ore_shapeless",
   "ingredients": [
     {
-      "item": "minecraft:coal",
-      "data": 0
+      "item": "minecraft:coal"
     }
   ]
 }

@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:auto_sieve"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "BGB",
     "GSG",
@@ -10,20 +10,17 @@
   ],
   "key": {
     "G": {
-      "type": "forge:ore_dict",
-      "ore": "paneGlassColorless"
+      "tag": "forge:glass_panes/colorless"
     },
     "S": {
       "type": "excompressum:nihilo_item",
       "value": "SIEVE"
     },
     "I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIron"
+      "tag": "forge:ingots/iron"
     },
     "B": {
-      "type": "forge:ore_dict",
-      "ore": "blockIron"
+      "tag": "forge:storage_blocks/iron"
     }
   },
   "conditions": [

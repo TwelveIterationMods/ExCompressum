@@ -1,13 +1,12 @@
 {
+  "type": "minecraft:crafting_shapeless",
   "result": {
     "item": "minecraft:netherrack",
     "count": 9
   },
-  "type": "forge:ore_shapeless",
   "ingredients": [
     {
-      "item": "excompressum:compressed_block",
-      "data": 9
+      "item": "excompressum:compressed_netherrack"
     }
   ]
 }

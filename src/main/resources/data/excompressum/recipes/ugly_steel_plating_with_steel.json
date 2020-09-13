@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:ugly_steel_plating"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     " I ",
     "IPI",
@@ -13,14 +13,16 @@
       "item": "minecraft:potato"
     },
     "I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotSteel"
+      "tag": "forge:ingots/steel"
     }
   },
   "conditions": [
     {
-      "type": "excompressum:has_oredict_item",
-      "value": "ingotSteel"
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:ingots/steel"
+      }
     }
   ]
 }

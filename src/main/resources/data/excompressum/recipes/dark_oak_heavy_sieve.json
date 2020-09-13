@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "excompressum:dark_oak_heavy_sieve"
+  },
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p p",
+    "ppp",
+    "s s"
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:rods/wooden"
+    },
+    "p": {
+      "item": "minecraft:dark_oak_log"
+    }
+  }
+}

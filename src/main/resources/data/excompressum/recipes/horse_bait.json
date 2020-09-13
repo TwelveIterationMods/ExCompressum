@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": {
+    "item": "excompressum:horse_bait"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:golden_apple"
+    },
+    {
+      "item": "minecraft:golden_apple"
+    }
+  ]
+}

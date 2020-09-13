@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 
 public class ChickenStickRecipeCategory implements IRecipeCategory<ChickenStickRecipe> {
 
-    public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "chickenStick");
+    public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "chicken_stick");
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_chicken_stick.png");
 
     private final IDrawable background;

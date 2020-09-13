@@ -1,9 +1,8 @@
 {
+  "type": "minecraft:crafting_shapeless",
   "result": {
-    "item": "excompressum:bait",
-    "data": 7
+    "item": "excompressum:rabbit_bait"
   },
-  "type": "forge:ore_shapeless",
   "ingredients": [
     {
       "item": "minecraft:carrot"

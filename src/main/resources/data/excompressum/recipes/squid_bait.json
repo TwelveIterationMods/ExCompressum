@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": {
+    "item": "excompressum:squid_bait"
+  },
+  "ingredients": [
+    {
+      "tag": "minecraft:fishes"
+    },
+    {
+      "tag": "minecraft:fishes"
+    }
+  ]
+}

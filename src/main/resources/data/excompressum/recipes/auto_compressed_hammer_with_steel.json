@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:auto_compressed_hammer"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "IPI",
     "IHI",
@@ -16,14 +16,16 @@
       "item": "excompressum:compressed_hammer_diamond"
     },
     "I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotSteel"
+      "tag": "forge:ingots/steel"
     }
   },
   "conditions": [
     {
-      "type": "excompressum:has_oredict_item",
-      "value": "ingotSteel"
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:ingots/steel"
+      }
     }
   ]
 }

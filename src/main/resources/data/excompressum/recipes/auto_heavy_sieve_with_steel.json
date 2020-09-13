@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:auto_heavy_sieve"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "BGB",
     "GSG",
@@ -10,20 +10,16 @@
   ],
   "key": {
     "G": {
-      "type": "forge:ore_dict",
-      "ore": "paneGlassColorless"
+      "tag": "forge:glass_panes/colorless"
     },
     "S": {
-      "item": "excompressum:heavy_sieve",
-      "data": 32767
+      "item": "excompressum:heavy_sieve"
     },
     "I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotSteel"
+      "tag": "forge:ingots/steel"
     },
     "B": {
-      "type": "forge:ore_dict",
-      "ore": "blockSteel"
+      "tag": "forge:storage_blocks/steel"
     }
   },
   "conditions": [
@@ -31,12 +27,18 @@
       "type": "forge:and",
       "values": [
         {
-          "type": "excompressum:has_oredict_item",
-          "value": "ingotSteel"
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "value": "forge:ingots/steel"
+          }
         },
         {
-          "type": "excompressum:has_oredict_item",
-          "value": "blockSteel"
+          "type": "forge:not",
+          "value": {
+            "type": "forge:tag_empty",
+            "value": "forge:storage_blocks/steel"
+          }
         }
       ]
     }

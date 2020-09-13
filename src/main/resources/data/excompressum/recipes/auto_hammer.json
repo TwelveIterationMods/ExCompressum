@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:auto_hammer"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "IPI",
     "IHI",
@@ -17,8 +17,7 @@
       "value": "HAMMER_DIAMOND"
     },
     "I": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIron"
+      "tag": "forge:ingots/iron"
     }
   },
   "conditions": [

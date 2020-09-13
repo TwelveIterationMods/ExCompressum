@@ -26,7 +26,7 @@ import java.util.List;
 
 public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecipe> {
 
-	public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "heavySieve");
+	public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve");
 	private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_heavy_sieve.png");
 
 	private final IDrawable background;

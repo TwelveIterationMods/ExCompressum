@@ -1,13 +1,12 @@
 {
+  "type": "minecraft:crafting_shapeless",
   "result": {
     "item": "minecraft:end_stone",
     "count": 9
   },
-  "type": "forge:ore_shapeless",
   "ingredients": [
     {
-      "item": "excompressum:compressed_block",
-      "data": 10
+      "item": "excompressum:compressed_end_stone"
     }
   ]
 }

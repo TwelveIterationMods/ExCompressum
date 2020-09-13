@@ -24,7 +24,7 @@ import java.util.List;
 public class CompressedHammerRecipeCategory implements IRecipeCategory<CompressedHammerRecipe> {
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_compressed_hammer.png");
-    public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "compressedHammer");
+    public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "compressed_hammer");
 
     private final IDrawable background;
     private final IDrawable slotHighlight;

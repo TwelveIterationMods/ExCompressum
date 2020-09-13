@@ -1,8 +1,8 @@
 {
+  "type": "minecraft:crafting_shaped",
   "result": {
     "item": "excompressum:compressed_hammer_wood"
   },
-  "type": "forge:ore_shaped",
   "pattern": [
     "###",
     "###",
@@ -11,8 +11,7 @@
   "key": {
     "#": {
       "type": "excompressum:nihilo_item",
-      "value": "HAMMER_WOODEN",
-      "data": 0
+      "value": "HAMMER_WOODEN"
     }
   },
   "conditions": [
