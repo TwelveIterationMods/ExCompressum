@@ -1,10 +1,14 @@
 package net.blay09.mods.excompressum.client;
 
+import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.client.render.entity.RenderAngryChicken;
 import net.blay09.mods.excompressum.client.render.tile.*;
 import net.blay09.mods.excompressum.entity.AngryChickenEntity;
 import net.blay09.mods.excompressum.entity.ModEntities;
 import net.blay09.mods.excompressum.tile.ModTileEntities;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.model.ChickenModel;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -12,6 +16,12 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 public class ModRenderers {
 
     public static void register() {
+        RenderTypeLookup.setRenderLayer(ModBlocks.autoSieve, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.autoHeavySieve, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.autoHammer, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.autoCompressedHammer, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.manaSieve, RenderType.getCutout());
+
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.heavySieve, RenderHeavySieve::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoSieve, RenderAutoSieve::normal);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.manaSieve, RenderAutoSieve::normal);

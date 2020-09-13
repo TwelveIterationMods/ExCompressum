@@ -2,6 +2,7 @@
     "parent": "minecraft:block/block",
 "__comment": "Designed by Blay09 with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
 "textures": {
+    "particle": "#texture",
     "iron_mesh": "excompressum:blocks/iron_mesh"
 },
 "elements": [ 

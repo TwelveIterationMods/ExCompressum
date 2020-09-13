@@ -1,11 +1,11 @@
 package net.blay09.mods.excompressum.tile;
 
 public enum EnvironmentalCondition {
-    CanSpawn("info.excompressum:baitCanSpawn"),
-    NearbyBait("info.excompressum:baitNearbyBait"),
-    WrongEnv("info.excompressum:baitWrongEnv"),
-    NearbyAnimal("info.excompressum:baitNearbyAnimal"),
-    NoWater("info.excompressum:baitNoWater");
+    CanSpawn("excompressum.tooltip.baitCanSpawn"),
+    NearbyBait("excompressum.tooltip.baitNearbyBait"),
+    WrongEnv("excompressum.tooltip.baitWrongEnv"),
+    NearbyAnimal("excompressum.tooltip.baitNearbyAnimal"),
+    NoWater("excompressum.tooltip.baitNoWater");
 
     public final String langKey;
 

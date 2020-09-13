@@ -3,10 +3,7 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tile.AutoHammerTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -44,6 +41,7 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
 
     public AutoHammerBlock() {
         super(Properties.create(Material.IRON).hardnessAndResistance(2f));
+        setDefaultState(getDefaultState().with(UGLY, false));
     }
 
     @Override
@@ -148,5 +146,10 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
         if (tileEntity instanceof AutoHammerTileEntity) {
             ((AutoHammerTileEntity) tileEntity).setDisabledByRedstone(world.isBlockPowered(pos));
         }
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 }

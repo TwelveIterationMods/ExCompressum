@@ -34,7 +34,7 @@ public class UglySteelPlatingItem extends Item {
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
         final PlayerEntity player = context.getPlayer();
         final World world = context.getWorld();
         final BlockPos pos = context.getPos();

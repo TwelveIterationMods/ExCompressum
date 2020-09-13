@@ -1,5 +1,8 @@
 {
     "parent": "minecraft:block/block",
+    "textures": {
+        "particle": "#texture"
+    },
 "__comment": "Designed by Blay09 with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
 "elements": [ 
 {

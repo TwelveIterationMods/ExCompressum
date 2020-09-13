@@ -36,7 +36,7 @@ public class BaitBlock extends ContainerBlock {
 
     public static final String nameSuffix = "_bait";
 
-    private static final VoxelShape BOUNDING_BOX = VoxelShapes.create(0, 0, 0, 1, 0.1, 1);
+    private static final VoxelShape BOUNDING_BOX = VoxelShapes.create(0.1, 0, 0.1, 0.9, 0.1, 0.9);
 
     private final BaitType baitType;
 

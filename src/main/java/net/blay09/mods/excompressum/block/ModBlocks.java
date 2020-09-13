@@ -32,10 +32,10 @@ public class ModBlocks {
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         final IForgeRegistry<Block> registry = event.getRegistry();
 
-        compressedBlocks = registerEnumBlock(CompressedBlockType.values(), it -> CompressedBlock.namePrefix + it, CompressedBlock::new);
-        heavySieves = registerEnumBlock(HeavySieveType.values(), it -> it + HeavySieveBlock.nameSuffix, HeavySieveBlock::new);
-        woodenCrucibles = registerEnumBlock(WoodenCrucibleType.values(), it -> it + WoodenCrucibleBlock.nameSuffix, WoodenCrucibleBlock::new);
-        baits = registerEnumBlock(BaitType.values(), it -> it + BaitBlock.nameSuffix, BaitBlock::new);
+        compressedBlocks = registerEnumBlock(registry, CompressedBlockType.values(), it -> CompressedBlock.namePrefix + it, CompressedBlock::new);
+        heavySieves = registerEnumBlock(registry, HeavySieveType.values(), it -> it + HeavySieveBlock.nameSuffix, HeavySieveBlock::new);
+        woodenCrucibles = registerEnumBlock(registry, WoodenCrucibleType.values(), it -> it + WoodenCrucibleBlock.nameSuffix, WoodenCrucibleBlock::new);
+        baits = registerEnumBlock(registry, BaitType.values(), it -> it + BaitBlock.nameSuffix, BaitBlock::new);
 
         registry.registerAll(
                 autoHammer = new AutoHammerBlock().setRegistryName(AutoHammerBlock.name),
@@ -48,12 +48,12 @@ public class ModBlocks {
         );
     }
 
-    private static <T extends Enum<T> & IStringSerializable> Block[] registerEnumBlock(T[] types, Function<String, String> nameFactory, Function<T, Block> factory) {
+    private static <T extends Enum<T> & IStringSerializable> Block[] registerEnumBlock(IForgeRegistry<Block> registry, T[] types, Function<String, String> nameFactory, Function<T, Block> factory) {
         Block[] blocks = new Block[types.length];
         for (T type : types) {
             blocks[type.ordinal()] = factory.apply(type).setRegistryName(nameFactory.apply(type.getString()));
         }
-
+        registry.registerAll(blocks);
         return blocks;
     }
 

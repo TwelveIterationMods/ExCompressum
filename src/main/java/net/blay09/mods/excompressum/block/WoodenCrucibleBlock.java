@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.tile.WoodenCrucibleTileEntity;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
@@ -12,6 +13,9 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
@@ -19,6 +23,17 @@ import net.minecraftforge.fluids.FluidUtil;
 public class WoodenCrucibleBlock extends ContainerBlock {
 
     public static final String nameSuffix = "_crucible";
+
+    private static final VoxelShape BOUNDING_BOX = VoxelShapes.or(
+            VoxelShapes.create(0, 0.1875f, 0, 1, 1f, 1),
+            VoxelShapes.create(0.0625f, 0.125f, 0.0625f, 1 - 0.0625f, 0.1875f, 1 - 0.0625f),
+            VoxelShapes.create(0.125f, 0.0625f, 0.125f, 1 - 0.125f, 0.125f, 1 - 0.125f),
+            VoxelShapes.create(0, 0, 0, 0.0625f, 0.1875f, 0.0625f),
+            VoxelShapes.create(1 - 0.0625f, 0, 0, 1, 0.1875f, 0.0625f),
+            VoxelShapes.create(0, 0, 1 - 0.0625f, 0.0625f, 0.1875f, 1),
+            VoxelShapes.create(1 - 0.0625f, 0, 1 - 0.0625f, 1, 0.1875f, 1)
+    ).simplify();
+
     private final WoodenCrucibleType type;
 
     public WoodenCrucibleBlock(WoodenCrucibleType type) {
@@ -57,4 +72,13 @@ public class WoodenCrucibleBlock extends ContainerBlock {
         return ActionResultType.SUCCESS;
     }
 
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+        return BOUNDING_BOX;
+    }
 }

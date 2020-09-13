@@ -5,10 +5,7 @@ import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.blay09.mods.excompressum.utils.Messages;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ContainerBlock;
-import net.minecraft.block.HorizontalBlock;
+import net.minecraft.block.*;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -50,6 +47,7 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
 
     protected AutoSieveBaseBlock(Properties properties) {
         super(properties.hardnessAndResistance(2f));
+        setDefaultState(getDefaultState().with(UGLY, false));
     }
 
     @Override
@@ -195,5 +193,10 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
             return true;
         }
         return false;
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
     }
 }
