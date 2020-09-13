@@ -1,0 +1,6 @@
+{
+  "parent": "excompressum:block/heavy_sieve",
+  "textures": {
+    "texture": "minecraft:block/spruce_log"
+  }
+}

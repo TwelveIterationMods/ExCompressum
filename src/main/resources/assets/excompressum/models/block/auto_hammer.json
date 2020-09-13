@@ -4,6 +4,7 @@
 "textures": {
     "texture": "excompressum:blocks/auto_frame_top",
     "texture_side": "excompressum:blocks/auto_frame_side",
+    "texture_glass": "excompressum:blocks/auto_frame_glass",
     "particle": "excompressum:blocks/auto_frame_side"
 },
 "elements": [ 
