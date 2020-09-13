@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "result": {
-    "item": "excompressum:auto_compressor_rationing"
+    "item": "excompressum:rationing_auto_compressor"
   },
   "pattern": [
     " G ",

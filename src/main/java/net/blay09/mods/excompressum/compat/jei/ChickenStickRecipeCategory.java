@@ -41,7 +41,7 @@ public class ChickenStickRecipeCategory implements IRecipeCategory<ChickenStickR
     @Nonnull
     @Override
     public String getTitle() {
-        return I18n.format("jei." + UID);
+        return I18n.format("item.excompressum.chicken_stick");
     }
 
     @Nonnull

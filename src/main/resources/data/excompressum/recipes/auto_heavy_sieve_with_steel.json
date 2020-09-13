@@ -13,7 +13,7 @@
       "tag": "forge:glass_panes/colorless"
     },
     "S": {
-      "item": "excompressum:heavy_sieve"
+      "tag": "excompressum:heavy_sieve"
     },
     "I": {
       "tag": "forge:ingots/steel"
@@ -30,14 +30,14 @@
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "value": "forge:ingots/steel"
+            "tag": "forge:ingots/steel"
           }
         },
         {
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "value": "forge:storage_blocks/steel"
+            "tag": "forge:storage_blocks/steel"
           }
         }
       ]

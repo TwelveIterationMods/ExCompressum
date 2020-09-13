@@ -23,11 +23,11 @@
         "type": "forge:or",
         "values": [
           {
-            "type": "forge_tag_empty",
+            "type": "forge:tag_empty",
             "tag": "forge:ingots/mana_steel"
           },
           {
-            "type": "forge_tag_empty",
+            "type": "forge:tag_empty",
             "tag": "forge:rods/magical_wooden"
           }
         ]

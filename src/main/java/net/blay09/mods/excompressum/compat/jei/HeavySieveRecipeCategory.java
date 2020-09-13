@@ -59,7 +59,7 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 	@Nonnull
 	@Override
 	public String getTitle() {
-		return I18n.format("jei." + UID);
+		return I18n.format("block.excompressum.heavy_sieve");
 	}
 
 	@Nonnull
@@ -122,7 +122,7 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 					}
 					condensedTooltips.add(s);
 				}
-				tooltip.add(new TranslationTextComponent("jei.excompressum:heavySieve.dropChance"));
+				tooltip.add(new TranslationTextComponent("excompressum.tooltip.heavySieve.dropChance"));
 				for(String line : condensedTooltips.elementSet()) {
 					tooltip.add(new StringTextComponent(" * " + condensedTooltips.count(line) + "x " + line));
 				}
