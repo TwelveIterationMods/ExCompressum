@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.client.ClientProxy;
 import net.blay09.mods.excompressum.client.ModRenderers;
-import net.blay09.mods.excompressum.client.gui.ModScreens;
+import net.blay09.mods.excompressum.client.ModScreens;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.ExRegistro;

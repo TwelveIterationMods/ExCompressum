@@ -4,6 +4,7 @@ import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -18,8 +19,8 @@ public class AutoSieveContainer extends Container {
     private int lastEnergy;
     private boolean lastDisabledByRedstone;
 
-    public AutoSieveContainer(int windowId, PlayerInventory inventoryPlayer, AutoSieveTileEntityBase tileEntity) {
-        super(ModContainers.autoSieve, windowId);
+    public AutoSieveContainer(ContainerType<AutoSieveContainer> type, int windowId, PlayerInventory inventoryPlayer, AutoSieveTileEntityBase tileEntity) {
+        super(type, windowId);
         this.tileEntity = tileEntity;
 
         ItemStackHandler itemHandler = tileEntity.getItemHandler();

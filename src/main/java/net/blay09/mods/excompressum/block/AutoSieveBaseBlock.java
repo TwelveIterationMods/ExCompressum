@@ -10,6 +10,8 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -29,6 +31,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -86,7 +89,10 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
                 }
             }
             if (!player.isSneaking()) {
-                // TODO player.openGui(ExCompressum.instance, GuiHandler.GUI_AUTO_SIEVE, world, pos.getX(), pos.getY(), pos.getZ());
+                final TileEntity tileEntity = world.getTileEntity(pos);
+                if (tileEntity instanceof INamedContainerProvider) {
+                    NetworkHooks.openGui(((ServerPlayerEntity) player), ((INamedContainerProvider) tileEntity), pos);
+                }
             }
         }
         return ActionResultType.SUCCESS;

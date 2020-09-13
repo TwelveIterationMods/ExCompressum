@@ -4,6 +4,8 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.Collection;
 import java.util.Random;
@@ -34,4 +36,8 @@ public class AutoHeavySieveTileEntity extends AutoSieveTileEntity {
         return (float) (ExCompressumConfig.COMMON.autoHeavySieveSpeed.get() * getSpeedMultiplier());
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("container.excompressum.auto_heavy_sieve");
+    }
 }

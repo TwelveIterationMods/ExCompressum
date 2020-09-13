@@ -7,6 +7,8 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.AutoSieveBaseBlock;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.container.AutoSieveContainer;
+import net.blay09.mods.excompressum.container.ModContainers;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
@@ -17,6 +19,10 @@ import net.blay09.mods.excompressum.utils.SubItemHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -25,6 +31,8 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.StringUtils;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
@@ -34,7 +42,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
-public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements ITickable {
+public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements ITickable, INamedContainerProvider {
 
     private static final int UPDATE_INTERVAL = 20;
     private static final int PARTICLE_TICKS = 30;
@@ -453,5 +461,15 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         isDisabledByRedstone = disabledByRedstone;
         isDirty = true;
         ticksSinceSync = UPDATE_INTERVAL;
+    }
+
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("container.excompressum.auto_sieve");
+    }
+
+    @Override
+    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+        return new AutoSieveContainer(ModContainers.autoSieve, windowId, inv, this);
     }
 }

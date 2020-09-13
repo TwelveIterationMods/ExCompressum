@@ -8,6 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.Collection;
@@ -58,4 +60,8 @@ public class AutoCompressedHammerTileEntity extends AutoHammerTileEntity {
         return false;
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("container.excompressum.auto_compressed_hammer");
+    }
 }

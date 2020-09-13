@@ -1,7 +1,14 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.container.AutoSieveContainer;
+import net.blay09.mods.excompressum.container.ModContainers;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
 
@@ -56,4 +63,13 @@ public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
         }
     }
 
+    @Override
+    public ITextComponent getDisplayName() {
+        return new TranslationTextComponent("container.excompressum.mana_sieve");
+    }
+
+    @Override
+    public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
+        return new AutoSieveContainer(ModContainers.manaSieve, windowId, inv, this);
+    }
 }
