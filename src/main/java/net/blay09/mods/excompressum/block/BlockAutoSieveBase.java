@@ -117,7 +117,7 @@ public abstract class BlockAutoSieveBase extends BlockContainer implements IUgly
                         if (tileEntity.getFoodBoost() <= 1f) {
                             tileEntity.setFoodBoost((int) (itemFood.getSaturationModifier(heldItem) * 640), Math.max(1f, itemFood.getHealAmount(heldItem) * 0.75f));
                             if (!player.capabilities.isCreativeMode) {
-                                ItemStack returnStack = itemFood.onItemUseFinish(heldItem, world, FakePlayerFactory.getMinecraft((WorldServer) world));
+                                ItemStack returnStack = itemFood.onItemUseFinish(heldItem, world, player);
                                 if (returnStack != heldItem) {
                                     player.setHeldItem(hand, returnStack);
                                 }
