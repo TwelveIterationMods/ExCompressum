@@ -6,7 +6,6 @@ import net.blay09.mods.excompressum.client.render.tile.*;
 import net.blay09.mods.excompressum.entity.AngryChickenEntity;
 import net.blay09.mods.excompressum.entity.ModEntities;
 import net.blay09.mods.excompressum.tile.ModTileEntities;
-import net.minecraft.block.BlockRenderType;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.model.ChickenModel;
@@ -26,8 +25,8 @@ public class ModRenderers {
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoSieve, RenderAutoSieve::normal);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.manaSieve, RenderAutoSieve::normal);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoHeavySieve, RenderAutoSieve::heavy);
-        ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoHammer, RenderAutoHammer::normal);
-        ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoCompressedHammer, RenderAutoHammer::compressed);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoHammer, AutoHammerRenderer::normal);
+        ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoCompressedHammer, AutoHammerRenderer::compressed);
 
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.woodenCrucible, RenderWoodenCrucible::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.bait, RenderBait::new);

@@ -1,6 +1,9 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.MatrixApplyingVertexBuilder;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.item.ModItems;
@@ -8,9 +11,14 @@ import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.AutoHammerTileEntity;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.model.ItemOverride;
+import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -18,14 +26,22 @@ import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.IModelData;
 import org.lwjgl.opengl.GL11;
 
-public class RenderAutoHammer extends TileEntityRenderer<AutoHammerTileEntity> {
+import java.util.Random;
+
+public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity> {
+
+    private static final Random random = new Random();
 
     private final boolean isCompressed;
+
     private ItemStack hammerItemStack = ItemStack.EMPTY;
 
-    public RenderAutoHammer(TileEntityRendererDispatcher dispatcher, boolean isCompressed) {
+    public AutoHammerRenderer(TileEntityRendererDispatcher dispatcher, boolean isCompressed) {
         super(dispatcher);
         this.isCompressed = isCompressed;
     }
@@ -35,6 +51,7 @@ public class RenderAutoHammer extends TileEntityRenderer<AutoHammerTileEntity> {
         if (!tileEntity.hasWorld() || tileEntity.isUgly()) {
             return;
         }
+
         if (hammerItemStack.isEmpty()) {
             if (isCompressed) {
                 hammerItemStack = new ItemStack(ModItems.compressedHammerDiamond);
@@ -55,7 +72,7 @@ public class RenderAutoHammer extends TileEntityRenderer<AutoHammerTileEntity> {
 
         matrixStack.push();
         matrixStack.translate(0.5f, 0f, +0.5f);
-        matrixStack.rotate(new Quaternion(RenderUtils.getRotationAngle(tileEntity.getFacing()), 1f, 0f, true));
+        matrixStack.rotate(new Quaternion(0f, RenderUtils.getRotationAngle(tileEntity.getFacing()), 0f, true));
 
         if (tileEntity.shouldAnimate()) {
             tileEntity.hammerAngle += 0.4f * partialTicks;
@@ -68,6 +85,7 @@ public class RenderAutoHammer extends TileEntityRenderer<AutoHammerTileEntity> {
         matrixStack.translate(0.15f, 0.6f, 0f);
         matrixStack.scale(0.5f, 0.5f, 0.5f);
         itemRenderer.renderItem(hammerItemStack, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
+
         ItemStack firstHammer = tileEntity.getUpgradeStack(0);
         if (!firstHammer.isEmpty()) {
             matrixStack.push();
@@ -81,7 +99,7 @@ public class RenderAutoHammer extends TileEntityRenderer<AutoHammerTileEntity> {
         if (!secondHammer.isEmpty()) {
             matrixStack.push();
             matrixStack.translate(0f, 0f, -0.33f);
-            matrixStack.rotate(new Quaternion(0f, 190f,  0f, true));
+            matrixStack.rotate(new Quaternion(0f, 190f, 0f, true));
             itemRenderer.renderItem(secondHammer, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
             matrixStack.pop();
         }
@@ -94,14 +112,26 @@ public class RenderAutoHammer extends TileEntityRenderer<AutoHammerTileEntity> {
         if (!currentStack.isEmpty()) {
             BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
             if (contentState != null) {
-                renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-                mc.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+
+                // Build a matrix for the destroy stages because it does some weird stuff with MatrixApplyingVertexBuilder that I don't understand but it kinda works
+                matrixStack.push();
+                matrixStack.translate(-0.09375f, 0.0625f, -0.25);
+                // I have no idea what these numbers mean. This is the result of one hour of trial-and-error, trying to get the destroy_stage pixels to overlay as well as possible. It's still not perfect.
+                matrixStack.scale(1f,1f , 1.4375f);
+                MatrixStack.Entry matrix = matrixStack.getLast();
+                matrixStack.pop();
+
                 matrixStack.push();
                 matrixStack.translate(-0.09375f, 0.0625f, -0.25);
                 matrixStack.scale(0.5f, 0.5f, 0.5f);
-                RenderUtils.renderBlockWithTranslate(mc, contentState, tileEntity.getWorld(), tileEntity.getPos(), renderer);
-                // TODO mc.getBlockRendererDispatcher().renderBlockDamage(contentState, tileEntity.getPos(), ModSprites.destroyBlockIcons[Math.min(9, (int) (tileEntity.getProgress() * 9f))], tileEntity.getWorld());
-                tessellator.draw();
+                World world = tileEntity.getWorld();
+                BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
+                dispatcher.renderBlock(contentState, matrixStack, bufferIn, combinedLightIn, combinedOverlayIn, EmptyModelData.INSTANCE);
+
+                int blockDamage = Math.min(9, (int) (tileEntity.getProgress() * 9f));
+                RenderTypeBuffers renderTypeBuffers = Minecraft.getInstance().getRenderTypeBuffers();
+                IVertexBuilder damageBuffer = new MatrixApplyingVertexBuilder(renderTypeBuffers.getCrumblingBufferSource().getBuffer(ModelBakery.DESTROY_RENDER_TYPES.get(blockDamage)), matrix.getMatrix(), matrix.getNormal());
+                dispatcher.renderBlockDamage(contentState, tileEntity.getPos(), world, matrixStack, damageBuffer, EmptyModelData.INSTANCE);
                 matrixStack.pop();
             }
         }
@@ -111,12 +141,12 @@ public class RenderAutoHammer extends TileEntityRenderer<AutoHammerTileEntity> {
         RenderHelper.enableStandardItemLighting();
     }
 
-    public static RenderAutoHammer normal(TileEntityRendererDispatcher dispatcher) {
-        return new RenderAutoHammer(dispatcher, false);
+    public static AutoHammerRenderer normal(TileEntityRendererDispatcher dispatcher) {
+        return new AutoHammerRenderer(dispatcher, false);
     }
 
-    public static RenderAutoHammer compressed(TileEntityRendererDispatcher dispatcher) {
-        return new RenderAutoHammer(dispatcher, true);
+    public static AutoHammerRenderer compressed(TileEntityRendererDispatcher dispatcher) {
+        return new AutoHammerRenderer(dispatcher, true);
     }
 
 }

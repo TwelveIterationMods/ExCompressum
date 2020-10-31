@@ -9,11 +9,14 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -31,6 +34,11 @@ public class RenderWoodenCrucible extends TileEntityRenderer<WoodenCrucibleTileE
 
         RenderHelper.disableStandardItemLighting();
         mc.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
+
+        matrixStack.push();
+        matrixStack.translate(0.5, 0.5, 0.5);
+        mc.getItemRenderer().renderItem(new ItemStack(Items.APPLE), ItemCameraTransforms.TransformType.FIXED, combinedLightIn, OverlayTexture.NO_OVERLAY, matrixStack, bufferIn);
+        matrixStack.pop();
 
         ItemStack outputStack = tileEntity.getItemHandler().getStackInSlot(0);
         if (!outputStack.isEmpty()) {
