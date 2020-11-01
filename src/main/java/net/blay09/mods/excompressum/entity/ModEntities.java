@@ -17,9 +17,8 @@ public class ModEntities {
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         final IForgeRegistry<EntityType<?>> registry = event.getRegistry();
-        registry.register(angryChicken = registerEntity(EntityType.Builder.create(AngryChickenEntity::new, EntityClassification.MONSTER).size(0.6f, 1.95f), "angry_chicken"));
+        registry.register(angryChicken = registerEntity(EntityType.Builder.create(AngryChickenEntity::new, EntityClassification.MONSTER).size(0.4f, 0.7f), "angry_chicken"));
         GlobalEntityTypeAttributes.put(angryChicken, AngryChickenEntity.createEntityAttributes().create());
-        // TODO EntityRegistry.registerModEntity(new ResourceLocation(MOD_ID, "angry_chicken"), AngryChickenEntity.class, "AngryChicken", 0, ExCompressum.instance, 64, 10, true);
     }
 
     @SuppressWarnings("unchecked")

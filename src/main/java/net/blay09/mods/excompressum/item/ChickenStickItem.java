@@ -23,7 +23,7 @@ public class ChickenStickItem extends ToolItem {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public ChickenStickItem(Item.Properties properties) {
-        super(0f, 0f, ChickenStickTier.INSTANCE, new HashSet<>(), properties);
+        super(0f, 0f, ChickenStickTier.INSTANCE, new HashSet<>(), properties.isImmuneToFire());
     }
 
     @Override

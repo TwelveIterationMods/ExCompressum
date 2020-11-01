@@ -4,12 +4,17 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.AngryChickenEntity;
 import net.blay09.mods.excompressum.entity.ModEntities;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,20 +28,30 @@ public class ChickenStickHandler {
             return;
         }
 
-        if (event.getTarget() instanceof ChickenEntity && !((ChickenEntity) event.getTarget()).isChild()) {
+        Entity chicken = event.getTarget();
+        if (chicken instanceof ChickenEntity && !((ChickenEntity) chicken).isChild()) {
             ItemStack heldItem = event.getPlayer().getHeldItem(Hand.MAIN_HAND);
             if (!heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
-                event.getTarget().remove();
-                if (!event.getTarget().world.isRemote) {
-                    heldItem.shrink(1);
+                chicken.remove();
+
+                World world = chicken.world;
+                if (!world.isRemote) {
+                    if (!event.getPlayer().abilities.isCreativeMode) {
+                        heldItem.shrink(1);
+                    }
+
                     if (heldItem.isEmpty()) {
                         event.getPlayer().setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                     }
 
-                    AngryChickenEntity angryChicken = ModEntities.angryChicken.create(event.getTarget().world);
-                    angryChicken.setLocationAndAngles(event.getTarget().getPosX(), event.getTarget().getPosY(), event.getTarget().getPosZ(), event.getTarget().rotationYaw, event.getTarget().rotationPitch);
-                    event.getTarget().world.addEntity(angryChicken);
-                    event.getTarget().world.playSound(angryChicken.getPosX(), angryChicken.getPosY(), angryChicken.getPosZ(), SoundEvents.ENTITY_CHICKEN_HURT, SoundCategory.NEUTRAL, 1f, 0.5f, false);
+                    AngryChickenEntity angryChicken = ModEntities.angryChicken.create(world);
+                    angryChicken.setLocationAndAngles(chicken.getPosX(), chicken.getPosY(), chicken.getPosZ(), chicken.rotationYaw, chicken.rotationPitch);
+                    angryChicken.setPositionAndRotation(chicken.getPosX(), chicken.getPosY(), chicken.getPosZ(), chicken.rotationYaw, chicken.rotationPitch);
+                    angryChicken.setRotationYawHead(((ChickenEntity) chicken).rotationYawHead);
+                    world.addEntity(angryChicken);
+                    world.playSound(null, angryChicken.getPosition(), SoundEvents.ENTITY_CHICKEN_HURT, SoundCategory.HOSTILE, 1f, 0.5f);
+                    world.playSound(null, angryChicken.getPosition(), SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 1f, 0.5f);
+                    ((ServerWorld) world).spawnParticle(ParticleTypes.ANGRY_VILLAGER, angryChicken.getPosX(), angryChicken.getPosY(), angryChicken.getPosZ(), 200, 0.25f, 0.1f, 0.25f, 1f);
                 }
                 event.setCanceled(true);
             }
