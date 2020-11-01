@@ -9,8 +9,6 @@ import net.minecraft.item.ItemStack;
 import java.util.List;
 
 public interface InternalMethods {
-    void registerChickenStickHammerable(BlockState state);
-
     void registerCompressedHammerEntry(BlockState state, List<CompressedHammerReward> rewards);
 
     void registerHeavySieveEntry(BlockState state, List<HeavySieveReward> rewards);

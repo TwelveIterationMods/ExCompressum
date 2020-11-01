@@ -25,10 +25,6 @@ public class ExCompressumAPI {
         return internalMethods.getExNihilo();
     }
 
-    public static void registerChickenStickHammerable(BlockState state) {
-        internalMethods.registerChickenStickHammerable(state);
-    }
-
     public static void registerCompressedHammerEntry(BlockState state, List<CompressedHammerReward> rewards) {
         internalMethods.registerCompressedHammerEntry(state, rewards);
     }

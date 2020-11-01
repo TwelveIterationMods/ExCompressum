@@ -9,7 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID)
-public class RegisterErrorInformHandler {
+public class RegistryErrorInformHandler {
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (AbstractRegistry.registryErrors.size() > 0) {

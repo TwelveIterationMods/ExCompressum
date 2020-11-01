@@ -12,15 +12,6 @@ import java.util.List;
 public class ReloadRegistryEvent extends Event {
 
 	/**
-	 * When handling this event, register blocks that should be hammerable by the Chicken Stick.
-	 */
-	public static class ChickenStick extends ReloadRegistryEvent {
-		public void register(BlockState state, boolean isWildcard) {
-			ExCompressumAPI.registerChickenStickHammerable(state);
-		}
-	}
-
-	/**
 	 * When handling this event, register blocks that should be hammerable by the Compressed Hammer.
 	 */
 	public static class CompressedHammer extends ReloadRegistryEvent {

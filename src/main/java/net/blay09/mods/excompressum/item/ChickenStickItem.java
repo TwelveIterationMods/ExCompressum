@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
-import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
+import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -41,12 +41,12 @@ public class ChickenStickItem extends ToolItem {
 
     @Override
     public boolean canHarvestBlock(BlockState state) {
-        return ChickenStickRegistry.isHammerable(state);
+        return ExRegistries.getChickenStickRegistry().isHammerable(state);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if ((ChickenStickRegistry.isHammerable(state))) {
+        if ((ExRegistries.getChickenStickRegistry().isHammerable(state))) {
             if (isAngry(stack)) {
                 return efficiency * 1.5f;
             }
