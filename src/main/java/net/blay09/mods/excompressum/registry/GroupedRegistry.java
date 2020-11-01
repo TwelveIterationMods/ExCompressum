@@ -38,14 +38,14 @@ public abstract class GroupedRegistry<
         RegistryGroup group = data.getGroup();
         if (group != null) {
             groupInitializers.put(group.getId(), new RegistryGroupInitializer<>(group, override -> {
-                loadData(data, override);
+                loadData(data, override, false);
             }));
         } else {
-            loadData(data, null);
+            loadData(data, null, true);
         }
     }
 
-    private void loadData(TData data, @Nullable TGroupOverride groupOverride) {
+    private void loadData(TData data, @Nullable TGroupOverride groupOverride, boolean ignoreEntryOverrides) {
         if (data.getGroupOverrides() != null) {
             groupOverrides.putAll(data.getGroupOverrides());
         }
@@ -56,7 +56,7 @@ public abstract class GroupedRegistry<
 
         if (data.getCustomEntries() != null) {
             for (TEntry customEntry : data.getCustomEntries()) {
-                TEntryOverride entryOverride = getEntryOverride(customEntry.getId());
+                TEntryOverride entryOverride = !ignoreEntryOverrides ? getEntryOverride(customEntry.getId()) : null;
                 boolean enabled = customEntry.isEnabledByDefault();
                 if (entryOverride != null) {
                     enabled = entryOverride.isEnabled();
