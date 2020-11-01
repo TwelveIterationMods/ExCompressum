@@ -13,7 +13,7 @@ public class TinyHumanModel extends PlayerModel<LivingEntity> {
         isChild = true;
     }
 
-    private void animate(AutoSieveTileEntityBase tileEntity, float partialTicks) {
+    public void animate(AutoSieveTileEntityBase tileEntity, float partialTicks) {
         if (tileEntity.shouldAnimate()) {
             tileEntity.armAngle += 0.5f * (Math.max(1f, tileEntity.getSpeedMultiplier() / 4f)) * partialTicks;
             bipedRightArm.rotateAngleX = tileEntity.armAngle;

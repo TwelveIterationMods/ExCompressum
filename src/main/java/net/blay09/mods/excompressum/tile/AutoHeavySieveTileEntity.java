@@ -4,6 +4,7 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -11,6 +12,10 @@ import java.util.Collection;
 import java.util.Random;
 
 public class AutoHeavySieveTileEntity extends AutoSieveTileEntity {
+
+    public AutoHeavySieveTileEntity() {
+        super(ModTileEntities.autoHeavySieve);
+    }
 
     @Override
     public boolean isSiftable(ItemStack itemStack) {

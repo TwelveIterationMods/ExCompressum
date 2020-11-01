@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.tile;
 import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -25,8 +26,12 @@ public class AutoSieveTileEntity extends AutoSieveTileEntityBase {
 
     private final LazyOptional<EnergyStorage> energyStorageCap = LazyOptional.of(() -> energyStorage);
 
+    public AutoSieveTileEntity(TileEntityType<?> type) {
+        super(type);
+    }
+
     public AutoSieveTileEntity() {
-        super(ModTileEntities.autoSieve);
+        this(ModTileEntities.autoSieve);
     }
 
     @Override

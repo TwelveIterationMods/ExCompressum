@@ -5,11 +5,9 @@ import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.tile.HeavySieveTileEntity;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
@@ -18,28 +16,20 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import org.lwjgl.opengl.GL11;
 
-public class RenderHeavySieve extends TileEntityRenderer<HeavySieveTileEntity> {
+public class HeavySieveRenderer extends TileEntityRenderer<HeavySieveTileEntity> {
 
-    public RenderHeavySieve(TileEntityRendererDispatcher dispatcher) {
+    public HeavySieveRenderer(TileEntityRendererDispatcher dispatcher) {
         super(dispatcher);
     }
 
     @Override
-    public void render(HeavySieveTileEntity tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        Minecraft mc = Minecraft.getInstance();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder renderer = tessellator.getBuffer();
-
-        RenderHelper.disableStandardItemLighting();
+    public void render(HeavySieveTileEntity tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
 
         matrixStack.push();
-
-        matrixStack.push();
-        matrixStack.translate(0.5, 0.5, 0.5);
-        mc.getItemRenderer().renderItem(new ItemStack(Items.APPLE), ItemCameraTransforms.TransformType.FIXED, combinedLightIn, OverlayTexture.NO_OVERLAY, matrixStack, bufferIn);
-        matrixStack.pop();
 
         // Render mesh
         ItemStack meshStack = tileEntity.getMeshStack();
@@ -62,24 +52,19 @@ public class RenderHeavySieve extends TileEntityRenderer<HeavySieveTileEntity> {
 
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (!currentStack.isEmpty()) {
-            BlockState state = StupidUtils.getStateFromItemStack(currentStack);
-            if (state != null) {
+            BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
+            if (contentState != null) {
                 float progress = tileEntity.getProgress();
-                renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-                mc.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
                 matrixStack.push();
                 matrixStack.translate(0.0625f, 0.5625f, 0.0625f);
                 float tt = 0.42f;
                 matrixStack.scale(0.88f, tt - progress * tt, 0.88f);
-                RenderUtils.renderBlockWithTranslate(mc, state, tileEntity.getWorld(), tileEntity.getPos(), renderer);
-                tessellator.draw();
+                dispatcher.renderBlock(contentState, matrixStack, buffer, combinedLight, combinedOverlay, EmptyModelData.INSTANCE);
                 matrixStack.pop();
             }
         }
 
         matrixStack.pop();
-
-        RenderHelper.enableStandardItemLighting();
     }
 
 }

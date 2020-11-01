@@ -10,9 +10,9 @@ import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.math.vector.Quaternion;
 
-public class RenderBait extends TileEntityRenderer<BaitTileEntity> {
+public class BaitRenderer extends TileEntityRenderer<BaitTileEntity> {
 
-    public RenderBait(TileEntityRendererDispatcher dispatcher) {
+    public BaitRenderer(TileEntityRendererDispatcher dispatcher) {
         super(dispatcher);
     }
 

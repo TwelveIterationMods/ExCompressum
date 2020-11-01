@@ -106,8 +106,6 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
 
         matrixStack.pop();
 
-        RenderHelper.disableStandardItemLighting();
-
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (!currentStack.isEmpty()) {
             BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
@@ -137,8 +135,6 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
         }
 
         matrixStack.pop();
-
-        RenderHelper.enableStandardItemLighting();
     }
 
     public static AutoHammerRenderer normal(TileEntityRendererDispatcher dispatcher) {

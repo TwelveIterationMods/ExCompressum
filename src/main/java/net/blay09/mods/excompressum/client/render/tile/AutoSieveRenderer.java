@@ -13,30 +13,26 @@ import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
-import org.lwjgl.opengl.GL11;
+import net.minecraftforge.client.model.data.EmptyModelData;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase> {
+public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBase> {
 
     private final TinyHumanModel biped = new TinyHumanModel();
     private final boolean isHeavy;
     private BlockState sieveState;
 
-    public RenderAutoSieve(TileEntityRendererDispatcher dispatcher, boolean isHeavy) {
+    public AutoSieveRenderer(TileEntityRendererDispatcher dispatcher, boolean isHeavy) {
         super(dispatcher);
         this.isHeavy = isHeavy;
     }
@@ -46,18 +42,15 @@ public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase>
         if (!tileEntity.hasWorld() || tileEntity.isUgly()) {
             return;
         }
+
+        BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
+
         if (sieveState == null) {
             sieveState = ModBlocks.heavySieves[0].getDefaultState();
             if (!isHeavy) {
                 sieveState = ExRegistro.getSieveRenderState();
             }
         }
-
-        Minecraft mc = Minecraft.getInstance();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder renderer = tessellator.getBuffer();
-
-        RenderHelper.disableStandardItemLighting();
 
         matrixStack.push();
         matrixStack.translate(0.5f, 0f, 0.5f);
@@ -69,8 +62,8 @@ public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase>
         matrixStack.rotate(new Quaternion(180, 0, 0, true));
         matrixStack.translate(0, -1.2f, 0.25f);
         matrixStack.scale(0.75f, 0.75f, 0.75f);
-        bindPlayerTexture(tileEntity.getCustomSkin());
-        // TODO biped.render(matrixStack, bufferIn);
+        biped.animate(tileEntity, partialTicks);
+        biped.render(matrixStack, bufferIn.getBuffer(RenderType.getEntitySolid(getPlayerSkinTexture(tileEntity.getCustomSkin()))), combinedLightIn, combinedOverlayIn, 1f, 1f, 1f, 1f);
         matrixStack.pop();
 
         // Sieve & Content
@@ -80,11 +73,8 @@ public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase>
 
         // Render the sieve
         matrixStack.push();
-        renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        mc.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
         matrixStack.translate(0f, 0.01f, 0f);
-        RenderUtils.renderBlockWithTranslate(mc, sieveState, tileEntity.getWorld(), tileEntity.getPos(), renderer);
-        tessellator.draw();
+        dispatcher.renderBlock(sieveState, matrixStack, bufferIn, combinedLightIn, combinedOverlayIn, EmptyModelData.INSTANCE);
         matrixStack.pop();
 
         SieveModelBounds bounds = ExRegistro.getSieveBounds();
@@ -117,24 +107,19 @@ public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase>
             BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
             if (contentState != null) {
                 float progress = tileEntity.getProgress();
-                renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-                mc.textureManager.bindTexture(PlayerContainer.LOCATION_BLOCKS_TEXTURE);
                 matrixStack.push();
                 matrixStack.translate(bounds.contentOffset, bounds.meshY, bounds.contentOffset);
                 matrixStack.scale(bounds.contentScaleXZ, bounds.contentBaseScaleY - progress * bounds.contentBaseScaleY, bounds.contentScaleXZ);
-                RenderUtils.renderBlockWithTranslate(mc, contentState, tileEntity.getWorld(), tileEntity.getPos(), renderer);
-                tessellator.draw();
+                dispatcher.renderBlock(contentState, matrixStack, bufferIn, combinedLightIn, combinedOverlayIn, EmptyModelData.INSTANCE);
                 matrixStack.pop();
             }
         }
         matrixStack.pop();
 
         matrixStack.pop();
-
-        RenderHelper.enableStandardItemLighting();
     }
 
-    private void bindPlayerTexture(@Nullable GameProfile customSkin) {
+    private ResourceLocation getPlayerSkinTexture(@Nullable GameProfile customSkin) {
         ResourceLocation resourceLocation = DefaultPlayerSkin.getDefaultSkinLegacy();
         final Minecraft mc = Minecraft.getInstance();
         if (customSkin != null) {
@@ -143,14 +128,14 @@ public class RenderAutoSieve extends TileEntityRenderer<AutoSieveTileEntityBase>
                 resourceLocation = mc.getSkinManager().loadSkin(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
             }
         }
-        mc.textureManager.bindTexture(resourceLocation);
+        return resourceLocation;
     }
 
-    public static RenderAutoSieve normal(TileEntityRendererDispatcher dispatcher) {
-        return new RenderAutoSieve(dispatcher, false);
+    public static AutoSieveRenderer normal(TileEntityRendererDispatcher dispatcher) {
+        return new AutoSieveRenderer(dispatcher, false);
     }
 
-    public static RenderAutoSieve heavy(TileEntityRendererDispatcher dispatcher) {
-        return new RenderAutoSieve(dispatcher, true);
+    public static AutoSieveRenderer heavy(TileEntityRendererDispatcher dispatcher) {
+        return new AutoSieveRenderer(dispatcher, true);
     }
 }

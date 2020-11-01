@@ -13,7 +13,12 @@ public class ManaSieveBlock extends AutoSieveBaseBlock {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public ManaSieveBlock() {
-        super(Properties.create(Material.IRON));
+        super(Properties.create(Material.IRON)
+                .notSolid()
+                .setAllowsSpawn((a, b, c, d) -> false)
+                .setOpaque((a, b, c) -> false)
+                .setSuffocates((a, b, c) -> false)
+                .setBlocksVision((a, b, c) -> false));
     }
 
     @Override

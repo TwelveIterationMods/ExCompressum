@@ -48,7 +48,13 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
 
     public AutoHammerBlock() {
         // TODO might not always be non-opaque, ugly-steel-plating can make it opaque
-        super(Properties.create(Material.IRON).hardnessAndResistance(2f).notSolid().setAllowsSpawn((a, b, c, d) -> false).setOpaque((a, b, c) -> false).setSuffocates((a, b, c) -> false).setBlocksVision((a, b, c) -> false));
+        super(Properties.create(Material.IRON)
+                .hardnessAndResistance(2f)
+                .notSolid()
+                .setAllowsSpawn((a, b, c, d) -> false)
+                .setOpaque((a, b, c) -> false)
+                .setSuffocates((a, b, c) -> false)
+                .setBlocksVision((a, b, c) -> false));
         setDefaultState(getDefaultState().with(UGLY, false));
     }
 
