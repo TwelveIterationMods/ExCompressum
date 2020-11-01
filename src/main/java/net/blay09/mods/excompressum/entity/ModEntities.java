@@ -17,6 +17,7 @@ public class ModEntities {
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
         final IForgeRegistry<EntityType<?>> registry = event.getRegistry();
+
         registry.register(angryChicken = registerEntity(EntityType.Builder.create(AngryChickenEntity::new, EntityClassification.MONSTER).size(0.4f, 0.7f), "angry_chicken"));
         GlobalEntityTypeAttributes.put(angryChicken, AngryChickenEntity.createEntityAttributes().create());
     }

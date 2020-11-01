@@ -38,8 +38,8 @@ public class ModRenderers {
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.woodenCrucible, WoodenCrucibleRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.bait, BaitRenderer::new);
 
-        final ChickenModel<AngryChickenEntity> modelChicken = new ChickenModel<>();
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.angryChicken, manager -> new AngryChickenRenderer(manager, modelChicken, 0.3f));
+        final ChickenModel<AngryChickenEntity> angryChickenModel = new ChickenModel<>();
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.angryChicken, manager -> new AngryChickenRenderer(manager, angryChickenModel, 0.3f));
     }
 
     @SubscribeEvent

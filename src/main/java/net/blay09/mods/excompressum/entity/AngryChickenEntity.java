@@ -7,11 +7,11 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -22,6 +22,7 @@ import net.minecraft.world.BossInfo;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerBossInfo;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -37,8 +38,10 @@ public class AngryChickenEntity extends CreatureEntity {
     public static AttributeModifierMap.MutableAttribute createEntityAttributes() {
         return MobEntity.func_233666_p_()
                 .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)
-                .createMutableAttribute(Attributes.MAX_HEALTH, 2)
-                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5);
+                .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1)
+                .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0)
+                .createMutableAttribute(Attributes.MAX_HEALTH, 50)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.45);
     }
 
     @Override
@@ -50,11 +53,7 @@ public class AngryChickenEntity extends CreatureEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
-
-        // TODO this.goalSelector.addGoal(3, this.summonSilverfish);
-        // TODO consider minion chickens this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(ChickenEntity.class));
-
-        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
+        this.goalSelector.addGoal(4, new AngryChickenAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(3, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4f));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
@@ -144,6 +143,11 @@ public class AngryChickenEntity extends CreatureEntity {
     }
 
     @Override
+    public void applyKnockback(float strength, double ratioX, double ratioZ) {
+        super.applyKnockback(strength * 2f, ratioX, ratioZ);
+    }
+
+    @Override
     public boolean isNonBoss() {
         return false;
     }
@@ -156,6 +160,7 @@ public class AngryChickenEntity extends CreatureEntity {
             this.recalculateSize();
         }
     }
+
 
     @Override
     public float getRenderScale() {
@@ -176,5 +181,29 @@ public class AngryChickenEntity extends CreatureEntity {
 
     private static float easeInOutCubic(float x) {
         return x < 0.5 ? 4 * x * x * x : (float) (1 - Math.pow(-2 * x + 2, 3) / 2);
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (source.isProjectile()) {
+            Entity arrow = source.getImmediateSource();
+            Entity attacker = source.getTrueSource();
+            if (!world.isRemote && arrow != null && !(attacker instanceof AngryChickenEntity)) {
+                ((ServerWorld) world).spawnParticle(ParticleTypes.CLOUD, getPosX(), getPosY() + 1f, getPosZ(), 50, 0.25f, 0.25f, 0.25f, 0.2f);
+                if (arrow instanceof ArrowEntity && attacker instanceof LivingEntity) {
+                    ArrowEntity reflectedArrow = new ArrowEntity(world, this);
+                    reflectedArrow.copyLocationAndAnglesFrom(arrow);
+                    world.addEntity(reflectedArrow);
+                    double dirX = attacker.getPosX() - arrow.getPosX();
+                    double dirY = (attacker.getPosY() + 1.8f) - arrow.getPosY();
+                    double dirZ = attacker.getPosZ() - arrow.getPosZ();
+                    reflectedArrow.shoot(dirX, dirY, dirZ, 1f, 10f);
+                    arrow.remove();
+                }
+            }
+            return false;
+        }
+
+        return super.attackEntityFrom(source, amount);
     }
 }
