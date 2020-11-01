@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -28,7 +29,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nullable;
 
-public class WoodenCrucibleTileEntity extends TileEntity implements ITickable {
+public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTileEntity {
 
     private static final int RAIN_FILL_INTERVAL = 20;
     private static final int MELT_INTERVAL = 20;

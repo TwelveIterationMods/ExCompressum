@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
+import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
@@ -64,7 +65,7 @@ public class OreSmasherItem extends ToolItem {
             ItemStack inventoryStack = player.inventory.mainInventory.get(i);
             if (!inventoryStack.isEmpty()) {
                 if (ExCompressumAPI.getExNihilo().isCompressableOre(inventoryStack)) {
-                    CompressedRecipe recipe = CompressedRecipeRegistry.getRecipe(inventoryStack);
+                    CompressedRecipe recipe = ExRegistries.getCompressedRecipeRegistry().getRecipe(inventoryStack);
                     if (recipe != null && recipe.getResultStack().getCount() == 1) {
                         if (inventoryStack.getCount() >= recipe.getCount()) {
                             BlockState oldState = world.getBlockState(pos);

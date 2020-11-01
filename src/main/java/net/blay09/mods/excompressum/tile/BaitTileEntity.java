@@ -13,6 +13,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -22,7 +23,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.Collection;
 
-public class BaitTileEntity extends TileEntity implements ITickable {
+public class BaitTileEntity extends TileEntity implements ITickableTileEntity {
 
     private static final int ENVIRONMENTAL_CHECK_INTERVAL = 20 * 10;
     private static final int MAX_BAITS_IN_AREA = 2;

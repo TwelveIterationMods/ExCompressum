@@ -4,13 +4,12 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.container.AutoCompressorContainer;
+import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
-import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
 import net.blay09.mods.excompressum.utils.EnergyStorageModifiable;
 import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
@@ -34,7 +34,7 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nullable;
 
-public class AutoCompressorTileEntity extends BaseTileEntity implements ITickable, INamedContainerProvider {
+public class AutoCompressorTileEntity extends BaseTileEntity implements ITickableTileEntity, INamedContainerProvider {
 
     private final EnergyStorageModifiable energyStorage = new EnergyStorageModifiable(32000) {
         @Override
@@ -51,7 +51,7 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
     private final DefaultItemHandler itemHandler = new DefaultItemHandler(this, 24) {
         @Override
         public boolean isItemValid(int slot, ItemStack itemStack) {
-            return slot >= 12 || CompressedRecipeRegistry.getRecipe(itemStack) != null;
+            return slot >= 12 || ExRegistries.getCompressedRecipeRegistry().getRecipe(itemStack) != null;
         }
     };
     private final RangedWrapper inputSlots = new RangedWrapper(itemHandler, 0, 12);
@@ -59,7 +59,7 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
     private final ItemHandlerAutomation itemHandlerAutomation = new ItemHandlerAutomation(itemHandler) {
         @Override
         public boolean canInsertItem(int slot, ItemStack itemStack) {
-            return slot < 12 && CompressedRecipeRegistry.getRecipe(itemStack) != null;
+            return slot < 12 && ExRegistries.getCompressedRecipeRegistry().getRecipe(itemStack) != null;
         }
 
         @Override
@@ -97,7 +97,7 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
                 for (int i = 0; i < inputSlots.getSlots(); i++) {
                     ItemStack slotStack = inputSlots.getStackInSlot(i);
                     if (!slotStack.isEmpty()) {
-                        CompressedRecipe compressedRecipe = CompressedRecipeRegistry.getRecipe(slotStack);
+                        CompressedRecipe compressedRecipe = ExRegistries.getCompressedRecipeRegistry().getRecipe(slotStack);
                         if (compressedRecipe != null) {
                             inputItems.add(compressedRecipe, slotStack.getCount());
                         }
