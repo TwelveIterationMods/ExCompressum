@@ -35,8 +35,6 @@ public class BaitTileEntity extends TileEntity implements ITickable {
         super(ModTileEntities.bait);
     }
 
-    private ItemStack renderItemMain = ItemStack.EMPTY;
-    private ItemStack renderItemSub = ItemStack.EMPTY;
     private EnvironmentalCondition environmentStatus;
     private int ticksSinceEnvironmentalCheck;
     private int ticksSinceSpawnCheck;
@@ -44,12 +42,6 @@ public class BaitTileEntity extends TileEntity implements ITickable {
     @Override
     public void tick() {
         final BaitType baitType = getBaitType();
-        if (renderItemMain.isEmpty()) {
-            renderItemMain = baitType.getDisplayItemFirst();
-        }
-        if (renderItemSub.isEmpty()) {
-            renderItemSub = baitType.getDisplayItemSecond();
-        }
 
         ticksSinceEnvironmentalCheck++;
 
@@ -122,7 +114,7 @@ public class BaitTileEntity extends TileEntity implements ITickable {
         return environmentStatus;
     }
 
-    private BaitType getBaitType() {
+    public BaitType getBaitType() {
         return ((BaitBlock) getBlockState().getBlock()).getBaitType();
     }
 

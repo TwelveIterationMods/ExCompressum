@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.blay09.mods.excompressum.block.BaitType;
 import net.blay09.mods.excompressum.tile.BaitTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -18,18 +19,20 @@ public class BaitRenderer extends TileEntityRenderer<BaitTileEntity> {
 
     @Override
     public void render(BaitTileEntity tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
+        BaitType baitType = tileEntity.getBaitType();
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         matrixStack.push();
-        matrixStack.translate(0.45, 0.05, 0.45);
+        matrixStack.translate(0.45, 0.05f, 0.45);
         matrixStack.scale(0.5f, 0.5f, 0.5f);
         matrixStack.rotate(new Quaternion(90f, 0f, 0f, true));
-        /* TODO if (!tileEntity.getRenderItem(0).isEmpty()) {
-            itemRenderer.renderItem(tileEntity.getRenderItem(0), ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
-        }*/
-        matrixStack.rotate(new Quaternion(-10f, 0f, 0f, true));
-        /* TODO if (!tileEntity.getRenderItem(1).isEmpty()) {
-            itemRenderer.renderItem(tileEntity.getRenderItem(1), ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
-        }*/
+        if (!baitType.getDisplayItemFirst().isEmpty()) {
+            itemRenderer.renderItem(baitType.getDisplayItemFirst(), ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
+        }
+        matrixStack.translate(0.1f, 0f, -0.05f);
+        matrixStack.rotate(new Quaternion(5f, 0f, 0f, true));
+        if (!baitType.getDisplayItemSecond().isEmpty()) {
+            itemRenderer.renderItem(baitType.getDisplayItemSecond(), ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
+        }
         matrixStack.pop();
     }
 }
