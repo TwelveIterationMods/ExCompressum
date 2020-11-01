@@ -6,31 +6,39 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
+import net.blay09.mods.excompressum.client.ModModels;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.client.render.model.TinyHumanModel;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Random;
 
 public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBase> {
 
+    private static final Random random = new Random();
+
     private final TinyHumanModel biped = new TinyHumanModel();
     private final boolean isHeavy;
-    private BlockState sieveState;
+    private IBakedModel sieveModel;
 
     public AutoSieveRenderer(TileEntityRendererDispatcher dispatcher, boolean isHeavy) {
         super(dispatcher);
@@ -38,18 +46,16 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
     }
 
     @Override
-    public void render(AutoSieveTileEntityBase tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn) {
-        if (!tileEntity.hasWorld() || tileEntity.isUgly()) {
+    public void render(AutoSieveTileEntityBase tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLightIn, int combinedOverlayIn) {
+        World world = tileEntity.getWorld();
+        if (world == null || tileEntity.isUgly()) {
             return;
         }
 
         BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
 
-        if (sieveState == null) {
-            sieveState = ModBlocks.heavySieves[0].getDefaultState();
-            if (!isHeavy) {
-                sieveState = ExRegistro.getSieveRenderState();
-            }
+        if (sieveModel == null) {
+            sieveModel = isHeavy ? dispatcher.getModelForState(ModBlocks.heavySieves[0].getDefaultState()) : ModModels.sieves[0];
         }
 
         matrixStack.push();
@@ -63,7 +69,7 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
         matrixStack.translate(0, -1.2f, 0.25f);
         matrixStack.scale(0.75f, 0.75f, 0.75f);
         biped.animate(tileEntity, partialTicks);
-        biped.render(matrixStack, bufferIn.getBuffer(RenderType.getEntitySolid(getPlayerSkinTexture(tileEntity.getCustomSkin()))), combinedLightIn, combinedOverlayIn, 1f, 1f, 1f, 1f);
+        biped.render(matrixStack, buffer.getBuffer(RenderType.getEntitySolid(getPlayerSkinTexture(tileEntity.getCustomSkin()))), combinedLightIn, combinedOverlayIn, 1f, 1f, 1f, 1f);
         matrixStack.pop();
 
         // Sieve & Content
@@ -74,31 +80,16 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
         // Render the sieve
         matrixStack.push();
         matrixStack.translate(0f, 0.01f, 0f);
-        dispatcher.renderBlock(sieveState, matrixStack, bufferIn, combinedLightIn, combinedOverlayIn, EmptyModelData.INSTANCE);
+        dispatcher.getBlockModelRenderer().renderModel(world, sieveModel, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
         matrixStack.pop();
 
-        SieveModelBounds bounds = ExRegistro.getSieveBounds();
-        if (isHeavy) {
-            bounds = HeavySieveBlock.SIEVE_BOUNDS;
-        }
+        SieveModelBounds bounds = HeavySieveBlock.SIEVE_BOUNDS;
 
         // Render the sieve mesh
         ItemStack meshStack = tileEntity.getMeshStack();
+        meshStack = new ItemStack(ModItems.ironMesh);
         if (!meshStack.isEmpty()) {
-            /* TODO SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
-            if (sieveMesh != null) {
-                renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-                TextureAtlasSprite sprite = sieveMesh.getSpriteLocation() != null ? mc.getTextureMapBlocks().getTextureExtry(sieveMesh.getSpriteLocation().toString()) : null;
-                if (sprite == null) {
-                    sprite = mc.getTextureMapBlocks().getMissingSprite();
-                }
-                int brightness = tileEntity.getWorld().getCombinedLight(tileEntity.getPos(), 0);
-                float meshXZ = bounds.contentOffset;
-                float meshXZ2 = 1f - meshXZ;
-                float meshY = bounds.meshY - 0.025f;
-                RenderUtils.renderQuadUp(renderer, meshXZ, meshY, meshXZ, meshXZ2, meshY, meshXZ2, 0xFFFFFFFF, brightness, sprite);
-                tessellator.draw();
-            }*/
+            dispatcher.getBlockModelRenderer().renderModel(world, ModModels.mesh, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
         }
 
         // Render the content
@@ -110,7 +101,7 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
                 matrixStack.push();
                 matrixStack.translate(bounds.contentOffset, bounds.meshY, bounds.contentOffset);
                 matrixStack.scale(bounds.contentScaleXZ, bounds.contentBaseScaleY - progress * bounds.contentBaseScaleY, bounds.contentScaleXZ);
-                dispatcher.renderBlock(contentState, matrixStack, bufferIn, combinedLightIn, combinedOverlayIn, EmptyModelData.INSTANCE);
+                dispatcher.renderBlock(contentState, matrixStack, buffer, combinedLightIn, combinedOverlayIn, EmptyModelData.INSTANCE);
                 matrixStack.pop();
             }
         }

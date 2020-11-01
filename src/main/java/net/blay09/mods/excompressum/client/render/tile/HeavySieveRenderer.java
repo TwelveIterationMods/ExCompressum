@@ -1,7 +1,9 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.blay09.mods.excompressum.client.ModModels;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tile.HeavySieveTileEntity;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
@@ -16,10 +18,15 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Random;
+
 public class HeavySieveRenderer extends TileEntityRenderer<HeavySieveTileEntity> {
+
+    private static final Random random = new Random();
 
     public HeavySieveRenderer(TileEntityRendererDispatcher dispatcher) {
         super(dispatcher);
@@ -27,6 +34,11 @@ public class HeavySieveRenderer extends TileEntityRenderer<HeavySieveTileEntity>
 
     @Override
     public void render(HeavySieveTileEntity tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+        World world = tileEntity.getWorld();
+        if (world == null) {
+            return;
+        }
+
         BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
 
         matrixStack.push();
@@ -34,20 +46,7 @@ public class HeavySieveRenderer extends TileEntityRenderer<HeavySieveTileEntity>
         // Render mesh
         ItemStack meshStack = tileEntity.getMeshStack();
         if (!meshStack.isEmpty()) {
-            /* TODO SieveMeshRegistryEntry sieveMesh = SieveMeshRegistry.getEntry(meshStack);
-            if (sieveMesh != null) {
-                renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-                TextureAtlasSprite sprite = sieveMesh.getSpriteLocation() != null ? mc.getTextureMapBlocks().getTextureExtry(sieveMesh.getSpriteLocation().toString()) : null;
-                if (sprite == null) {
-                    sprite = mc.getTextureMapBlocks().getMissingSprite();
-                }
-                int brightness = tileEntity.getWorld().getCombinedLight(tileEntity.getPos().up(), 0);
-                float meshXZ = 0.0625f;
-                float meshXZ2 = 1f - meshXZ;
-                float meshY = 0.56f;
-                RenderUtils.renderQuadUp(renderer, meshXZ, meshY, meshXZ, meshXZ2, meshY, meshXZ2, 0xFFFFFFFF, brightness, sprite);
-                tessellator.draw();
-            }*/
+            dispatcher.getBlockModelRenderer().renderModel(world, ModModels.mesh, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
         }
 
         ItemStack currentStack = tileEntity.getCurrentStack();

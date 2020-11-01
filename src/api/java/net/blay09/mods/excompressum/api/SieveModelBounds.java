@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.api;
 
+@Deprecated
 public class SieveModelBounds {
 	public float meshY;
 	public float contentOffset;

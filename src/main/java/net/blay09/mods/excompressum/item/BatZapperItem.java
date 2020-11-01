@@ -7,11 +7,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.energy.CapabilityEnergy;
 
 public class BatZapperItem extends Item {
@@ -50,6 +52,7 @@ public class BatZapperItem extends Item {
             for (Object obj : world.getEntitiesWithinAABB(BatEntity.class, new AxisAlignedBB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range))) {
                 BatEntity entity = (BatEntity) obj;
                 entity.attackEntityFrom(DamageSource.causePlayerDamage(player), Float.MAX_VALUE);
+                ((ServerWorld) world).spawnParticle(ParticleTypes.CRIMSON_SPORE, entity.getPosX(), entity.getPosY(), entity.getPosZ(), 50, 0.1f, 0.1f, 0.1f, 0.1f);
             }
         }
 
