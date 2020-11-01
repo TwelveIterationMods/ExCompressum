@@ -63,15 +63,10 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
             }
         }
 
-        Minecraft mc = Minecraft.getInstance();
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder renderer = tessellator.getBuffer();
-
-        RenderHelper.disableStandardItemLighting();
 
         matrixStack.push();
-        matrixStack.translate(0.5f, 0f, +0.5f);
+        matrixStack.translate(0.5f, 0f, 0.5f);
         matrixStack.rotate(new Quaternion(0f, RenderUtils.getRotationAngle(tileEntity.getFacing()), 0f, true));
 
         if (tileEntity.shouldAnimate()) {
@@ -107,6 +102,7 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
         matrixStack.pop();
 
         ItemStack currentStack = tileEntity.getCurrentStack();
+        currentStack = new ItemStack(Blocks.COBBLESTONE);
         if (!currentStack.isEmpty()) {
             BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
             if (contentState != null) {
@@ -115,7 +111,7 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
                 matrixStack.push();
                 matrixStack.translate(-0.09375f, 0.0625f, -0.25);
                 // I have no idea what these numbers mean. This is the result of one hour of trial-and-error, trying to get the destroy_stage pixels to overlay as well as possible. It's still not perfect.
-                matrixStack.scale(1f,1f , 1.4375f);
+                matrixStack.scale(1f, 1f, (float) Math.sqrt(2));
                 MatrixStack.Entry matrix = matrixStack.getLast();
                 matrixStack.pop();
 
@@ -126,10 +122,13 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
                 BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
                 dispatcher.renderBlock(contentState, matrixStack, bufferIn, combinedLightIn, combinedOverlayIn, EmptyModelData.INSTANCE);
 
-                int blockDamage = Math.min(9, (int) (tileEntity.getProgress() * 9f));
-                RenderTypeBuffers renderTypeBuffers = Minecraft.getInstance().getRenderTypeBuffers();
-                IVertexBuilder damageBuffer = new MatrixApplyingVertexBuilder(renderTypeBuffers.getCrumblingBufferSource().getBuffer(ModelBakery.DESTROY_RENDER_TYPES.get(blockDamage)), matrix.getMatrix(), matrix.getNormal());
-                dispatcher.renderBlockDamage(contentState, tileEntity.getPos(), world, matrixStack, damageBuffer, EmptyModelData.INSTANCE);
+                if (tileEntity.getProgress() > 0f) {
+                    int blockDamage = Math.min(9, (int) (tileEntity.getProgress() * 9f));
+                    RenderTypeBuffers renderTypeBuffers = Minecraft.getInstance().getRenderTypeBuffers();
+                    IVertexBuilder damageBuffer = new MatrixApplyingVertexBuilder(renderTypeBuffers.getCrumblingBufferSource().getBuffer(ModelBakery.DESTROY_RENDER_TYPES.get(blockDamage)), matrix.getMatrix(), matrix.getNormal());
+                    dispatcher.renderBlockDamage(contentState, tileEntity.getPos(), world, matrixStack, damageBuffer, EmptyModelData.INSTANCE);
+                }
+
                 matrixStack.pop();
             }
         }

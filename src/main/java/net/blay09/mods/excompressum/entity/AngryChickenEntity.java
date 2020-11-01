@@ -50,12 +50,14 @@ public class AngryChickenEntity extends CreatureEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
+
         // TODO this.goalSelector.addGoal(3, this.summonSilverfish);
+        // TODO consider minion chickens this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(ChickenEntity.class));
+
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(3, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(5, new LeapAtTargetGoal(this, 0.4f));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        // TODO consider minion chickens this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(ChickenEntity.class));#
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
     }
 
@@ -108,29 +110,6 @@ public class AngryChickenEntity extends CreatureEntity {
         playSound(SoundEvents.ENTITY_CHICKEN_STEP, 0.15f, 1.0f);
     }
 
-// TODO loot table	protected Item getDropItem() {  chickenstick }
-
-	/* TODO loot table
-	protected void dropFewItems(boolean wasRecentlyHit, int looting) {
-		int featherCount = rand.nextInt(3) + rand.nextInt(1 + looting);
-		for (int i = 0; i < featherCount; i++) {
-			dropItem(Items.FEATHER, 1);
-		}
-
-		if (isBurning()) {
-			dropItem(Items.COOKED_CHICKEN, 1);
-		} else {
-			dropItem(Items.CHICKEN, 1);
-		}
-
-		EntityItem chickenStick = dropItem(ModItems.chickenStick, 1);
-		if(chickenStick != null) {
-			NBTTagCompound tagCompound = new NBTTagCompound();
-			tagCompound.setBoolean("IsAngry", true);
-			chickenStick.getItem().setTagCompound(tagCompound);
-		}
-	}*/
-
     @Override
     protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
     }
@@ -140,9 +119,12 @@ public class AngryChickenEntity extends CreatureEntity {
         super.onDeathUpdate();
 
         if (deathTime == 18) {
-            LightningBoltEntity lightningboltentity = EntityType.LIGHTNING_BOLT.create(this.world);
-            lightningboltentity.moveForced(Vector3d.copyCenteredHorizontally(getPosition()));
-            world.addEntity(lightningboltentity);
+            LightningBoltEntity lightningBolt = EntityType.LIGHTNING_BOLT.create(world);
+            if (lightningBolt != null) {
+                lightningBolt.setEffectOnly(true);
+                lightningBolt.moveForced(Vector3d.copyCenteredHorizontally(getPosition()));
+                world.addEntity(lightningBolt);
+            }
 
             Random random = new Random();
             for (int i = 0; i < 3; i++) {
