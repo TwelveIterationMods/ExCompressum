@@ -17,7 +17,6 @@ import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.utils.SubItemHandler;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -26,6 +25,7 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
-public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements ITickable, INamedContainerProvider {
+public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements ITickableTileEntity, INamedContainerProvider {
 
     private static final int UPDATE_INTERVAL = 20;
     private static final int PARTICLE_TICKS = 30;
@@ -249,7 +249,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     }
 
     public boolean isSiftable(ItemStack itemStack) {
-        return ExRegistro.isSiftable(itemStack);
+        return ExRegistro.isSiftableWithMesh(itemStack, getSieveMesh());
     }
 
     public boolean isSiftableWithMesh(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {

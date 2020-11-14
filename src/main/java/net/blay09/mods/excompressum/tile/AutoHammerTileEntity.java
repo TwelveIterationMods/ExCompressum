@@ -10,7 +10,6 @@ import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.utils.*;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.item.ItemEntity;
@@ -23,6 +22,7 @@ import net.minecraft.item.ItemTier;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
-public class AutoHammerTileEntity extends BaseTileEntity implements ITickable, INamedContainerProvider {
+public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTileEntity, INamedContainerProvider {
 
     private static final int UPDATE_INTERVAL = 20;
 

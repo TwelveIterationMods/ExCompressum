@@ -85,7 +85,7 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
         if (!firstHammer.isEmpty()) {
             matrixStack.push();
             matrixStack.translate(0f, 0f, 0.33f);
-            matrixStack.rotate(new Quaternion(0f, 170f, 0f, true));
+            matrixStack.rotate(new Quaternion(0f, -10, 0, true));
             itemRenderer.renderItem(firstHammer, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
             matrixStack.pop();
         }
@@ -94,7 +94,7 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
         if (!secondHammer.isEmpty()) {
             matrixStack.push();
             matrixStack.translate(0f, 0f, -0.33f);
-            matrixStack.rotate(new Quaternion(0f, 190f, 0f, true));
+            matrixStack.rotate(new Quaternion(0f, 10, 0, true));
             itemRenderer.renderItem(secondHammer, ItemCameraTransforms.TransformType.FIXED, combinedLightIn, combinedOverlayIn, matrixStack, bufferIn);
             matrixStack.pop();
         }
@@ -102,7 +102,6 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
         matrixStack.pop();
 
         ItemStack currentStack = tileEntity.getCurrentStack();
-        currentStack = new ItemStack(Blocks.COBBLESTONE);
         if (!currentStack.isEmpty()) {
             BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
             if (contentState != null) {

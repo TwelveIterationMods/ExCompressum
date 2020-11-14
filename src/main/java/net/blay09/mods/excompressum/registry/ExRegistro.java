@@ -3,13 +3,13 @@ package net.blay09.mods.excompressum.registry;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
-import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
@@ -48,12 +48,7 @@ public abstract class ExRegistro {
 		return Collections.emptyList();
 	}
 
-	public static boolean isSiftable(ItemStack itemStack) {
-		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
-		return state != null && instance.isSiftable(state);
-	}
-
-	public static boolean isSiftableWithMesh(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
+	public static boolean isSiftableWithMesh(ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
 		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		return state != null && instance.isSiftableWithMesh(state, sieveMesh);
 	}
@@ -74,12 +69,8 @@ public abstract class ExRegistro {
 		return instance.rollCrookRewards(player, state, luck, rand);
 	}
 
-	public static SieveModelBounds getSieveBounds() {
-		return instance.getSieveBounds();
-	}
-
-	public static Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count) {
-		return instance.generateHeavyRewards(sourceStack, count);
+	public static Collection<HeavySieveReward> generateHeavySieveRewards(ItemStack sourceStack, int count) {
+		return instance.generateHeavySieveRewards(sourceStack, count);
 	}
 
 	public static boolean doMeshesHaveDurability() {
@@ -90,10 +81,6 @@ public abstract class ExRegistro {
 		return instance.doMeshesSplitLootTables();
 	}
 
-	public static ExNihiloProvider.NihiloMod getNihiloMod() {
-		return instance.getNihiloMod();
-	}
-
 	public static int getMeshFortune(ItemStack meshStack) {
 		return instance.getMeshFortune(meshStack);
 	}
@@ -102,7 +89,7 @@ public abstract class ExRegistro {
 		return instance.getMeshEfficiency(meshStack);
 	}
 
-	public static BlockState getSieveRenderState() {
-		return instance.getSieveRenderState();
+	public static boolean hasNihiloMod() {
+		return !(instance instanceof NihilisticNihiloProvider);
 	}
 }

@@ -10,9 +10,11 @@ public class SieveMeshRegistryEntry {
 	private int meshLevel;
 	private boolean isHeavy;
 	private ResourceLocation spriteLocation;
+	private Object backingMesh;
 
-	public SieveMeshRegistryEntry(ItemStack itemStack) {
+	public SieveMeshRegistryEntry(ItemStack itemStack, Object backingMesh) {
 		this.itemStack = itemStack;
+		this.backingMesh = backingMesh;
 	}
 
 	public ItemStack getItemStack() {
@@ -42,5 +44,9 @@ public class SieveMeshRegistryEntry {
 
 	public void setSpriteLocation(ResourceLocation spriteLocation) {
 		this.spriteLocation = spriteLocation;
+	}
+
+	public Object getBackingMesh() {
+		return backingMesh;
 	}
 }

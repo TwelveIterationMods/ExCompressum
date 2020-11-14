@@ -46,6 +46,7 @@ public class ExCompressum {
         buildSoftDependProxy(Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
         buildSoftDependProxy(Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
         buildSoftDependProxy(Compat.EXNIHILO_CREATIO, "net.blay09.mods.excompressum.compat.exnihilocreatio.ExNihiloCreatioAddon");
+        buildSoftDependProxy(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.compat.exnihilosequentia.ExNihiloSequentiaAddon");
 
         if (ExRegistro.instance == null) {
             ExCompressum.logger.warn("No Ex Nihilo mod installed - many things will be disabled.");

@@ -19,7 +19,7 @@ public class NihiloModLoadedCondition implements ICondition {
 
     @Override
     public boolean test() {
-        return ExRegistro.getNihiloMod() != ExNihiloProvider.NihiloMod.NONE;
+        return ExRegistro.hasNihiloMod();
     }
 
     public static class Serializer implements IConditionSerializer<NihiloModLoadedCondition> {

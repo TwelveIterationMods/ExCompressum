@@ -10,6 +10,7 @@ public class Compat {
 	public static final String BOTANIA = "botania";
 	public static final String EXNIHILO_OMNIA = "exnihiloomnia";
 	public static final String EXNIHILO_ADSCENSIO = "exnihiloadscensio";
+	public static final String EXNIHILO_SEQUENTIA = "exnihilosequentia";
 	public static final String EXNIHILO_CREATIO = "exnihilocreatio";
 	public static final String TCONSTRUCT = "tconstruct";
 	public static final String EXTRAUTILS2 = "extrautils2";

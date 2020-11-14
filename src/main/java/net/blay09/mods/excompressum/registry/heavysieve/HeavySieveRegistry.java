@@ -437,7 +437,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
             return;
         }
         HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state);
-        Collection<HeavySieveReward> rewards = ExRegistro.generateHeavyRewards(sourceStack, count);
+        Collection<HeavySieveReward> rewards = ExRegistro.generateHeavySieveRewards(sourceStack, count);
         if (rewards.isEmpty()) {
             logWarning("Entry %s could not be generated in %s because %s is not an Ex Nihilo siftable", itemStack.getItem().getRegistryName(), registryName, sourceStack.getItem().getRegistryName());
             return;

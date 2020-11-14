@@ -52,12 +52,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public SieveModelBounds getSieveBounds() {
-		return nullBounds;
-	}
-
-	@Override
-	public Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count) {
+	public Collection<HeavySieveReward> generateHeavySieveRewards(ItemStack sourceStack, int count) {
 		return Collections.emptyList();
 	}
 
@@ -69,11 +64,6 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	@Override
 	public boolean doMeshesSplitLootTables() {
 		return false;
-	}
-
-	@Override
-	public NihiloMod getNihiloMod() {
-		return NihiloMod.NONE;
 	}
 
 	@Override

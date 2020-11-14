@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "result": {
-    "item": "exnihilosequentia:ender_gravel",
+    "item": "exnihilosequentia:crushed_end_stone",
     "count": 9
   },
   "ingredients": [
@@ -12,7 +12,7 @@
   "conditions": [
     {
       "type": "forge:item_exists",
-      "item": "exnihilosequentia:ender_gravel"
+      "item": "exnihilosequentia:crushed_end_stone"
     }
   ]
 }

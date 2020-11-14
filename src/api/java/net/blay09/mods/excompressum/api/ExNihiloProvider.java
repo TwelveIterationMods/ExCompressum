@@ -9,17 +9,20 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Random;
 
 public interface ExNihiloProvider {
 
+	@Deprecated
 	enum NihiloMod implements IStringSerializable {
 		NONE,
 		OMNIA,
 		ADSCENSIO,
-		CREATIO;
+		CREATIO,
+		SEQUENTIA;
 
 		@Override
 		public String getString() {
@@ -49,24 +52,14 @@ public interface ExNihiloProvider {
 	boolean isHammerable(BlockState state);
 	Collection<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand);
 	boolean isSiftable(BlockState state);
-	boolean isSiftableWithMesh(BlockState state, SieveMeshRegistryEntry sieveMesh);
+	boolean isSiftableWithMesh(BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh);
 	Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand);
 	Collection<ItemStack> rollCrookRewards(LivingEntity player, BlockState state, float luck, Random rand);
-	SieveModelBounds getSieveBounds();
-	Collection<HeavySieveReward> generateHeavyRewards(ItemStack sourceStack, int count);
+	Collection<HeavySieveReward> generateHeavySieveRewards(ItemStack sourceStack, int count);
 	boolean doMeshesHaveDurability();
 	boolean doMeshesSplitLootTables();
-	NihiloMod getNihiloMod();
 	int getMeshFortune(ItemStack meshStack);
 	int getMeshEfficiency(ItemStack meshStack);
-	default BlockState getSieveRenderState() {
-		ItemStack itemStack = getNihiloItem(NihiloItems.SIEVE);
-		if(!itemStack.isEmpty()) {
-			return Block.getBlockFromItem(itemStack.getItem()).getDefaultState();
-		}
-		return Blocks.AIR.getDefaultState();
-	}
-
 	boolean isCompressableOre(ItemStack itemStack);
 	boolean isHammerableOre(ItemStack itemStack);
 
