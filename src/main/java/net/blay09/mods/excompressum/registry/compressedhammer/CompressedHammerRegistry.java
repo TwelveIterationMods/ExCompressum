@@ -65,8 +65,8 @@ public class CompressedHammerRegistry extends GroupedRegistry<
     }
 
     public static List<ItemStack> rollHammerRewards(CompressedHammerable hammerable, LootContext context) {
-        if (hammerable.getLootTable() != null) {
-            LootTable lootTable = context.getLootTable(hammerable.getLootTable());
+        LootTable lootTable = hammerable.getLootTable(context);
+        if (lootTable != null) {
             return lootTable.generate(context);
         }
 

@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -16,9 +15,6 @@ public class CompressedHammerRecipe {
     public CompressedHammerRecipe(CompressedHammerable entry) {
         input = new ItemStack(ForgeRegistries.BLOCKS.getValue(entry.getSource()));
         outputs = new ArrayList<>();
-        if (entry.getResult() != null) {
-            outputs.addAll(entry.getResult());
-        }
     }
 
     public ItemStack getInput() {

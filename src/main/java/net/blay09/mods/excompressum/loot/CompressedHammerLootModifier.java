@@ -2,26 +2,21 @@ package net.blay09.mods.excompressum.loot;
 
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.registry.ExRegistries;
+import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CompressedHammerLootModifier extends LootModifier {
 
@@ -48,17 +43,14 @@ public class CompressedHammerLootModifier extends LootModifier {
 
         CompressedHammerable hammerable = ExRegistries.getCompressedHammerRegistry().getHammerable(state);
         if (hammerable != null) {
-            LootTable lootTable = hammerable.getLootTable(context);
-            if (lootTable != null) {
-                synchronized (activeContexts) {
-                    activeContexts.add(context);
-                }
-                List<ItemStack> loot = lootTable.generate(context);
-                synchronized (activeContexts) {
-                    activeContexts.remove(context);
-                }
-                return loot;
+            synchronized (activeContexts) {
+                activeContexts.add(context);
             }
+            List<ItemStack> loot = CompressedHammerRegistry.rollHammerRewards(hammerable, context);
+            synchronized (activeContexts) {
+                activeContexts.remove(context);
+            }
+            return loot;
         }
 
         // TODO normal hammering

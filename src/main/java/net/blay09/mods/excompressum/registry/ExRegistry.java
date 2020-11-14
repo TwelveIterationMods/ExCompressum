@@ -28,6 +28,7 @@ public abstract class ExRegistry<T> implements IResourceManagerReloadListener {
     protected GsonBuilder gsonBuilder() {
         return new GsonBuilder()
                 .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+                .registerTypeAdapter(LootTableProvider.class, new LootTableProvider.Serializer())
                 .registerTypeAdapter(ItemStack.class, new ItemStackSerializer());
     }
 
