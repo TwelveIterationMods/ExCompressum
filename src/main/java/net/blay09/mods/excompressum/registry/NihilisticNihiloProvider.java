@@ -6,16 +6,20 @@ import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class NihilisticNihiloProvider implements ExNihiloProvider {
-	private final SieveModelBounds nullBounds = new SieveModelBounds(0f, 0f, 0f, 0f);
-
 	@Override
 	public ItemStack getNihiloItem(NihiloItems type) {
 		return ItemStack.EMPTY;
@@ -47,7 +51,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public Collection<ItemStack> rollCrookRewards(LivingEntity player, BlockState state, float luck, Random rand) {
+	public List<ItemStack> rollCrookRewards(ServerWorld world, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, Random rand) {
 		return Collections.emptyList();
 	}
 

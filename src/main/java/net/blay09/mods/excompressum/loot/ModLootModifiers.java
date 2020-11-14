@@ -12,8 +12,9 @@ public class ModLootModifiers {
 
     @SubscribeEvent
     public static void register(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
-        event.getRegistry().register(
-                new ChickenStickLootModifier.Serializer().setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "chickenstick"))
+        event.getRegistry().registerAll(
+                new ChickenStickLootModifier.Serializer().setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "chicken_stick")),
+                new CompressedCrookLootModifier.Serializer().setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "compressed_crook"))
         );
     }
 

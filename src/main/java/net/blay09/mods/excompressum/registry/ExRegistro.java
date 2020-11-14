@@ -6,12 +6,15 @@ import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public abstract class ExRegistro {
@@ -65,8 +68,8 @@ public abstract class ExRegistro {
 		return Collections.emptyList();
 	}
 
-	public static Collection<ItemStack> rollCrookRewards(LivingEntity player, BlockState state, float luck, Random rand) {
-		return instance.rollCrookRewards(player, state, luck, rand);
+	public static List<ItemStack> rollCrookRewards(ServerWorld world, BlockPos pos, BlockState state, @Nullable Entity player, ItemStack tool, Random rand) {
+		return instance.rollCrookRewards(world, pos, state, player, tool, rand);
 	}
 
 	public static Collection<HeavySieveReward> generateHeavySieveRewards(ItemStack sourceStack, int count) {

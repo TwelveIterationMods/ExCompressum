@@ -2,9 +2,13 @@ package net.blay09.mods.excompressum.compat.exnihilosequentia;
 
 import com.google.common.collect.Maps;
 import com.novamachina.exnihilosequentia.common.api.ExNihiloRegistries;
+import com.novamachina.exnihilosequentia.common.block.InfestedLeavesBlock;
 import com.novamachina.exnihilosequentia.common.item.mesh.EnumMesh;
+import com.novamachina.exnihilosequentia.common.item.resources.EnumResource;
 import com.novamachina.exnihilosequentia.common.registries.crook.CrookDropEntry;
 import com.novamachina.exnihilosequentia.common.registries.sieve.SieveDropEntry;
+import com.novamachina.exnihilosequentia.common.utility.Config;
+import jdk.nashorn.internal.runtime.regexp.joni.EncodingHelper;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
@@ -12,20 +16,27 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.blay09.mods.excompressum.utils.StupidUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
-public class ExNihiloSequentiaAddon implements ExNihiloProvider {
+public
+class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
     private final EnumMap<NihiloItems, ItemStack> itemMap = Maps.newEnumMap(NihiloItems.class);
 
@@ -163,14 +174,28 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public Collection<ItemStack> rollCrookRewards(LivingEntity player, BlockState state, float luck, Random rand) {
-        if (!BlockTags.LEAVES.contains(state.getBlock())) {
+    public List<ItemStack> rollCrookRewards(ServerWorld world, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, Random rand) {
+        final float luck = getLuckFromTool(tool);
+        if (state.getBlock() instanceof InfestedLeavesBlock) {
+            List<ItemStack> list = new ArrayList<>();
+            list.add(new ItemStack(Items.STRING, rand.nextInt(Config.MAX_BONUS_STRING_COUNT.get()) + Config.MIN_STRING_COUNT.get()));
+            if (rand.nextDouble() <= 0.8) {
+                list.add(new ItemStack(EnumResource.SILKWORM.getRegistryObject().get()));
+            }
+            return list;
+        } else if (!BlockTags.LEAVES.contains(state.getBlock())) {
             return Collections.emptyList();
         }
 
         List<CrookDropEntry> rewards = ExNihiloRegistries.CROOK_REGISTRY.getDrops();
         if (rewards != null) {
             List<ItemStack> list = new ArrayList<>();
+
+            for (int i = 0; i < Config.VANILLA_SIMULATE_DROP_COUNT.get(); i++) {
+                List<ItemStack> items = Block.getDrops(state, world, pos, null);
+                list.addAll(items);
+            }
+
             for (CrookDropEntry reward : rewards) {
                 float fortuneChanceBonus = 0.1f;
                 if (rand.nextFloat() <= reward.getRarity() + fortuneChanceBonus * luck) {
@@ -183,6 +208,10 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             return list;
         }
         return Collections.emptyList();
+    }
+
+    private float getLuckFromTool(ItemStack tool) {
+        return EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
     }
 
     public Collection<HeavySieveReward> generateHeavySieveRewards(ItemStack sourceStack, int count) {
