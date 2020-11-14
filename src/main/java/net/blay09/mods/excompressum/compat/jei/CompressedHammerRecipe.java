@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;

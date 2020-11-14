@@ -47,16 +47,18 @@ public class CompressedHammerLootModifier extends LootModifier {
 
 
         CompressedHammerable hammerable = ExRegistries.getCompressedHammerRegistry().getHammerable(state);
-        if (hammerable != null && hammerable.getLootTable() != null) {
-            synchronized (activeContexts) {
-                activeContexts.add(context);
+        if (hammerable != null) {
+            LootTable lootTable = hammerable.getLootTable(context);
+            if (lootTable != null) {
+                synchronized (activeContexts) {
+                    activeContexts.add(context);
+                }
+                List<ItemStack> loot = lootTable.generate(context);
+                synchronized (activeContexts) {
+                    activeContexts.remove(context);
+                }
+                return loot;
             }
-            LootTable lootTable = context.getLootTable(hammerable.getLootTable());
-            List<ItemStack> loot = lootTable.generate(context);
-            synchronized (activeContexts) {
-                activeContexts.remove(context);
-            }
-            return loot;
         }
 
         // TODO normal hammering
