@@ -10,14 +10,12 @@ import net.blay09.mods.excompressum.client.ModModels;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.client.render.model.TinyHumanModel;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.resources.DefaultPlayerSkin;
@@ -25,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
 import javax.annotation.Nullable;
@@ -87,7 +84,6 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
 
         // Render the sieve mesh
         ItemStack meshStack = tileEntity.getMeshStack();
-        meshStack = new ItemStack(ModItems.ironMesh);
         if (!meshStack.isEmpty()) {
             dispatcher.getBlockModelRenderer().renderModel(world, ModModels.mesh, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
         }

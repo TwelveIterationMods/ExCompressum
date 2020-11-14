@@ -7,7 +7,7 @@ import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
 import net.minecraft.block.BlockState;
@@ -37,6 +37,6 @@ public class InternalMethodsImpl implements InternalMethods {
 	}
 	@Override
 	public ExNihiloProvider getExNihilo() {
-		return ExRegistro.instance;
+		return ExNihilo.instance;
 	}
 }

@@ -10,7 +10,7 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.container.AutoSieveContainer;
 import net.blay09.mods.excompressum.container.ModContainers;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.DefaultItemHandler;
 import net.blay09.mods.excompressum.utils.ItemHandlerAutomation;
@@ -168,7 +168,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
                                     world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
                                 }
                             }
-                            if (ExRegistro.doMeshesHaveDurability()) {
+                            if (ExNihilo.doMeshesHaveDurability()) {
                                 ItemStack meshStack = meshSlots.getStackInSlot(0);
                                 if (!meshStack.isEmpty()) {
                                     if (meshStack.attemptDamageItem(1, world.rand, null)) {
@@ -240,17 +240,17 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     public float getEffectiveLuck() {
         ItemStack meshStack = meshSlots.getStackInSlot(0);
         if (!meshStack.isEmpty()) {
-            return ExRegistro.getMeshFortune(meshStack);
+            return ExNihilo.getMeshFortune(meshStack);
         }
         return 0f;
     }
 
     public boolean isSiftable(ItemStack itemStack) {
-        return ExRegistro.isSiftableWithMesh(itemStack, getSieveMesh());
+        return ExNihilo.isSiftableWithMesh(itemStack, getSieveMesh());
     }
 
     public boolean isSiftableWithMesh(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
-        return ExRegistro.isSiftableWithMesh(itemStack, sieveMesh);
+        return ExNihilo.isSiftableWithMesh(itemStack, sieveMesh);
     }
 
     public boolean isMesh(ItemStack itemStack) {
@@ -258,7 +258,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     }
 
     public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        return ExRegistro.rollSieveRewards(itemStack, sieveMesh, luck, rand);
+        return ExNihilo.rollSieveRewards(itemStack, sieveMesh, luck, rand);
     }
 
     @Override
@@ -375,7 +375,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         float boost = 1f;
         ItemStack meshStack = meshSlots.getStackInSlot(0);
         if (!meshStack.isEmpty()) {
-            boost += EFFICIENCY_BOOST * ExRegistro.getMeshEfficiency(meshStack);
+            boost += EFFICIENCY_BOOST * ExNihilo.getMeshEfficiency(meshStack);
         }
         return boost * getFoodBoost();
     }

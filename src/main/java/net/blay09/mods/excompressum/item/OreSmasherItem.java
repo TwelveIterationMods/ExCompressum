@@ -3,9 +3,8 @@ package net.blay09.mods.excompressum.item;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
-import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -102,9 +101,9 @@ public class OreSmasherItem extends ToolItem {
 
     @Override
     public boolean onBlockDestroyed(ItemStack itemStack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (!world.isRemote && canHarvestBlock(itemStack, state) && ExRegistro.isHammerable(state)) {
+        if (!world.isRemote && canHarvestBlock(itemStack, state) && ExNihilo.isHammerable(state)) {
             world.removeBlock(pos, false);
-            Collection<ItemStack> rewards = ExRegistro.rollHammerRewards(state, getTier().getHarvestLevel(), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);
+            Collection<ItemStack> rewards = ExNihilo.getInstance().rollHammerRewards(state, getTier().getHarvestLevel(), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);
             for (ItemStack rewardStack : rewards) {
                 world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, rewardStack));
             }

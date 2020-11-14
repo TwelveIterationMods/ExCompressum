@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.botania.BotaniaBindings;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -29,12 +29,12 @@ public class ManaHammerItem extends ToolItem implements IHammer {
 
     @Override
     public boolean canHarvestBlock(ItemStack stack, BlockState state) {
-        return ExRegistro.isHammerable(state);
+        return ExNihilo.isHammerable(state);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (ExRegistro.isHammerable(state) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
+        if (ExNihilo.isHammerable(state) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
             return efficiency * 0.75f;
         }
         return 0.8f;

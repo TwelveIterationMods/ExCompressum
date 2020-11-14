@@ -4,7 +4,7 @@ import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -85,7 +85,7 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTil
 
     public boolean addItem(ItemStack itemStack, boolean isAutomated, boolean simulate) {
         // When inserting dust, turn it into clay if we have enough liquid
-        if (fluidTank.getFluidAmount() >= 1000 && ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.DUST)) {
+        if (fluidTank.getFluidAmount() >= 1000 && ExNihilo.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.DUST)) {
             itemStack.shrink(1);
             if (!simulate) {
                 itemHandler.setStackInSlot(0, new ItemStack(Blocks.CLAY));

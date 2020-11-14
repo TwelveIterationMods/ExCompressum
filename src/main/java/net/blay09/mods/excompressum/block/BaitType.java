@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.block;
 import com.google.common.collect.Lists;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.tile.BaitBlockStateCondition;
 import net.blay09.mods.excompressum.tile.BaitBlockTagCondition;
 import net.blay09.mods.excompressum.tile.BaitEnvironmentCondition;
@@ -64,7 +64,7 @@ public enum BaitType implements IStringSerializable {
 
     public ItemStack getDisplayItemFirst() {
         if (this == SHEEP) {
-            ItemStack grassSeeds = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
+            ItemStack grassSeeds = ExNihilo.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
             if (!grassSeeds.isEmpty()) {
                 return grassSeeds;
             }

@@ -4,7 +4,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
@@ -97,7 +97,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
             } else {
                 clicksSinceSecond++;
                 if (clicksSinceSecond <= ExCompressumConfig.COMMON.heavySieveClicksPerSecond.get()) {
-                    int efficiency = ExRegistro.getMeshEfficiency(meshStack);
+                    int efficiency = ExNihilo.getMeshEfficiency(meshStack);
                     progress = Math.min(1f, progress + PROCESSING_INTERVAL * (1f + efficiency * EFFICIENCY_BOOST));
                 }
             }
@@ -108,7 +108,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
                 if (!world.isRemote) {
                     SieveMeshRegistryEntry sieveMesh = getSieveMesh();
                     if (sieveMesh != null) {
-                        int fortune = ExRegistro.getMeshFortune(meshStack);
+                        int fortune = ExNihilo.getMeshFortune(meshStack);
                         fortune += player.getLuck();
                         Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, sieveMesh, fortune, world.rand);
                         for (ItemStack itemStack : rewards) {
@@ -118,7 +118,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
                         world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, currentStack));
                     }
                     currentStack = ItemStack.EMPTY;
-                    if (ExRegistro.doMeshesHaveDurability() && sieveMesh != null) {
+                    if (ExNihilo.doMeshesHaveDurability() && sieveMesh != null) {
                         if (!sieveMesh.isHeavy()) {
                             getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
                             meshStack = ItemStack.EMPTY;

@@ -8,7 +8,6 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerRegistryEntry;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
@@ -16,7 +15,7 @@ import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
@@ -37,7 +36,7 @@ public class JEIAddon implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registry) {
         List<HeavySieveRecipe> heavySieveRecipes = new ArrayList<>();
-        if (ExRegistro.doMeshesSplitLootTables()) {
+        if (ExNihilo.doMeshesSplitLootTables()) {
             Collection<HeavySieveRegistryEntry> entries = HeavySieveRegistry.INSTANCE.getEntries().values();
             for (SieveMeshRegistryEntry sieveMesh : SieveMeshRegistry.getEntries().values()) {
                 for (HeavySieveRegistryEntry entry : entries) {

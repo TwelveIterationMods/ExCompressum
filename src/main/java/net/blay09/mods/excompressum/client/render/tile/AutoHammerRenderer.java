@@ -1,35 +1,26 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mojang.blaze3d.vertex.MatrixApplyingVertexBuilder;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.tile.AutoHammerTileEntity;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.model.ItemOverride;
 import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.vector.Quaternion;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
@@ -56,7 +47,7 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
             if (isCompressed) {
                 hammerItemStack = new ItemStack(ModItems.compressedHammerDiamond);
             } else {
-                hammerItemStack = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
+                hammerItemStack = ExNihilo.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
                 if (hammerItemStack.isEmpty()) {
                     hammerItemStack = new ItemStack(Items.COD); // This should never happen
                 }

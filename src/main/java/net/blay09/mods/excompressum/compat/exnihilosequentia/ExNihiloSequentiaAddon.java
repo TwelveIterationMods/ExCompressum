@@ -8,21 +8,18 @@ import com.novamachina.exnihilosequentia.common.item.resources.EnumResource;
 import com.novamachina.exnihilosequentia.common.registries.crook.CrookDropEntry;
 import com.novamachina.exnihilosequentia.common.registries.sieve.SieveDropEntry;
 import com.novamachina.exnihilosequentia.common.utility.Config;
-import jdk.nashorn.internal.runtime.regexp.joni.EncodingHelper;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
-import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
@@ -43,7 +40,7 @@ class ExNihiloSequentiaAddon implements ExNihiloProvider {
     public ExNihiloSequentiaAddon() {
         MinecraftForge.EVENT_BUS.register(this);
 
-        ExRegistro.instance = this;
+        ExNihilo.instance = this;
 
         itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood"));
         itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammer_stone"));
@@ -127,7 +124,7 @@ class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public Collection<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand) {
+    public List<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand) {
         return Collections.singletonList(new ItemStack(ExNihiloRegistries.HAMMER_REGISTRY.getResult(state.getBlock().getRegistryName())));
     }
 

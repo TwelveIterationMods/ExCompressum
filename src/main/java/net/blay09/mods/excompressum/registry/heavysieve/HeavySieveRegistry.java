@@ -14,7 +14,7 @@ import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.AbstractRegistry;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -49,7 +49,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
     }
 
     public static boolean isSiftableWithMesh(BlockState state, SieveMeshRegistryEntry sieveMesh) {
-        if (ExRegistro.doMeshesSplitLootTables()) {
+        if (ExNihilo.doMeshesSplitLootTables()) {
             final ResourceLocation registryName = state.getBlock().getRegistryName();
             HeavySieveRegistryEntry entry = INSTANCE.entries.get(registryName);
             if (entry != null && !entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.COMMON.flattenSieveRecipes.get()).isEmpty()) {
@@ -344,7 +344,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_dust", true)) {
-            ItemStack dustBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
+            ItemStack dustBlock = ExNihilo.getNihiloItem(ExNihiloProvider.NihiloItems.DUST);
             if (!dustBlock.isEmpty()) {
                 ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks[CompressedBlockType.DUST.ordinal()]);
                 addGeneratedEntry(itemStack, dustBlock, COMPRESSION_SIZE - defaultLoss);
@@ -353,7 +353,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_nether_gravel", true)) {
-            ItemStack netherGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
+            ItemStack netherGravelBlock = ExNihilo.getNihiloItem(ExNihiloProvider.NihiloItems.NETHER_GRAVEL);
             if (!netherGravelBlock.isEmpty()) {
                 ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks[CompressedBlockType.NETHER_GRAVEL.ordinal()]);
                 addGeneratedEntry(itemStack, netherGravelBlock, COMPRESSION_SIZE - defaultLoss);
@@ -361,7 +361,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
         }
 
         if (tryGetBoolean(defaults, "excompressum:compressed_ender_gravel", true)) {
-            ItemStack enderGravelBlock = ExRegistro.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
+            ItemStack enderGravelBlock = ExNihilo.getNihiloItem(ExNihiloProvider.NihiloItems.ENDER_GRAVEL);
             if (!enderGravelBlock.isEmpty()) {
                 ItemStack itemStack = new ItemStack(ModBlocks.compressedBlocks[CompressedBlockType.ENDER_GRAVEL.ordinal()]);
                 addGeneratedEntry(itemStack, enderGravelBlock, COMPRESSION_SIZE - defaultLoss);
@@ -437,7 +437,7 @@ public class HeavySieveRegistry extends AbstractRegistry {
             return;
         }
         HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state);
-        Collection<HeavySieveReward> rewards = ExRegistro.generateHeavySieveRewards(sourceStack, count);
+        Collection<HeavySieveReward> rewards = ExNihilo.generateHeavySieveRewards(sourceStack, count);
         if (rewards.isEmpty()) {
             logWarning("Entry %s could not be generated in %s because %s is not an Ex Nihilo siftable", itemStack.getItem().getRegistryName(), registryName, sourceStack.getItem().getRegistryName());
             return;

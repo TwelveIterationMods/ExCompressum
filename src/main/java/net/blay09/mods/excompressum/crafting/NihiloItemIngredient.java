@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.crafting;
 
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
@@ -24,7 +24,7 @@ public class NihiloItemIngredient extends Ingredient {
 
     private static Stream<? extends IItemList> getItemLists(String key, int count) {
         ExNihiloProvider.NihiloItems nihiloItem = ExNihiloProvider.NihiloItems.valueOf(key);
-        ItemStack itemStack = ExRegistro.getNihiloItem(nihiloItem);
+        ItemStack itemStack = ExNihilo.getNihiloItem(nihiloItem);
         if (itemStack.isEmpty()) {
             return Stream.empty();
         }

@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.loot;
 
 import com.google.gson.JsonObject;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -41,7 +41,7 @@ public class CompressedCrookLootModifier extends LootModifier {
         }
         BlockPos pos = new BlockPos(origin);
 
-        return ExRegistro.rollCrookRewards(world, pos, state, entity, tool, context.getRandom());
+        return ExNihilo.rollCrookRewards(world, pos, state, entity, tool, context.getRandom());
     }
 
     public static class Serializer extends GlobalLootModifierSerializer<CompressedCrookLootModifier> {

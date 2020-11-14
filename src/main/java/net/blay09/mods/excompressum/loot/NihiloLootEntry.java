@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootPoolEntryType;
@@ -26,7 +26,7 @@ public class NihiloLootEntry extends StandaloneLootEntry {
 
     @Override
     protected void func_216154_a(Consumer<ItemStack> stackConsumer, LootContext context) {
-        stackConsumer.accept(ExRegistro.getNihiloItem(nihiloItem).copy());
+        stackConsumer.accept(ExNihilo.getNihiloItem(nihiloItem).copy());
     }
 
     @Override

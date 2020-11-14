@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.loot;
 
 import com.google.gson.JsonObject;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
@@ -8,7 +9,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
-import net.minecraft.loot.LootTable;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
@@ -22,7 +22,7 @@ public class CompressedHammerLootModifier extends LootModifier {
 
     private static final List<LootContext> activeContexts = new ArrayList<>();
 
-    public CompressedHammerLootModifier(ILootCondition[] conditionsIn) {
+    private CompressedHammerLootModifier(ILootCondition[] conditionsIn) {
         super(conditionsIn);
     }
 
@@ -53,7 +53,9 @@ public class CompressedHammerLootModifier extends LootModifier {
             return loot;
         }
 
-        // TODO normal hammering
+        if (ExNihilo.getInstance().isHammerable(state)) {
+            return ExNihilo.getInstance().rollHammerRewards(state, 0, context.getLuck(), context.getRandom());
+        }
 
         return generatedLoot;
     }

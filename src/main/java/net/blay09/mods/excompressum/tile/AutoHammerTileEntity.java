@@ -7,7 +7,7 @@ import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.container.AutoHammerContainer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -356,15 +356,15 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
                 }
             }
         }
-        return ExRegistro.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
+        return ExNihilo.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
     }
 
     public boolean isRegistered(ItemStack itemStack) {
-        return ExRegistro.isHammerable(itemStack);
+        return ExNihilo.isHammerable(itemStack);
     }
 
     public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
-        return ExRegistro.rollHammerRewards(itemStack, miningLevel, luck, rand);
+        return ExNihilo.rollHammerRewards(itemStack, miningLevel, luck, rand);
     }
 
     public int getMiningLevel() {

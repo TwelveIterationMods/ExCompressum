@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public abstract class ExRegistro {
+public abstract class ExNihilo {
 
 	public static ExNihiloProvider instance;
 
@@ -37,10 +37,6 @@ public abstract class ExRegistro {
 	public static boolean isHammerable(ItemStack itemStack) {
 		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		return state != null && instance.isHammerable(state);
-	}
-
-	public static Collection<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand) {
-		return instance.rollHammerRewards(state, miningLevel, luck, rand);
 	}
 
 	public static Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
@@ -94,5 +90,9 @@ public abstract class ExRegistro {
 
 	public static boolean hasNihiloMod() {
 		return !(instance instanceof NihilisticNihiloProvider);
+	}
+
+	public static ExNihiloProvider getInstance() {
+		return instance;
 	}
 }

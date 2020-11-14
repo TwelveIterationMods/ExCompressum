@@ -2,8 +2,7 @@ package net.blay09.mods.excompressum.crafting;
 
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
@@ -19,7 +18,7 @@ public class NihiloModLoadedCondition implements ICondition {
 
     @Override
     public boolean test() {
-        return ExRegistro.hasNihiloMod();
+        return ExNihilo.hasNihiloMod();
     }
 
     public static class Serializer implements IConditionSerializer<NihiloModLoadedCondition> {

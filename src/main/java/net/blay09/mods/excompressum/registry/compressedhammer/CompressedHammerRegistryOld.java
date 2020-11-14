@@ -1,33 +1,5 @@
 package net.blay09.mods.excompressum.registry.compressedhammer;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.api.ReloadRegistryEvent;
-import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerRegistryEntry;
-import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
-import net.blay09.mods.excompressum.block.CompressedBlockType;
-import net.blay09.mods.excompressum.block.ModBlocks;
-import net.blay09.mods.excompressum.compat.Compat;
-import net.blay09.mods.excompressum.registry.AbstractRegistry;
-import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.utils.StupidUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import javax.annotation.Nullable;
-import java.util.*;
-
 /*public class CompressedHammerRegistryOld extends AbstractRegistry {
 
     @Override

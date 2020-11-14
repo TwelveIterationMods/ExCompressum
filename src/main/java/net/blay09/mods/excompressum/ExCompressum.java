@@ -7,7 +7,7 @@ import net.blay09.mods.excompressum.client.ModScreens;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.loot.ModLoot;
-import net.blay09.mods.excompressum.registry.ExRegistro;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.NihilisticNihiloProvider;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
@@ -49,9 +49,9 @@ public class ExCompressum {
         buildSoftDependProxy(Compat.EXNIHILO_CREATIO, "net.blay09.mods.excompressum.compat.exnihilocreatio.ExNihiloCreatioAddon");
         buildSoftDependProxy(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.compat.exnihilosequentia.ExNihiloSequentiaAddon");
 
-        if (ExRegistro.instance == null) {
+        if (ExNihilo.instance == null) {
             ExCompressum.logger.warn("No Ex Nihilo mod installed - many things will be disabled.");
-            ExRegistro.instance = new NihilisticNihiloProvider();
+            ExNihilo.instance = new NihilisticNihiloProvider();
         }
 
         buildSoftDependProxy(Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
