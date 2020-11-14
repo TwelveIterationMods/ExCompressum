@@ -1,7 +1,11 @@
 package net.blay09.mods.excompressum.registry.chickenstick;
 
 import net.blay09.mods.excompressum.registry.*;
+import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootTable;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -18,6 +22,15 @@ public class ChickenStickRegistry extends GroupedRegistry<
 
     public ChickenStickRegistry() {
         super("ChickenStick");
+    }
+
+    public static List<ItemStack> rollHammerRewards(ChickenStickHammerable hammerable, LootContext context) {
+        LootTable lootTable = hammerable.getLootTable(context);
+        if (lootTable != null) {
+            return lootTable.generate(context);
+        }
+
+        return Collections.emptyList();
     }
 
     public Collection<ChickenStickHammerable> getEntries() {

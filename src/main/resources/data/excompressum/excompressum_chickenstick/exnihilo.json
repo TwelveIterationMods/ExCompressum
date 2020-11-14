@@ -1,0 +1,13 @@
+{
+  "modid": "minecraft",
+  "group": {
+    "id": "excompressum:exnihilo",
+    "enabledByDefault": true
+  },
+  "customEntries": [
+    {
+      "source": "minecraft:sand",
+      "lootTable": "excompressum:chicken_stick/sand"
+    }
+  ]
+}

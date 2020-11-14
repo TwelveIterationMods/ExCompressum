@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "excompressum:nihilo_item",
+          "name": "DUST"
+        }
+      ],
+      "conditions": []
+    }
+  ]
+}
