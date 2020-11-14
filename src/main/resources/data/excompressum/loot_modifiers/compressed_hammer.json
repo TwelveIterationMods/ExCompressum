@@ -3,7 +3,7 @@
     {
       "condition": "minecraft:match_tool",
       "predicate": {
-        "item": "excompressum:compressed_hammer_diamond"
+        "tag": "excompressum:compressed_hammer"
       }
     }
   ],
