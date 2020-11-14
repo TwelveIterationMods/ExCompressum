@@ -6,6 +6,7 @@ import net.blay09.mods.excompressum.client.ModRenderers;
 import net.blay09.mods.excompressum.client.ModScreens;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.loot.ModLoot;
 import net.blay09.mods.excompressum.registry.ExRegistro;
 import net.blay09.mods.excompressum.registry.NihilisticNihiloProvider;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,6 +56,8 @@ public class ExCompressum {
 
         buildSoftDependProxy(Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
         buildSoftDependProxy(Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
+
+        ModLoot.registerLootEntries();
     }
 
     private void setupClient(FMLClientSetupEvent event) {
