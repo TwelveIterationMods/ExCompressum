@@ -29,6 +29,12 @@ public class ChickenStickRegistry extends GroupedRegistry<
         return entries.containsKey(registryName);
     }
 
+    @Nullable
+    public ChickenStickHammerable getHammerable(BlockState state) {
+        final ResourceLocation registryName = state.getBlock().getRegistryName();
+        return entries.get(registryName);
+    }
+
     @Override
     protected void reset() {
         super.reset();

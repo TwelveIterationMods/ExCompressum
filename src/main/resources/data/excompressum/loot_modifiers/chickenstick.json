@@ -1,0 +1,11 @@
+{
+  "conditions": [
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "item": "excompressum:chicken_stick"
+      }
+    }
+  ],
+  "type": "excompressum:chickenstick"
+}
