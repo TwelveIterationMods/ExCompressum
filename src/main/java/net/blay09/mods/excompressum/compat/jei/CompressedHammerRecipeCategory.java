@@ -108,7 +108,7 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
             slotNumber++;
         }
 
-        recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+        /* TODO recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (!input) {
                 CompressedHammerReward reward = recipeWrapper.getRewardAt(slotIndex - INPUT_SLOTS);
                 tooltip.add(new TranslationTextComponent("jei.excompressum:compressedHammer.dropChance"));
@@ -118,6 +118,6 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
                 }
                 tooltip.add(new StringTextComponent(s));
             }
-        });
+        });*/
     }
 }

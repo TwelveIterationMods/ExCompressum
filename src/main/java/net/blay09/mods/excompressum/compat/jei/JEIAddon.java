@@ -15,8 +15,9 @@ import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEnt
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
+import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
@@ -53,7 +54,7 @@ public class JEIAddon implements IModPlugin {
         registry.addRecipes(heavySieveRecipes, HeavySieveRecipeCategory.UID);
 
         List<CompressedHammerRecipe> compressedHammerRecipes = new ArrayList<>();
-        for (CompressedHammerRegistryEntry entry : CompressedHammerRegistry.INSTANCE.getEntries().values()) {
+        for (CompressedHammerable entry : ExRegistries.getCompressedHammerRegistry().getEntries()) {
             compressedHammerRecipes.add(new CompressedHammerRecipe(entry));
         }
         registry.addRecipes(compressedHammerRecipes, CompressedHammerRecipeCategory.UID);

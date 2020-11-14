@@ -8,8 +8,6 @@ import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
 import net.minecraft.block.BlockState;
@@ -23,7 +21,7 @@ public class InternalMethodsImpl implements InternalMethods {
 	public void registerCompressedHammerEntry(BlockState state, List<CompressedHammerReward> rewards) {
 		CompressedHammerRegistryEntry entry = new CompressedHammerRegistryEntry(state);
 		entry.addRewards(rewards);
-		CompressedHammerRegistry.INSTANCE.add(entry);
+		// TODO noop
 	}
 
 	@Override

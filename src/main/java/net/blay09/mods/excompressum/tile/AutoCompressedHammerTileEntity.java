@@ -3,16 +3,21 @@ package net.blay09.mods.excompressum.tile;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
+import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 
 public class AutoCompressedHammerTileEntity extends AutoHammerTileEntity {
@@ -33,12 +38,17 @@ public class AutoCompressedHammerTileEntity extends AutoHammerTileEntity {
 
     @Override
     public boolean isRegistered(ItemStack itemStack) {
-        return CompressedHammerRegistry.isHammerable(itemStack);
+        return ExRegistries.getCompressedHammerRegistry().isHammerable(itemStack);
     }
 
     @Override
     public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
-        return CompressedHammerRegistry.rollHammerRewards(itemStack, luck, rand);
+        CompressedHammerable hammerable = ExRegistries.getCompressedHammerRegistry().getHammerable(itemStack);
+        if (hammerable != null && hammerable.getLootTable() != null) {
+            LootContext lootContext = CompressedHammerRegistry.buildLootContext(((ServerWorld) world), itemStack, luck, rand);
+            return CompressedHammerRegistry.rollHammerRewards(hammerable, lootContext);
+        }
+        return Collections.emptyList();
     }
 
     @Override

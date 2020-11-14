@@ -152,9 +152,6 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
                 }
             } else {
                 extractEnergy(effectiveEnergy, false);
-                if (getEffectiveSpeed() < 0f) {
-                    System.out.println("WUT");
-                }
                 progress += getEffectiveSpeed();
 
                 particleTicks = PARTICLE_TICKS;

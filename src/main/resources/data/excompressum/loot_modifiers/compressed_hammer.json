@@ -1,0 +1,11 @@
+{
+  "conditions": [
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "item": "excompressum:compressed_hammer_diamond"
+      }
+    }
+  ],
+  "type": "excompressum:compressed_hammer"
+}

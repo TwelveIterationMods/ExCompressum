@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.item;
 
+import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ExRegistro;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,12 +22,12 @@ public class CompressedHammerItem extends ToolItem implements ICompressedHammer 
 
     @Override
     public boolean canHarvestBlock(ItemStack stack, BlockState state) {
-        return CompressedHammerRegistry.isHammerable(state) || ExRegistro.isHammerable(state);
+        return ExRegistries.getCompressedHammerRegistry().isHammerable(state) || ExRegistro.isHammerable(state);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if ((CompressedHammerRegistry.isHammerable(state) || ExRegistro.isHammerable(state)) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
+        if ((ExRegistries.getCompressedHammerRegistry().isHammerable(state) || ExRegistro.isHammerable(state)) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
             return efficiency * 0.75f;
         }
         return 0.8f;
