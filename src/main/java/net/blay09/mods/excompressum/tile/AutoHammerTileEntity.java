@@ -33,6 +33,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
+import org.lwjgl.opengl.EXTCompiledVertexArray;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -97,6 +98,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     private boolean isDirty;
     private float progress;
 
+    private ItemStack finishedStack = ItemStack.EMPTY;
     private BlockState cachedState;
     public float hammerAngle;
 
@@ -164,12 +166,8 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
                                     world.addEntity(entityItem);
                                 }
                             }
-                        } else {
-                            final BlockState currentBlock = getCurrentBlock();
-                            if (!isUgly() && currentBlock != null) {
-                                ExCompressum.proxy.spawnCrushParticles(world, pos, currentBlock);
-                            }
                         }
+                        finishedStack = currentStack;
                         progress = 0f;
                         currentStack = ItemStack.EMPTY;
                     }
@@ -181,10 +179,19 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
             if (ticksSinceUpdate > UPDATE_INTERVAL) {
                 if (isDirty) {
                     VanillaPacketHandler.sendTileEntityUpdate(this);
+                    finishedStack = ItemStack.EMPTY;
                     isDirty = false;
                 }
                 ticksSinceUpdate = 0;
             }
+        }
+
+        if (world.isRemote && !finishedStack.isEmpty()) {
+            BlockState state = StupidUtils.getStateFromItemStack(finishedStack);
+            if (state != null) {
+                ExCompressum.proxy.spawnCrushParticles(world, pos, state);
+            }
+            finishedStack = ItemStack.EMPTY;
         }
     }
 
@@ -277,6 +284,9 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
         }
 
         isDisabledByRedstone = tagCompound.getBoolean("IsDisabledByRedstone");
+        if (tagCompound.contains("FinishedStack")) {
+            finishedStack = ItemStack.read(tagCompound.getCompound("FinishedStack"));
+        }
     }
 
     @Override
@@ -298,6 +308,10 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
         }
 
         tagCompound.putBoolean("IsDisabledByRedstone", isDisabledByRedstone);
+
+        if (!finishedStack.isEmpty()) {
+            tagCompound.put("FinishedStack", finishedStack.write(new CompoundNBT()));
+        }
     }
 
     public boolean isProcessing() {

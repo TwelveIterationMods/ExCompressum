@@ -98,10 +98,11 @@ public class ClientProxy extends CommonProxy {
         for (int i = 0; i < actualParticleCount; i++) {
             double spread = 0.8 * scale;
             double min = 0.4 * scale;
-            double particleX = particleOffset.getX() + world.rand.nextFloat() * spread - min;
+            float particleScale = 0.25f * scale;
+            double particleX = 0.5f + particleOffset.getX() + world.rand.nextFloat() * spread - min;
             double particleY = particleOffset.getY();
-            double particleZ = particleOffset.getZ() + world.rand.nextFloat() * spread - min;
-            Minecraft.getInstance().particles.addEffect(new SievingParticle((ClientWorld) world, pos, particleX, particleY, particleZ, scale, particleState));
+            double particleZ = 0.5f + particleOffset.getZ() + world.rand.nextFloat() * spread - min;
+            Minecraft.getInstance().particles.addEffect(new SievingParticle((ClientWorld) world, pos, particleX, particleY, particleZ, particleScale, particleState));
         }
     }
 }
