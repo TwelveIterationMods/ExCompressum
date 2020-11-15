@@ -12,6 +12,7 @@ public class ExCompressumConfig {
         public final ForgeConfigSpec.BooleanValue enableWoodChippings;
         public final ForgeConfigSpec.BooleanValue disableCreatioWoodenCrucible;
         public final ForgeConfigSpec.BooleanValue flattenSieveRecipes;
+        public final ForgeConfigSpec.IntValue heavySieveDefaultRolls;
 
         public final ForgeConfigSpec.DoubleValue wolfBaitChance;
         public final ForgeConfigSpec.DoubleValue ocelotBaitChance;
@@ -79,6 +80,11 @@ public class ExCompressumConfig {
                     .comment("If enabled, all meshes can obtain the results from the lower tier meshes. Note if the same item is registered in multiple tiers, then the higher tier will have a chance to drop multiples.")
                     .translation("excompressum.config.flattenSieveRecipes")
                     .define("flattenSieveRecipes", false);
+
+			heavySieveDefaultRolls = builder
+					.comment("The amount of times the heavy sieve should roll for compressed entries. For example, a value of 7 means for every compressed gravel you only get the equivalent drops of 7 sifted gravel blocks (2 loss). A value of 9 would therefore mean no loss.")
+					.translation("excompressum.config.heavySieveDefaultRolls")
+					.defineInRange("heavySieveDefaultRolls", 7, 1, Integer.MAX_VALUE);
 
             builder.pop();
 

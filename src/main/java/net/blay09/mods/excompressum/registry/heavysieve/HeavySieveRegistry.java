@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.registry.heavysieve;
 
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
@@ -67,7 +68,8 @@ public class HeavySieveRegistry extends GroupedRegistry<
         if (generatedEntry == null) {
             GeneratedHeavySiftable generatedHeavySiftable = generatedEntries.get(registryName);
             if (generatedHeavySiftable != null) {
-                LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(generatedHeavySiftable.getSource(), generatedHeavySiftable.getTimes());
+                int times = generatedHeavySiftable.getTimes() != null ? generatedHeavySiftable.getTimes() : ExCompressumConfig.COMMON.heavySieveDefaultRolls.get();
+                LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(generatedHeavySiftable.getSource(), times);
                 HeavySiftable generatedSiftable = new HeavySiftable();
                 generatedSiftable.setSource(registryName);
                 generatedSiftable.setLootTable(new LootTableProvider(lootTable));
