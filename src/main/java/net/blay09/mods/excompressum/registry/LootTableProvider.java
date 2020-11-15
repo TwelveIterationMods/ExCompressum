@@ -27,9 +27,13 @@ public class LootTableProvider {
         this.lootTableLocation = lootTableLocation;
     }
 
+    public LootTableProvider(LootTable inlineLootTable) {
+        this.inlineLootTable = inlineLootTable;
+    }
+
     @Nullable
     public LootTable getLootTable(String name, LootContext context) {
-        if (inlineLootTableJson != null) {
+        if (inlineLootTableJson != null || inlineLootTable != null) {
             if (inlineLootTable == null) {
                 inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, new ResourceLocation(ExCompressum.MOD_ID, name + "_embed"), inlineLootTableJson, true, context.getWorld().getServer().getLootTableManager());
             }

@@ -5,7 +5,9 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootTable;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
@@ -63,7 +65,7 @@ public interface ExNihiloProvider {
 
     List<ItemStack> rollCrookRewards(ServerWorld world, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, Random rand);
 
-    Collection<HeavySieveReward> generateHeavySieveRewards(ItemStack sourceStack, int count);
+    LootTable generateHeavySieveLootTable(ResourceLocation source, int count);
 
     boolean doMeshesHaveDurability();
 

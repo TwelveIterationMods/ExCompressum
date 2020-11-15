@@ -68,10 +68,6 @@ public abstract class ExNihilo {
 		return instance.rollCrookRewards(world, pos, state, player, tool, rand);
 	}
 
-	public static Collection<HeavySieveReward> generateHeavySieveRewards(ItemStack sourceStack, int count) {
-		return instance.generateHeavySieveRewards(sourceStack, count);
-	}
-
 	public static boolean doMeshesHaveDurability() {
 		return instance.doMeshesHaveDurability();
 	}

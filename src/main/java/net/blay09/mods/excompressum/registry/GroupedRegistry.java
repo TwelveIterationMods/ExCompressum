@@ -30,7 +30,7 @@ public abstract class GroupedRegistry<
     }
 
     @Override
-    protected void load(TData data) {
+    protected final void load(TData data) {
         if (data.getModId() != null && !data.getModId().equals("minecraft") && !ModList.get().isLoaded(data.getModId())) {
             return;
         }
@@ -67,6 +67,11 @@ public abstract class GroupedRegistry<
                 }
             }
         }
+
+        loadRegistry(data);
+    }
+
+    protected void loadRegistry(TData data) {
     }
 
     protected abstract void loadEntry(TEntry entry, @Nullable TGroupOverride groupOverride, @Nullable TEntryOverride entryOverride);

@@ -53,6 +53,7 @@ public class WoodenCrucibleRegistry extends GroupedRegistry<
     protected void reset() {
         super.reset();
         entries.clear();
+        tagEntries.clear();
     }
 
     @Override

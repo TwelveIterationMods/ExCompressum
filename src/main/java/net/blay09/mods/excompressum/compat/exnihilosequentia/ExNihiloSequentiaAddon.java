@@ -13,6 +13,7 @@ import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.block.Block;
@@ -20,9 +21,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.RandomChance;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
@@ -32,8 +38,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public
-class ExNihiloSequentiaAddon implements ExNihiloProvider {
+public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
     private final EnumMap<NihiloItems, ItemStack> itemMap = Maps.newEnumMap(NihiloItems.class);
 
@@ -211,24 +216,28 @@ class ExNihiloSequentiaAddon implements ExNihiloProvider {
         return EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
     }
 
-    public Collection<HeavySieveReward> generateHeavySieveRewards(ItemStack sourceStack, int count) {
-        // TODO revisit, this is utterly broken right now:
-        List<HeavySieveReward> rewards = new ArrayList<>();
+    @Override
+    public LootTable generateHeavySieveLootTable(ResourceLocation source, int times) {
+        LootTable.Builder tableBuilder = LootTable.builder();
         for (EnumMesh mesh : EnumMesh.values()) {
-            List<SieveDropEntry> entries = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(sourceStack.getItem().getRegistryName(), mesh, false);
-            if (entries != null) {
-                for (SieveDropEntry entry : entries) {
-                    for (int i = 0; i < count; i++) {
-                        ItemStack itemStack = createItemStack(entry.getResult());
-                        if (!itemStack.isEmpty()) {
-                            rewards.add(new HeavySieveReward(itemStack, entry.getRarity(), mesh.getId())); // TODO id == meshlevel ???
-                        }
-                    }
+            LootPool.Builder poolBuilder = LootPool.builder();
+            poolBuilder.rolls(ConstantRange.of(times));
+            if (!ExCompressumConfig.COMMON.flattenSieveRecipes.get()) {
+                // TODO sieve mesh poolBuilder.acceptCondition();
+            }
+
+            List<SieveDropEntry> drops = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(source, mesh, false);// TODO support waterlogged
+            for (SieveDropEntry drop : drops) {
+                Item item = ForgeRegistries.ITEMS.getValue(drop.getResult());
+                if (item != null) {
+                    StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(item);
+                    entryBuilder.acceptCondition(RandomChance.builder(drop.getRarity()));
+                    poolBuilder.addEntry(entryBuilder);
                 }
             }
+            tableBuilder.addLootPool(poolBuilder);
         }
-
-        return rewards;
+        return tableBuilder.build();
     }
 
     @Override
