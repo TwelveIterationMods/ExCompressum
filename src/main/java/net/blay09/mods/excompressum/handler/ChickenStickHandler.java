@@ -58,28 +58,14 @@ public class ChickenStickHandler {
         }
     }
 
-	/* TODO global loot modifiers @SubscribeEvent
+	/* TODO chicken stick needs to play chicken sounds / spawn chickens
 	public static void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
-		if (event.getHarvester() != null) {
-			ItemStack heldItem = event.getHarvester().getHeldItemMainhand();
-			if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemChickenStick && ChickenStickRegistry.isHammerable(event.getState())) {
-				final int fortune = 0;
-				List<ItemStack> rewards = Lists.newArrayList(CompressedHammerRegistry.rollHammerRewards(event.getState(), fortune, event.getWorld().rand));
-				rewards.addAll(ExRegistro.rollHammerRewards(event.getState(), 0, fortune, event.getWorld().rand));
-				if (!rewards.isEmpty()) {
-					event.setDropChance(1f);
-					event.getDrops().clear();
-					event.getDrops().addAll(rewards);
-
 					((ItemChickenStick) heldItem.getItem()).playChickenSound(event.getWorld(), event.getPos());
 					if (event.getWorld().rand.nextFloat() <= ModConfig.tools.chickenStickSpawnChance) {
 						EntityChicken entityChicken = new EntityChicken(event.getWorld());
 						entityChicken.setPosition(event.getPos().getX() + 0.5, event.getPos().getY() + 0.5, event.getPos().getZ() + 0.5);
 						event.getWorld().spawnEntity(entityChicken);
 					}
-				}
-			}
-		}
 	}*/
 
 }
