@@ -10,14 +10,13 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveRegistryEntry;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySiftable;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleMeltable;
 import net.minecraft.block.Block;
@@ -37,16 +36,16 @@ public class JEIAddon implements IModPlugin {
     public void registerRecipes(IRecipeRegistration registry) {
         List<HeavySieveRecipe> heavySieveRecipes = new ArrayList<>();
         if (ExNihilo.doMeshesSplitLootTables()) {
-            Collection<HeavySieveRegistryEntry> entries = HeavySieveRegistry.INSTANCE.getEntries().values();
+            Collection<HeavySiftable> entries = ExRegistries.getHeavySieveRegistry().getEntries();
             for (SieveMeshRegistryEntry sieveMesh : SieveMeshRegistry.getEntries().values()) {
-                for (HeavySieveRegistryEntry entry : entries) {
-                    if (!entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.COMMON.flattenSieveRecipes.get()).isEmpty()) {
+                for (HeavySiftable entry : entries) {
+                    /*if (!entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.COMMON.flattenSieveRecipes.get()).isEmpty()) {
                         heavySieveRecipes.add(new HeavySieveRecipe(entry, sieveMesh));
-                    }
+                    }*/
                 }
             }
         } else {
-            for (HeavySieveRegistryEntry entry : HeavySieveRegistry.INSTANCE.getEntries().values()) {
+            for (HeavySiftable entry : ExRegistries.getHeavySieveRegistry().getEntries()) {
                 heavySieveRecipes.add(new HeavySieveRecipe(entry));
             }
         }

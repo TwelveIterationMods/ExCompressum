@@ -5,13 +5,16 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihilo;
+import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySiftable;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -19,6 +22,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nullable;
@@ -49,7 +53,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     public boolean addSiftable(PlayerEntity player, ItemStack itemStack) {
-        if (!currentStack.isEmpty() || meshStack.isEmpty() || !HeavySieveRegistry.isSiftable(itemStack)) {
+        if (!currentStack.isEmpty() || meshStack.isEmpty() || !ExRegistries.getHeavySieveRegistry().isSiftable(itemStack)) {
             return false;
         }
         currentStack = player.abilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(itemStack, 1) : itemStack.split(1);
@@ -108,11 +112,15 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
                 if (!world.isRemote) {
                     SieveMeshRegistryEntry sieveMesh = getSieveMesh();
                     if (sieveMesh != null) {
-                        int fortune = ExNihilo.getMeshFortune(meshStack);
-                        fortune += player.getLuck();
-                        Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(currentStack, sieveMesh, fortune, world.rand);
-                        for (ItemStack itemStack : rewards) {
-                            world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
+                        HeavySiftable siftable = ExRegistries.getHeavySieveRegistry().getSiftable(currentStack);
+                        if(siftable != null) {
+                            int fortune = ExNihilo.getMeshFortune(meshStack);
+                            fortune += player.getLuck();
+                            LootContext lootContext = HeavySieveRegistry.buildLootContext(((ServerWorld) world), currentStack, fortune, world.rand);
+                            Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(siftable, lootContext);
+                            for (ItemStack itemStack : rewards) {
+                                world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
+                            }
                         }
                     } else {
                         world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, currentStack));
