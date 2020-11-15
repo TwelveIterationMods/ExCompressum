@@ -19,7 +19,7 @@ import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
-import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
+import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleMeltable;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -58,11 +58,12 @@ public class JEIAddon implements IModPlugin {
         }
         registry.addRecipes(compressedHammerRecipes, CompressedHammerRecipeCategory.UID);
 
-        ArrayListMultimap<ResourceLocation, WoodenCrucibleRegistryEntry> fluidOutputMap = ArrayListMultimap.create();
-        for (WoodenCrucibleRegistryEntry entry : WoodenCrucibleRegistry.INSTANCE.getEntries().values()) {
-            if (!entry.getItemStack().isEmpty()) {
-                fluidOutputMap.put(entry.getFluid().getRegistryName(), entry);
-            }
+        ArrayListMultimap<ResourceLocation, WoodenCrucibleMeltable> fluidOutputMap = ArrayListMultimap.create();
+        for (WoodenCrucibleMeltable entry : ExRegistries.getWoodenCrucibleRegistry().getEntries()) {
+            fluidOutputMap.put(entry.getFluid(), entry);
+        }
+        for (WoodenCrucibleMeltable entry : ExRegistries.getWoodenCrucibleRegistry().getTagEntries()) {
+            fluidOutputMap.put(entry.getFluid(), entry);
         }
 
         List<WoodenCrucibleRecipe> woodenCrucibleRecipes = new ArrayList<>();
@@ -72,11 +73,11 @@ public class JEIAddon implements IModPlugin {
                 continue;
             }
 
-            List<WoodenCrucibleRegistryEntry> entries = fluidOutputMap.get(fluidName);
+            List<WoodenCrucibleMeltable> entries = fluidOutputMap.get(fluidName);
 
             final int pageSize = 45;
-            List<List<WoodenCrucibleRegistryEntry>> pages = Lists.partition(entries, pageSize);
-            for (List<WoodenCrucibleRegistryEntry> page : pages) {
+            List<List<WoodenCrucibleMeltable>> pages = Lists.partition(entries, pageSize);
+            for (List<WoodenCrucibleMeltable> page : pages) {
                 woodenCrucibleRecipes.add(new WoodenCrucibleRecipe(fluid, page));
             }
         }

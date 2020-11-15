@@ -4,6 +4,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
+import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,12 +15,14 @@ public class ExRegistries {
     private static CompressedRecipeRegistry compressedRecipeRegistry;
     private static ChickenStickRegistry chickenStickRegistry;
     private static CompressedHammerRegistry compressedHammerRegistry;
+    private static WoodenCrucibleRegistry woodenCrucibleRegistry;
 
     @SubscribeEvent
     public static void addReloadListeners(AddReloadListenerEvent event) {
         event.addListener(compressedRecipeRegistry = new CompressedRecipeRegistry(event.getDataPackRegistries()));
         event.addListener(chickenStickRegistry = new ChickenStickRegistry());
         event.addListener(compressedHammerRegistry = new CompressedHammerRegistry());
+        event.addListener(woodenCrucibleRegistry = new WoodenCrucibleRegistry());
     }
 
     public static CompressedRecipeRegistry getCompressedRecipeRegistry() {
@@ -32,5 +35,9 @@ public class ExRegistries {
 
     public static CompressedHammerRegistry getCompressedHammerRegistry() {
         return compressedHammerRegistry;
+    }
+
+    public static WoodenCrucibleRegistry getWoodenCrucibleRegistry() {
+        return woodenCrucibleRegistry;
     }
 }

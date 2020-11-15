@@ -116,13 +116,13 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
             slotNumber++;
         }
 
-        recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+        /* TODO recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (input) {
                 WoodenCrucibleRegistryEntry entry = recipe.getEntryAt(slotIndex - INPUT_SLOTS);
                 // TODO tooltip.add(recipe.getFluid().getLocalizedName(ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0)));
                 tooltip.add(new StringTextComponent(" * " + entry.getAmount() + " mB"));
             }
-        });
+        }); */
     }
 
     @Override

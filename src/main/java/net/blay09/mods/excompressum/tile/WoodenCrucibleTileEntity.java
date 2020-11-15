@@ -1,13 +1,14 @@
 package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihilo;
-import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
+import net.blay09.mods.excompressum.registry.ExRegistries;
+import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleMeltable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -16,6 +17,7 @@ import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -25,8 +27,10 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTileEntity {
 
@@ -35,7 +39,7 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTil
     private static final int RAIN_FILL_SPEED = 8;
     private static final int SYNC_INTERVAL = 10;
 
-    private ItemStackHandler itemHandler = new ItemStackHandler(1) {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
             ItemStack copy = stack.copy();
@@ -46,7 +50,7 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTil
         }
     };
 
-    private FluidTank fluidTank = new FluidTank(1999, it -> itemHandler.getStackInSlot(0).isEmpty() && it.getFluid().getAttributes().getTemperature(it) <= 300) {
+    private final FluidTank fluidTank = new FluidTank(1999, it -> itemHandler.getStackInSlot(0).isEmpty() && it.getFluid().getAttributes().getTemperature(it) <= 300) {
 
         @Override
         public int fill(FluidStack resource, FluidAction action) {
@@ -76,7 +80,7 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTil
     private boolean isDirty;
     private int ticksSinceRain;
     private int ticksSinceMelt;
-    private WoodenCrucibleRegistryEntry currentMeltable;
+    private Fluid currentTargetFluid;
     private int solidVolume;
 
     public WoodenCrucibleTileEntity() {
@@ -89,21 +93,21 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTil
             itemStack.shrink(1);
             if (!simulate) {
                 itemHandler.setStackInSlot(0, new ItemStack(Blocks.CLAY));
-                fluidTank.setFluid(null);
+                fluidTank.setFluid(FluidStack.EMPTY);
                 VanillaPacketHandler.sendTileEntityUpdate(this);
             }
             return true;
         }
 
         // Otherwise, try to add it as a meltable
-        WoodenCrucibleRegistryEntry meltable = WoodenCrucibleRegistry.getEntry(itemStack);
+        WoodenCrucibleMeltable meltable = ExRegistries.getWoodenCrucibleRegistry().getMeltable(itemStack);
         if (meltable != null) {
-            if (fluidTank.getFluid() == null || fluidTank.getFluidAmount() == 0 || fluidTank.getFluid().getFluid() == meltable.getFluid()) {
+            if (fluidTank.getFluid().isEmpty() || fluidTank.getFluidAmount() == 0 || meltable.matchesFluid(fluidTank.getFluid())) {
                 int capacityLeft = fluidTank.getCapacity() - fluidTank.getFluidAmount() - solidVolume;
                 if ((isAutomated && capacityLeft >= meltable.getAmount()) || (!isAutomated && capacityLeft > 0)) {
                     itemStack.shrink(1);
                     if (!simulate) {
-                        currentMeltable = meltable;
+                        currentTargetFluid = meltable.getFluidStack().getFluid();
                         solidVolume += Math.min(capacityLeft, meltable.getAmount());
                         VanillaPacketHandler.sendTileEntityUpdate(this);
                     }
@@ -127,11 +131,11 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTil
             }
 
             // Melt down content
-            if (currentMeltable != null) {
+            if (currentTargetFluid != null) {
                 ticksSinceMelt++;
                 if (ticksSinceMelt >= MELT_INTERVAL && fluidTank.getFluidAmount() < fluidTank.getCapacity()) {
                     int amount = Math.min(ExCompressumConfig.COMMON.woodenCrucibleSpeed.get(), solidVolume);
-                    fluidTank.fill(new FluidStack(currentMeltable.getFluid(), amount), IFluidHandler.FluidAction.EXECUTE);
+                    fluidTank.fill(new FluidStack(currentTargetFluid, amount), IFluidHandler.FluidAction.EXECUTE);
                     solidVolume = Math.max(0, solidVolume - amount);
                     ticksSinceMelt = 0;
                     isDirty = true;
@@ -156,16 +160,16 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTil
         solidVolume = tagCompound.getInt("SolidVolume");
         fluidTank.readFromNBT(tagCompound.getCompound("FluidTank"));
         itemHandler.deserializeNBT(tagCompound.getCompound("ItemHandler"));
-        if (tagCompound.contains("Content")) {
-            currentMeltable = WoodenCrucibleRegistry.getEntry(ItemStack.read(tagCompound.getCompound("Content")));
+        if (tagCompound.contains("TargetFluid")) {
+            currentTargetFluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(tagCompound.getString("TargetFluid")));
         }
     }
 
     @Override
     public CompoundNBT write(CompoundNBT tagCompound) {
         super.write(tagCompound);
-        if (currentMeltable != null) {
-            tagCompound.put("Content", currentMeltable.getItemStack().write(new CompoundNBT()));
+        if (currentTargetFluid != null) {
+            tagCompound.putString("TargetFluid", Objects.toString(currentTargetFluid.getRegistryName()));
         }
         tagCompound.putInt("SolidVolume", solidVolume);
         tagCompound.put("FluidTank", fluidTank.writeToNBT(new CompoundNBT()));

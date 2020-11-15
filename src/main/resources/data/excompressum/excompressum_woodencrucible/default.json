@@ -1,0 +1,34 @@
+{
+  "modid": "minecraft",
+  "group": {
+    "id": "excompressum:default",
+    "enabledByDefault": true
+  },
+  "customEntries": [
+    {
+      "source": "minecraft:apple",
+      "fluid": "minecraft:water",
+      "amount": 100
+    },
+    {
+      "source": "#minecraft:saplings",
+      "fluid": "minecraft:water",
+      "amount": 100
+    },
+    {
+      "source": "#minecraft:leaves",
+      "fluid": "minecraft:water",
+      "amount": 250
+    },
+    {
+      "source": "minecraft:cactus",
+      "fluid": "minecraft:water",
+      "amount": 250
+    },
+    {
+      "source": "#minecraft:flowers",
+      "fluid": "minecraft:water",
+      "amount": 100
+    }
+  ]
+}

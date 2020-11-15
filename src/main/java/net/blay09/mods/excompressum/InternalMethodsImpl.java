@@ -9,7 +9,6 @@ import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
-import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
@@ -33,7 +32,7 @@ public class InternalMethodsImpl implements InternalMethods {
 
 	@Override
 	public void registerWoodenCrucibleEntry(ItemStack itemStack, Fluid fluid, int amount) {
-		WoodenCrucibleRegistry.INSTANCE.add(new WoodenCrucibleRegistryEntry(itemStack, fluid, amount));
+		// TODO WoodenCrucibleRegistry.INSTANCE.add(new WoodenCrucibleRegistryEntry(itemStack, fluid, amount));
 	}
 	@Override
 	public ExNihiloProvider getExNihilo() {
