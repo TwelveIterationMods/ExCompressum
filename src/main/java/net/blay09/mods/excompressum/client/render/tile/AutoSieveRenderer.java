@@ -9,7 +9,6 @@ import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.client.ModModels;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.client.render.model.TinyHumanModel;
-import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
@@ -33,7 +32,8 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
 
     private static final Random random = new Random();
 
-    private final TinyHumanModel biped = new TinyHumanModel();
+    private final TinyHumanModel tinyHumanModel = new TinyHumanModel(false);
+    private final TinyHumanModel tinyHumanModelSlim = new TinyHumanModel(true);
     private final boolean isHeavy;
     private IBakedModel sieveModel;
 
@@ -65,8 +65,10 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
         matrixStack.rotate(new Quaternion(180, 0, 0, true));
         matrixStack.translate(0, -1.2f, 0.25f);
         matrixStack.scale(0.75f, 0.75f, 0.75f);
-        biped.animate(tileEntity, partialTicks);
-        biped.render(matrixStack, buffer.getBuffer(RenderType.getEntitySolid(getPlayerSkinTexture(tileEntity.getCustomSkin()))), combinedLightIn, combinedOverlayIn, 1f, 1f, 1f, 1f);
+        MinecraftProfileTexture skin = getPlayerSkin(tileEntity.getCustomSkin());
+        TinyHumanModel playerModel = getPlayerModel(skin);
+        playerModel.animate(tileEntity, partialTicks);
+        playerModel.render(matrixStack, buffer.getBuffer(RenderType.getEntitySolid(getPlayerSkinTexture(skin))), combinedLightIn, combinedOverlayIn, 1f, 1f, 1f, 1f);
         matrixStack.pop();
 
         // Sieve & Content
@@ -106,16 +108,35 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
         matrixStack.pop();
     }
 
-    private ResourceLocation getPlayerSkinTexture(@Nullable GameProfile customSkin) {
-        ResourceLocation resourceLocation = DefaultPlayerSkin.getDefaultSkinLegacy();
-        final Minecraft mc = Minecraft.getInstance();
+    @Nullable
+    private MinecraftProfileTexture getPlayerSkin(@Nullable GameProfile customSkin) {
         if (customSkin != null) {
+            final Minecraft mc = Minecraft.getInstance();
             Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = mc.getSkinManager().loadSkinFromCache(customSkin);
-            if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
-                resourceLocation = mc.getSkinManager().loadSkin(map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+            return map.get(MinecraftProfileTexture.Type.SKIN);
+        } else {
+            return null;
+        }
+    }
+
+    private TinyHumanModel getPlayerModel(@Nullable MinecraftProfileTexture customSkin) {
+        if (customSkin != null) {
+            String model = customSkin.getMetadata("model");
+            if ("slim".equals(model)) {
+                return tinyHumanModelSlim;
             }
         }
-        return resourceLocation;
+
+        return tinyHumanModel;
+    }
+
+    private ResourceLocation getPlayerSkinTexture(@Nullable MinecraftProfileTexture customSkin) {
+        if (customSkin != null) {
+            final Minecraft mc = Minecraft.getInstance();
+            return mc.getSkinManager().loadSkin(customSkin, MinecraftProfileTexture.Type.SKIN);
+        } else {
+            return DefaultPlayerSkin.getDefaultSkinLegacy();
+        }
     }
 
     public static AutoSieveRenderer normal(TileEntityRendererDispatcher dispatcher) {

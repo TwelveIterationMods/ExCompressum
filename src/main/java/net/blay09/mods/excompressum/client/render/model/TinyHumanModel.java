@@ -8,8 +8,8 @@ import net.minecraft.entity.LivingEntity;
 
 public class TinyHumanModel extends PlayerModel<LivingEntity> {
 
-    public TinyHumanModel() {
-        super(0f, false);
+    public TinyHumanModel(boolean smallArms) {
+        super(0f, smallArms);
         isChild = true;
     }
 
