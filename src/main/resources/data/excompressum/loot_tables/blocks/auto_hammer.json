@@ -7,6 +7,19 @@
         {
           "type": "minecraft:item",
           "name": "excompressum:auto_hammer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "excompressum:ugly_steel_plating",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "excompressum:auto_hammer",
+              "properties": {
+                "ugly": "true"
+              }
+            }
+          ]
         }
       ],
       "conditions": [

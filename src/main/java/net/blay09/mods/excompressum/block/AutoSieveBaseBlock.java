@@ -121,9 +121,6 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
                 world.addEntity(entityItem);
             }
         }
-        if (state.get(UGLY)) {
-            world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.uglySteelPlating)));
-        }
 
         super.onReplaced(state, world, pos, newState, isMoving);
     }

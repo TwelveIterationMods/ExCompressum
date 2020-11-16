@@ -96,9 +96,6 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
                 world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), currentStack));
             }
         }
-        if (state.get(UGLY)) {
-            world.addEntity(new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ModItems.uglySteelPlating)));
-        }
 
         super.onReplaced(state, world, pos, newState, isMoving);
     }

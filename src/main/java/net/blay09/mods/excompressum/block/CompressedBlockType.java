@@ -16,7 +16,10 @@ public enum CompressedBlockType implements IStringSerializable {
     ENDER_GRAVEL,
     SOUL_SAND,
     NETHERRACK,
-    END_STONE;
+    END_STONE,
+    DIORITE,
+    ANDESITE,
+    GRANITE;
 
     public static final CompressedBlockType[] values = values();
 
