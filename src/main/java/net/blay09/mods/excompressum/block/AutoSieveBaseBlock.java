@@ -2,7 +2,8 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.registry.AutoSieveSkinRegistry;
+import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
+import net.blay09.mods.excompressum.registry.autosieveskin.WhitelistEntry;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.block.*;
@@ -149,7 +150,10 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
                 }
             }
             if (!world.isRemote && useRandomSkin) {
-                tileEntity.setCustomSkin(new GameProfile(null, AutoSieveSkinRegistry.getRandomSkin()));
+                WhitelistEntry randomSkin = AutoSieveSkinRegistry.getRandomSkin();
+                if (randomSkin != null) {
+                    tileEntity.setCustomSkin(new GameProfile(randomSkin.getUuid(), randomSkin.getName()));
+                }
             }
         }
     }
@@ -182,14 +186,21 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
             }
         } else {
             if (currentRandomName == null) {
-                currentRandomName = AutoSieveSkinRegistry.getRandomSkin();
+                updateRandomSkinName();
             }
+
             tooltip.add(Messages.styledLang("tooltip." + getRegistryName().getPath(), TextFormatting.GRAY, currentRandomName));
         }
+
         if (lastHoverStack != stack) {
-            currentRandomName = AutoSieveSkinRegistry.getRandomSkin();
+            updateRandomSkinName();
             lastHoverStack = stack;
         }
+    }
+
+    private void updateRandomSkinName() {
+        WhitelistEntry randomSkin = AutoSieveSkinRegistry.getRandomSkin();
+        currentRandomName = randomSkin != null ? randomSkin.getName() : "Steve";
     }
 
     @Override

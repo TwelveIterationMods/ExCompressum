@@ -332,7 +332,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         return currentStack;
     }
 
-    public void setCustomSkin(GameProfile customSkin) {
+    public void setCustomSkin(@Nullable GameProfile customSkin) {
         this.customSkin = customSkin;
         grabProfile();
         isDirty = true;

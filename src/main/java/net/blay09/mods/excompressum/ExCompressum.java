@@ -9,6 +9,7 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.loot.ModLoot;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.NihilisticNihiloProvider;
+import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -41,6 +42,8 @@ public class ExCompressum {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
 
         MinecraftForge.EVENT_BUS.register(proxy);
+
+        AutoSieveSkinRegistry.load();
     }
 
     private void setupCommon(FMLCommonSetupEvent event) {
