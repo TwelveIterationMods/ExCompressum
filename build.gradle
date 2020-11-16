@@ -114,7 +114,7 @@ dependencies {
     compileOnly "inventory-tweaks:InventoryTweaks:1.64+dev.146"
     compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.0.22:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.0.22")
-    compile fg.deobf("curse.maven:exnihilosequentia:3067634")
+    compile fg.deobf("curse.maven:exnihilosequentia:3113345")
 
     /*deobfCompile "shadowfacts-forgelin:Forgelin:1.8.2"
     deobfCompile "ex-nihilo-creatio:exnihilocreatio:1.12.2:0.4.1.2"

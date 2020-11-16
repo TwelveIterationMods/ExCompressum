@@ -41,7 +41,7 @@ public class CompressedCrookLootModifier extends LootModifier {
         }
         BlockPos pos = new BlockPos(origin);
 
-        return ExNihilo.rollCrookRewards(world, pos, state, entity, tool, context.getRandom());
+        return ExNihilo.getInstance().rollCrookRewards(world, pos, state, entity, tool, context.getRandom());
     }
 
     public static class Serializer extends GlobalLootModifierSerializer<CompressedCrookLootModifier> {

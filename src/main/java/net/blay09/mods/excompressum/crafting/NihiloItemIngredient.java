@@ -24,7 +24,7 @@ public class NihiloItemIngredient extends Ingredient {
 
     private static Stream<? extends IItemList> getItemLists(String key, int count) {
         ExNihiloProvider.NihiloItems nihiloItem = ExNihiloProvider.NihiloItems.valueOf(key);
-        ItemStack itemStack = ExNihilo.getNihiloItem(nihiloItem);
+        ItemStack itemStack = ExNihilo.getInstance().getNihiloItem(nihiloItem);
         if (itemStack.isEmpty()) {
             return Stream.empty();
         }

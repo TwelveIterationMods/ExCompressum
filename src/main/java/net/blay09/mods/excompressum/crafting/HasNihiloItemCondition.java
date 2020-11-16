@@ -26,7 +26,7 @@ public class HasNihiloItemCondition implements ICondition {
     @Override
     public boolean test() {
         ExNihiloProvider.NihiloItems nihiloItem = ExNihiloProvider.NihiloItems.valueOf(key);
-        return !ExNihilo.getNihiloItem(nihiloItem).isEmpty();
+        return !ExNihilo.getInstance().getNihiloItem(nihiloItem).isEmpty();
     }
 
     public static class Serializer implements IConditionSerializer<HasNihiloItemCondition> {

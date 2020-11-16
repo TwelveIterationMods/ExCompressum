@@ -47,7 +47,7 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
             if (isCompressed) {
                 hammerItemStack = new ItemStack(ModItems.compressedHammerDiamond);
             } else {
-                hammerItemStack = ExNihilo.getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
+                hammerItemStack = ExNihilo.getInstance().getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
                 if (hammerItemStack.isEmpty()) {
                     hammerItemStack = new ItemStack(Items.COD); // This should never happen
                 }

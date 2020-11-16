@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -58,7 +59,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public LootTable generateHeavySieveLootTable(ResourceLocation source, int count) {
+	public LootTable generateHeavySieveLootTable(IItemProvider source, int count) {
 		return LootTable.EMPTY_LOOT_TABLE;
 	}
 

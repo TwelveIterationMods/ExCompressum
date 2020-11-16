@@ -101,7 +101,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
             } else {
                 clicksSinceSecond++;
                 if (clicksSinceSecond <= ExCompressumConfig.COMMON.heavySieveClicksPerSecond.get()) {
-                    int efficiency = ExNihilo.getMeshEfficiency(meshStack);
+                    int efficiency = ExNihilo.getInstance().getMeshEfficiency(meshStack);
                     progress = Math.min(1f, progress + PROCESSING_INTERVAL * (1f + efficiency * EFFICIENCY_BOOST));
                 }
             }
@@ -114,7 +114,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
                     if (sieveMesh != null) {
                         HeavySiftable siftable = ExRegistries.getHeavySieveRegistry().getSiftable(currentStack);
                         if(siftable != null) {
-                            int fortune = ExNihilo.getMeshFortune(meshStack);
+                            int fortune = ExNihilo.getInstance().getMeshFortune(meshStack);
                             fortune += player.getLuck();
                             LootContext lootContext = HeavySieveRegistry.buildLootContext(((ServerWorld) world), currentStack, fortune, world.rand);
                             Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(siftable, lootContext);
@@ -126,7 +126,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
                         world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, currentStack));
                     }
                     currentStack = ItemStack.EMPTY;
-                    if (ExNihilo.doMeshesHaveDurability() && sieveMesh != null) {
+                    if (ExNihilo.getInstance().doMeshesHaveDurability() && sieveMesh != null) {
                         if (!sieveMesh.isHeavy()) {
                             getWorld().playSound(null, this.pos, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.BLOCKS, 0.5f, 2.5f);
                             meshStack = ItemStack.EMPTY;

@@ -168,7 +168,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
                                     world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));
                                 }
                             }
-                            if (ExNihilo.doMeshesHaveDurability()) {
+                            if (ExNihilo.getInstance().doMeshesHaveDurability()) {
                                 ItemStack meshStack = meshSlots.getStackInSlot(0);
                                 if (!meshStack.isEmpty()) {
                                     if (meshStack.attemptDamageItem(1, world.rand, null)) {
@@ -240,7 +240,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     public float getEffectiveLuck() {
         ItemStack meshStack = meshSlots.getStackInSlot(0);
         if (!meshStack.isEmpty()) {
-            return ExNihilo.getMeshFortune(meshStack);
+            return ExNihilo.getInstance().getMeshFortune(meshStack);
         }
         return 0f;
     }
@@ -375,7 +375,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         float boost = 1f;
         ItemStack meshStack = meshSlots.getStackInSlot(0);
         if (!meshStack.isEmpty()) {
-            boost += EFFICIENCY_BOOST * ExNihilo.getMeshEfficiency(meshStack);
+            boost += EFFICIENCY_BOOST * ExNihilo.getInstance().getMeshEfficiency(meshStack);
         }
         return boost * getFoodBoost();
     }

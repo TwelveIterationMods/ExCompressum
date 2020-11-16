@@ -8,8 +8,10 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameter;
 import net.minecraft.loot.LootParameterSet;
 import net.minecraft.loot.LootTable;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -68,8 +70,9 @@ public class HeavySieveRegistry extends GroupedRegistry<
         if (generatedEntry == null) {
             GeneratedHeavySiftable generatedHeavySiftable = generatedEntries.get(registryName);
             if (generatedHeavySiftable != null) {
+                IItemProvider source = ForgeRegistries.ITEMS.getValue(generatedHeavySiftable.getSource());
                 int times = generatedHeavySiftable.getTimes() != null ? generatedHeavySiftable.getTimes() : ExCompressumConfig.COMMON.heavySieveDefaultRolls.get();
-                LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(generatedHeavySiftable.getSource(), times);
+                LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(source, times);
                 HeavySiftable generatedSiftable = new HeavySiftable();
                 generatedSiftable.setSource(registryName);
                 generatedSiftable.setLootTable(new LootTableProvider(lootTable));

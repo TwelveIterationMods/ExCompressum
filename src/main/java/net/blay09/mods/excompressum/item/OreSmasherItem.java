@@ -101,7 +101,7 @@ public class OreSmasherItem extends ToolItem {
 
     @Override
     public boolean onBlockDestroyed(ItemStack itemStack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (!world.isRemote && canHarvestBlock(itemStack, state) && ExNihilo.isHammerable(state)) {
+        if (!world.isRemote && canHarvestBlock(itemStack, state) && ExNihilo.getInstance().isHammerable(state)) {
             world.removeBlock(pos, false);
             Collection<ItemStack> rewards = ExNihilo.getInstance().rollHammerRewards(state, getTier().getHarvestLevel(), EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack), world.rand);
             for (ItemStack rewardStack : rewards) {

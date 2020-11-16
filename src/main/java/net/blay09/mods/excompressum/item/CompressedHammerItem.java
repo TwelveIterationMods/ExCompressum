@@ -22,12 +22,12 @@ public class CompressedHammerItem extends ToolItem implements ICompressedHammer 
 
     @Override
     public boolean canHarvestBlock(ItemStack stack, BlockState state) {
-        return ExRegistries.getCompressedHammerRegistry().isHammerable(state) || ExNihilo.isHammerable(state);
+        return ExRegistries.getCompressedHammerRegistry().isHammerable(state) || ExNihilo.getInstance().isHammerable(state);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if ((ExRegistries.getCompressedHammerRegistry().isHammerable(state) || ExNihilo.isHammerable(state)) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
+        if ((ExRegistries.getCompressedHammerRegistry().isHammerable(state) || ExNihilo.getInstance().isHammerable(state)) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
             return efficiency * 0.75f;
         }
         return 0.8f;

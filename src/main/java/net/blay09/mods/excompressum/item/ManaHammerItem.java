@@ -29,12 +29,12 @@ public class ManaHammerItem extends ToolItem implements IHammer {
 
     @Override
     public boolean canHarvestBlock(ItemStack stack, BlockState state) {
-        return ExNihilo.isHammerable(state);
+        return ExNihilo.getInstance().isHammerable(state);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (ExNihilo.isHammerable(state) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
+        if (ExNihilo.getInstance().isHammerable(state) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
             return efficiency * 0.75f;
         }
         return 0.8f;

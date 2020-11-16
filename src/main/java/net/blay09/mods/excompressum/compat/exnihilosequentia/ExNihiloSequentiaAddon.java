@@ -1,16 +1,8 @@
 package net.blay09.mods.excompressum.compat.exnihilosequentia;
 
 import com.google.common.collect.Maps;
-import com.novamachina.exnihilosequentia.common.api.ExNihiloRegistries;
-import com.novamachina.exnihilosequentia.common.block.InfestedLeavesBlock;
-import com.novamachina.exnihilosequentia.common.item.mesh.EnumMesh;
-import com.novamachina.exnihilosequentia.common.item.resources.EnumResource;
-import com.novamachina.exnihilosequentia.common.registries.crook.CrookDropEntry;
-import com.novamachina.exnihilosequentia.common.registries.sieve.SieveDropEntry;
-import com.novamachina.exnihilosequentia.common.utility.Config;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
@@ -21,19 +13,31 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.RandomChance;
+import net.minecraft.loot.functions.CopyNbt;
+import net.minecraft.loot.functions.SetCount;
+import net.minecraft.loot.functions.SetNBT;
+import net.minecraft.loot.functions.SetName;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
+import novamachina.exnihilosequentia.api.ExNihiloRegistries;
+import novamachina.exnihilosequentia.api.crafting.ItemStackWithChance;
+import novamachina.exnihilosequentia.api.crafting.crook.CrookRecipe;
+import novamachina.exnihilosequentia.api.crafting.sieve.MeshWithChance;
+import novamachina.exnihilosequentia.api.crafting.sieve.SieveRecipe;
+import novamachina.exnihilosequentia.common.block.InfestedLeavesBlock;
+import novamachina.exnihilosequentia.common.item.mesh.EnumMesh;
+import novamachina.exnihilosequentia.common.item.resources.EnumResource;
+import novamachina.exnihilosequentia.common.utility.Config;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -130,7 +134,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
     @Override
     public List<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand) {
-        return Collections.singletonList(new ItemStack(ExNihiloRegistries.HAMMER_REGISTRY.getResult(state.getBlock().getRegistryName())));
+        return Collections.singletonList(ExNihiloRegistries.HAMMER_REGISTRY.getResult(state.getBlock().getRegistryName()).copy());
     }
 
     @Override
@@ -146,21 +150,16 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
     @Override
     public Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        List<SieveDropEntry> rewards = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(state.getBlock(), ((EnumMesh) sieveMesh.getBackingMesh()), false); // TODO waterlogged support
-        if (rewards != null) {
+        List<SieveRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(state.getBlock(), ((EnumMesh) sieveMesh.getBackingMesh()), false); // TODO waterlogged support
+        if (recipes != null) {
             List<ItemStack> list = new ArrayList<>();
-            for (SieveDropEntry reward : rewards) {
-                if (reward.getResult() == null) {
-                    ExCompressum.logger.error("Tried to roll sieve rewards from a null reward entry: {} (base chance: {}, mesh level: {})", state.getBlock().getRegistryName(), reward.getRarity(), sieveMesh.getMeshLevel());
-                    continue;
-                }
-
+            for (SieveRecipe recipe : recipes) {
                 int tries = rand.nextInt((int) luck + 1) + 1;
                 for (int i = 0; i < tries; i++) {
-                    if (rand.nextDouble() < (double) reward.getRarity()) {
-                        ItemStack itemStack = createItemStack(reward.getResult());
-                        if (!itemStack.isEmpty()) {
-                            list.add(itemStack);
+                    for (MeshWithChance roll : recipe.getRolls()) {
+                        if (rand.nextDouble() < (double) roll.getChance()) {
+                            ItemStack itemStack = recipe.getDrop();
+                            list.add(itemStack.copy());
                         }
                     }
                 }
@@ -169,10 +168,6 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         }
 
         return Collections.emptyList();
-    }
-
-    private ItemStack createItemStack(ResourceLocation registryName) {
-        return new ItemStack(ForgeRegistries.ITEMS.getValue(registryName));
     }
 
     @Override
@@ -189,8 +184,8 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             return Collections.emptyList();
         }
 
-        List<CrookDropEntry> rewards = ExNihiloRegistries.CROOK_REGISTRY.getDrops();
-        if (rewards != null) {
+        List<CrookRecipe> recipes = ExNihiloRegistries.CROOK_REGISTRY.getDrops(state.getBlock());
+        if (recipes != null) {
             List<ItemStack> list = new ArrayList<>();
 
             for (int i = 0; i < Config.VANILLA_SIMULATE_DROP_COUNT.get(); i++) {
@@ -198,12 +193,11 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
                 list.addAll(items);
             }
 
-            for (CrookDropEntry reward : rewards) {
-                float fortuneChanceBonus = 0.1f;
-                if (rand.nextFloat() <= reward.getRarity() + fortuneChanceBonus * luck) {
-                    ItemStack itemStack = createItemStack(reward.getItem());
-                    if (!itemStack.isEmpty()) {
-                        list.add(itemStack);
+            for (CrookRecipe recipe : recipes) {
+                for (ItemStackWithChance drop : recipe.getOutputsWithChance()) {
+                    float fortuneChanceBonus = 0.1f;
+                    if (rand.nextFloat() <= drop.getChance() + fortuneChanceBonus * luck) {
+                        list.add(drop.getStack().copy());
                     }
                 }
             }
@@ -217,7 +211,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public LootTable generateHeavySieveLootTable(ResourceLocation source, int times) {
+    public LootTable generateHeavySieveLootTable(IItemProvider source, int times) {
         LootTable.Builder tableBuilder = LootTable.builder();
         for (EnumMesh mesh : EnumMesh.values()) {
             LootPool.Builder poolBuilder = LootPool.builder();
@@ -226,12 +220,18 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
                 // TODO sieve mesh poolBuilder.acceptCondition();
             }
 
-            List<SieveDropEntry> drops = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(source, mesh, false);// TODO support waterlogged
-            for (SieveDropEntry drop : drops) {
-                Item item = ForgeRegistries.ITEMS.getValue(drop.getResult());
-                if (item != null) {
-                    StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(item);
-                    entryBuilder.acceptCondition(RandomChance.builder(drop.getRarity()));
+            List<SieveRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(source, mesh, false);// TODO support waterlogged
+            for (SieveRecipe recipe : recipes) {
+                ItemStack itemStack = recipe.getDrop();
+                for (MeshWithChance roll : recipe.getRolls()) {
+                    StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(itemStack.getItem());
+                    if (itemStack.getCount() > 0) {
+                        entryBuilder.acceptFunction(SetCount.builder(ConstantRange.of(itemStack.getCount())));
+                    }
+                    if(itemStack.getTag() != null) {
+                        entryBuilder.acceptFunction(SetNBT.builder(itemStack.getTag()));
+                    }
+                    entryBuilder.acceptCondition(RandomChance.builder(roll.getChance()));
                     poolBuilder.addEntry(entryBuilder);
                 }
             }

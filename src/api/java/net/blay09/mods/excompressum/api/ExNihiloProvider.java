@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -65,7 +66,7 @@ public interface ExNihiloProvider {
 
     List<ItemStack> rollCrookRewards(ServerWorld world, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, Random rand);
 
-    LootTable generateHeavySieveLootTable(ResourceLocation source, int count);
+    LootTable generateHeavySieveLootTable(IItemProvider source, int count);
 
     boolean doMeshesHaveDurability();
 

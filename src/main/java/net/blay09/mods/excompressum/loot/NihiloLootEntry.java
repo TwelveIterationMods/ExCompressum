@@ -26,7 +26,7 @@ public class NihiloLootEntry extends StandaloneLootEntry {
 
     @Override
     protected void func_216154_a(Consumer<ItemStack> stackConsumer, LootContext context) {
-        stackConsumer.accept(ExNihilo.getNihiloItem(nihiloItem).copy());
+        stackConsumer.accept(ExNihilo.getInstance().getNihiloItem(nihiloItem).copy());
     }
 
     @Override

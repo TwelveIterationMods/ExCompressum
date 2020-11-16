@@ -64,7 +64,7 @@ public enum BaitType implements IStringSerializable {
 
     public ItemStack getDisplayItemFirst() {
         if (this == SHEEP) {
-            ItemStack grassSeeds = ExNihilo.getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
+            ItemStack grassSeeds = ExNihilo.getInstance().getNihiloItem(ExNihiloProvider.NihiloItems.SEEDS_GRASS);
             if (!grassSeeds.isEmpty()) {
                 return grassSeeds;
             }

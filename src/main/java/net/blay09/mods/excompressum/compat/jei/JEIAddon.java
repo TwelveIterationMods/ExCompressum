@@ -35,7 +35,7 @@ public class JEIAddon implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registry) {
         List<HeavySieveRecipe> heavySieveRecipes = new ArrayList<>();
-        if (ExNihilo.doMeshesSplitLootTables()) {
+        if (ExNihilo.getInstance().doMeshesSplitLootTables()) {
             Collection<HeavySiftable> entries = ExRegistries.getHeavySieveRegistry().getEntries();
             for (SieveMeshRegistryEntry sieveMesh : SieveMeshRegistry.getEntries().values()) {
                 for (HeavySiftable entry : entries) {
