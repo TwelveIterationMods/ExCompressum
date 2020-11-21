@@ -8,6 +8,9 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.container.AutoHammerContainer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihilo;
+import net.blay09.mods.excompressum.registry.ExRegistries;
+import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;
+import net.blay09.mods.excompressum.registry.hammer.Hammerable;
 import net.blay09.mods.excompressum.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -19,6 +22,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
+import net.minecraft.loot.LootContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
@@ -27,6 +31,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -374,12 +379,16 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     }
 
     public boolean isRegistered(ItemStack itemStack) {
-        // TODO add support for compressum hammer registry
-        return ExNihilo.isHammerable(itemStack);
+        return ExNihilo.isHammerable(itemStack) || ExRegistries.getHammerRegistry().isHammerable(itemStack);
     }
 
     public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
-        // TODO add support for compressum hammer registry
+        Hammerable hammerable = ExRegistries.getHammerRegistry().getHammerable(itemStack);
+        if (hammerable != null) {
+            LootContext lootContext = HammerRegistry.buildLootContext(((ServerWorld) world), itemStack, luck, rand);
+            return HammerRegistry.rollHammerRewards(hammerable, lootContext);
+        }
+
         return ExNihilo.rollHammerRewards(itemStack, miningLevel, luck, rand);
     }
 
