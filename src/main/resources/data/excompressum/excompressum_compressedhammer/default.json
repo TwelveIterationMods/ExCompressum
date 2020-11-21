@@ -7,11 +7,11 @@
   "customEntries": [
     {
       "source": "excompressum:compressed_cobblestone",
-      "lootTable": "excompressum:compressed_hammer/compressed_cobblestone"
+      "lootTable": "excompressum:excompressum/compressed_hammer/compressed_cobblestone"
     },
     {
       "source": "excompressum:compressed_gravel",
-      "lootTable": "excompressum:compressed_hammer/compressed_gravel"
+      "lootTable": "excompressum:excompressum/compressed_hammer/compressed_gravel"
     }
   ]
 }

@@ -5,6 +5,7 @@
     "excompressum:compressed_hammer_stone",
     "excompressum:compressed_hammer_iron",
     "excompressum:compressed_hammer_gold",
-    "excompressum:compressed_hammer_diamond"
+    "excompressum:compressed_hammer_diamond",
+    "excompressum:compressed_hammer_netherite"
   ]
 }

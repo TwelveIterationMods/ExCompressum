@@ -62,6 +62,9 @@ public class WoodenCrucibleBlock extends ContainerBlock {
 
             if (!heldItem.isEmpty()) {
                 if (tileEntity.addItem(heldItem, false, false)) {
+                    if (!player.abilities.isCreativeMode) {
+                        heldItem.shrink(1);
+                    }
                     return ActionResultType.SUCCESS;
                 }
             }

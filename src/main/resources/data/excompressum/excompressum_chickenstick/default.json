@@ -7,11 +7,11 @@
   "customEntries": [
     {
       "source": "minecraft:cobblestone",
-      "lootTable": "excompressum:chicken_stick/cobblestone"
+      "lootTable": "excompressum:excompressum/chicken_stick/cobblestone"
     },
     {
       "source": "minecraft:gravel",
-      "lootTable": "excompressum:chicken_stick/gravel"
+      "lootTable": "excompressum:excompressum/chicken_stick/gravel"
     }
   ]
 }

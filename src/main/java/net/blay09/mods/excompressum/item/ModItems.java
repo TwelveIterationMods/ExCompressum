@@ -16,6 +16,7 @@ public class ModItems {
     public static Item compressedHammerIron;
     public static Item compressedHammerGold;
     public static Item compressedHammerDiamond;
+    public static Item compressedHammerNetherite;
     public static Item doubleCompressedDiamondHammer;
     public static Item compressedCrook;
     public static Item ironMesh;
@@ -35,6 +36,7 @@ public class ModItems {
                 compressedHammerIron = new CompressedHammerItem(ItemTier.IRON, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "iron"),
                 compressedHammerGold = new CompressedHammerItem(ItemTier.GOLD, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "gold"),
                 compressedHammerDiamond = new CompressedHammerItem(ItemTier.DIAMOND, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "diamond"),
+                compressedHammerNetherite = new CompressedHammerItem(ItemTier.NETHERITE, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "netherite"),
                 doubleCompressedDiamondHammer = new DoubleCompressedDiamondHammerItem(itemProperties()).setRegistryName(DoubleCompressedDiamondHammerItem.name),
                 compressedCrook = new CompressedCrookItem(itemProperties()).setRegistryName(CompressedCrookItem.name),
                 ironMesh = new IronMeshItem(itemProperties()).setRegistryName(IronMeshItem.name),

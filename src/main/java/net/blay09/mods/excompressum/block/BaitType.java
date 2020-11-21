@@ -37,7 +37,11 @@ public enum BaitType implements IStringSerializable {
     DONKEY(new ItemStack(Items.GOLDEN_CARROT), new ItemStack(Items.GOLDEN_CARROT), EntityType.DONKEY, ExCompressumConfig.COMMON.donkeyBaitChance::get),
     POLAR_BEAR(new ItemStack(Items.SNOWBALL), new ItemStack(Items.COD), EntityType.POLAR_BEAR, ExCompressumConfig.COMMON.polarBearBaitChance::get),
     LLAMA(new ItemStack(Items.WHEAT), new ItemStack(Items.SUGAR), EntityType.LLAMA, ExCompressumConfig.COMMON.llamaBaitChance::get),
-    PARROT(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), EntityType.PARROT, ExCompressumConfig.COMMON.parrotBaitChance::get);
+    PARROT(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), EntityType.PARROT, ExCompressumConfig.COMMON.parrotBaitChance::get),
+    CAT(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), EntityType.CAT, ExCompressumConfig.COMMON.catBaitChance::get), // TODO fix items
+    FOX(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), EntityType.FOX, ExCompressumConfig.COMMON.foxBaitChance::get),
+    TURTLE(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), EntityType.TURTLE, ExCompressumConfig.COMMON.turtleBaitChance::get),
+    MOOSHROOM(new ItemStack(Items.RED_DYE), new ItemStack(Items.GREEN_DYE), EntityType.MOOSHROOM, ExCompressumConfig.COMMON.mooshroomBaitChance::get);
 
     private final ItemStack displayItemFirst;
     private final ItemStack displayItemSecond;

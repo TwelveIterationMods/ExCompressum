@@ -27,41 +27,45 @@ public class ExCompressumConfig {
         public final ForgeConfigSpec.DoubleValue parrotBaitChance;
         public final ForgeConfigSpec.DoubleValue polarBearBaitChance;
         public final ForgeConfigSpec.DoubleValue llamaBaitChance;
+        public final ForgeConfigSpec.DoubleValue catBaitChance;
+        public final ForgeConfigSpec.DoubleValue foxBaitChance;
+        public final ForgeConfigSpec.DoubleValue turtleBaitChance;
+        public final ForgeConfigSpec.DoubleValue mooshroomBaitChance;
         public final ForgeConfigSpec.DoubleValue childBaitChance;
 
         public final ForgeConfigSpec.DoubleValue compressedMobChance;
         public final ForgeConfigSpec.IntValue compressedMobSize;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> compressedMobAllowedMobs;
 
-		public final ForgeConfigSpec.BooleanValue allowChickenStickCreation;
-		public final ForgeConfigSpec.DoubleValue chickenStickSoundChance;
-		public final ForgeConfigSpec.DoubleValue chickenStickSpawnChance;
-		public final ForgeConfigSpec.ConfigValue<List<? extends String>> chickenStickSounds;
-		public final ForgeConfigSpec.DoubleValue compressedCrookDurabilityMultiplier;
-		public final ForgeConfigSpec.DoubleValue compressedCrookSpeedMultiplier;
+        public final ForgeConfigSpec.BooleanValue allowChickenStickCreation;
+        public final ForgeConfigSpec.DoubleValue chickenStickSoundChance;
+        public final ForgeConfigSpec.DoubleValue chickenStickSpawnChance;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> chickenStickSounds;
+        public final ForgeConfigSpec.DoubleValue compressedCrookDurabilityMultiplier;
+        public final ForgeConfigSpec.DoubleValue compressedCrookSpeedMultiplier;
 
-		public final ForgeConfigSpec.BooleanValue enableSmashingModifier;
-		public final ForgeConfigSpec.BooleanValue enableCompressingModifier;
-		public final ForgeConfigSpec.BooleanValue enableEvolvedOrechid;
-		public final ForgeConfigSpec.BooleanValue disableVanillaOrechid;
-		public final ForgeConfigSpec.IntValue manaSieveCost;
-		public final ForgeConfigSpec.IntValue evolvedOrechidCost;
-		public final ForgeConfigSpec.IntValue evolvedOrechidDelay;
+        public final ForgeConfigSpec.BooleanValue enableSmashingModifier;
+        public final ForgeConfigSpec.BooleanValue enableCompressingModifier;
+        public final ForgeConfigSpec.BooleanValue enableEvolvedOrechid;
+        public final ForgeConfigSpec.BooleanValue disableVanillaOrechid;
+        public final ForgeConfigSpec.IntValue manaSieveCost;
+        public final ForgeConfigSpec.IntValue evolvedOrechidCost;
+        public final ForgeConfigSpec.IntValue evolvedOrechidDelay;
 
-		public final ForgeConfigSpec.IntValue autoHammerEnergy;
-		public final ForgeConfigSpec.DoubleValue autoHammerSpeed;
-		public final ForgeConfigSpec.DoubleValue autoHammerDecay;
-		public final ForgeConfigSpec.IntValue autoCompressedHammerEnergy;
-		public final ForgeConfigSpec.DoubleValue autoCompressedHammerSpeed;
-		public final ForgeConfigSpec.IntValue autoSieveEnergy;
-		public final ForgeConfigSpec.IntValue autoHeavySieveEnergy;
-		public final ForgeConfigSpec.DoubleValue autoHeavySieveSpeed;
-		public final ForgeConfigSpec.DoubleValue autoSieveSpeed;
-		public final ForgeConfigSpec.IntValue autoCompressorEnergy;
-		public final ForgeConfigSpec.DoubleValue autoCompressorSpeed;
-		public final ForgeConfigSpec.BooleanValue allowHeavySieveAutomation;
-		public final ForgeConfigSpec.IntValue heavySieveClicksPerSecond;
-		public final ForgeConfigSpec.IntValue woodenCrucibleSpeed;
+        public final ForgeConfigSpec.IntValue autoHammerEnergy;
+        public final ForgeConfigSpec.DoubleValue autoHammerSpeed;
+        public final ForgeConfigSpec.DoubleValue autoHammerDecay;
+        public final ForgeConfigSpec.IntValue autoCompressedHammerEnergy;
+        public final ForgeConfigSpec.DoubleValue autoCompressedHammerSpeed;
+        public final ForgeConfigSpec.IntValue autoSieveEnergy;
+        public final ForgeConfigSpec.IntValue autoHeavySieveEnergy;
+        public final ForgeConfigSpec.DoubleValue autoHeavySieveSpeed;
+        public final ForgeConfigSpec.DoubleValue autoSieveSpeed;
+        public final ForgeConfigSpec.IntValue autoCompressorEnergy;
+        public final ForgeConfigSpec.DoubleValue autoCompressorSpeed;
+        public final ForgeConfigSpec.BooleanValue allowHeavySieveAutomation;
+        public final ForgeConfigSpec.IntValue heavySieveClicksPerSecond;
+        public final ForgeConfigSpec.IntValue woodenCrucibleSpeed;
 
         public Common(ForgeConfigSpec.Builder builder) {
             builder.push("general");
@@ -81,10 +85,10 @@ public class ExCompressumConfig {
                     .translation("excompressum.config.flattenSieveRecipes")
                     .define("flattenSieveRecipes", false);
 
-			heavySieveDefaultRolls = builder
-					.comment("The amount of times the heavy sieve should roll for compressed entries. For example, a value of 7 means for every compressed gravel you only get the equivalent drops of 7 sifted gravel blocks (2 loss). A value of 9 would therefore mean no loss.")
-					.translation("excompressum.config.heavySieveDefaultRolls")
-					.defineInRange("heavySieveDefaultRolls", 7, 1, Integer.MAX_VALUE);
+            heavySieveDefaultRolls = builder
+                    .comment("The amount of times the heavy sieve should roll for compressed entries. For example, a value of 7 means for every compressed gravel you only get the equivalent drops of 7 sifted gravel blocks (2 loss). A value of 9 would therefore mean no loss.")
+                    .translation("excompressum.config.heavySieveDefaultRolls")
+                    .defineInRange("heavySieveDefaultRolls", 7, 1, Integer.MAX_VALUE);
 
             builder.pop();
 
@@ -155,6 +159,26 @@ public class ExCompressumConfig {
                     .translation("excompressum.config.llamaChance")
                     .defineInRange("llamaChance", 0.01f, 0.002f, 1f);
 
+            catBaitChance = builder
+                    .comment("The chance (per second) that a cat bait will result in a spawn.")
+                    .translation("excompressum.config.catChance")
+                    .defineInRange("catChance", 0.01f, 0.002f, 1f);
+
+            foxBaitChance = builder
+                    .comment("The chance (per second) that a fox bait will result in a spawn.")
+                    .translation("excompressum.config.foxChance")
+                    .defineInRange("foxChance", 0.01f, 0.002f, 1f);
+
+            turtleBaitChance = builder
+                    .comment("The chance (per second) that a turtle bait will result in a spawn.")
+                    .translation("excompressum.config.turtleChance")
+                    .defineInRange("turtleChance", 0.01f, 0.002f, 1f);
+
+            mooshroomBaitChance = builder
+                    .comment("The chance (per second) that a mooshroom bait will result in a spawn.")
+                    .translation("excompressum.config.mooshroomChance")
+                    .defineInRange("mooshroomChance", 0.01f, 0.002f, 1f);
+
             childBaitChance = builder
                     .comment("The chance (per second) that an animal spawned from a bait will result in a child.")
                     .translation("excompressum.config.childChance")
@@ -178,7 +202,7 @@ public class ExCompressumConfig {
                     .comment("A list of entity registry names that can spawn as compressed entities.")
                     .translation("excompressum.config.compressedMobAllowedMobs")
                     .defineList("compressedMobAllowedMobs", Lists.newArrayList(
-                    		"minecraft:zombie",
+                            "minecraft:zombie",
                             "minecraft:creeper",
                             "minecraft:skeleton",
                             "minecraft:spider",
@@ -198,152 +222,152 @@ public class ExCompressumConfig {
 
             builder.push("tools");
 
-			allowChickenStickCreation = builder
-					.comment("If true, hitting a chicken with a stick will turn it into an Angry Chicken, which will drop a Chicken Stick when killed.")
-					.translation("excompressum.config.allowChickenStickCreation")
-					.define("allowChickenStickCreation", true);
+            allowChickenStickCreation = builder
+                    .comment("If true, hitting a chicken with a stick will turn it into an Angry Chicken, which will drop a Chicken Stick when killed.")
+                    .translation("excompressum.config.allowChickenStickCreation")
+                    .define("allowChickenStickCreation", true);
 
-			chickenStickSoundChance = builder
-					.comment("The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.")
-					.translation("excompressum.config.chickenStickSoundChance")
-					.defineInRange("chickenStickSoundChance", 0.2f, 0f, 1f);
+            chickenStickSoundChance = builder
+                    .comment("The chance for the chicken stick to make sounds when breaking blocks. Set to 0 to disable.")
+                    .translation("excompressum.config.chickenStickSoundChance")
+                    .defineInRange("chickenStickSoundChance", 0.2f, 0f, 1f);
 
-			chickenStickSpawnChance = builder
-					.comment("The chance for the chicken stick to spawn a chicken. Set to 0 to disable.")
-					.translation("excompressum.config.chickenStickSpawnChance")
-					.defineInRange("chickenStickSpawnChance", 0.008f, 0f, 1f);
+            chickenStickSpawnChance = builder
+                    .comment("The chance for the chicken stick to spawn a chicken. Set to 0 to disable.")
+                    .translation("excompressum.config.chickenStickSpawnChance")
+                    .defineInRange("chickenStickSpawnChance", 0.008f, 0f, 1f);
 
-			chickenStickSounds = builder
-					.comment("The sound names the chicken stick will randomly play.")
-					.translation("excompressum.config.chickenStickSounds")
-					.defineList("chickenStickSounds", Lists.newArrayList(
-							"entity.chicken.ambient",
-							"entity.chicken.hurt",
-							"entity.chicken.egg",
-							"entity.chicken.step"), it -> it instanceof String);
+            chickenStickSounds = builder
+                    .comment("The sound names the chicken stick will randomly play.")
+                    .translation("excompressum.config.chickenStickSounds")
+                    .defineList("chickenStickSounds", Lists.newArrayList(
+                            "entity.chicken.ambient",
+                            "entity.chicken.hurt",
+                            "entity.chicken.egg",
+                            "entity.chicken.step"), it -> it instanceof String);
 
-			compressedCrookDurabilityMultiplier = builder
-					.comment("The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)")
-					.translation("excompressum.config.compressedCrookDurabilityMultiplier")
-					.defineInRange("compressedCrookDurabilityMultiplier", 2f, Float.MIN_VALUE, Float.MAX_VALUE);
+            compressedCrookDurabilityMultiplier = builder
+                    .comment("The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)")
+                    .translation("excompressum.config.compressedCrookDurabilityMultiplier")
+                    .defineInRange("compressedCrookDurabilityMultiplier", 2f, Float.MIN_VALUE, Float.MAX_VALUE);
 
-			compressedCrookSpeedMultiplier = builder
-					.comment("The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)")
-					.translation("excompressum.config.compressedCrookSpeedMultiplier")
-					.defineInRange("compressedCrookSpeedMultiplier", 4f, Float.MIN_VALUE, Float.MAX_VALUE);
+            compressedCrookSpeedMultiplier = builder
+                    .comment("The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)")
+                    .translation("excompressum.config.compressedCrookSpeedMultiplier")
+                    .defineInRange("compressedCrookSpeedMultiplier", 4f, Float.MIN_VALUE, Float.MAX_VALUE);
 
             builder.pop();
 
             builder.push("compat");
 
-			enableSmashingModifier = builder
-					.comment("If set to true, adding a double compressed diamond hammer will add the Smashing II modifier to a Tinkers Construct tool, which allows smashing of compressed blocks.")
-					.translation("excompressum.config.enableSmashingModifier")
-					.define("enableSmashingModifier", true);
+            enableSmashingModifier = builder
+                    .comment("If set to true, adding a double compressed diamond hammer will add the Smashing II modifier to a Tinkers Construct tool, which allows smashing of compressed blocks.")
+                    .translation("excompressum.config.enableSmashingModifier")
+                    .define("enableSmashingModifier", true);
 
-			enableCompressingModifier = builder
-					.comment("If set to true, adding an auto compressor will add the Compressing modifier to a Tinkers Construct tool, which will automatically compress hammered compressed blocks.")
-					.translation("excompressum.config.enableCompressingModifier")
-					.define("enableCompressingModifier", true);
+            enableCompressingModifier = builder
+                    .comment("If set to true, adding an auto compressor will add the Compressing modifier to a Tinkers Construct tool, which will automatically compress hammered compressed blocks.")
+                    .translation("excompressum.config.enableCompressingModifier")
+                    .define("enableCompressingModifier", true);
 
-			enableEvolvedOrechid = builder
-					.comment("Setting this to false will disable the Evolved Orechid.")
-					.translation("excompressum.config.enableEvolvedOrechid")
-					.define("enableEvolvedOrechid", true);
+            enableEvolvedOrechid = builder
+                    .comment("Setting this to false will disable the Evolved Orechid.")
+                    .translation("excompressum.config.enableEvolvedOrechid")
+                    .define("enableEvolvedOrechid", true);
 
-			disableVanillaOrechid = builder
-					.comment("If set to true, Botania's Orechid will not show up in the lexicon and will not be craftable.")
-					.translation("excompressum.config.disableVanillaOrechid")
-					.define("disableVanillaOrechid", false);
+            disableVanillaOrechid = builder
+                    .comment("If set to true, Botania's Orechid will not show up in the lexicon and will not be craftable.")
+                    .translation("excompressum.config.disableVanillaOrechid")
+                    .define("disableVanillaOrechid", false);
 
-			manaSieveCost = builder
-					.comment("The mana cost of the Mana Sieve per Tick.")
-					.translation("excompressum.config.manaSieveCost")
-					.defineInRange("manaSieveCost", 1, 0, Integer.MAX_VALUE);
+            manaSieveCost = builder
+                    .comment("The mana cost of the Mana Sieve per Tick.")
+                    .translation("excompressum.config.manaSieveCost")
+                    .defineInRange("manaSieveCost", 1, 0, Integer.MAX_VALUE);
 
-			evolvedOrechidCost = builder
-					.comment("The mana cost of the Evolved Orechid. GoG Orechid is 700, vanilla Orechid is 17500.")
-					.translation("excompressum.config.evolvedOrechidCost")
-					.defineInRange("evolvedOrechidCost", 700, 0, Integer.MAX_VALUE);
+            evolvedOrechidCost = builder
+                    .comment("The mana cost of the Evolved Orechid. GoG Orechid is 700, vanilla Orechid is 17500.")
+                    .translation("excompressum.config.evolvedOrechidCost")
+                    .defineInRange("evolvedOrechidCost", 700, 0, Integer.MAX_VALUE);
 
-			evolvedOrechidDelay = builder
-					.comment("The ore generation delay for the Evolved Orechid in ticks. GoG Orechid is 2, vanilla Orechid is 100.")
-					.translation("excompressum.config.evolvedOrechidDelay")
-					.defineInRange("evolvedOrechidDelay", 2, 0, Integer.MAX_VALUE);
+            evolvedOrechidDelay = builder
+                    .comment("The ore generation delay for the Evolved Orechid in ticks. GoG Orechid is 2, vanilla Orechid is 100.")
+                    .translation("excompressum.config.evolvedOrechidDelay")
+                    .defineInRange("evolvedOrechidDelay", 2, 0, Integer.MAX_VALUE);
 
             builder.pop();
 
             builder.push("automation");
 
-			autoHammerEnergy = builder
-					.comment("The energy cost of the auto hammer per tick.")
-					.translation("excompressum.config.autoHammerEnergy")
-					.defineInRange("autoHammerEnergy", 40, 0, Integer.MAX_VALUE);
+            autoHammerEnergy = builder
+                    .comment("The energy cost of the auto hammer per tick.")
+                    .translation("excompressum.config.autoHammerEnergy")
+                    .defineInRange("autoHammerEnergy", 40, 0, Integer.MAX_VALUE);
 
-			autoHammerSpeed = builder
-					.comment("The speed at which the auto hammer will smash stuff.")
-					.translation("excompressum.config.autoHammerSpeed")
-					.defineInRange("autoHammerSpeed", 0.0075f, Float.MIN_VALUE, Float.MAX_VALUE);
+            autoHammerSpeed = builder
+                    .comment("The speed at which the auto hammer will smash stuff.")
+                    .translation("excompressum.config.autoHammerSpeed")
+                    .defineInRange("autoHammerSpeed", 0.0075f, Float.MIN_VALUE, Float.MAX_VALUE);
 
-			autoHammerDecay = builder
-					.comment("The chance for the upgrade hammers in an auto hammer to lose durability (per operation)")
-					.translation("excompressum.config.autoHammerDecay")
-					.defineInRange("autoHammerDecay", 0.5f, 0f, 1f);
+            autoHammerDecay = builder
+                    .comment("The chance for the upgrade hammers in an auto hammer to lose durability (per operation)")
+                    .translation("excompressum.config.autoHammerDecay")
+                    .defineInRange("autoHammerDecay", 0.5f, 0f, 1f);
 
-			autoCompressedHammerEnergy = builder
-					.comment("The energy cost of the auto compressed hammer per tick.")
-					.translation("excompressum.config.autoCompressedHammerEnergy")
-					.defineInRange("autoCompressedHammerEnergy", 120, 0, Integer.MAX_VALUE);
+            autoCompressedHammerEnergy = builder
+                    .comment("The energy cost of the auto compressed hammer per tick.")
+                    .translation("excompressum.config.autoCompressedHammerEnergy")
+                    .defineInRange("autoCompressedHammerEnergy", 120, 0, Integer.MAX_VALUE);
 
-			autoCompressedHammerSpeed = builder
-					.comment("The speed at which the auto compressed hammer will smash stuff.")
-					.translation("excompressum.config.autoCompressedHammerSpeed")
-					.defineInRange("autoCompressedHammerSpeed", 0.00375f, Float.MIN_VALUE, Float.MAX_VALUE);
+            autoCompressedHammerSpeed = builder
+                    .comment("The speed at which the auto compressed hammer will smash stuff.")
+                    .translation("excompressum.config.autoCompressedHammerSpeed")
+                    .defineInRange("autoCompressedHammerSpeed", 0.00375f, Float.MIN_VALUE, Float.MAX_VALUE);
 
-			autoSieveEnergy = builder
-					.comment("The energy cost of the auto sieve per tick.")
-					.translation("excompressum.config.autoSieveEnergy")
-					.defineInRange("autoSieveEnergy", 40, 0, Integer.MAX_VALUE);
+            autoSieveEnergy = builder
+                    .comment("The energy cost of the auto sieve per tick.")
+                    .translation("excompressum.config.autoSieveEnergy")
+                    .defineInRange("autoSieveEnergy", 40, 0, Integer.MAX_VALUE);
 
-			autoSieveSpeed = builder
-					.comment("The speed at which the auto sieve will sift stuff.")
-					.translation("excompressum.config.autoSieveSpeed")
-					.defineInRange("autoSieveSpeed", 0.0075f, Float.MIN_VALUE, Float.MAX_VALUE);
+            autoSieveSpeed = builder
+                    .comment("The speed at which the auto sieve will sift stuff.")
+                    .translation("excompressum.config.autoSieveSpeed")
+                    .defineInRange("autoSieveSpeed", 0.0075f, Float.MIN_VALUE, Float.MAX_VALUE);
 
-			autoHeavySieveEnergy = builder
-					.comment("The energy cost of the auto heavy sieve per tick.")
-					.translation("excompressum.config.autoHeavySieveEnergy")
-					.defineInRange("autoHeavySieveEnergy", 120, 0, Integer.MAX_VALUE);
+            autoHeavySieveEnergy = builder
+                    .comment("The energy cost of the auto heavy sieve per tick.")
+                    .translation("excompressum.config.autoHeavySieveEnergy")
+                    .defineInRange("autoHeavySieveEnergy", 120, 0, Integer.MAX_VALUE);
 
-			autoHeavySieveSpeed = builder
-					.comment("The speed at which the auto heavy sieve will sift stuff.")
-					.translation("excompressum.config.autoHeavySieveSpeed")
-					.defineInRange("autoHeavySieveSpeed", 0.00375f, Float.MIN_VALUE, Float.MAX_VALUE);
+            autoHeavySieveSpeed = builder
+                    .comment("The speed at which the auto heavy sieve will sift stuff.")
+                    .translation("excompressum.config.autoHeavySieveSpeed")
+                    .defineInRange("autoHeavySieveSpeed", 0.00375f, Float.MIN_VALUE, Float.MAX_VALUE);
 
-			autoCompressorEnergy = builder
-					.comment("The energy cost of the auto compressor per tick.")
-					.translation("excompressum.config.autoCompressorEnergy")
-					.defineInRange("autoCompressorEnergy", 5, 0, Integer.MAX_VALUE);
+            autoCompressorEnergy = builder
+                    .comment("The energy cost of the auto compressor per tick.")
+                    .translation("excompressum.config.autoCompressorEnergy")
+                    .defineInRange("autoCompressorEnergy", 5, 0, Integer.MAX_VALUE);
 
-			autoCompressorSpeed = builder
-					.comment("The speed at which the auto compressor will compress stuff.")
-					.translation("excompressum.config.autoCompressorSpeed")
-					.defineInRange("autoCompressorSpeed", 0.1f, Float.MIN_VALUE, Float.MAX_VALUE);
+            autoCompressorSpeed = builder
+                    .comment("The speed at which the auto compressor will compress stuff.")
+                    .translation("excompressum.config.autoCompressorSpeed")
+                    .defineInRange("autoCompressorSpeed", 0.1f, Float.MIN_VALUE, Float.MAX_VALUE);
 
-			allowHeavySieveAutomation = builder
-					.comment("Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)")
-					.translation("excompressum.config.allowHeavySieveAutomation")
-					.define("allowHeavySieveAutomation", false);
+            allowHeavySieveAutomation = builder
+                    .comment("Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)")
+                    .translation("excompressum.config.allowHeavySieveAutomation")
+                    .define("allowHeavySieveAutomation", false);
 
-			heavySieveClicksPerSecond = builder
-					.comment("The maximum amount of clicks per second on a heavy sieve. Clicks above this will be ignored.")
-					.translation("excompressum.config.heavySieveClicksPerSecond")
-					.defineInRange("heavySieveClicksPerSecond", 6, 1, Integer.MAX_VALUE);
+            heavySieveClicksPerSecond = builder
+                    .comment("The maximum amount of clicks per second on a heavy sieve. Clicks above this will be ignored.")
+                    .translation("excompressum.config.heavySieveClicksPerSecond")
+                    .defineInRange("heavySieveClicksPerSecond", 6, 1, Integer.MAX_VALUE);
 
-			woodenCrucibleSpeed = builder
-					.comment("The rate at which the wooden crucible extracts water. Measured in liquid per second.")
-					.translation("excompressum.config.woodenCrucibleSpeed")
-					.defineInRange("woodenCrucibleSpeed", 8, 1, Integer.MAX_VALUE);
+            woodenCrucibleSpeed = builder
+                    .comment("The rate at which the wooden crucible extracts water. Measured in liquid per second.")
+                    .translation("excompressum.config.woodenCrucibleSpeed")
+                    .defineInRange("woodenCrucibleSpeed", 8, 1, Integer.MAX_VALUE);
 
             builder.pop();
         }
@@ -372,23 +396,23 @@ public class ExCompressumConfig {
         }
     }
 
-	public static final ForgeConfigSpec commonSpec;
-	public static final Common COMMON;
+    public static final ForgeConfigSpec commonSpec;
+    public static final Common COMMON;
 
-	static {
-		final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
-		commonSpec = specPair.getRight();
-		COMMON = specPair.getLeft();
-	}
+    static {
+        final Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
+        commonSpec = specPair.getRight();
+        COMMON = specPair.getLeft();
+    }
 
-	public static final ForgeConfigSpec clientSpec;
-	public static final Client CLIENT;
+    public static final ForgeConfigSpec clientSpec;
+    public static final Client CLIENT;
 
-	static {
-		final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
-		clientSpec = specPair.getRight();
-		CLIENT = specPair.getLeft();
-	}
+    static {
+        final Pair<Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Client::new);
+        clientSpec = specPair.getRight();
+        CLIENT = specPair.getLeft();
+    }
 
 
 }

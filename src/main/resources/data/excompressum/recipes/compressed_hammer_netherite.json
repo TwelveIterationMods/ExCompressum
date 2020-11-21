@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "excompressum:compressed_hammer_netherite"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "excompressum:nihilo_item",
+      "value": "HAMMER_NETHERITE"
+    }
+  },
+  "conditions": [
+    {
+      "type": "excompressum:has_nihilo_item",
+      "value": "HAMMER_NETHERITE"
+    }
+  ]
+}

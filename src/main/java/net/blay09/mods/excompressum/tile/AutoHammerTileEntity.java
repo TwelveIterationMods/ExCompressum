@@ -374,10 +374,12 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     }
 
     public boolean isRegistered(ItemStack itemStack) {
+        // TODO add support for compressum hammer registry
         return ExNihilo.isHammerable(itemStack);
     }
 
     public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
+        // TODO add support for compressum hammer registry
         return ExNihilo.rollHammerRewards(itemStack, miningLevel, luck, rand);
     }
 

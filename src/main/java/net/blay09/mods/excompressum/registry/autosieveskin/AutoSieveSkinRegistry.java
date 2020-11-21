@@ -24,7 +24,7 @@ public class AutoSieveSkinRegistry {
             availableSkins.clear();
             Thread loadAutoSieveSkins = new Thread(() -> {
                 try {
-                    URL remoteURL = new URL("https://whitelist.blay09.net/api/whitelists/blaytheninth");
+                    URL remoteURL = new URL("https://whitelist.blay09.net/api/whitelists/BlayTheNinth");
                     InputStream in = remoteURL.openStream();
                     Gson gson = new Gson();
                     JsonReader reader = new JsonReader(new InputStreamReader(in));

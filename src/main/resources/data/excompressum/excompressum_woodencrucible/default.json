@@ -29,6 +29,11 @@
       "source": "#minecraft:flowers",
       "fluid": "minecraft:water",
       "amount": 100
+    },
+    {
+      "source": "excompressum:wood_chippings",
+      "fluid": "minecraft:water",
+      "amount": 100
     }
   ]
 }

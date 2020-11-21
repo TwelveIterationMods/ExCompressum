@@ -7,7 +7,7 @@
   "customEntries": [
     {
       "source": "minecraft:sand",
-      "lootTable": "excompressum:chicken_stick/sand"
+      "lootTable": "excompressum:excompressum/chicken_stick/sand"
     }
   ]
 }

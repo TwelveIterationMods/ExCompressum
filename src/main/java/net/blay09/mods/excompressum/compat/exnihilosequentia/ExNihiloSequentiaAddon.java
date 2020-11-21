@@ -13,15 +13,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.RandomChance;
-import net.minecraft.loot.functions.CopyNbt;
 import net.minecraft.loot.functions.SetCount;
 import net.minecraft.loot.functions.SetNBT;
-import net.minecraft.loot.functions.SetName;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
@@ -37,6 +34,7 @@ import novamachina.exnihilosequentia.api.crafting.sieve.SieveRecipe;
 import novamachina.exnihilosequentia.common.block.InfestedLeavesBlock;
 import novamachina.exnihilosequentia.common.item.mesh.EnumMesh;
 import novamachina.exnihilosequentia.common.item.resources.EnumResource;
+import novamachina.exnihilosequentia.common.registries.HammerRegistry;
 import novamachina.exnihilosequentia.common.utility.Config;
 
 import javax.annotation.Nullable;
@@ -56,6 +54,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammer_iron"));
         itemMap.put(NihiloItems.HAMMER_GOLD, findItem("hammer_gold"));
         itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammer_diamond"));
+        itemMap.put(NihiloItems.HAMMER_NETHERITE, findItem("hammer_netherite"));
         itemMap.put(NihiloItems.CROOK_WOODEN, findItem("crook_wood"));
         itemMap.put(NihiloItems.SILK_MESH, findItem("mesh_string"));
         itemMap.put(NihiloItems.IRON_MESH, findItem("mesh_iron"));
@@ -65,7 +64,9 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("infested_leaves"));
         itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("crushed_netherrack"));
         itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("crushed_end_stone"));
-
+        itemMap.put(NihiloItems.DIORITE_GRAVEL, findBlock("crushed_diorite"));
+        itemMap.put(NihiloItems.ANDESITE_GRAVEL, findBlock("crushed_andesite"));
+        itemMap.put(NihiloItems.GRANITE_GRAVEL, findBlock("crushed_granite"));
 
         ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
         if (!stringMeshItem.isEmpty()) {

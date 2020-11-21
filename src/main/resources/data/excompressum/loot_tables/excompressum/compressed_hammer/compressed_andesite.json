@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "excompressum:nihilo_item",
+          "name": "ANDESITE_GRAVEL",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 9
+            }
+          ]
+        }
+      ],
+      "conditions": []
+    }
+  ]
+}

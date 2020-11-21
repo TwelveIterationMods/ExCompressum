@@ -42,6 +42,7 @@ public interface ExNihiloProvider {
         HAMMER_IRON,
         HAMMER_GOLD,
         HAMMER_DIAMOND,
+        HAMMER_NETHERITE,
         SILK_WORM,
         SILK_MESH,
         DUST,
@@ -49,7 +50,10 @@ public interface ExNihiloProvider {
         ENDER_GRAVEL,
         INFESTED_LEAVES,
         IRON_MESH,
-        SIEVE
+        SIEVE,
+        ANDESITE_GRAVEL,
+        DIORITE_GRAVEL,
+        GRANITE_GRAVEL
     }
 
     ItemStack getNihiloItem(NihiloItems type);

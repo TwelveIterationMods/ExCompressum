@@ -1,0 +1,13 @@
+{
+  "modid": "minecraft",
+  "group": {
+    "id": "excompressum:default",
+    "enabledByDefault": true
+  },
+  "customEntries": [
+    {
+      "source": "#minecraft:logs",
+      "lootTable": "excompressum:excompressum/hammer/logs"
+    }
+  ]
+}
