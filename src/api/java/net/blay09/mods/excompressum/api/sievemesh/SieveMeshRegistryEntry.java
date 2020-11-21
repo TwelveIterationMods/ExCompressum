@@ -1,16 +1,16 @@
 package net.blay09.mods.excompressum.api.sievemesh;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
 public class SieveMeshRegistryEntry {
 	private final ItemStack itemStack;
+	private final Object backingMesh;
+
 	private int meshLevel;
 	private boolean isHeavy;
-	private ResourceLocation spriteLocation;
-	private Object backingMesh;
+	private String modelName;
 
 	public SieveMeshRegistryEntry(ItemStack itemStack, Object backingMesh) {
 		this.itemStack = itemStack;
@@ -38,12 +38,12 @@ public class SieveMeshRegistryEntry {
 	}
 
 	@Nullable
-	public ResourceLocation getSpriteLocation() {
-		return spriteLocation;
+	public String getModelName() {
+		return modelName;
 	}
 
-	public void setSpriteLocation(ResourceLocation spriteLocation) {
-		this.spriteLocation = spriteLocation;
+	public void setModelName(@Nullable String modelName) {
+		this.modelName = modelName;
 	}
 
 	public Object getBackingMesh() {

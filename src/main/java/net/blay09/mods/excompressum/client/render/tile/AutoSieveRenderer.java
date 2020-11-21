@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.blay09.mods.excompressum.api.SieveModelBounds;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.client.ModModels;
@@ -79,15 +80,18 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
         // Render the sieve
         matrixStack.push();
         matrixStack.translate(0f, 0.01f, 0f);
-        dispatcher.getBlockModelRenderer().renderModel(world, sieveModel, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
+        dispatcher.getBlockModelRenderer().renderModel(world, sieveModel, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getSolid()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
         matrixStack.pop();
 
         SieveModelBounds bounds = HeavySieveBlock.SIEVE_BOUNDS;
 
         // Render the sieve mesh
-        ItemStack meshStack = tileEntity.getMeshStack();
-        if (!meshStack.isEmpty()) {
-            dispatcher.getBlockModelRenderer().renderModel(world, ModModels.mesh, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
+        SieveMeshRegistryEntry mesh = tileEntity.getSieveMesh();
+        if (mesh != null) {
+            IBakedModel meshModel = ModModels.meshes.get(mesh.getModelName());
+            if(meshModel != null) {
+                dispatcher.getBlockModelRenderer().renderModel(world, meshModel, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
+            }
         }
 
         // Render the content

@@ -1,26 +1,20 @@
 package net.blay09.mods.excompressum.client.render.tile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.client.ModModels;
-import net.blay09.mods.excompressum.client.render.RenderUtils;
-import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tile.HeavySieveTileEntity;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
@@ -44,9 +38,12 @@ public class HeavySieveRenderer extends TileEntityRenderer<HeavySieveTileEntity>
         matrixStack.push();
 
         // Render mesh
-        ItemStack meshStack = tileEntity.getMeshStack();
-        if (!meshStack.isEmpty()) {
-            dispatcher.getBlockModelRenderer().renderModel(world, ModModels.mesh, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
+        SieveMeshRegistryEntry mesh = tileEntity.getSieveMesh();
+        if (mesh != null) {
+            IBakedModel meshModel = ModModels.meshes.get(mesh.getModelName());
+            if (meshModel != null) {
+                dispatcher.getBlockModelRenderer().renderModel(world, meshModel, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
+            }
         }
 
         ItemStack currentStack = tileEntity.getCurrentStack();

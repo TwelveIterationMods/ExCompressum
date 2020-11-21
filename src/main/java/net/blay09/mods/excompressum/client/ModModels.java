@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum.client;
 import com.mojang.datafixers.util.Either;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.HeavySieveType;
-import net.minecraft.block.WoodType;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
@@ -19,12 +18,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModModels {
+    public static final Map<String, IBakedModel> meshes = new HashMap<>();
+
     public static IBakedModel woodenCrucibleLiquid;
-    public static IBakedModel mesh;
     public static IBakedModel[] sieves;
 
     @SubscribeEvent
@@ -32,7 +31,13 @@ public class ModModels {
         try {
             // Static models used in TileEntityRenderer
             woodenCrucibleLiquid = loadAndBakeModel(event, location("block/wooden_crucible_liquid"));
-            mesh = loadAndBakeModel(event, location("block/mesh"));
+
+            meshes.put("string", loadAndBakeModel(event, location("block/string_mesh")));
+            meshes.put("flint", loadAndBakeModel(event, location("block/flint_mesh")));
+            meshes.put("iron", loadAndBakeModel(event, location("block/iron_mesh")));
+            meshes.put("diamond", loadAndBakeModel(event, location("block/diamond_mesh")));
+            meshes.put("emerald", loadAndBakeModel(event, location("block/emerald_mesh")));
+            meshes.put("netherite", loadAndBakeModel(event, location("block/netherite_mesh")));
 
             HeavySieveType[] sieveTypes = HeavySieveType.values;
             sieves = new IBakedModel[sieveTypes.length];

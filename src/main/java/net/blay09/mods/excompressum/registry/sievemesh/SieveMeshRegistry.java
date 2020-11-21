@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.registry.sievemesh;
 
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.item.ItemStack;
@@ -18,7 +17,7 @@ public class SieveMeshRegistry {
         SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(new ItemStack(ModItems.ironMesh), null);
         ironMesh.setHeavy(true);
         ironMesh.setMeshLevel(3);
-        ironMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/iron_mesh"));
+        ironMesh.setModelName("iron");
         add(ironMesh);
     }
 

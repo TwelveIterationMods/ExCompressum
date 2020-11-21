@@ -1,0 +1,17 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:block/block",
+	"textures": {
+		"mesh": "excompressum:blocks/netherite_mesh"
+	},
+	"elements": [
+		{
+			"name": "Mesh",
+			"from": [1, 8, 1],
+			"to": [15, 8.5, 15],
+			"faces": {
+				"up": {"uv": [0, 0, 16, 16], "texture": "#mesh"}
+			}
+		}
+	]
+}

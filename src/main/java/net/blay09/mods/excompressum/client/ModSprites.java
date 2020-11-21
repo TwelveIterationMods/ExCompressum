@@ -33,6 +33,8 @@ public class ModSprites {
             event.addSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/flint_mesh"));
             event.addSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/iron_mesh"));
             event.addSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/diamond_mesh"));
+            event.addSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/emerald_mesh"));
+            event.addSprite(new ResourceLocation(ExCompressum.MOD_ID, "blocks/netherite_mesh"));
         }
     }
 

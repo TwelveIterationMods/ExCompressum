@@ -34,7 +34,6 @@ import novamachina.exnihilosequentia.api.crafting.sieve.SieveRecipe;
 import novamachina.exnihilosequentia.common.block.InfestedLeavesBlock;
 import novamachina.exnihilosequentia.common.item.mesh.EnumMesh;
 import novamachina.exnihilosequentia.common.item.resources.EnumResource;
-import novamachina.exnihilosequentia.common.registries.HammerRegistry;
 import novamachina.exnihilosequentia.common.utility.Config;
 
 import javax.annotation.Nullable;
@@ -72,7 +71,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         if (!stringMeshItem.isEmpty()) {
             SieveMeshRegistryEntry stringMesh = new SieveMeshRegistryEntry(stringMeshItem, EnumMesh.STRING);
             stringMesh.setMeshLevel(1);
-            stringMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/string_mesh"));
+            stringMesh.setModelName("string");
             SieveMeshRegistry.add(stringMesh);
         }
 
@@ -80,7 +79,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         if (!flintMeshItem.isEmpty()) {
             SieveMeshRegistryEntry flintMesh = new SieveMeshRegistryEntry(flintMeshItem, EnumMesh.FLINT);
             flintMesh.setMeshLevel(2);
-            flintMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/flint_mesh"));
+            flintMesh.setModelName("flint");
             SieveMeshRegistry.add(flintMesh);
         }
 
@@ -89,7 +88,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(ironMeshItem, EnumMesh.IRON);
             ironMesh.setMeshLevel(3);
             ironMesh.setHeavy(true);
-            ironMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/iron_mesh"));
+            ironMesh.setModelName("iron");
             SieveMeshRegistry.add(ironMesh);
         }
 
@@ -98,8 +97,26 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             SieveMeshRegistryEntry diamondMesh = new SieveMeshRegistryEntry(diamondMeshItem, EnumMesh.DIAMOND);
             diamondMesh.setMeshLevel(4);
             diamondMesh.setHeavy(true);
-            diamondMesh.setSpriteLocation(new ResourceLocation(ExCompressum.MOD_ID, "blocks/diamond_mesh"));
+            diamondMesh.setModelName("diamond");
             SieveMeshRegistry.add(diamondMesh);
+        }
+
+        ItemStack emeraldMeshItem = findItem("mesh_emerald");
+        if (!emeraldMeshItem.isEmpty()) {
+            SieveMeshRegistryEntry emeraldMesh = new SieveMeshRegistryEntry(emeraldMeshItem, EnumMesh.EMERALD);
+            emeraldMesh.setMeshLevel(5);
+            emeraldMesh.setHeavy(true);
+            emeraldMesh.setModelName("emerald");
+            SieveMeshRegistry.add(emeraldMesh);
+        }
+
+        ItemStack netheriteMeshItem = findItem("mesh_netherite");
+        if (!netheriteMeshItem.isEmpty()) {
+            SieveMeshRegistryEntry mesh = new SieveMeshRegistryEntry(netheriteMeshItem, EnumMesh.NETHERITE);
+            mesh.setMeshLevel(6);
+            mesh.setHeavy(true);
+            mesh.setModelName("netherite");
+            SieveMeshRegistry.add(mesh);
         }
     }
 

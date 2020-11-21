@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/block",
 	"textures": {
-		"iron_mesh": "excompressum:blocks/iron_mesh"
+		"mesh": "excompressum:blocks/diamond_mesh"
 	},
 	"elements": [
 		{
@@ -10,7 +10,7 @@
 			"from": [1, 8, 1],
 			"to": [15, 8.5, 15],
 			"faces": {
-				"up": {"uv": [0, 0, 16, 16], "texture": "#iron_mesh"}
+				"up": {"uv": [0, 0, 16, 16], "texture": "#mesh"}
 			}
 		}
 	]
