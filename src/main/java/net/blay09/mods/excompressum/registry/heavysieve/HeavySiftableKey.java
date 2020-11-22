@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.registry.heavysieve;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 public class HeavySiftableKey {
@@ -10,7 +11,7 @@ public class HeavySiftableKey {
     private final SieveMeshRegistryEntry mesh;
     private final boolean waterlogged;
 
-    public HeavySiftableKey(ResourceLocation source, SieveMeshRegistryEntry mesh, boolean waterlogged) {
+    public HeavySiftableKey(ResourceLocation source, @Nullable SieveMeshRegistryEntry mesh, boolean waterlogged) {
         this.source = source;
         this.mesh = mesh;
         this.waterlogged = waterlogged;

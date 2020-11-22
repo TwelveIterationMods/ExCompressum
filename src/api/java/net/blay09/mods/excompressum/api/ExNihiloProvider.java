@@ -66,7 +66,7 @@ public interface ExNihiloProvider {
 
     List<ItemStack> rollCrookRewards(ServerWorld world, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, Random rand);
 
-    LootTable generateHeavySieveLootTable(IItemProvider source, int count);
+    LootTable generateHeavySieveLootTable(BlockState sieveState, IItemProvider source, int count, SieveMeshRegistryEntry mesh);
 
     boolean doMeshesHaveDurability();
 

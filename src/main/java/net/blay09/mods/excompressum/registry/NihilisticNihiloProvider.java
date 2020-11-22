@@ -49,7 +49,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public LootTable generateHeavySieveLootTable(IItemProvider source, int count) {
+	public LootTable generateHeavySieveLootTable(BlockState sieveState, IItemProvider source, int count, SieveMeshRegistryEntry mesh) {
 		return LootTable.EMPTY_LOOT_TABLE;
 	}
 

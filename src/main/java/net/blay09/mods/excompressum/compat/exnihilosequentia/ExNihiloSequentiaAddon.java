@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.api.sievemesh.MeshType;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
@@ -227,32 +226,31 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public LootTable generateHeavySieveLootTable(IItemProvider source, int times) {
-        LootTable.Builder tableBuilder = LootTable.builder();
-        for (EnumMesh mesh : EnumMesh.values()) {
-            LootPool.Builder poolBuilder = LootPool.builder();
-            poolBuilder.rolls(ConstantRange.of(times));
-            if (!ExCompressumConfig.COMMON.flattenSieveRecipes.get()) {
-                // TODO sieve mesh poolBuilder.acceptCondition();
-            }
-
-            List<SieveRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(source, mesh, false);// TODO support waterlogged
-            for (SieveRecipe recipe : recipes) {
-                ItemStack itemStack = recipe.getDrop();
-                for (MeshWithChance roll : recipe.getRolls()) {
-                    StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(itemStack.getItem());
-                    if (itemStack.getCount() > 0) {
-                        entryBuilder.acceptFunction(SetCount.builder(ConstantRange.of(itemStack.getCount())));
-                    }
-                    if(itemStack.getTag() != null) {
-                        entryBuilder.acceptFunction(SetNBT.builder(itemStack.getTag()));
-                    }
-                    entryBuilder.acceptCondition(RandomChance.builder(roll.getChance()));
-                    poolBuilder.addEntry(entryBuilder);
-                }
-            }
-            tableBuilder.addLootPool(poolBuilder);
+    public LootTable generateHeavySieveLootTable(BlockState sieveState, IItemProvider source, int times, SieveMeshRegistryEntry mesh) {
+        if (!(mesh.getBackingMesh() instanceof EnumMesh)) {
+            return LootTable.EMPTY_LOOT_TABLE;
         }
+
+        boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.get(BlockStateProperties.WATERLOGGED);
+        LootTable.Builder tableBuilder = LootTable.builder();
+        LootPool.Builder poolBuilder = LootPool.builder();
+        poolBuilder.rolls(ConstantRange.of(times));
+        List<SieveRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(source, ((EnumMesh) mesh.getBackingMesh()), waterlogged);
+        for (SieveRecipe recipe : recipes) {
+            ItemStack itemStack = recipe.getDrop();
+            for (MeshWithChance roll : recipe.getRolls()) {
+                StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(itemStack.getItem());
+                if (itemStack.getCount() > 0) {
+                    entryBuilder.acceptFunction(SetCount.builder(ConstantRange.of(itemStack.getCount())));
+                }
+                if (itemStack.getTag() != null) {
+                    entryBuilder.acceptFunction(SetNBT.builder(itemStack.getTag()));
+                }
+                entryBuilder.acceptCondition(RandomChance.builder(roll.getChance()));
+                poolBuilder.addEntry(entryBuilder);
+            }
+        }
+        tableBuilder.addLootPool(poolBuilder);
         return tableBuilder.build();
     }
 

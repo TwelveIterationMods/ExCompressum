@@ -10,7 +10,6 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Set;
 
 public class HeavySiftable extends RegistryEntry {
