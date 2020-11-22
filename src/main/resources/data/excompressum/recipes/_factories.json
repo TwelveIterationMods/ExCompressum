@@ -1,9 +1,0 @@
-{
-  "ingredients": {
-    "nihilo_item": "net.blay09.mods.excompressum.crafting.NihiloItemIngredient"
-  },
-  "conditions": {
-    "has_nihilo_item": "net.blay09.mods.excompressum.crafting.HasNihiloItemCondition",
-    "has_oredict_item": "net.blay09.mods.excompressum.crafting.HasOreDictItemCondition"
-  }
-}

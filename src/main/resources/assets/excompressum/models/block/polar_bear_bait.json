@@ -1,5 +1,5 @@
 {
   "textures": {
-    "particle": "excompressum:items/bait_polar_bear"
+    "particle": "minecraft:item/snowball"
   }
 }

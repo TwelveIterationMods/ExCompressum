@@ -1,5 +1,5 @@
 {
   "textures": {
-    "particle": "excompressum:items/bait_sheep"
+    "particle": "minecraft:item/wheat"
   }
 }
