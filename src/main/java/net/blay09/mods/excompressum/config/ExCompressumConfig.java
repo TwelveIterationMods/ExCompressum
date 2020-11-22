@@ -307,7 +307,7 @@ public class ExCompressumConfig {
             autoHammerSpeed = builder
                     .comment("The speed at which the auto hammer will smash stuff.")
                     .translation("excompressum.config.autoHammerSpeed")
-                    .defineInRange("autoHammerSpeed", 0.0075f, Float.MIN_VALUE, Float.MAX_VALUE);
+                    .defineInRange("autoHammerSpeed", 0.008f, Float.MIN_VALUE, Float.MAX_VALUE);
 
             autoHammerDecay = builder
                     .comment("The chance for the upgrade hammers in an auto hammer to lose durability (per operation)")
@@ -322,7 +322,7 @@ public class ExCompressumConfig {
             autoCompressedHammerSpeed = builder
                     .comment("The speed at which the auto compressed hammer will smash stuff.")
                     .translation("excompressum.config.autoCompressedHammerSpeed")
-                    .defineInRange("autoCompressedHammerSpeed", 0.00375f, Float.MIN_VALUE, Float.MAX_VALUE);
+                    .defineInRange("autoCompressedHammerSpeed", 0.0038f, Float.MIN_VALUE, Float.MAX_VALUE);
 
             autoSieveEnergy = builder
                     .comment("The energy cost of the auto sieve per tick.")

@@ -98,6 +98,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     private final LazyOptional<ItemHandlerAutomation> itemHandlerAutomationCap = LazyOptional.of(() -> itemHandlerAutomation);
 
     private ItemStack currentStack = ItemStack.EMPTY;
+    private int cooldown;
 
     private int ticksSinceUpdate;
     private boolean isDirty;
@@ -120,9 +121,12 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     @Override
     public void tick() {
         if (!world.isRemote) {
+            if(cooldown > 0) {
+                cooldown--;
+            }
             int effectiveEnergy = getEffectiveEnergy();
             if (!isDisabledByRedstone() && getEnergyStored() >= effectiveEnergy) {
-                if (currentStack.isEmpty()) {
+                if (currentStack.isEmpty() && cooldown <= 0) {
                     ItemStack inputStack = inputSlots.getStackInSlot(0);
                     if (!inputStack.isEmpty() && isRegistered(inputStack)) {
                         boolean foundSpace = false;
@@ -139,7 +143,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
                             inputSlots.setStackInSlot(0, ItemStack.EMPTY);
                         }
                         energyStorage.extractEnergy(effectiveEnergy, false);
-                        VanillaPacketHandler.sendTileEntityUpdate(this);
+                        ticksSinceUpdate = UPDATE_INTERVAL;
                         progress = 0f;
                     }
                 } else {
@@ -174,6 +178,8 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
                         }
                         finishedStack = currentStack;
                         progress = 0f;
+                        ticksSinceUpdate = UPDATE_INTERVAL;
+                        cooldown = 2;
                         currentStack = ItemStack.EMPTY;
                     }
                 }
