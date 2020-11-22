@@ -51,7 +51,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         @Override
         public boolean isItemValid(int slot, ItemStack itemStack) {
             if (inputSlots.isInside(slot)) {
-                return isSiftable(itemStack);
+                return isSiftableWithMesh(itemStack, getSieveMesh());
             } else if (meshSlots.isInside(slot)) {
                 return isMesh(itemStack);
             }
@@ -237,7 +237,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         return (float) (ExCompressumConfig.COMMON.autoSieveSpeed.get() * getSpeedMultiplier());
     }
 
-    public float getEffectiveLuck() {
+    private float getEffectiveLuck() {
         ItemStack meshStack = meshSlots.getStackInSlot(0);
         if (!meshStack.isEmpty()) {
             return ExNihilo.getInstance().getMeshFortune(meshStack);
@@ -245,20 +245,16 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         return 0f;
     }
 
-    public boolean isSiftable(ItemStack itemStack) {
-        return ExNihilo.isSiftableWithMesh(itemStack, getSieveMesh());
+    public boolean isSiftableWithMesh(ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
+        return ExNihilo.isSiftableWithMesh(getBlockState(), itemStack, sieveMesh);
     }
 
-    public boolean isSiftableWithMesh(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
-        return ExNihilo.isSiftableWithMesh(itemStack, sieveMesh);
-    }
-
-    public boolean isMesh(ItemStack itemStack) {
+    private boolean isMesh(ItemStack itemStack) {
         return SieveMeshRegistry.getEntry(itemStack) != null;
     }
 
     public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        return ExNihilo.rollSieveRewards(itemStack, sieveMesh, luck, rand);
+        return ExNihilo.rollSieveRewards(getBlockState(), itemStack, sieveMesh, luck, rand);
     }
 
     @Override

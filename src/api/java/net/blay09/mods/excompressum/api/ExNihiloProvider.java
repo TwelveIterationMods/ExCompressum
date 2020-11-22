@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.api;
 
-import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -8,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.server.ServerWorld;
 
@@ -62,11 +60,9 @@ public interface ExNihiloProvider {
 
     List<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand);
 
-    boolean isSiftable(BlockState state);
+    boolean isSiftableWithMesh(BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh);
 
-    boolean isSiftableWithMesh(BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh);
-
-    Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand);
+    Collection<ItemStack> rollSieveRewards(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand);
 
     List<ItemStack> rollCrookRewards(ServerWorld world, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, Random rand);
 

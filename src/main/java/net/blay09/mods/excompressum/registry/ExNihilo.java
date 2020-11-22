@@ -34,15 +34,15 @@ public abstract class ExNihilo {
 		return Collections.emptyList();
 	}
 
-	public static boolean isSiftableWithMesh(ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
+	public static boolean isSiftableWithMesh(BlockState sieveState, ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
 		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
-		return state != null && instance.isSiftableWithMesh(state, sieveMesh);
+		return state != null && instance.isSiftableWithMesh(sieveState, state, sieveMesh);
 	}
 
-	public static Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+	public static Collection<ItemStack> rollSieveRewards(BlockState sieveState, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
 		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		if(state != null) {
-			return instance.rollSieveRewards(state, sieveMesh, luck, rand);
+			return instance.rollSieveRewards(sieveState, state, sieveMesh, luck, rand);
 		}
 		return Collections.emptyList();
 	}

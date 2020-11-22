@@ -1,19 +1,14 @@
 package net.blay09.mods.excompressum.registry;
 
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.api.SieveModelBounds;
-import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
@@ -39,17 +34,12 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public boolean isSiftable(BlockState state) {
+	public boolean isSiftableWithMesh(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh) {
 		return false;
 	}
 
 	@Override
-	public boolean isSiftableWithMesh(BlockState state, SieveMeshRegistryEntry sieveMesh) {
-		return false;
-	}
-
-	@Override
-	public Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+	public Collection<ItemStack> rollSieveRewards(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
 		return Collections.emptyList();
 	}
 

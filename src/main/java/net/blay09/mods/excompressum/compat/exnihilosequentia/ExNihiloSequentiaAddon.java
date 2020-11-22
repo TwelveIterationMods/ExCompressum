@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.compat.exnihilosequentia;
 
 import com.google.common.collect.Maps;
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
@@ -19,6 +18,7 @@ import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.RandomChance;
 import net.minecraft.loot.functions.SetCount;
 import net.minecraft.loot.functions.SetNBT;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
@@ -156,19 +156,16 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public boolean isSiftable(BlockState state) {
-        return ExNihiloRegistries.SIEVE_REGISTRY.isBlockSiftable(state.getBlock(), EnumMesh.NONE, false); // TODO waterlogged support
-    }
-
-    @Override
-    public boolean isSiftableWithMesh(BlockState state, SieveMeshRegistryEntry sieveMesh) {
+    public boolean isSiftableWithMesh(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh) {
+        boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.get(BlockStateProperties.WATERLOGGED);
         EnumMesh mesh = sieveMesh != null ? (EnumMesh) sieveMesh.getBackingMesh() : EnumMesh.NONE;
-        return ExNihiloRegistries.SIEVE_REGISTRY.isBlockSiftable(state.getBlock(), mesh, false); // TODO waterlogged support
+        return ExNihiloRegistries.SIEVE_REGISTRY.isBlockSiftable(state.getBlock(), mesh, waterlogged);
     }
 
     @Override
-    public Collection<ItemStack> rollSieveRewards(BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        List<SieveRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(state.getBlock(), ((EnumMesh) sieveMesh.getBackingMesh()), false); // TODO waterlogged support
+    public Collection<ItemStack> rollSieveRewards(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+        boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.get(BlockStateProperties.WATERLOGGED);
+        List<SieveRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(state.getBlock(), ((EnumMesh) sieveMesh.getBackingMesh()), waterlogged);
         if (recipes != null) {
             List<ItemStack> list = new ArrayList<>();
             for (SieveRecipe recipe : recipes) {
