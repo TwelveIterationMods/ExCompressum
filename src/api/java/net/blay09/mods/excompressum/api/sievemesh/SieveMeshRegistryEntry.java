@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nullable;
 
 public class SieveMeshRegistryEntry {
+	private final MeshType meshType;
 	private final ItemStack itemStack;
 	private final Object backingMesh;
 
@@ -12,7 +13,8 @@ public class SieveMeshRegistryEntry {
 	private boolean isHeavy;
 	private String modelName;
 
-	public SieveMeshRegistryEntry(ItemStack itemStack, Object backingMesh) {
+	public SieveMeshRegistryEntry(MeshType meshType, ItemStack itemStack, Object backingMesh) {
+		this.meshType = meshType;
 		this.itemStack = itemStack;
 		this.backingMesh = backingMesh;
 	}
@@ -44,6 +46,10 @@ public class SieveMeshRegistryEntry {
 
 	public void setModelName(@Nullable String modelName) {
 		this.modelName = modelName;
+	}
+
+	public MeshType getMeshType() {
+		return meshType;
 	}
 
 	public Object getBackingMesh() {

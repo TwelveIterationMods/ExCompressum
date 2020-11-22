@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
@@ -29,6 +30,7 @@ public abstract class ExRegistry<T> implements IResourceManagerReloadListener {
         return new GsonBuilder()
                 .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
                 .registerTypeAdapter(LootTableProvider.class, new LootTableProvider.Serializer())
+                .registerTypeAdapter(Ingredient.class, new IngredientSerializer())
                 .registerTypeAdapter(TagOrResourceLocation.class, new TagOrResourceLocation.Serializer())
                 .registerTypeAdapter(ItemStack.class, new ItemStackSerializer());
     }

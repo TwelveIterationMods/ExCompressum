@@ -6,6 +6,7 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.ExNihilo;
+import net.blay09.mods.excompressum.api.sievemesh.MeshType;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -69,7 +70,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
         ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
         if (!stringMeshItem.isEmpty()) {
-            SieveMeshRegistryEntry stringMesh = new SieveMeshRegistryEntry(stringMeshItem, EnumMesh.STRING);
+            SieveMeshRegistryEntry stringMesh = new SieveMeshRegistryEntry(MeshType.STRING, stringMeshItem, EnumMesh.STRING);
             stringMesh.setMeshLevel(1);
             stringMesh.setModelName("string");
             SieveMeshRegistry.add(stringMesh);
@@ -77,7 +78,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
         ItemStack flintMeshItem = findItem("mesh_flint");
         if (!flintMeshItem.isEmpty()) {
-            SieveMeshRegistryEntry flintMesh = new SieveMeshRegistryEntry(flintMeshItem, EnumMesh.FLINT);
+            SieveMeshRegistryEntry flintMesh = new SieveMeshRegistryEntry(MeshType.FLINT, flintMeshItem, EnumMesh.FLINT);
             flintMesh.setMeshLevel(2);
             flintMesh.setModelName("flint");
             SieveMeshRegistry.add(flintMesh);
@@ -85,7 +86,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
         ItemStack ironMeshItem = getNihiloItem(NihiloItems.IRON_MESH);
         if (!ironMeshItem.isEmpty()) {
-            SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(ironMeshItem, EnumMesh.IRON);
+            SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(MeshType.IRON, ironMeshItem, EnumMesh.IRON);
             ironMesh.setMeshLevel(3);
             ironMesh.setHeavy(true);
             ironMesh.setModelName("iron");
@@ -94,7 +95,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
         ItemStack diamondMeshItem = findItem("mesh_diamond");
         if (!diamondMeshItem.isEmpty()) {
-            SieveMeshRegistryEntry diamondMesh = new SieveMeshRegistryEntry(diamondMeshItem, EnumMesh.DIAMOND);
+            SieveMeshRegistryEntry diamondMesh = new SieveMeshRegistryEntry(MeshType.DIAMOND, diamondMeshItem, EnumMesh.DIAMOND);
             diamondMesh.setMeshLevel(4);
             diamondMesh.setHeavy(true);
             diamondMesh.setModelName("diamond");
@@ -103,7 +104,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
         ItemStack emeraldMeshItem = findItem("mesh_emerald");
         if (!emeraldMeshItem.isEmpty()) {
-            SieveMeshRegistryEntry emeraldMesh = new SieveMeshRegistryEntry(emeraldMeshItem, EnumMesh.EMERALD);
+            SieveMeshRegistryEntry emeraldMesh = new SieveMeshRegistryEntry(MeshType.EMERALD, emeraldMeshItem, EnumMesh.EMERALD);
             emeraldMesh.setMeshLevel(5);
             emeraldMesh.setHeavy(true);
             emeraldMesh.setModelName("emerald");
@@ -112,7 +113,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
         ItemStack netheriteMeshItem = findItem("mesh_netherite");
         if (!netheriteMeshItem.isEmpty()) {
-            SieveMeshRegistryEntry mesh = new SieveMeshRegistryEntry(netheriteMeshItem, EnumMesh.NETHERITE);
+            SieveMeshRegistryEntry mesh = new SieveMeshRegistryEntry(MeshType.NETHERITE, netheriteMeshItem, EnumMesh.NETHERITE);
             mesh.setMeshLevel(6);
             mesh.setHeavy(true);
             mesh.setModelName("netherite");

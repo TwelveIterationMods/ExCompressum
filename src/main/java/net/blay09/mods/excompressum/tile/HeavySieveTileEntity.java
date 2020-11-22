@@ -53,7 +53,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     public boolean addSiftable(PlayerEntity player, ItemStack itemStack) {
-        if (!currentStack.isEmpty() || meshStack.isEmpty() || !ExRegistries.getHeavySieveRegistry().isSiftable(itemStack)) {
+        if (!currentStack.isEmpty() || meshStack.isEmpty() || !ExRegistries.getHeavySieveRegistry().isSiftable(getBlockState(), itemStack, getSieveMesh())) {
             return false;
         }
         currentStack = player.abilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(itemStack, 1) : itemStack.split(1);
@@ -112,7 +112,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
                 if (!world.isRemote) {
                     SieveMeshRegistryEntry sieveMesh = getSieveMesh();
                     if (sieveMesh != null) {
-                        HeavySiftable siftable = ExRegistries.getHeavySieveRegistry().getSiftable(currentStack);
+                        HeavySiftable siftable = ExRegistries.getHeavySieveRegistry().getSiftable(getBlockState(), currentStack, sieveMesh);
                         if(siftable != null) {
                             int fortune = ExNihilo.getInstance().getMeshFortune(meshStack);
                             fortune += player.getLuck();

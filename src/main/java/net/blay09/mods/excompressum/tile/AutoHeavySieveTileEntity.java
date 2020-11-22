@@ -11,6 +11,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
@@ -22,13 +23,13 @@ public class AutoHeavySieveTileEntity extends AutoSieveTileEntity {
     }
 
     @Override
-    public boolean isSiftableWithMesh(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
-        return ExRegistries.getHeavySieveRegistry().isSiftable(itemStack/*, sieveMesh*/); // TODO revisit this
+    public boolean isSiftableWithMesh(ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
+        return ExRegistries.getHeavySieveRegistry().isSiftable(getBlockState(), itemStack, sieveMesh);
     }
 
     @Override
     public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        HeavySiftable siftable = ExRegistries.getHeavySieveRegistry().getSiftable(itemStack);
+        HeavySiftable siftable = ExRegistries.getHeavySieveRegistry().getSiftable(getBlockState(), itemStack, getSieveMesh());
         if (siftable != null) {
             LootContext lootContext = HeavySieveRegistry.buildLootContext(((ServerWorld) world), itemStack, luck, rand);
             return HeavySieveRegistry.rollSieveRewards(siftable, lootContext);

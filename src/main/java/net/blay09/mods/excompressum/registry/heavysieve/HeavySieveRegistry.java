@@ -1,17 +1,18 @@
 package net.blay09.mods.excompressum.registry.heavysieve;
 
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.registry.*;
+import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameter;
 import net.minecraft.loot.LootParameterSet;
 import net.minecraft.loot.LootTable;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -23,52 +24,35 @@ public class HeavySieveRegistry extends GroupedRegistry<
         HeavySiftable,
         HeavySieveRegistryData> {
 
-    public static final LootParameter<ItemStack> SOURCE_STACK = new LootParameter<>(new ResourceLocation("excompressum", "source_stack"));
+    private static final LootParameter<ItemStack> SOURCE_STACK = new LootParameter<>(new ResourceLocation(ExCompressum.MOD_ID, "source_stack"));
 
-    private final Map<ResourceLocation, HeavySiftable> entries = new HashMap<>();
-    private final Map<ResourceLocation, GeneratedHeavySiftable> generatedEntries = new HashMap<>();
-    private final Map<ResourceLocation, HeavySiftable> generatedEntriesCache = new HashMap<>();
+    private final List<HeavySiftable> siftables = new ArrayList<>();
+    private final Map<HeavySiftableKey, GeneratedHeavySiftable> generatedEntries = new HashMap<>();
+    private final Map<HeavySiftableKey, HeavySiftable> generatedEntriesCache = new HashMap<>();
 
     public HeavySieveRegistry() {
         super("HeavySieve");
     }
 
     public Collection<HeavySiftable> getEntries() {
-        return entries.values();
+        return siftables; // TODO generated ones?
     }
 
-    public boolean isSiftable(ItemStack itemStack) {
-        final ResourceLocation registryName = itemStack.getItem().getRegistryName();
-        return getSiftable(Objects.requireNonNull(registryName)) != null;
-    }
-
-    public boolean isSiftable(BlockState state) {
-        final ResourceLocation registryName = state.getBlock().getRegistryName();
-        return getSiftable(Objects.requireNonNull(registryName)) != null;
+    public boolean isSiftable(BlockState sieveState, ItemStack itemStack, @Nullable SieveMeshRegistryEntry mesh) {
+        return getSiftable(sieveState, itemStack, mesh) != null;
     }
 
     @Nullable
-    public HeavySiftable getSiftable(BlockState state) {
-        final ResourceLocation registryName = state.getBlock().getRegistryName();
-        return getSiftable(Objects.requireNonNull(registryName));
-    }
-
-    @Nullable
-    public HeavySiftable getSiftable(ItemStack itemStack) {
-        final ResourceLocation registryName = itemStack.getItem().getRegistryName();
-        return getSiftable(Objects.requireNonNull(registryName));
-    }
-
-    @Nullable
-    private HeavySiftable getSiftable(ResourceLocation registryName) {
-        HeavySiftable customEntry = entries.get(registryName);
+    public HeavySiftable getSiftable(BlockState sieveState, ItemStack itemStack, @Nullable SieveMeshRegistryEntry mesh) {
+        boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.get(BlockStateProperties.WATERLOGGED);
+        HeavySiftable customEntry = siftables.stream().filter(it -> siftableMatches(it, itemStack, waterlogged, mesh)).findFirst().orElse(null);
         if (customEntry != null) {
             return customEntry;
         }
 
-        HeavySiftable generatedEntry = generatedEntriesCache.get(registryName);
+        /*HeavySiftable generatedEntry = generatedEntriesCache.get(heavySiftableKey);
         if (generatedEntry == null) {
-            GeneratedHeavySiftable generatedHeavySiftable = generatedEntries.get(registryName);
+            GeneratedHeavySiftable generatedHeavySiftable = generatedEntries.get(heavySiftableKey);
             if (generatedHeavySiftable != null) {
                 IItemProvider source = ForgeRegistries.ITEMS.getValue(generatedHeavySiftable.getSource());
                 int times = generatedHeavySiftable.getTimes() != null ? generatedHeavySiftable.getTimes() : ExCompressumConfig.COMMON.heavySieveDefaultRolls.get();
@@ -76,11 +60,33 @@ public class HeavySieveRegistry extends GroupedRegistry<
                 HeavySiftable generatedSiftable = new HeavySiftable();
                 generatedSiftable.setSource(registryName);
                 generatedSiftable.setLootTable(new LootTableProvider(lootTable));
-                generatedEntriesCache.put(registryName, generatedSiftable);
+                generatedEntriesCache.put(heavySiftableKey, generatedSiftable);
             }
         }
 
-        return generatedEntry;
+                return generatedEntry;
+*/
+
+        return null;
+    }
+
+    private boolean siftableMatches(HeavySiftable siftable, ItemStack itemStack, boolean waterlogged, SieveMeshRegistryEntry mesh) {
+        if (siftable.isWaterlogged() != waterlogged) {
+            return false;
+        }
+
+        if (siftable.getMinimumMesh() != null) {
+            SieveMeshRegistryEntry minimumMesh = SieveMeshRegistry.getEntry(siftable.getMinimumMesh());
+            if (mesh.getMeshLevel() < minimumMesh.getMeshLevel()) {
+                return false;
+            }
+        }
+
+        if (siftable.getMeshes() != null && !siftable.getMeshes().contains(mesh.getMeshType())) {
+            return false;
+        }
+
+        return siftable.getSource().test(itemStack);
     }
 
     // TODO move somewhere else, duplicate code
@@ -104,7 +110,7 @@ public class HeavySieveRegistry extends GroupedRegistry<
     @Override
     protected void reset() {
         super.reset();
-        entries.clear();
+        siftables.clear();
         generatedEntries.clear();
         generatedEntriesCache.clear();
     }
@@ -112,13 +118,13 @@ public class HeavySieveRegistry extends GroupedRegistry<
     @Override
     protected void loadRegistry(HeavySieveRegistryData data) {
         if (data.getGeneratedEntries() != null) {
-            this.generatedEntries.putAll(data.getGeneratedEntries());
+            // TODO this.generatedEntries.putAll(data.getGeneratedEntries());
         }
     }
 
     @Override
     protected void loadEntry(HeavySiftable entry, @Nullable RegistryOverride groupOverride, @Nullable RegistryOverride entryOverride) {
-        entries.put(entry.getSource(), entry);
+        siftables.add(entry);
     }
 
     @Override
