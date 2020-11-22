@@ -5,6 +5,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.blay09.mods.excompressum.api.SieveModelBounds;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.block.AutoSieveBaseBlock;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.client.ModModels;
@@ -13,6 +14,7 @@ import net.blay09.mods.excompressum.client.render.model.TinyHumanModel;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -72,6 +74,16 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
         playerModel.render(matrixStack, buffer.getBuffer(RenderType.getEntitySolid(getPlayerSkinTexture(skin))), combinedLightIn, combinedOverlayIn, 1f, 1f, 1f, 1f);
         matrixStack.pop();
 
+        // Render the glass around player head if underwater
+        if (tileEntity.isWaterlogged()) {
+            matrixStack.push();
+            matrixStack.translate(-0.425f, 0.6f, -0.175f);
+            float glassScale = 0.35f;
+            matrixStack.scale(glassScale, glassScale, glassScale);
+            dispatcher.renderBlock(Blocks.GLASS.getDefaultState(), matrixStack, buffer, combinedLightIn, combinedOverlayIn, EmptyModelData.INSTANCE);
+            matrixStack.pop();
+        }
+
         // Sieve & Content
         matrixStack.push();
         matrixStack.scale(0.5f, 0.5f, 0.5f);
@@ -89,7 +101,7 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
         SieveMeshRegistryEntry mesh = tileEntity.getSieveMesh();
         if (mesh != null) {
             IBakedModel meshModel = ModModels.meshes.get(mesh.getModelName());
-            if(meshModel != null) {
+            if (meshModel != null) {
                 dispatcher.getBlockModelRenderer().renderModel(world, meshModel, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
             }
         }

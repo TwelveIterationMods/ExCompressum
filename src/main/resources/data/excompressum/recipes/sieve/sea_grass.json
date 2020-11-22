@@ -10,7 +10,7 @@
     "tag": "minecraft:sand"
   },
   "result": {
-    "item": "minecraft:sea_grass"
+    "item": "minecraft:seagrass"
   },
   "waterlogged": true
 }

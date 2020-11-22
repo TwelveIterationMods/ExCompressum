@@ -440,6 +440,16 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         return false;
     }
 
+    public boolean isWaterlogged() {
+        if (cachedState == null) {
+            cachedState = world.getBlockState(pos);
+        }
+        if (cachedState.getBlock() instanceof AutoSieveBaseBlock) {
+            return cachedState.get(AutoSieveBaseBlock.WATERLOGGED);
+        }
+        return false;
+    }
+
     public Direction getFacing() {
         if (cachedState == null) {
             cachedState = world.getBlockState(pos);

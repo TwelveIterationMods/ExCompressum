@@ -12,13 +12,17 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -26,9 +30,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayerFactory;
@@ -40,23 +46,25 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUglyfiable {
 
     public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
     public static final BooleanProperty UGLY = BooleanProperty.create("ugly");
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private ItemStack lastHoverStack = ItemStack.EMPTY;
     private String currentRandomName;
 
     protected AutoSieveBaseBlock(Properties properties) {
         super(properties.hardnessAndResistance(2f));
-        setDefaultState(getDefaultState().with(UGLY, false));
+        setDefaultState(getDefaultState().with(UGLY, false).with(WATERLOGGED, false));
     }
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(FACING, UGLY);
+        builder.add(FACING, UGLY, WATERLOGGED);
     }
 
     @Override
@@ -123,12 +131,6 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
         }
 
         super.onReplaced(state, world, pos, newState, isMoving);
-    }
-
-    @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        final Direction facing = context.getPlacementHorizontalFacing();
-        return getDefaultState().with(FACING, facing);
     }
 
     @Override
@@ -212,5 +214,41 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
     @Override
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        final Direction facing = context.getPlacementHorizontalFacing();
+        FluidState fluidState = context.getWorld().getFluidState(context.getPos());
+        return this.getDefaultState().with(FACING, facing).with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
+    }
+
+    @Override
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        if (stateIn.get(WATERLOGGED)) {
+            worldIn.getPendingFluidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickRate(worldIn));
+        }
+        return super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+        super.animateTick(stateIn, worldIn, pos, rand);
+
+        if (!stateIn.get(UGLY) && stateIn.get(WATERLOGGED)) {
+            float posX = pos.getX() + 0.5f;
+            float posY = (float) (pos.getY() + 0.6f + Math.random() * 0.25f);
+            float posZ = pos.getZ() + 0.5f;
+            float speed = 0.25f;
+            float motionX = 0f * speed;
+            float motionY = (float) ((0.5f + Math.random() - 0.5f) * speed);
+            float motionZ = 0f * speed;
+            worldIn.addOptionalParticle(ParticleTypes.BUBBLE, posX, posY, posZ, motionX, motionY, motionZ);
+        }
     }
 }
