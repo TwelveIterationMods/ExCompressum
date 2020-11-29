@@ -299,7 +299,7 @@ public class ExCompressumConfig {
             enableEvolvedOrechid = builder
                     .comment("Setting this to false will disable the Evolved Orechid.")
                     .translation("excompressum.config.enableEvolvedOrechid")
-                    .define("enableEvolvedOrechid", true);
+                    .define("enableEvolvedOrechid", false);
 
             disableVanillaOrechid = builder
                     .comment("If set to true, Botania's Orechid will not show up in the lexicon and will not be craftable.")

@@ -37,7 +37,7 @@ public class ModItems {
                 compressedHammerGold = new CompressedHammerItem(ItemTier.GOLD, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "gold"),
                 compressedHammerDiamond = new CompressedHammerItem(ItemTier.DIAMOND, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "diamond"),
                 compressedHammerNetherite = new CompressedHammerItem(ItemTier.NETHERITE, itemProperties()).setRegistryName(CompressedHammerItem.namePrefix + "netherite"),
-                doubleCompressedDiamondHammer = new DoubleCompressedDiamondHammerItem(itemProperties()).setRegistryName(DoubleCompressedDiamondHammerItem.name),
+                doubleCompressedDiamondHammer = new UniversalHammerHead(itemProperties()).setRegistryName(UniversalHammerHead.name),
                 compressedCrook = new CompressedCrookItem(itemProperties()).setRegistryName(CompressedCrookItem.name),
                 ironMesh = new IronMeshItem(itemProperties()).setRegistryName(IronMeshItem.name),
                 woodChipping = new WoodChippingItem(itemProperties()).setRegistryName(WoodChippingItem.name),

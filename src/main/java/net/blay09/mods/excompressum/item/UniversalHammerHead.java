@@ -13,18 +13,18 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class DoubleCompressedDiamondHammerItem extends Item {
+public class UniversalHammerHead extends Item {
 
-    public static final String name = "double_compressed_diamond_hammer";
+    public static final String name = "universal_hammer_head";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public DoubleCompressedDiamondHammerItem(Item.Properties properties) {
+    public UniversalHammerHead(Item.Properties properties) {
         super(properties.maxStackSize(1));
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(Messages.styledLang("tooltip.double_compressed_diamond_hammer", TextFormatting.DARK_AQUA));
+        tooltip.add(Messages.styledLang("tooltip.universal_hammer_head", TextFormatting.DARK_AQUA));
         tooltip.add(Messages.styledLang("tooltip.best_with_blasting", TextFormatting.DARK_AQUA));
     }
 

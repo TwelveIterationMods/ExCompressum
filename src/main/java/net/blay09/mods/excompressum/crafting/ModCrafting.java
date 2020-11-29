@@ -15,6 +15,7 @@ public class ModCrafting {
     public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
         CraftingHelper.register(HasNihiloItemCondition.Serializer.INSTANCE);
         CraftingHelper.register(NihiloModLoadedCondition.Serializer.INSTANCE);
+        CraftingHelper.register(EvolvedOrechidEnabledCondition.Serializer.INSTANCE);
 
         CraftingHelper.register(new ResourceLocation(ExCompressum.MOD_ID, "nihilo_item"), NihiloItemIngredient.Serializer.INSTANCE);
     }

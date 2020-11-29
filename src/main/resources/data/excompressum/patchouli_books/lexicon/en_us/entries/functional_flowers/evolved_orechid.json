@@ -1,0 +1,18 @@
+{
+  "name": "excompressum.entry.evolved_orechid",
+  "category": "botania:functional_flowers",
+  "icon": "excompressum:evolved_orechid",
+  "priority": true,
+  "advancement": "botania:main/pure_daisy_pickup",
+  "pages": [
+    {
+      "type": "text",
+      "text": "excompressum.page.orechidEvolved0"
+    },
+    {
+      "type": "botania:petal_apothecary",
+      "text": "excompressum.page.orechidEvolved1",
+      "recipe": "excompressum:petal_apothecary/evolved_orechid"
+    }
+  ]
+}

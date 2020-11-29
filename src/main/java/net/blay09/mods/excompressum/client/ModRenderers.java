@@ -36,6 +36,7 @@ public class ModRenderers {
         RenderTypeLookup.setRenderLayer(ModBlocks.autoHammer, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.autoCompressedHammer, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.manaSieve, RenderType.getCutout());
+        RenderTypeLookup.setRenderLayer(ModBlocks.evolvedOrechid, RenderType.getCutout());
 
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.heavySieve, HeavySieveRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoSieve, AutoSieveRenderer::normal);

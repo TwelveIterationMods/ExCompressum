@@ -1,15 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
   "result": {
-    "item": "excompressum:double_compressed_diamond_hammer"
+    "item": "excompressum:universal_hammer_head"
   },
   "pattern": [
-    "##",
-    "##"
+    " D ",
+    "I I",
+    " G "
   ],
   "key": {
-    "#": {
+    "D": {
       "item": "excompressum:compressed_hammer_diamond"
+    },
+    "I": {
+      "item": "excompressum:compressed_hammer_iron"
+    },
+    "G": {
+      "item": "excompressum:compressed_hammer_gold"
     }
   },
   "conditions": [

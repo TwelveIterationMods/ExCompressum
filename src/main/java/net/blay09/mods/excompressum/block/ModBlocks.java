@@ -1,10 +1,12 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.compat.botania.BotaniaBindings;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +27,7 @@ public class ModBlocks {
     public static Block autoHeavySieve;
     public static Block autoSieve;
     public static Block manaSieve;
+    public static Block evolvedOrechid;
     public static Block autoCompressor;
     public static Block rationingAutoCompressor;
 
@@ -44,7 +47,8 @@ public class ModBlocks {
                 autoCompressedHammer = new AutoCompressedHammerBlock().setRegistryName(AutoCompressedHammerBlock.name),
                 autoHeavySieve = new AutoHeavySieveBlock().setRegistryName(AutoHeavySieveBlock.name),
                 autoCompressor = new AutoCompressorBlock().setRegistryName(AutoCompressorBlock.name),
-                rationingAutoCompressor = new RationingAutoCompressorBlock().setRegistryName(RationingAutoCompressorBlock.name)
+                rationingAutoCompressor = new RationingAutoCompressorBlock().setRegistryName(RationingAutoCompressorBlock.name),
+                evolvedOrechid = BotaniaBindings.createOrechidBlock().setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "evolved_orechid"))
         );
     }
 
@@ -73,7 +77,8 @@ public class ModBlocks {
                 blockItem(manaSieve),
                 blockItem(autoHeavySieve),
                 blockItem(autoCompressor),
-                blockItem(rationingAutoCompressor)
+                blockItem(rationingAutoCompressor),
+                blockItem(evolvedOrechid)
         );
     }
 
