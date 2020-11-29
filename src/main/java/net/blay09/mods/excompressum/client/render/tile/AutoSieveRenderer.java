@@ -38,6 +38,9 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
     private final TinyHumanModel tinyHumanModel = new TinyHumanModel(false);
     private final TinyHumanModel tinyHumanModelSlim = new TinyHumanModel(true);
     private final boolean isHeavy;
+
+    public static int cacheKey;
+    private int currentCacheKey;
     private IBakedModel sieveModel;
 
     public AutoSieveRenderer(TileEntityRendererDispatcher dispatcher, boolean isHeavy) {
@@ -54,8 +57,9 @@ public class AutoSieveRenderer extends TileEntityRenderer<AutoSieveTileEntityBas
 
         BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
 
-        if (sieveModel == null) {
+        if (sieveModel == null || currentCacheKey != cacheKey) {
             sieveModel = isHeavy ? dispatcher.getModelForState(ModBlocks.heavySieves[0].getDefaultState()) : ModModels.sieves[0];
+            currentCacheKey = cacheKey;
         }
 
         matrixStack.push();
