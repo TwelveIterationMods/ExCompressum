@@ -3,6 +3,8 @@ package net.blay09.mods.excompressum.loot;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.minecraft.block.BlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -40,6 +42,10 @@ public class CompressedCrookLootModifier extends LootModifier {
             tool = ItemStack.EMPTY;
         }
         BlockPos pos = new BlockPos(origin);
+
+        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool) > 0) {
+            return generatedLoot;
+        }
 
         return ExNihilo.getInstance().rollCrookRewards(world, pos, state, entity, tool, context.getRandom());
     }
