@@ -5,6 +5,7 @@ import net.blay09.mods.excompressum.client.ClientProxy;
 import net.blay09.mods.excompressum.client.ModRenderers;
 import net.blay09.mods.excompressum.client.ModScreens;
 import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.compat.top.TheOneProbeAddon;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.loot.ModLoot;
 import net.blay09.mods.excompressum.registry.ExNihilo;
@@ -12,13 +13,16 @@ import net.blay09.mods.excompressum.registry.NihilisticNihiloProvider;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import novamachina.exnihilosequentia.common.compat.top.CompatTOP;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,6 +44,7 @@ public class ExCompressum {
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::imc);
 
         MinecraftForge.EVENT_BUS.register(proxy);
 
@@ -68,6 +73,12 @@ public class ExCompressum {
         ModRenderers.register();
     }
 
+    private void imc(InterModEnqueueEvent event) {
+        if(ModList.get().isLoaded("theoneprobe")) {
+            TheOneProbeAddon.register();
+        }
+    }
+
     private static void buildSoftDependProxy(String modId, String className) {
         if (ModList.get().isLoaded(modId)) {
             try {
@@ -78,19 +89,5 @@ public class ExCompressum {
         }
     }
 
-    public static void registerOreDictionary() {
-        /* TODO OreDictionary.registerOre("dustWood", new ItemStack(ModItems.woodChipping));
-        OreDictionary.registerOre("compressed1xDust", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.DUST.ordinal()));
-        OreDictionary.registerOre("compressed1xCobblestone", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.COBBLESTONE.ordinal()));
-        OreDictionary.registerOre("compressed1xGravel", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.GRAVEL.ordinal()));
-        OreDictionary.registerOre("compressed1xSand", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.SAND.ordinal()));
-        OreDictionary.registerOre("compressed1xDirt", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.DIRT.ordinal()));
-        OreDictionary.registerOre("compressed1xFlint", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.FLINT.ordinal()));
-        OreDictionary.registerOre("compressed1xEnderGravel", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.ENDER_GRAVEL.ordinal()));
-        OreDictionary.registerOre("compressed1xNetherGravel", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.NETHER_GRAVEL.ordinal()));
-        OreDictionary.registerOre("compressed1xSoulsand", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.SOUL_SAND.ordinal()));
-        OreDictionary.registerOre("compressed1xNetherrack", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.NETHERRACK.ordinal()));
-        OreDictionary.registerOre("compressed1xEndStone", new ItemStack(ModBlocks.compressedBlock, 1, CompressedBlockType.END_STONE.ordinal())); */
-    }
 
 }
