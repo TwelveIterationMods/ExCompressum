@@ -21,7 +21,7 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 import java.util.List;
 import java.util.Random;
 
-// Blatantly stolen from LibX
+// Blatantly stolen from LibX.
 // Apache License 2.0
 public class BlockRenderUtils {
 
