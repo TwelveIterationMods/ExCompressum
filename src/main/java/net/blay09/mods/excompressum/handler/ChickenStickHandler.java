@@ -4,11 +4,12 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.AngryChickenEntity;
 import net.blay09.mods.excompressum.entity.ModEntities;
+import net.blay09.mods.excompressum.item.ChickenStickItem;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
@@ -16,8 +17,10 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 
 @Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID)
 public class ChickenStickHandler {
@@ -58,14 +61,18 @@ public class ChickenStickHandler {
         }
     }
 
-	/* TODO chicken stick needs to play chicken sounds / spawn chickens
-	public static void onHarvestDrops(BlockEvent.HarvestDropsEvent event) {
-					((ItemChickenStick) heldItem.getItem()).playChickenSound(event.getWorld(), event.getPos());
-					if (event.getWorld().rand.nextFloat() <= ModConfig.tools.chickenStickSpawnChance) {
-						EntityChicken entityChicken = new EntityChicken(event.getWorld());
-						entityChicken.setPosition(event.getPos().getX() + 0.5, event.getPos().getY() + 0.5, event.getPos().getZ() + 0.5);
-						event.getWorld().spawnEntity(entityChicken);
-					}
-	}*/
+    @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent event) {
+        ItemStack heldItem = event.getPlayer().getHeldItemMainhand();
+        if(heldItem.getItem() instanceof ChickenStickItem) {
+            ((ChickenStickItem) heldItem.getItem()).tryPlayChickenSound(event.getWorld(), event.getPos());
+
+            if (event.getWorld().getRandom().nextFloat() <= ExCompressumConfig.COMMON.chickenStickSpawnChance.get()) {
+                ChickenEntity entityChicken = new ChickenEntity(EntityType.CHICKEN, ((World) event.getWorld()));
+                entityChicken.setPosition(event.getPos().getX() + 0.5, event.getPos().getY() + 0.5, event.getPos().getZ() + 0.5);
+                event.getWorld().addEntity(entityChicken);
+            }
+        }
+    }
 
 }

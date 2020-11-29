@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -28,13 +29,13 @@ public class ChickenStickItem extends ToolItem {
 
     @Override
     public boolean hitEntity(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
-        playChickenSound(attacker.world, new BlockPos(attacker.getPosX(), attacker.getPosY(), attacker.getPosZ()));
+        tryPlayChickenSound(attacker.world, new BlockPos(attacker.getPosX(), attacker.getPosY(), attacker.getPosZ()));
         return super.hitEntity(itemStack, attacker, target);
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        playChickenSound(world, new BlockPos(player.getPosX(), player.getPosY(), player.getPosZ()));
+        tryPlayChickenSound(world, new BlockPos(player.getPosX(), player.getPosY(), player.getPosZ()));
         player.swingArm(hand);
         return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));
     }
@@ -55,17 +56,17 @@ public class ChickenStickItem extends ToolItem {
         return 0.8f;
     }
 
-    private void playChickenSound(World world, BlockPos pos) {
-        if (world.rand.nextFloat() <= ExCompressumConfig.COMMON.chickenStickSoundChance.get()) {
+    public void tryPlayChickenSound(IWorld world, BlockPos pos) {
+        if (world.getRandom().nextFloat() <= ExCompressumConfig.COMMON.chickenStickSoundChance.get()) {
             ResourceLocation location = null;
             final List<? extends String> chickenStickSounds = ExCompressumConfig.COMMON.chickenStickSounds.get();
             if (!chickenStickSounds.isEmpty()) {
-                location = new ResourceLocation(chickenStickSounds.get(world.rand.nextInt(chickenStickSounds.size())));
+                location = new ResourceLocation(chickenStickSounds.get(world.getRandom().nextInt(chickenStickSounds.size())));
             }
             if (location != null) {
                 SoundEvent soundEvent = ForgeRegistries.SOUND_EVENTS.getValue(location);
                 if (soundEvent != null) {
-                    world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, soundEvent, SoundCategory.PLAYERS, 1f, world.rand.nextFloat() * 0.1f + 0.9f, false);
+                    world.playSound(null, pos, soundEvent, SoundCategory.PLAYERS, 1f, world.getRandom().nextFloat() * 0.1f + 0.9f);
                 } else {
                     ExCompressum.logger.warn("Chicken Stick tried to play a sound that does not exist: {}", location);
                 }
