@@ -35,6 +35,7 @@ public class ExCompressumConfig {
 
         public final ForgeConfigSpec.DoubleValue compressedMobChance;
         public final ForgeConfigSpec.IntValue compressedMobSize;
+        public final ForgeConfigSpec.BooleanValue compressedMobAllowedMobsIsBlacklist;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> compressedMobAllowedMobs;
 
         public final ForgeConfigSpec.BooleanValue allowChickenStickCreation;
@@ -198,6 +199,11 @@ public class ExCompressumConfig {
                     .translation("excompressum.config.compressedMobSize")
                     .defineInRange("compressedMobSize", 9, 1, Integer.MAX_VALUE);
 
+            compressedMobAllowedMobsIsBlacklist = builder
+                    .comment("Should the allowed mobs list be treated as a blacklist instead of a whitelist?")
+                    .translation("excompressum.config.compressedMobAllowedMobsIsBlacklist")
+                    .define("compressedMobAllowedMobsIsBlacklist", false);
+
             compressedMobAllowedMobs = builder
                     .comment("A list of entity registry names that can spawn as compressed entities.")
                     .translation("excompressum.config.compressedMobAllowedMobs")
@@ -212,11 +218,31 @@ public class ExCompressumConfig {
                             "minecraft:enderman",
                             "minecraft:pig_zombie",
                             "minecraft:blaze",
+                            "minecraft:bee",
                             "minecraft:chicken",
                             "minecraft:sheep",
                             "minecraft:cow",
+                            "minecraft:mooshroom",
                             "minecraft:pig",
-                            "minecraft:ghast"), it -> it instanceof String);
+                            "minecraft:ghast",
+                            "minecraft:drowned",
+                            "minecraft:elder_guardian",
+                            "minecraft:endermite",
+                            "minecraft:cat",
+                            "minecraft:evoker",
+                            "minecraft:husk",
+                            "minecraft:hoglin",
+                            "minecraft:guardian",
+                            "minecraft:piglin",
+                            "minecraft:piglin_brute",
+                            "minecraft:pillager",
+                            "minecraft:shulker",
+                            "minecraft:stray",
+                            "minecraft:vindicator",
+                            "minecraft:wither_skeleton",
+                            "minecraft:zoglin",
+                            "minecraft:zombie_villager",
+                            "minecraft:zombified_piglin"), it -> it instanceof String);
 
             builder.pop();
 

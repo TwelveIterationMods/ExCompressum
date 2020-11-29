@@ -27,9 +27,10 @@ public class CompressedEnemyHandler {
 
     @SubscribeEvent
     public static void onSpawnEntity(EntityJoinWorldEvent event) {
-        if (!event.getWorld().isRemote && (event.getEntity() instanceof CreatureEntity || event.getEntity() instanceof GhastEntity)) {
+        if (!event.getWorld().isRemote && (event.getEntity() instanceof MobEntity || event.getEntity() instanceof GhastEntity)) {
             ResourceLocation registryName = event.getEntity().getType().getRegistryName();
-            if (registryName != null && ExCompressumConfig.COMMON.compressedMobAllowedMobs.get().contains(registryName.toString())) {
+            boolean isWhitelist = !ExCompressumConfig.COMMON.compressedMobAllowedMobsIsBlacklist.get();
+            if (registryName != null && ExCompressumConfig.COMMON.compressedMobAllowedMobs.get().contains(registryName.toString()) == isWhitelist) {
                 CompoundNBT baseTag = event.getEntity().getPersistentData().getCompound(ExCompressum.MOD_ID);
                 if (baseTag.contains(NOCOMPRESS) || baseTag.contains(COMPRESSED)) {
                     return;
@@ -53,7 +54,7 @@ public class CompressedEnemyHandler {
     @SubscribeEvent
     public static void onEntityDeath(LivingDeathEvent event) {
         if (!event.getEntity().world.isRemote && event.getEntity().getPersistentData().getCompound(ExCompressum.MOD_ID).contains(COMPRESSED)) {
-            if (event.getEntity() instanceof CreatureEntity || event.getEntity() instanceof GhastEntity) {
+            if (event.getEntity() instanceof MobEntity || event.getEntity() instanceof GhastEntity) {
                 if (event.getSource().getTrueSource() instanceof PlayerEntity && !(event.getSource().getTrueSource() instanceof FakePlayer)) {
                     if (StupidUtils.hasSilkTouchModifier((LivingEntity) event.getSource().getTrueSource())) {
                         return;
