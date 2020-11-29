@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.mojang.blaze3d.vertex.MatrixApplyingVertexBuilder;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
+import net.blay09.mods.excompressum.client.render.BlockRenderUtils;
 import net.blay09.mods.excompressum.client.render.RenderUtils;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExNihilo;
@@ -96,27 +97,15 @@ public class AutoHammerRenderer extends TileEntityRenderer<AutoHammerTileEntity>
         if (!currentStack.isEmpty()) {
             BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
             if (contentState != null) {
-
-                // Build a matrix for the destroy stages because it does some weird stuff with MatrixApplyingVertexBuilder that I don't understand but it kinda works
-                matrixStack.push();
-                matrixStack.translate(-0.09375f, 0.0625f, -0.25);
-                // I have no idea what these numbers mean. This is the result of one hour of trial-and-error, trying to get the destroy_stage pixels to overlay as well as possible. It's still not perfect.
-                matrixStack.scale(1f, 1f, (float) Math.sqrt(2));
-                MatrixStack.Entry matrix = matrixStack.getLast();
-                matrixStack.pop();
-
                 matrixStack.push();
                 matrixStack.translate(-0.09375f, 0.0625f, -0.25);
                 matrixStack.scale(0.5f, 0.5f, 0.5f);
-                World world = tileEntity.getWorld();
                 BlockRendererDispatcher dispatcher = Minecraft.getInstance().getBlockRendererDispatcher();
                 dispatcher.renderBlock(contentState, matrixStack, bufferIn, combinedLightIn, combinedOverlayIn, EmptyModelData.INSTANCE);
 
                 if (tileEntity.getProgress() > 0f) {
                     int blockDamage = Math.min(9, (int) (tileEntity.getProgress() * 9f));
-                    RenderTypeBuffers renderTypeBuffers = Minecraft.getInstance().getRenderTypeBuffers();
-                    IVertexBuilder damageBuffer = new MatrixApplyingVertexBuilder(renderTypeBuffers.getCrumblingBufferSource().getBuffer(ModelBakery.DESTROY_RENDER_TYPES.get(blockDamage)), matrix.getMatrix(), matrix.getNormal());
-                    dispatcher.renderBlockDamage(contentState, tileEntity.getPos(), world, matrixStack, damageBuffer, EmptyModelData.INSTANCE);
+                    BlockRenderUtils.renderBlockBreak(contentState, matrixStack, bufferIn, combinedLightIn, combinedOverlayIn, blockDamage + 1);
                 }
 
                 matrixStack.pop();
