@@ -56,14 +56,4 @@ public class ModRenderers {
         }
     }
 
-    @SubscribeEvent
-    public static void initBlockColors(ColorHandlerEvent.Block event) {
-        // Guard against event bus crashes
-        if (ModBlocks.woodenCrucibles != null) {
-            for (Block woodenCrucible : ModBlocks.woodenCrucibles) {
-                event.getBlockColors().register((state, world, pos, i) -> 4159204, woodenCrucible);
-            }
-        }
-    }
-
 }

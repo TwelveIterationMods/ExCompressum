@@ -62,7 +62,11 @@ public class WoodenCrucibleRenderer extends TileEntityRenderer<WoodenCrucibleTil
             matrixStack.push();
             float fillLevel = (float) fluidStack.getAmount() / (float) tileEntity.getFluidTank().getCapacity();
             matrixStack.translate(0f, fillLevel * 11 / 16f, 0f);
-            dispatcher.getBlockModelRenderer().renderModel(world, ModModels.woodenCrucibleLiquid, tileEntity.getBlockState(), tileEntity.getPos(), matrixStack, buffer.getBuffer(RenderType.getTranslucent()), false, random, 0, Integer.MAX_VALUE, EmptyModelData.INSTANCE);
+            int color = fluidStack.getFluid().getAttributes().getColor(world, tileEntity.getPos());
+            float red = (float)(color >> 16 & 255) / 255.0F;
+            float green = (float)(color >> 8 & 255) / 255.0F;
+            float blue = (float)(color & 255) / 255.0F;
+            dispatcher.getBlockModelRenderer().renderModel(matrixStack.getLast(), buffer.getBuffer(RenderType.getTranslucent()), null, ModModels.woodenCrucibleLiquid, red, green, blue, combinedLightIn, combinedOverlayIn, EmptyModelData.INSTANCE);
             matrixStack.pop();
         }
 

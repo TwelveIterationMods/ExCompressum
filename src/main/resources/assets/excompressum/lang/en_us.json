@@ -76,6 +76,7 @@
   "excompressum.tooltip.auto_heavy_sieve": "%s in a Heavy Box™",
   "excompressum.tooltip.mana_sieve": "%s in a Magical Box™",
   "excompressum.tooltip.energyStored": "%d FE",
+  "excompressum.tooltip.energyStoredOfMax": "%d/%d FE",
   "excompressum.tooltip.consumingEnergy": "Consuming %d FE/t",
   "excompressum.tooltip.ugly_steel_plating": "Apply on a machine to make it visually unappealing.",
   "excompressum.tooltip.baitCanSpawn": "This bait will work in this environment. Move out of range so you don't scare the animals away!",

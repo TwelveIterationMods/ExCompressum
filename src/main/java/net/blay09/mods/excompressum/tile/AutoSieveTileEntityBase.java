@@ -237,7 +237,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         return (float) (ExCompressumConfig.COMMON.autoSieveSpeed.get() * getSpeedMultiplier());
     }
 
-    private float getEffectiveLuck() {
+    public float getEffectiveLuck() {
         ItemStack meshStack = meshSlots.getStackInSlot(0);
         if (!meshStack.isEmpty()) {
             return ExNihilo.getInstance().getMeshFortune(meshStack);
