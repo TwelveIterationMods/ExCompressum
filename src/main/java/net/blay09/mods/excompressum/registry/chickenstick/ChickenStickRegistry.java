@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.registry.chickenstick;
 
 import net.blay09.mods.excompressum.registry.*;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -18,7 +19,7 @@ public class ChickenStickRegistry extends GroupedRegistry<
         ChickenStickHammerable,
         GroupedRegistryData<RegistryGroup, RegistryOverride, RegistryOverride, ChickenStickHammerable>> {
 
-    private final Map<ResourceLocation, ChickenStickHammerable> entries = new HashMap<>();
+    private final List<ChickenStickHammerable> entries = new ArrayList<>();
 
     public ChickenStickRegistry() {
         super("ChickenStick");
@@ -34,18 +35,25 @@ public class ChickenStickRegistry extends GroupedRegistry<
     }
 
     public Collection<ChickenStickHammerable> getEntries() {
-        return entries.values();
+        return entries;
     }
 
     public boolean isHammerable(BlockState state) {
-        final ResourceLocation registryName = state.getBlock().getRegistryName();
-        return entries.containsKey(registryName);
+        return isHammerable(StupidUtils.getItemStackFromState(state));
+    }
+
+    public boolean isHammerable(ItemStack itemStack) {
+        return getHammerable(itemStack) != null;
     }
 
     @Nullable
     public ChickenStickHammerable getHammerable(BlockState state) {
-        final ResourceLocation registryName = state.getBlock().getRegistryName();
-        return entries.get(registryName);
+        return getHammerable(StupidUtils.getItemStackFromState(state));
+    }
+
+    @Nullable
+    public ChickenStickHammerable getHammerable(ItemStack itemStack) {
+        return entries.stream().filter(it -> it.getSource().test(itemStack)).findFirst().orElse(null);
     }
 
     @Override
@@ -56,7 +64,7 @@ public class ChickenStickRegistry extends GroupedRegistry<
 
     @Override
     protected void loadEntry(ChickenStickHammerable entry, @Nullable RegistryOverride groupOverride, @Nullable RegistryOverride entryOverride) {
-        entries.put(entry.getSource(), entry);
+        entries.add(entry);
     }
 
     @Override
@@ -68,5 +76,4 @@ public class ChickenStickRegistry extends GroupedRegistry<
     protected ChickenStickRegistryData getEmptyData() {
         return new ChickenStickRegistryData();
     }
-
 }

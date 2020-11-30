@@ -64,7 +64,7 @@ public class HeavySieveRegistry extends GroupedRegistry<
                 int times = generatedHeavySiftable.getTimes() != null ? generatedHeavySiftable.getTimes() : ExCompressumConfig.COMMON.heavySieveDefaultRolls.get();
                 LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(sieveState, source, times, mesh);
                 HeavySiftable generatedSiftable = new HeavySiftable();
-                generatedSiftable.setId(itemRegistryName.getPath());
+                generatedSiftable.setId(new ResourceLocation(ExCompressum.MOD_ID, itemRegistryName.getPath()));
                 generatedSiftable.setSource(Ingredient.fromItems(source));
                 generatedSiftable.setWaterlogged(waterlogged);
                 generatedSiftable.setLootTable(new LootTableProvider(lootTable));

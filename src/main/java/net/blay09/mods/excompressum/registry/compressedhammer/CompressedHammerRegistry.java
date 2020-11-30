@@ -4,6 +4,7 @@ import net.blay09.mods.excompressum.registry.GroupedRegistry;
 import net.blay09.mods.excompressum.registry.GroupedRegistryData;
 import net.blay09.mods.excompressum.registry.RegistryGroup;
 import net.blay09.mods.excompressum.registry.RegistryOverride;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.*;
@@ -21,36 +22,32 @@ public class CompressedHammerRegistry extends GroupedRegistry<
         GroupedRegistryData<RegistryGroup, RegistryOverride, RegistryOverride, CompressedHammerable>> {
 
     public static final LootParameter<ItemStack> SOURCE_STACK = new LootParameter<>(new ResourceLocation("excompressum", "source_stack"));
-    private final Map<ResourceLocation, CompressedHammerable> entries = new HashMap<>();
+    private final List<CompressedHammerable> entries = new ArrayList<>();
 
     public CompressedHammerRegistry() {
         super("CompressedHammer");
     }
 
     public Collection<CompressedHammerable> getEntries() {
-        return entries.values();
+        return entries;
     }
 
     public boolean isHammerable(ItemStack itemStack) {
-        final ResourceLocation registryName = itemStack.getItem().getRegistryName();
-        return entries.containsKey(registryName);
+        return getHammerable(itemStack) != null;
     }
 
     public boolean isHammerable(BlockState state) {
-        final ResourceLocation registryName = state.getBlock().getRegistryName();
-        return entries.containsKey(registryName);
+        return getHammerable(state) != null;
     }
 
     @Nullable
     public CompressedHammerable getHammerable(BlockState state) {
-        final ResourceLocation registryName = state.getBlock().getRegistryName();
-        return entries.get(registryName);
+        return getHammerable(StupidUtils.getItemStackFromState(state));
     }
 
     @Nullable
     public CompressedHammerable getHammerable(ItemStack itemStack) {
-        final ResourceLocation registryName = itemStack.getItem().getRegistryName();
-        return entries.get(registryName);
+        return entries.stream().filter(it -> it.getSource().test(itemStack)).findFirst().orElse(null);
     }
 
     // TODO move somewhere else
@@ -79,7 +76,7 @@ public class CompressedHammerRegistry extends GroupedRegistry<
 
     @Override
     protected void loadEntry(CompressedHammerable entry, @Nullable RegistryOverride groupOverride, @Nullable RegistryOverride entryOverride) {
-        entries.put(entry.getSource(), entry);
+        entries.add(entry);
     }
 
     @Override

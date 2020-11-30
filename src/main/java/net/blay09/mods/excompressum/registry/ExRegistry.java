@@ -31,7 +31,6 @@ public abstract class ExRegistry<T> implements IResourceManagerReloadListener {
                 .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
                 .registerTypeAdapter(LootTableProvider.class, new LootTableProvider.Serializer())
                 .registerTypeAdapter(Ingredient.class, new IngredientSerializer())
-                .registerTypeAdapter(TagOrResourceLocation.class, new TagOrResourceLocation.Serializer())
                 .registerTypeAdapter(ItemStack.class, new ItemStackSerializer());
     }
 

@@ -61,9 +61,6 @@ public class JEIAddon implements IModPlugin {
         for (WoodenCrucibleMeltable entry : ExRegistries.getWoodenCrucibleRegistry().getEntries()) {
             fluidOutputMap.put(entry.getFluid(), entry);
         }
-        for (WoodenCrucibleMeltable entry : ExRegistries.getWoodenCrucibleRegistry().getTagEntries()) {
-            fluidOutputMap.put(entry.getFluid(), entry);
-        }
 
         List<WoodenCrucibleRecipe> woodenCrucibleRecipes = new ArrayList<>();
         for (ResourceLocation fluidName : fluidOutputMap.keySet()) {

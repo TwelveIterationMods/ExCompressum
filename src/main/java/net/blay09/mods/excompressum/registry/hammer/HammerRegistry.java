@@ -4,6 +4,7 @@ import net.blay09.mods.excompressum.registry.GroupedRegistry;
 import net.blay09.mods.excompressum.registry.GroupedRegistryData;
 import net.blay09.mods.excompressum.registry.RegistryGroup;
 import net.blay09.mods.excompressum.registry.RegistryOverride;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -24,19 +25,14 @@ public class HammerRegistry extends GroupedRegistry<
         GroupedRegistryData<RegistryGroup, RegistryOverride, RegistryOverride, Hammerable>> {
 
     public static final LootParameter<ItemStack> SOURCE_STACK = new LootParameter<>(new ResourceLocation("excompressum", "source_stack"));
-    private final Map<ResourceLocation, Hammerable> entries = new HashMap<>();
-    private final Map<ResourceLocation, Hammerable> tagEntries = new HashMap<>();
+    private final List<Hammerable> entries = new ArrayList<>();
 
     public HammerRegistry() {
         super("Hammer");
     }
 
     public Collection<Hammerable> getEntries() {
-        return entries.values();
-    }
-
-    public Collection<Hammerable> getTagEntries() {
-        return tagEntries.values();
+        return entries;
     }
 
     public boolean isHammerable(ItemStack itemStack) {
@@ -49,29 +45,12 @@ public class HammerRegistry extends GroupedRegistry<
 
     @Nullable
     public Hammerable getHammerable(BlockState state) {
-        return getHammerable(state.getBlock().getRegistryName(), state.getBlock().getTags());
+        return getHammerable(StupidUtils.getItemStackFromState(state));
     }
 
     @Nullable
     public Hammerable getHammerable(ItemStack itemStack) {
-        return getHammerable(itemStack.getItem().getRegistryName(), itemStack.getItem().getTags());
-    }
-
-    @Nullable
-    public Hammerable getHammerable(@Nullable ResourceLocation registryName, Set<ResourceLocation> tags) {
-        Hammerable hammerable = entries.get(registryName);
-        if (hammerable != null) {
-            return hammerable;
-        }
-
-        for (ResourceLocation tag : tags) {
-            hammerable = tagEntries.get(tag);
-            if(hammerable != null) {
-                return hammerable;
-            }
-        }
-
-        return null;
+        return entries.stream().filter(it -> it.getSource().test(itemStack)).findFirst().orElse(null);
     }
 
     // TODO move somewhere else
@@ -100,11 +79,7 @@ public class HammerRegistry extends GroupedRegistry<
 
     @Override
     protected void loadEntry(Hammerable entry, @Nullable RegistryOverride groupOverride, @Nullable RegistryOverride entryOverride) {
-        if (entry.getSource().isTag()) {
-            tagEntries.put(entry.getSource().getResourceLocation(), entry);
-        } else {
-            entries.put(entry.getSource().getResourceLocation(), entry);
-        }
+        entries.add(entry);
     }
 
     @Override

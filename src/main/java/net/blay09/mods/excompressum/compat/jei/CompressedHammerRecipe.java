@@ -13,7 +13,7 @@ public class CompressedHammerRecipe {
     private final List<ItemStack> outputs;
 
     public CompressedHammerRecipe(CompressedHammerable entry) {
-        input = new ItemStack(ForgeRegistries.BLOCKS.getValue(entry.getSource()));
+        input = ItemStack.EMPTY;
         outputs = new ArrayList<>();
     }
 

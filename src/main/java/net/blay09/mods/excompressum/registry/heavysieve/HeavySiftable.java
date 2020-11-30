@@ -69,8 +69,8 @@ public class HeavySiftable extends RegistryEntry {
         this.waterlogged = waterlogged;
     }
 
-    public void setId(String id) {
-        this.id = new ResourceLocation(ExCompressum.MOD_ID, id);
+    public void setId(ResourceLocation id) {
+        this.id = id;
     }
 
     @Override
