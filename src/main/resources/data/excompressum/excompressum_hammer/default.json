@@ -6,7 +6,9 @@
   },
   "customEntries": [
     {
-      "source": "#minecraft:logs",
+      "source": {
+        "tag": "minecraft:logs"
+      },
       "lootTable": "excompressum:excompressum/hammer/logs"
     }
   ]

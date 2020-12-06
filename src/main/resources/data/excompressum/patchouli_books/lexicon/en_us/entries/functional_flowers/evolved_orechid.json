@@ -2,6 +2,7 @@
   "name": "excompressum.entry.evolved_orechid",
   "category": "botania:functional_flowers",
   "icon": "excompressum:evolved_orechid",
+  "entry_color": "aa00",
   "priority": true,
   "advancement": "botania:main/pure_daisy_pickup",
   "pages": [

@@ -6,32 +6,44 @@
   },
   "customEntries": [
     {
-      "source": "minecraft:apple",
+      "source:": {
+        "item": "minecraft:apple"
+      },
       "fluid": "minecraft:water",
       "amount": 100
     },
     {
-      "source": "#minecraft:saplings",
+      "source:": {
+        "tag": "minecraft:saplings"
+      },
       "fluid": "minecraft:water",
       "amount": 100
     },
     {
-      "source": "#minecraft:leaves",
+      "source:": {
+        "tag": "minecraft:leaves"
+      },
       "fluid": "minecraft:water",
       "amount": 250
     },
     {
-      "source": "minecraft:cactus",
+      "source:": {
+        "item": "minecraft:cactus"
+      },
       "fluid": "minecraft:water",
       "amount": 250
     },
     {
-      "source": "#minecraft:flowers",
+      "source:": {
+        "tag": "minecraft:flowers"
+      },
       "fluid": "minecraft:water",
       "amount": 100
     },
     {
-      "source": "excompressum:wood_chippings",
+      "source:": {
+        "item": "excompressum:wood_chippings"
+      },
       "fluid": "minecraft:water",
       "amount": 100
     }
