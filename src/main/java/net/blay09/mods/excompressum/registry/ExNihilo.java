@@ -26,14 +26,6 @@ public abstract class ExNihilo {
 		return state != null && instance.isHammerable(state);
 	}
 
-	public static Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
-		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
-		if(state != null) {
-			return instance.rollHammerRewards(state, miningLevel, luck, rand);
-		}
-		return Collections.emptyList();
-	}
-
 	public static boolean isSiftableWithMesh(BlockState sieveState, ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
 		BlockState state = StupidUtils.getStateFromItemStack(itemStack);
 		return state != null && instance.isSiftableWithMesh(sieveState, state, sieveMesh);

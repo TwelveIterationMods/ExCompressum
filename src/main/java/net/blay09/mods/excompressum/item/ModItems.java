@@ -1,8 +1,10 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.compat.botania.BotaniaCompat;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemTier;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +27,7 @@ public class ModItems {
     public static Item batZapper;
     public static Item oreSmasher;
     public static Item uglySteelPlating;
+    public static Item manaHammer;
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
@@ -44,7 +47,8 @@ public class ModItems {
                 uncompressedCoal = new UncompressedCoalItem(itemProperties()).setRegistryName(UncompressedCoalItem.name),
                 batZapper = new BatZapperItem(itemProperties()).setRegistryName(BatZapperItem.name),
                 oreSmasher = new OreSmasherItem(itemProperties()).setRegistryName(OreSmasherItem.name),
-                uglySteelPlating = new UglySteelPlatingItem(itemProperties()).setRegistryName(UglySteelPlatingItem.name)
+                uglySteelPlating = new UglySteelPlatingItem(itemProperties()).setRegistryName(UglySteelPlatingItem.name),
+                manaHammer = BotaniaCompat.createManaHammerItem(itemProperties()).setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "hammer_mana"))
         );
     }
 

@@ -1,7 +1,9 @@
 package net.blay09.mods.excompressum.registry.hammer;
 
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.registry.RegistryEntry;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootTable;

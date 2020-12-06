@@ -54,7 +54,8 @@ public class CompressedHammerLootModifier extends LootModifier {
         }
 
         if (ExNihilo.getInstance().isHammerable(state)) {
-            return ExNihilo.getInstance().rollHammerRewards(state, 0, context.getLuck(), context.getRandom());
+            ItemStack itemStack = context.get(LootParameters.TOOL);
+            return ExNihilo.getInstance().rollHammerRewards(state, itemStack != null ? itemStack : ItemStack.EMPTY, context.getRandom());
         }
 
         return generatedLoot;

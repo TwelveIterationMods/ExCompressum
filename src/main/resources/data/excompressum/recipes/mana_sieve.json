@@ -17,10 +17,10 @@
       "value": "SIEVE"
     },
     "I": {
-      "tag": "forge:ingots/mana_steel"
+      "tag": "forge:ingots/manasteel"
     },
     "B": {
-      "tag": "forge:storage_blocks/mana_steel"
+      "tag": "forge:storage_blocks/manasteel"
     }
   },
   "conditions": [
@@ -31,14 +31,14 @@
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "tag": "forge:ingots/mana_steel"
+            "tag": "forge:ingots/manasteel"
           }
         },
         {
           "type": "forge:not",
           "value": {
             "type": "forge:tag_empty",
-            "tag": "forge:storage_blocks/mana_steel"
+            "tag": "forge:storage_blocks/manasteel"
           }
         },
         {

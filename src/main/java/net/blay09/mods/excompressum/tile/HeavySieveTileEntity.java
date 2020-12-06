@@ -114,9 +114,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
                     if (sieveMesh != null) {
                         HeavySiftable siftable = ExRegistries.getHeavySieveRegistry().getSiftable(getBlockState(), currentStack, sieveMesh);
                         if(siftable != null) {
-                            int fortune = ExNihilo.getInstance().getMeshFortune(meshStack);
-                            fortune += player.getLuck();
-                            LootContext lootContext = HeavySieveRegistry.buildLootContext(((ServerWorld) world), currentStack, fortune, world.rand);
+                            LootContext lootContext = HeavySieveRegistry.buildLootContext(((ServerWorld) world), currentStack, world.rand);
                             Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(siftable, lootContext);
                             for (ItemStack itemStack : rewards) {
                                 world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));

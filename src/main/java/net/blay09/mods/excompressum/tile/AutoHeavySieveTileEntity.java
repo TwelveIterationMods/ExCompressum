@@ -31,7 +31,7 @@ public class AutoHeavySieveTileEntity extends AutoSieveTileEntity {
     public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
         HeavySiftable siftable = ExRegistries.getHeavySieveRegistry().getSiftable(getBlockState(), itemStack, getSieveMesh());
         if (siftable != null) {
-            LootContext lootContext = HeavySieveRegistry.buildLootContext(((ServerWorld) world), itemStack, luck, rand);
+            LootContext lootContext = HeavySieveRegistry.buildLootContext(((ServerWorld) world), itemStack, rand);
             return HeavySieveRegistry.rollSieveRewards(siftable, lootContext);
         }
 

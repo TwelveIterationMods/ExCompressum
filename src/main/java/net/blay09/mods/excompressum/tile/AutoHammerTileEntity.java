@@ -121,7 +121,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     @Override
     public void tick() {
         if (!world.isRemote) {
-            if(cooldown > 0) {
+            if (cooldown > 0) {
                 cooldown--;
             }
             int effectiveEnergy = getEffectiveEnergy();
@@ -166,7 +166,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
                                     }
                                 }
                             }
-                            Collection<ItemStack> rewards = rollHammerRewards(currentStack, getMiningLevel(), getEffectiveLuck(), world.rand);
+                            Collection<ItemStack> rewards = rollHammerRewards(currentStack, getEffectiveTool(), world.rand);
                             for (ItemStack itemStack : rewards) {
                                 if (!addItemToOutput(itemStack)) {
                                     ItemEntity entityItem = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack);
@@ -204,6 +204,10 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
             }
             finishedStack = ItemStack.EMPTY;
         }
+    }
+
+    private ItemStack getEffectiveTool() {
+        return Math.random() < 0.5 ? hammerSlots.getStackInSlot(0) : hammerSlots.getStackInSlot(1);
     }
 
     public int getEnergyStored() {
@@ -388,14 +392,15 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
         return ExNihilo.isHammerable(itemStack) || ExRegistries.getHammerRegistry().isHammerable(itemStack);
     }
 
-    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
+    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, Random rand) {
         Hammerable hammerable = ExRegistries.getHammerRegistry().getHammerable(itemStack);
         if (hammerable != null) {
-            LootContext lootContext = HammerRegistry.buildLootContext(((ServerWorld) world), itemStack, luck, rand);
+            LootContext lootContext = HammerRegistry.buildLootContext(((ServerWorld) world), itemStack, rand);
             return HammerRegistry.rollHammerRewards(hammerable, lootContext);
         }
 
-        return ExNihilo.rollHammerRewards(itemStack, miningLevel, luck, rand);
+        BlockState currentState = StupidUtils.getStateFromItemStack(itemStack);
+        return ExNihilo.getInstance().rollHammerRewards(currentState, toolItem, rand);
     }
 
     public int getMiningLevel() {

@@ -6,6 +6,7 @@
   },
   "customEntries": [
     {
+      "id": "minecraft:apple",
       "source:": {
         "item": "minecraft:apple"
       },
@@ -13,6 +14,7 @@
       "amount": 100
     },
     {
+      "id": "minecraft:saplings",
       "source:": {
         "tag": "minecraft:saplings"
       },
@@ -20,6 +22,7 @@
       "amount": 100
     },
     {
+      "id": "minecraft:leaves",
       "source:": {
         "tag": "minecraft:leaves"
       },
@@ -27,6 +30,7 @@
       "amount": 250
     },
     {
+      "id": "minecraft:cactus",
       "source:": {
         "item": "minecraft:cactus"
       },
@@ -34,6 +38,7 @@
       "amount": 250
     },
     {
+      "id": "minecraft:flowers",
       "source:": {
         "tag": "minecraft:flowers"
       },
@@ -41,6 +46,7 @@
       "amount": 100
     },
     {
+      "id": "excompressum:wood_chippings",
       "source:": {
         "item": "excompressum:wood_chippings"
       },

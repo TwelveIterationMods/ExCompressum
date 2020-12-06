@@ -29,7 +29,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public List<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand) {
+	public List<ItemStack> rollHammerRewards(BlockState state, ItemStack itemStack, Random rand) {
 		return Collections.emptyList();
 	}
 

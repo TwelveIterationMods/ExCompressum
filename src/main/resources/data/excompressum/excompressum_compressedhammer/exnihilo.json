@@ -6,36 +6,42 @@
   },
   "customEntries": [
     {
+      "id": "excompressum:compressed_sand",
       "source:": {
         "item": "excompressum:compressed_sand"
       },
       "lootTable": "excompressum:excompressum/compressed_hammer/compressed_sand"
     },
     {
+      "id": "excompressum:compressed_netherrack",
       "source:": {
         "item": "excompressum:compressed_netherrack"
       },
       "lootTable": "excompressum:excompressum/compressed_hammer/compressed_netherrack"
     },
     {
+      "id": "excompressum:compressed_end_stone",
       "source:": {
         "item": "excompressum:compressed_end_stone"
       },
       "lootTable": "excompressum:excompressum/compressed_hammer/compressed_end_stone"
     },
     {
+      "id": "excompressum:compressed_diorite",
       "source:": {
         "item": "excompressum:compressed_diorite"
       },
       "lootTable": "excompressum:excompressum/compressed_hammer/compressed_diorite"
     },
     {
+      "id": "excompressum:compressed_andesite",
       "source:": {
         "item": "excompressum:compressed_andesite"
       },
       "lootTable": "excompressum:excompressum/compressed_hammer/compressed_andesite"
     },
     {
+      "id": "excompressum:compressed_granite",
       "source:": {
         "item": "excompressum:compressed_granite"
       },

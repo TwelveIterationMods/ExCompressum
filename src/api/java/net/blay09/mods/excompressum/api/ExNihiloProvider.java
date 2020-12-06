@@ -58,7 +58,7 @@ public interface ExNihiloProvider {
 
     boolean isHammerable(BlockState state);
 
-    List<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand);
+    List<ItemStack> rollHammerRewards(BlockState state, ItemStack tool, Random rand);
 
     boolean isSiftableWithMesh(BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh);
 

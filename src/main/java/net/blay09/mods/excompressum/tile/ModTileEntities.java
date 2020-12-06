@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.*;
-import net.blay09.mods.excompressum.compat.botania.BotaniaBindings;
+import net.blay09.mods.excompressum.compat.botania.BotaniaCompat;
 import net.blay09.mods.excompressum.compat.botania.EvolvedOrechidTileEntity;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
@@ -38,12 +38,12 @@ public class ModTileEntities {
                 autoCompressor = build(AutoCompressorTileEntity::new, AutoCompressorBlock.registryName, ModBlocks.autoCompressor),
                 rationingAutoCompressor = build(RationingAutoCompressorTileEntity::new, RationingAutoCompressorBlock.registryName, ModBlocks.rationingAutoCompressor),
                 autoSieve = build(AutoSieveTileEntity::new, AutoSieveBlock.registryName, ModBlocks.autoSieve),
-                manaSieve = build(ManaSieveTileEntity::new, ManaSieveBlock.registryName, ModBlocks.manaSieve),
+                manaSieve = build(BotaniaCompat::createManaSieveTileEntity, ManaSieveBlock.registryName, ModBlocks.manaSieve),
                 heavySieve = build(HeavySieveTileEntity::new, new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve"), ModBlocks.heavySieves),
                 autoHeavySieve = build(AutoHeavySieveTileEntity::new, AutoHeavySieveBlock.registryName, ModBlocks.autoHeavySieve),
                 woodenCrucible = build(WoodenCrucibleTileEntity::new, new ResourceLocation(ExCompressum.MOD_ID, "wooden_crucible"), ModBlocks.woodenCrucibles),
                 bait = build(BaitTileEntity::new, new ResourceLocation(ExCompressum.MOD_ID, "bait"), ModBlocks.baits),
-                evolvedOrechid = build(BotaniaBindings::createOrechidTileEntity, new ResourceLocation(ExCompressum.MOD_ID, "evolved_orechid"), ModBlocks.evolvedOrechid)
+                evolvedOrechid = build(BotaniaCompat::createOrechidTileEntity, new ResourceLocation(ExCompressum.MOD_ID, "evolved_orechid"), ModBlocks.evolvedOrechid)
         );
     }
 

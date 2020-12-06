@@ -151,7 +151,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public List<ItemStack> rollHammerRewards(BlockState state, int miningLevel, float luck, Random rand) {
+    public List<ItemStack> rollHammerRewards(BlockState state, ItemStack toolItem, Random rand) {
         return Collections.singletonList(ExNihiloRegistries.HAMMER_REGISTRY.getResult(state.getBlock().getRegistryName()).copy());
     }
 

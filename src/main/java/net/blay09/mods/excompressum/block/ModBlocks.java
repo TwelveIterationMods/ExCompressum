@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.compat.botania.BotaniaBindings;
+import net.blay09.mods.excompressum.compat.botania.BotaniaCompat;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -43,12 +43,12 @@ public class ModBlocks {
         registry.registerAll(
                 autoHammer = new AutoHammerBlock().setRegistryName(AutoHammerBlock.name),
                 autoSieve = new AutoSieveBlock().setRegistryName(AutoSieveBlock.name),
-                manaSieve = new ManaSieveBlock().setRegistryName(ManaSieveBlock.name),
+                manaSieve = BotaniaCompat.createManaSieveBlock().setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "mana_sieve")),
                 autoCompressedHammer = new AutoCompressedHammerBlock().setRegistryName(AutoCompressedHammerBlock.name),
                 autoHeavySieve = new AutoHeavySieveBlock().setRegistryName(AutoHeavySieveBlock.name),
                 autoCompressor = new AutoCompressorBlock().setRegistryName(AutoCompressorBlock.name),
                 rationingAutoCompressor = new RationingAutoCompressorBlock().setRegistryName(RationingAutoCompressorBlock.name),
-                evolvedOrechid = BotaniaBindings.createOrechidBlock().setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "evolved_orechid"))
+                evolvedOrechid = BotaniaCompat.createOrechidBlock().setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "evolved_orechid"))
         );
     }
 

@@ -6,6 +6,7 @@
   },
   "customEntries": [
     {
+      "id": "minecraft:logs",
       "source": {
         "tag": "minecraft:logs"
       },

@@ -95,11 +95,10 @@ public class HeavySieveRegistry extends GroupedRegistry<
     }
 
     // TODO move somewhere else, duplicate code
-    public static LootContext buildLootContext(ServerWorld world, ItemStack itemStack, float luck, Random random) {
+    public static LootContext buildLootContext(ServerWorld world, ItemStack itemStack, Random random) {
         return new LootContext.Builder(world)
                 .withRandom(random)
                 .withParameter(SOURCE_STACK, itemStack)
-                .withLuck(luck)
                 .build(new LootParameterSet.Builder().required(SOURCE_STACK).build());
     }
 

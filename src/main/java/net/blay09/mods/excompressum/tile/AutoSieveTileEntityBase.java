@@ -120,6 +120,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
             ticksSinceSync++;
             if (ticksSinceSync > UPDATE_INTERVAL) {
                 if (isDirty) {
+                    markDirty();
                     VanillaPacketHandler.sendTileEntityUpdate(this);
                     isDirty = false;
                 }
@@ -158,6 +159,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
                 particleCount = (int) getSpeedMultiplier();
 
                 isDirty = true;
+
                 if (progress >= 1) {
                     if (!world.isRemote) {
                         SieveMeshRegistryEntry sieveMesh = getSieveMesh();
@@ -474,5 +476,9 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     @Override
     public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
         return new AutoSieveContainer(ModContainers.autoSieve, windowId, inv, this);
+    }
+
+    public SieveAnimationType getAnimationType() {
+        return SieveAnimationType.DEFAULT;
     }
 }

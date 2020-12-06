@@ -6,6 +6,7 @@
   },
   "customEntries": [
     {
+      "id": "minecraft:sand",
       "source": {
         "item": "minecraft:sand"
       },

@@ -1,11 +1,8 @@
 package net.blay09.mods.excompressum.loot;
 
 import com.google.gson.JsonObject;
-import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;
 import net.blay09.mods.excompressum.registry.hammer.Hammerable;
 import net.minecraft.block.BlockState;
@@ -13,14 +10,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.conditions.ILootCondition;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class HammerLootModifier extends LootModifier {
@@ -57,9 +52,10 @@ public class HammerLootModifier extends LootModifier {
             return loot;
         }
 
-        /*if(BlockTags.LOGS.contains(state.getBlock())) {
-            return Collections.singletonList(new ItemStack(ModItems.woodChipping, 4));
-        }*/
+        if (ExNihilo.getInstance().isHammerable(state)) {
+            ItemStack itemStack = context.get(LootParameters.TOOL);
+            return ExNihilo.getInstance().rollHammerRewards(state, itemStack != null ? itemStack : ItemStack.EMPTY, context.getRandom());
+        }
 
         return generatedLoot;
     }

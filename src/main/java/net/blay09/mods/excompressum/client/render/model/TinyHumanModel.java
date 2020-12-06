@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.client.render.model;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
+import net.blay09.mods.excompressum.tile.SieveAnimationType;
 import net.minecraft.client.renderer.entity.model.PlayerModel;
 import net.minecraft.entity.LivingEntity;
 
@@ -14,9 +15,25 @@ public class TinyHumanModel extends PlayerModel<LivingEntity> {
     }
 
     public void animate(AutoSieveTileEntityBase tileEntity, float partialTicks) {
-        if (tileEntity.shouldAnimate()) {
-            tileEntity.armAngle += 0.5f * (Math.max(1f, tileEntity.getSpeedMultiplier() / 4f)) * partialTicks;
-            bipedRightArm.rotateAngleX = tileEntity.armAngle;
+        if (tileEntity.getAnimationType() == SieveAnimationType.MAGIC) {
+            if(tileEntity.getEnergyStored() > 0) {
+                System.out.println(tileEntity.getEnergyStored());
+            }
+            if (tileEntity.shouldAnimate()) {
+                tileEntity.armAngle += partialTicks * 0.05f;
+
+                float base = (float) Math.toRadians(280);
+                bipedRightArm.rotateAngleX = (float) (base + Math.sin(tileEntity.armAngle) * 0.1f);
+                bipedLeftArm.rotateAngleX = (float) (base + Math.cos(tileEntity.armAngle) * 0.1f);
+            } else {
+                bipedRightArm.rotateAngleX = 0;
+                bipedLeftArm.rotateAngleX = 0;
+            }
+        } else {
+            if (tileEntity.shouldAnimate()) {
+                tileEntity.armAngle += 0.5f * (Math.max(1f, tileEntity.getSpeedMultiplier() / 4f)) * partialTicks;
+                bipedRightArm.rotateAngleX = tileEntity.armAngle;
+            }
         }
     }
 

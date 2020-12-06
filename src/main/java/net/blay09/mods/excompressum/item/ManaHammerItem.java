@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.compat.botania.BotaniaBindings;
+import net.blay09.mods.excompressum.compat.botania.BotaniaCompat;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -13,10 +13,11 @@ import net.minecraft.item.ToolItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import vazkii.botania.api.mana.IManaUsingItem;
 
 import java.util.HashSet;
 
-public class ManaHammerItem extends ToolItem implements IHammer {
+public class ManaHammerItem extends ToolItem implements IManaUsingItem {
 
     public static final String name = "hammer_mana";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
@@ -24,7 +25,7 @@ public class ManaHammerItem extends ToolItem implements IHammer {
     private static final int MANA_PER_DAMAGE = 60;
 
     public ManaHammerItem(Item.Properties properties) {
-        super(6f, -3.2f, BotaniaBindings.manaSteelItemTier, new HashSet<>(), properties);
+        super(6f, -3.2f, BotaniaCompat.getManaSteelItemTier(), new HashSet<>(), properties);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class ManaHammerItem extends ToolItem implements IHammer {
 
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        boolean manaRequested = attacker instanceof PlayerEntity && BotaniaBindings.requestManaExactForTool(stack, (PlayerEntity) attacker, 2 * MANA_PER_DAMAGE, true);
+        boolean manaRequested = attacker instanceof PlayerEntity && BotaniaCompat.requestManaExactForTool(stack, (PlayerEntity) attacker, 2 * MANA_PER_DAMAGE, true);
         if (!manaRequested) {
             stack.damageItem(2, attacker, it -> {
             });
@@ -53,7 +54,7 @@ public class ManaHammerItem extends ToolItem implements IHammer {
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (state.getBlockHardness(world, pos) != 0.0) {
-            boolean manaRequested = entityLiving instanceof PlayerEntity && BotaniaBindings.requestManaExactForTool(stack, (PlayerEntity) entityLiving, MANA_PER_DAMAGE, true);
+            boolean manaRequested = entityLiving instanceof PlayerEntity && BotaniaCompat.requestManaExactForTool(stack, (PlayerEntity) entityLiving, MANA_PER_DAMAGE, true);
             if (!manaRequested) {
                 stack.damageItem(1, entityLiving, it -> {
                 });
@@ -64,19 +65,13 @@ public class ManaHammerItem extends ToolItem implements IHammer {
 
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
-        if (!world.isRemote && entity instanceof PlayerEntity && stack.getDamage() > 0 && BotaniaBindings.requestManaExactForTool(stack, (PlayerEntity) entity, 2 * MANA_PER_DAMAGE, true)) {
+        if (!world.isRemote && entity instanceof PlayerEntity && stack.getDamage() > 0 && BotaniaCompat.requestManaExactForTool(stack, (PlayerEntity) entity, 2 * MANA_PER_DAMAGE, true)) {
             stack.setDamage(stack.getDamage() - 1);
         }
     }
 
     @Override
-    public boolean canHammer(ItemStack itemStack, World world, BlockState state, PlayerEntity entityPlayer) {
+    public boolean usesMana(ItemStack itemStack) {
         return true;
     }
-
-    @Override
-    public int getHammerLevel(ItemStack itemStack, World world, BlockState state, PlayerEntity entityPlayer) {
-        return getTier().getHarvestLevel();
-    }
-
 }

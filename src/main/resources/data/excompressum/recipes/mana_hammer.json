@@ -10,28 +10,28 @@
   ],
   "key": {
     "S": {
-      "tag": "forge:rods/magical_wooden"
+      "item": "botania:livingwood_twig"
     },
     "I": {
-      "tag": "forge:ingots/mana_steel"
+      "tag": "forge:ingots/manasteel"
     }
   },
   "conditions": [
     {
-      "type": "forge:not",
-      "value": {
-        "type": "forge:or",
-        "values": [
-          {
+      "type": "forge:and",
+      "values": [
+        {
+          "type": "forge:not",
+          "value": {
             "type": "forge:tag_empty",
-            "tag": "forge:ingots/mana_steel"
-          },
-          {
-            "type": "forge:tag_empty",
-            "tag": "forge:rods/magical_wooden"
+            "tag": "forge:ingots/manasteel"
           }
-        ]
-      }
+        },
+        {
+          "type": "forge:item_exists",
+          "item": "botania:livingwood_twig"
+        }
+      ]
     }
   ]
 }

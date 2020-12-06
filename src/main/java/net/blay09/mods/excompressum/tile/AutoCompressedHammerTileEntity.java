@@ -42,10 +42,10 @@ public class AutoCompressedHammerTileEntity extends AutoHammerTileEntity {
     }
 
     @Override
-    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, int miningLevel, float luck, Random rand) {
+    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, Random rand) {
         CompressedHammerable hammerable = ExRegistries.getCompressedHammerRegistry().getHammerable(itemStack);
         if (hammerable != null && hammerable.getLootTable() != null) {
-            LootContext lootContext = CompressedHammerRegistry.buildLootContext(((ServerWorld) world), itemStack, luck, rand);
+            LootContext lootContext = CompressedHammerRegistry.buildLootContext(((ServerWorld) world), itemStack, rand);
             return CompressedHammerRegistry.rollHammerRewards(hammerable, lootContext);
         }
         return Collections.emptyList();

@@ -3,14 +3,16 @@ package net.blay09.mods.excompressum.tile;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.container.AutoSieveContainer;
 import net.blay09.mods.excompressum.container.ModContainers;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import vazkii.botania.api.mana.IManaReceiver;
 
-public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
+public class ManaSieveTileEntity extends AutoSieveTileEntityBase implements IManaReceiver {
 
     private int manaStored;
 
@@ -50,17 +52,13 @@ public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
     @Override
     protected void writeToNBTSynced(CompoundNBT tagCompound, boolean isSync) {
         super.writeToNBTSynced(tagCompound, isSync);
-        if (!isSync) {
-            tagCompound.putInt("ManaStored", manaStored);
-        }
+        tagCompound.putInt("ManaStored", manaStored);
     }
 
     @Override
     protected void readFromNBTSynced(CompoundNBT tagCompound, boolean isSync) {
         super.readFromNBTSynced(tagCompound, isSync);
-        if (!isSync) {
-            manaStored = tagCompound.getInt("ManaStored");
-        }
+        manaStored = tagCompound.getInt("ManaStored");
     }
 
     @Override
@@ -72,4 +70,30 @@ public class ManaSieveTileEntity extends AutoSieveTileEntityBase {
     public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
         return new AutoSieveContainer(ModContainers.manaSieve, windowId, inv, this);
     }
+
+    @Override
+    public boolean isFull() {
+        return getEnergyStored() >= getMaxEnergyStored();
+    }
+
+    @Override
+    public void receiveMana(int mana) {
+        setEnergyStored(Math.min(getMaxEnergyStored(), getEnergyStored() + mana));
+    }
+
+    @Override
+    public boolean canReceiveManaFromBursts() {
+        return !isFull();
+    }
+
+    @Override
+    public int getCurrentMana() {
+        return getEnergyStored();
+    }
+
+    @Override
+    public SieveAnimationType getAnimationType() {
+        return SieveAnimationType.MAGIC;
+    }
+
 }
