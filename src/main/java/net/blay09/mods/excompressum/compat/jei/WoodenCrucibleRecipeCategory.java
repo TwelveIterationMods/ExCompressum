@@ -12,6 +12,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
@@ -52,7 +53,7 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
     @Nonnull
     @Override
     public String getTitle() {
-        return I18n.format("jei." + UID);
+        return I18n.format(UID.toString());
     }
 
     @Nonnull
@@ -75,18 +76,8 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, final WoodenCrucibleRecipe recipe, final IIngredients ingredients) {
-        ItemStack fluidItem = new ItemStack(Items.WATER_BUCKET);
-        /* TODO if (FluidRegistry.isUniversalBucketEnabled()) {
-            fluidItem = new ItemStack(Items.BUCKET);
-            IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(fluidItem);
-            if (fluidHandler != null) {
-                fluidHandler.fill(ingredients.getOutputs(VanillaTypes.FLUID).get(0).get(0), IFluidHandler.FluidAction.EXECUTE);
-                fluidItem = fluidHandler.getContainer();
-            }
-        }*/
-
-        recipeLayout.getItemStacks().init(0, false, 74, 9);
-        recipeLayout.getItemStacks().set(0, fluidItem);
+        recipeLayout.getFluidStacks().init(0, false, 75, 10);
+        recipeLayout.getFluidStacks().set(0, recipe.getFluidStack());
 
         IFocus<?> focus = recipeLayout.getFocus();
         boolean hasFocus = focus != null && focus.getMode() == IFocus.Mode.INPUT;

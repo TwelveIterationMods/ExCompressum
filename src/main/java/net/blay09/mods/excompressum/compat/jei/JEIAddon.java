@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
+import com.mojang.datafixers.util.Pair;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -26,8 +27,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @JeiPlugin
 public class JEIAddon implements IModPlugin {
@@ -69,11 +72,17 @@ public class JEIAddon implements IModPlugin {
                 continue;
             }
 
-            List<WoodenCrucibleMeltable> entries = fluidOutputMap.get(fluidName);
+            List<WoodenCrucibleMeltable> meltables = fluidOutputMap.get(fluidName);
+            List<Pair<WoodenCrucibleMeltable, ItemStack>> inputs = new ArrayList<>();
+            for (WoodenCrucibleMeltable meltable : meltables) {
+                for (ItemStack matchingStack : meltable.getSource().getMatchingStacks()) {
+                    inputs.add(Pair.of(meltable, matchingStack));
+                }
+            }
 
             final int pageSize = 45;
-            List<List<WoodenCrucibleMeltable>> pages = Lists.partition(entries, pageSize);
-            for (List<WoodenCrucibleMeltable> page : pages) {
+            List<List<Pair<WoodenCrucibleMeltable, ItemStack>>> pages = Lists.partition(inputs, pageSize);
+            for (List<Pair<WoodenCrucibleMeltable, ItemStack>> page : pages) {
                 woodenCrucibleRecipes.add(new WoodenCrucibleRecipe(fluid, page));
             }
         }
