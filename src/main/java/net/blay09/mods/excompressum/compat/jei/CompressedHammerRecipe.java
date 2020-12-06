@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class CompressedHammerRecipe {
     private final List<ItemStack> outputs;
 
     public CompressedHammerRecipe(CompressedHammerable entry) {
-        input = ItemStack.EMPTY;
+        input = new ItemStack(Items.APPLE);
         outputs = new ArrayList<>();
     }
 

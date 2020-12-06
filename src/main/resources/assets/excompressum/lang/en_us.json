@@ -101,6 +101,8 @@
   "excompressum.tooltip.compressedHammer.luck": "luck",
   "excompressum.tooltip.heavySieve.luck": "luck",
   "excompressum.tooltip.disableFakeWoodenCrucible": "Disabled by Ex Compressum, use Oak Crucible",
+  "excompressum.tooltip.evolvedOrechid.functionalFlower": "Functional Flower",
+  "excompressum.tooltip.evolvedOrechid.tagline": "Orechid: Evolved: Skyblock: The Movie",
   "excompressum.entry.evolved_orechid": "Evolved Orechid",
   "excompressum.tagline.orechidEvolved": "Creates ores from stone",
   "excompressum.page.orechidEvolved0": "You probably noticed by now that you won't be mining any ores in this world. The $(item)Evolved Orechid$(0) will use $(thing)Mana$(0) to synthesize $(thing)ores$(0) from nearby $(item)Stone$(0) blocks at a faster and cheaper rate than the $(item)Orechid$(0).<br>The ores it generates are random, but rarer ores seem to be created less often.",
