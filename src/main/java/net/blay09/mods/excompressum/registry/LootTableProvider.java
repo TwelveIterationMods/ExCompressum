@@ -5,7 +5,9 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootSerializers;
 import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTableManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
@@ -23,12 +25,24 @@ public class LootTableProvider {
         this.inlineLootTableJson = inlineLootTableJson;
     }
 
-    private LootTableProvider(ResourceLocation lootTableLocation) {
+    public LootTableProvider(ResourceLocation lootTableLocation) {
         this.lootTableLocation = lootTableLocation;
     }
 
     public LootTableProvider(LootTable inlineLootTable) {
         this.inlineLootTable = inlineLootTable;
+    }
+
+    @Nullable
+    public LootTable getLootTable(String name, LootTableManager lootTableManager) {
+        if (inlineLootTableJson != null || inlineLootTable != null) {
+            if (inlineLootTable == null) {
+                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, new ResourceLocation(ExCompressum.MOD_ID, name + "_embed"), inlineLootTableJson, true, lootTableManager);
+            }
+            return inlineLootTable;
+        }
+
+        return lootTableManager.getLootTableFromLocation(lootTableLocation);
     }
 
     @Nullable

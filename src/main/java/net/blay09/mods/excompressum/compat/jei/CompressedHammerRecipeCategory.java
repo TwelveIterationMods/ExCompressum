@@ -53,7 +53,7 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
     @Nonnull
     @Override
     public String getTitle() {
-        return I18n.format("jei." + UID);
+        return I18n.format(UID.toString());
     }
 
     @Override
@@ -68,8 +68,8 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
 
     @Override
     public void setIngredients(CompressedHammerRecipe compressedHammerRecipe, IIngredients ingredients) {
-        ingredients.setInput(VanillaTypes.ITEM, compressedHammerRecipe.getInput());
-        ingredients.setOutputs(VanillaTypes.ITEM, compressedHammerRecipe.getOutputs());
+        ingredients.setInputs(VanillaTypes.ITEM, compressedHammerRecipe.getInputs());
+        ingredients.setOutputs(VanillaTypes.ITEM, compressedHammerRecipe.getOutputItems());
     }
 
     @Override

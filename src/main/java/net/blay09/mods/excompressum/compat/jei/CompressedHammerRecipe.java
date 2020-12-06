@@ -6,23 +6,27 @@ import net.minecraft.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CompressedHammerRecipe {
 
-    private final ItemStack input;
-    private final List<ItemStack> outputs;
+    private final List<ItemStack> inputs;
+    private final List<LootTableEntry> outputs;
+    private final List<ItemStack> outputItems;
 
     public CompressedHammerRecipe(CompressedHammerable entry) {
-        input = new ItemStack(Items.APPLE);
-        outputs = new ArrayList<>();
+        inputs = Arrays.asList(entry.getSource().getMatchingStacks());
+        outputs = LootTableUtils.getLootTableEntries(entry.getLootTable());
+        outputItems = outputs.stream().map(LootTableEntry::getItemStack).collect(Collectors.toList());
     }
 
-    public ItemStack getInput() {
-        return input;
+    public List<ItemStack> getInputs() {
+        return inputs;
     }
 
-    public List<ItemStack> getOutputs() {
-        return outputs;
+    public List<ItemStack> getOutputItems() {
+        return outputItems;
     }
 }

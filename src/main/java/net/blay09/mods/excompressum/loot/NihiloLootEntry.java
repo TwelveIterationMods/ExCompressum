@@ -34,6 +34,10 @@ public class NihiloLootEntry extends StandaloneLootEntry {
         return ModLoot.nihiloItemEntry;
     }
 
+    public ExNihiloProvider.NihiloItems getNihiloItem() {
+        return nihiloItem;
+    }
+
     public static class Serializer extends StandaloneLootEntry.Serializer<NihiloLootEntry> {
         @Override
         public void doSerialize(JsonObject object, NihiloLootEntry context, JsonSerializationContext conditions) {
