@@ -16,9 +16,6 @@ public class TinyHumanModel extends PlayerModel<LivingEntity> {
 
     public void animate(AutoSieveTileEntityBase tileEntity, float partialTicks) {
         if (tileEntity.getAnimationType() == SieveAnimationType.MAGIC) {
-            if(tileEntity.getEnergyStored() > 0) {
-                System.out.println(tileEntity.getEnergyStored());
-            }
             if (tileEntity.shouldAnimate()) {
                 tileEntity.armAngle += partialTicks * 0.05f;
 
