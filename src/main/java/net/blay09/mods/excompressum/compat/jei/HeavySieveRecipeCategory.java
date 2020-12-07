@@ -59,7 +59,7 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
 	@Nonnull
 	@Override
 	public String getTitle() {
-		return I18n.format("block.excompressum.heavy_sieve");
+		return I18n.format(UID.toString());
 	}
 
 	@Nonnull

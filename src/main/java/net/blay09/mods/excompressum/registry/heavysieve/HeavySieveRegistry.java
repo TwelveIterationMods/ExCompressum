@@ -39,7 +39,11 @@ public class HeavySieveRegistry extends GroupedRegistry<
     }
 
     public Collection<HeavySiftable> getEntries() {
-        return siftables; // TODO generated ones?
+        return siftables;
+    }
+
+    public Collection<HeavySiftable> getGeneratedEntries() {
+        return generatedEntriesCache.values();
     }
 
     public boolean isSiftable(BlockState sieveState, ItemStack itemStack, @Nullable SieveMeshRegistryEntry mesh) {
@@ -60,19 +64,24 @@ public class HeavySieveRegistry extends GroupedRegistry<
         if (generatedEntry == null) {
             GeneratedHeavySiftable generatedHeavySiftable = generatedEntries.get(itemRegistryName);
             if (generatedHeavySiftable != null) {
-                IItemProvider source = ForgeRegistries.ITEMS.getValue(generatedHeavySiftable.getSource());
-                int times = generatedHeavySiftable.getTimes() != null ? generatedHeavySiftable.getTimes() : ExCompressumConfig.COMMON.heavySieveDefaultRolls.get();
-                LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(sieveState, source, times, mesh);
-                HeavySiftable generatedSiftable = new HeavySiftable();
-                generatedSiftable.setId(new ResourceLocation(ExCompressum.MOD_ID, itemRegistryName.getPath()));
-                generatedSiftable.setSource(Ingredient.fromItems(source));
-                generatedSiftable.setWaterlogged(waterlogged);
-                generatedSiftable.setLootTable(new LootTableProvider(lootTable));
+                HeavySiftable generatedSiftable = generateSiftable(sieveState, mesh, waterlogged, itemRegistryName, generatedHeavySiftable);
                 generatedEntriesCache.put(heavySiftableKey, generatedSiftable);
             }
         }
 
         return generatedEntry;
+    }
+
+    private HeavySiftable generateSiftable(BlockState sieveState, @Nullable SieveMeshRegistryEntry mesh, boolean waterlogged, ResourceLocation itemRegistryName, GeneratedHeavySiftable generatedHeavySiftable) {
+        IItemProvider source = ForgeRegistries.ITEMS.getValue(generatedHeavySiftable.getSource());
+        int times = generatedHeavySiftable.getTimes() != null ? generatedHeavySiftable.getTimes() : ExCompressumConfig.COMMON.heavySieveDefaultRolls.get();
+        LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(sieveState, source, times, mesh);
+        HeavySiftable generatedSiftable = new HeavySiftable();
+        generatedSiftable.setId(new ResourceLocation(ExCompressum.MOD_ID, itemRegistryName.getPath()));
+        generatedSiftable.setSource(Ingredient.fromItems(source));
+        generatedSiftable.setWaterlogged(waterlogged);
+        generatedSiftable.setLootTable(new LootTableProvider(lootTable));
+        return generatedSiftable;
     }
 
     private boolean siftableMatches(HeavySiftable siftable, ItemStack itemStack, boolean waterlogged, SieveMeshRegistryEntry mesh) {

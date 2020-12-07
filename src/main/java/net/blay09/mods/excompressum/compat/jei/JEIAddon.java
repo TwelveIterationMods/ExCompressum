@@ -38,20 +38,13 @@ public class JEIAddon implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registry) {
         List<HeavySieveRecipe> heavySieveRecipes = new ArrayList<>();
-        if (ExNihilo.getInstance().doMeshesSplitLootTables()) {
-            Collection<HeavySiftable> entries = ExRegistries.getHeavySieveRegistry().getEntries();
-            for (SieveMeshRegistryEntry sieveMesh : SieveMeshRegistry.getEntries().values()) {
-                for (HeavySiftable entry : entries) {
-                    /*if (!entry.getRewardsForMesh(sieveMesh, ExCompressumConfig.COMMON.flattenSieveRecipes.get()).isEmpty()) {
-                        heavySieveRecipes.add(new HeavySieveRecipe(entry, sieveMesh));
-                    }*/
-                }
-            }
-        } else {
-            for (HeavySiftable entry : ExRegistries.getHeavySieveRegistry().getEntries()) {
-                heavySieveRecipes.add(new HeavySieveRecipe(entry));
-            }
+        for (HeavySiftable entry : ExRegistries.getHeavySieveRegistry().getEntries()) {
+            heavySieveRecipes.add(new HeavySieveRecipe(entry));
         }
+        for (HeavySiftable entry : ExRegistries.getHeavySieveRegistry().getEntries()) {
+            heavySieveRecipes.add(new HeavySieveRecipe(entry));
+        }
+
         registry.addRecipes(heavySieveRecipes, HeavySieveRecipeCategory.UID);
 
         List<CompressedHammerRecipe> compressedHammerRecipes = new ArrayList<>();
@@ -100,6 +93,8 @@ public class JEIAddon implements IModPlugin {
         for (Block woodenCrucible : ModBlocks.woodenCrucibles) {
             registry.addRecipeCatalyst(new ItemStack(woodenCrucible), WoodenCrucibleRecipeCategory.UID);
         }
+        registry.addRecipeCatalyst(new ItemStack(ModBlocks.autoCompressedHammer), CompressedHammerRecipeCategory.UID);
+        registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerNetherite), CompressedHammerRecipeCategory.UID);
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerDiamond), CompressedHammerRecipeCategory.UID);
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerGold), CompressedHammerRecipeCategory.UID);
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerIron), CompressedHammerRecipeCategory.UID);
