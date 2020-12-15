@@ -6,6 +6,7 @@ import net.blay09.mods.excompressum.client.render.entity.AngryChickenRenderer;
 import net.blay09.mods.excompressum.client.render.tile.*;
 import net.blay09.mods.excompressum.entity.AngryChickenEntity;
 import net.blay09.mods.excompressum.entity.ModEntities;
+import net.blay09.mods.excompressum.tile.AutoSieveTileEntityBase;
 import net.blay09.mods.excompressum.tile.ModTileEntities;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -17,6 +18,7 @@ import net.minecraft.resources.IFutureReloadListener;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,7 +42,6 @@ public class ModRenderers {
 
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.heavySieve, HeavySieveRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoSieve, AutoSieveRenderer::normal);
-        ClientRegistry.bindTileEntityRenderer(ModTileEntities.manaSieve, AutoSieveRenderer::normal);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoHeavySieve, AutoSieveRenderer::heavy);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoHammer, AutoHammerRenderer::normal);
         ClientRegistry.bindTileEntityRenderer(ModTileEntities.autoCompressedHammer, AutoHammerRenderer::compressed);
@@ -55,6 +56,9 @@ public class ModRenderers {
         if (resourceManager instanceof IReloadableResourceManager) {
             ((IReloadableResourceManager) resourceManager).addReloadListener((IResourceManagerReloadListener) manager -> AutoSieveRenderer.cacheKey++);
         }
+
+        //noinspection unchecked
+        ClientRegistry.bindTileEntityRenderer((TileEntityType<AutoSieveTileEntityBase>) ModTileEntities.manaSieve, AutoSieveRenderer::normal);
     }
 
 }

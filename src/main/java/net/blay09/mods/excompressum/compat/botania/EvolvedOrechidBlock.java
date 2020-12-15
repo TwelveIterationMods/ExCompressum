@@ -1,8 +1,6 @@
 package net.blay09.mods.excompressum.compat.botania;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.blay09.mods.excompressum.compat.botania.BotaniaBindings;
-import net.blay09.mods.excompressum.compat.botania.EvolvedOrechidTileEntity;
 import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -22,7 +20,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import vazkii.botania.api.subtile.TileEntitySpecialFlower;
@@ -47,7 +44,7 @@ public class EvolvedOrechidBlock extends FlowerBlock implements IWandable, IWand
 
     @Override
     protected boolean isValidGround(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return BotaniaBindings.RED_STRING_RELAY.equals(state.getBlock().getRegistryName()) || state.getBlock() == Blocks.MYCELIUM || super.isValidGround(state, worldIn, pos);
+        return BotaniaCompat.RED_STRING_RELAY.equals(state.getBlock().getRegistryName()) || state.getBlock() == Blocks.MYCELIUM || super.isValidGround(state, worldIn, pos);
     }
 
     @Override

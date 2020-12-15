@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.compat.botania;
 
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.tile.ModTileEntities;
-import net.minecraft.tileentity.TileEntityType;
 import vazkii.botania.common.block.subtile.functional.SubTileOrechid;
 
 public class EvolvedOrechidTileEntity extends SubTileOrechid {

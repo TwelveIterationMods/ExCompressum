@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.compat.botania;
 
-import net.blay09.mods.excompressum.tile.ManaSieveTileEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -11,40 +10,58 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
 
 public class BotaniaCompat {
 
+    public static final String MOD_ID = "botania";
+    public static ResourceLocation RED_STRING_RELAY = new ResourceLocation("botania", "red_string_relay");
+
+    private static BotaniaBindings bindings;
+    private static BotaniaInternalBindings internalBindings;
     private static boolean failedToGetManaParticle;
 
+    static {
+        if (isBotaniaLoaded()) {
+            try {
+                bindings = (BotaniaBindings) Class.forName("net.blay09.mods.excompressum.compat.botania.BotaniaBindingsImpl").newInstance();
+                internalBindings = (BotaniaInternalBindings) Class.forName("net.blay09.mods.excompressum.compat.botania.BotaniaInternalBindings").newInstance();
+            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static boolean requestManaExactForTool(ItemStack stack, PlayerEntity player, int mana, boolean remove) {
-        return isBotaniaLoaded() && BotaniaBindings.requestManaExactForTool(stack, player, mana, remove);
+        return isBotaniaLoaded() && bindings.requestManaExactForTool(stack, player, mana, remove);
     }
 
     public static Block createOrechidBlock() {
-        AbstractBlock.Properties properties = AbstractBlock.Properties.from(Blocks.POPPY);
         if (isBotaniaLoaded()) {
-            return BotaniaBindings.createOrechidBlock();
+            return bindings.createOrechidBlock();
         } else {
+            AbstractBlock.Properties properties = AbstractBlock.Properties.from(Blocks.POPPY);
             return new Block(properties);
         }
     }
 
     @Nullable
-    public static EvolvedOrechidTileEntity createOrechidTileEntity() {
+    public static TileEntity createOrechidTileEntity() {
         if (isBotaniaLoaded()) {
-            return BotaniaBindings.createOrechidTileEntity();
+            return bindings.createOrechidTileEntity();
         } else {
             return null;
         }
     }
 
     @Nullable
-    public static ManaSieveTileEntity createManaSieveTileEntity() {
+    public static TileEntity createManaSieveTileEntity() {
         if (isBotaniaLoaded()) {
-            return BotaniaBindings.createManaSieveTileEntity();
+            return bindings.createManaSieveTileEntity();
         } else {
             return null;
         }
@@ -52,16 +69,16 @@ public class BotaniaCompat {
 
     public static Block createManaSieveBlock() {
         if (isBotaniaLoaded()) {
-            return BotaniaBindings.createManaSieveBlock();
+            return bindings.createManaSieveBlock();
         } else {
             return new Block(AbstractBlock.Properties.from(Blocks.IRON_BLOCK));
         }
     }
 
     public static IParticleData getManaParticle() {
-        if (isBotaniaLoaded() && !failedToGetManaParticle) {
+        if (isBotaniaLoaded() && !failedToGetManaParticle && internalBindings != null) {
             try {
-                return BotaniaInternalBindings.createWispParticle();
+                return internalBindings.createWispParticle();
             } catch (Throwable ignored) {
                 failedToGetManaParticle = true;
             }
@@ -71,7 +88,7 @@ public class BotaniaCompat {
     }
 
     public static IItemTier getManaSteelItemTier() {
-        return isBotaniaLoaded() ? BotaniaBindings.getManaSteelItemTier() : ItemTier.IRON;
+        return isBotaniaLoaded() ? bindings.getManaSteelItemTier() : ItemTier.IRON;
     }
 
     private static boolean isBotaniaLoaded() {
@@ -80,7 +97,7 @@ public class BotaniaCompat {
 
     public static Item createManaHammerItem(Item.Properties properties) {
         if (isBotaniaLoaded()) {
-            return BotaniaBindings.createManaHammerItem(properties);
+            return bindings.createManaHammerItem(properties);
         } else {
             return new Item(properties);
         }

@@ -7,6 +7,7 @@ import net.minecraft.item.ItemTier;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -48,12 +49,21 @@ public class ModItems {
                 batZapper = new BatZapperItem(itemProperties()).setRegistryName(BatZapperItem.name),
                 oreSmasher = new OreSmasherItem(itemProperties()).setRegistryName(OreSmasherItem.name),
                 uglySteelPlating = new UglySteelPlatingItem(itemProperties()).setRegistryName(UglySteelPlatingItem.name),
-                manaHammer = BotaniaCompat.createManaHammerItem(itemProperties()).setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "hammer_mana"))
+                manaHammer = BotaniaCompat.createManaHammerItem(optionalItemProperties(BotaniaCompat.MOD_ID)).setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "hammer_mana"))
         );
     }
 
     private static Item.Properties itemProperties() {
         return new Item.Properties().group(ExCompressum.itemGroup);
+    }
+
+    private static Item.Properties optionalItemProperties(String modId) {
+        Item.Properties properties = new Item.Properties();
+        if (ModList.get().isLoaded(modId)) {
+            return properties.group(ExCompressum.itemGroup);
+        }
+
+        return properties;
     }
 
 }

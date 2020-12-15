@@ -9,6 +9,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -74,11 +75,11 @@ public class ModBlocks {
                 blockItem(autoHammer),
                 blockItem(autoCompressedHammer),
                 blockItem(autoSieve),
-                blockItem(manaSieve),
                 blockItem(autoHeavySieve),
                 blockItem(autoCompressor),
                 blockItem(rationingAutoCompressor),
-                blockItem(evolvedOrechid)
+                blockItem(manaSieve, optionalItemProperties(BotaniaCompat.MOD_ID)),
+                blockItem(evolvedOrechid, optionalItemProperties(BotaniaCompat.MOD_ID))
         );
     }
 
@@ -89,11 +90,24 @@ public class ModBlocks {
     }
 
     private static Item blockItem(Block block) {
-        return new BlockItem(block, itemProperties()).setRegistryName(Objects.requireNonNull(block.getRegistryName()));
+        return blockItem(block, itemProperties());
+    }
+
+    private static Item blockItem(Block block, Item.Properties properties) {
+        return new BlockItem(block, properties).setRegistryName(Objects.requireNonNull(block.getRegistryName()));
     }
 
     private static Item.Properties itemProperties() {
         return new Item.Properties().group(ExCompressum.itemGroup);
+    }
+
+    private static Item.Properties optionalItemProperties(String modId) {
+        Item.Properties properties = new Item.Properties();
+        if (ModList.get().isLoaded(modId)) {
+            return properties.group(ExCompressum.itemGroup);
+        }
+
+        return properties;
     }
 
 	/*public static void registerModels() {
