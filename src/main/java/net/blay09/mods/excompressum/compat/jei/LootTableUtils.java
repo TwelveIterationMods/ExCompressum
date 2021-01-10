@@ -23,6 +23,14 @@ public class LootTableUtils {
 
     private static final Random random = new Random();
 
+    public static boolean isLootTableEmpty(@Nullable LootTableProvider lootTableProvider) {
+        if (lootTableProvider == null) {
+            return true;
+        }
+
+        return getLootTableEntries(lootTableProvider).isEmpty();
+    }
+
     public static List<LootTableEntry> getLootTableEntries(@Nullable LootTableProvider lootTableProvider) {
         if (lootTableProvider == null) {
             return Collections.emptyList();

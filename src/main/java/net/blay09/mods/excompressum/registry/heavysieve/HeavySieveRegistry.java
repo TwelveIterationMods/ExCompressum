@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.registry.heavysieve;
 
+import com.google.common.collect.Sets;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
@@ -42,7 +43,11 @@ public class HeavySieveRegistry extends GroupedRegistry<
         return siftables;
     }
 
-    public Collection<HeavySiftable> getGeneratedEntries() {
+    public Map<ResourceLocation, GeneratedHeavySiftable> getGeneratedEntries() {
+        return generatedEntries;
+    }
+
+    public Collection<HeavySiftable> getGeneratedEntriesCache() {
         return generatedEntriesCache.values();
     }
 
@@ -72,15 +77,17 @@ public class HeavySieveRegistry extends GroupedRegistry<
         return generatedEntry;
     }
 
-    private HeavySiftable generateSiftable(BlockState sieveState, @Nullable SieveMeshRegistryEntry mesh, boolean waterlogged, ResourceLocation itemRegistryName, GeneratedHeavySiftable generatedHeavySiftable) {
+    public static HeavySiftable generateSiftable(BlockState sieveState, @Nullable SieveMeshRegistryEntry mesh, boolean waterlogged, ResourceLocation itemRegistryName, GeneratedHeavySiftable generatedHeavySiftable) {
         IItemProvider source = ForgeRegistries.ITEMS.getValue(generatedHeavySiftable.getSource());
+        IItemProvider compressedSource = ForgeRegistries.ITEMS.getValue(itemRegistryName);
         int times = generatedHeavySiftable.getTimes() != null ? generatedHeavySiftable.getTimes() : ExCompressumConfig.COMMON.heavySieveDefaultRolls.get();
         LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(sieveState, source, times, mesh);
         HeavySiftable generatedSiftable = new HeavySiftable();
         generatedSiftable.setId(new ResourceLocation(ExCompressum.MOD_ID, itemRegistryName.getPath()));
-        generatedSiftable.setSource(Ingredient.fromItems(source));
+        generatedSiftable.setSource(Ingredient.fromItems(compressedSource));
         generatedSiftable.setWaterlogged(waterlogged);
         generatedSiftable.setLootTable(new LootTableProvider(lootTable));
+        generatedSiftable.setMeshes(mesh != null ? Sets.newHashSet(mesh.getMeshType()) : Collections.emptySet());
         return generatedSiftable;
     }
 

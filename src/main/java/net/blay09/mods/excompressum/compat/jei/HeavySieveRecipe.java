@@ -10,8 +10,10 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySiftable;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -24,6 +26,7 @@ public class HeavySieveRecipe {
     private final List<LootTableEntry> outputs;
     private final List<ItemStack> outputItems;
     private final ArrayListMultimap<ResourceLocation, HeavySieveReward> rewards;
+    private final boolean waterlogged;
 
     public HeavySieveRecipe(HeavySiftable entry) {
         this.entry = entry;
@@ -54,6 +57,7 @@ public class HeavySieveRecipe {
         inputs.add(Arrays.asList(entry.getSource().getMatchingStacks()));
         outputs = LootTableUtils.getLootTableEntries(entry.getLootTable());
         outputItems = outputs.stream().map(LootTableEntry::getItemStack).collect(Collectors.toList());
+        waterlogged = entry.isWaterlogged();
     }
 
     public Collection<HeavySieveReward> getRewardsForItemStack(ItemStack itemStack) {
@@ -70,5 +74,9 @@ public class HeavySieveRecipe {
 
     public List<ItemStack> getOutputs() {
         return outputItems;
+    }
+
+    public boolean isWaterlogged() {
+        return waterlogged;
     }
 }
