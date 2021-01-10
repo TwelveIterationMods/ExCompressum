@@ -29,7 +29,7 @@ public class BotaniaCompat {
         if (isBotaniaLoaded()) {
             try {
                 bindings = (BotaniaBindings) Class.forName("net.blay09.mods.excompressum.compat.botania.BotaniaBindingsImpl").newInstance();
-                internalBindings = (BotaniaInternalBindings) Class.forName("net.blay09.mods.excompressum.compat.botania.BotaniaInternalBindings").newInstance();
+                internalBindings = (BotaniaInternalBindings) Class.forName("net.blay09.mods.excompressum.compat.botania.BotaniaInternalBindingsImpl").newInstance();
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -71,7 +71,7 @@ public class BotaniaCompat {
         if (isBotaniaLoaded()) {
             return bindings.createManaSieveBlock();
         } else {
-            return new Block(AbstractBlock.Properties.from(Blocks.IRON_BLOCK));
+            return new Block(AbstractBlock.Properties.from(Blocks.IRON_BLOCK).noDrops());
         }
     }
 
@@ -84,7 +84,7 @@ public class BotaniaCompat {
             }
         }
 
-        return ParticleTypes.FLASH;
+        return ParticleTypes.HAPPY_VILLAGER;
     }
 
     public static IItemTier getManaSteelItemTier() {

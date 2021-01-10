@@ -11,6 +11,7 @@ import net.blay09.mods.excompressum.loot.ModLoot;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.NihilisticNihiloProvider;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.InterModComms;

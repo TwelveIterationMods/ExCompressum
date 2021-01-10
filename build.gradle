@@ -120,7 +120,7 @@ dependencies {
     compile fg.deobf("curse.maven:exnihilosequentia:3123311")
     compile fg.deobf("curse.maven:hwyla:3033593")
     compile fg.deobf("curse.maven:the-one-probe:3108607")
-    compileOnly fg.deobf("curse.maven:botania:3086502")
+    compile fg.deobf("curse.maven:botania:3086502")
     compile fg.deobf("curse.maven:curios:3122651")
     compile fg.deobf("curse.maven:patchouli:3086492")
 

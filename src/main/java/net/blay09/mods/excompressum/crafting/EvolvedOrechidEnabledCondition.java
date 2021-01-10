@@ -3,12 +3,14 @@ package net.blay09.mods.excompressum.crafting;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
+import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
+import net.minecraftforge.fml.ModList;
 
 public class EvolvedOrechidEnabledCondition implements ICondition {
 
@@ -21,7 +23,7 @@ public class EvolvedOrechidEnabledCondition implements ICondition {
 
     @Override
     public boolean test() {
-        return ExCompressumConfig.COMMON.enableEvolvedOrechid.get();
+        return ModList.get().isLoaded(Compat.BOTANIA) && ExCompressumConfig.COMMON.enableEvolvedOrechid.get();
     }
 
     public static class Serializer implements IConditionSerializer<EvolvedOrechidEnabledCondition> {
