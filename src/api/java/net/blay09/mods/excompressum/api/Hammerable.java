@@ -1,9 +1,5 @@
-package net.blay09.mods.excompressum.registry.hammer;
+package net.blay09.mods.excompressum.api;
 
-import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.registry.LootTableProvider;
-import net.blay09.mods.excompressum.registry.RegistryEntry;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootTable;
@@ -11,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
-public class Hammerable extends RegistryEntry {
+public class Hammerable extends RegistryEntry { // TODO apify
 
     private ResourceLocation id;
     private Ingredient source;

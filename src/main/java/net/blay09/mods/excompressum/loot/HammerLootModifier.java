@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;
-import net.blay09.mods.excompressum.registry.hammer.Hammerable;
+import net.blay09.mods.excompressum.api.Hammerable;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;

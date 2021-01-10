@@ -117,12 +117,12 @@ dependencies {
     compileOnly "inventory-tweaks:InventoryTweaks:1.64+dev.146"
     compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.0.22:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.0.22")
-    compile fg.deobf("curse.maven:exnihilosequentia:3123311")
-    compile fg.deobf("curse.maven:hwyla:3033593")
-    compile fg.deobf("curse.maven:the-one-probe:3108607")
-    compile fg.deobf("curse.maven:botania:3086502")
-    compile fg.deobf("curse.maven:curios:3122651")
-    compile fg.deobf("curse.maven:patchouli:3086492")
+    compile fg.deobf("curse.maven:exnihilosequentia-400012:3123311")
+    compile fg.deobf("curse.maven:hwyla-253449:3033593")
+    compile fg.deobf("curse.maven:the-one-probe-245211:3108607")
+    compile fg.deobf("curse.maven:botania-225643:3086502")
+    compile fg.deobf("curse.maven:curios-309927:3122651")
+    compile fg.deobf("curse.maven:patchouli-306770:3086492")
 
     /*deobfCompile "tinkers-construct:TConstruct:1.12.2:2.12.0.135"
     deobfCompile "mantle:Mantle:1.12:1.3.3.49"*/

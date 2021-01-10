@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.registry;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.api.LootTableProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.resources.IResource;

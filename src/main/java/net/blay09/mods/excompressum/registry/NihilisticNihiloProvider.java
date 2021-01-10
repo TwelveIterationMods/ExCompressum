@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.registry;
 
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
+import net.blay09.mods.excompressum.api.Hammerable;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 
 import net.minecraft.block.BlockState;
@@ -81,5 +82,10 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	@Override
 	public boolean isHammerableOre(ItemStack itemStack) {
 		return false;
+	}
+
+	@Override
+	public List<Hammerable> getHammerables() {
+		return Collections.emptyList();
 	}
 }

@@ -9,22 +9,18 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class CompressedHammerRecipeCategory implements IRecipeCategory<CompressedHammerRecipe> {
+public class HammerRecipeCategory implements IRecipeCategory<HammerRecipe> {
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_hammer.png");
-    public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "compressed_hammer");
+    public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "hammer");
 
     private final IDrawable background;
     private final IDrawable slotHighlight;
@@ -33,10 +29,10 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
     private int highlightX;
     private int highlightY;
 
-    public CompressedHammerRecipeCategory(IGuiHelper guiHelper) {
+    public HammerRecipeCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createDrawable(texture, 0, 0, 166, 63);
         this.slotHighlight = guiHelper.createDrawable(texture, 166, 0, 18, 18);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.autoCompressedHammer));
+        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.autoHammer));
     }
 
     @Nonnull
@@ -46,8 +42,8 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
     }
 
     @Override
-    public Class<? extends CompressedHammerRecipe> getRecipeClass() {
-        return CompressedHammerRecipe.class;
+    public Class<? extends HammerRecipe> getRecipeClass() {
+        return HammerRecipe.class;
     }
 
     @Nonnull
@@ -67,20 +63,20 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
     }
 
     @Override
-    public void setIngredients(CompressedHammerRecipe compressedHammerRecipe, IIngredients ingredients) {
-        ingredients.setInputs(VanillaTypes.ITEM, compressedHammerRecipe.getInputs());
-        ingredients.setOutputs(VanillaTypes.ITEM, compressedHammerRecipe.getOutputItems());
+    public void setIngredients(HammerRecipe recipe, IIngredients ingredients) {
+        ingredients.setInputs(VanillaTypes.ITEM, recipe.getInputs());
+        ingredients.setOutputs(VanillaTypes.ITEM, recipe.getOutputItems());
     }
 
     @Override
-    public void draw(CompressedHammerRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(HammerRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
         if (hasHighlight) {
             slotHighlight.draw(matrixStack, highlightX, highlightY);
         }
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, final CompressedHammerRecipe recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, final HammerRecipe recipe, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 74, 9);
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
 
@@ -110,7 +106,7 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
 
         /* TODO recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (!input) {
-                CompressedHammerReward reward = recipeWrapper.getRewardAt(slotIndex - INPUT_SLOTS);
+                CompressedHammerReward reward = recipe.getRewardAt(slotIndex - INPUT_SLOTS);
                 tooltip.add(new TranslationTextComponent("jei.excompressum:compressedHammer.dropChance"));
                 String s = String.format(" * %3d%%", (int) (reward.getBaseChance() * 100f));
                 if (reward.getLuckMultiplier() > 0f) {

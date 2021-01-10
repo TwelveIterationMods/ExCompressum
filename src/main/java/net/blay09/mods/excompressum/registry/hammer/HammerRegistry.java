@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.registry.hammer;
 
+import net.blay09.mods.excompressum.api.Hammerable;
 import net.blay09.mods.excompressum.registry.GroupedRegistry;
 import net.blay09.mods.excompressum.registry.GroupedRegistryData;
 import net.blay09.mods.excompressum.registry.RegistryGroup;

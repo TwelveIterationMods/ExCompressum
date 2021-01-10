@@ -1,19 +1,26 @@
 package net.blay09.mods.excompressum.compat.exnihilosequentia;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
+import net.blay09.mods.excompressum.api.Hammerable;
+import net.blay09.mods.excompressum.api.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.api.sievemesh.MeshType;
+import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.RandomChance;
 import net.minecraft.loot.functions.SetCount;
@@ -29,6 +36,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import novamachina.exnihilosequentia.api.ExNihiloRegistries;
 import novamachina.exnihilosequentia.api.crafting.ItemStackWithChance;
 import novamachina.exnihilosequentia.api.crafting.crook.CrookRecipe;
+import novamachina.exnihilosequentia.api.crafting.hammer.HammerRecipe;
 import novamachina.exnihilosequentia.api.crafting.sieve.MeshWithChance;
 import novamachina.exnihilosequentia.api.crafting.sieve.SieveRecipe;
 import novamachina.exnihilosequentia.common.block.InfestedLeavesBlock;
@@ -303,4 +311,39 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 //			}
 //		}
 //	}
+
+
+    @Override
+    public List<Hammerable> getHammerables() {
+        Multimap<ResourceLocation, HammerRecipe> groupedRecipes = ArrayListMultimap.create();
+        for (HammerRecipe hammerRecipe : ExNihiloRegistries.HAMMER_REGISTRY.getRecipeList()) {
+            groupedRecipes.put(hammerRecipe.getInput().getItem().getRegistryName(), hammerRecipe);
+        }
+
+        List<Hammerable> result = new ArrayList<>();
+        for (ResourceLocation registryName : groupedRecipes.keySet()) {
+            Hammerable hammerable = new Hammerable();
+            Item inputItem = ForgeRegistries.ITEMS.getValue(registryName);
+            hammerable.setId(registryName);
+            hammerable.setSource(Ingredient.fromItems(inputItem));
+            LootTable.Builder tableBuilder = LootTable.builder();
+            LootPool.Builder poolBuilder = LootPool.builder();
+            for (HammerRecipe hammerRecipe : groupedRecipes.get(registryName)) {
+                ItemStack outputItem = hammerRecipe.getOutput();
+                StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(outputItem.getItem()); // TODO duplicate code
+                if (outputItem.getCount() > 0) {
+                    entryBuilder.acceptFunction(SetCount.builder(ConstantRange.of(outputItem.getCount())));
+                }
+                if (outputItem.getTag() != null) {
+                    entryBuilder.acceptFunction(SetNBT.builder(outputItem.getTag()));
+                }
+                poolBuilder.addEntry(entryBuilder);
+            }
+            tableBuilder.addLootPool(poolBuilder);
+            hammerable.setLootTable(new LootTableProvider(tableBuilder.build()));
+            result.add(hammerable);
+        }
+
+        return result;
+    }
 }

@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.registry;
 
+import net.blay09.mods.excompressum.api.RegistryEntry;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.ModList;
 

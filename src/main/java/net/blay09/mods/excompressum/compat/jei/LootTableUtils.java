@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.compat.jei;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.loot.NihiloLootEntry;
 import net.blay09.mods.excompressum.registry.ExNihilo;
-import net.blay09.mods.excompressum.registry.LootTableProvider;
+import net.blay09.mods.excompressum.api.LootTableProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.*;

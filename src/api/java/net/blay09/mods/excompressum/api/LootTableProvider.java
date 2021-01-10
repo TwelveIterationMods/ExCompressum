@@ -1,19 +1,17 @@
-package net.blay09.mods.excompressum.registry;
+package net.blay09.mods.excompressum.api;
 
 import com.google.gson.*;
-import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootSerializers;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTableManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
 
-public class LootTableProvider {
+public class LootTableProvider { // TODO interface
 
     private static final Gson GSON_INSTANCE = LootSerializers.func_237388_c_().create();
 
@@ -37,7 +35,7 @@ public class LootTableProvider {
     public LootTable getLootTable(String name, LootTableManager lootTableManager) {
         if (inlineLootTableJson != null || inlineLootTable != null) {
             if (inlineLootTable == null) {
-                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, new ResourceLocation(ExCompressum.MOD_ID, name + "_embed"), inlineLootTableJson, true, lootTableManager);
+                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, new ResourceLocation(ExCompressumAPI.MOD_ID, name + "_embed"), inlineLootTableJson, true, lootTableManager);
             }
             return inlineLootTable;
         }
@@ -49,7 +47,7 @@ public class LootTableProvider {
     public LootTable getLootTable(String name, LootContext context) {
         if (inlineLootTableJson != null || inlineLootTable != null) {
             if (inlineLootTable == null) {
-                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, new ResourceLocation(ExCompressum.MOD_ID, name + "_embed"), inlineLootTableJson, true, context.getWorld().getServer().getLootTableManager());
+                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, new ResourceLocation(ExCompressumAPI.MOD_ID, name + "_embed"), inlineLootTableJson, true, context.getWorld().getServer().getLootTableManager());
             }
             return inlineLootTable;
         }

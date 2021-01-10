@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.registry.woodencrucible;
 
-import net.blay09.mods.excompressum.registry.RegistryEntry;
+import net.blay09.mods.excompressum.api.RegistryEntry;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;

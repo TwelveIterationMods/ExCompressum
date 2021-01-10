@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.registry.heavysieve;
 
 import com.google.common.collect.Sets;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.api.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.*;

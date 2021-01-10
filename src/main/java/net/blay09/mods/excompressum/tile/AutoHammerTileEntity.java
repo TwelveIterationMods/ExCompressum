@@ -10,7 +10,7 @@ import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;
-import net.blay09.mods.excompressum.registry.hammer.Hammerable;
+import net.blay09.mods.excompressum.api.Hammerable;
 import net.blay09.mods.excompressum.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -38,7 +38,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
-import org.lwjgl.opengl.EXTCompiledVertexArray;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

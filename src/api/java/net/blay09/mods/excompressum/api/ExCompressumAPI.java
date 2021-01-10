@@ -12,6 +12,8 @@ import java.util.List;
  * To register stuff, subscribe to the appropriate {@link net.blay09.mods.excompressum.api.ReloadRegistryEvent}.
  */
 public class ExCompressumAPI {
+    public static final String MOD_ID = "excompressum";
+
     private static InternalMethods internalMethods;
 
     /**

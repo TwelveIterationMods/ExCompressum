@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry;
+package net.blay09.mods.excompressum.api;
 
 import net.minecraft.util.ResourceLocation;
 

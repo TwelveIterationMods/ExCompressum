@@ -9,12 +9,15 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.item.ModItems;
+import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
+import net.blay09.mods.excompressum.api.Hammerable;
 import net.blay09.mods.excompressum.registry.heavysieve.GeneratedHeavySiftable;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySiftable;
@@ -52,6 +55,15 @@ public class JEIAddon implements IModPlugin {
             compressedHammerRecipes.add(new CompressedHammerRecipe(entry));
         }
         registry.addRecipes(compressedHammerRecipes, CompressedHammerRecipeCategory.UID);
+
+        List<HammerRecipe> hammerRecipes = new ArrayList<>();
+        for (Hammerable entry : ExRegistries.getHammerRegistry().getEntries()) {
+            hammerRecipes.add(new HammerRecipe(entry));
+        }
+        for (Hammerable hammerable : ExNihilo.getInstance().getHammerables()) {
+            hammerRecipes.add(new HammerRecipe(hammerable));
+        }
+        registry.addRecipes(hammerRecipes, HammerRecipeCategory.UID);
 
         ArrayListMultimap<ResourceLocation, WoodenCrucibleMeltable> fluidOutputMap = ArrayListMultimap.create();
         for (WoodenCrucibleMeltable entry : ExRegistries.getWoodenCrucibleRegistry().getEntries()) {
@@ -110,6 +122,14 @@ public class JEIAddon implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerIron), CompressedHammerRecipeCategory.UID);
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerStone), CompressedHammerRecipeCategory.UID);
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerWood), CompressedHammerRecipeCategory.UID);
+
+        registry.addRecipeCatalyst(new ItemStack(ModBlocks.autoHammer), HammerRecipeCategory.UID);
+        registry.addRecipeCatalyst(ExNihilo.getInstance().getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_NETHERITE), HammerRecipeCategory.UID);
+        registry.addRecipeCatalyst(ExNihilo.getInstance().getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND), HammerRecipeCategory.UID);
+        registry.addRecipeCatalyst(ExNihilo.getInstance().getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_GOLD), HammerRecipeCategory.UID);
+        registry.addRecipeCatalyst(ExNihilo.getInstance().getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_IRON), HammerRecipeCategory.UID);
+        registry.addRecipeCatalyst(ExNihilo.getInstance().getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_STONE), HammerRecipeCategory.UID);
+        registry.addRecipeCatalyst(ExNihilo.getInstance().getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_WOODEN), HammerRecipeCategory.UID);
     }
 
     @Override
@@ -121,6 +141,7 @@ public class JEIAddon implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registry) {
         registry.addRecipeCategories(
                 new HeavySieveRecipeCategory(registry.getJeiHelpers()),
+                new HammerRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
                 new CompressedHammerRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
                 new WoodenCrucibleRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
                 new ChickenStickRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
