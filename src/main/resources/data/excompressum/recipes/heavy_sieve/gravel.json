@@ -1,0 +1,8 @@
+{
+  "type": "excompressum:heavy_sieve_generated",
+  "input": {
+    "item":"excompressum:compressed_gravel"
+  },
+  "source": "minecraft:gravel",
+  "times": 9
+}

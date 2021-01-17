@@ -36,6 +36,7 @@ public class CompressedRecipeRegistry implements IResourceManagerReloadListener 
 
         final RecipeManager recipeManager = dataPackRegistries.getRecipeManager();
         for (IRecipe<?> recipe : recipeManager.getRecipes()) {
+            // TODO limit to only crafting recipes
             NonNullList<Ingredient> ingredients = recipe.getIngredients();
             int count = ingredients.size();
             if (count == 4 || count == 9) {
