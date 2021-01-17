@@ -44,14 +44,6 @@
       },
       "fluid": "minecraft:water",
       "amount": 100
-    },
-    {
-      "id": "excompressum:wood_chippings",
-      "source": {
-        "item": "excompressum:wood_chippings"
-      },
-      "fluid": "minecraft:water",
-      "amount": 100
     }
   ]
 }
