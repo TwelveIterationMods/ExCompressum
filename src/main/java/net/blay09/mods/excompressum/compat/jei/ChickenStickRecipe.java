@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.compat.jei;
 
-import mezz.jei.api.ingredients.IIngredients;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

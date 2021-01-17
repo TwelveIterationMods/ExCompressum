@@ -26,6 +26,10 @@ public class CompressedHammerRecipe {
         return inputs;
     }
 
+    public List<LootTableEntry> getOutputs() {
+        return outputs;
+    }
+
     public List<ItemStack> getOutputItems() {
         return outputItems;
     }

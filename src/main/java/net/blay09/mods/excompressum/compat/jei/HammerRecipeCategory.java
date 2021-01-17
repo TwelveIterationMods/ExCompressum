@@ -10,8 +10,11 @@ import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
+import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.BinomialRange;
+import net.minecraft.loot.RandomValueRange;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
@@ -104,16 +107,11 @@ public class HammerRecipeCategory implements IRecipeCategory<HammerRecipe> {
             slotNumber++;
         }
 
-        /* TODO recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+        recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (!input) {
-                CompressedHammerReward reward = recipe.getRewardAt(slotIndex - INPUT_SLOTS);
-                tooltip.add(new TranslationTextComponent("jei.excompressum:compressedHammer.dropChance"));
-                String s = String.format(" * %3d%%", (int) (reward.getBaseChance() * 100f));
-                if (reward.getLuckMultiplier() > 0f) {
-                    s += TextFormatting.BLUE + String.format(" (+ %1.1f " + I18n.format("jei.excompressum:compressedHammer.luck") + ")", reward.getLuckMultiplier());
-                }
-                tooltip.add(new StringTextComponent(s));
+                LootTableEntry entry = recipe.getOutputs().get(slotIndex - INPUT_SLOTS);
+                JeiUtils.addLootTableEntryTooltips(entry, tooltip);
             }
-        });*/
+        });
     }
 }

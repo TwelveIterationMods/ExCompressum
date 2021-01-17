@@ -31,8 +31,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.ToIntFunction;
 
 @JeiPlugin
 public class JEIAddon implements IModPlugin {
@@ -84,6 +86,8 @@ public class JEIAddon implements IModPlugin {
                     inputs.add(Pair.of(meltable, matchingStack));
                 }
             }
+
+            inputs.sort(Comparator.comparingInt((Pair<WoodenCrucibleMeltable, ItemStack> pair) -> pair.getFirst().getAmount()).reversed());
 
             final int pageSize = 45;
             List<List<Pair<WoodenCrucibleMeltable, ItemStack>>> pages = Lists.partition(inputs, pageSize);

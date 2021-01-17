@@ -11,8 +11,11 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
 import net.blay09.mods.excompressum.block.ModBlocks;
+import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.BinomialRange;
+import net.minecraft.loot.RandomValueRange;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -80,7 +83,7 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, final CompressedHammerRecipe recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, final CompressedHammerRecipe recipe, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 74, 9);
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
 
@@ -108,16 +111,11 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
             slotNumber++;
         }
 
-        /* TODO recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+        recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (!input) {
-                CompressedHammerReward reward = recipeWrapper.getRewardAt(slotIndex - INPUT_SLOTS);
-                tooltip.add(new TranslationTextComponent("jei.excompressum:compressedHammer.dropChance"));
-                String s = String.format(" * %3d%%", (int) (reward.getBaseChance() * 100f));
-                if (reward.getLuckMultiplier() > 0f) {
-                    s += TextFormatting.BLUE + String.format(" (+ %1.1f " + I18n.format("jei.excompressum:compressedHammer.luck") + ")", reward.getLuckMultiplier());
-                }
-                tooltip.add(new StringTextComponent(s));
+                LootTableEntry entry = recipe.getOutputs().get(slotIndex - INPUT_SLOTS);
+                JeiUtils.addLootTableEntryTooltips(entry, tooltip);
             }
-        });*/
+        });
     }
 }

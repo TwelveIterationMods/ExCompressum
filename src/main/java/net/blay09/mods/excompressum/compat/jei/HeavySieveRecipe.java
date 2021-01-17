@@ -72,7 +72,11 @@ public class HeavySieveRecipe {
         return inputs;
     }
 
-    public List<ItemStack> getOutputs() {
+    public List<LootTableEntry> getOutputs() {
+        return outputs;
+    }
+
+    public List<ItemStack> getOutputItems() {
         return outputItems;
     }
 

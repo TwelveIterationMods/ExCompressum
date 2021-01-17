@@ -3,6 +3,7 @@ buildscript {
         jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
         mavenCentral()
+        maven { url = "https://repo.spongepowered.org/maven" }
     }
     // This is only here while FG is under active development
     configurations.classpath {
@@ -13,10 +14,12 @@ buildscript {
     }
     dependencies {
         classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "3.+", changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 
 apply plugin: "net.minecraftforge.gradle"
+apply plugin: "org.spongepowered.mixin"
 
 def BUILD_NUMBER = System.getenv("BUILD_NUMBER") ?: patch_version
 
@@ -36,6 +39,8 @@ sourceSets {
     main {
         compileClasspath += sourceSets.api.output
         runtimeClasspath += sourceSets.api.output
+
+        ext.refMap = "refmap.excompressum.json"
     }
 }
 
@@ -49,7 +54,16 @@ minecraft {
             workingDirectory project.file('run')
 //            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            jvmArg '-Dmixin.env.disableRefMap=true'
+
+            arg "-mixin.config=mixins.excompressum.json"
+
+            property "mixin.env.disableRefMap", "true"
+            property "mixin.debug.export", "true"
+            property "mixin.debug.export.decompile", "false"
+            property "mixin.debug.verbose", "true"
+            property "mixin.debug.dumpTargetOnFailure", "true"
+            property "mixin.checks", "true"
+            property "mixin.hotSwap", "true"
 
             mods {
                 excompressum {
@@ -62,7 +76,16 @@ minecraft {
             workingDirectory project.file('run')
 //            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            jvmArg '-Dmixin.env.disableRefMap=true'
+
+            arg "-mixin.config=mixins.excompressum.json"
+
+            property "mixin.env.disableRefMap", "true"
+            property "mixin.debug.export", "true"
+            property "mixin.debug.export.decompile", "false"
+            property "mixin.debug.verbose", "true"
+            property "mixin.debug.dumpTargetOnFailure", "true"
+            property "mixin.checks", "true"
+            property "mixin.hotSwap", "true"
 
             mods {
                 excompressum {
@@ -74,7 +97,16 @@ minecraft {
         data {
             workingDirectory project.file('run')
             property 'forge.logging.console.level', 'debug'
-            jvmArg '-Dmixin.env.disableRefMap=true'
+
+            arg "-mixin.config=mixins.excompressum.json"
+
+            property "mixin.env.disableRefMap", "true"
+            property "mixin.debug.export", "true"
+            property "mixin.debug.export.decompile", "false"
+            property "mixin.debug.verbose", "true"
+            property "mixin.debug.dumpTargetOnFailure", "true"
+            property "mixin.checks", "true"
+            property "mixin.hotSwap", "true"
 
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/')
 
@@ -148,6 +180,7 @@ jar {
                     "Implementation-Title"    : project.name,
                     "Implementation-Version"  : "${version}",
                     "Implementation-Vendor"   : "BlayTheNinth",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
+                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                    "MixinConfigs": "mixins.excompressum.json"])
     }
 }

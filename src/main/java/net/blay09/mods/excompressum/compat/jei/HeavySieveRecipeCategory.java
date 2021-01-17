@@ -1,7 +1,5 @@
 package net.blay09.mods.excompressum.compat.jei;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -12,15 +10,13 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.block.ModBlocks;
-import net.minecraft.client.Minecraft;
+import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -88,7 +84,7 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, final HeavySieveRecipe recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, final HeavySieveRecipe recipe, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 61, 9);
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         recipeLayout.getItemStacks().init(1, true, 87, 9);
@@ -118,20 +114,11 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
         }
         recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (!input) {
-                Multiset<String> condensedTooltips = HashMultiset.create();
-                for (HeavySieveReward reward : recipeWrapper.getRewardsForItemStack(ingredient)) {
-                    String s;
-                    int iChance = (int) (reward.getBaseChance() * 100f);
-                    if (iChance > 0) {
-                        s = String.format("%3d%%", (int) (reward.getBaseChance() * 100f));
-                    } else {
-                        s = String.format("%1.1f%%", reward.getBaseChance() * 100f);
-                    }
-                    condensedTooltips.add(s);
-                }
-                tooltip.add(new TranslationTextComponent("excompressum.tooltip.heavySieve.dropChance"));
-                for (String line : condensedTooltips.elementSet()) {
-                    tooltip.add(new StringTextComponent(" * " + condensedTooltips.count(line) + "x " + line));
+                LootTableEntry entry = recipe.getOutputs().get(slotIndex - INPUT_SLOTS);
+                JeiUtils.addLootTableEntryTooltips(entry, tooltip);
+            } else {
+                if (slotIndex == 0 && recipe.isWaterlogged()) {
+                    tooltip.add(Messages.lang("tooltip.jei.waterlogged"));
                 }
             }
         });
@@ -140,6 +127,6 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
     @Override
     public void setIngredients(HeavySieveRecipe heavySieveRecipe, IIngredients ingredients) {
         ingredients.setInputLists(VanillaTypes.ITEM, heavySieveRecipe.getInputs());
-        ingredients.setOutputs(VanillaTypes.ITEM, heavySieveRecipe.getOutputs());
+        ingredients.setOutputs(VanillaTypes.ITEM, heavySieveRecipe.getOutputItems());
     }
 }
