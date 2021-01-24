@@ -6,6 +6,7 @@ import net.blay09.mods.excompressum.api.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.*;
+import net.blay09.mods.excompressum.registry.heavysieve.newregistry.GeneratedHeavySieveRecipe;
 import net.blay09.mods.excompressum.registry.heavysieve.newregistry.HeavySieveRecipe;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.block.BlockState;
@@ -20,25 +21,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class HeavySieveRegistry {
-
-    @Deprecated
-    public static HeavySiftable generateSiftable(BlockState sieveState, @Nullable SieveMeshRegistryEntry mesh, boolean waterlogged, ResourceLocation itemRegistryName, GeneratedHeavySiftable generatedHeavySiftable) {
-        IItemProvider source = ForgeRegistries.ITEMS.getValue(generatedHeavySiftable.getSource());
-        IItemProvider compressedSource = ForgeRegistries.ITEMS.getValue(itemRegistryName);
-        int times = generatedHeavySiftable.getTimes() != null ? generatedHeavySiftable.getTimes() : ExCompressumConfig.COMMON.heavySieveDefaultRolls.get();
-        LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(sieveState, source, times, mesh);
-        HeavySiftable generatedSiftable = new HeavySiftable();
-        generatedSiftable.setId(new ResourceLocation(ExCompressum.MOD_ID, itemRegistryName.getPath()));
-        generatedSiftable.setSource(Ingredient.fromItems(compressedSource));
-        generatedSiftable.setWaterlogged(waterlogged);
-        generatedSiftable.setLootTable(new LootTableProvider(lootTable));
-        generatedSiftable.setMeshes(mesh != null ? Sets.newHashSet(mesh.getMeshType()) : Collections.emptySet());
-        return generatedSiftable;
-    }
 
     private static boolean testRecipe(SieveMeshRegistryEntry mesh, ItemStack itemStack, boolean waterlogged, HeavySieveRecipe recipe) {
         if (recipe.isWaterlogged() != waterlogged) {
@@ -59,6 +44,10 @@ public class HeavySieveRegistry {
         return recipe.getInput().test(itemStack);
     }
 
+    private static boolean testGeneratedRecipe(ItemStack itemStack, GeneratedHeavySieveRecipe generatedRecipe) {
+        return generatedRecipe.getInput().test(itemStack);
+    }
+
     public static List<ItemStack> rollSieveRewards(LootContext context, BlockState sieve, SieveMeshRegistryEntry mesh, ItemStack itemStack) {
         boolean waterlogged = sieve.hasProperty(BlockStateProperties.WATERLOGGED) && sieve.get(BlockStateProperties.WATERLOGGED);
         RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
@@ -73,17 +62,23 @@ public class HeavySieveRegistry {
             }
         }
 
+        List<GeneratedHeavySieveRecipe> generatedRecipes = recipeManager.getRecipesForType(GeneratedHeavySieveRecipe.TYPE);
+        for (GeneratedHeavySieveRecipe generatedRecipe : generatedRecipes) {
+            if (testGeneratedRecipe(itemStack, generatedRecipe)) {
+                int rolls = getGeneratedRollCount(generatedRecipe);
+                IItemProvider source = ForgeRegistries.ITEMS.getValue(generatedRecipe.getSource());
+                LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(sieve, source, rolls, mesh);
+                if (lootTable != null) {
+                    results.addAll(lootTable.generate(context));
+                }
+            }
+        }
+
         return results;
     }
 
-    @Deprecated
-    public static List<ItemStack> rollSieveRewards(HeavySiftable siftable, LootContext context) {
-        LootTable lootTable = siftable.getLootTable(context);
-        if (lootTable != null) {
-            return lootTable.generate(context);
-        }
-
-        return Collections.emptyList();
+    public static Integer getGeneratedRollCount(GeneratedHeavySieveRecipe generatedRecipe) {
+        return generatedRecipe.getRolls() != null ? generatedRecipe.getRolls() : ExCompressumConfig.COMMON.heavySieveDefaultRolls.get();
     }
 
     public boolean isSiftable(BlockState sieve, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
@@ -96,6 +91,23 @@ public class HeavySieveRegistry {
             }
         }
 
+        List<GeneratedHeavySieveRecipe> generatedRecipes = recipeManager.getRecipesForType(GeneratedHeavySieveRecipe.TYPE);
+        for (GeneratedHeavySieveRecipe recipe : generatedRecipes) {
+            if (testGeneratedRecipe(itemStack, recipe)) {
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    @Deprecated
+    public static List<ItemStack> rollSieveRewards(HeavySiftable siftable, LootContext context) {
+        LootTable lootTable = siftable.getLootTable(context);
+        if (lootTable != null) {
+            return lootTable.generate(context);
+        }
+
+        return Collections.emptyList();
     }
 }

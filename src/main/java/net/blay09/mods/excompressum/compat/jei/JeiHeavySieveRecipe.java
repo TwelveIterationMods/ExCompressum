@@ -4,7 +4,6 @@ import com.google.common.collect.ArrayListMultimap;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.MeshType;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySiftable;
 import net.blay09.mods.excompressum.registry.heavysieve.newregistry.HeavySieveRecipe;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.item.ItemStack;
@@ -17,7 +16,7 @@ public class JeiHeavySieveRecipe {
 
     private final HeavySieveRecipe recipe;
     private final List<List<ItemStack>> inputs;
-    private final List<LootTableEntry> outputs;
+    private final List<MergedLootTableEntry> outputs;
     private final List<ItemStack> outputItems;
     private final ArrayListMultimap<ResourceLocation, HeavySieveReward> rewards;
     private final boolean waterlogged;
@@ -49,13 +48,10 @@ public class JeiHeavySieveRecipe {
             inputs.add(Collections.emptyList());
         }
         inputs.add(Arrays.asList(recipe.getInput().getMatchingStacks()));
-        outputs = LootTableUtils.getLootTableEntries(recipe.getLootTable());
-        outputItems = outputs.stream().map(LootTableEntry::getItemStack).collect(Collectors.toList());
+        List<LootTableEntry> entries = LootTableUtils.getLootTableEntries(recipe.getLootTable());
+        outputs = LootTableUtils.mergeLootTableEntries(entries);
+        outputItems = outputs.stream().map(MergedLootTableEntry::getItemStack).collect(Collectors.toList());
         waterlogged = recipe.isWaterlogged();
-    }
-
-    public Collection<HeavySieveReward> getRewardsForItemStack(ItemStack itemStack) {
-        return rewards.get(itemStack.getItem().getRegistryName());
     }
 
     public HeavySieveRecipe getRecipe() {
@@ -66,7 +62,7 @@ public class JeiHeavySieveRecipe {
         return inputs;
     }
 
-    public List<LootTableEntry> getOutputs() {
+    public List<MergedLootTableEntry> getOutputs() {
         return outputs;
     }
 

@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.registry.heavysieve.newregistry;
 
-import com.google.gson.JsonArray;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.MeshType;

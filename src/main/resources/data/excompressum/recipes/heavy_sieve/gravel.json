@@ -4,5 +4,5 @@
     "item":"excompressum:compressed_gravel"
   },
   "source": "minecraft:gravel",
-  "times": 9
+  "rolls": 9
 }

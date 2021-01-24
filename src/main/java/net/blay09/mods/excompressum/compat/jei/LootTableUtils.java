@@ -1,5 +1,7 @@
 package net.blay09.mods.excompressum.compat.jei;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.loot.NihiloLootEntry;
@@ -28,6 +30,14 @@ public class LootTableUtils {
 
     private static final Random random = new Random();
 
+    public static boolean isLootTableEmpty(@Nullable LootTable lootTable) {
+        if (lootTable == null) {
+            return true;
+        }
+
+        return getLootTableEntries(lootTable).isEmpty();
+    }
+
     public static boolean isLootTableEmpty(@Nullable LootTableProvider lootTableProvider) {
         if (lootTableProvider == null) {
             return true;
@@ -43,6 +53,14 @@ public class LootTableUtils {
 
         LootTableManager lootTableManager = ServerLifecycleHooks.getCurrentServer().getLootTableManager();
         LootTable lootTable = lootTableProvider.getLootTable("", lootTableManager);
+        return getLootTableEntries(lootTable);
+    }
+
+    public static List<LootTableEntry> getLootTableEntries(@Nullable LootTable lootTable) {
+        if (lootTable == null) {
+            return Collections.emptyList();
+        }
+
         List<LootTableEntry> result = new ArrayList<>();
         List<LootPool> pools = ObfuscationReflectionHelper.getPrivateValue(LootTable.class, lootTable, "field_186466_c");
         for (LootPool pool : pools) {
@@ -126,4 +144,23 @@ public class LootTableUtils {
                 .build(new LootParameterSet.Builder().required(SOURCE_STACK).build());
     }
 
+    public static List<MergedLootTableEntry> mergeLootTableEntries(List<LootTableEntry> entries) {
+        List<MergedLootTableEntry> result = new ArrayList<>();
+        ArrayListMultimap<ResourceLocation, LootTableEntry> entryMap = ArrayListMultimap.create();
+        for (LootTableEntry entry : entries) {
+            if (entry.getItemStack().hasTag()) {
+                result.add(new MergedLootTableEntry(entry));
+            } else {
+                entryMap.put(entry.getItemStack().getItem().getRegistryName(), entry);
+            }
+        }
+
+        for (ResourceLocation key : entryMap.keySet()) {
+            List<LootTableEntry> mergableEntries = entryMap.get(key);
+            LootTableEntry firstEntry = mergableEntries.get(0);
+            mergableEntries.sort(Comparator.comparing(LootTableEntry::getBaseChance).reversed());
+            result.add(new MergedLootTableEntry(firstEntry.getItemStack(), mergableEntries));
+        }
+        return result;
+    }
 }

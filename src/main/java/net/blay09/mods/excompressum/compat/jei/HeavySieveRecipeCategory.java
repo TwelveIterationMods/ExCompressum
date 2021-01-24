@@ -113,7 +113,7 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<JeiHeavySieveRe
         }
         recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (!input) {
-                LootTableEntry entry = recipe.getOutputs().get(slotIndex - INPUT_SLOTS);
+                MergedLootTableEntry entry = recipe.getOutputs().get(slotIndex - INPUT_SLOTS);
                 JeiUtils.addLootTableEntryTooltips(entry, tooltip);
             } else {
                 if (slotIndex == 0 && recipe.isWaterlogged()) {
