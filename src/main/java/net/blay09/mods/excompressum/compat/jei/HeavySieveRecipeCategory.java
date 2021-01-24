@@ -16,13 +16,12 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecipe> {
+public class HeavySieveRecipeCategory implements IRecipeCategory<JeiHeavySieveRecipe> {
 
     public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve");
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_heavy_sieve.png");
@@ -52,8 +51,8 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
     }
 
     @Override
-    public Class<? extends HeavySieveRecipe> getRecipeClass() {
-        return HeavySieveRecipe.class;
+    public Class<? extends JeiHeavySieveRecipe> getRecipeClass() {
+        return JeiHeavySieveRecipe.class;
     }
 
     @Nonnull
@@ -74,7 +73,7 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
     }
 
     @Override
-    public void draw(HeavySieveRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(JeiHeavySieveRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
         if (hasHighlight) {
             slotHighlight.draw(matrixStack, highlightX, highlightY);
         }
@@ -84,7 +83,7 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, final HeavySieveRecipe recipe, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, final JeiHeavySieveRecipe recipe, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 61, 9);
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         recipeLayout.getItemStacks().init(1, true, 87, 9);
@@ -125,7 +124,7 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<HeavySieveRecip
     }
 
     @Override
-    public void setIngredients(HeavySieveRecipe heavySieveRecipe, IIngredients ingredients) {
+    public void setIngredients(JeiHeavySieveRecipe heavySieveRecipe, IIngredients ingredients) {
         ingredients.setInputLists(VanillaTypes.ITEM, heavySieveRecipe.getInputs());
         ingredients.setOutputs(VanillaTypes.ITEM, heavySieveRecipe.getOutputItems());
     }

@@ -1,10 +1,10 @@
 package net.blay09.mods.excompressum.tile;
 
+import net.blay09.mods.excompressum.compat.jei.LootTableUtils;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySiftable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.util.text.ITextComponent;
@@ -13,7 +13,6 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Random;
 
 public class AutoHeavySieveTileEntity extends AutoSieveTileEntity {
@@ -29,13 +28,8 @@ public class AutoHeavySieveTileEntity extends AutoSieveTileEntity {
 
     @Override
     public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        HeavySiftable siftable = ExRegistries.getHeavySieveRegistry().getSiftable(getBlockState(), itemStack, getSieveMesh());
-        if (siftable != null) {
-            LootContext lootContext = HeavySieveRegistry.buildLootContext(((ServerWorld) world), itemStack, rand);
-            return HeavySieveRegistry.rollSieveRewards(siftable, lootContext);
-        }
-
-        return Collections.emptyList();
+        LootContext lootContext = LootTableUtils.buildLootContext(((ServerWorld) world), itemStack, world.rand);
+        return HeavySieveRegistry.rollSieveRewards(lootContext, getBlockState(), sieveMesh, itemStack);
     }
 
     @Override

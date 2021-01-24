@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.tile;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.compat.jei.LootTableUtils;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihilo;
@@ -112,7 +113,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
                 if (!world.isRemote) {
                     SieveMeshRegistryEntry sieveMesh = getSieveMesh();
                     if (sieveMesh != null) {
-                        LootContext lootContext = HeavySieveRegistry.buildLootContext(((ServerWorld) world), currentStack, world.rand);
+                        LootContext lootContext = LootTableUtils.buildLootContext(((ServerWorld) world), currentStack, world.rand);
                         Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(lootContext, getBlockState(), sieveMesh, currentStack);
                         for (ItemStack itemStack : rewards) {
                             world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, itemStack));

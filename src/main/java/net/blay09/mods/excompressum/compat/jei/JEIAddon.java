@@ -19,8 +19,9 @@ import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.blay09.mods.excompressum.api.Hammerable;
 import net.blay09.mods.excompressum.registry.heavysieve.GeneratedHeavySiftable;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySiftable;
+import net.blay09.mods.excompressum.registry.heavysieve.newregistry.HeavySieveRecipe;
+import net.blay09.mods.excompressum.registry.heavysieve.newregistry.ModRecipeTypes;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleMeltable;
 import net.minecraft.block.Block;
@@ -35,23 +36,24 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 @JeiPlugin
 public class JEIAddon implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registry) {
-        List<HeavySieveRecipe> heavySieveRecipes = new ArrayList<>();
-        for (HeavySiftable entry : ExRegistries.getHeavySieveRegistry().getEntries()) {
-            heavySieveRecipes.add(new HeavySieveRecipe(entry));
+        List<JeiHeavySieveRecipe> jeiHeavySieveRecipes = new ArrayList<>();
+
+        RecipeManager recipeManager = Minecraft.getInstance().world.getRecipeManager();
+        List<HeavySieveRecipe> heavySieveRecipes = recipeManager.getRecipesForType(HeavySieveRecipe.TYPE);
+        for (HeavySieveRecipe entry : heavySieveRecipes) {
+            jeiHeavySieveRecipes.add(new JeiHeavySieveRecipe(entry));
         }
-        for (Map.Entry<ResourceLocation, GeneratedHeavySiftable> entry : ExRegistries.getHeavySieveRegistry().getGeneratedEntries().entrySet()) {
+        /*for (Map.Entry<ResourceLocation, GeneratedHeavySiftable> entry : ExRegistries.getHeavySieveRegistry().getGeneratedEntries().entrySet()) {
             loadGeneratedHeavySieveRecipe(false, entry.getKey(), entry.getValue(), heavySieveRecipes);
             loadGeneratedHeavySieveRecipe(true, entry.getKey(), entry.getValue(), heavySieveRecipes);
-        }
-
-        registry.addRecipes(heavySieveRecipes, HeavySieveRecipeCategory.UID);
+        }*/
+        registry.addRecipes(jeiHeavySieveRecipes, HeavySieveRecipeCategory.UID);
 
         List<CompressedHammerRecipe> compressedHammerRecipes = new ArrayList<>();
         for (CompressedHammerable entry : ExRegistries.getCompressedHammerRegistry().getEntries()) {
@@ -102,13 +104,13 @@ public class JEIAddon implements IModPlugin {
         registry.addRecipes(Lists.newArrayList(new ChickenStickRecipe()), ChickenStickRecipeCategory.UID);
     }
 
-    private void loadGeneratedHeavySieveRecipe(boolean waterlogged, ResourceLocation compressedSourceItem, GeneratedHeavySiftable generatedHeavySiftable, List<HeavySieveRecipe> outRecipes) {
+    private void loadGeneratedHeavySieveRecipe(boolean waterlogged, ResourceLocation compressedSourceItem, GeneratedHeavySiftable generatedHeavySiftable, List<JeiHeavySieveRecipe> outRecipes) {
         BlockState waterLoggedState = ModBlocks.heavySieves[0].getDefaultState().with(HeavySieveBlock.WATERLOGGED, waterlogged);
         for (SieveMeshRegistryEntry mesh : SieveMeshRegistry.getEntries().values()) {
-            HeavySiftable siftable = HeavySieveRegistry.generateSiftable(waterLoggedState, mesh, waterlogged, compressedSourceItem, generatedHeavySiftable);
+            /*HeavySiftable siftable = HeavySieveRegistry.generateSiftable(waterLoggedState, mesh, waterlogged, compressedSourceItem, generatedHeavySiftable);
             if (!LootTableUtils.isLootTableEmpty(siftable.getLootTable())) {
                 outRecipes.add(new HeavySieveRecipe(siftable));
-            }
+            } TODO */
         }
     }
 

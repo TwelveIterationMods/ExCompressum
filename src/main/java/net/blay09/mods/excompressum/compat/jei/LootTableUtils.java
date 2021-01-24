@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.compat.jei;
 
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.loot.NihiloLootEntry;
 import net.blay09.mods.excompressum.mixin.LootPoolAccessor;
@@ -13,6 +14,8 @@ import net.minecraft.loot.conditions.RandomChance;
 import net.minecraft.loot.functions.ILootFunction;
 import net.minecraft.loot.functions.SetCount;
 import net.minecraft.tags.ITag;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
@@ -20,6 +23,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class LootTableUtils {
+
+    private static final LootParameter<ItemStack> SOURCE_STACK = new LootParameter<>(new ResourceLocation(ExCompressum.MOD_ID, "source_stack"));
 
     private static final Random random = new Random();
 
@@ -112,6 +117,13 @@ public class LootTableUtils {
         }
 
         return 1;
+    }
+
+    public static LootContext buildLootContext(ServerWorld world, ItemStack itemStack, Random random) {
+        return new LootContext.Builder(world)
+                .withRandom(random)
+                .withParameter(SOURCE_STACK, itemStack)
+                .build(new LootParameterSet.Builder().required(SOURCE_STACK).build());
     }
 
 }
