@@ -10,17 +10,14 @@ import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
-import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.BinomialRange;
-import net.minecraft.loot.RandomValueRange;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class HammerRecipeCategory implements IRecipeCategory<HammerRecipe> {
+public class HammerRecipeCategory implements IRecipeCategory<JeiHammerRecipe> {
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_hammer.png");
     public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "hammer");
@@ -45,8 +42,8 @@ public class HammerRecipeCategory implements IRecipeCategory<HammerRecipe> {
     }
 
     @Override
-    public Class<? extends HammerRecipe> getRecipeClass() {
-        return HammerRecipe.class;
+    public Class<? extends JeiHammerRecipe> getRecipeClass() {
+        return JeiHammerRecipe.class;
     }
 
     @Nonnull
@@ -66,20 +63,20 @@ public class HammerRecipeCategory implements IRecipeCategory<HammerRecipe> {
     }
 
     @Override
-    public void setIngredients(HammerRecipe recipe, IIngredients ingredients) {
+    public void setIngredients(JeiHammerRecipe recipe, IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.ITEM, recipe.getInputs());
         ingredients.setOutputs(VanillaTypes.ITEM, recipe.getOutputItems());
     }
 
     @Override
-    public void draw(HammerRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(JeiHammerRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
         if (hasHighlight) {
             slotHighlight.draw(matrixStack, highlightX, highlightY);
         }
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, final HammerRecipe recipe, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, final JeiHammerRecipe recipe, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 74, 9);
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
 

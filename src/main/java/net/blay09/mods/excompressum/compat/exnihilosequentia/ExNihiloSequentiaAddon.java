@@ -10,7 +10,6 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.api.sievemesh.MeshType;
-import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

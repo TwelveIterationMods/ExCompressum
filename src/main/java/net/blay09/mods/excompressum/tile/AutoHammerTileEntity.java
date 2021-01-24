@@ -4,12 +4,13 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.block.AutoHammerBlock;
 import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.compat.jei.LootTableUtils;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.container.AutoHammerContainer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;
+import net.blay09.mods.excompressum.newregistry.hammer.HammerRegistry;
 import net.blay09.mods.excompressum.api.Hammerable;
 import net.blay09.mods.excompressum.utils.*;
 import net.minecraft.block.BlockState;
@@ -40,7 +41,9 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTileEntity, INamedContainerProvider {
@@ -392,10 +395,9 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     }
 
     public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, Random rand) {
-        Hammerable hammerable = ExRegistries.getHammerRegistry().getHammerable(itemStack);
-        if (hammerable != null) {
-            LootContext lootContext = HammerRegistry.buildLootContext(((ServerWorld) world), itemStack, rand);
-            return HammerRegistry.rollHammerRewards(hammerable, lootContext);
+        if (ExRegistries.getHammerRegistry().isHammerable(itemStack)) {
+            LootContext lootContext = LootTableUtils.buildLootContext(((ServerWorld) world), itemStack, rand);
+            return HammerRegistry.rollHammerRewards(lootContext, itemStack);
         }
 
         BlockState currentState = StupidUtils.getStateFromItemStack(itemStack);

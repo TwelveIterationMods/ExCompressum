@@ -41,7 +41,7 @@ public class StupidUtils {
     }
 
     public static ItemStack getItemStackFromState(BlockState state) {
-        Item item = Item.getItemFromBlock(state.getBlock());
+        Item item = state.getBlock().asItem();
         if (item != Items.AIR) {
             return new ItemStack(item);
         }

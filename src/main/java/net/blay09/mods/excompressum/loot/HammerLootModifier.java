@@ -3,8 +3,8 @@ package net.blay09.mods.excompressum.loot;
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;
-import net.blay09.mods.excompressum.api.Hammerable;
+import net.blay09.mods.excompressum.newregistry.hammer.HammerRegistry;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -40,12 +40,12 @@ public class HammerLootModifier extends LootModifier {
             return generatedLoot;
         }
 
-        Hammerable hammerable = ExRegistries.getHammerRegistry().getHammerable(state);
-        if (hammerable != null) {
+        ItemStack itemStack = StupidUtils.getItemStackFromState(state);
+        if (ExRegistries.getHammerRegistry().isHammerable(itemStack)) {
             synchronized (activeContexts) {
                 activeContexts.add(context);
             }
-            List<ItemStack> loot = HammerRegistry.rollHammerRewards(hammerable, context);
+            List<ItemStack> loot = HammerRegistry.rollHammerRewards(context, itemStack);
             synchronized (activeContexts) {
                 activeContexts.remove(context);
             }
@@ -53,8 +53,8 @@ public class HammerLootModifier extends LootModifier {
         }
 
         if (ExNihilo.getInstance().isHammerable(state)) {
-            ItemStack itemStack = context.get(LootParameters.TOOL);
-            return ExNihilo.getInstance().rollHammerRewards(state, itemStack != null ? itemStack : ItemStack.EMPTY, context.getRandom());
+            ItemStack tool = context.get(LootParameters.TOOL);
+            return ExNihilo.getInstance().rollHammerRewards(state, tool != null ? tool : ItemStack.EMPTY, context.getRandom());
         }
 
         return generatedLoot;

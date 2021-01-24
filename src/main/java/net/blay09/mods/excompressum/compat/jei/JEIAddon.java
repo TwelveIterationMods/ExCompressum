@@ -17,6 +17,7 @@ import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.newregistry.compressedhammer.CompressedHammerRecipe;
+import net.blay09.mods.excompressum.newregistry.hammer.HammerRecipe;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.api.Hammerable;
@@ -69,14 +70,15 @@ public class JEIAddon implements IModPlugin {
         }
         registry.addRecipes(jeiCompressedHammerRecipes, CompressedHammerRecipeCategory.UID);
 
-        List<HammerRecipe> hammerRecipes = new ArrayList<>();
-        for (Hammerable entry : ExRegistries.getHammerRegistry().getEntries()) {
-            hammerRecipes.add(new HammerRecipe(entry));
+        List<JeiHammerRecipe> jeiHammerRecipes = new ArrayList<>();
+        List<HammerRecipe> hammerRecipes = recipeManager.getRecipesForType(HammerRecipe.TYPE);
+        for (HammerRecipe recipe : hammerRecipes) {
+            jeiHammerRecipes.add(new JeiHammerRecipe(recipe));
         }
-        for (Hammerable hammerable : ExNihilo.getInstance().getHammerables()) {
-            hammerRecipes.add(new HammerRecipe(hammerable));
-        }
-        registry.addRecipes(hammerRecipes, HammerRecipeCategory.UID);
+        /* TODO for (Hammerable hammerable : ExNihilo.getInstance().getHammerables()) {
+            jeiHammerRecipes.add(new JeiHammerRecipe(hammerable));
+        }*/
+        registry.addRecipes(jeiHammerRecipes, HammerRecipeCategory.UID);
 
         ArrayListMultimap<ResourceLocation, WoodenCrucibleMeltable> fluidOutputMap = ArrayListMultimap.create();
         for (WoodenCrucibleMeltable entry : ExRegistries.getWoodenCrucibleRegistry().getEntries()) {

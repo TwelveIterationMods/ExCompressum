@@ -1,0 +1,39 @@
+{
+  "type": "excompressum:hammer",
+  "input": {
+    "tag":"minecraft:logs"
+  },
+  "lootTable": {
+    "type": "minecraft:block",
+    "pools": [
+      {
+        "rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "name": "excompressum:wood_chippings",
+            "functions": [
+              {
+                "function": "minecraft:set_count",
+                "count": {
+                  "min": 2.0,
+                  "max": 4.0,
+                  "type": "minecraft:uniform"
+                }
+              },
+              {
+                "function": "minecraft:apply_bonus",
+                "enchantment": "minecraft:fortune",
+                "formula": "minecraft:uniform_bonus_count",
+                "parameters": {
+                  "bonusMultiplier": 1
+                }
+              }
+            ]
+          }
+        ],
+        "conditions": []
+      }
+    ]
+  }
+}
