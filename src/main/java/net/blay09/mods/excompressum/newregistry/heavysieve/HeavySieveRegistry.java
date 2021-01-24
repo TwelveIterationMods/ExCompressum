@@ -1,29 +1,24 @@
-package net.blay09.mods.excompressum.registry.heavysieve;
+package net.blay09.mods.excompressum.newregistry.heavysieve;
 
-import com.google.common.collect.Sets;
-import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.*;
-import net.blay09.mods.excompressum.registry.heavysieve.newregistry.GeneratedHeavySieveRecipe;
-import net.blay09.mods.excompressum.registry.heavysieve.newregistry.HeavySieveRecipe;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootTable;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
 public class HeavySieveRegistry {
+
+
 
     private static boolean testRecipe(SieveMeshRegistryEntry mesh, ItemStack itemStack, boolean waterlogged, HeavySieveRecipe recipe) {
         if (recipe.isWaterlogged() != waterlogged) {
@@ -101,13 +96,4 @@ public class HeavySieveRegistry {
         return false;
     }
 
-    @Deprecated
-    public static List<ItemStack> rollSieveRewards(HeavySiftable siftable, LootContext context) {
-        LootTable lootTable = siftable.getLootTable(context);
-        if (lootTable != null) {
-            return lootTable.generate(context);
-        }
-
-        return Collections.emptyList();
-    }
 }

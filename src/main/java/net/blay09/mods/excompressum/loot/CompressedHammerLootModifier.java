@@ -2,9 +2,8 @@ package net.blay09.mods.excompressum.loot;
 
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.registry.ExNihilo;
-import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
+import net.blay09.mods.excompressum.newregistry.compressedhammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -40,22 +39,21 @@ public class CompressedHammerLootModifier extends LootModifier {
             return generatedLoot;
         }
 
-
-        CompressedHammerable hammerable = ExRegistries.getCompressedHammerRegistry().getHammerable(state);
-        if (hammerable != null) {
-            synchronized (activeContexts) {
-                activeContexts.add(context);
-            }
-            List<ItemStack> loot = CompressedHammerRegistry.rollHammerRewards(hammerable, context);
-            synchronized (activeContexts) {
-                activeContexts.remove(context);
-            }
+        synchronized (activeContexts) {
+            activeContexts.add(context);
+        }
+        ItemStack itemStack = StupidUtils.getItemStackFromState(state);
+        List<ItemStack> loot = CompressedHammerRegistry.rollHammerRewards(context, itemStack);
+        synchronized (activeContexts) {
+            activeContexts.remove(context);
+        }
+        if (!loot.isEmpty()) {
             return loot;
         }
 
         if (ExNihilo.getInstance().isHammerable(state)) {
-            ItemStack itemStack = context.get(LootParameters.TOOL);
-            return ExNihilo.getInstance().rollHammerRewards(state, itemStack != null ? itemStack : ItemStack.EMPTY, context.getRandom());
+            ItemStack tool = context.get(LootParameters.TOOL);
+            return ExNihilo.getInstance().rollHammerRewards(state, tool != null ? tool : ItemStack.EMPTY, context.getRandom());
         }
 
         return generatedLoot;

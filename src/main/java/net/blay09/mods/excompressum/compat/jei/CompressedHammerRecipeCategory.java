@@ -9,22 +9,15 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
 import net.blay09.mods.excompressum.block.ModBlocks;
-import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.BinomialRange;
-import net.minecraft.loot.RandomValueRange;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class CompressedHammerRecipeCategory implements IRecipeCategory<CompressedHammerRecipe> {
+public class CompressedHammerRecipeCategory implements IRecipeCategory<JeiCompressedHammerRecipe> {
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_hammer.png");
     public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "compressed_hammer");
@@ -49,8 +42,8 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
     }
 
     @Override
-    public Class<? extends CompressedHammerRecipe> getRecipeClass() {
-        return CompressedHammerRecipe.class;
+    public Class<? extends JeiCompressedHammerRecipe> getRecipeClass() {
+        return JeiCompressedHammerRecipe.class;
     }
 
     @Nonnull
@@ -70,20 +63,20 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<Compresse
     }
 
     @Override
-    public void setIngredients(CompressedHammerRecipe compressedHammerRecipe, IIngredients ingredients) {
+    public void setIngredients(JeiCompressedHammerRecipe compressedHammerRecipe, IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.ITEM, compressedHammerRecipe.getInputs());
         ingredients.setOutputs(VanillaTypes.ITEM, compressedHammerRecipe.getOutputItems());
     }
 
     @Override
-    public void draw(CompressedHammerRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(JeiCompressedHammerRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
         if (hasHighlight) {
             slotHighlight.draw(matrixStack, highlightX, highlightY);
         }
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, final CompressedHammerRecipe recipe, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, final JeiCompressedHammerRecipe recipe, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 74, 9);
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
 

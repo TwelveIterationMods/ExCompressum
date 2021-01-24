@@ -1,6 +1,6 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package net.blay09.mods.excompressum.registry.heavysieve.newregistry;
+package net.blay09.mods.excompressum.newregistry.compressedhammer;
 
 import mcp.MethodsReturnNonnullByDefault;
 

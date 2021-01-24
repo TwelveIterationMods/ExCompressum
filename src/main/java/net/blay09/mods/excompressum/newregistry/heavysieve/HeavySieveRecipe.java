@@ -1,8 +1,10 @@
-package net.blay09.mods.excompressum.registry.heavysieve.newregistry;
+package net.blay09.mods.excompressum.newregistry.heavysieve;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.MeshType;
+import net.blay09.mods.excompressum.newregistry.ExCompressumRecipe;
+import net.blay09.mods.excompressum.newregistry.ModRecipeTypes;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;

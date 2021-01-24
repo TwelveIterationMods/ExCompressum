@@ -4,7 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.MeshType;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.registry.heavysieve.newregistry.HeavySieveRecipe;
+import net.blay09.mods.excompressum.newregistry.heavysieve.HeavySieveRecipe;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

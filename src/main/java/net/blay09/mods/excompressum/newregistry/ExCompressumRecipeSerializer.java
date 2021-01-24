@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry.heavysieve.newregistry;
+package net.blay09.mods.excompressum.newregistry;
 
 import com.google.gson.*;
 import net.blay09.mods.excompressum.api.LootTableProvider;

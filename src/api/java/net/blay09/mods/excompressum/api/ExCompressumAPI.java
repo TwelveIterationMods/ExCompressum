@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.api;
 
-import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
@@ -25,10 +24,6 @@ public class ExCompressumAPI {
 
     public static ExNihiloProvider getExNihilo() {
         return internalMethods.getExNihilo();
-    }
-
-    public static void registerCompressedHammerEntry(BlockState state, List<CompressedHammerReward> rewards) {
-        internalMethods.registerCompressedHammerEntry(state, rewards);
     }
 
     public static void registerHeavySieveEntry(BlockState state, List<HeavySieveReward> rewards) {

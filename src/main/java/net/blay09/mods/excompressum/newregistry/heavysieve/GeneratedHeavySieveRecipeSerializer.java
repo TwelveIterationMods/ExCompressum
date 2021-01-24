@@ -1,7 +1,8 @@
-package net.blay09.mods.excompressum.registry.heavysieve.newregistry;
+package net.blay09.mods.excompressum.newregistry.heavysieve;
 
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.newregistry.ExCompressumRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;

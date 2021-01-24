@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.item;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -22,12 +23,14 @@ public class CompressedHammerItem extends ToolItem implements ICompressedHammer 
 
     @Override
     public boolean canHarvestBlock(ItemStack stack, BlockState state) {
-        return ExRegistries.getCompressedHammerRegistry().isHammerable(state) || ExNihilo.getInstance().isHammerable(state);
+        ItemStack itemStack = StupidUtils.getItemStackFromState(state);
+        return ExRegistries.getCompressedHammerRegistry().isHammerable(itemStack) || ExNihilo.getInstance().isHammerable(state);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if ((ExRegistries.getCompressedHammerRegistry().isHammerable(state) || ExNihilo.getInstance().isHammerable(state)) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
+        ItemStack itemStack = StupidUtils.getItemStackFromState(state);
+        if ((ExRegistries.getCompressedHammerRegistry().isHammerable(itemStack) || ExNihilo.getInstance().isHammerable(state)) && state.getBlock().getHarvestLevel(state) <= getTier().getHarvestLevel()) {
             return efficiency * 0.75f;
         }
         return 0.8f;

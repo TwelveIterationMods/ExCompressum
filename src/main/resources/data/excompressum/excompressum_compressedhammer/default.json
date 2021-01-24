@@ -6,13 +6,6 @@
   },
   "customEntries": [
     {
-      "id": "excompressum:compressed_cobblestone",
-      "source": {
-        "item":"excompressum:compressed_cobblestone"
-      },
-      "lootTable": "excompressum:excompressum/compressed_hammer/compressed_cobblestone"
-    },
-    {
       "id": "excompressum:compressed_gravel",
       "source": {
         "item": "excompressum:compressed_gravel"

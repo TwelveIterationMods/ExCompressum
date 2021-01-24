@@ -28,10 +28,7 @@ public class JeiUtils {
     }
 
     public static void addLootTableEntryTooltips(LootTableEntry entry, List<ITextComponent> tooltip) {
-        tooltip.add(getCountTextComponent(entry));
-        if (entry.getBaseChance() > 0f) {
-            tooltip.add(Messages.lang("tooltip.jei.drop_chance", formatChance(entry)));
-        }
+        tooltip.add(Messages.lang("tooltip.jei.main_roll", getCountTextComponent(entry), formatChance(entry)));
     }
 
     private static String formatChance(LootTableEntry entry) {

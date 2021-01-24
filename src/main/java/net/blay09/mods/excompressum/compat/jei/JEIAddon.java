@@ -2,10 +2,8 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Pair;
-import it.unimi.dsi.fastutil.ints.IntList;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -18,16 +16,13 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.item.ModItems;
+import net.blay09.mods.excompressum.newregistry.compressedhammer.CompressedHammerRecipe;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerable;
 import net.blay09.mods.excompressum.api.Hammerable;
-import net.blay09.mods.excompressum.registry.heavysieve.GeneratedHeavySiftable;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
-import net.blay09.mods.excompressum.registry.heavysieve.HeavySiftable;
-import net.blay09.mods.excompressum.registry.heavysieve.newregistry.GeneratedHeavySieveRecipe;
-import net.blay09.mods.excompressum.registry.heavysieve.newregistry.HeavySieveRecipe;
-import net.blay09.mods.excompressum.registry.heavysieve.newregistry.ModRecipeTypes;
+import net.blay09.mods.excompressum.newregistry.heavysieve.HeavySieveRegistry;
+import net.blay09.mods.excompressum.newregistry.heavysieve.GeneratedHeavySieveRecipe;
+import net.blay09.mods.excompressum.newregistry.heavysieve.HeavySieveRecipe;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleMeltable;
 import net.minecraft.block.Block;
@@ -35,7 +30,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.loot.LootTable;
 import net.minecraft.util.IItemProvider;
@@ -43,7 +37,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -69,11 +62,12 @@ public class JEIAddon implements IModPlugin {
 
         registry.addRecipes(jeiHeavySieveRecipes, HeavySieveRecipeCategory.UID);
 
-        List<CompressedHammerRecipe> compressedHammerRecipes = new ArrayList<>();
-        for (CompressedHammerable entry : ExRegistries.getCompressedHammerRegistry().getEntries()) {
-            compressedHammerRecipes.add(new CompressedHammerRecipe(entry));
+        List<JeiCompressedHammerRecipe> jeiCompressedHammerRecipes = new ArrayList<>();
+        List<CompressedHammerRecipe> compressedHammerRecipes = recipeManager.getRecipesForType(CompressedHammerRecipe.TYPE);
+        for (CompressedHammerRecipe recipe : compressedHammerRecipes) {
+            jeiCompressedHammerRecipes.add(new JeiCompressedHammerRecipe(recipe));
         }
-        registry.addRecipes(compressedHammerRecipes, CompressedHammerRecipeCategory.UID);
+        registry.addRecipes(jeiCompressedHammerRecipes, CompressedHammerRecipeCategory.UID);
 
         List<HammerRecipe> hammerRecipes = new ArrayList<>();
         for (Hammerable entry : ExRegistries.getHammerRegistry().getEntries()) {

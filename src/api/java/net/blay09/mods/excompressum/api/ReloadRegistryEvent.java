@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.api;
 
-import net.blay09.mods.excompressum.api.compressedhammer.CompressedHammerReward;
 import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
@@ -10,18 +9,6 @@ import net.minecraftforge.eventbus.api.Event;
 import java.util.List;
 
 public class ReloadRegistryEvent extends Event {
-
-	/**
-	 * When handling this event, register blocks that should be hammerable by the Compressed Hammer.
-	 */
-	public static class CompressedHammer extends ReloadRegistryEvent {
-		/**
-		 * To add rewards, call addReward() on the returned object, while instantiating new CompressedHammerReward objects
-		 */
-		public void register(BlockState state, boolean isWildcard, List<CompressedHammerReward> rewards) {
-			ExCompressumAPI.registerCompressedHammerEntry(state, rewards);
-		}
-	}
 
 	/**
 	 * When handling this event, register blocks that should be siftable by the Heavy Sieve.

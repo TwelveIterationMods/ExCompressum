@@ -110,7 +110,7 @@ public class LootTableUtils {
                 return ((RandomChance) condition).chance;
             }
         }
-        return 0f;
+        return 1f;
     }
 
     private static IRandomRange getCountRange(LootEntry entry) {
