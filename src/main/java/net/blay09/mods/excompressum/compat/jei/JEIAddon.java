@@ -19,13 +19,11 @@ import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.newregistry.compressedhammer.CompressedHammerRecipe;
 import net.blay09.mods.excompressum.newregistry.hammer.HammerRecipe;
 import net.blay09.mods.excompressum.registry.ExNihilo;
-import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.api.Hammerable;
 import net.blay09.mods.excompressum.newregistry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.newregistry.heavysieve.GeneratedHeavySieveRecipe;
 import net.blay09.mods.excompressum.newregistry.heavysieve.HeavySieveRecipe;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
-import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleMeltable;
+import net.blay09.mods.excompressum.newregistry.woodencrucible.WoodenCrucibleRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -80,36 +78,37 @@ public class JEIAddon implements IModPlugin {
         }*/
         registry.addRecipes(jeiHammerRecipes, HammerRecipeCategory.UID);
 
-        ArrayListMultimap<ResourceLocation, WoodenCrucibleMeltable> fluidOutputMap = ArrayListMultimap.create();
-        for (WoodenCrucibleMeltable entry : ExRegistries.getWoodenCrucibleRegistry().getEntries()) {
+        ArrayListMultimap<ResourceLocation, WoodenCrucibleRecipe> fluidOutputMap = ArrayListMultimap.create();
+        List<WoodenCrucibleRecipe> woodenCrucibleRecipes = recipeManager.getRecipesForType(WoodenCrucibleRecipe.TYPE);
+        for (WoodenCrucibleRecipe entry : woodenCrucibleRecipes) {
             fluidOutputMap.put(entry.getFluid(), entry);
         }
 
-        List<WoodenCrucibleRecipe> woodenCrucibleRecipes = new ArrayList<>();
+        List<JeiWoodenCrucibleRecipe> jeiWoodenCrucibleRecipes = new ArrayList<>();
         for (ResourceLocation fluidName : fluidOutputMap.keySet()) {
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName);
             if (fluid == null) {
                 continue;
             }
 
-            List<WoodenCrucibleMeltable> meltables = fluidOutputMap.get(fluidName);
-            List<Pair<WoodenCrucibleMeltable, ItemStack>> inputs = new ArrayList<>();
-            for (WoodenCrucibleMeltable meltable : meltables) {
-                for (ItemStack matchingStack : meltable.getSource().getMatchingStacks()) {
+            List<WoodenCrucibleRecipe> recipes = fluidOutputMap.get(fluidName);
+            List<Pair<WoodenCrucibleRecipe, ItemStack>> inputs = new ArrayList<>();
+            for (WoodenCrucibleRecipe meltable : recipes) {
+                for (ItemStack matchingStack : meltable.getInput().getMatchingStacks()) {
                     inputs.add(Pair.of(meltable, matchingStack));
                 }
             }
 
-            inputs.sort(Comparator.comparingInt((Pair<WoodenCrucibleMeltable, ItemStack> pair) -> pair.getFirst().getAmount()).reversed());
+            inputs.sort(Comparator.comparingInt((Pair<WoodenCrucibleRecipe, ItemStack> pair) -> pair.getFirst().getAmount()).reversed());
 
             final int pageSize = 45;
-            List<List<Pair<WoodenCrucibleMeltable, ItemStack>>> pages = Lists.partition(inputs, pageSize);
-            for (List<Pair<WoodenCrucibleMeltable, ItemStack>> page : pages) {
-                woodenCrucibleRecipes.add(new WoodenCrucibleRecipe(fluid, page));
+            List<List<Pair<WoodenCrucibleRecipe, ItemStack>>> pages = Lists.partition(inputs, pageSize);
+            for (List<Pair<WoodenCrucibleRecipe, ItemStack>> page : pages) {
+                jeiWoodenCrucibleRecipes.add(new JeiWoodenCrucibleRecipe(fluid, page));
             }
         }
 
-        registry.addRecipes(woodenCrucibleRecipes, WoodenCrucibleRecipeCategory.UID);
+        registry.addRecipes(jeiWoodenCrucibleRecipes, WoodenCrucibleRecipeCategory.UID);
 
         registry.addRecipes(Lists.newArrayList(new ChickenStickRecipe()), ChickenStickRecipeCategory.UID);
     }

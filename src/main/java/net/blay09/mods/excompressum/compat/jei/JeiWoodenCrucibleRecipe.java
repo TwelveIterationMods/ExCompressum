@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.compat.jei;
 
 import com.mojang.datafixers.util.Pair;
-import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleMeltable;
+import net.blay09.mods.excompressum.newregistry.woodencrucible.WoodenCrucibleRecipe;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -9,18 +9,18 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WoodenCrucibleRecipe {
+public class JeiWoodenCrucibleRecipe {
 
     private final Fluid fluid;
-    private final List<Pair<WoodenCrucibleMeltable, ItemStack>> entries;
+    private final List<Pair<WoodenCrucibleRecipe, ItemStack>> entries;
     private final List<ItemStack> inputs;
 
-    public WoodenCrucibleRecipe(Fluid fluid, List<Pair<WoodenCrucibleMeltable, ItemStack>> entries) {
+    public JeiWoodenCrucibleRecipe(Fluid fluid, List<Pair<WoodenCrucibleRecipe, ItemStack>> entries) {
         this.fluid = fluid;
         this.entries = entries;
 
         inputs = new ArrayList<>();
-        for (Pair<WoodenCrucibleMeltable, ItemStack> entry : entries) {
+        for (Pair<WoodenCrucibleRecipe, ItemStack> entry : entries) {
             inputs.add(entry.getSecond());
         }
     }
@@ -37,7 +37,7 @@ public class WoodenCrucibleRecipe {
         return new FluidStack(fluid, 1000);
     }
 
-    public WoodenCrucibleMeltable getEntryAt(int index) {
+    public WoodenCrucibleRecipe getEntryAt(int index) {
         return entries.get(index).getFirst();
     }
 

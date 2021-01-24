@@ -11,6 +11,8 @@ import net.blay09.mods.excompressum.newregistry.heavysieve.GeneratedHeavySieveRe
 import net.blay09.mods.excompressum.newregistry.heavysieve.GeneratedHeavySieveRecipeSerializer;
 import net.blay09.mods.excompressum.newregistry.heavysieve.HeavySieveRecipe;
 import net.blay09.mods.excompressum.newregistry.heavysieve.HeavySieveRecipeSerializer;
+import net.blay09.mods.excompressum.newregistry.woodencrucible.WoodenCrucibleRecipe;
+import net.blay09.mods.excompressum.newregistry.woodencrucible.WoodenCrucibleRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,6 +25,7 @@ public class ModRecipeTypes {
     public static IRecipeSerializer<CompressedHammerRecipe> compressedHammerRecipe;
     public static IRecipeSerializer<HammerRecipe> hammerRecipe;
     public static IRecipeSerializer<ChickenStickRecipe> chickenStick;
+    public static IRecipeSerializer<WoodenCrucibleRecipe> woodenCrucible;
 
     @SubscribeEvent
     public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
@@ -31,7 +34,8 @@ public class ModRecipeTypes {
                 generatedHeavySieveRecipe = new GeneratedHeavySieveRecipeSerializer(),
                 compressedHammerRecipe = new CompresedHammerRecipeSerializer(),
                 hammerRecipe = new HammerRecipeSerializer(),
-                chickenStick = new ChickenStickRecipeSerializer()
+                chickenStick = new ChickenStickRecipeSerializer(),
+                woodenCrucible = new WoodenCrucibleRecipeSerializer()
         );
     }
 }

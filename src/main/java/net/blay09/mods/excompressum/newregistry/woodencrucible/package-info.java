@@ -1,6 +1,6 @@
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package net.blay09.mods.excompressum.registry.woodencrucible;
+package net.blay09.mods.excompressum.newregistry.woodencrucible;
 
 import mcp.MethodsReturnNonnullByDefault;
 

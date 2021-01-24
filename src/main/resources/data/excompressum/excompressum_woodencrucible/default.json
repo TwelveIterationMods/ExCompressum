@@ -6,14 +6,6 @@
   },
   "customEntries": [
     {
-      "id": "minecraft:apple",
-      "source": {
-        "item": "minecraft:apple"
-      },
-      "fluid": "minecraft:water",
-      "amount": 100
-    },
-    {
       "id": "minecraft:saplings",
       "source": {
         "tag": "minecraft:saplings"

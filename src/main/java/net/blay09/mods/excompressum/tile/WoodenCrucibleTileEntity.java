@@ -5,7 +5,7 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleMeltable;
+import net.blay09.mods.excompressum.newregistry.woodencrucible.WoodenCrucibleRecipe;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluid;
@@ -99,15 +99,15 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTil
             return true;
         }
 
-        // Otherwise, try to add it as a meltable
-        WoodenCrucibleMeltable meltable = ExRegistries.getWoodenCrucibleRegistry().getMeltable(itemStack);
-        if (meltable != null) {
-            if (fluidTank.getFluid().isEmpty() || fluidTank.getFluidAmount() == 0 || meltable.matchesFluid(fluidTank.getFluid())) {
+        // Otherwise, try to add it as a recipe
+        WoodenCrucibleRecipe recipe = ExRegistries.getWoodenCrucibleRegistry().getRecipe(itemStack);
+        if (recipe != null) {
+            if (fluidTank.getFluid().isEmpty() || fluidTank.getFluidAmount() == 0 || recipe.matchesFluid(fluidTank.getFluid())) {
                 int capacityLeft = fluidTank.getCapacity() - fluidTank.getFluidAmount() - solidVolume;
-                if ((isAutomated && capacityLeft >= meltable.getAmount()) || (!isAutomated && capacityLeft > 0)) {
+                if ((isAutomated && capacityLeft >= recipe.getAmount()) || (!isAutomated && capacityLeft > 0)) {
                     if (!simulate) {
-                        currentTargetFluid = meltable.getFluidStack().getFluid();
-                        solidVolume += Math.min(capacityLeft, meltable.getAmount());
+                        currentTargetFluid = recipe.getFluidStack().getFluid();
+                        solidVolume += Math.min(capacityLeft, recipe.getAmount());
                         VanillaPacketHandler.sendTileEntityUpdate(this);
                     }
                     return true;

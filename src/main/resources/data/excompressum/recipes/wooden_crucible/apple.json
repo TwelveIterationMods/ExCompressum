@@ -1,0 +1,8 @@
+{
+  "type": "excompressum:wooden_crucible",
+  "input": {
+    "item": "minecraft:apple"
+  },
+  "fluid": "minecraft:water",
+  "amount": 100
+}

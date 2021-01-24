@@ -4,22 +4,17 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.ITooltipCallback;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.woodencrucible.WoodenCrucibleRegistryEntry;
 import net.blay09.mods.excompressum.block.ModBlocks;
-import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleMeltable;
+import net.blay09.mods.excompressum.newregistry.woodencrucible.WoodenCrucibleRecipe;
 import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -27,7 +22,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
 
-public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCrucibleRecipe> {
+public class WoodenCrucibleRecipeCategory implements IRecipeCategory<JeiWoodenCrucibleRecipe> {
 
     public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "wooden_crucible");
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_wooden_crucible.png");
@@ -52,8 +47,8 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
     }
 
     @Override
-    public Class<? extends WoodenCrucibleRecipe> getRecipeClass() {
-        return WoodenCrucibleRecipe.class;
+    public Class<? extends JeiWoodenCrucibleRecipe> getRecipeClass() {
+        return JeiWoodenCrucibleRecipe.class;
     }
 
     @Nonnull
@@ -74,14 +69,14 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
     }
 
     @Override
-    public void draw(WoodenCrucibleRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
+    public void draw(JeiWoodenCrucibleRecipe recipe, MatrixStack matrixStack, double mouseX, double mouseY) {
         if (hasHighlight) {
             slotHighlight.draw(matrixStack, highlightX, highlightY);
         }
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, final WoodenCrucibleRecipe recipe, final IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, final JeiWoodenCrucibleRecipe recipe, final IIngredients ingredients) {
         recipeLayout.getFluidStacks().init(0, false, 75, 10);
         recipeLayout.getFluidStacks().set(0, recipe.getFluidStack());
 
@@ -115,7 +110,7 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
 
         recipeLayout.getItemStacks().addTooltipCallback((slotIndex, isInput, itemStack, tooltip) -> {
             if (isInput) {
-                WoodenCrucibleMeltable entry = recipe.getEntryAt(slotIndex - INPUT_SLOTS);
+                WoodenCrucibleRecipe entry = recipe.getEntryAt(slotIndex - INPUT_SLOTS);
                 ResourceLocation registryName = Objects.requireNonNull(recipe.getFluid().getDefaultState().getBlockState().getBlock().getRegistryName());
                 TranslationTextComponent fluidComponent = new TranslationTextComponent("block." + registryName.getNamespace() + "." + registryName.getPath());
                 StringTextComponent amountComponent = new StringTextComponent(String.valueOf(entry.getAmount()));
@@ -126,7 +121,7 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<WoodenCruci
     }
 
     @Override
-    public void setIngredients(WoodenCrucibleRecipe woodenCrucibleRecipe, IIngredients ingredients) {
+    public void setIngredients(JeiWoodenCrucibleRecipe woodenCrucibleRecipe, IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.ITEM, woodenCrucibleRecipe.getInputs());
         ingredients.setOutput(VanillaTypes.FLUID, woodenCrucibleRecipe.getFluidStack());
     }
