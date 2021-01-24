@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.newregistry.hammer;
+package net.blay09.mods.excompressum.newregistry.chickenstick;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
@@ -6,15 +6,16 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootTable;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class HammerRegistry {
+public class ChickenStickRegistry {
 
     public static List<ItemStack> rollHammerRewards(LootContext context, ItemStack itemStack) {
         RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
-        List<HammerRecipe> recipes = recipeManager.getRecipesForType(HammerRecipe.TYPE);
+        List<ChickenStickRecipe> recipes = recipeManager.getRecipesForType(ChickenStickRecipe.TYPE);
         List<ItemStack> results = new ArrayList<>();
-        for (HammerRecipe recipe : recipes) {
+        for (ChickenStickRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {
                 LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId().toString(), context);
                 if (lootTable != null) {
@@ -26,14 +27,14 @@ public class HammerRegistry {
         return results;
     }
 
-    private static boolean testRecipe(ItemStack itemStack, HammerRecipe recipe) {
+    private static boolean testRecipe(ItemStack itemStack, ChickenStickRecipe recipe) {
         return recipe.getInput().test(itemStack);
     }
 
     public boolean isHammerable(ItemStack itemStack) {
         RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
-        List<HammerRecipe> recipes = recipeManager.getRecipesForType(HammerRecipe.TYPE);
-        for (HammerRecipe recipe : recipes) {
+        List<ChickenStickRecipe> recipes = recipeManager.getRecipesForType(ChickenStickRecipe.TYPE);
+        for (ChickenStickRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {
                 return true;
             }

@@ -42,12 +42,12 @@ public class ChickenStickItem extends ToolItem {
 
     @Override
     public boolean canHarvestBlock(BlockState state) {
-        return ExRegistries.getChickenStickRegistry().isHammerable(state);
+        return ExRegistries.getChickenStickRegistry().isHammerable(new ItemStack(state.getBlock()));
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if ((ExRegistries.getChickenStickRegistry().isHammerable(state))) {
+        if ((ExRegistries.getChickenStickRegistry().isHammerable(new ItemStack(state.getBlock())))) {
             if (isAngry(stack)) {
                 return efficiency * 1.5f;
             }

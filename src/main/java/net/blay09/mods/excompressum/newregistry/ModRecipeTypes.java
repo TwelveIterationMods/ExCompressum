@@ -1,6 +1,8 @@
 package net.blay09.mods.excompressum.newregistry;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.newregistry.chickenstick.ChickenStickRecipe;
+import net.blay09.mods.excompressum.newregistry.chickenstick.ChickenStickRecipeSerializer;
 import net.blay09.mods.excompressum.newregistry.compressedhammer.CompresedHammerRecipeSerializer;
 import net.blay09.mods.excompressum.newregistry.compressedhammer.CompressedHammerRecipe;
 import net.blay09.mods.excompressum.newregistry.hammer.HammerRecipe;
@@ -20,6 +22,7 @@ public class ModRecipeTypes {
     public static IRecipeSerializer<GeneratedHeavySieveRecipe> generatedHeavySieveRecipe;
     public static IRecipeSerializer<CompressedHammerRecipe> compressedHammerRecipe;
     public static IRecipeSerializer<HammerRecipe> hammerRecipe;
+    public static IRecipeSerializer<ChickenStickRecipe> chickenStick;
 
     @SubscribeEvent
     public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
@@ -27,7 +30,8 @@ public class ModRecipeTypes {
                 heavySieveRecipe = new HeavySieveRecipeSerializer(),
                 generatedHeavySieveRecipe = new GeneratedHeavySieveRecipeSerializer(),
                 compressedHammerRecipe = new CompresedHammerRecipeSerializer(),
-                hammerRecipe = new HammerRecipeSerializer()
+                hammerRecipe = new HammerRecipeSerializer(),
+                chickenStick = new ChickenStickRecipeSerializer()
         );
     }
 }

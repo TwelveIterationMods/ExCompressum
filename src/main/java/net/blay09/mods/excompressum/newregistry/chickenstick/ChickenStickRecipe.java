@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.newregistry.hammer;
+package net.blay09.mods.excompressum.newregistry.chickenstick;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.LootTableProvider;
@@ -9,13 +9,13 @@ import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
-public class HammerRecipe extends ExCompressumRecipe {
-    public static final IRecipeType<HammerRecipe> TYPE = IRecipeType.register(ExCompressum.MOD_ID + ":hammer");
+public class ChickenStickRecipe extends ExCompressumRecipe {
+    public static final IRecipeType<ChickenStickRecipe> TYPE = IRecipeType.register(ExCompressum.MOD_ID + ":chicken_stick");
 
     private final Ingredient input;
     private final LootTableProvider lootTable;
 
-    public HammerRecipe(ResourceLocation id, Ingredient input, LootTableProvider lootTable) {
+    public ChickenStickRecipe(ResourceLocation id, Ingredient input, LootTableProvider lootTable) {
         super(id, TYPE);
         this.input = input;
         this.lootTable = lootTable;

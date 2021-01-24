@@ -1,9 +1,8 @@
 package net.blay09.mods.excompressum.loot;
 
 import com.google.gson.JsonObject;
+import net.blay09.mods.excompressum.newregistry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickHammerable;
-import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -39,12 +38,12 @@ public class ChickenStickLootModifier extends LootModifier {
             return generatedLoot;
         }
 
-        ChickenStickHammerable hammerable = ExRegistries.getChickenStickRegistry().getHammerable(state);
-        if(hammerable != null) {
+        ItemStack itemStack = new ItemStack(state.getBlock());
+        if (ExRegistries.getChickenStickRegistry().isHammerable(itemStack)) {
             synchronized (activeContexts) {
                 activeContexts.add(context);
             }
-            List<ItemStack> loot = ChickenStickRegistry.rollHammerRewards(hammerable, context);
+            List<ItemStack> loot = ChickenStickRegistry.rollHammerRewards(context, itemStack);
             synchronized (activeContexts) {
                 activeContexts.remove(context);
             }

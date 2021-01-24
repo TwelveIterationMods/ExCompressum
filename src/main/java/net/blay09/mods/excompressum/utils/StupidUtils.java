@@ -19,8 +19,7 @@ public class StupidUtils {
      * Removed from Vanilla's EnchantmentHelper for some stupid reason.
      */
     public static boolean hasSilkTouchModifier(LivingEntity entity) {
-        ItemStack heldItem = entity.getHeldItemMainhand();
-        return !heldItem.isEmpty() && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, heldItem) > 0;
+        return EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.SILK_TOUCH, entity) > 0;
     }
 
     /**
