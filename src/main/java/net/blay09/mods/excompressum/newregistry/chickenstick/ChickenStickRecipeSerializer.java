@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.newregistry.chickenstick;
 
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.LootTableProvider;
+import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.newregistry.ExCompressumRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;

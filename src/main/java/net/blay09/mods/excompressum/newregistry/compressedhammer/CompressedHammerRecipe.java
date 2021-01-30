@@ -1,17 +1,13 @@
 package net.blay09.mods.excompressum.newregistry.compressedhammer;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.LootTableProvider;
-import net.blay09.mods.excompressum.api.sievemesh.MeshType;
+import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.newregistry.ExCompressumRecipe;
 import net.blay09.mods.excompressum.newregistry.ModRecipeTypes;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.Set;
 
 public class CompressedHammerRecipe extends ExCompressumRecipe {
     public static final IRecipeType<CompressedHammerRecipe> TYPE = IRecipeType.register(ExCompressum.MOD_ID + ":compressed_hammer");

@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.IHammerRecipe;
-import net.blay09.mods.excompressum.api.LootTableProvider;
+import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.registry.ExNihilo;

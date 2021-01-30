@@ -1,6 +1,7 @@
-package net.blay09.mods.excompressum.api;
+package net.blay09.mods.excompressum.registry;
 
 import com.google.gson.*;
+import net.blay09.mods.excompressum.api.ILootTableProvider;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootSerializers;
 import net.minecraft.loot.LootTable;
@@ -11,7 +12,7 @@ import net.minecraftforge.common.ForgeHooks;
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
 
-public class LootTableProvider {
+public class LootTableProvider implements ILootTableProvider {
 
     private static final Gson GSON_INSTANCE = LootSerializers.func_237388_c_().create();
 

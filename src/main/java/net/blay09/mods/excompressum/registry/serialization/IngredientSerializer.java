@@ -1,4 +1,4 @@
-package net.blay09.mods.excompressum.registry;
+package net.blay09.mods.excompressum.registry.serialization;
 
 import com.google.gson.*;
 import net.minecraft.item.ItemStack;

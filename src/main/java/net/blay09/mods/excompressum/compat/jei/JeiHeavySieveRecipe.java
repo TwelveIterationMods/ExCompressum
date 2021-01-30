@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.compat.jei;
 
 import com.google.common.collect.ArrayListMultimap;
-import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.blay09.mods.excompressum.api.sievemesh.MeshType;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.newregistry.heavysieve.HeavySieveRecipe;

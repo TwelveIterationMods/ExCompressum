@@ -1,13 +1,12 @@
 package net.blay09.mods.excompressum.compat.jei;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.loot.NihiloLootEntry;
 import net.blay09.mods.excompressum.mixin.LootPoolAccessor;
 import net.blay09.mods.excompressum.registry.ExNihilo;
-import net.blay09.mods.excompressum.api.LootTableProvider;
+import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.*;

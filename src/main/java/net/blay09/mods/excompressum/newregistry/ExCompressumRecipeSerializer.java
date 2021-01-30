@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.newregistry;
 
 import com.google.gson.*;
-import net.blay09.mods.excompressum.api.LootTableProvider;
+import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.loot.LootTable;

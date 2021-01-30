@@ -5,14 +5,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.LootTableProvider;
+import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.MeshType;
 import net.blay09.mods.excompressum.newregistry.ExCompressumRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;

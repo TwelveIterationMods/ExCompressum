@@ -6,5 +6,5 @@ public interface IHammerRecipe {
 
     Ingredient getInput();
 
-    LootTableProvider getLootTable();
+    ILootTableProvider getLootTable();
 }

@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.newregistry.chickenstick;
 
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.LootTableProvider;
+import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.newregistry.ExCompressumRecipe;
 import net.blay09.mods.excompressum.newregistry.ModRecipeTypes;
 import net.minecraft.item.crafting.IRecipeSerializer;

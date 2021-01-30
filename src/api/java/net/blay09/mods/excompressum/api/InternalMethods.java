@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.api;
 
-import net.blay09.mods.excompressum.api.heavysieve.HeavySieveReward;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
