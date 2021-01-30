@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.compat.jei;
 
 import com.mojang.datafixers.util.Pair;
-import net.blay09.mods.excompressum.newregistry.woodencrucible.WoodenCrucibleRecipe;
+import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRecipe;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;

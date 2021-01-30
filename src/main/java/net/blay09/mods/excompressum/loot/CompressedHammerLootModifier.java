@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.loot;
 
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.registry.ExNihilo;
-import net.blay09.mods.excompressum.newregistry.compressedhammer.CompressedHammerRegistry;
+import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;

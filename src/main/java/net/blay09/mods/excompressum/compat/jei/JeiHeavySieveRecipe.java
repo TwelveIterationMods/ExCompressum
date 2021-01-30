@@ -1,12 +1,10 @@
 package net.blay09.mods.excompressum.compat.jei;
 
-import com.google.common.collect.ArrayListMultimap;
 import net.blay09.mods.excompressum.api.sievemesh.MeshType;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.newregistry.heavysieve.HeavySieveRecipe;
+import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRecipe;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,13 +15,11 @@ public class JeiHeavySieveRecipe {
     private final List<List<ItemStack>> inputs;
     private final List<MergedLootTableEntry> outputs;
     private final List<ItemStack> outputItems;
-    private final ArrayListMultimap<ResourceLocation, HeavySieveReward> rewards;
     private final boolean waterlogged;
 
     public JeiHeavySieveRecipe(HeavySieveRecipe recipe) {
         this.recipe = recipe;
         inputs = new ArrayList<>();
-        rewards = ArrayListMultimap.create();
         if (recipe.getMinimumMesh() != null) {
             SieveMeshRegistryEntry minimumMesh = SieveMeshRegistry.getEntry(recipe.getMinimumMesh());
             List<ItemStack> meshItems = new ArrayList<>();

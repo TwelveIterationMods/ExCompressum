@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.compat.jei;
 
 import net.blay09.mods.excompressum.api.IHammerRecipe;
-import net.blay09.mods.excompressum.newregistry.hammer.HammerRecipe;
 import net.minecraft.item.ItemStack;
 
 import java.util.Arrays;

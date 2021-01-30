@@ -305,7 +305,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             tableBuilder.addLootPool(poolBuilder);
             Ingredient input = Ingredient.fromItems(inputItem);
             LootTableProvider lootTableProvider = new LootTableProvider(tableBuilder.build());
-            result.add(new net.blay09.mods.excompressum.newregistry.hammer.HammerRecipe(registryName, input, lootTableProvider));
+            result.add(new net.blay09.mods.excompressum.registry.hammer.HammerRecipe(registryName, input, lootTableProvider));
         }
 
         return result;

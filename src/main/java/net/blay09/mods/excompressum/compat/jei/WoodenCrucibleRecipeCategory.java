@@ -10,7 +10,7 @@ import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
-import net.blay09.mods.excompressum.newregistry.woodencrucible.WoodenCrucibleRecipe;
+import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRecipe;
 import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;

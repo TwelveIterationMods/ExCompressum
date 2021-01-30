@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.compat.jei;
 import com.google.common.collect.ArrayListMultimap;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
+import net.blay09.mods.excompressum.api.ILootTableProvider;
 import net.blay09.mods.excompressum.loot.NihiloLootEntry;
 import net.blay09.mods.excompressum.mixin.LootPoolAccessor;
 import net.blay09.mods.excompressum.registry.ExNihilo;
@@ -45,7 +46,7 @@ public class LootTableUtils {
         return getLootTableEntries(lootTableProvider).isEmpty();
     }
 
-    public static List<LootTableEntry> getLootTableEntries(@Nullable LootTableProvider lootTableProvider) {
+    public static List<LootTableEntry> getLootTableEntries(@Nullable ILootTableProvider lootTableProvider) {
         if (lootTableProvider == null) {
             return Collections.emptyList();
         }

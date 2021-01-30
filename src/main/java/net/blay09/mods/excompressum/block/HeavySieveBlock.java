@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.block;
 
-import net.blay09.mods.excompressum.api.SieveModelBounds;
+import net.blay09.mods.excompressum.registry.SieveModelBounds;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;

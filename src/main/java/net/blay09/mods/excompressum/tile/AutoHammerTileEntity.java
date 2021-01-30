@@ -10,7 +10,7 @@ import net.blay09.mods.excompressum.container.AutoHammerContainer;
 import net.blay09.mods.excompressum.handler.VanillaPacketHandler;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.blay09.mods.excompressum.newregistry.hammer.HammerRegistry;
+import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;
 import net.blay09.mods.excompressum.utils.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
