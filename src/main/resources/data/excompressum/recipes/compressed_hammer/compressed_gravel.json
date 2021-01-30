@@ -1,10 +1,8 @@
 {
-  "type": "excompressum:heavy_sieve",
+  "type": "excompressum:compressed_hammer",
   "input": {
-    "item": "minecraft:white_wool"
+    "item":"excompressum:compressed_gravel"
   },
-  "waterlogged": false,
-  "minimumMesh": "FLINT",
   "lootTable": {
     "type": "minecraft:block",
     "pools": [
@@ -13,21 +11,16 @@
         "entries": [
           {
             "type": "minecraft:item",
-            "name": "minecraft:string",
+            "name": "minecraft:sand",
             "functions": [
               {
                 "function": "minecraft:set_count",
-                "count": {
-                  "type": "minecraft:uniform",
-                  "min": 2,
-                  "max": 6
-                }
+                "count": 9
               }
             ]
           }
         ],
-        "conditions": [
-        ]
+        "conditions": []
       }
     ]
   }

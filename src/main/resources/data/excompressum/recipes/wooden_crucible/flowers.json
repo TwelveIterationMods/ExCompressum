@@ -1,0 +1,8 @@
+{
+  "type": "excompressum:wooden_crucible",
+  "input": {
+    "tag": "minecraft:flowers"
+  },
+  "fluid": "minecraft:water",
+  "amount": 100
+}

@@ -1,0 +1,8 @@
+{
+  "type": "excompressum:heavy_sieve_generated",
+  "input": {
+    "item":"excompressum:compressed_end_stone"
+  },
+  "source": "minecraft:end_stone",
+  "rolls": 9
+}

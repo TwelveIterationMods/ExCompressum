@@ -1,0 +1,8 @@
+{
+  "type": "excompressum:heavy_sieve_generated",
+  "input": {
+    "item":"excompressum:compressed_dirt"
+  },
+  "source": "minecraft:dirt",
+  "rolls": 9
+}

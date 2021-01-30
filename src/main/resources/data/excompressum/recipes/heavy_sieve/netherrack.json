@@ -1,0 +1,8 @@
+{
+  "type": "excompressum:heavy_sieve_generated",
+  "input": {
+    "item":"excompressum:compressed_netherrack"
+  },
+  "source": "minecraft:netherrack",
+  "rolls": 9
+}

@@ -1,0 +1,8 @@
+{
+  "type": "excompressum:heavy_sieve_generated",
+  "input": {
+    "item":"excompressum:compressed_cobblestone"
+  },
+  "source": "minecraft:cobblestone",
+  "rolls": 9
+}

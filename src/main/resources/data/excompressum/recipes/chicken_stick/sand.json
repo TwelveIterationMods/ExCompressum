@@ -1,0 +1,27 @@
+{
+  "type": "excompressum:chicken_stick",
+  "input": {
+    "item": "minecraft:sand"
+  },
+  "lootTable": {
+    "type": "minecraft:block",
+    "pools": [
+      {
+        "rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "name": "exnihilosequentia:dust"
+          }
+        ],
+        "conditions": []
+      }
+    ]
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "exnihilosequentia"
+    }
+  ]
+}

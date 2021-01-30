@@ -1,0 +1,33 @@
+{
+  "type": "excompressum:compressed_hammer",
+  "input": {
+    "item":"excompressum:compressed_granite"
+  },
+  "lootTable": {
+    "type": "minecraft:block",
+    "pools": [
+      {
+        "rolls": 1,
+        "entries": [
+          {
+            "type": "minecraft:item",
+            "name": "exnihilosequentia:crushed_granite",
+            "functions": [
+              {
+                "function": "minecraft:set_count",
+                "count": 9
+              }
+            ]
+          }
+        ],
+        "conditions": []
+      }
+    ]
+  },
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "exnihilosequentia"
+    }
+  ]
+}

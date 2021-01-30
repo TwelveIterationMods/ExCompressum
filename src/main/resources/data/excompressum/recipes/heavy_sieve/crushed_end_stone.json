@@ -1,0 +1,14 @@
+{
+  "type": "excompressum:heavy_sieve_generated",
+  "input": {
+    "item":"excompressum:compressed_ender_gravel"
+  },
+  "source": "exnihilosequentia:crushed_end_stone",
+  "rolls": 9,
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "exnihilosequentia"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "type": "excompressum:wooden_crucible",
+  "input": {
+    "tag": "minecraft:saplings"
+  },
+  "fluid": "minecraft:water",
+  "amount": 100
+}
