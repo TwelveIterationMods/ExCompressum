@@ -313,7 +313,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
 
     @Override
-    public List<Hammerable> getHammerables() {
+    public List<Hammerable> getHammerRecipes() {
         Multimap<ResourceLocation, HammerRecipe> groupedRecipes = ArrayListMultimap.create();
         for (HammerRecipe hammerRecipe : ExNihiloRegistries.HAMMER_REGISTRY.getRecipeList()) {
             groupedRecipes.put(hammerRecipe.getInput().getItem().getRegistryName(), hammerRecipe);

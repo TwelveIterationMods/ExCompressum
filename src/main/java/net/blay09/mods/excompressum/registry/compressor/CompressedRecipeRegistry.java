@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.registry.compressor;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.resources.DataPackRegistries;
@@ -35,8 +36,7 @@ public class CompressedRecipeRegistry implements IResourceManagerReloadListener 
         recipes.clear();
 
         final RecipeManager recipeManager = dataPackRegistries.getRecipeManager();
-        for (IRecipe<?> recipe : recipeManager.getRecipes()) {
-            // TODO limit to only crafting recipes
+        for (IRecipe<?> recipe : recipeManager.getRecipesForType(IRecipeType.CRAFTING)) {
             NonNullList<Ingredient> ingredients = recipe.getIngredients();
             int count = ingredients.size();
             if (count == 4 || count == 9) {

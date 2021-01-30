@@ -11,7 +11,7 @@ import net.minecraftforge.common.ForgeHooks;
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
 
-public class LootTableProvider { // TODO interface
+public class LootTableProvider {
 
     private static final Gson GSON_INSTANCE = LootSerializers.func_237388_c_().create();
 

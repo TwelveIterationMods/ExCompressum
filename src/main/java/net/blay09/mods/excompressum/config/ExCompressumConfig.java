@@ -48,7 +48,6 @@ public class ExCompressumConfig {
         public final ForgeConfigSpec.BooleanValue enableSmashingModifier;
         public final ForgeConfigSpec.BooleanValue enableCompressingModifier;
         public final ForgeConfigSpec.BooleanValue enableEvolvedOrechid;
-        public final ForgeConfigSpec.BooleanValue disableVanillaOrechid;
         public final ForgeConfigSpec.IntValue manaSieveCost;
         public final ForgeConfigSpec.IntValue evolvedOrechidCost;
         public final ForgeConfigSpec.IntValue evolvedOrechidDelay;

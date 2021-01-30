@@ -11,6 +11,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
+import net.blay09.mods.excompressum.api.IHammerRecipe;
 import net.blay09.mods.excompressum.api.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
@@ -74,9 +75,9 @@ public class JEIAddon implements IModPlugin {
         for (HammerRecipe recipe : hammerRecipes) {
             jeiHammerRecipes.add(new JeiHammerRecipe(recipe));
         }
-        /* TODO for (Hammerable hammerable : ExNihilo.getInstance().getHammerables()) {
-            jeiHammerRecipes.add(new JeiHammerRecipe(hammerable));
-        }*/
+        for (IHammerRecipe recipe : ExNihilo.getInstance().getHammerRecipes()) {
+            jeiHammerRecipes.add(new JeiHammerRecipe(recipe));
+        }
         registry.addRecipes(jeiHammerRecipes, HammerRecipeCategory.UID);
 
         List<JeiChickenStickRecipe> jeiChickenStickRecipes = new ArrayList<>();

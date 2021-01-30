@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.compat.jei;
 
+import net.blay09.mods.excompressum.api.IHammerRecipe;
 import net.blay09.mods.excompressum.newregistry.hammer.HammerRecipe;
 import net.minecraft.item.ItemStack;
 
@@ -13,7 +14,7 @@ public class JeiHammerRecipe {
     private final List<MergedLootTableEntry> outputs;
     private final List<ItemStack> outputItems;
 
-    public JeiHammerRecipe(HammerRecipe recipe) {
+    public JeiHammerRecipe(IHammerRecipe recipe) {
         inputs = Arrays.asList(recipe.getInput().getMatchingStacks());
         List<LootTableEntry> entries = LootTableUtils.getLootTableEntries(recipe.getLootTable());
         outputs = LootTableUtils.mergeLootTableEntries(entries);

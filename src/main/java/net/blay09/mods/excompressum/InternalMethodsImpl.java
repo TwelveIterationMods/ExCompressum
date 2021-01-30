@@ -12,17 +12,7 @@ import net.minecraft.item.ItemStack;
 import java.util.List;
 
 public class InternalMethodsImpl implements InternalMethods {
-	@Override
-	public void registerHeavySieveEntry(BlockState state, List<HeavySieveReward> rewards) {
-		HeavySieveRegistryEntry entry = new HeavySieveRegistryEntry(state);
-		entry.addRewards(rewards);
-		// TODO HeavySieveRegistryOld.INSTANCE.add(entry);
-	}
 
-	@Override
-	public void registerWoodenCrucibleEntry(ItemStack itemStack, Fluid fluid, int amount) {
-		// TODO WoodenCrucibleRegistry.INSTANCE.add(new WoodenCrucibleRegistryEntry(itemStack, fluid, amount));
-	}
 	@Override
 	public ExNihiloProvider getExNihilo() {
 		return ExNihilo.instance;

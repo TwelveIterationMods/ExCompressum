@@ -63,7 +63,6 @@ public class ExCompressum {
             ExNihilo.instance = new NihilisticNihiloProvider();
         }
 
-        buildSoftDependProxy(Compat.BOTANIA, "net.blay09.mods.excompressum.compat.botania.BotaniaAddon");
         buildSoftDependProxy(Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
 
         ModLoot.registerLootEntries();

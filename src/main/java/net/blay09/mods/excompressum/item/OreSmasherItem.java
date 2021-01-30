@@ -30,7 +30,8 @@ public class OreSmasherItem extends ToolItem {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public OreSmasherItem(Properties properties) {
-        super(0f, 0f, ItemTier.DIAMOND, new HashSet<>(), properties);
+        //noinspection ConstantConditions - hide ore smasher for now, there's no useful function for it in current ex nihilo
+        super(0f, 0f, ItemTier.DIAMOND, new HashSet<>(), properties.group(null));
     }
 
     @Override
@@ -56,7 +57,7 @@ public class OreSmasherItem extends ToolItem {
 
         final World world = context.getWorld();
         final BlockPos pos = context.getPos();
-        /* TODO if (!world.checkNoEntityCollision(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
+        /* if (!world.checkNoEntityCollision(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1))) {
             return ActionResultType.FAIL;
         }*/
 

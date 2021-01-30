@@ -80,6 +80,6 @@ public interface ExNihiloProvider {
 
     boolean isHammerableOre(ItemStack itemStack);
 
-    List<Hammerable> getHammerables();
+    List<IHammerRecipe> getHammerRecipes();
 
 }

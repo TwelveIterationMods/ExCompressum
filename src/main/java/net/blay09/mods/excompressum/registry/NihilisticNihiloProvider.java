@@ -85,7 +85,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public List<Hammerable> getHammerables() {
+	public List<Hammerable> getHammerRecipes() {
 		return Collections.emptyList();
 	}
 }
