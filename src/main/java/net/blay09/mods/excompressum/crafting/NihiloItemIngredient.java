@@ -33,6 +33,11 @@ public class NihiloItemIngredient extends Ingredient {
         return Stream.of(new SingleItemList(ingredientStack));
     }
 
+    @Override
+    public IIngredientSerializer<? extends Ingredient> getSerializer() {
+        return new Serializer();
+    }
+
     public static class Serializer implements IIngredientSerializer<NihiloItemIngredient> {
         public static final Serializer INSTANCE = new Serializer();
 
