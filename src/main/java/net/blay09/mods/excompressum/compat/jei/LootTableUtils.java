@@ -6,6 +6,7 @@ import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.ILootTableProvider;
 import net.blay09.mods.excompressum.loot.NihiloLootEntry;
 import net.blay09.mods.excompressum.mixin.LootPoolAccessor;
+import net.blay09.mods.excompressum.mixin.LootTableAccessor;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.minecraft.item.Item;
@@ -18,7 +19,6 @@ import net.minecraft.loot.functions.SetCount;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
@@ -62,7 +62,7 @@ public class LootTableUtils {
         }
 
         List<LootTableEntry> result = new ArrayList<>();
-        List<LootPool> pools = ObfuscationReflectionHelper.getPrivateValue(LootTable.class, lootTable, "field_186466_c");
+        List<LootPool> pools = ((LootTableAccessor) lootTable).getPools();
         for (LootPool pool : pools) {
             float poolBaseChance = getBaseChance(pool);
             List<LootEntry> entries = ((LootPoolAccessor) pool).getLootEntries();

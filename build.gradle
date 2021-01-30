@@ -149,7 +149,7 @@ dependencies {
     compileOnly "inventory-tweaks:InventoryTweaks:1.64+dev.146"
     compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.0.22:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.0.22")
-    compile fg.deobf("curse.maven:exnihilosequentia-400012:3123311")
+    compile fg.deobf("curse.maven:exnihilosequentia-400012:3174222")
     compile fg.deobf("curse.maven:hwyla-253449:3033593")
     compile fg.deobf("curse.maven:the-one-probe-245211:3108607")
     compile fg.deobf("curse.maven:botania-225643:3086502")

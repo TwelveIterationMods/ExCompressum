@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.compat.exnihilosequentia;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.IHammerRecipe;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
@@ -16,7 +16,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -154,12 +153,20 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
     @Override
     public boolean isHammerable(BlockState state) {
-        return ExNihiloRegistries.HAMMER_REGISTRY.isHammerable(state.getBlock().getRegistryName());
+        return ExNihiloRegistries.HAMMER_REGISTRY.isHammerable(state.getBlock());
     }
 
     @Override
     public List<ItemStack> rollHammerRewards(BlockState state, ItemStack toolItem, Random rand) {
-        return Collections.singletonList(ExNihiloRegistries.HAMMER_REGISTRY.getResult(state.getBlock().getRegistryName()).copy());
+        List<ItemStackWithChance> possibleDrops = ExNihiloRegistries.HAMMER_REGISTRY.getResult(state.getBlock());
+        List<ItemStack> drops = new ArrayList<>();
+        for (ItemStackWithChance itemStackWithChance : possibleDrops) {
+            if (rand.nextFloat() <= itemStackWithChance.getChance()) {
+                drops.add(itemStackWithChance.getStack().copy());
+            }
+        }
+
+        return drops;
     }
 
     @Override
@@ -197,7 +204,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         final float luck = getLuckFromTool(tool);
         if (state.getBlock() instanceof InfestedLeavesBlock) {
             List<ItemStack> list = new ArrayList<>();
-            list.add(new ItemStack(Items.STRING, rand.nextInt(Config.MAX_BONUS_STRING_COUNT.get()) + Config.MIN_STRING_COUNT.get()));
+            list.add(new ItemStack(Items.STRING, rand.nextInt(Config.getMaxBonusStringCount()) + Config.getMinStringCount()));
             if (rand.nextDouble() <= 0.8) {
                 list.add(new ItemStack(EnumResource.SILKWORM.getRegistryObject().get()));
             }
@@ -210,13 +217,13 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         if (recipes != null) {
             List<ItemStack> list = new ArrayList<>();
 
-            for (int i = 0; i < Config.VANILLA_SIMULATE_DROP_COUNT.get(); i++) {
+            for (int i = 0; i < Config.getVanillaSimulateDropCount(); i++) {
                 List<ItemStack> items = Block.getDrops(state, world, pos, null);
                 list.addAll(items);
             }
 
             for (CrookRecipe recipe : recipes) {
-                for (ItemStackWithChance drop : recipe.getOutputsWithChance()) {
+                for (ItemStackWithChance drop : recipe.getOutput()) {
                     float fortuneChanceBonus = 0.1f;
                     if (rand.nextFloat() <= drop.getChance() + fortuneChanceBonus * luck) {
                         list.add(drop.getStack().copy());
@@ -287,37 +294,50 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
     @Override
     public List<IHammerRecipe> getHammerRecipes() {
-        Multimap<ResourceLocation, HammerRecipe> groupedRecipes = ArrayListMultimap.create();
+        ArrayListMultimap<IntList, HammerRecipe> groupedRecipes = ArrayListMultimap.create();
         for (HammerRecipe hammerRecipe : ExNihiloRegistries.HAMMER_REGISTRY.getRecipeList()) {
-            groupedRecipes.put(hammerRecipe.getInput().getItem().getRegistryName(), hammerRecipe);
+            groupedRecipes.put(hammerRecipe.getInput().getValidItemStacksPacked(), hammerRecipe);
         }
 
         List<IHammerRecipe> result = new ArrayList<>();
-        for (ResourceLocation registryName : groupedRecipes.keySet()) {
-            Item inputItem = ForgeRegistries.ITEMS.getValue(registryName);
+        for (IntList packedStacks : groupedRecipes.keySet()) {
             LootTable.Builder tableBuilder = LootTable.builder();
             LootPool.Builder poolBuilder = LootPool.builder();
-            for (HammerRecipe hammerRecipe : groupedRecipes.get(registryName)) {
-                ItemStack outputItem = hammerRecipe.getOutput();
-                StandaloneLootEntry.Builder<?> entryBuilder = buildLootEntry(outputItem);
-                poolBuilder.addEntry(entryBuilder);
+            for (HammerRecipe hammerRecipe : groupedRecipes.get(packedStacks)) {
+                for (ItemStackWithChance itemStackWithChance : hammerRecipe.getOutput()) {
+                    StandaloneLootEntry.Builder<?> entryBuilder = buildLootEntry(itemStackWithChance);
+                    poolBuilder.addEntry(entryBuilder);
+                }
             }
             tableBuilder.addLootPool(poolBuilder);
-            Ingredient input = Ingredient.fromItems(inputItem);
+
+            HammerRecipe firstRecipe = groupedRecipes.get(packedStacks).get(0);
+            Ingredient input = firstRecipe.getInput();
             LootTableProvider lootTableProvider = new LootTableProvider(tableBuilder.build());
-            result.add(new net.blay09.mods.excompressum.registry.hammer.HammerRecipe(registryName, input, lootTableProvider));
+            result.add(new net.blay09.mods.excompressum.registry.hammer.HammerRecipe(firstRecipe.getId(), input, lootTableProvider));
         }
 
         return result;
     }
 
     private StandaloneLootEntry.Builder<?> buildLootEntry(ItemStack outputItem) {
+        return buildLootEntry(outputItem, -1f);
+    }
+
+    private StandaloneLootEntry.Builder<?> buildLootEntry(ItemStackWithChance outputItem) {
+        return buildLootEntry(outputItem.getStack(), outputItem.getChance());
+    }
+
+    private StandaloneLootEntry.Builder<?> buildLootEntry(ItemStack outputItem, float chance) {
         StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(outputItem.getItem());
         if (outputItem.getCount() > 0) {
             entryBuilder.acceptFunction(SetCount.builder(ConstantRange.of(outputItem.getCount())));
         }
         if (outputItem.getTag() != null) {
             entryBuilder.acceptFunction(SetNBT.builder(outputItem.getTag()));
+        }
+        if (chance != -1f) {
+            entryBuilder.acceptCondition(RandomChance.builder(chance));
         }
         return entryBuilder;
     }

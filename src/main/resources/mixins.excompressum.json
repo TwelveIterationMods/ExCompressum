@@ -4,6 +4,7 @@
   "required": true,
   "package": "net.blay09.mods.excompressum.mixin",
   "mixins": [
+    "LootTableAccessor",
     "LootPoolAccessor"
   ],
   "refmap": "refmap.excompressum.json"
