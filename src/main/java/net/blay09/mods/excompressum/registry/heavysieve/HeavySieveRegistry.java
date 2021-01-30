@@ -4,6 +4,7 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.*;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
@@ -17,8 +18,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.*;
 
 public class HeavySieveRegistry {
-
-
 
     private static boolean testRecipe(SieveMeshRegistryEntry mesh, ItemStack itemStack, boolean waterlogged, HeavySieveRecipe recipe) {
         if (recipe.isWaterlogged() != waterlogged) {
@@ -39,8 +38,9 @@ public class HeavySieveRegistry {
         return recipe.getInput().test(itemStack);
     }
 
-    private static boolean testGeneratedRecipe(ItemStack itemStack, GeneratedHeavySieveRecipe generatedRecipe) {
-        return generatedRecipe.getInput().test(itemStack);
+    private static boolean testGeneratedRecipe(ItemStack itemStack, GeneratedHeavySieveRecipe generatedRecipe, BlockState sieve, SieveMeshRegistryEntry sieveMesh) {
+        Block sourceBlock = ForgeRegistries.BLOCKS.getValue(generatedRecipe.getSource());
+        return generatedRecipe.getInput().test(itemStack) && ExNihilo.isSiftableWithMesh(sieve, new ItemStack(sourceBlock), sieveMesh);
     }
 
     public static List<ItemStack> rollSieveRewards(LootContext context, BlockState sieve, SieveMeshRegistryEntry mesh, ItemStack itemStack) {
@@ -59,7 +59,7 @@ public class HeavySieveRegistry {
 
         List<GeneratedHeavySieveRecipe> generatedRecipes = recipeManager.getRecipesForType(GeneratedHeavySieveRecipe.TYPE);
         for (GeneratedHeavySieveRecipe generatedRecipe : generatedRecipes) {
-            if (testGeneratedRecipe(itemStack, generatedRecipe)) {
+            if (testGeneratedRecipe(itemStack, generatedRecipe, sieve, mesh)) {
                 int rolls = getGeneratedRollCount(generatedRecipe);
                 IItemProvider source = ForgeRegistries.ITEMS.getValue(generatedRecipe.getSource());
                 LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(sieve, source, rolls, mesh);
@@ -88,7 +88,7 @@ public class HeavySieveRegistry {
 
         List<GeneratedHeavySieveRecipe> generatedRecipes = recipeManager.getRecipesForType(GeneratedHeavySieveRecipe.TYPE);
         for (GeneratedHeavySieveRecipe recipe : generatedRecipes) {
-            if (testGeneratedRecipe(itemStack, recipe)) {
+            if (testGeneratedRecipe(itemStack, recipe, sieve, sieveMesh)) {
                 return true;
             }
         }
