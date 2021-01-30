@@ -16,6 +16,7 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.item.ModItems;
+import net.blay09.mods.excompressum.newregistry.chickenstick.ChickenStickRecipe;
 import net.blay09.mods.excompressum.newregistry.compressedhammer.CompressedHammerRecipe;
 import net.blay09.mods.excompressum.newregistry.hammer.HammerRecipe;
 import net.blay09.mods.excompressum.registry.ExNihilo;
@@ -78,6 +79,13 @@ public class JEIAddon implements IModPlugin {
         }*/
         registry.addRecipes(jeiHammerRecipes, HammerRecipeCategory.UID);
 
+        List<JeiChickenStickRecipe> jeiChickenStickRecipes = new ArrayList<>();
+        List<ChickenStickRecipe> chickenStickRecipes = recipeManager.getRecipesForType(ChickenStickRecipe.TYPE);
+        for (ChickenStickRecipe recipe : chickenStickRecipes) {
+            jeiChickenStickRecipes.add(new JeiChickenStickRecipe(recipe));
+        }
+        registry.addRecipes(jeiChickenStickRecipes, ChickenStickRecipeCategory.UID);
+
         ArrayListMultimap<ResourceLocation, WoodenCrucibleRecipe> fluidOutputMap = ArrayListMultimap.create();
         List<WoodenCrucibleRecipe> woodenCrucibleRecipes = recipeManager.getRecipesForType(WoodenCrucibleRecipe.TYPE);
         for (WoodenCrucibleRecipe entry : woodenCrucibleRecipes) {
@@ -110,7 +118,7 @@ public class JEIAddon implements IModPlugin {
 
         registry.addRecipes(jeiWoodenCrucibleRecipes, WoodenCrucibleRecipeCategory.UID);
 
-        registry.addRecipes(Lists.newArrayList(new ChickenStickRecipe()), ChickenStickRecipeCategory.UID);
+        registry.addRecipes(Lists.newArrayList(new CraftChickenStickRecipe()), CraftChickenStickRecipeCategory.UID);
     }
 
     private void loadGeneratedHeavySieveRecipe(boolean waterlogged, GeneratedHeavySieveRecipe generatedRecipe, List<JeiHeavySieveRecipe> outRecipes) {
@@ -141,6 +149,7 @@ public class JEIAddon implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerIron), CompressedHammerRecipeCategory.UID);
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerStone), CompressedHammerRecipeCategory.UID);
         registry.addRecipeCatalyst(new ItemStack(ModItems.compressedHammerWood), CompressedHammerRecipeCategory.UID);
+        registry.addRecipeCatalyst(new ItemStack(ModItems.chickenStick), ChickenStickRecipeCategory.UID);
 
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.autoHammer), HammerRecipeCategory.UID);
         registry.addRecipeCatalyst(ExNihilo.getInstance().getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_NETHERITE), HammerRecipeCategory.UID);
@@ -163,6 +172,7 @@ public class JEIAddon implements IModPlugin {
                 new HammerRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
                 new CompressedHammerRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
                 new WoodenCrucibleRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
+                new CraftChickenStickRecipeCategory(registry.getJeiHelpers().getGuiHelper()),
                 new ChickenStickRecipeCategory(registry.getJeiHelpers().getGuiHelper()));
     }
 

@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.compat.jei;
 
+import net.blay09.mods.excompressum.newregistry.chickenstick.ChickenStickRecipe;
 import net.blay09.mods.excompressum.newregistry.hammer.HammerRecipe;
 import net.minecraft.item.ItemStack;
 
@@ -7,13 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JeiHammerRecipe {
+public class JeiChickenStickRecipe {
 
     private final List<ItemStack> inputs;
     private final List<MergedLootTableEntry> outputs;
     private final List<ItemStack> outputItems;
 
-    public JeiHammerRecipe(HammerRecipe recipe) {
+    public JeiChickenStickRecipe(ChickenStickRecipe recipe) {
         inputs = Arrays.asList(recipe.getInput().getMatchingStacks());
         List<LootTableEntry> entries = LootTableUtils.getLootTableEntries(recipe.getLootTable());
         outputs = LootTableUtils.mergeLootTableEntries(entries);

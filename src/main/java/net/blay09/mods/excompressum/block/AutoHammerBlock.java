@@ -83,7 +83,7 @@ public class AutoHammerBlock extends ContainerBlock implements IUglyfiable {
     @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileEntity = world.getTileEntity(pos);
-        if (tileEntity != null) {
+        if (tileEntity != null && state.getBlock() != newState.getBlock()) {
             IItemHandler itemHandler = ((AutoHammerTileEntity) tileEntity).getItemHandler();
             for (int i = 0; i < itemHandler.getSlots(); i++) {
                 ItemStack itemStack = itemHandler.getStackInSlot(i);

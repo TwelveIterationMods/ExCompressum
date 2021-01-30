@@ -110,7 +110,7 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
     @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
         TileEntity tileEntity = world.getTileEntity(pos);
-        if (tileEntity != null) {
+        if (tileEntity != null && newState.getBlock() != state.getBlock()) {
             IItemHandler itemHandler = ((AutoSieveTileEntityBase) tileEntity).getItemHandler();
             for (int i = 0; i < itemHandler.getSlots(); i++) {
                 ItemStack itemStack = itemHandler.getStackInSlot(i);

@@ -10,20 +10,21 @@ import java.util.stream.Collectors;
 public class JeiCompressedHammerRecipe {
 
     private final List<ItemStack> inputs;
-    private final List<LootTableEntry> outputs;
+    private final List<MergedLootTableEntry> outputs;
     private final List<ItemStack> outputItems;
 
-    public JeiCompressedHammerRecipe(CompressedHammerRecipe entry) {
-        inputs = Arrays.asList(entry.getInput().getMatchingStacks());
-        outputs = LootTableUtils.getLootTableEntries(entry.getLootTable());
-        outputItems = outputs.stream().map(LootTableEntry::getItemStack).collect(Collectors.toList());
+    public JeiCompressedHammerRecipe(CompressedHammerRecipe recipe) {
+        inputs = Arrays.asList(recipe.getInput().getMatchingStacks());
+        List<LootTableEntry> entries = LootTableUtils.getLootTableEntries(recipe.getLootTable());
+        outputs = LootTableUtils.mergeLootTableEntries(entries);
+        outputItems = outputs.stream().map(MergedLootTableEntry::getItemStack).collect(Collectors.toList());
     }
 
     public List<ItemStack> getInputs() {
         return inputs;
     }
 
-    public List<LootTableEntry> getOutputs() {
+    public List<MergedLootTableEntry> getOutputs() {
         return outputs;
     }
 

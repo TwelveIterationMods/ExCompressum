@@ -106,7 +106,7 @@ public class HammerRecipeCategory implements IRecipeCategory<JeiHammerRecipe> {
 
         recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (!input) {
-                LootTableEntry entry = recipe.getOutputs().get(slotIndex - INPUT_SLOTS);
+                MergedLootTableEntry entry = recipe.getOutputs().get(slotIndex - INPUT_SLOTS);
                 JeiUtils.addLootTableEntryTooltips(entry, tooltip);
             }
         });
