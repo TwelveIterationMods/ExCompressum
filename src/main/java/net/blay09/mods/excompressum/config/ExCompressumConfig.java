@@ -300,11 +300,6 @@ public class ExCompressumConfig {
                     .translation("excompressum.config.enableEvolvedOrechid")
                     .define("enableEvolvedOrechid", false);
 
-            disableVanillaOrechid = builder
-                    .comment("If set to true, Botania's Orechid will not show up in the lexicon and will not be craftable.")
-                    .translation("excompressum.config.disableVanillaOrechid")
-                    .define("disableVanillaOrechid", false);
-
             manaSieveCost = builder
                     .comment("The mana cost of the Mana Sieve per Tick.")
                     .translation("excompressum.config.manaSieveCost")

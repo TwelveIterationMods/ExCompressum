@@ -4,7 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.api.Hammerable;
+import net.blay09.mods.excompressum.api.IHammerRecipe;
 import net.blay09.mods.excompressum.api.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
@@ -246,13 +246,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         for (SieveRecipe recipe : recipes) {
             ItemStack itemStack = recipe.getDrop();
             for (MeshWithChance roll : recipe.getRolls()) {
-                StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(itemStack.getItem());
-                if (itemStack.getCount() > 0) {
-                    entryBuilder.acceptFunction(SetCount.builder(ConstantRange.of(itemStack.getCount())));
-                }
-                if (itemStack.getTag() != null) {
-                    entryBuilder.acceptFunction(SetNBT.builder(itemStack.getTag()));
-                }
+                StandaloneLootEntry.Builder<?> entryBuilder = buildLootEntry(itemStack);
                 entryBuilder.acceptCondition(RandomChance.builder(roll.getChance()));
                 poolBuilder.addEntry(entryBuilder);
             }
@@ -291,58 +285,40 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         return false;
     }
 
-    //	@SubscribeEvent Wood Chippings won't work in Adscensio until it ports the RegistryReloadedEvent to 1.11.2
-//	public void onRegistryReload(RegistryReloadedEvent event) {
-//		if(ExCompressumConfig.enableWoodChippings) {
-//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
-//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
-//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
-//			HammerRegistry.register(Blocks.LOG.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
-//
-//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 1f, 0f, true);
-//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.75f, 0f, true);
-//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.5f, 0f, true);
-//			HammerRegistry.register(Blocks.LOG2.getDefaultState(), new ItemStack(ModItems.woodChipping), 0, 0.25f, 0f, true);
-//
-//			List<ItemStack> oreDictStacks = OreDictionary.getOres("dustWood", false);
-//			for (ItemStack itemStack : oreDictStacks) {
-//				CompostRegistry.register(itemStack.getItem(), itemStack.getItemDamage(), 0.125f, Blocks.DIRT.getDefaultState(), new Color(0xFFC77826));
-//			}
-//		}
-//	}
-
-
     @Override
-    public List<Hammerable> getHammerRecipes() {
+    public List<IHammerRecipe> getHammerRecipes() {
         Multimap<ResourceLocation, HammerRecipe> groupedRecipes = ArrayListMultimap.create();
         for (HammerRecipe hammerRecipe : ExNihiloRegistries.HAMMER_REGISTRY.getRecipeList()) {
             groupedRecipes.put(hammerRecipe.getInput().getItem().getRegistryName(), hammerRecipe);
         }
 
-        List<Hammerable> result = new ArrayList<>();
+        List<IHammerRecipe> result = new ArrayList<>();
         for (ResourceLocation registryName : groupedRecipes.keySet()) {
-            Hammerable hammerable = new Hammerable();
             Item inputItem = ForgeRegistries.ITEMS.getValue(registryName);
-            hammerable.setId(registryName);
-            hammerable.setSource(Ingredient.fromItems(inputItem));
             LootTable.Builder tableBuilder = LootTable.builder();
             LootPool.Builder poolBuilder = LootPool.builder();
             for (HammerRecipe hammerRecipe : groupedRecipes.get(registryName)) {
                 ItemStack outputItem = hammerRecipe.getOutput();
-                StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(outputItem.getItem()); // TODO duplicate code
-                if (outputItem.getCount() > 0) {
-                    entryBuilder.acceptFunction(SetCount.builder(ConstantRange.of(outputItem.getCount())));
-                }
-                if (outputItem.getTag() != null) {
-                    entryBuilder.acceptFunction(SetNBT.builder(outputItem.getTag()));
-                }
+                StandaloneLootEntry.Builder<?> entryBuilder = buildLootEntry(outputItem);
                 poolBuilder.addEntry(entryBuilder);
             }
             tableBuilder.addLootPool(poolBuilder);
-            hammerable.setLootTable(new LootTableProvider(tableBuilder.build()));
-            result.add(hammerable);
+            Ingredient input = Ingredient.fromItems(inputItem);
+            LootTableProvider lootTableProvider = new LootTableProvider(tableBuilder.build());
+            result.add(new net.blay09.mods.excompressum.newregistry.hammer.HammerRecipe(registryName, input, lootTableProvider));
         }
 
         return result;
+    }
+
+    private StandaloneLootEntry.Builder<?> buildLootEntry(ItemStack outputItem) {
+        StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(outputItem.getItem());
+        if (outputItem.getCount() > 0) {
+            entryBuilder.acceptFunction(SetCount.builder(ConstantRange.of(outputItem.getCount())));
+        }
+        if (outputItem.getTag() != null) {
+            entryBuilder.acceptFunction(SetNBT.builder(outputItem.getTag()));
+        }
+        return entryBuilder;
     }
 }

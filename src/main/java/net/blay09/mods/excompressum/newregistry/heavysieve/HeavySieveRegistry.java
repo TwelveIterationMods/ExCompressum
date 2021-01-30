@@ -50,7 +50,7 @@ public class HeavySieveRegistry {
         List<ItemStack> results = new ArrayList<>();
         for (HeavySieveRecipe recipe : recipes) {
             if (testRecipe(mesh, itemStack, waterlogged, recipe)) {
-                LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId().toString(), context);
+                LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId(), context);
                 if (lootTable != null) {
                     results.addAll(lootTable.generate(context));
                 }

@@ -32,11 +32,10 @@ public class LootTableProvider {
     }
 
     @Nullable
-    public LootTable getLootTable(String name, LootTableManager lootTableManager) {
+    public LootTable getLootTable(@Nullable ResourceLocation resourceLocation, LootTableManager lootTableManager) {
         if (inlineLootTableJson != null || inlineLootTable != null) {
             if (inlineLootTable == null) {
-                // TODO remove that replace
-                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, new ResourceLocation(ExCompressumAPI.MOD_ID, name.replace("/", ".").replace("excompressum:", "") + "_embed"), inlineLootTableJson, true, lootTableManager);
+                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, resourceLocation, inlineLootTableJson, true, lootTableManager);
             }
             return inlineLootTable;
         }
@@ -45,11 +44,10 @@ public class LootTableProvider {
     }
 
     @Nullable
-    public LootTable getLootTable(String name, LootContext context) {
+    public LootTable getLootTable(ResourceLocation resourceLocation, LootContext context) {
         if (inlineLootTableJson != null || inlineLootTable != null) {
             if (inlineLootTable == null) {
-                // TODO remove that replace
-                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, new ResourceLocation(ExCompressumAPI.MOD_ID, name.replace("/", ".").replace("excompressum:", "") + "_embed"), inlineLootTableJson, true, context.getWorld().getServer().getLootTableManager());
+                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, resourceLocation, inlineLootTableJson, true, context.getWorld().getServer().getLootTableManager());
             }
             return inlineLootTable;
         }

@@ -15,7 +15,7 @@ public class CompressedHammerRegistry {
         List<ItemStack> results = new ArrayList<>();
         for (CompressedHammerRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {
-                LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId().toString(), context);
+                LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId(), context);
                 if (lootTable != null) {
                     results.addAll(lootTable.generate(context));
                 }

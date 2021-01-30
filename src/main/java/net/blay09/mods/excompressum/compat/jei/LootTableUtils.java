@@ -52,7 +52,7 @@ public class LootTableUtils {
         }
 
         LootTableManager lootTableManager = ServerLifecycleHooks.getCurrentServer().getLootTableManager();
-        LootTable lootTable = lootTableProvider.getLootTable("", lootTableManager);
+        LootTable lootTable = lootTableProvider.getLootTable(null, lootTableManager);
         return getLootTableEntries(lootTable);
     }
 

@@ -16,7 +16,7 @@ public class HammerRegistry {
         List<ItemStack> results = new ArrayList<>();
         for (HammerRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {
-                LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId().toString(), context);
+                LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId(), context);
                 if (lootTable != null) {
                     results.addAll(lootTable.generate(context));
                 }

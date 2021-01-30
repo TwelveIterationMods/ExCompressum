@@ -47,7 +47,7 @@ public abstract class ExCompressumRecipeSerializer<T extends IRecipe<?>> extends
 
     public void writeLootTable(PacketBuffer buffer, ResourceLocation recipeId, LootTableProvider lootTableProvider) {
         LootTableManager lootTableManager = ServerLifecycleHooks.getCurrentServer().getLootTableManager();
-        LootTable lootTable = lootTableProvider.getLootTable(recipeId.toString(), lootTableManager);
+        LootTable lootTable = lootTableProvider.getLootTable(recipeId, lootTableManager);
         String jsonString = gson.toJson(lootTable);
         buffer.writeString(jsonString);
     }
