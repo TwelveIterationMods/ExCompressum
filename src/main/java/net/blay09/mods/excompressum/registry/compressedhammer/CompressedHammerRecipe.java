@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 public class CompressedHammerRecipe extends ExCompressumRecipe {
     public static final IRecipeType<CompressedHammerRecipe> TYPE = IRecipeType.register(ExCompressum.MOD_ID + ":compressed_hammer");
 
-    private final Ingredient input;
-    private final LootTableProvider lootTable;
+    private Ingredient input;
+    private LootTableProvider lootTable;
 
     public CompressedHammerRecipe(ResourceLocation id, Ingredient input, LootTableProvider lootTable) {
         super(id, TYPE);
@@ -34,4 +34,11 @@ public class CompressedHammerRecipe extends ExCompressumRecipe {
         return lootTable;
     }
 
+    public void setInput(Ingredient input) {
+        this.input = input;
+    }
+
+    public void setLootTable(LootTableProvider lootTable) {
+        this.lootTable = lootTable;
+    }
 }

@@ -8,11 +8,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTier;
 import net.minecraft.item.ToolItem;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
@@ -24,7 +26,7 @@ public class ChickenStickItem extends ToolItem {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public ChickenStickItem(Item.Properties properties) {
-        super(0f, 0f, ChickenStickTier.INSTANCE, new HashSet<>(), properties.isImmuneToFire());
+        super(0f, 0f, ChickenStickTier.INSTANCE, new HashSet<>(), properties.isImmuneToFire().addToolType(ToolType.PICKAXE, ItemTier.DIAMOND.getHarvestLevel()));
     }
 
     @Override

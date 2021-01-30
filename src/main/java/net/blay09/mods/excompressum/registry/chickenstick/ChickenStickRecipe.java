@@ -12,8 +12,8 @@ import net.minecraft.util.ResourceLocation;
 public class ChickenStickRecipe extends ExCompressumRecipe {
     public static final IRecipeType<ChickenStickRecipe> TYPE = IRecipeType.register(ExCompressum.MOD_ID + ":chicken_stick");
 
-    private final Ingredient input;
-    private final LootTableProvider lootTable;
+    private Ingredient input;
+    private LootTableProvider lootTable;
 
     public ChickenStickRecipe(ResourceLocation id, Ingredient input, LootTableProvider lootTable) {
         super(id, TYPE);
@@ -34,4 +34,11 @@ public class ChickenStickRecipe extends ExCompressumRecipe {
         return lootTable;
     }
 
+    public void setInput(Ingredient input) {
+        this.input = input;
+    }
+
+    public void setLootTable(LootTableProvider lootTable) {
+        this.lootTable = lootTable;
+    }
 }
