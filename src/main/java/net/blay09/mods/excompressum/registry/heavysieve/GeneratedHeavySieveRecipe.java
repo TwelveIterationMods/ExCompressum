@@ -13,9 +13,9 @@ import javax.annotation.Nullable;
 public class GeneratedHeavySieveRecipe extends ExCompressumRecipe {
     public static final IRecipeType<GeneratedHeavySieveRecipe> TYPE = IRecipeType.register(ExCompressum.MOD_ID + ":heavy_sieve_generated");
 
-    private final Ingredient input;
-    private final ResourceLocation source;
-    private final Integer rolls;
+    private Ingredient input;
+    private ResourceLocation source;
+    private Integer rolls;
 
     public GeneratedHeavySieveRecipe(ResourceLocation id, Ingredient input, ResourceLocation source, @Nullable Integer rolls) {
         super(id, TYPE);
@@ -40,5 +40,17 @@ public class GeneratedHeavySieveRecipe extends ExCompressumRecipe {
     @Override
     public IRecipeSerializer<?> getSerializer() {
         return ModRecipeTypes.generatedHeavySieveRecipe;
+    }
+
+    public void setInput(Ingredient input) {
+        this.input = input;
+    }
+
+    public void setSource(ResourceLocation source) {
+        this.source = source;
+    }
+
+    public void setRolls(Integer rolls) {
+        this.rolls = rolls;
     }
 }

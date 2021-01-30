@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.IHammerRecipe;
+import net.blay09.mods.excompressum.compat.jei.LootTableUtils;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
@@ -21,8 +22,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.RandomChance;
-import net.minecraft.loot.functions.SetCount;
-import net.minecraft.loot.functions.SetNBT;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.IItemProvider;
@@ -321,24 +320,11 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     private StandaloneLootEntry.Builder<?> buildLootEntry(ItemStack outputItem) {
-        return buildLootEntry(outputItem, -1f);
+        return LootTableUtils.buildLootEntry(outputItem, -1f);
     }
 
     private StandaloneLootEntry.Builder<?> buildLootEntry(ItemStackWithChance outputItem) {
-        return buildLootEntry(outputItem.getStack(), outputItem.getChance());
+        return LootTableUtils.buildLootEntry(outputItem.getStack(), outputItem.getChance());
     }
 
-    private StandaloneLootEntry.Builder<?> buildLootEntry(ItemStack outputItem, float chance) {
-        StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(outputItem.getItem());
-        if (outputItem.getCount() > 0) {
-            entryBuilder.acceptFunction(SetCount.builder(ConstantRange.of(outputItem.getCount())));
-        }
-        if (outputItem.getTag() != null) {
-            entryBuilder.acceptFunction(SetNBT.builder(outputItem.getTag()));
-        }
-        if (chance != -1f) {
-            entryBuilder.acceptCondition(RandomChance.builder(chance));
-        }
-        return entryBuilder;
-    }
 }

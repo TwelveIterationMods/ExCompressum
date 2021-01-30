@@ -16,11 +16,11 @@ import java.util.Set;
 public class HeavySieveRecipe extends ExCompressumRecipe {
     public static final IRecipeType<HeavySieveRecipe> TYPE = IRecipeType.register(ExCompressum.MOD_ID + ":heavy_sieve");
 
-    private final Ingredient input;
-    private final LootTableProvider lootTable;
-    private final boolean waterlogged;
-    private final MeshType minimumMesh;
-    private final Set<MeshType> meshes;
+    private Ingredient input;
+    private LootTableProvider lootTable;
+    private boolean waterlogged;
+    private MeshType minimumMesh;
+    private Set<MeshType> meshes;
 
     public HeavySieveRecipe(ResourceLocation id, Ingredient input, LootTableProvider lootTable, boolean waterlogged, @Nullable MeshType minimumMesh, @Nullable Set<MeshType> meshes) {
         super(id, TYPE);
@@ -56,5 +56,25 @@ public class HeavySieveRecipe extends ExCompressumRecipe {
     @Nullable
     public Set<MeshType> getMeshes() {
         return meshes;
+    }
+
+    public void setInput(Ingredient input) {
+        this.input = input;
+    }
+
+    public void setLootTable(LootTableProvider lootTable) {
+        this.lootTable = lootTable;
+    }
+
+    public void setWaterlogged(boolean waterlogged) {
+        this.waterlogged = waterlogged;
+    }
+
+    public void setMinimumMesh(@Nullable MeshType minimumMesh) {
+        this.minimumMesh = minimumMesh;
+    }
+
+    public void setMeshes(@Nullable Set<MeshType> meshes) {
+        this.meshes = meshes;
     }
 }

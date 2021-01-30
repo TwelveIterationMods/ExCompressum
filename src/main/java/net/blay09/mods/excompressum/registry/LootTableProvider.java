@@ -15,6 +15,7 @@ import java.lang.reflect.Type;
 public class LootTableProvider implements ILootTableProvider {
 
     private static final Gson GSON_INSTANCE = LootSerializers.func_237388_c_().create();
+    public static final LootTableProvider EMPTY = new LootTableProvider(LootTable.EMPTY_LOOT_TABLE);
 
     private ResourceLocation lootTableLocation;
     private JsonObject inlineLootTableJson;

@@ -16,6 +16,7 @@ import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.loot.conditions.RandomChance;
 import net.minecraft.loot.functions.ILootFunction;
 import net.minecraft.loot.functions.SetCount;
+import net.minecraft.loot.functions.SetNBT;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
@@ -38,21 +39,21 @@ public class LootTableUtils {
         return getLootTableEntries(lootTable).isEmpty();
     }
 
-    public static boolean isLootTableEmpty(@Nullable LootTableProvider lootTableProvider) {
+    public static boolean isLootTableEmpty(ResourceLocation id, @Nullable LootTableProvider lootTableProvider) {
         if (lootTableProvider == null) {
             return true;
         }
 
-        return getLootTableEntries(lootTableProvider).isEmpty();
+        return getLootTableEntries(id, lootTableProvider).isEmpty();
     }
 
-    public static List<LootTableEntry> getLootTableEntries(@Nullable ILootTableProvider lootTableProvider) {
+    public static List<LootTableEntry> getLootTableEntries(ResourceLocation id, @Nullable ILootTableProvider lootTableProvider) {
         if (lootTableProvider == null) {
             return Collections.emptyList();
         }
 
         LootTableManager lootTableManager = ServerLifecycleHooks.getCurrentServer().getLootTableManager();
-        LootTable lootTable = lootTableProvider.getLootTable(null, lootTableManager);
+        LootTable lootTable = lootTableProvider.getLootTable(id, lootTableManager);
         return getLootTableEntries(lootTable);
     }
 
@@ -88,8 +89,9 @@ public class LootTableUtils {
                     itemStack.setCount(getMaxCount(countRange));
                     result.add(new LootTableEntry(itemStack, countRange, baseChance));
                 } else if (entry instanceof TableLootEntry) {
-                    LootTableProvider provider = new LootTableProvider(((TableLootEntry) entry).table);
-                    result.addAll(getLootTableEntries(provider));
+                    ResourceLocation lootTableLocation = ((TableLootEntry) entry).table;
+                    LootTableProvider provider = new LootTableProvider(lootTableLocation);
+                    result.addAll(getLootTableEntries(lootTableLocation, provider));
                 }
             }
         }
@@ -162,5 +164,19 @@ public class LootTableUtils {
             result.add(new MergedLootTableEntry(firstEntry.getItemStack(), mergableEntries));
         }
         return result;
+    }
+
+    public static StandaloneLootEntry.Builder<?> buildLootEntry(ItemStack outputItem, float chance) {
+        StandaloneLootEntry.Builder<?> entryBuilder = ItemLootEntry.builder(outputItem.getItem());
+        if (outputItem.getCount() > 0) {
+            entryBuilder.acceptFunction(SetCount.builder(ConstantRange.of(outputItem.getCount())));
+        }
+        if (outputItem.getTag() != null) {
+            entryBuilder.acceptFunction(SetNBT.builder(outputItem.getTag()));
+        }
+        if (chance != -1f) {
+            entryBuilder.acceptCondition(RandomChance.builder(chance));
+        }
+        return entryBuilder;
     }
 }
