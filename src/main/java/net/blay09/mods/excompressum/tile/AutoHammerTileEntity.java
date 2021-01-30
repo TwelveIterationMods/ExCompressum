@@ -107,7 +107,6 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     private float progress;
 
     private ItemStack finishedStack = ItemStack.EMPTY;
-    private BlockState cachedState;
     public float hammerAngle;
 
     private boolean isDisabledByRedstone;
@@ -417,21 +416,17 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     }
 
     public boolean isUgly() {
-        if (cachedState == null) {
-            cachedState = world.getBlockState(pos);
-        }
-        if (cachedState.getBlock() instanceof AutoHammerBlock) {
-            return cachedState.get(AutoHammerBlock.UGLY);
+        BlockState state = getBlockState();
+        if (state.hasProperty(AutoHammerBlock.UGLY)) {
+            return state.get(AutoHammerBlock.UGLY);
         }
         return false;
     }
 
     public Direction getFacing() {
-        if (cachedState == null) {
-            cachedState = world.getBlockState(pos);
-        }
-        if (cachedState.getBlock() instanceof AutoHammerBlock) {
-            return cachedState.get(AutoHammerBlock.FACING);
+        BlockState state = getBlockState();
+        if (state.hasProperty(AutoHammerBlock.FACING)) {
+            return state.get(AutoHammerBlock.FACING);
         }
         return Direction.NORTH;
     }
@@ -455,4 +450,5 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity player) {
         return new AutoHammerContainer(windowId, inv, this);
     }
+
 }

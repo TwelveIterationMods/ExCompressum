@@ -432,7 +432,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         if (cachedState == null) {
             cachedState = world.getBlockState(pos);
         }
-        if (cachedState.getBlock() instanceof AutoSieveBaseBlock) {
+        if (cachedState.hasProperty(AutoSieveBaseBlock.UGLY)) {
             return cachedState.get(AutoSieveBaseBlock.UGLY);
         }
         return false;
@@ -442,7 +442,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         if (cachedState == null) {
             cachedState = world.getBlockState(pos);
         }
-        if (cachedState.getBlock() instanceof AutoSieveBaseBlock) {
+        if (cachedState.hasProperty(AutoSieveBaseBlock.WATERLOGGED)) {
             return cachedState.get(AutoSieveBaseBlock.WATERLOGGED);
         }
         return false;
@@ -452,7 +452,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         if (cachedState == null) {
             cachedState = world.getBlockState(pos);
         }
-        if (cachedState.getBlock() instanceof AutoSieveBaseBlock) {
+        if (cachedState.hasProperty(AutoSieveBaseBlock.FACING)) {
             return cachedState.get(AutoSieveBaseBlock.FACING);
         }
         return Direction.NORTH;
