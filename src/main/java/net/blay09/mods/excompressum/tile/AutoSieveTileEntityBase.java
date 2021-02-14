@@ -96,7 +96,6 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     private float foodBoost;
     private int foodBoostTicks;
 
-    private BlockState cachedState;
     public float armAngle;
     private int particleTicks;
     private int particleCount;
@@ -429,33 +428,24 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
     }
 
     public boolean isUgly() {
-        if (cachedState == null) {
-            cachedState = world.getBlockState(pos);
-        }
-        if (cachedState.hasProperty(AutoSieveBaseBlock.UGLY)) {
-            return cachedState.get(AutoSieveBaseBlock.UGLY);
+        BlockState state = getBlockState();
+        if (state.hasProperty(AutoSieveBaseBlock.UGLY)) {
+            return state.get(AutoSieveBaseBlock.UGLY);
         }
         return false;
     }
 
     public boolean isWaterlogged() {
-        if (cachedState == null) {
-            cachedState = world.getBlockState(pos);
-        }
-        if (cachedState.hasProperty(AutoSieveBaseBlock.WATERLOGGED)) {
-            return cachedState.get(AutoSieveBaseBlock.WATERLOGGED);
+        BlockState state = getBlockState();
+        if (state.hasProperty(AutoSieveBaseBlock.WATERLOGGED)) {
+            return state.get(AutoSieveBaseBlock.WATERLOGGED);
         }
         return false;
     }
 
     public Direction getFacing() {
-        if (cachedState == null) {
-            cachedState = world.getBlockState(pos);
-        }
-        if (cachedState.hasProperty(AutoSieveBaseBlock.FACING)) {
-            return cachedState.get(AutoSieveBaseBlock.FACING);
-        }
-        return Direction.NORTH;
+        BlockState state = getBlockState();
+        return state.hasProperty(AutoSieveBaseBlock.FACING) ? state.get(AutoSieveBaseBlock.FACING) : Direction.NORTH;
     }
 
     public boolean isDisabledByRedstone() {
