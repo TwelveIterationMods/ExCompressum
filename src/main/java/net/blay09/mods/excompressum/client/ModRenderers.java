@@ -24,6 +24,7 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModRenderers {
 
+    @SuppressWarnings("unchecked")
     public static void register() {
         RenderTypeLookup.setRenderLayer(ModBlocks.autoSieve, RenderType.getCutout());
         RenderTypeLookup.setRenderLayer(ModBlocks.autoHeavySieve, RenderType.getCutout());
@@ -49,7 +50,6 @@ public class ModRenderers {
             ((IReloadableResourceManager) resourceManager).addReloadListener((IResourceManagerReloadListener) manager -> AutoSieveRenderer.cacheKey++);
         }
 
-        //noinspection unchecked
         ClientRegistry.bindTileEntityRenderer((TileEntityType<AutoSieveTileEntityBase>) ModTileEntities.manaSieve, AutoSieveRenderer::normal);
     }
 

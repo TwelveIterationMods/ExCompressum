@@ -33,7 +33,7 @@ public class ExCompressum {
     public static final String MOD_ID = "excompressum";
     public static final Logger logger = LogManager.getLogger(MOD_ID);
 
-    public static CommonProxy proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+    public static CommonProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> CommonProxy::new);
 
     public static final ExCompressumCreativeTab itemGroup = new ExCompressumCreativeTab();
 

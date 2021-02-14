@@ -35,7 +35,7 @@ public class NihiloItemIngredient extends Ingredient {
 
     @Override
     public IIngredientSerializer<? extends Ingredient> getSerializer() {
-        return new Serializer();
+        return NihiloItemIngredient.Serializer.INSTANCE;
     }
 
     public static class Serializer implements IIngredientSerializer<NihiloItemIngredient> {
