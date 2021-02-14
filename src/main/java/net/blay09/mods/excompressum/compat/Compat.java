@@ -7,6 +7,7 @@ public class Compat {
 
     public static Item TCONSTRUCT_HAMMER;
 
+	public static final String PATCHOULI = "patchouli";
 	public static final String BOTANIA = "botania";
 	public static final String EXNIHILO_OMNIA = "exnihiloomnia";
 	public static final String EXNIHILO_ADSCENSIO = "exnihiloadscensio";

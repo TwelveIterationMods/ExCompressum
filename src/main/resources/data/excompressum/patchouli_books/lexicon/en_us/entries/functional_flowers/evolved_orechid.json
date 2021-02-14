@@ -4,6 +4,7 @@
   "icon": "excompressum:evolved_orechid",
   "entry_color": "aa00",
   "priority": true,
+  "flag": "excompressum:evolved_orechid_enabled",
   "advancement": "botania:main/pure_daisy_pickup",
   "pages": [
     {

@@ -64,6 +64,7 @@ public class ExCompressum {
         }
 
         buildSoftDependProxy(Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
+        buildSoftDependProxy(Compat.PATCHOULI, "net.blay09.mods.excompressum.compat.patchouli.PatchouliAddon");
 
         ModLoot.registerLootEntries();
     }

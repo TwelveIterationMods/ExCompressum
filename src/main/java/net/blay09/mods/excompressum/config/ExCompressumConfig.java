@@ -45,8 +45,6 @@ public class ExCompressumConfig {
         public final ForgeConfigSpec.DoubleValue compressedCrookDurabilityMultiplier;
         public final ForgeConfigSpec.DoubleValue compressedCrookSpeedMultiplier;
 
-        public final ForgeConfigSpec.BooleanValue enableSmashingModifier;
-        public final ForgeConfigSpec.BooleanValue enableCompressingModifier;
         public final ForgeConfigSpec.BooleanValue enableEvolvedOrechid;
         public final ForgeConfigSpec.IntValue manaSieveCost;
         public final ForgeConfigSpec.IntValue evolvedOrechidCost;
@@ -284,16 +282,6 @@ public class ExCompressumConfig {
             builder.pop();
 
             builder.push("compat");
-
-            enableSmashingModifier = builder
-                    .comment("If set to true, adding a double compressed diamond hammer will add the Smashing II modifier to a Tinkers Construct tool, which allows smashing of compressed blocks.")
-                    .translation("excompressum.config.enableSmashingModifier")
-                    .define("enableSmashingModifier", true);
-
-            enableCompressingModifier = builder
-                    .comment("If set to true, adding an auto compressor will add the Compressing modifier to a Tinkers Construct tool, which will automatically compress hammered compressed blocks.")
-                    .translation("excompressum.config.enableCompressingModifier")
-                    .define("enableCompressingModifier", true);
 
             enableEvolvedOrechid = builder
                     .comment("Setting this to false will disable the Evolved Orechid.")
