@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.tile;
 
+import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.jei.LootTableUtils;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
@@ -7,6 +8,7 @@ import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.loot.LootContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -37,13 +39,14 @@ public class AutoCompressedHammerTileEntity extends AutoHammerTileEntity {
 
     @Override
     public boolean isRegistered(ItemStack itemStack) {
-        return ExRegistries.getCompressedHammerRegistry().isHammerable(itemStack);
+        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager();
+        return ExRegistries.getCompressedHammerRegistry().isHammerable(recipeManager, itemStack);
     }
 
     @Override
     public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, Random rand) {
         LootContext lootContext = LootTableUtils.buildLootContext(((ServerWorld) world), itemStack, rand);
-        return CompressedHammerRegistry.rollHammerRewards(lootContext, itemStack);
+        return CompressedHammerRegistry.rollHammerRewards(world, lootContext, itemStack);
     }
 
     @Override

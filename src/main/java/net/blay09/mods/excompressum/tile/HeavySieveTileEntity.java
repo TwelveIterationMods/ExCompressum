@@ -53,7 +53,7 @@ public class HeavySieveTileEntity extends TileEntity implements ITickableTileEnt
     }
 
     public boolean addSiftable(PlayerEntity player, ItemStack itemStack) {
-        if (!currentStack.isEmpty() || meshStack.isEmpty() || !ExRegistries.getHeavySieveRegistry().isSiftable(getBlockState(), itemStack, getSieveMesh())) {
+        if (!currentStack.isEmpty() || meshStack.isEmpty() || !ExRegistries.getHeavySieveRegistry().isSiftable(world, getBlockState(), itemStack, getSieveMesh())) {
             return false;
         }
         currentStack = player.abilities.isCreativeMode ? ItemHandlerHelper.copyStackWithSize(itemStack, 1) : itemStack.split(1);

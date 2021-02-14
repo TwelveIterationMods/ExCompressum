@@ -41,7 +41,7 @@ public class HammerLootModifier extends LootModifier {
         }
 
         ItemStack itemStack = StupidUtils.getItemStackFromState(state);
-        if (ExRegistries.getHammerRegistry().isHammerable(itemStack)) {
+        if (ExRegistries.getHammerRegistry().isHammerable(context.getWorld(), itemStack)) {
             synchronized (activeContexts) {
                 activeContexts.add(context);
             }

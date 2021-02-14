@@ -13,13 +13,14 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class UniversalHammerHead extends Item {
+public class UniversalHammerHeadItem extends Item {
 
     public static final String name = "universal_hammer_head";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
-    public UniversalHammerHead(Item.Properties properties) {
-        super(properties.maxStackSize(1));
+    public UniversalHammerHeadItem(Item.Properties properties) {
+        //noinspection ConstantConditions - TConstruct is not yet released and this modifier does not work yet - so hide it!
+        super(properties.maxStackSize(1).group(null));
     }
 
     @Override

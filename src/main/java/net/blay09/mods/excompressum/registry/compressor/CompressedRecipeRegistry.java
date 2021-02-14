@@ -23,19 +23,22 @@ public class CompressedRecipeRegistry implements IResourceManagerReloadListener 
     private final List<CompressedRecipe> recipes = new ArrayList<>();
 
     private final Map<ResourceLocation, CompressedRecipe> cachedResults = new HashMap<>();
-    private final DataPackRegistries dataPackRegistries;
+    private final RecipeManager recipeManager;
 
-    public CompressedRecipeRegistry(DataPackRegistries dataPackRegistries) {
-        this.dataPackRegistries = dataPackRegistries;
+    public CompressedRecipeRegistry(RecipeManager recipeManager) {
+        this.recipeManager = recipeManager;
     }
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
+        reloadRecipes();
+    }
+
+    public void reloadRecipes() {
         cachedResults.clear();
         recipesSmall.clear();
         recipes.clear();
 
-        final RecipeManager recipeManager = dataPackRegistries.getRecipeManager();
         for (IRecipe<?> recipe : recipeManager.getRecipesForType(IRecipeType.CRAFTING)) {
             NonNullList<Ingredient> ingredients = recipe.getIngredients();
             int count = ingredients.size();

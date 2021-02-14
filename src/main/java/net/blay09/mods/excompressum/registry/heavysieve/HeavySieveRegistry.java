@@ -6,12 +6,14 @@ import net.blay09.mods.excompressum.registry.*;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootTable;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -45,7 +47,7 @@ public class HeavySieveRegistry {
 
     public static List<ItemStack> rollSieveRewards(LootContext context, BlockState sieve, SieveMeshRegistryEntry mesh, ItemStack itemStack) {
         boolean waterlogged = sieve.hasProperty(BlockStateProperties.WATERLOGGED) && sieve.get(BlockStateProperties.WATERLOGGED);
-        RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
+        RecipeManager recipeManager = context.getWorld().getRecipeManager();
         List<HeavySieveRecipe> recipes = recipeManager.getRecipesForType(HeavySieveRecipe.TYPE);
         List<ItemStack> results = new ArrayList<>();
         for (HeavySieveRecipe recipe : recipes) {
@@ -76,9 +78,9 @@ public class HeavySieveRegistry {
         return generatedRecipe.getRolls() != null ? generatedRecipe.getRolls() : ExCompressumConfig.COMMON.heavySieveDefaultRolls.get();
     }
 
-    public boolean isSiftable(BlockState sieve, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
+    public boolean isSiftable(World world, BlockState sieve, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
         boolean waterlogged = sieve.hasProperty(BlockStateProperties.WATERLOGGED) && sieve.get(BlockStateProperties.WATERLOGGED);
-        RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
+        RecipeManager recipeManager = world.getRecipeManager();
         List<HeavySieveRecipe> recipes = recipeManager.getRecipesForType(HeavySieveRecipe.TYPE);
         for (HeavySieveRecipe recipe : recipes) {
             if (testRecipe(sieveMesh, itemStack, waterlogged, recipe)) {

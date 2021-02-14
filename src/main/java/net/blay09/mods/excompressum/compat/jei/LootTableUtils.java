@@ -39,20 +39,12 @@ public class LootTableUtils {
         return getLootTableEntries(lootTable).isEmpty();
     }
 
-    public static boolean isLootTableEmpty(ResourceLocation id, @Nullable LootTableProvider lootTableProvider) {
-        if (lootTableProvider == null) {
-            return true;
-        }
-
-        return getLootTableEntries(id, lootTableProvider).isEmpty();
-    }
-
     public static List<LootTableEntry> getLootTableEntries(ResourceLocation id, @Nullable ILootTableProvider lootTableProvider) {
         if (lootTableProvider == null) {
             return Collections.emptyList();
         }
 
-        LootTableManager lootTableManager = ServerLifecycleHooks.getCurrentServer().getLootTableManager();
+        LootTableManager lootTableManager = ExCompressum.proxy.getLootTableManager();
         LootTable lootTable = lootTableProvider.getLootTable(id, lootTableManager);
         return getLootTableEntries(lootTable);
     }

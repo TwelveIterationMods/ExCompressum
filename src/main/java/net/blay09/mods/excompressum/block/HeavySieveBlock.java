@@ -91,7 +91,7 @@ public class HeavySieveBlock extends ContainerBlock {
             } else {
                 if (!world.isRemote && player.isSneaking()) {
                     ItemStack meshStack = tileEntity.getMeshStack();
-                    if (!meshStack.isEmpty()) {
+                    if (!meshStack.isEmpty() && tileEntity.getCurrentStack().isEmpty()) {
                         if (player.inventory.addItemStackToInventory(meshStack)) {
                             world.addEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, meshStack));
                         }

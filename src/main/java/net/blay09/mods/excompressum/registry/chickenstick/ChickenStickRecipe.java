@@ -23,7 +23,7 @@ public class ChickenStickRecipe extends ExCompressumRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModRecipeTypes.hammerRecipe;
+        return ModRecipeTypes.chickenStickRecipe;
     }
 
     public Ingredient getInput() {

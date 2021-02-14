@@ -22,6 +22,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.loot.LootContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -387,11 +388,13 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     }
 
     public boolean isRegistered(ItemStack itemStack) {
-        return ExNihilo.isHammerable(itemStack) || ExRegistries.getHammerRegistry().isHammerable(itemStack);
+        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager();
+        return ExNihilo.isHammerable(itemStack) || ExRegistries.getHammerRegistry().isHammerable(recipeManager, itemStack);
     }
 
     public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, Random rand) {
-        if (ExRegistries.getHammerRegistry().isHammerable(itemStack)) {
+        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager();
+        if (ExRegistries.getHammerRegistry().isHammerable(recipeManager, itemStack)) {
             LootContext lootContext = LootTableUtils.buildLootContext(((ServerWorld) world), itemStack, rand);
             return HammerRegistry.rollHammerRewards(lootContext, itemStack);
         }

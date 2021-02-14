@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootTable;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.*;
 public class HammerRegistry {
 
     public static List<ItemStack> rollHammerRewards(LootContext context, ItemStack itemStack) {
-        RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
+        RecipeManager recipeManager = context.getWorld().getRecipeManager();
         List<HammerRecipe> recipes = recipeManager.getRecipesForType(HammerRecipe.TYPE);
         List<ItemStack> results = new ArrayList<>();
         for (HammerRecipe recipe : recipes) {
@@ -30,8 +31,11 @@ public class HammerRegistry {
         return recipe.getInput().test(itemStack);
     }
 
-    public boolean isHammerable(ItemStack itemStack) {
-        RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
+    public boolean isHammerable(World world, ItemStack itemStack) {
+        return isHammerable(world.getRecipeManager(), itemStack);
+    }
+
+    public boolean isHammerable(RecipeManager recipeManager, ItemStack itemStack) {
         List<HammerRecipe> recipes = recipeManager.getRecipesForType(HammerRecipe.TYPE);
         for (HammerRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {

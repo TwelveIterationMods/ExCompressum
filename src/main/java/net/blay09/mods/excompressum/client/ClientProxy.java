@@ -11,17 +11,23 @@ import net.minecraft.block.HorizontalBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.ParticleStatus;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.item.crafting.RecipeManager;
+import net.minecraft.loot.LootPredicateManager;
+import net.minecraft.loot.LootTableManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.Set;
 
 public class ClientProxy extends CommonProxy {
 
     private final Set<GameProfile> skinRequested = Sets.newHashSet();
+
+    private final LootTableManager lootTableManager = new LootTableManager(new LootPredicateManager());
 
     @Override
     public void preloadSkin(GameProfile customSkin) {
@@ -104,5 +110,19 @@ public class ClientProxy extends CommonProxy {
             double particleZ = 0.5f + particleOffset.getZ() + world.rand.nextFloat() * spread - min;
             Minecraft.getInstance().particles.addEffect(new SievingParticle((ClientWorld) world, pos, particleX, particleY, particleZ, particleScale, particleState));
         }
+    }
+
+    @Override
+    public LootTableManager getLootTableManager() {
+        if (ServerLifecycleHooks.getCurrentServer() != null) {
+            return ServerLifecycleHooks.getCurrentServer().getLootTableManager();
+        }
+
+        return lootTableManager;
+    }
+
+    @Override
+    public RecipeManager getRecipeManager() {
+        return Minecraft.getInstance().world.getRecipeManager();
     }
 }

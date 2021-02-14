@@ -10,11 +10,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTier;
 import net.minecraft.item.ToolItem;
+import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
@@ -44,12 +46,14 @@ public class ChickenStickItem extends ToolItem {
 
     @Override
     public boolean canHarvestBlock(BlockState state) {
-        return ExRegistries.getChickenStickRegistry().isHammerable(new ItemStack(state.getBlock()));
+        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager();
+        return ExRegistries.getChickenStickRegistry().isHammerable(recipeManager, new ItemStack(state.getBlock()));
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if ((ExRegistries.getChickenStickRegistry().isHammerable(new ItemStack(state.getBlock())))) {
+        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager();
+        if ((ExRegistries.getChickenStickRegistry().isHammerable(recipeManager, new ItemStack(state.getBlock())))) {
             if (isAngry(stack)) {
                 return efficiency * 1.5f;
             }

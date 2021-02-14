@@ -39,11 +39,11 @@ public class ChickenStickLootModifier extends LootModifier {
         }
 
         ItemStack itemStack = new ItemStack(state.getBlock());
-        if (ExRegistries.getChickenStickRegistry().isHammerable(itemStack)) {
+        if (ExRegistries.getChickenStickRegistry().isHammerable(context.getWorld(), itemStack)) {
             synchronized (activeContexts) {
                 activeContexts.add(context);
             }
-            List<ItemStack> loot = ChickenStickRegistry.rollHammerRewards(context, itemStack);
+            List<ItemStack> loot = ChickenStickRegistry.rollHammerRewards(context.getWorld(), context, itemStack);
             synchronized (activeContexts) {
                 activeContexts.remove(context);
             }

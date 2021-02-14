@@ -23,7 +23,7 @@ public class AutoHeavySieveTileEntity extends AutoSieveTileEntity {
 
     @Override
     public boolean isSiftableWithMesh(ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
-        return ExRegistries.getHeavySieveRegistry().isSiftable(getBlockState(), itemStack, sieveMesh);
+        return ExRegistries.getHeavySieveRegistry().isSiftable(world, getBlockState(), itemStack, sieveMesh);
     }
 
     @Override

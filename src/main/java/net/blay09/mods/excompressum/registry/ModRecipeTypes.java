@@ -24,8 +24,8 @@ public class ModRecipeTypes {
     public static IRecipeSerializer<GeneratedHeavySieveRecipe> generatedHeavySieveRecipe;
     public static IRecipeSerializer<CompressedHammerRecipe> compressedHammerRecipe;
     public static IRecipeSerializer<HammerRecipe> hammerRecipe;
-    public static IRecipeSerializer<ChickenStickRecipe> chickenStick;
-    public static IRecipeSerializer<WoodenCrucibleRecipe> woodenCrucible;
+    public static IRecipeSerializer<ChickenStickRecipe> chickenStickRecipe;
+    public static IRecipeSerializer<WoodenCrucibleRecipe> woodenCrucibleRecipe;
 
     @SubscribeEvent
     public static void registerRecipeSerializers(RegistryEvent.Register<IRecipeSerializer<?>> event) {
@@ -34,8 +34,8 @@ public class ModRecipeTypes {
                 generatedHeavySieveRecipe = new GeneratedHeavySieveRecipeSerializer(),
                 compressedHammerRecipe = new CompresedHammerRecipeSerializer(),
                 hammerRecipe = new HammerRecipeSerializer(),
-                chickenStick = new ChickenStickRecipeSerializer(),
-                woodenCrucible = new WoodenCrucibleRecipeSerializer()
+                chickenStickRecipe = new ChickenStickRecipeSerializer(),
+                woodenCrucibleRecipe = new WoodenCrucibleRecipeSerializer()
         );
     }
 }

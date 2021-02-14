@@ -4,20 +4,21 @@ import com.google.gson.*;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.LootTableManager;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import java.util.Objects;
+
 public abstract class ExCompressumRecipeSerializer<T extends IRecipe<?>> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
 
-    private static final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LootTable.class, new LootTable.Serializer())
-            .create();
+    private static final Gson gson = LootSerializers.func_237388_c_().create();
 
     @Override
     public final T read(ResourceLocation id, JsonObject json) {
@@ -41,8 +42,8 @@ public abstract class ExCompressumRecipeSerializer<T extends IRecipe<?>> extends
 
     public LootTableProvider readLootTableProvider(PacketBuffer buffer) {
         String jsonString = buffer.readString();
-        LootTable lootTable = gson.fromJson(jsonString, LootTable.class);
-        return new LootTableProvider(lootTable);
+        JsonObject jsonElement = gson.fromJson(jsonString, JsonObject.class);
+        return new LootTableProvider(jsonElement);
     }
 
     public void writeLootTable(PacketBuffer buffer, ResourceLocation recipeId, LootTableProvider lootTableProvider) {

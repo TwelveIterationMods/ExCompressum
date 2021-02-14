@@ -53,7 +53,7 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe {
 
     @Override
     public IRecipeSerializer<?> getSerializer() {
-        return ModRecipeTypes.woodenCrucible;
+        return ModRecipeTypes.woodenCrucibleRecipe;
     }
 
     public boolean matchesFluid(FluidStack fluid) {

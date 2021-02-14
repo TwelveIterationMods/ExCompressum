@@ -100,7 +100,7 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTil
         }
 
         // Otherwise, try to add it as a recipe
-        WoodenCrucibleRecipe recipe = ExRegistries.getWoodenCrucibleRegistry().getRecipe(itemStack);
+        WoodenCrucibleRecipe recipe = ExRegistries.getWoodenCrucibleRegistry().getRecipe(world, itemStack);
         if (recipe != null) {
             if (fluidTank.getFluid().isEmpty() || fluidTank.getFluidAmount() == 0 || recipe.matchesFluid(fluidTank.getFluid())) {
                 int capacityLeft = fluidTank.getCapacity() - fluidTank.getFluidAmount() - solidVolume;

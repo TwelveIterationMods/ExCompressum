@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootTable;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
@@ -11,8 +12,8 @@ import java.util.List;
 
 public class ChickenStickRegistry {
 
-    public static List<ItemStack> rollHammerRewards(LootContext context, ItemStack itemStack) {
-        RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
+    public static List<ItemStack> rollHammerRewards(World world, LootContext context, ItemStack itemStack) {
+        RecipeManager recipeManager = world.getRecipeManager();
         List<ChickenStickRecipe> recipes = recipeManager.getRecipesForType(ChickenStickRecipe.TYPE);
         List<ItemStack> results = new ArrayList<>();
         for (ChickenStickRecipe recipe : recipes) {
@@ -31,8 +32,11 @@ public class ChickenStickRegistry {
         return recipe.getInput().test(itemStack);
     }
 
-    public boolean isHammerable(ItemStack itemStack) {
-        RecipeManager recipeManager = ServerLifecycleHooks.getCurrentServer().getRecipeManager();
+    public boolean isHammerable(World world, ItemStack itemStack) {
+        return isHammerable(world.getRecipeManager(), itemStack);
+    }
+
+    public boolean isHammerable(RecipeManager recipeManager, ItemStack itemStack) {
         List<ChickenStickRecipe> recipes = recipeManager.getRecipesForType(ChickenStickRecipe.TYPE);
         for (ChickenStickRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {

@@ -43,7 +43,7 @@ public class CompressedHammerLootModifier extends LootModifier {
             activeContexts.add(context);
         }
         ItemStack itemStack = StupidUtils.getItemStackFromState(state);
-        List<ItemStack> loot = CompressedHammerRegistry.rollHammerRewards(context, itemStack);
+        List<ItemStack> loot = CompressedHammerRegistry.rollHammerRewards(context.getWorld(), context, itemStack);
         synchronized (activeContexts) {
             activeContexts.remove(context);
         }
