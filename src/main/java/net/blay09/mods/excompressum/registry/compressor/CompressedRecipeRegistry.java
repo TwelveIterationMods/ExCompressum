@@ -25,13 +25,15 @@ public class CompressedRecipeRegistry implements IResourceManagerReloadListener 
     private final Map<ResourceLocation, CompressedRecipe> cachedResults = new HashMap<>();
     private final RecipeManager recipeManager;
 
+    private boolean recipesLoaded;
+
     public CompressedRecipeRegistry(RecipeManager recipeManager) {
         this.recipeManager = recipeManager;
     }
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        reloadRecipes();
+        recipesLoaded = false;
     }
 
     public void reloadRecipes() {
@@ -70,10 +72,16 @@ public class CompressedRecipeRegistry implements IResourceManagerReloadListener 
                 }
             }
         }
+
+        recipesLoaded = true;
     }
 
     @Nullable
     public CompressedRecipe getRecipe(ItemStack itemStack) {
+        if (!recipesLoaded) {
+            reloadRecipes();
+        }
+
         if (itemStack.getTag() != null) {
             return null;
         }

@@ -157,6 +157,9 @@ dependencies {
     compile fg.deobf("curse.maven:patchouli-306770:3086492")
     compile fg.deobf("curse.maven:crafttweaker-239197:3185109")
 
+    /*compile fg.deobf("curse.maven:evilcraft-74610:3206360")
+    compile fg.deobf("curse.maven:cyclops-core-232758:3207425")*/
+
     /*deobfCompile "tinkers-construct:TConstruct:1.12.2:2.12.0.135"
     deobfCompile "mantle:Mantle:1.12:1.3.3.49"*/
 
