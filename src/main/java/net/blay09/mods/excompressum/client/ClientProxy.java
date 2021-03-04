@@ -21,6 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 public class ClientProxy extends CommonProxy {
@@ -122,7 +123,13 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public RecipeManager getRecipeManager() {
-        return Minecraft.getInstance().world.getRecipeManager();
+    public RecipeManager getRecipeManager(@Nullable World world) {
+        if (world == null) {
+            world = Minecraft.getInstance().world;
+        }
+        if (world == null) {
+            return new RecipeManager();
+        }
+        return world.getRecipeManager();
     }
 }

@@ -388,12 +388,12 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     }
 
     public boolean isRegistered(ItemStack itemStack) {
-        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager();
+        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager(world);
         return ExNihilo.isHammerable(itemStack) || ExRegistries.getHammerRegistry().isHammerable(recipeManager, itemStack);
     }
 
     public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, Random rand) {
-        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager();
+        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager(world);
         if (ExRegistries.getHammerRegistry().isHammerable(recipeManager, itemStack)) {
             LootContext lootContext = LootTableUtils.buildLootContext(((ServerWorld) world), itemStack, rand);
             return HammerRegistry.rollHammerRewards(lootContext, itemStack);
