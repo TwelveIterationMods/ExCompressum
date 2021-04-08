@@ -164,10 +164,12 @@ dependencies {
     deobfCompile "mantle:Mantle:1.12:1.3.3.49"*/
 
     def obfModsDir = new File("run/obfmods")
-    obfModsDir.eachFile { file ->
-        def parts = file.name.split('-', 2)
-        def dep = "ignored:" + parts[0] + ":" + parts[1].replace(".jar", "");
-        runtimeOnly fg.deobf(dep)
+    if(obfModsDir.exists()) {
+        obfModsDir.eachFile { file ->
+            def parts = file.name.split('-', 2)
+            def dep = "ignored:" + parts[0] + ":" + parts[1].replace(".jar", "");
+            runtimeOnly fg.deobf(dep)
+        }
     }
 }
 
