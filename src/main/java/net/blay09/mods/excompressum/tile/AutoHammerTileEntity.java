@@ -222,9 +222,8 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
         for (int i = 0; i < outputSlots.getSlots(); i++) {
             ItemStack slotStack = outputSlots.getStackInSlot(i);
             if (slotStack.isEmpty()) {
-                if (firstEmptySlot == -1) {
-                    firstEmptySlot = i;
-                }
+                firstEmptySlot = i;
+                break;
             } else {
                 if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && slotStack.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(slotStack, itemStack)) {
                     slotStack.grow(itemStack.getCount());
