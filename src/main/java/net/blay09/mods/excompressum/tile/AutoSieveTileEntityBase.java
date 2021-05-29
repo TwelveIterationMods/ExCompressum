@@ -22,6 +22,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.item.Food;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -470,5 +471,15 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
 
     public SieveAnimationType getAnimationType() {
         return SieveAnimationType.DEFAULT;
+    }
+
+    public void applyFoodBoost(Food food) {
+        int foodBoostTicks = (int) food.getSaturation() * 640;
+        // If this food has no saturation (e.g. culinary construct has neither healing nor saturation in their Food object), just default to 1 saturation
+        if (foodBoostTicks <= 0) {
+            foodBoostTicks = 640;
+        }
+        float foodBoost = Math.max(1f, food.getHealing() * 0.75f);
+        setFoodBoost(foodBoostTicks, foodBoost);
     }
 }

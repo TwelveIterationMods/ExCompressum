@@ -156,6 +156,7 @@ dependencies {
     compile fg.deobf("curse.maven:curios-309927:3122651")
     compile fg.deobf("curse.maven:patchouli-306770:3086492")
     compile fg.deobf("curse.maven:crafttweaker-239197:3185109")
+    runtimeOnly fg.deobf("curse.maven:culinary-construct-296676:3217589")
 
     /*compile fg.deobf("curse.maven:evilcraft-74610:3206360")
     compile fg.deobf("curse.maven:cyclops-core-232758:3207425")*/

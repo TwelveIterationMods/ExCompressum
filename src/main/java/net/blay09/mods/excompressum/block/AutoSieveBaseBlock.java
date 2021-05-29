@@ -78,7 +78,7 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
                     if (heldItem.isFood()) {
                         final Food food = Objects.requireNonNull(heldItem.getFood());
                         if (tileEntity.getFoodBoost() <= 1f) {
-                            tileEntity.setFoodBoost((int) (food.getSaturation() * 640), Math.max(1f, food.getHealing() * 0.75f));
+                            tileEntity.applyFoodBoost(food);
                             if (!player.abilities.isCreativeMode) {
                                 ItemStack returnStack = heldItem.onItemUseFinish(heldItemStack, world, FakePlayerFactory.getMinecraft((ServerWorld) world));
                                 if (returnStack != heldItemStack) {
