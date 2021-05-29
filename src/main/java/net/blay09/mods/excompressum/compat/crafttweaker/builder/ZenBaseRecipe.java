@@ -7,21 +7,26 @@ import net.minecraft.loot.*;
 import net.minecraft.util.ResourceLocation;
 import org.openzen.zencode.java.ZenCodeType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ZenRegister
 @ZenCodeType.Name("mods.exnihilosequentia.ZenSieveRecipe")
 public abstract class ZenBaseRecipe<T> {
 
-    private LootPool.Builder lootPoolBuilder;
+    private final List<LootPool.Builder> lootPoolBuilders = new ArrayList<>();
     private ResourceLocation lootTableLocation;
 
     public final LootTableProvider getLootTableProvider() {
-        if (lootTableLocation != null && lootPoolBuilder != null) {
+        if (lootTableLocation != null && !lootPoolBuilders.isEmpty()) {
             throw new RuntimeException("Can not use 'useLootTable()' and 'addDrop()' simultaneously");
         }
 
-        if (lootPoolBuilder != null) {
+        if (!lootPoolBuilders.isEmpty()) {
             LootTable.Builder lootTableBuilder = new LootTable.Builder();
-            lootTableBuilder.addLootPool(lootPoolBuilder);
+            for (LootPool.Builder lootPoolBuilder : lootPoolBuilders) {
+                lootTableBuilder.addLootPool(lootPoolBuilder);
+            }
             return new LootTableProvider(lootTableBuilder.build());
         } else if (lootTableLocation != null) {
             return new LootTableProvider(lootTableLocation);
@@ -30,12 +35,10 @@ public abstract class ZenBaseRecipe<T> {
         }
     }
 
-    protected final LootPool.Builder getLootPoolBuilder() {
-        if (lootPoolBuilder == null) {
-            lootPoolBuilder = new LootPool.Builder();
-        }
-
-        return lootPoolBuilder;
+    protected final LootPool.Builder addLootPoolBuilder() {
+        LootPool.Builder builder = new LootPool.Builder();
+        lootPoolBuilders.add(builder);
+        return builder;
     }
 
     @ZenCodeType.Method

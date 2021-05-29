@@ -7,7 +7,6 @@ import com.blamejared.crafttweaker.api.item.IItemStack;
 import net.blay09.mods.excompressum.compat.jei.LootTableUtils;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRecipe;
-import net.blay09.mods.excompressum.registry.hammer.HammerRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import org.openzen.zencode.java.ZenCodeType;
@@ -29,14 +28,14 @@ public class ZenCompressedHammerRecipe extends ZenBaseRecipe<ZenCompressedHammer
 
     @ZenCodeType.Method
     public ZenCompressedHammerRecipe addDrop(IItemStack drop) {
-        getLootPoolBuilder().addEntry(LootTableUtils.buildLootEntry(drop.getInternal(), 1f));
+        addLootPoolBuilder().addEntry(LootTableUtils.buildLootEntry(drop.getInternal(), 1f));
         recipe.setLootTable(getLootTableProvider());
         return this;
     }
 
     @ZenCodeType.Method
     public ZenCompressedHammerRecipe addDrop(IItemStack drop, float chance) {
-        getLootPoolBuilder().addEntry(LootTableUtils.buildLootEntry(drop.getInternal(), chance));
+        addLootPoolBuilder().addEntry(LootTableUtils.buildLootEntry(drop.getInternal(), chance));
         recipe.setLootTable(getLootTableProvider());
         return this;
     }

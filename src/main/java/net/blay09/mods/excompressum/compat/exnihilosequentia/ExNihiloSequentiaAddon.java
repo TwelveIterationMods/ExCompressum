@@ -246,18 +246,18 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
         boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.get(BlockStateProperties.WATERLOGGED);
         LootTable.Builder tableBuilder = LootTable.builder();
-        LootPool.Builder poolBuilder = LootPool.builder();
-        poolBuilder.rolls(ConstantRange.of(times));
         List<SieveRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(source, ((EnumMesh) mesh.getBackingMesh()), waterlogged);
         for (SieveRecipe recipe : recipes) {
             ItemStack itemStack = recipe.getDrop();
             for (MeshWithChance roll : recipe.getRolls()) {
+                LootPool.Builder poolBuilder = LootPool.builder();
+                poolBuilder.rolls(ConstantRange.of(times));
                 StandaloneLootEntry.Builder<?> entryBuilder = buildLootEntry(itemStack);
                 entryBuilder.acceptCondition(RandomChance.builder(roll.getChance()));
                 poolBuilder.addEntry(entryBuilder);
+                tableBuilder.addLootPool(poolBuilder);
             }
         }
-        tableBuilder.addLootPool(poolBuilder);
         return tableBuilder.build();
     }
 
@@ -301,14 +301,14 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         List<IHammerRecipe> result = new ArrayList<>();
         for (IntList packedStacks : groupedRecipes.keySet()) {
             LootTable.Builder tableBuilder = LootTable.builder();
-            LootPool.Builder poolBuilder = LootPool.builder();
             for (HammerRecipe hammerRecipe : groupedRecipes.get(packedStacks)) {
                 for (ItemStackWithChance itemStackWithChance : hammerRecipe.getOutput()) {
+                    LootPool.Builder poolBuilder = LootPool.builder();
                     StandaloneLootEntry.Builder<?> entryBuilder = buildLootEntry(itemStackWithChance);
                     poolBuilder.addEntry(entryBuilder);
+                    tableBuilder.addLootPool(poolBuilder);
                 }
             }
-            tableBuilder.addLootPool(poolBuilder);
 
             HammerRecipe firstRecipe = groupedRecipes.get(packedStacks).get(0);
             Ingredient input = firstRecipe.getInput();

@@ -32,14 +32,14 @@ public class ZenHeavySieveRecipe extends ZenBaseRecipe<ZenHeavySieveRecipe> {
 
     @ZenCodeType.Method
     public ZenHeavySieveRecipe addDrop(IItemStack drop) {
-        getLootPoolBuilder().addEntry(LootTableUtils.buildLootEntry(drop.getInternal(), 1f));
+        addLootPoolBuilder().addEntry(LootTableUtils.buildLootEntry(drop.getInternal(), 1f));
         recipe.setLootTable(getLootTableProvider());
         return this;
     }
 
     @ZenCodeType.Method
     public ZenHeavySieveRecipe addDrop(IItemStack drop, float chance) {
-        getLootPoolBuilder().addEntry(LootTableUtils.buildLootEntry(drop.getInternal(), chance));
+        addLootPoolBuilder().addEntry(LootTableUtils.buildLootEntry(drop.getInternal(), chance));
         recipe.setLootTable(getLootTableProvider());
         return this;
     }
