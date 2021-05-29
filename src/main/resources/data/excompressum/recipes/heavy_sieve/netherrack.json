@@ -3,6 +3,5 @@
   "input": {
     "item":"excompressum:compressed_netherrack"
   },
-  "source": "minecraft:netherrack",
-  "rolls": 9
+  "source": "minecraft:netherrack"
 }

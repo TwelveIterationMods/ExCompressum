@@ -3,6 +3,5 @@
   "input": {
     "item":"excompressum:compressed_gravel"
   },
-  "source": "minecraft:gravel",
-  "rolls": 9
+  "source": "minecraft:gravel"
 }

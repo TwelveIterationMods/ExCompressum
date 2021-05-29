@@ -3,6 +3,5 @@
   "input": {
     "item":"excompressum:compressed_end_stone"
   },
-  "source": "minecraft:end_stone",
-  "rolls": 9
+  "source": "minecraft:end_stone"
 }

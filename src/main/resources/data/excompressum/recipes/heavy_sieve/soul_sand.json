@@ -3,6 +3,5 @@
   "input": {
     "item":"excompressum:compressed_soul_sand"
   },
-  "source": "minecraft:soul_sand",
-  "rolls": 9
+  "source": "minecraft:soul_sand"
 }

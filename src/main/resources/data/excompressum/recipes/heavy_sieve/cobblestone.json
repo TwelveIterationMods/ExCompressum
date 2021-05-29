@@ -3,6 +3,5 @@
   "input": {
     "item":"excompressum:compressed_cobblestone"
   },
-  "source": "minecraft:cobblestone",
-  "rolls": 9
+  "source": "minecraft:cobblestone"
 }
