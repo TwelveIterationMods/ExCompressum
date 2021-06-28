@@ -38,7 +38,6 @@ import novamachina.exnihilosequentia.api.crafting.sieve.MeshWithChance;
 import novamachina.exnihilosequentia.api.crafting.sieve.SieveRecipe;
 import novamachina.exnihilosequentia.common.block.InfestedLeavesBlock;
 import novamachina.exnihilosequentia.common.item.mesh.EnumMesh;
-import novamachina.exnihilosequentia.common.item.resources.EnumResource;
 import novamachina.exnihilosequentia.common.utility.Config;
 
 import javax.annotation.Nullable;
@@ -205,7 +204,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             List<ItemStack> list = new ArrayList<>();
             list.add(new ItemStack(Items.STRING, rand.nextInt(Config.getMaxBonusStringCount()) + Config.getMinStringCount()));
             if (rand.nextDouble() <= 0.8) {
-                list.add(new ItemStack(EnumResource.SILKWORM.getRegistryObject().get()));
+                list.add(getNihiloItem(NihiloItems.SILK_WORM).copy());
             }
             return list;
         } else if (!BlockTags.LEAVES.contains(state.getBlock())) {
