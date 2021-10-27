@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="[37,)"
+license="GPL-3.0-only"
+issueTrackerURL="https://github.com/ModdingForBlockheads/ExCompressum/issues"
+
+[[mods]]
+modId="excompressum"
+version="${file.jarVersion}"
+displayName="Ex Compressum"
+displayURL="https://blay09.net/mods/excompressum"
+logoFile="excompressum-icon.png"
+credits="BlayTheNinth"
+authors="BlayTheNinth"
+description='''
+Ex Nihilo Addon. Attempts to reduce grind by adding pre-automation tools like compressed hammers.
+'''
+
+[[dependencies.excompressum]]
+    modId="forge"
+    mandatory=true
+    versionRange="[37,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.excompressum]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.17.1,1.18)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.excompressum]]
+    modId="balm"
+    mandatory=true
+    versionRange="[1.7.0,)"
+    ordering="NONE"
+    side="BOTH"

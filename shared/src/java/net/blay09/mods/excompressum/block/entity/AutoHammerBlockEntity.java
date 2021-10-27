@@ -1,0 +1,463 @@
+package net.blay09.mods.excompressum.block.entity;
+
+import net.blay09.mods.balm.api.container.BalmContainerProvider;
+import net.blay09.mods.balm.api.container.DefaultContainer;
+import net.blay09.mods.balm.api.container.DelegateContainer;
+import net.blay09.mods.balm.api.container.SubContainer;
+import net.blay09.mods.balm.api.energy.BalmEnergyStorageProvider;
+import net.blay09.mods.balm.api.energy.EnergyStorage;
+import net.blay09.mods.balm.api.menu.BalmMenuProvider;
+import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.api.ExNihiloProvider;
+import net.blay09.mods.excompressum.block.AutoHammerBlock;
+import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.compat.jei.LootTableUtils;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.menu.AutoHammerMenu;
+import net.blay09.mods.excompressum.registry.ExNihilo;
+import net.blay09.mods.excompressum.registry.ExRegistries;
+import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;
+import net.blay09.mods.excompressum.utils.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.Random;
+
+public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements BalmMenuProvider, BalmContainerProvider, BalmEnergyStorageProvider {
+
+    private static final int UPDATE_INTERVAL = 20;
+
+    private final EnergyStorage energyStorage = new EnergyStorage(32000) {
+        @Override
+        public int fill(int maxReceive, boolean simulate) {
+            if (!simulate) {
+                isDirty = true;
+            }
+            return super.fill(maxReceive, simulate);
+        }
+    };
+
+
+    private final DefaultContainer backingContainer = new DefaultContainer(23) {
+        @Override
+        public boolean canPlaceItem(int slot, ItemStack itemStack) {
+            if (slot == 0) {
+                return isRegistered(itemStack);
+            } else if (slot == 21 || slot == 22) {
+                return isHammerUpgrade(itemStack);
+            }
+            return true;
+        }
+
+        @Override
+        public void slotChanged(int slot) {
+            super.slotChanged(slot);
+            // Make sure the hammer slots are always synced.
+            if (hammerSlots.containsSlot(slot)) {
+                isDirty = true;
+            }
+        }
+    };
+    private final SubContainer inputSlots = new SubContainer(backingContainer, 0, 1);
+    private final SubContainer outputSlots = new SubContainer(backingContainer, 1, 21);
+    private final SubContainer hammerSlots = new SubContainer(backingContainer, 21, 23);
+    private final DelegateContainer container = new DelegateContainer(backingContainer) {
+        @Override
+        public ItemStack removeItem(int slot, int count) {
+            if (!outputSlots.containsSlot(slot)) {
+                return ItemStack.EMPTY;
+            }
+
+            return super.removeItem(slot, count);
+        }
+
+        @Override
+        public ItemStack removeItemNoUpdate(int slot) {
+            if (!outputSlots.containsSlot(slot)) {
+                return ItemStack.EMPTY;
+            }
+
+            return super.removeItemNoUpdate(slot);
+        }
+
+        @Override
+        public boolean canPlaceItem(int slot, ItemStack itemStack) {
+            return super.canPlaceItem(slot, itemStack) && inputSlots.containsSlot(slot) || hammerSlots.containsSlot(slot);
+        }
+    };
+
+    private ItemStack currentStack = ItemStack.EMPTY;
+    private int cooldown;
+
+    private int ticksSinceUpdate;
+    private boolean isDirty;
+    private float progress;
+
+    private ItemStack finishedStack = ItemStack.EMPTY;
+    public float hammerAngle;
+
+    private boolean isDisabledByRedstone;
+
+    public AutoHammerBlockEntity(BlockPos pos, BlockState state) {
+        this(ModBlockEntities.autoHammer.get(), pos, state);
+    }
+
+    public AutoHammerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
+
+    public void tick() { // TODO port
+        if (!level.isClientSide) {
+            if (cooldown > 0) {
+                cooldown--;
+            }
+            int effectiveEnergy = getEffectiveEnergy();
+            if (!isDisabledByRedstone() && getEnergyStored() >= effectiveEnergy) {
+                if (currentStack.isEmpty() && cooldown <= 0) {
+                    ItemStack inputStack = inputSlots.getItem(0);
+                    if (!inputStack.isEmpty() && isRegistered(inputStack)) {
+                        boolean foundSpace = false;
+                        for (int i = 0; i < outputSlots.getContainerSize(); i++) {
+                            if (outputSlots.getItem(i).isEmpty()) {
+                                foundSpace = true;
+                            }
+                        }
+                        if (!foundSpace) {
+                            return;
+                        }
+                        currentStack = inputStack.split(1);
+                        if (inputStack.isEmpty()) {
+                            inputSlots.setItem(0, ItemStack.EMPTY);
+                        }
+                        energyStorage.drain(effectiveEnergy, false);
+                        ticksSinceUpdate = UPDATE_INTERVAL;
+                        progress = 0f;
+                    }
+                } else {
+                    energyStorage.drain(effectiveEnergy, false);
+                    progress += getEffectiveSpeed();
+                    isDirty = true;
+                    if (progress >= 1) {
+                        if (!level.isClientSide) {
+                            if (level.random.nextFloat() <= ExCompressumConfig.getActive().automation.autoHammerDecay) {
+                                ItemStack firstHammer = hammerSlots.getItem(0);
+                                if (!firstHammer.isEmpty()) {
+                                    if (firstHammer.hurt(1, level.random, null)) {
+                                        hammerSlots.setItem(0, ItemStack.EMPTY);
+                                    }
+                                }
+                                ItemStack secondHammer = hammerSlots.getItem(1);
+                                if (!secondHammer.isEmpty()) {
+                                    if (secondHammer.hurt(1, level.random, null)) {
+                                        hammerSlots.setItem(1, ItemStack.EMPTY);
+                                    }
+                                }
+                            }
+                            Collection<ItemStack> rewards = rollHammerRewards(currentStack, getEffectiveTool(), level.random);
+                            for (ItemStack itemStack : rewards) {
+                                if (!addItemToOutput(itemStack)) {
+                                    ItemEntity entityItem = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, itemStack);
+                                    double motion = 0.05;
+                                    entityItem.setDeltaMovement(level.random.nextGaussian() * motion, 0.2, level.random.nextGaussian() * motion);
+                                    level.addFreshEntity(entityItem);
+                                }
+                            }
+                        }
+                        finishedStack = currentStack;
+                        progress = 0f;
+                        ticksSinceUpdate = UPDATE_INTERVAL;
+                        cooldown = 2;
+                        currentStack = ItemStack.EMPTY;
+                    }
+                }
+            }
+
+            // Sync to clients
+            ticksSinceUpdate++;
+            if (ticksSinceUpdate > UPDATE_INTERVAL) {
+                if (isDirty) {
+                    balmSync();
+                    finishedStack = ItemStack.EMPTY;
+                    isDirty = false;
+                }
+                ticksSinceUpdate = 0;
+            }
+        }
+
+        if (level.isClientSide && !finishedStack.isEmpty()) {
+            BlockState state = StupidUtils.getStateFromItemStack(finishedStack);
+            if (state != null) {
+                ExCompressum.proxy.spawnCrushParticles(level, worldPosition, state);
+            }
+            finishedStack = ItemStack.EMPTY;
+        }
+    }
+
+    private ItemStack getEffectiveTool() {
+        return Math.random() < 0.5 ? hammerSlots.getItem(0) : hammerSlots.getItem(1);
+    }
+
+    public int getEnergyStored() {
+        return energyStorage.getEnergy();
+    }
+
+    public int getMaxEnergyStored() {
+        return energyStorage.getCapacity();
+    }
+
+    private boolean addItemToOutput(ItemStack itemStack) {
+        int firstEmptySlot = -1;
+        for (int i = 0; i < outputSlots.getContainerSize(); i++) {
+            ItemStack slotStack = outputSlots.getItem(i);
+            if (slotStack.isEmpty()) {
+                if (firstEmptySlot == -1) {
+                    firstEmptySlot = i;
+                }
+            } else {
+                if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && slotStack.sameItem(itemStack) && ItemStack.isSameItemSameTags(slotStack, itemStack)) {
+                    slotStack.grow(itemStack.getCount());
+                    return true;
+                }
+            }
+        }
+        if (firstEmptySlot != -1) {
+            outputSlots.setItem(firstEmptySlot, itemStack);
+            return true;
+        }
+        return false;
+    }
+
+    public int getEffectiveEnergy() {
+        return ExCompressumConfig.getActive().automation.autoHammerEnergy;
+    }
+
+    public float getSpeedMultiplier() {
+        final float HAMMER_BOOST = 0.5f;
+        final float EFFICIENCY_BOOST = 0.5f;
+        float boost = 1f;
+        ItemStack firstHammer = hammerSlots.getItem(0);
+        if (!firstHammer.isEmpty() && isHammerUpgrade(firstHammer)) {
+            boost += HAMMER_BOOST;
+            boost += EFFICIENCY_BOOST * EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY, firstHammer);
+        }
+        ItemStack secondHammer = hammerSlots.getItem(1);
+        if (!secondHammer.isEmpty() && isHammerUpgrade(secondHammer)) {
+            boost += HAMMER_BOOST;
+            boost += EFFICIENCY_BOOST * EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY, secondHammer);
+        }
+        return boost;
+    }
+
+    public float getEffectiveSpeed() {
+        return (float) (ExCompressumConfig.getActive().automation.autoHammerSpeed * getSpeedMultiplier());
+    }
+
+    public float getEffectiveLuck() {
+        float luck = 0f;
+        ItemStack firstHammer = hammerSlots.getItem(0);
+        if (!firstHammer.isEmpty() && isHammerUpgrade(firstHammer)) {
+            luck += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, firstHammer);
+        }
+        ItemStack secondHammer = hammerSlots.getItem(1);
+        if (!secondHammer.isEmpty() && isHammerUpgrade(secondHammer)) {
+            luck += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, secondHammer);
+        }
+        return luck;
+    }
+
+    @Override
+    public void load(CompoundTag tag) {
+        super.load(tag);
+
+        currentStack = ItemStack.of(tag.getCompound("CurrentStack"));
+        progress = tag.getFloat("Progress");
+        if (tag.contains("EnergyStorage")) {
+            energyStorage.deserialize(tag.get("EnergyStorage"));
+        }
+
+        backingContainer.deserialize(tag.getCompound("ItemHandler"));
+
+        isDisabledByRedstone = tag.getBoolean("IsDisabledByRedstone");
+        if (tag.contains("FinishedStack")) {
+            finishedStack = ItemStack.of(tag.getCompound("FinishedStack"));
+        }
+    }
+
+    @Override
+    public void balmFromClientTag(CompoundTag tag) {
+        load(tag);
+
+        hammerSlots.setItem(0, ItemStack.of(tag.getCompound("FirstHammer")));
+        hammerSlots.setItem(1, ItemStack.of(tag.getCompound("SecondHammer")));
+    }
+
+    @Override
+    public CompoundTag save(CompoundTag tag) {
+        tag.put("EnergyStorage", energyStorage.serialize());
+
+        tag.put("CurrentStack", currentStack.save(new CompoundTag()));
+        tag.putFloat("Progress", progress);
+        tag.put("ItemHandler", backingContainer.serialize());
+
+        tag.putBoolean("IsDisabledByRedstone", isDisabledByRedstone);
+
+        if (!finishedStack.isEmpty()) {
+            tag.put("FinishedStack", finishedStack.save(new CompoundTag()));
+        }
+
+        return super.save(tag);
+    }
+
+    @Override
+    public CompoundTag balmToClientTag(CompoundTag tag) {
+        ItemStack firstHammer = hammerSlots.getItem(0);
+        tag.put("FirstHammer", firstHammer.save(new CompoundTag()));
+        ItemStack secondHammer = hammerSlots.getItem(1);
+        tag.put("SecondHammer", secondHammer.save(new CompoundTag()));
+        return save(tag);
+    }
+
+    public boolean isProcessing() {
+        return progress > 0f;
+    }
+
+    public float getProgress() {
+        return progress;
+    }
+
+    public float getEnergyPercentage() {
+        return (float) getEnergyStored() / (float) getMaxEnergyStored();
+    }
+
+    public ItemStack getCurrentStack() {
+        return currentStack;
+    }
+
+    @Nullable
+    public BlockState getCurrentBlock() {
+        return StupidUtils.getStateFromItemStack(currentStack);
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
+    }
+
+    public DefaultContainer getBackingContainer() {
+        return backingContainer;
+    }
+
+    @Override
+    public Container getContainer() {
+        return container;
+    }
+
+    public ItemStack getUpgradeStack(int i) {
+        return hammerSlots.getItem(i);
+    }
+
+    public boolean isHammerUpgrade(ItemStack itemStack) {
+        if (itemStack.getItem() == Compat.TCONSTRUCT_HAMMER) {
+            CompoundTag tagCompound = itemStack.getTag();
+            if (tagCompound != null) {
+                ListTag traits = tagCompound.getList("Traits", Constants.NBT.TAG_STRING);
+                for (Tag tag : traits) {
+                    if (tag.getAsString().equalsIgnoreCase(Compat.TCONSTRUCT_TRAIT_SMASHING)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return ExNihilo.isNihiloItem(itemStack, ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
+    }
+
+    public boolean isRegistered(ItemStack itemStack) {
+        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager(level);
+        return ExNihilo.isHammerable(itemStack) || ExRegistries.getHammerRegistry().isHammerable(recipeManager, itemStack);
+    }
+
+    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, Random rand) {
+        RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager(level);
+        if (ExRegistries.getHammerRegistry().isHammerable(recipeManager, itemStack)) {
+            LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), itemStack, rand);
+            return HammerRegistry.rollHammerRewards(lootContext, itemStack);
+        }
+
+        BlockState currentState = StupidUtils.getStateFromItemStack(itemStack);
+        return ExNihilo.getInstance().rollHammerRewards(currentState, toolItem, rand);
+    }
+
+    public int getMiningLevel() {
+        return Tiers.DIAMOND.getLevel();
+    }
+
+    public boolean shouldAnimate() {
+        return !currentStack.isEmpty() && getEnergyStored() >= getEffectiveEnergy() && !isDisabledByRedstone();
+    }
+
+    @Override
+    public EnergyStorage getEnergyStorage() {
+        return energyStorage;
+    }
+
+    public boolean isUgly() {
+        BlockState state = getBlockState();
+        if (state.hasProperty(AutoHammerBlock.UGLY)) {
+            return state.getValue(AutoHammerBlock.UGLY);
+        }
+        return false;
+    }
+
+    public Direction getFacing() {
+        BlockState state = getBlockState();
+        if (state.hasProperty(AutoHammerBlock.FACING)) {
+            return state.getValue(AutoHammerBlock.FACING);
+        }
+        return Direction.NORTH;
+    }
+
+    public boolean isDisabledByRedstone() {
+        return isDisabledByRedstone;
+    }
+
+    public void setDisabledByRedstone(boolean disabledByRedstone) {
+        isDisabledByRedstone = disabledByRedstone;
+        isDirty = true;
+        ticksSinceUpdate = UPDATE_INTERVAL;
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return new TranslatableComponent("container.excompressum.auto_hammer");
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player) {
+        return new AutoHammerMenu(windowId, inventory, this);
+    }
+
+}

@@ -1,0 +1,307 @@
+package net.blay09.mods.excompressum.block.entity;
+
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+import net.blay09.mods.balm.api.container.BalmContainerProvider;
+import net.blay09.mods.balm.api.container.DefaultContainer;
+import net.blay09.mods.balm.api.container.DelegateContainer;
+import net.blay09.mods.balm.api.container.SubContainer;
+import net.blay09.mods.balm.api.energy.BalmEnergyStorageProvider;
+import net.blay09.mods.balm.api.energy.EnergyStorage;
+import net.blay09.mods.balm.api.menu.BalmMenuProvider;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.menu.AutoCompressorMenu;
+import net.blay09.mods.excompressum.registry.ExRegistries;
+import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.items.CapabilityItemHandler;
+
+import javax.annotation.Nullable;
+
+public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implements BalmMenuProvider, BalmEnergyStorageProvider, BalmContainerProvider {
+
+    private final EnergyStorage energyStorage = new EnergyStorage(32000) {
+        @Override
+        public int fill(int maxReceive, boolean simulate) {
+            if (!simulate) {
+                setChanged();
+            }
+            return super.fill(maxReceive, simulate);
+        }
+    };
+
+
+    private final Multiset<CompressedRecipe> inputItems = HashMultiset.create();
+    private final DefaultContainer backingContainer = new DefaultContainer(24) {
+        @Override
+        public boolean canPlaceItem(int slot, ItemStack itemStack) {
+            return slot >= 12 || ExRegistries.getCompressedRecipeRegistry().getRecipe(itemStack) != null;
+        }
+    };
+    private final SubContainer inputSlots = new SubContainer(backingContainer, 0, 12);
+    private final SubContainer outputSlots = new SubContainer(backingContainer, 12, 24);
+    private final DelegateContainer container = new DelegateContainer(backingContainer) {
+        @Override
+        public ItemStack removeItem(int slot, int count) {
+            if (slot < 12) {
+                return ItemStack.EMPTY;
+            }
+
+            return super.removeItem(slot, count);
+        }
+
+        @Override
+        public ItemStack removeItemNoUpdate(int slot) {
+            if (slot < 12) {
+                return ItemStack.EMPTY;
+            }
+
+            return super.removeItemNoUpdate(slot);
+        }
+
+        @Override
+        public boolean canPlaceItem(int slot, ItemStack itemStack) {
+            return slot < 12 && ExRegistries.getCompressedRecipeRegistry().getRecipe(itemStack) != null;
+        }
+    };
+
+    private NonNullList<ItemStack> currentBuffer = NonNullList.create();
+    private CompressedRecipe currentRecipe = null;
+    private float progress;
+    private boolean isDisabledByRedstone;
+
+    public AutoCompressorBlockEntity(BlockPos pos, BlockState state) {
+        this(ModBlockEntities.autoCompressor.get(), pos, state);
+    }
+
+    public AutoCompressorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+    }
+
+    public boolean shouldCompress(Multiset<CompressedRecipe> inputItems, CompressedRecipe compressedRecipe) {
+        return inputItems.count(compressedRecipe) >= compressedRecipe.getCount();
+    }
+
+    public void tick() { // TODO port
+        int effectiveEnergy = getEffectiveEnergy();
+        if (!level.isClientSide && !isDisabledByRedstone() && energyStorage.getEnergy() > effectiveEnergy) {
+            if (currentRecipe == null) {
+                inputItems.clear();
+                for (int i = 0; i < inputSlots.getContainerSize(); i++) {
+                    ItemStack slotStack = inputSlots.getItem(i);
+                    if (!slotStack.isEmpty()) {
+                        CompressedRecipe compressedRecipe = ExRegistries.getCompressedRecipeRegistry().getRecipe(slotStack);
+                        if (compressedRecipe != null) {
+                            inputItems.add(compressedRecipe, slotStack.getCount());
+                        }
+                    }
+                }
+                for (CompressedRecipe compressedRecipe : inputItems.elementSet()) {
+                    Ingredient ingredient = compressedRecipe.getIngredient();
+                    if (shouldCompress(inputItems, compressedRecipe)) {
+                        int space = 0;
+                        for (int i = 0; i < outputSlots.getContainerSize(); i++) {
+                            ItemStack slotStack = outputSlots.getItem(i);
+                            if (slotStack.isEmpty()) {
+                                space = 64;
+                            } else if (isItemEqualWildcard(slotStack, compressedRecipe.getResultStack())) {
+                                space += slotStack.getMaxStackSize() - slotStack.getCount();
+                            }
+                            if (space >= compressedRecipe.getResultStack().getCount()) {
+                                break;
+                            }
+                        }
+                        if (space < compressedRecipe.getResultStack().getCount()) {
+                            continue;
+                        }
+                        int count = compressedRecipe.getCount();
+                        for (int i = 0; i < inputSlots.getContainerSize(); i++) {
+                            ItemStack slotStack = inputSlots.getItem(i);
+                            if (!slotStack.isEmpty() && ingredient.test(slotStack)) {
+                                if (slotStack.getCount() >= count) {
+                                    currentBuffer.add(slotStack.split(count));
+                                    if (slotStack.isEmpty()) {
+                                        inputSlots.setItem(i, ItemStack.EMPTY);
+                                    }
+                                    count = 0;
+                                    break;
+                                } else {
+                                    currentBuffer.add(slotStack.copy());
+                                    count -= slotStack.getCount();
+                                    inputSlots.setItem(i, ItemStack.EMPTY);
+                                }
+                            }
+                        }
+                        if (count <= 0) {
+                            currentRecipe = compressedRecipe;
+                            progress = 0f;
+                        }
+                        break;
+                    }
+                }
+            } else {
+                energyStorage.drain(effectiveEnergy, false);
+                progress = Math.min(1f, progress + getEffectiveSpeed());
+                if (progress >= 1) {
+                    if (!level.isClientSide) {
+                        CompressedRecipe compressedRecipe = currentRecipe;
+                        if (compressedRecipe != null) {
+                            ItemStack resultStack = compressedRecipe.getResultStack().copy();
+                            if (!addItemToOutput(resultStack)) {
+                                ItemEntity entityItem = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, resultStack);
+                                double motion = 0.05;
+                                entityItem.setDeltaMovement(level.random.nextGaussian() * motion, 0.2, level.random.nextGaussian() * motion);
+                                level.addFreshEntity(entityItem);
+                            }
+                        }
+                    }
+                    currentBuffer.clear();
+                    currentRecipe = null;
+                    progress = 0f;
+                }
+            }
+        }
+    }
+
+    private boolean isItemEqualWildcard(ItemStack itemStack, ItemStack otherStack) {
+        return ItemStack.isSameItemSameTags(itemStack, otherStack) && (itemStack.sameItem(otherStack)
+                || itemStack.getItem() == otherStack.getItem());
+    }
+
+    private boolean addItemToOutput(ItemStack itemStack) {
+        int firstEmptySlot = -1;
+        for (int i = 0; i < outputSlots.getContainerSize(); i++) {
+            ItemStack slotStack = outputSlots.getItem(i);
+            if (slotStack.isEmpty()) {
+                if (firstEmptySlot == -1) {
+                    firstEmptySlot = i;
+                }
+            } else {
+                if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && isItemEqualWildcard(slotStack, itemStack)) {
+                    slotStack.grow(itemStack.getCount());
+                    return true;
+                }
+            }
+        }
+        if (firstEmptySlot != -1) {
+            outputSlots.setItem(firstEmptySlot, itemStack);
+            return true;
+        }
+        return false;
+    }
+
+    public int getEffectiveEnergy() {
+        return ExCompressumConfig.getActive().automation.autoCompressorEnergy;
+    }
+
+    public float getEffectiveSpeed() {
+        return (float) ExCompressumConfig.getActive().automation.autoCompressorSpeed;
+    }
+
+    @Override
+    public void load(CompoundTag tagCompound) {
+        super.load(tagCompound);
+        if (tagCompound.contains("CurrentRecipeResult")) {
+            ItemStack itemStack = ItemStack.of(tagCompound.getCompound("CurrentRecipeResult"));
+            if (!itemStack.isEmpty()) {
+                currentRecipe = new CompressedRecipe(Ingredient.EMPTY, 0, itemStack);
+            }
+        }
+        isDisabledByRedstone = tagCompound.getBoolean("IsDisabledByRedstone");
+        progress = tagCompound.getFloat("Progress");
+        backingContainer.deserialize(tagCompound.getCompound("ItemHandler"));
+        energyStorage.deserialize(tagCompound.get("EnergyStorage"));
+    }
+
+    @Override
+    public void balmFromClientTag(CompoundTag tag) {
+        super.balmFromClientTag(tag);
+        load(tag);
+    }
+
+    @Override
+    public CompoundTag save(CompoundTag tagCompound) {
+        if (currentRecipe != null) {
+            tagCompound.put("CurrentRecipeResult", currentRecipe.getResultStack().save(new CompoundTag()));
+        }
+        tagCompound.putBoolean("IsDisabledByRedstone", isDisabledByRedstone);
+        tagCompound.putFloat("Progress", progress);
+        tagCompound.put("ItemHandler", backingContainer.serialize());
+        tagCompound.put("EnergyStorage", energyStorage.serialize());
+        return super.save(tagCompound);
+    }
+
+    @Override
+    public CompoundTag balmToClientTag(CompoundTag tag) {
+        return save(tag);
+    }
+
+    public boolean isProcessing() {
+        return progress > 0f;
+    }
+
+    public float getProgress() {
+        return progress;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
+    }
+
+    public float getEnergyPercentage() {
+        return (float) energyStorage.getEnergy() / (float) energyStorage.getCapacity();
+    }
+
+    public NonNullList<ItemStack> getCurrentBuffer() {
+        return currentBuffer; // not saved currently which can cause item loss if you break an Auto Compressor that was reload in between a single run (which is so unlikely to happen I won't bother)
+    }
+
+    public Container getBackingContainer() {
+        return backingContainer;
+    }
+
+    @Override
+    public Container getContainer() {
+        return container;
+    }
+
+    @Override
+    public EnergyStorage getEnergyStorage() {
+        return energyStorage;
+    }
+
+    public boolean isDisabledByRedstone() {
+        return isDisabledByRedstone;
+    }
+
+    public void setDisabledByRedstone(boolean disabledByRedstone) {
+        isDisabledByRedstone = disabledByRedstone;
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return new TranslatableComponent("container.excompressum.auto_compressor");
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int windowId, Inventory inv, Player player) {
+        return new AutoCompressorMenu(windowId, inv, this);
+    }
+}
