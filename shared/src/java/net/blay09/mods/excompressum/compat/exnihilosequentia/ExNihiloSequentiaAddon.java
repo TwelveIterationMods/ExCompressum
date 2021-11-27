@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.compat.exnihilosequentia;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.IHammerRecipe;
 import net.blay09.mods.excompressum.compat.jei.LootTableUtils;
@@ -253,6 +254,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             ItemStack itemStack = recipe.getDrop();
             for (MeshWithChance roll : recipe.getRolls()) {
                 LootPool.Builder poolBuilder = LootPool.lootPool();
+                poolBuilder.name("excompressum-heavysieve-" + Balm.getRegistries().getKey(source.asItem()).toString().replace(':', '-') + "-" + UUID.randomUUID());
                 poolBuilder.setRolls(ConstantValue.exactly(times));
                 LootPoolSingletonContainer.Builder<?> entryBuilder = buildLootEntry(itemStack);
                 entryBuilder.when(LootItemRandomChanceCondition.randomChance(roll.getChance()));

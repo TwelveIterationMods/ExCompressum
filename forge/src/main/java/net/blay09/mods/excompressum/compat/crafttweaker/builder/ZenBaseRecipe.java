@@ -10,6 +10,7 @@ import org.openzen.zencode.java.ZenCodeType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @ZenRegister
 @ZenCodeType.Name("mods.exnihilosequentia.ZenSieveRecipe")
@@ -38,6 +39,7 @@ public abstract class ZenBaseRecipe<T> {
 
     protected final LootPool.Builder addLootPoolBuilder() {
         LootPool.Builder builder = new LootPool.Builder();
+        builder.name("excompressum-ct-" + UUID.randomUUID());
         lootPoolBuilders.add(builder);
         return builder;
     }
