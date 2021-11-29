@@ -34,7 +34,7 @@ public class ManaSieveBlock extends AutoSieveBaseBlock {
 
     @Override
     public TileEntity createNewTileEntity(IBlockReader world) {
-        return new ManaSieveTileEntity();
+        return BotaniaCompat.createManaSieveTileEntity();
     }
 
     @Override

@@ -45,7 +45,7 @@ public class ModBlocks {
         registry.registerAll(
                 autoHammer = new AutoHammerBlock().setRegistryName(AutoHammerBlock.name),
                 autoSieve = new AutoSieveBlock().setRegistryName(AutoSieveBlock.name),
-                manaSieve = BotaniaCompat.createManaSieveBlock().setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "mana_sieve")),
+                manaSieve = new ManaSieveBlock().setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "mana_sieve")),
                 autoCompressedHammer = new AutoCompressedHammerBlock().setRegistryName(AutoCompressedHammerBlock.name),
                 autoHeavySieve = new AutoHeavySieveBlock().setRegistryName(AutoHeavySieveBlock.name),
                 autoCompressor = new AutoCompressorBlock().setRegistryName(AutoCompressorBlock.name),

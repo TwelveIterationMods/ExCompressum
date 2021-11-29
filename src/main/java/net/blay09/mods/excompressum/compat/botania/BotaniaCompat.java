@@ -67,14 +67,6 @@ public class BotaniaCompat {
         }
     }
 
-    public static Block createManaSieveBlock() {
-        if (isBotaniaLoaded()) {
-            return bindings.createManaSieveBlock();
-        } else {
-            return new Block(AbstractBlock.Properties.from(Blocks.IRON_BLOCK).noDrops());
-        }
-    }
-
     public static IParticleData getManaParticle() {
         if (isBotaniaLoaded() && !failedToGetManaParticle && internalBindings != null) {
             try {
