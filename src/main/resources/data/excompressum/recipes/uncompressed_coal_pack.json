@@ -5,28 +5,28 @@
   },
   "ingredients": [
     {
-      "item": "excompressum:uncompressed_coal"
+      "tag": "forge:nuggets/coal"
     },
     {
-      "item": "excompressum:uncompressed_coal"
+      "tag": "forge:nuggets/coal"
     },
     {
-      "item": "excompressum:uncompressed_coal"
+      "tag": "forge:nuggets/coal"
     },
     {
-      "item": "excompressum:uncompressed_coal"
+      "tag": "forge:nuggets/coal"
     },
     {
-      "item": "excompressum:uncompressed_coal"
+      "tag": "forge:nuggets/coal"
     },
     {
-      "item": "excompressum:uncompressed_coal"
+      "tag": "forge:nuggets/coal"
     },
     {
-      "item": "excompressum:uncompressed_coal"
+      "tag": "forge:nuggets/coal"
     },
     {
-      "item": "excompressum:uncompressed_coal"
+      "tag": "forge:nuggets/coal"
     }
   ]
 }
