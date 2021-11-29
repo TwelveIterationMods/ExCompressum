@@ -9,5 +9,5 @@ public interface IHammerRecipe {
 
     ILootTableProvider getLootTable();
 
-    ResourceLocation getId();
+    ResourceLocation getRecipeId();
 }

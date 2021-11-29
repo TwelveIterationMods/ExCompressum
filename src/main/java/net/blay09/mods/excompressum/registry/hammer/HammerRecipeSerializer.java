@@ -32,7 +32,7 @@ public class HammerRecipeSerializer extends ExCompressumRecipeSerializer<HammerR
     @Override
     public void write(PacketBuffer buffer, HammerRecipe recipe) {
         recipe.getInput().write(buffer);
-        writeLootTable(buffer, recipe.getId(), recipe.getLootTable());
+        writeLootTable(buffer, recipe.getRecipeId(), recipe.getLootTable());
     }
 
 }

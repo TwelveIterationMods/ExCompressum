@@ -5,7 +5,6 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootTable;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.List;

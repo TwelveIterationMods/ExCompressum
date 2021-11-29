@@ -5,7 +5,6 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootTable;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.*;
 
@@ -17,7 +16,7 @@ public class HammerRegistry {
         List<ItemStack> results = new ArrayList<>();
         for (HammerRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {
-                LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId(), context);
+                LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getRecipeId(), context);
                 if (lootTable != null) {
                     results.addAll(lootTable.generate(context));
                 }

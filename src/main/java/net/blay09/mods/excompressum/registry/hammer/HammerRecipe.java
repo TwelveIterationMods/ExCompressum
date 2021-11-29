@@ -33,6 +33,11 @@ public class HammerRecipe extends ExCompressumRecipe implements IHammerRecipe {
     }
 
     @Override
+    public ResourceLocation getRecipeId() {
+        return getId();
+    }
+
+    @Override
     public LootTableProvider getLootTable() {
         return lootTable;
     }
