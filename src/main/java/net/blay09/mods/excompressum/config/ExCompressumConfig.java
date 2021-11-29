@@ -62,6 +62,7 @@ public class ExCompressumConfig {
         public final ForgeConfigSpec.IntValue autoCompressorEnergy;
         public final ForgeConfigSpec.DoubleValue autoCompressorSpeed;
         public final ForgeConfigSpec.BooleanValue allowHeavySieveAutomation;
+        public final ForgeConfigSpec.BooleanValue allowAutoSieveFoodSpeedBoosts;
         public final ForgeConfigSpec.IntValue heavySieveClicksPerSecond;
         public final ForgeConfigSpec.IntValue woodenCrucibleSpeed;
 
@@ -366,6 +367,11 @@ public class ExCompressumConfig {
                     .comment("Set this to true if you want to allow automation of the heavy sieve through fake players (i.e. Autonomous Activator)")
                     .translation("excompressum.config.allowHeavySieveAutomation")
                     .define("allowHeavySieveAutomation", false);
+
+            allowAutoSieveFoodSpeedBoosts = builder
+                    .comment("Set this to true if you want to allow right-clicking Auto Sieves with Food to give them speed boosts")
+                    .translation("excompressum.config.allowAutoSieveFoodSpeedBoosts")
+                    .define("allowAutoSieveFoodSpeedBoosts", true);
 
             heavySieveClicksPerSecond = builder
                     .comment("The maximum amount of clicks per second on a heavy sieve. Clicks above this will be ignored.")

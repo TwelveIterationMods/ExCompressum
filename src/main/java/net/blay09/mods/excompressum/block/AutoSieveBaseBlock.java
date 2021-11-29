@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.block;
 
 import com.mojang.authlib.GameProfile;
+import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.registry.autosieveskin.WhitelistEntry;
@@ -75,7 +76,7 @@ public abstract class AutoSieveBaseBlock extends ContainerBlock implements IUgly
                 AutoSieveTileEntityBase tileEntity = (AutoSieveTileEntityBase) world.getTileEntity(pos);
                 if (tileEntity != null) {
                     final Item heldItem = heldItemStack.getItem();
-                    if (heldItem.isFood()) {
+                    if (heldItem.isFood() && ExCompressumConfig.COMMON.allowAutoSieveFoodSpeedBoosts.get()) {
                         final Food food = Objects.requireNonNull(heldItem.getFood());
                         if (tileEntity.getFoodBoost() <= 1f) {
                             tileEntity.applyFoodBoost(food);
