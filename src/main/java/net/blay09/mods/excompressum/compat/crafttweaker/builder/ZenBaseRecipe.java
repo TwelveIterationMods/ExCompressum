@@ -36,7 +36,8 @@ public abstract class ZenBaseRecipe<T> {
     }
 
     protected final LootPool.Builder addLootPoolBuilder() {
-        LootPool.Builder builder = new LootPool.Builder();
+        LootPool.Builder builder = LootPool.builder();
+        builder.name("excompressum_ct_recipe");
         lootPoolBuilders.add(builder);
         return builder;
     }

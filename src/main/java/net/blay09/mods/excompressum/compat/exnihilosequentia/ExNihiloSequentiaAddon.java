@@ -250,6 +250,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             ItemStack itemStack = recipe.getDrop();
             for (MeshWithChance roll : recipe.getRolls()) {
                 LootPool.Builder poolBuilder = LootPool.builder();
+                poolBuilder.name("excompressum_heavy_sieve");
                 poolBuilder.rolls(ConstantRange.of(times));
                 StandaloneLootEntry.Builder<?> entryBuilder = buildLootEntry(itemStack);
                 entryBuilder.acceptCondition(RandomChance.builder(roll.getChance()));
