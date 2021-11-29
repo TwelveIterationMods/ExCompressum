@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.TurtleEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -53,6 +54,9 @@ public class BaitTileEntity extends TileEntity implements ITickableTileEntity {
                         Entity entityLiving = baitType.createEntity(world);
                         if (entityLiving instanceof AgeableEntity && world.rand.nextFloat() <= ExCompressumConfig.COMMON.childBaitChance.get()) {
                             ((AgeableEntity) entityLiving).setGrowingAge(-24000);
+                        }
+                        if (entityLiving instanceof TurtleEntity) {
+                            ((TurtleEntity) entityLiving).setHome(pos);
                         }
                         entityLiving.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                         world.addEntity(entityLiving);
