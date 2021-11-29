@@ -186,7 +186,7 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
 
             // Sync to clients
             ticksSinceUpdate++;
-            if (ticksSinceUpdate > UPDATE_INTERVAL) {
+            if (ticksSinceUpdate > UPDATE_INTERVAL && !isUgly()) {
                 if (isDirty) {
                     VanillaPacketHandler.sendTileEntityUpdate(this);
                     finishedStack = ItemStack.EMPTY;
@@ -436,9 +436,11 @@ public class AutoHammerTileEntity extends BaseTileEntity implements ITickableTil
     }
 
     public void setDisabledByRedstone(boolean disabledByRedstone) {
-        isDisabledByRedstone = disabledByRedstone;
-        isDirty = true;
-        ticksSinceUpdate = UPDATE_INTERVAL;
+        if(isDisabledByRedstone != disabledByRedstone) {
+            isDisabledByRedstone = disabledByRedstone;
+            isDirty = true;
+            ticksSinceUpdate = UPDATE_INTERVAL;
+        }
     }
 
     @Override

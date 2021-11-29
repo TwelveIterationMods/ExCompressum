@@ -118,7 +118,7 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
 
         if (!world.isRemote) {
             ticksSinceSync++;
-            if (ticksSinceSync > UPDATE_INTERVAL) {
+            if (ticksSinceSync > UPDATE_INTERVAL && !isUgly()) {
                 if (isDirty) {
                     markDirty();
                     VanillaPacketHandler.sendTileEntityUpdate(this);
