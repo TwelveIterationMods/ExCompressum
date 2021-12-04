@@ -281,6 +281,13 @@ public class AutoCompressorTileEntity extends BaseTileEntity implements ITickabl
         return super.getCapability(cap, side);
     }
 
+    @Override
+    public void invalidateCaps() {
+        energyStorageCap.invalidate();
+        itemHandlerAutomationCap.invalidate();
+        super.invalidateCaps();
+    }
+
     public DefaultItemHandler getItemHandler() {
         return itemHandler;
     }

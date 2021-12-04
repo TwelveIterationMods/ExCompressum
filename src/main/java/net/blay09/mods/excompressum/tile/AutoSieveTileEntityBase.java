@@ -401,6 +401,12 @@ public abstract class AutoSieveTileEntityBase extends BaseTileEntity implements 
         return super.getCapability(cap, side);
     }
 
+    @Override
+    public void invalidateCaps() {
+        itemHandlerAutomationCap.invalidate();
+        super.invalidateCaps();
+    }
+
     public DefaultItemHandler getItemHandler() {
         return itemHandler;
     }
