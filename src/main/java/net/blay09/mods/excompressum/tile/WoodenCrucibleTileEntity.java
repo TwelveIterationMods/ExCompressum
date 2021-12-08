@@ -202,6 +202,13 @@ public class WoodenCrucibleTileEntity extends TileEntity implements ITickableTil
         return super.getCapability(cap, side);
     }
 
+    @Override
+    public void invalidateCaps() {
+        fluidTankCap.invalidate();
+        itemHandlerCap.invalidate();
+        super.invalidateCaps();
+    }
+
     public FluidTank getFluidTank() {
         return fluidTank;
     }

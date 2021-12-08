@@ -84,6 +84,12 @@ public class AutoSieveTileEntity extends AutoSieveTileEntityBase {
         return super.getCapability(cap, side);
     }
 
+    @Override
+    public void invalidateCaps() {
+        energyStorageCap.invalidate();
+        super.invalidateCaps();
+    }
+
     public EnergyStorageModifiable getEnergyStorage() {
         return energyStorage;
     }
