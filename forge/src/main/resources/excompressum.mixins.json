@@ -2,11 +2,9 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.blay09.mods.excompressum.mixin",
-  "compatibilityLevel": "JAVA_16",
-  "refmap": "refmap.excompressum.json",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "excompressum.refmap.json",
   "mixins": [
-    "LootTableAccessor",
-    "LootPoolAccessor"
   ],
   "client": [
   ],

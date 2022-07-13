@@ -1,7 +1,10 @@
 package net.blay09.mods.excompressum.compat.jei;
 
-import net.blay09.mods.excompressum.api.sievemesh.MeshType;
+import net.blay09.mods.excompressum.api.sievemesh.CommonMeshType;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
+import net.blay09.mods.excompressum.loot.LootTableEntry;
+import net.blay09.mods.excompressum.loot.LootTableUtils;
+import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRecipe;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +34,7 @@ public class JeiHeavySieveRecipe {
             inputs.add(meshItems);
         } else if (recipe.getMeshes() != null) {
             List<ItemStack> meshItems = new ArrayList<>();
-            for (MeshType meshType : recipe.getMeshes()) {
+            for (CommonMeshType meshType : recipe.getMeshes()) {
                 for (SieveMeshRegistryEntry mesh : SieveMeshRegistry.getEntries().values()) {
                     if (mesh.getMeshType() == meshType) {
                         meshItems.add(mesh.getItemStack());

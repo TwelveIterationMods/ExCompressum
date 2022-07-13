@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.compat.crafttweaker.builder;
 
 
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootPool;

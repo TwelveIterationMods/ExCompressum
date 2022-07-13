@@ -10,6 +10,7 @@ import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
+import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;

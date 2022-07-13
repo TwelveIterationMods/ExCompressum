@@ -1,5 +1,11 @@
 package net.blay09.mods.excompressum.compat.jei;
 
+import net.blay09.mods.excompressum.loot.LootTableEntry;
+import net.blay09.mods.excompressum.loot.LootTableUtils;
+import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
+import net.blay09.mods.excompressum.mixin.BinomialDistributionGeneratorAccessor;
+import net.blay09.mods.excompressum.mixin.ConstantValueAccessor;
+import net.blay09.mods.excompressum.mixin.UniformGeneratorAccessor;
 import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -33,14 +39,16 @@ public class JeiUtils {
 
 
     private static Component getCountTextComponent(LootTableEntry entry) {
-        if (entry.getCountRange() instanceof UniformGenerator uniform) {
-            int min = Math.max(0, (int) uniform.min);
-            int max = (int) uniform.max;
+        if (entry.getCountRange() instanceof UniformGeneratorAccessor uniform) {
+            int min = LootTableUtils.getMinCount(uniform.getMin());
+            int max = LootTableUtils.getMaxCount(uniform.getMax());
             return Messages.lang("tooltip.jei.drop_count.random_range", min, max);
-        } else if (entry.getCountRange() instanceof BinomialDistributionGenerator binomial) {
-            return Messages.lang("tooltip.jei.drop_count.binomial_range", (int) (binomial.n * binomial.p));
-        } else if (entry.getCountRange() instanceof ConstantValue constant) {
-            return Messages.lang("tooltip.jei.drop_count.constant", (int) constant.value);
+        } else if (entry.getCountRange() instanceof BinomialDistributionGeneratorAccessor binomial) {
+            int n = LootTableUtils.getMinCount(binomial.getN());
+            int p = LootTableUtils.getMinCount(binomial.getP());
+            return Messages.lang("tooltip.jei.drop_count.binomial_range", n * p);
+        } else if (entry.getCountRange() instanceof ConstantValueAccessor constant) {
+            return Messages.lang("tooltip.jei.drop_count.constant", (int) constant.getValue());
         } else {
             return new TextComponent("");
         }

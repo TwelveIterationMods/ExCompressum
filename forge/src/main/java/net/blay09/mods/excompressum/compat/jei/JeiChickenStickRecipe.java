@@ -1,5 +1,8 @@
 package net.blay09.mods.excompressum.compat.jei;
 
+import net.blay09.mods.excompressum.loot.LootTableEntry;
+import net.blay09.mods.excompressum.loot.LootTableUtils;
+import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRecipe;
 import net.minecraft.world.item.ItemStack;
 

@@ -1,9 +1,9 @@
 package net.blay09.mods.excompressum.compat.crafttweaker.builder;
 
 
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.fluid.IFluidStack;
-import com.blamejared.crafttweaker.api.item.IIngredient;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;

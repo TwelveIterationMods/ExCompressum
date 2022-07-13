@@ -1,10 +1,10 @@
 package net.blay09.mods.excompressum.compat.crafttweaker.builder;
 
 
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.api.item.IIngredient;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.item.IItemStack;
-import net.blay09.mods.excompressum.compat.jei.LootTableUtils;
+import net.blay09.mods.excompressum.loot.LootTableUtils;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.registry.hammer.HammerRecipe;
 import net.minecraft.resources.ResourceLocation;

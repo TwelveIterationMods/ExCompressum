@@ -1,11 +1,12 @@
 package net.blay09.mods.excompressum.compat.crafttweaker;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.api.managers.IRecipeManager;
-import com.blamejared.crafttweaker.impl.actions.recipes.ActionAddRecipe;
+import com.blamejared.crafttweaker.api.action.recipe.ActionAddRecipe;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.crafttweaker.builder.ZenHammerRecipe;
+import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.blay09.mods.excompressum.registry.hammer.HammerRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -26,6 +27,6 @@ public class HammerRecipeManager implements IRecipeManager {
 
     @Override
     public RecipeType<HammerRecipe> getRecipeType() {
-        return HammerRecipe.TYPE;
+        return ModRecipeTypes.HAMMER;
     }
 }

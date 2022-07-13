@@ -1,10 +1,10 @@
 package net.blay09.mods.excompressum.compat.crafttweaker.builder;
 
 
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.api.item.IIngredient;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.ingredient.IIngredient;
 import com.blamejared.crafttweaker.api.item.IItemStack;
-import net.blay09.mods.excompressum.compat.jei.LootTableUtils;
+import net.blay09.mods.excompressum.loot.LootTableUtils;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -28,14 +28,14 @@ public class ZenChickenStickRecipe extends ZenBaseRecipe<ZenChickenStickRecipe> 
 
     @ZenCodeType.Method
     public ZenChickenStickRecipe addDrop(IItemStack drop) {
-        addLootPoolBuilder().addEntry(LootTableUtils.buildLootEntry(drop.getInternal(), 1f));
+        addLootPoolBuilder().add(LootTableUtils.buildLootEntry(drop.getInternal(), 1f));
         recipe.setLootTable(getLootTableProvider());
         return this;
     }
 
     @ZenCodeType.Method
     public ZenChickenStickRecipe addDrop(IItemStack drop, float chance) {
-        addLootPoolBuilder().addEntry(LootTableUtils.buildLootEntry(drop.getInternal(), chance));
+        addLootPoolBuilder().add(LootTableUtils.buildLootEntry(drop.getInternal(), chance));
         recipe.setLootTable(getLootTableProvider());
         return this;
     }

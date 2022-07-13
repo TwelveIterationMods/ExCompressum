@@ -12,11 +12,13 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.IHammerRecipe;
+import net.blay09.mods.excompressum.loot.LootTableUtils;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.HeavySieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.item.ModItems;
+import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRecipe;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRecipe;
 import net.blay09.mods.excompressum.registry.hammer.HammerRecipe;
@@ -50,12 +52,12 @@ public class JEIAddon implements IModPlugin {
 
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
 
-        List<HeavySieveRecipe> heavySieveRecipes = recipeManager.getAllRecipesFor(HeavySieveRecipe.TYPE);
+        List<HeavySieveRecipe> heavySieveRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.HEAVY_SIEVE);
         for (HeavySieveRecipe recipe : heavySieveRecipes) {
             jeiHeavySieveRecipes.add(new JeiHeavySieveRecipe(recipe));
         }
 
-        List<GeneratedHeavySieveRecipe> generatedHeavySieveRecipes = recipeManager.getAllRecipesFor(GeneratedHeavySieveRecipe.TYPE);
+        List<GeneratedHeavySieveRecipe> generatedHeavySieveRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.GENERATED_HEAVY_SIEVE);
         for (GeneratedHeavySieveRecipe recipe : generatedHeavySieveRecipes) {
             loadGeneratedHeavySieveRecipe(false, recipe, jeiHeavySieveRecipes);
             loadGeneratedHeavySieveRecipe(true, recipe, jeiHeavySieveRecipes);
@@ -64,14 +66,14 @@ public class JEIAddon implements IModPlugin {
         registry.addRecipes(jeiHeavySieveRecipes, HeavySieveRecipeCategory.UID);
 
         List<JeiCompressedHammerRecipe> jeiCompressedHammerRecipes = new ArrayList<>();
-        List<CompressedHammerRecipe> compressedHammerRecipes = recipeManager.getAllRecipesFor(CompressedHammerRecipe.TYPE);
+        List<CompressedHammerRecipe> compressedHammerRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.COMPRESSED_HAMMER);
         for (CompressedHammerRecipe recipe : compressedHammerRecipes) {
             jeiCompressedHammerRecipes.add(new JeiCompressedHammerRecipe(recipe));
         }
         registry.addRecipes(jeiCompressedHammerRecipes, CompressedHammerRecipeCategory.UID);
 
         List<JeiHammerRecipe> jeiHammerRecipes = new ArrayList<>();
-        List<HammerRecipe> hammerRecipes = recipeManager.getAllRecipesFor(HammerRecipe.TYPE);
+        List<HammerRecipe> hammerRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.HAMMER);
         for (HammerRecipe recipe : hammerRecipes) {
             jeiHammerRecipes.add(new JeiHammerRecipe(recipe));
         }
@@ -81,14 +83,14 @@ public class JEIAddon implements IModPlugin {
         registry.addRecipes(jeiHammerRecipes, HammerRecipeCategory.UID);
 
         List<JeiChickenStickRecipe> jeiChickenStickRecipes = new ArrayList<>();
-        List<ChickenStickRecipe> chickenStickRecipes = recipeManager.getAllRecipesFor(ChickenStickRecipe.TYPE);
+        List<ChickenStickRecipe> chickenStickRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.CHICKEN_STICK);
         for (ChickenStickRecipe recipe : chickenStickRecipes) {
             jeiChickenStickRecipes.add(new JeiChickenStickRecipe(recipe));
         }
         registry.addRecipes(jeiChickenStickRecipes, ChickenStickRecipeCategory.UID);
 
         ArrayListMultimap<ResourceLocation, WoodenCrucibleRecipe> fluidOutputMap = ArrayListMultimap.create();
-        List<WoodenCrucibleRecipe> woodenCrucibleRecipes = recipeManager.getAllRecipesFor(WoodenCrucibleRecipe.TYPE);
+        List<WoodenCrucibleRecipe> woodenCrucibleRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.WOODEN_CRUCIBLE);
         for (WoodenCrucibleRecipe entry : woodenCrucibleRecipes) {
             fluidOutputMap.put(entry.getFluid(), entry);
         }

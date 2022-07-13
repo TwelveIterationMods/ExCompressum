@@ -1,11 +1,12 @@
 package net.blay09.mods.excompressum.compat.crafttweaker;
 
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
-import com.blamejared.crafttweaker.api.annotations.ZenRegister;
-import com.blamejared.crafttweaker.api.managers.IRecipeManager;
-import com.blamejared.crafttweaker.impl.actions.recipes.ActionAddRecipe;
+import com.blamejared.crafttweaker.api.action.recipe.ActionAddRecipe;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.recipe.manager.base.IRecipeManager;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.compat.crafttweaker.builder.ZenChickenStickRecipe;
+import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -26,6 +27,6 @@ public class ChickenStickRecipeManager implements IRecipeManager {
 
     @Override
     public RecipeType<ChickenStickRecipe> getRecipeType() {
-        return ChickenStickRecipe.TYPE;
+        return ModRecipeTypes.CHICKEN_STICK;
     }
 }

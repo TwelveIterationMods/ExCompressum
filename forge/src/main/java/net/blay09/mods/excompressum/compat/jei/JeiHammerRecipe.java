@@ -1,6 +1,9 @@
 package net.blay09.mods.excompressum.compat.jei;
 
 import net.blay09.mods.excompressum.api.IHammerRecipe;
+import net.blay09.mods.excompressum.loot.LootTableEntry;
+import net.blay09.mods.excompressum.loot.LootTableUtils;
+import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;

@@ -1,12 +1,12 @@
 modLoader="javafml"
-loaderVersion="[37,)"
-license="GPL-3.0-only"
+loaderVersion="[40,)"
+license="All rights reserved"
 issueTrackerURL="https://github.com/ModdingForBlockheads/ExCompressum/issues"
 
 [[mods]]
 modId="excompressum"
 version="${file.jarVersion}"
-displayName="Ex Compressum"
+displayName="ExCompressum"
 displayURL="https://blay09.net/mods/excompressum"
 logoFile="excompressum-icon.png"
 credits="BlayTheNinth"
@@ -16,20 +16,20 @@ Ex Nihilo Addon. Attempts to reduce grind by adding pre-automation tools like co
 '''
 
 [[dependencies.excompressum]]
-    modId="forge"
-    mandatory=true
-    versionRange="[37,)"
-    ordering="NONE"
-    side="BOTH"
+modId="forge"
+mandatory=true
+versionRange="[40,)"
+ordering="NONE"
+side="BOTH"
 [[dependencies.excompressum]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.17.1,1.18)"
-    ordering="NONE"
-    side="BOTH"
+modId="minecraft"
+mandatory=true
+versionRange="[1.18,1.19)"
+ordering="NONE"
+side="BOTH"
 [[dependencies.excompressum]]
-    modId="balm"
-    mandatory=true
-    versionRange="[1.7.0,)"
-    ordering="NONE"
-    side="BOTH"
+modId="balm"
+mandatory=true
+versionRange="[3.0.0,)"
+ordering="NONE"
+side="BOTH"

@@ -2,7 +2,7 @@
 
 Minecraft Mod. Attempts to reduce grind by adding pre-automation tools like compressed hammers.
 
-This mod is available for both Forge and Fabric (starting Minecraft 1.17).
+This mod is available for both Forge and Fabric (starting Minecraft 1.19).
 
 #### Forge
 
