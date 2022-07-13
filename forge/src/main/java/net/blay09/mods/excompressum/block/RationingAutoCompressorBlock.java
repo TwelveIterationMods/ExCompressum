@@ -1,11 +1,16 @@
 package net.blay09.mods.excompressum.block;
 
-import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.block.entity.AutoCompressorBlockEntity;
+import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.block.entity.RationingAutoCompressorBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+
+import javax.annotation.Nullable;
 
 public class RationingAutoCompressorBlock extends AutoCompressorBlock {
 
@@ -14,4 +19,9 @@ public class RationingAutoCompressorBlock extends AutoCompressorBlock {
         return new RationingAutoCompressorBlockEntity(pos, state);
     }
 
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return !level.isClientSide ? createTickerHelper(type, ModBlockEntities.rationingAutoCompressor.get(), AutoCompressorBlockEntity::serverTick) : null;
+    }
 }

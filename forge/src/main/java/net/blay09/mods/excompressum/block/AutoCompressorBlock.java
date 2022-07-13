@@ -3,6 +3,8 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.entity.AutoCompressorBlockEntity;
+import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
+import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -20,6 +22,8 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
@@ -124,5 +128,11 @@ public class AutoCompressorBlock extends BaseEntityBlock {
     @Override
     public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return !level.isClientSide ? createTickerHelper(type, ModBlockEntities.autoCompressor.get(), AutoCompressorBlockEntity::serverTick) : null;
     }
 }

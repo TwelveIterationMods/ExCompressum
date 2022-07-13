@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.block;
 
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.compat.botania.BotaniaCompat;
 import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
 import net.blay09.mods.excompressum.block.entity.ManaSieveBlockEntity;
@@ -10,6 +11,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -57,4 +59,11 @@ public class ManaSieveBlock extends AutoSieveBaseBlock {
             }
         }
     }
+
+    @Override
+    public BlockEntityType<?> getBlockEntityType() {
+        return ModBlockEntities.manaSieve.get();
+    }
+
+
 }

@@ -35,6 +35,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.StringUtils;
@@ -146,7 +147,31 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
         super(type, pos, state);
     }
 
-    public void tick() { // TODO port
+    public static void clientTick(Level level, BlockPos pos, BlockState state, AbstractAutoSieveBlockEntity blockEntity) {
+        blockEntity.clientTick();
+    }
+
+    public static void serverTick(Level level, BlockPos pos, BlockState state, AbstractAutoSieveBlockEntity blockEntity) {
+        blockEntity.serverTick();
+    }
+
+    public void clientTick() {
+        if (particleTicks > 0) {
+            particleTicks--;
+            if (particleTicks <= 0) {
+                particleCount = 0;
+            }
+
+            if (!currentStack.isEmpty() && !isUgly()) {
+                final BlockState processingState = StupidUtils.getStateFromItemStack(currentStack);
+                if (!processingState.isAir()) {
+                    ExCompressum.proxy.spawnAutoSieveParticles(level, worldPosition, getBlockState(), processingState, particleCount);
+                }
+            }
+        }
+    }
+
+    public void serverTick() {
         if (foodBoostTicks > 0) {
             foodBoostTicks--;
             if (foodBoostTicks <= 0) {
@@ -154,16 +179,14 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
             }
         }
 
-        if (!level.isClientSide) {
-            ticksSinceSync++;
-            if (ticksSinceSync > UPDATE_INTERVAL) {
-                if (isDirty) {
-                    setChanged();
-                    sync();
-                    isDirty = false;
-                }
-                ticksSinceSync = 0;
+        ticksSinceSync++;
+        if (ticksSinceSync > UPDATE_INTERVAL) {
+            if (isDirty) {
+                setChanged();
+                sync();
+                isDirty = false;
             }
+            ticksSinceSync = 0;
         }
 
         int effectiveEnergy = getEffectiveEnergy();
@@ -226,20 +249,6 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
                     }
                     progress = 0f;
                     currentStack = ItemStack.EMPTY;
-                }
-            }
-        }
-
-        if (particleTicks > 0 && level.isClientSide) {
-            particleTicks--;
-            if (particleTicks <= 0) {
-                particleCount = 0;
-            }
-
-            if (!currentStack.isEmpty() && !isUgly()) {
-                final BlockState processingState = StupidUtils.getStateFromItemStack(currentStack);
-                if (processingState != null) {
-                    ExCompressum.proxy.spawnAutoSieveParticles(level, worldPosition, getBlockState(), processingState, particleCount);
                 }
             }
         }

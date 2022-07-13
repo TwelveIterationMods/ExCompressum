@@ -1,5 +1,7 @@
 package net.blay09.mods.excompressum.block;
 
+import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
+import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.registry.SieveModelBounds;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
@@ -22,6 +24,8 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -147,5 +151,13 @@ public class HeavySieveBlock extends BaseEntityBlock {
     @Override
     public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return level.isClientSide
+                ? createTickerHelper(type, ModBlockEntities.heavySieve.get(), HeavySieveBlockEntity::clientTick)
+                : createTickerHelper(type, ModBlockEntities.heavySieve.get(), HeavySieveBlockEntity::serverTick);
     }
 }

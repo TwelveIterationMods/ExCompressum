@@ -2,6 +2,8 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
+import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.registry.autosieveskin.WhitelistEntry;
 import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
@@ -35,6 +37,8 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -229,7 +233,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     @Override
     public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
         if (stateIn.getValue(WATERLOGGED)) {
-//            level.getFluidTicks().schedule(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level)); // TODO
+            level.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         return super.updateShape(stateIn, facing, facingState, level, currentPos, facingPos);
     }
@@ -253,5 +257,15 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
             float motionZ = 0f * speed;
             level.addParticle(ParticleTypes.BUBBLE, posX, posY, posZ, motionX, motionY, motionZ);
         }
+    }
+
+    public abstract BlockEntityType<?> getBlockEntityType();
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return level.isClientSide
+                ? createTickerHelper(type, (BlockEntityType<AbstractAutoSieveBlockEntity>) getBlockEntityType(), AbstractAutoSieveBlockEntity::clientTick)
+                : createTickerHelper(type, (BlockEntityType<AbstractAutoSieveBlockEntity>) getBlockEntityType(), AbstractAutoSieveBlockEntity::serverTick);
     }
 }

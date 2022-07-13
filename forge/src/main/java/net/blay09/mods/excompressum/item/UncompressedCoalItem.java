@@ -4,6 +4,9 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.common.ForgeHooks;
+import org.jetbrains.annotations.Nullable;
 
 public class UncompressedCoalItem extends Item {
 
@@ -14,8 +17,8 @@ public class UncompressedCoalItem extends Item {
         super(properties);
     }
 
-    // TODO @Override
-    public int getBurnTime(ItemStack itemStack) {
+    @Override
+    public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
         return 200;
     }
 }

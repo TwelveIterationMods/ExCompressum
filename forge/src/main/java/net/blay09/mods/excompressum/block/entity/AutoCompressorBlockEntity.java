@@ -26,6 +26,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -120,9 +121,13 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
         return inputItems.count(compressedRecipe) >= compressedRecipe.getCount();
     }
 
-    public void tick() { // TODO port
+    public static void serverTick(Level level, BlockPos pos, BlockState state, AutoCompressorBlockEntity blockEntity) {
+        blockEntity.serverTick();
+    }
+
+    public void serverTick() {
         int effectiveEnergy = getEffectiveEnergy();
-        if (!level.isClientSide && !isDisabledByRedstone() && energyStorage.getEnergy() > effectiveEnergy) {
+        if (!isDisabledByRedstone() && energyStorage.getEnergy() > effectiveEnergy) {
             if (currentRecipe == null) {
                 inputItems.clear();
                 for (int i = 0; i < inputSlots.getContainerSize(); i++) {

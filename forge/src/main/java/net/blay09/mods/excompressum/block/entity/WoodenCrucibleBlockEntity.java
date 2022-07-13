@@ -11,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
@@ -114,37 +115,39 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity {
         return false;
     }
 
-    public void tick() { // TODO port
-        if (!level.isClientSide) {
-            // Fill the crucible from rain
-            if (level.getLevelData().isRaining() && level.canSeeSkyFromBelowWater(worldPosition) && level.getBiome(worldPosition).value().getDownfall() > 0f) {
-                ticksSinceRain++;
-                if (ticksSinceRain >= RAIN_FILL_INTERVAL) {
-                    fluidTank.fill(new FluidStack(Fluids.WATER, RAIN_FILL_SPEED), IFluidHandler.FluidAction.EXECUTE);
-                    ticksSinceRain = 0;
-                }
-            }
+    public static void serverTick(Level level, BlockPos pos, BlockState state, WoodenCrucibleBlockEntity blockEntity) {
+        blockEntity.serverTick();
+    }
 
-            // Melt down content
-            if (currentTargetFluid != null) {
-                ticksSinceMelt++;
-                if (ticksSinceMelt >= MELT_INTERVAL && fluidTank.getFluidAmount() < fluidTank.getCapacity()) {
-                    int amount = Math.min(ExCompressumConfig.getActive().automation.woodenCrucibleSpeed, solidVolume);
-                    fluidTank.fill(new FluidStack(currentTargetFluid, amount), IFluidHandler.FluidAction.EXECUTE);
-                    solidVolume = Math.max(0, solidVolume - amount);
-                    ticksSinceMelt = 0;
-                    isDirty = true;
-                }
+    public void serverTick() {
+        // Fill the crucible from rain
+        if (level.getLevelData().isRaining() && level.canSeeSkyFromBelowWater(worldPosition) && level.getBiome(worldPosition).value().getDownfall() > 0f) {
+            ticksSinceRain++;
+            if (ticksSinceRain >= RAIN_FILL_INTERVAL) {
+                fluidTank.fill(new FluidStack(Fluids.WATER, RAIN_FILL_SPEED), IFluidHandler.FluidAction.EXECUTE);
+                ticksSinceRain = 0;
             }
+        }
 
-            // Sync to clients
-            ticksSinceSync++;
-            if (ticksSinceSync >= SYNC_INTERVAL) {
-                ticksSinceSync = 0;
-                if (isDirty) {
-                    sync();
-                    isDirty = false;
-                }
+        // Melt down content
+        if (currentTargetFluid != null) {
+            ticksSinceMelt++;
+            if (ticksSinceMelt >= MELT_INTERVAL && fluidTank.getFluidAmount() < fluidTank.getCapacity()) {
+                int amount = Math.min(ExCompressumConfig.getActive().automation.woodenCrucibleSpeed, solidVolume);
+                fluidTank.fill(new FluidStack(currentTargetFluid, amount), IFluidHandler.FluidAction.EXECUTE);
+                solidVolume = Math.max(0, solidVolume - amount);
+                ticksSinceMelt = 0;
+                isDirty = true;
+            }
+        }
+
+        // Sync to clients
+        ticksSinceSync++;
+        if (ticksSinceSync >= SYNC_INTERVAL) {
+            ticksSinceSync = 0;
+            if (isDirty) {
+                sync();
+                isDirty = false;
             }
         }
     }

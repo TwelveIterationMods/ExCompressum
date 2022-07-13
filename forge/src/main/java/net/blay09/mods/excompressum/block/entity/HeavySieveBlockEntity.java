@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -59,7 +60,31 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
         return true;
     }
 
-    public void tick() { // TODO port
+    public static void clientTick(Level level, BlockPos pos, BlockState state, HeavySieveBlockEntity blockEntity) {
+        blockEntity.clientTick();
+    }
+
+    public static void serverTick(Level level, BlockPos pos, BlockState state, HeavySieveBlockEntity blockEntity) {
+        blockEntity.serverTick();
+    }
+
+    public void clientTick() {
+        if (particleTicks > 0) {
+            particleTicks--;
+            if (particleTicks <= 0) {
+                particleCount = 0;
+            }
+
+            if (level.isClientSide && !currentStack.isEmpty()) {
+                final BlockState state = StupidUtils.getStateFromItemStack(currentStack);
+                if (state != null) {
+                    ExCompressum.proxy.spawnHeavySieveParticles(level, worldPosition, state, particleCount);
+                }
+            }
+        }
+    }
+
+    public void serverTick() {
         ticksSinceSync++;
         if (ticksSinceSync >= UPDATE_INTERVAL) {
             ticksSinceSync = 0;
@@ -73,20 +98,6 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
         if (ticksSinceSecond >= 20) {
             clicksSinceSecond = 0;
             ticksSinceSecond = 0;
-        }
-
-        if (particleTicks > 0) {
-            particleTicks--;
-            if (particleTicks <= 0) {
-                particleCount = 0;
-            }
-
-            if (level.isClientSide && !currentStack.isEmpty()) {
-                final BlockState state = StupidUtils.getStateFromItemStack(currentStack);
-                if (state != null) {
-                    ExCompressum.proxy.spawnHeavySieveParticles(level, worldPosition, state, particleCount);
-                }
-            }
         }
     }
 

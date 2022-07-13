@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.block;
 
+import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
 import net.blay09.mods.excompressum.block.entity.EnvironmentalCondition;
@@ -20,6 +21,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
@@ -107,5 +110,11 @@ public class BaitBlock extends BaseEntityBlock {
 
     public BaitType getBaitType() {
         return baitType;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return !level.isClientSide ? createTickerHelper(type, ModBlockEntities.bait.get(), BaitBlockEntity::serverTick) : null;
     }
 }

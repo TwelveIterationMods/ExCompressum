@@ -26,19 +26,6 @@ public class ManaHammerItem extends DiggerItem /*TODO implements IManaUsingItem*
         super(6f, -3.2f, BotaniaCompat.getManaSteelItemTier(), ModTags.MINEABLE_WITH_HAMMER, properties);
     }
 
-//    @Override TODO
-//    public boolean canHarvestBlock(ItemStack stack, BlockState state) {
-//        return ExNihilo.getInstance().isHammerable(state);
-//    }
-//
-//    @Override
-//    public float getDestroySpeed(ItemStack stack, BlockState state) {
-//        if (ExNihilo.getInstance().isHammerable(state) && state.getBlock().getHarvestLevel(state) <= getTier().getLevel()) {
-//            return speed * 0.75f;
-//        }
-//        return 0.8f;
-//    }
-
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         boolean manaRequested = attacker instanceof Player && BotaniaCompat.requestManaExactForTool(stack, (Player) attacker, 2 * MANA_PER_DAMAGE, true);

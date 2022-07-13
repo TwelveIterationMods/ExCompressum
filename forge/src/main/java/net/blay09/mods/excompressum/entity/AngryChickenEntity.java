@@ -150,10 +150,6 @@ public class AngryChickenEntity extends PathfinderMob {
         super.knockback(strength * 2f, ratioX, ratioZ);
     }
 
-    public boolean isNonBoss() { // TODO
-        return false;
-    }
-
     @Override
     public void tick() {
         super.tick();

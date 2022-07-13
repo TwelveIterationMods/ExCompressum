@@ -37,6 +37,7 @@ import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -68,7 +69,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
                 return (int) (100f * AutoHammerBlockEntity.this.getProgress());
             } else if (id == 1) {
                 return AutoHammerBlockEntity.this.getEnergyStorage().getEnergy();
-            } else if (id  == 2) {
+            } else if (id == 2) {
                 return AutoHammerBlockEntity.this.isDisabledByRedstone() ? 1 : 0;
             }
             return 0;
@@ -76,10 +77,10 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
 
         public void set(int id, int value) {
             if (id == 0) {
-                AutoHammerBlockEntity.this.setProgress( value / 100f);
+                AutoHammerBlockEntity.this.setProgress(value / 100f);
             } else if (id == 1) {
                 AutoHammerBlockEntity.this.getEnergyStorage().setEnergy(value);
-            } else if (id  == 2) {
+            } else if (id == 2) {
                 AutoHammerBlockEntity.this.setDisabledByRedstone(value == 1);
             }
         }
@@ -157,90 +158,99 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
         super(type, pos, state);
     }
 
-    public void tick() { // TODO port
-        if (!level.isClientSide) {
-            if (cooldown > 0) {
-                cooldown--;
-            }
-            int effectiveEnergy = getEffectiveEnergy();
-            if (!isDisabledByRedstone() && getEnergyStored() >= effectiveEnergy) {
-                if (currentStack.isEmpty() && cooldown <= 0) {
-                    ItemStack inputStack = inputSlots.getItem(0);
-                    if (!inputStack.isEmpty() && isRegistered(inputStack)) {
-                        boolean foundSpace = false;
-                        for (int i = 0; i < outputSlots.getContainerSize(); i++) {
-                            if (outputSlots.getItem(i).isEmpty()) {
-                                foundSpace = true;
-                            }
-                        }
-                        if (!foundSpace) {
-                            return;
-                        }
-                        currentStack = inputStack.split(1);
-                        if (inputStack.isEmpty()) {
-                            inputSlots.setItem(0, ItemStack.EMPTY);
-                        }
-                        energyStorage.drain(effectiveEnergy, false);
-                        ticksSinceUpdate = UPDATE_INTERVAL;
-                        progress = 0f;
-                    }
-                } else {
-                    energyStorage.drain(effectiveEnergy, false);
-                    progress += getEffectiveSpeed();
-                    isDirty = true;
-                    if (progress >= 1) {
-                        if (!level.isClientSide) {
-                            if (level.random.nextFloat() <= ExCompressumConfig.getActive().automation.autoHammerDecay) {
-                                ItemStack firstHammer = hammerSlots.getItem(0);
-                                if (!firstHammer.isEmpty()) {
-                                    if (firstHammer.hurt(1, level.random, null)) {
-                                        hammerSlots.setItem(0, ItemStack.EMPTY);
-                                    }
-                                }
-                                ItemStack secondHammer = hammerSlots.getItem(1);
-                                if (!secondHammer.isEmpty()) {
-                                    if (secondHammer.hurt(1, level.random, null)) {
-                                        hammerSlots.setItem(1, ItemStack.EMPTY);
-                                    }
-                                }
-                            }
-                            Collection<ItemStack> rewards = rollHammerRewards(currentStack, getEffectiveTool(), level.random);
-                            for (ItemStack itemStack : rewards) {
-                                if (!addItemToOutput(itemStack)) {
-                                    ItemEntity entityItem = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, itemStack);
-                                    double motion = 0.05;
-                                    entityItem.setDeltaMovement(level.random.nextGaussian() * motion, 0.2, level.random.nextGaussian() * motion);
-                                    level.addFreshEntity(entityItem);
-                                }
-                            }
-                        }
-                        finishedStack = currentStack;
-                        progress = 0f;
-                        ticksSinceUpdate = UPDATE_INTERVAL;
-                        cooldown = 2;
-                        currentStack = ItemStack.EMPTY;
-                    }
-                }
-            }
+    public static void clientTick(Level level, BlockPos pos, BlockState state, AutoHammerBlockEntity blockEntity) {
+        blockEntity.clientTick();
+    }
 
-            // Sync to clients
-            ticksSinceUpdate++;
-            if (ticksSinceUpdate > UPDATE_INTERVAL) {
-                if (isDirty) {
-                    sync();
-                    finishedStack = ItemStack.EMPTY;
-                    isDirty = false;
-                }
-                ticksSinceUpdate = 0;
-            }
-        }
+    public static void serverTick(Level level, BlockPos pos, BlockState state, AutoHammerBlockEntity blockEntity) {
+        blockEntity.serverTick();
+    }
 
-        if (level.isClientSide && !finishedStack.isEmpty()) {
+    public void clientTick() {
+        if (!finishedStack.isEmpty()) {
             BlockState state = StupidUtils.getStateFromItemStack(finishedStack);
-            if (state != null) {
+            if (!state.isAir()) {
                 ExCompressum.proxy.spawnCrushParticles(level, worldPosition, state);
             }
             finishedStack = ItemStack.EMPTY;
+        }
+    }
+
+    public void serverTick() {
+        if (cooldown > 0) {
+            cooldown--;
+        }
+
+        int effectiveEnergy = getEffectiveEnergy();
+        if (!isDisabledByRedstone() && getEnergyStored() >= effectiveEnergy) {
+            if (currentStack.isEmpty() && cooldown <= 0) {
+                ItemStack inputStack = inputSlots.getItem(0);
+                if (!inputStack.isEmpty() && isRegistered(inputStack)) {
+                    boolean foundSpace = false;
+                    for (int i = 0; i < outputSlots.getContainerSize(); i++) {
+                        if (outputSlots.getItem(i).isEmpty()) {
+                            foundSpace = true;
+                        }
+                    }
+                    if (!foundSpace) {
+                        return;
+                    }
+                    currentStack = inputStack.split(1);
+                    if (inputStack.isEmpty()) {
+                        inputSlots.setItem(0, ItemStack.EMPTY);
+                    }
+                    energyStorage.drain(effectiveEnergy, false);
+                    ticksSinceUpdate = UPDATE_INTERVAL;
+                    progress = 0f;
+                }
+            } else {
+                energyStorage.drain(effectiveEnergy, false);
+                progress += getEffectiveSpeed();
+                isDirty = true;
+                if (progress >= 1) {
+                    if (!level.isClientSide) {
+                        if (level.random.nextFloat() <= ExCompressumConfig.getActive().automation.autoHammerDecay) {
+                            ItemStack firstHammer = hammerSlots.getItem(0);
+                            if (!firstHammer.isEmpty()) {
+                                if (firstHammer.hurt(1, level.random, null)) {
+                                    hammerSlots.setItem(0, ItemStack.EMPTY);
+                                }
+                            }
+                            ItemStack secondHammer = hammerSlots.getItem(1);
+                            if (!secondHammer.isEmpty()) {
+                                if (secondHammer.hurt(1, level.random, null)) {
+                                    hammerSlots.setItem(1, ItemStack.EMPTY);
+                                }
+                            }
+                        }
+                        Collection<ItemStack> rewards = rollHammerRewards(currentStack, getEffectiveTool(), level.random);
+                        for (ItemStack itemStack : rewards) {
+                            if (!addItemToOutput(itemStack)) {
+                                ItemEntity entityItem = new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, itemStack);
+                                double motion = 0.05;
+                                entityItem.setDeltaMovement(level.random.nextGaussian() * motion, 0.2, level.random.nextGaussian() * motion);
+                                level.addFreshEntity(entityItem);
+                            }
+                        }
+                    }
+                    finishedStack = currentStack;
+                    progress = 0f;
+                    ticksSinceUpdate = UPDATE_INTERVAL;
+                    cooldown = 2;
+                    currentStack = ItemStack.EMPTY;
+                }
+            }
+        }
+
+        // Sync to clients
+        ticksSinceUpdate++;
+        if (ticksSinceUpdate > UPDATE_INTERVAL) {
+            if (isDirty) {
+                sync();
+                finishedStack = ItemStack.EMPTY;
+                isDirty = false;
+            }
+            ticksSinceUpdate = 0;
         }
     }
 
@@ -333,10 +343,10 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
             finishedStack = ItemStack.of(tag.getCompound("FinishedStack"));
         }
 
-        if(tag.contains("FirstHammer", Tag.TAG_COMPOUND)) {
+        if (tag.contains("FirstHammer", Tag.TAG_COMPOUND)) {
             hammerSlots.setItem(0, ItemStack.of(tag.getCompound("FirstHammer")));
         }
-        if(tag.contains("SecondHammer", Tag.TAG_COMPOUND)) {
+        if (tag.contains("SecondHammer", Tag.TAG_COMPOUND)) {
             hammerSlots.setItem(1, ItemStack.of(tag.getCompound("SecondHammer")));
         }
     }
