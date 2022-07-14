@@ -38,7 +38,7 @@ public class BaitBlock extends BaseEntityBlock {
 
     public static final String nameSuffix = "_bait";
 
-    private static final VoxelShape BOUNDING_BOX = box(0.1, 0, 0.1, 0.9, 0.1, 0.9);
+    private static final VoxelShape BOUNDING_BOX = Shapes.box(0.1, 0, 0.1, 0.9, 0.1, 0.9);
 
     private final BaitType baitType;
 

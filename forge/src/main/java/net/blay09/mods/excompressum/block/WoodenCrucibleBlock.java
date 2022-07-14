@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.block;
 
-import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.block.entity.WoodenCrucibleBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -30,14 +29,14 @@ public class WoodenCrucibleBlock extends BaseEntityBlock {
     public static final String nameSuffix = "_crucible";
 
     private static final VoxelShape BOUNDING_BOX = Shapes.or(
-            box(0, 0.1875f, 0, 1, 1f, 1),
-            box(0.0625f, 0.125f, 0.0625f, 1 - 0.0625f, 0.1875f, 1 - 0.0625f),
-            box(0.125f, 0.0625f, 0.125f, 1 - 0.125f, 0.125f, 1 - 0.125f),
-            box(0, 0, 0, 0.0625f, 0.1875f, 0.0625f),
-            box(1 - 0.0625f, 0, 0, 1, 0.1875f, 0.0625f),
-            box(0, 0, 1 - 0.0625f, 0.0625f, 0.1875f, 1),
-            box(1 - 0.0625f, 0, 1 - 0.0625f, 1, 0.1875f, 1)
-    ).optimize();
+            Shapes.box(0, 0.1875f, 0, 1, 1f, 1),
+            Shapes.box(0.0625f, 0.125f, 0.0625f, 1 - 0.0625f, 0.1875f, 1 - 0.0625f),
+            Shapes.box(0.125f, 0.0625f, 0.125f, 1 - 0.125f, 0.125f, 1 - 0.125f),
+            Shapes.box(0, 0, 0, 0.0625f, 0.1875f, 0.0625f),
+            Shapes.box(1 - 0.0625f, 0, 0, 1, 0.1875f, 0.0625f),
+            Shapes.box(0, 0, 1 - 0.0625f, 0.0625f, 0.1875f, 1),
+            Shapes.box(1 - 0.0625f, 0, 1 - 0.0625f, 1, 0.1875f, 1)
+    );
 
     private final WoodenCrucibleType type;
 

@@ -8,6 +8,6 @@ public class InternalMethodsImpl implements InternalMethods {
 
 	@Override
 	public ExNihiloProvider getExNihilo() {
-		return ExNihilo.instance;
+		return ExNihilo.getInstance();
 	}
 }

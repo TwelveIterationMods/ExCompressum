@@ -43,11 +43,6 @@ public class ExCompressum {
         Balm.initializeIfLoaded(Compat.EXNIHILO_CREATIO, "net.blay09.mods.excompressum.compat.exnihilocreatio.ExNihiloCreatioAddon");
         Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.compat.exnihilosequentia.ExNihiloSequentiaAddon");
 
-        if (ExNihilo.instance == null) {
-            ExCompressum.logger.warn("No Ex Nihilo mod installed - many things will be disabled.");
-            ExNihilo.instance = new NihilisticNihiloProvider();
-        }
-
         //Balm.initializeIfLoaded(Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
         Balm.initializeIfLoaded(Compat.PATCHOULI, "net.blay09.mods.excompressum.compat.patchouli.PatchouliAddon");
 

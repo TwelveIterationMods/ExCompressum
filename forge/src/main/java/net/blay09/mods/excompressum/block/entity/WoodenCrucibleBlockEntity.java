@@ -9,6 +9,8 @@ import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRecipe
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -172,6 +174,11 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity {
         tagCompound.putInt("SolidVolume", solidVolume);
         tagCompound.put("FluidTank", fluidTank.writeToNBT(new CompoundTag()));
         tagCompound.put("ItemHandler", itemHandler.serializeNBT());
+    }
+
+    @Override
+    public void writeUpdateTag(CompoundTag tag) {
+        saveAdditional(tag);
     }
 
     @Override

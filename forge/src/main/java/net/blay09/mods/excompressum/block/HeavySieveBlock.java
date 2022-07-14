@@ -48,12 +48,12 @@ public class HeavySieveBlock extends BaseEntityBlock {
     public static final SieveModelBounds SIEVE_BOUNDS = new SieveModelBounds(0.5625f, 0.0625f, 0.88f, 0.5f);
 
     private static final VoxelShape BOUNDING_BOX = Shapes.or(
-            box(0, 0.5f, 0, 1, 0.75f, 1),
-            box(0.0625f, 0, 0.0625f, 0.125f, 0.5, 0.125f),
-            box(0.0625f, 0, 1 - 0.125f, 0.125f, 0.5, 1 - 0.0625f),
-            box(1 - 0.125f, 0, 0.0625f, 1 - 0.0625f, 0.5, 0.125f),
-            box(1 - 0.125f, 0, 1 - 0.125f, 1 - 0.0625f, 0.5, 1 - 0.0625f)
-    ).optimize();
+            Shapes.box(0, 0.5f, 0, 1, 0.75f, 1),
+            Shapes.box(0.0625f, 0, 0.0625f, 0.125f, 0.5, 0.125f),
+            Shapes.box(0.0625f, 0, 1 - 0.125f, 0.125f, 0.5, 1 - 0.0625f),
+            Shapes.box(1 - 0.125f, 0, 0.0625f, 1 - 0.0625f, 0.5, 0.125f),
+            Shapes.box(1 - 0.125f, 0, 1 - 0.125f, 1 - 0.0625f, 0.5, 1 - 0.0625f)
+    );
 
     public static final BooleanProperty WITH_MESH = BooleanProperty.create("with_mesh");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;

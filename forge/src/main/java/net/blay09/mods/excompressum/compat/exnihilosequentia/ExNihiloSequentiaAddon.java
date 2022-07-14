@@ -52,7 +52,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     private final EnumMap<NihiloItems, ItemStack> itemMap = Maps.newEnumMap(NihiloItems.class);
 
     public ExNihiloSequentiaAddon() {
-        ExNihilo.instance = this;
+        ExNihilo.setInstance(this);
 
         itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood"));
         itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammer_stone"));
