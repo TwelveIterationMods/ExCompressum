@@ -6,6 +6,7 @@ import net.blay09.mods.excompressum.block.BaitType;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class BaitBlockEntity extends BalmBlockEntity {
 
@@ -34,7 +36,7 @@ public class BaitBlockEntity extends BalmBlockEntity {
         super(ModBlockEntities.bait.get(), pos, state);
     }
 
-    private EnvironmentalCondition environmentStatus;
+    private EnvironmentalConditionResult environmentStatus;
     private int ticksSinceEnvironmentalCheck;
     private int ticksSinceSpawnCheck;
 
@@ -50,7 +52,7 @@ public class BaitBlockEntity extends BalmBlockEntity {
         ticksSinceSpawnCheck++;
         if (ticksSinceSpawnCheck >= SPAWN_CHECK_INTERVAL) {
             if (!level.isClientSide && level.random.nextFloat() <= baitType.getChance()) {
-                if (checkSpawnConditions(true) == EnvironmentalCondition.CanSpawn) {
+                if (checkSpawnConditions(true) == EnvironmentalConditionResult.CanSpawn) {
                     final float range = MIN_DISTANCE_NO_PLAYERS;
                     if (level.getEntitiesOfClass(Player.class, new AABB(worldPosition.getX() - range, worldPosition.getY() - range, worldPosition.getZ() - range, worldPosition.getX() + range, worldPosition.getY() + range, worldPosition.getZ() + range)).isEmpty()) {
                         Entity entity = baitType.createEntity(level);
@@ -70,7 +72,7 @@ public class BaitBlockEntity extends BalmBlockEntity {
         }
     }
 
-    public EnvironmentalCondition checkSpawnConditions(boolean checkNow) {
+    public EnvironmentalConditionResult checkSpawnConditions(boolean checkNow) {
         if (checkNow || ticksSinceEnvironmentalCheck > ENVIRONMENTAL_CHECK_INTERVAL) {
             BaitType baitType = getBaitType();
             Collection<BaitEnvironmentCondition> envBlocks = baitType.getEnvironmentConditions();
@@ -100,15 +102,16 @@ public class BaitBlockEntity extends BalmBlockEntity {
                 }
             }
             if (!foundWater) {
-                environmentStatus = EnvironmentalCondition.NoWater;
+                environmentStatus = EnvironmentalConditionResult.NoWater;
             } else if (countBait > MAX_BAITS_IN_AREA) {
-                environmentStatus = EnvironmentalCondition.NearbyBait;
+                environmentStatus = EnvironmentalConditionResult.NearbyBait;
             } else if (countEnvBlocks < MIN_ENV_IN_AREA) {
-                environmentStatus = EnvironmentalCondition.WrongEnv;
+                String listOfBlocks = envBlocks.stream().map(BaitEnvironmentCondition::getDisplayName).map(Component::getString).collect(Collectors.joining(", "));
+                environmentStatus = EnvironmentalConditionResult.wrongEnv(listOfBlocks);
             } else if (level.getEntitiesOfClass(Animal.class, new AABB(worldPosition.getX() - range * 2, worldPosition.getY() - rangeVertical, worldPosition.getZ() - range * 2, worldPosition.getX() + range * 2, worldPosition.getY() + rangeVertical, worldPosition.getZ() + range * 2)).size() > MAX_ANIMALS_IN_AREA) {
-                environmentStatus = EnvironmentalCondition.NearbyAnimal;
+                environmentStatus = EnvironmentalConditionResult.NearbyAnimal;
             } else {
-                environmentStatus = EnvironmentalCondition.CanSpawn;
+                environmentStatus = EnvironmentalConditionResult.CanSpawn;
             }
             ticksSinceEnvironmentalCheck = 0;
         }

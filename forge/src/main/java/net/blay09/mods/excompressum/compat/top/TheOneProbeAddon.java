@@ -97,12 +97,12 @@ public class TheOneProbeAddon  {
         }
 
         private void addBaitInfo(BaitBlockEntity tileEntity, ProbeMode mode, IProbeInfo info) {
-            EnvironmentalCondition environmentalStatus = tileEntity.checkSpawnConditions(true);
-            if (environmentalStatus == EnvironmentalCondition.CanSpawn) {
+            EnvironmentalConditionResult environmentalStatus = tileEntity.checkSpawnConditions(true);
+            if (environmentalStatus == EnvironmentalConditionResult.CanSpawn) {
                 info.text(new TranslatableComponent("excompressum.tooltip.baitTooClose"));
                 info.text(new TranslatableComponent("excompressum.tooltip.baitTooClose2"));
             } else {
-                TranslatableComponent statusText = new TranslatableComponent(environmentalStatus.langKey);
+                TranslatableComponent statusText = new TranslatableComponent(environmentalStatus.langKey, environmentalStatus.params);
                 statusText.withStyle(ChatFormatting.RED);
                 info.text(statusText);
             }

@@ -75,9 +75,9 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
                 particleCount = 0;
             }
 
-            if (level.isClientSide && !currentStack.isEmpty()) {
+            if (!currentStack.isEmpty()) {
                 final BlockState state = StupidUtils.getStateFromItemStack(currentStack);
-                if (state != null) {
+                if (!state.isAir()) {
                     ExCompressum.proxy.spawnHeavySieveParticles(level, worldPosition, state, particleCount);
                 }
             }
@@ -102,55 +102,58 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
     }
 
     public boolean processContents(Player player) {
-        if (!currentStack.isEmpty() && !meshStack.isEmpty()) {
-            if (player.getAbilities().instabuild) {
-                progress = 1f;
-            } else {
-                clicksSinceSecond++;
-                if (clicksSinceSecond <= ExCompressumConfig.getActive().automation.heavySieveClicksPerSecond) {
-                    int efficiency = ExNihilo.getInstance().getMeshEfficiency(meshStack);
-                    progress = Math.min(1f, progress + PROCESSING_INTERVAL * (1f + efficiency * EFFICIENCY_BOOST));
-                }
-            }
-
-            if (progress >= 1f) {
-                particleCount = 0;
-
-                if (!level.isClientSide) {
-                    SieveMeshRegistryEntry sieveMesh = getSieveMesh();
-                    if (sieveMesh != null) {
-                        LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), currentStack, level.random);
-                        Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(lootContext, getBlockState(), sieveMesh, currentStack);
-                        for (ItemStack itemStack : rewards) {
-                            level.addFreshEntity(new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, itemStack));
-                        }
-                    } else {
-                        level.addFreshEntity(new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, currentStack));
-                    }
-                    currentStack = ItemStack.EMPTY;
-                    if (ExNihilo.getInstance().doMeshesHaveDurability() && sieveMesh != null) {
-                        if (!sieveMesh.isHeavy()) {
-                            level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5f, 2.5f);
-                            meshStack = ItemStack.EMPTY;
-                        } else {
-                            meshStack.hurtAndBreak(1, player, it -> {
-                                level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5f, 2.5f);
-                                meshStack = ItemStack.EMPTY;
-                            });
-                        }
-                    }
-                    progress = 0f;
-                    sync();
-                }
-            }
-
-            particleTicks = PARTICLE_TICKS;
-            particleCount++;
-            isDirty = true;
-            return true;
+        if (currentStack.isEmpty() || meshStack.isEmpty()) {
+            return false;
         }
 
-        return false;
+        if (player.getAbilities().instabuild) {
+            progress = 1f;
+        } else {
+            clicksSinceSecond++;
+            if (clicksSinceSecond <= ExCompressumConfig.getActive().automation.heavySieveClicksPerSecond) {
+                int efficiency = ExNihilo.getInstance().getMeshEfficiency(meshStack);
+                progress = Math.min(1f, progress + PROCESSING_INTERVAL * (1f + efficiency * EFFICIENCY_BOOST));
+            }
+        }
+
+        if (progress >= 1f) {
+            particleCount = 0;
+
+            if (!level.isClientSide) {
+                SieveMeshRegistryEntry sieveMesh = getSieveMesh();
+                if (sieveMesh != null) {
+                    LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), currentStack, level.random);
+                    Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(lootContext, getBlockState(), sieveMesh, currentStack);
+                    for (ItemStack itemStack : rewards) {
+                        level.addFreshEntity(new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, itemStack));
+                    }
+                } else {
+                    level.addFreshEntity(new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, currentStack));
+                }
+                currentStack = ItemStack.EMPTY;
+                if (ExNihilo.getInstance().doMeshesHaveDurability() && sieveMesh != null) {
+                    if (!sieveMesh.isHeavy()) {
+                        level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5f, 2.5f);
+                        meshStack = ItemStack.EMPTY;
+                    } else {
+                        meshStack.hurtAndBreak(1, player, it -> {
+                            level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5f, 2.5f);
+                            meshStack = ItemStack.EMPTY;
+                        });
+                    }
+                }
+                progress = 0f;
+                sync();
+            }
+        }
+
+        setChanged();
+
+        particleTicks = PARTICLE_TICKS;
+        particleCount++;
+        isDirty = true;
+        return true;
+
     }
 
     @Override
@@ -171,6 +174,11 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
         tagCompound.putFloat("Progress", progress);
         tagCompound.putInt("ParticleTicks", particleTicks);
         tagCompound.putInt("ParticleCount", particleCount);
+    }
+
+    @Override
+    public void writeUpdateTag(CompoundTag tag) {
+        saveAdditional(tag);
     }
 
     public ItemStack getCurrentStack() {
@@ -195,6 +203,7 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
 
     public void setMeshStack(ItemStack meshStack) {
         this.meshStack = meshStack;
+        setChanged();
         sync();
     }
 }

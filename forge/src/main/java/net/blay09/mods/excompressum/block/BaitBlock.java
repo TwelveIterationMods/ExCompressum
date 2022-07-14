@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.block;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
-import net.blay09.mods.excompressum.block.entity.EnvironmentalCondition;
+import net.blay09.mods.excompressum.block.entity.EnvironmentalConditionResult;
 import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -65,10 +65,10 @@ public class BaitBlock extends BaseEntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.getBlockEntity(pos) instanceof BaitBlockEntity bait) {
-            EnvironmentalCondition environmentStatus = bait.checkSpawnConditions(true);
+            EnvironmentalConditionResult environmentStatus = bait.checkSpawnConditions(true);
             if (!level.isClientSide) {
-                TranslatableComponent chatComponent = new TranslatableComponent(environmentStatus.langKey);
-                chatComponent.withStyle(environmentStatus != EnvironmentalCondition.CanSpawn ? ChatFormatting.RED : ChatFormatting.GREEN);
+                TranslatableComponent chatComponent = new TranslatableComponent(environmentStatus.langKey, environmentStatus.params);
+                chatComponent.withStyle(environmentStatus != EnvironmentalConditionResult.CanSpawn ? ChatFormatting.RED : ChatFormatting.GREEN);
                 player.sendMessage(chatComponent, Util.NIL_UUID);
             }
         }
@@ -80,10 +80,10 @@ public class BaitBlock extends BaseEntityBlock {
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         if (placer instanceof Player) {
             if (level.getBlockEntity(pos) instanceof BaitBlockEntity bait) {
-                EnvironmentalCondition environmentStatus = bait.checkSpawnConditions(true);
+                EnvironmentalConditionResult environmentStatus = bait.checkSpawnConditions(true);
                 if (!level.isClientSide) {
-                    TranslatableComponent chatComponent = new TranslatableComponent(environmentStatus.langKey);
-                    chatComponent.withStyle(environmentStatus != EnvironmentalCondition.CanSpawn ? ChatFormatting.RED : ChatFormatting.GREEN);
+                    TranslatableComponent chatComponent = new TranslatableComponent(environmentStatus.langKey, environmentStatus.params);
+                    chatComponent.withStyle(environmentStatus != EnvironmentalConditionResult.CanSpawn ? ChatFormatting.RED : ChatFormatting.GREEN);
                     placer.sendMessage(chatComponent, Util.NIL_UUID);
                 }
             }
@@ -93,7 +93,7 @@ public class BaitBlock extends BaseEntityBlock {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, Random rand) {
         if (!ExCompressumConfig.getActive().client.disableParticles) {
-            if (level.getBlockEntity(pos) instanceof BaitBlockEntity bait && bait.checkSpawnConditions(false) == EnvironmentalCondition.CanSpawn) {
+            if (level.getBlockEntity(pos) instanceof BaitBlockEntity bait && bait.checkSpawnConditions(false) == EnvironmentalConditionResult.CanSpawn) {
                 if (rand.nextFloat() <= 0.2f) {
                     level.addParticle(ParticleTypes.SMOKE, pos.getX() + rand.nextFloat(), pos.getY() + rand.nextFloat() * 0.5f, pos.getZ() + rand.nextFloat(), 0.0, 0.0, 0.0);
                 }

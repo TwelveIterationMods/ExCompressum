@@ -8,6 +8,7 @@ import net.blay09.mods.excompressum.block.entity.BaitBlockStateCondition;
 import net.blay09.mods.excompressum.block.entity.BaitBlockTagCondition;
 import net.blay09.mods.excompressum.block.entity.BaitEnvironmentCondition;
 import net.blay09.mods.excompressum.block.entity.BaitFluidCondition;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
@@ -92,10 +93,10 @@ public enum BaitType implements StringRepresentable {
         if (environmentConditions == null) {
             if (this == OCELOT || this == PARROT) {
                 environmentConditions = Lists.newArrayList(
-                        new BaitBlockTagCondition(BlockTags.LOGS),
+                        new BaitBlockTagCondition(BlockTags.LOGS, new TranslatableComponent("excompressum.tooltip.bait.logs")),
                         new BaitBlockStateCondition(Blocks.VINE.defaultBlockState()),
                         new BaitBlockStateCondition(Blocks.LILY_PAD.defaultBlockState()),
-                        new BaitBlockTagCondition(BlockTags.SAPLINGS)
+                        new BaitBlockTagCondition(BlockTags.SAPLINGS, new TranslatableComponent("excompressum.tooltip.bait.saplings"))
                 );
             } else if (this == SQUID) {
                 environmentConditions = Lists.newArrayList(
@@ -114,8 +115,8 @@ public enum BaitType implements StringRepresentable {
                         new BaitBlockStateCondition(Blocks.TALL_GRASS.defaultBlockState()),
                         new BaitBlockStateCondition(Blocks.FERN.defaultBlockState()),
                         new BaitBlockStateCondition(Blocks.LARGE_FERN.defaultBlockState()),
-                        new BaitBlockTagCondition(BlockTags.LOGS),
-                        new BaitBlockTagCondition(BlockTags.SAPLINGS)
+                        new BaitBlockTagCondition(BlockTags.LOGS, new TranslatableComponent("excompressum.tooltip.bait.logs")),
+                        new BaitBlockTagCondition(BlockTags.SAPLINGS, new TranslatableComponent("excompressum.tooltip.bait.saplings"))
                 );
             }
         }

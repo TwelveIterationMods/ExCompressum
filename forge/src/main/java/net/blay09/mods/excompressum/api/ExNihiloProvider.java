@@ -34,7 +34,6 @@ public interface ExNihiloProvider {
 
     enum NihiloItems {
         SEEDS_GRASS,
-        CROOK_WOODEN,
         HAMMER_WOODEN,
         HAMMER_STONE,
         HAMMER_IRON,
@@ -42,12 +41,10 @@ public interface ExNihiloProvider {
         HAMMER_DIAMOND,
         HAMMER_NETHERITE,
         SILK_WORM,
-        SILK_MESH,
         DUST,
         NETHER_GRAVEL,
         ENDER_GRAVEL,
         INFESTED_LEAVES,
-        IRON_MESH,
         SIEVE,
         ANDESITE_GRAVEL,
         DIORITE_GRAVEL,

@@ -54,18 +54,14 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     public ExNihiloSequentiaAddon() {
         ExNihilo.setInstance(this);
 
-        itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("hammer_wood"));
-        itemMap.put(NihiloItems.HAMMER_STONE, findItem("hammer_stone"));
-        itemMap.put(NihiloItems.HAMMER_IRON, findItem("hammer_iron"));
-        itemMap.put(NihiloItems.HAMMER_GOLD, findItem("hammer_gold"));
-        itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("hammer_diamond"));
-        itemMap.put(NihiloItems.HAMMER_NETHERITE, findItem("hammer_netherite"));
-        itemMap.put(NihiloItems.CROOK_WOODEN, findItem("crook_wood"));
-        itemMap.put(NihiloItems.SILK_MESH, findItem("mesh_string"));
-        itemMap.put(NihiloItems.IRON_MESH, findItem("mesh_iron"));
+        itemMap.put(NihiloItems.HAMMER_WOODEN, findItem("wooden_hammer"));
+        itemMap.put(NihiloItems.HAMMER_STONE, findItem("stone_hammer"));
+        itemMap.put(NihiloItems.HAMMER_IRON, findItem("iron_hammer"));
+        itemMap.put(NihiloItems.HAMMER_GOLD, findItem("golden_hammer"));
+        itemMap.put(NihiloItems.HAMMER_DIAMOND, findItem("diamond_hammer"));
+        itemMap.put(NihiloItems.HAMMER_NETHERITE, findItem("netherite_hammer"));
 
         itemMap.put(NihiloItems.DUST, findBlock("dust"));
-        itemMap.put(NihiloItems.SIEVE, findBlock("sieve"));
         itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("infested_leaves"));
         itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("crushed_netherrack"));
         itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("crushed_end_stone"));
@@ -73,7 +69,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         itemMap.put(NihiloItems.ANDESITE_GRAVEL, findBlock("crushed_andesite"));
         itemMap.put(NihiloItems.GRANITE_GRAVEL, findBlock("crushed_granite"));
 
-        ItemStack stringMeshItem = getNihiloItem(NihiloItems.SILK_MESH);
+        ItemStack stringMeshItem = findItem("string_mesh");
         if (!stringMeshItem.isEmpty()) {
             SieveMeshRegistryEntry stringMesh = new SieveMeshRegistryEntry(CommonMeshType.STRING, stringMeshItem, MeshType.STRING);
             stringMesh.setMeshLevel(1);
@@ -81,7 +77,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             SieveMeshRegistry.add(stringMesh);
         }
 
-        ItemStack flintMeshItem = findItem("mesh_flint");
+        ItemStack flintMeshItem = findItem("flint_mesh");
         if (!flintMeshItem.isEmpty()) {
             SieveMeshRegistryEntry flintMesh = new SieveMeshRegistryEntry(CommonMeshType.FLINT, flintMeshItem, MeshType.FLINT);
             flintMesh.setMeshLevel(2);
@@ -89,7 +85,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             SieveMeshRegistry.add(flintMesh);
         }
 
-        ItemStack ironMeshItem = getNihiloItem(NihiloItems.IRON_MESH);
+        ItemStack ironMeshItem = findItem("iron_mesh");
         if (!ironMeshItem.isEmpty()) {
             SieveMeshRegistryEntry ironMesh = new SieveMeshRegistryEntry(CommonMeshType.IRON, ironMeshItem, MeshType.IRON);
             ironMesh.setMeshLevel(3);
@@ -98,7 +94,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             SieveMeshRegistry.add(ironMesh);
         }
 
-        ItemStack diamondMeshItem = findItem("mesh_diamond");
+        ItemStack diamondMeshItem = findItem("diamond_mesh");
         if (!diamondMeshItem.isEmpty()) {
             SieveMeshRegistryEntry diamondMesh = new SieveMeshRegistryEntry(CommonMeshType.DIAMOND, diamondMeshItem, MeshType.DIAMOND);
             diamondMesh.setMeshLevel(4);
@@ -107,7 +103,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             SieveMeshRegistry.add(diamondMesh);
         }
 
-        ItemStack emeraldMeshItem = findItem("mesh_emerald");
+        ItemStack emeraldMeshItem = findItem("emerald_mesh");
         if (!emeraldMeshItem.isEmpty()) {
             SieveMeshRegistryEntry emeraldMesh = new SieveMeshRegistryEntry(CommonMeshType.EMERALD, emeraldMeshItem, MeshType.EMERALD);
             emeraldMesh.setMeshLevel(5);
@@ -116,7 +112,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             SieveMeshRegistry.add(emeraldMesh);
         }
 
-        ItemStack netheriteMeshItem = findItem("mesh_netherite");
+        ItemStack netheriteMeshItem = findItem("netherite_mesh");
         if (!netheriteMeshItem.isEmpty()) {
             SieveMeshRegistryEntry mesh = new SieveMeshRegistryEntry(CommonMeshType.NETHERITE, netheriteMeshItem, MeshType.NETHERITE);
             mesh.setMeshLevel(6);
