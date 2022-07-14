@@ -92,7 +92,7 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
         ItemStack currentStack = tileEntity.getCurrentStack();
         if (!currentStack.isEmpty()) {
             BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
-            if (contentState != null) {
+            if (!contentState.isAir()) {
                 poseStack.pushPose();
                 poseStack.translate(-0.09375f, 0.0625f, -0.25);
                 poseStack.scale(0.5f, 0.5f, 0.5f);

@@ -5,8 +5,15 @@ import net.blay09.mods.balm.api.client.rendering.BalmModels;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.HeavySieveType;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.ForgeModelBakery;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.*;
@@ -38,4 +45,12 @@ public class ModModels {
         return new ResourceLocation(ExCompressum.MOD_ID, path);
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onBake(ModelBakeEvent event) {
+        HeavySieveType[] sieveTypes = HeavySieveType.values;
+        for (HeavySieveType sieveType : sieveTypes) {
+            UnbakedModel model = event.getModelLoader().getModel(location("block/" + sieveType.getSerializedName() + "_sieve"));
+            model.getMaterials(event.getModelLoader()::getModel, Collections.emptySet());
+        }
+    }
 }
