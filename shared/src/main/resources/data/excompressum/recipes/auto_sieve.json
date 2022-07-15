@@ -13,8 +13,7 @@
       "tag": "forge:glass_panes/colorless"
     },
     "S": {
-      "type": "excompressum:nihilo_item",
-      "value": "SIEVE"
+      "tag": "excompressum:sieves"
     },
     "I": {
       "tag": "forge:ingots/iron"
@@ -22,11 +21,5 @@
     "B": {
       "tag": "forge:storage_blocks/iron"
     }
-  },
-  "conditions": [
-    {
-      "type": "excompressum:has_nihilo_item",
-      "value": "SIEVE"
-    }
-  ]
+  }
 }

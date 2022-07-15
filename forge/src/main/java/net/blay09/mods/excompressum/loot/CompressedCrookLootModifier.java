@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.loot;
 
 import com.google.gson.JsonObject;
 import net.blay09.mods.excompressum.item.ModItems;
+import net.blay09.mods.excompressum.item.ModTags;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -19,9 +20,12 @@ import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CompressedCrookLootModifier extends LootModifier {
+
+    private static final List<LootContext> activeContexts = new ArrayList<>();
 
     public CompressedCrookLootModifier(LootItemCondition[] conditionsIn) {
         super(conditionsIn);
@@ -30,6 +34,12 @@ public class CompressedCrookLootModifier extends LootModifier {
     @Nonnull
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+        synchronized (activeContexts) {
+            if (activeContexts.contains(context)) {
+                return generatedLoot;
+            }
+        }
+
         BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         Vec3 origin = context.getParamOrNull(LootContextParams.ORIGIN);
         if (state == null || origin == null) {
@@ -39,7 +49,7 @@ public class CompressedCrookLootModifier extends LootModifier {
         ServerLevel world = context.getLevel();
         Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
         ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
-        if (tool == null || tool.getItem() != ModItems.compressedCrook) {
+        if (tool == null || !tool.is(ModTags.COMPRESSED_CROOKS)) {
             return generatedLoot;
         }
 
@@ -49,7 +59,14 @@ public class CompressedCrookLootModifier extends LootModifier {
             return generatedLoot;
         }
 
-        return ExNihilo.getInstance().rollCrookRewards(world, pos, state, entity, tool, context.getRandom());
+        synchronized (activeContexts) {
+            activeContexts.add(context);
+        }
+        List<ItemStack> loot = ExNihilo.getInstance().rollCrookRewards(world, pos, state, entity, tool, context.getRandom());
+        synchronized (activeContexts) {
+            activeContexts.remove(context);
+        }
+        return loot;
     }
 
     public static class Serializer extends GlobalLootModifierSerializer<CompressedCrookLootModifier> {

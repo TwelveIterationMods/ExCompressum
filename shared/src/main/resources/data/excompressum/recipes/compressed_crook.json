@@ -10,14 +10,7 @@
   ],
   "key": {
     "#": {
-      "type": "excompressum:nihilo_item",
-      "value": "CROOK_WOODEN"
+      "tag": "excompressum:crooks/wooden",
     }
-  },
-  "conditions": [
-    {
-      "type": "excompressum:has_nihilo_item",
-      "value": "CROOK_WOODEN"
-    }
-  ]
+  }
 }

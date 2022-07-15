@@ -1,7 +1,9 @@
 package net.blay09.mods.excompressum.loot;
 
 import com.google.gson.JsonObject;
+import net.blay09.mods.excompressum.item.ModTags;
 import net.blay09.mods.excompressum.registry.ExNihilo;
+import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -34,8 +36,13 @@ public class CompressedHammerLootModifier extends LootModifier {
             }
         }
 
-        BlockState state = context.getParam(LootContextParams.BLOCK_STATE);
+        BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         if (state == null) {
+            return generatedLoot;
+        }
+
+        ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
+        if(tool == null || !tool.is(ModTags.COMPRESSED_HAMMERS)) {
             return generatedLoot;
         }
 
@@ -52,8 +59,14 @@ public class CompressedHammerLootModifier extends LootModifier {
         }
 
         if (ExNihilo.getInstance().isHammerable(state)) {
-            ItemStack tool = context.getParam(LootContextParams.TOOL);
-            return ExNihilo.getInstance().rollHammerRewards(state, tool != null ? tool : ItemStack.EMPTY, context.getRandom());
+            synchronized (activeContexts) {
+                activeContexts.add(context);
+            }
+            List<ItemStack> nihiLoot = ExNihilo.getInstance().rollHammerRewards(state, tool, context.getRandom());
+            synchronized (activeContexts) {
+                activeContexts.remove(context);
+            }
+            return nihiLoot;
         }
 
         return generatedLoot;

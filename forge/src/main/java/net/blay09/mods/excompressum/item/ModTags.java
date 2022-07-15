@@ -11,11 +11,17 @@ public class ModTags {
 
     public static TagKey<Block> MINEABLE_WITH_HAMMER;
     public static TagKey<Block> MINEABLE_WITH_CROOK;
-    public static TagKey<Item> HAMMER;
+    public static TagKey<Item> HAMMERS;
+    public static TagKey<Item> COMPRESSED_HAMMERS;
+    public static TagKey<Item> CHICKEN_STICKS;
+    public static TagKey<Item> COMPRESSED_CROOKS;
 
     public static void initialize(BalmRegistries registries) {
         MINEABLE_WITH_HAMMER = BlockTags.create(new ResourceLocation("excompressum", "mineable/hammer")); // TODO registries.getBlockTag(new ResourceLocation("excompressum", "mineable/hammer"));
         MINEABLE_WITH_CROOK = BlockTags.create(new ResourceLocation("excompressum", "mineable/crook")); // TODO registries.getBlockTag(new ResourceLocation("excompressum", "mineable/hammer"));
-        HAMMER = registries.getItemTag(new ResourceLocation("excompressum", "hammer"));
+        HAMMERS = registries.getItemTag(new ResourceLocation("excompressum", "hammer"));
+        COMPRESSED_HAMMERS = registries.getItemTag(new ResourceLocation("excompressum", "compressed_hammer"));
+        CHICKEN_STICKS = registries.getItemTag(new ResourceLocation("excompressum", "chicken_sticks"));
+        COMPRESSED_CROOKS = registries.getItemTag(new ResourceLocation("excompressum", "compressed_crooks"));
     }
 }

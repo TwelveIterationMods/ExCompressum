@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.loot;
 
 import com.google.gson.JsonObject;
+import net.blay09.mods.excompressum.item.ModTags;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -33,8 +34,13 @@ public class ChickenStickLootModifier extends LootModifier {
             }
         }
 
-        BlockState state = context.getParam(LootContextParams.BLOCK_STATE);
+        BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         if (state == null) {
+            return generatedLoot;
+        }
+
+        ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
+        if(tool == null || !tool.is(ModTags.CHICKEN_STICKS)) {
             return generatedLoot;
         }
 

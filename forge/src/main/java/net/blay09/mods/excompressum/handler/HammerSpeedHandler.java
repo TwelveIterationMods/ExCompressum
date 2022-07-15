@@ -16,7 +16,7 @@ public class HammerSpeedHandler {
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
         ItemStack heldItem = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
-        if (heldItem.is(ModTags.HAMMER) && event.getState().is(BlockTags.LOGS)) {
+        if (heldItem.is(ModTags.HAMMERS) && event.getState().is(BlockTags.LOGS)) {
             float newSpeed = 2f;
             if (heldItem.getItem() instanceof DiggerItem) {
                 newSpeed = ((DiggerItem) heldItem.getItem()).getTier().getSpeed();
