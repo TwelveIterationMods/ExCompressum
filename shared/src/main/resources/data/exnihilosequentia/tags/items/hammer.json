@@ -1,7 +1,9 @@
 {
   "replace": false,
-  "values": [],
-  "optional": [
-    "excompressum:hammer_mana"
+  "values": [
+    {
+      "id": "excompressum:hammer_mana",
+      "required": false
+    }
   ]
 }

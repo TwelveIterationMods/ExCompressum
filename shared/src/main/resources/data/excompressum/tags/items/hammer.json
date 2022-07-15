@@ -1,14 +1,33 @@
 {
   "replace": false,
   "values": [
-  ],
-  "optional": [
-    "excompressum:hammer_mana",
-    "exnihilosequentia:hammer_wood",
-    "exnihilosequentia:hammer_stone",
-    "exnihilosequentia:hammer_iron",
-    "exnihilosequentia:hammer_gold",
-    "exnihilosequentia:hammer_diamond",
-    "exnihilosequentia:hammer_netherite"
+    {
+      "id": "excompressum:hammer_mana",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:hammer_wood",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:hammer_stone",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:hammer_iron",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:hammer_gold",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:hammer_diamond",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:hammer_netherite",
+      "required": false
+    }
   ]
 }

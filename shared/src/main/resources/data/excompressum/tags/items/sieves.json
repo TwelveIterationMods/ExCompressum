@@ -1,7 +1,9 @@
 {
   "replace": false,
-  "values": [],
-  "optional": [
-    "#exnihilosequentia:sieves"
+  "values": [
+    {
+      "id": "#exnihilosequentia:sieves",
+      "required": false
+    }
   ]
 }
