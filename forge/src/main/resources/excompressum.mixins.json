@@ -5,6 +5,18 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "excompressum.refmap.json",
   "mixins": [
+    "BinomialDistributionGeneratorAccessor",
+    "ConstantValueAccessor",
+    "LootItemAccessor",
+    "LootItemRandomChanceConditionAccessor",
+    "LootPoolAccessor",
+    "LootPoolEntryContainerAccessor",
+    "LootPoolSingletonContainerAccessor",
+    "LootTableAccessor",
+    "LootTableReferenceAccessor",
+    "SetItemCountFunctionAccessor",
+    "TagEntryAccessor",
+    "UniformGeneratorAccessor"
   ],
   "client": [
   ],
