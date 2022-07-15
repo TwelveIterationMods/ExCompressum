@@ -48,7 +48,9 @@ public interface ExNihiloProvider {
         SIEVE,
         ANDESITE_GRAVEL,
         DIORITE_GRAVEL,
-        GRANITE_GRAVEL
+        GRANITE_GRAVEL,
+        /** used to disable our iron mesh recipe **/
+        IRON_MESH
     }
 
     ItemStack getNihiloItem(NihiloItems type);
