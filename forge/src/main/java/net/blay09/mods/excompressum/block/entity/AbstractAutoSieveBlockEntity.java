@@ -52,9 +52,9 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
     private final DefaultContainer backingContainer = new DefaultContainer(22) {
         @Override
         public boolean canPlaceItem(int slot, ItemStack itemStack) {
-            if (inputSlots.containsSlot(slot)) {
+            if (inputSlots.containsOuterSlot(slot)) {
                 return isSiftableWithMesh(itemStack, getSieveMesh());
-            } else if (meshSlots.containsSlot(slot)) {
+            } else if (meshSlots.containsOuterSlot(slot)) {
                 return isMesh(itemStack);
             }
             return true;
@@ -64,7 +64,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
         public void slotChanged(int slot) {
             super.slotChanged(slot);
             // Make sure the mesh slot is always synced.
-            if (meshSlots.containsSlot(slot)) {
+            if (meshSlots.containsOuterSlot(slot)) {
                 isDirty = true;
             }
         }
@@ -104,7 +104,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
     private final DelegateContainer container = new DelegateContainer(backingContainer) {
         @Override
         public ItemStack removeItem(int slot, int count) {
-            if (!outputSlots.containsSlot(slot)) {
+            if (!outputSlots.containsOuterSlot(slot)) {
                 return ItemStack.EMPTY;
             }
 
@@ -113,7 +113,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
 
         @Override
         public ItemStack removeItemNoUpdate(int slot) {
-            if (!outputSlots.containsSlot(slot)) {
+            if (!outputSlots.containsOuterSlot(slot)) {
                 return ItemStack.EMPTY;
             }
 
@@ -122,7 +122,12 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
 
         @Override
         public boolean canPlaceItem(int slot, ItemStack itemStack) {
-            return super.canPlaceItem(slot, itemStack) && (inputSlots.containsSlot(slot) || meshSlots.containsSlot(slot));
+            return super.canPlaceItem(slot, itemStack) && (inputSlots.containsOuterSlot(slot) || meshSlots.containsOuterSlot(slot));
+        }
+
+        @Override
+        public boolean canExtractItem(int slot) {
+            return outputSlots.containsOuterSlot(slot);
         }
     };
 

@@ -93,9 +93,9 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
     private final DefaultContainer backingContainer = new DefaultContainer(23) {
         @Override
         public boolean canPlaceItem(int slot, ItemStack itemStack) {
-            if (slot == 0) {
+            if (inputSlots.containsOuterSlot(slot)) {
                 return isRegistered(itemStack);
-            } else if (slot == 21 || slot == 22) {
+            } else if (hammerSlots.containsOuterSlot(slot)) {
                 return isHammerUpgrade(itemStack);
             }
             return true;
@@ -105,7 +105,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
         public void slotChanged(int slot) {
             super.slotChanged(slot);
             // Make sure the hammer slots are always synced.
-            if (hammerSlots.containsSlot(slot)) {
+            if (hammerSlots.containsOuterSlot(slot)) {
                 isDirty = true;
             }
         }
@@ -116,7 +116,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
     private final DelegateContainer container = new DelegateContainer(backingContainer) {
         @Override
         public ItemStack removeItem(int slot, int count) {
-            if (!outputSlots.containsSlot(slot)) {
+            if (!outputSlots.containsOuterSlot(slot)) {
                 return ItemStack.EMPTY;
             }
 
@@ -125,7 +125,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
 
         @Override
         public ItemStack removeItemNoUpdate(int slot) {
-            if (!outputSlots.containsSlot(slot)) {
+            if (!outputSlots.containsOuterSlot(slot)) {
                 return ItemStack.EMPTY;
             }
 
@@ -134,7 +134,13 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
 
         @Override
         public boolean canPlaceItem(int slot, ItemStack itemStack) {
-            return super.canPlaceItem(slot, itemStack) && inputSlots.containsSlot(slot) || hammerSlots.containsSlot(slot);
+            return super.canPlaceItem(slot, itemStack)
+                    && (inputSlots.containsOuterSlot(slot) || hammerSlots.containsOuterSlot(slot));
+        }
+
+        @Override
+        public boolean canExtractItem(int slot) {
+            return outputSlots.containsOuterSlot(slot);
         }
     };
 
