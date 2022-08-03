@@ -1,3 +1,7 @@
+### Version 5.0.2 for Minecraft 1.18.x
+
+- Fixed Mana Sieve showing up in Creative Mode even if Botania isn't installed
+
 ### Version 5.0.1 for Minecraft 1.18.x
 
 - Fixed mixins not being loaded

@@ -41,7 +41,7 @@ public class ModBlocks {
 
         blocks.register(() -> autoHammer = new AutoHammerBlock(), () -> new BlockItem(autoHammer, itemProperties()), id("auto_hammer"));
         blocks.register(() -> autoSieve = new AutoSieveBlock(), () -> new BlockItem(autoSieve, itemProperties()), id("auto_sieve"));
-        blocks.register(() -> manaSieve = BotaniaCompat.createManaSieveBlock(), () -> new BlockItem(manaSieve, itemProperties()), id("mana_sieve"));
+        blocks.register(() -> manaSieve = BotaniaCompat.createManaSieveBlock(), () -> new BlockItem(manaSieve, optionalItemProperties(Compat.BOTANIA)), id("mana_sieve"));
         blocks.register(() -> autoCompressedHammer = new AutoCompressedHammerBlock(), () -> new BlockItem(autoCompressedHammer, itemProperties()), id("auto_compressed_hammer"));
         blocks.register(() -> autoHeavySieve = new AutoHeavySieveBlock(), () -> new BlockItem(autoHeavySieve, itemProperties()), id("auto_heavy_sieve"));
         blocks.register(() -> autoCompressor = new AutoCompressorBlock(), () -> new BlockItem(autoCompressor, itemProperties()), id("auto_compressor"));
