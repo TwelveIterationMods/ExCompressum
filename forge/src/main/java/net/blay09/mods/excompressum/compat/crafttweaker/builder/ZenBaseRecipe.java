@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@ZenRegister
-@ZenCodeType.Name("mods.exnihilosequentia.ZenSieveRecipe")
 public abstract class ZenBaseRecipe<T> {
 
     private final List<LootPool.Builder> lootPoolBuilders = new ArrayList<>();
