@@ -1,4 +1,5 @@
 {
+    "render_type": "minecraft:cutout",
     "parent": "minecraft:block/block",
 "__comment": "Designed by Blay09 with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
 "textures": {

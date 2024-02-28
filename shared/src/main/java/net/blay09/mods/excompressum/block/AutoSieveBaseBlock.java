@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.registry.autosieveskin.WhitelistEntry;
 import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
@@ -48,6 +49,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -72,6 +74,10 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (player.getItemInHand(hand).is(ModItems.uglySteelPlating)) {
+            return InteractionResult.PASS;
+        }
+
         if (!level.isClientSide) {
             ItemStack heldItemStack = player.getItemInHand(hand);
             if (!heldItemStack.isEmpty()) {

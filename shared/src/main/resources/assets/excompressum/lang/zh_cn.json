@@ -77,8 +77,8 @@
     "block.excompressum.evolved_orechid": "进化凝矿兰",
     "entity.excompressum.angry_chicken": "愤怒的小鸡",
     
-    "excompressum.gui.autoSieve.noMesh": "无筛网",
-    "excompressum.gui.autoSieve.incorrectMesh": "不正确的筛网",
+    "gui.excompressum.autoSieve.noMesh": "无筛网",
+    "gui.excompressum.autoSieve.incorrectMesh": "不正确的筛网",
     "excompressum.compressedMob": "压缩 %s",
     "tooltip.excompressum.universal_hammer_head": "匠魂强化",
     "tooltip.excompressum.best_with_blasting": "与爆破强化结合以达到最佳效果",

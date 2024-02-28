@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.IUglyfiable;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public class UglySteelPlatingItem extends Item {
@@ -28,7 +30,7 @@ public class UglySteelPlatingItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(Component.translatable("tooltip.excompressum.ugly_steel_plating"));
+        tooltip.add(Component.translatable("tooltip.excompressum.ugly_steel_plating").withStyle(ChatFormatting.GRAY));
     }
 
     @Override

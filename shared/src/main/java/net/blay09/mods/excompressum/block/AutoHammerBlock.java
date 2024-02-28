@@ -5,6 +5,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.block.entity.WoodenCrucibleBlockEntity;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -71,6 +72,10 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (player.getItemInHand(hand).is(ModItems.uglySteelPlating)) {
+            return InteractionResult.PASS;
+        }
+
         if (!player.isShiftKeyDown() && !level.isClientSide) {
             final BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof MenuProvider menuProvider) {
@@ -179,6 +184,8 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide ? createTickerHelper(type, ModBlockEntities.autoHammer.get(), AutoHammerBlockEntity::serverTick) : createTickerHelper(type, ModBlockEntities.autoHammer.get(), AutoHammerBlockEntity::clientTick);
+        return !level.isClientSide ? createTickerHelper(type, ModBlockEntities.autoHammer.get(), AutoHammerBlockEntity::serverTick) : createTickerHelper(type,
+                ModBlockEntities.autoHammer.get(),
+                AutoHammerBlockEntity::clientTick);
     }
 }

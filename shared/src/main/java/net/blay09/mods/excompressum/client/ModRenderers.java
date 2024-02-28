@@ -21,7 +21,6 @@ public class ModRenderers {
 
     public static void initialize(BalmRenderers renderers) {
         renderers.setBlockRenderType(() -> ModBlocks.autoSieve, RenderType.cutout());
-        renderers.setBlockRenderType(() -> ModBlocks.autoSieve, RenderType.cutout());
         renderers.setBlockRenderType(() -> ModBlocks.autoHeavySieve, RenderType.cutout());
         renderers.setBlockRenderType(() -> ModBlocks.autoHammer, RenderType.cutout());
         renderers.setBlockRenderType(() -> ModBlocks.autoCompressedHammer, RenderType.cutout());
