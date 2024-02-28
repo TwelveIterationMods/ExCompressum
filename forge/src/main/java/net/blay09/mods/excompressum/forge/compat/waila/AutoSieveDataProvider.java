@@ -10,16 +10,16 @@ public class AutoSieveDataProvider implements IBlockComponentProvider {
     public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
         if(accessor.getBlockEntity() instanceof AbstractAutoSieveBlockEntity autoSieve) {
             if(autoSieve.getCustomSkin() != null) {
-                tooltip.addLine(Component.translatable("excompressum.tooltip.sieveSkin", autoSieve.getCustomSkin().getName()));
+                tooltip.addLine(Component.translatable("tooltip.excompressum.sieveSkin", autoSieve.getCustomSkin().getName()));
             }
             if(autoSieve.getFoodBoost() > 1f) {
-                tooltip.addLine(Component.translatable("excompressum.tooltip.speedBoost", autoSieve.getFoodBoost()));
+                tooltip.addLine(Component.translatable("tooltip.excompressum.speedBoost", autoSieve.getFoodBoost()));
             }
             if(autoSieve.getEffectiveLuck() > 1) {
-                tooltip.addLine(Component.translatable("excompressum.tooltip.luckBonus", autoSieve.getEffectiveLuck() - 1));
+                tooltip.addLine(Component.translatable("tooltip.excompressum.luckBonus", autoSieve.getEffectiveLuck() - 1));
             }
 
-            tooltip.addLine(Component.translatable("excompressum.tooltip.energyStoredOfMax", autoSieve.getEnergyStored(), autoSieve.getMaxEnergyStored()));
+            tooltip.addLine(Component.translatable("tooltip.excompressum.energyStoredOfMax", autoSieve.getEnergyStored(), autoSieve.getMaxEnergyStored()));
         }
     }
 

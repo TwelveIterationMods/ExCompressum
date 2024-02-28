@@ -12,17 +12,17 @@ public class HeavySieveDataProvider implements IBlockComponentProvider {
     public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
         if(accessor.getBlockEntity() instanceof HeavySieveBlockEntity heavySieve) {
             if(heavySieve.getProgress() > 0f) {
-                tooltip.addLine(Component.translatable("excompressum.tooltip.sieveProgress", (int) (heavySieve.getProgress() * 100) + "%"));
+                tooltip.addLine(Component.translatable("tooltip.excompressum.sieveProgress", (int) (heavySieve.getProgress() * 100) + "%"));
             }
             ItemStack meshStack = heavySieve.getMeshStack();
             if (!meshStack.isEmpty()) {
                 if(ExNihilo.getInstance().doMeshesHaveDurability()) {
-                    tooltip.addLine(Component.translatable("excompressum.tooltip.sieveMesh", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getDamageValue(), meshStack.getMaxDamage()));
+                    tooltip.addLine(Component.translatable("tooltip.excompressum.sieveMesh", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getDamageValue(), meshStack.getMaxDamage()));
                 } else {
                     tooltip.addLine(meshStack.getDisplayName());
                 }
             } else {
-                tooltip.addLine(Component.translatable("excompressum.tooltip.sieveNoMesh"));
+                tooltip.addLine(Component.translatable("tooltip.excompressum.sieveNoMesh"));
             }
         }
     }

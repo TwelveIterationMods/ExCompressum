@@ -93,10 +93,10 @@ public enum BaitType implements StringRepresentable {
         if (environmentConditions == null) {
             if (this == OCELOT || this == PARROT) {
                 environmentConditions = Lists.newArrayList(
-                        new BaitBlockTagCondition(BlockTags.LOGS, Component.translatable("excompressum.tooltip.bait.logs")),
+                        new BaitBlockTagCondition(BlockTags.LOGS, Component.translatable("tooltip.excompressum.bait.logs")),
                         new BaitBlockStateCondition(Blocks.VINE.defaultBlockState()),
                         new BaitBlockStateCondition(Blocks.LILY_PAD.defaultBlockState()),
-                        new BaitBlockTagCondition(BlockTags.SAPLINGS, Component.translatable("excompressum.tooltip.bait.saplings"))
+                        new BaitBlockTagCondition(BlockTags.SAPLINGS, Component.translatable("tooltip.excompressum.bait.saplings"))
                 );
             } else if (this == SQUID) {
                 environmentConditions = Lists.newArrayList(
@@ -115,8 +115,8 @@ public enum BaitType implements StringRepresentable {
                         new BaitBlockStateCondition(Blocks.TALL_GRASS.defaultBlockState()),
                         new BaitBlockStateCondition(Blocks.FERN.defaultBlockState()),
                         new BaitBlockStateCondition(Blocks.LARGE_FERN.defaultBlockState()),
-                        new BaitBlockTagCondition(BlockTags.LOGS, Component.translatable("excompressum.tooltip.bait.logs")),
-                        new BaitBlockTagCondition(BlockTags.SAPLINGS, Component.translatable("excompressum.tooltip.bait.saplings"))
+                        new BaitBlockTagCondition(BlockTags.LOGS, Component.translatable("tooltip.excompressum.bait.logs")),
+                        new BaitBlockTagCondition(BlockTags.SAPLINGS, Component.translatable("tooltip.excompressum.bait.saplings"))
                 );
             }
         }

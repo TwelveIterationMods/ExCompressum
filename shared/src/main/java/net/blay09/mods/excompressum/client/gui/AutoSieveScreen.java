@@ -80,8 +80,8 @@ public class AutoSieveScreen extends AbstractContainerScreen<AutoSieveMenu> {
         if (mouseX >= leftPos + 152 && mouseX <= leftPos + 167 && mouseY >= topPos + 8 && mouseY <= topPos + 77) {
             AbstractAutoSieveBlockEntity blockEntity = menu.getAutoSieve();
             List<Component> tooltip = new ArrayList<>();
-            tooltip.add(Component.translatable("excompressum.tooltip.energyStored", blockEntity.getEnergyStored()));
-            tooltip.add(Component.translatable("excompressum.tooltip.consumingEnergy", blockEntity.getEffectiveEnergy()));
+            tooltip.add(Component.translatable("tooltip.excompressum.energyStored", blockEntity.getEnergyStored()));
+            tooltip.add(Component.translatable("tooltip.excompressum.consumingEnergy", blockEntity.getEffectiveEnergy()));
             guiGraphics.renderComponentTooltip(Minecraft.getInstance().font, tooltip, mouseX - leftPos, mouseY - topPos);
         }
     }

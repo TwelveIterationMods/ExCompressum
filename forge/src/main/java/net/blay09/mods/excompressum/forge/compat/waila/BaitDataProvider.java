@@ -13,8 +13,8 @@ public class BaitDataProvider implements IBlockComponentProvider {
         if (accessor.getBlockEntity() instanceof BaitBlockEntity bait) {
             EnvironmentalConditionResult environmentalStatus = bait.checkSpawnConditions(true);
             if (environmentalStatus == EnvironmentalConditionResult.CanSpawn) {
-                tooltip.addLine(Component.translatable("excompressum.tooltip.baitTooClose"));
-                tooltip.addLine(Component.translatable("excompressum.tooltip.baitTooClose2"));
+                tooltip.addLine(Component.translatable("tooltip.excompressum.baitTooClose"));
+                tooltip.addLine(Component.translatable("tooltip.excompressum.baitTooClose2"));
             } else {
                 final var statusText = Component.translatable(environmentalStatus.langKey, environmentalStatus.params);
                 statusText.withStyle(ChatFormatting.RED);

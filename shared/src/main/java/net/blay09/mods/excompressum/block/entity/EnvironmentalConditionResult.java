@@ -1,13 +1,13 @@
 package net.blay09.mods.excompressum.block.entity;
 
 public class EnvironmentalConditionResult {
-    public static final EnvironmentalConditionResult CanSpawn = new EnvironmentalConditionResult("excompressum.tooltip.baitCanSpawn");
-    public static final EnvironmentalConditionResult NearbyBait = new EnvironmentalConditionResult("excompressum.tooltip.baitNearbyBait");
-    public static final EnvironmentalConditionResult NearbyAnimal = new EnvironmentalConditionResult("excompressum.tooltip.baitNearbyAnimal");
-    public static final EnvironmentalConditionResult NoWater = new EnvironmentalConditionResult("excompressum.tooltip.baitNoWater");
+    public static final EnvironmentalConditionResult CanSpawn = new EnvironmentalConditionResult("tooltip.excompressum.baitCanSpawn");
+    public static final EnvironmentalConditionResult NearbyBait = new EnvironmentalConditionResult("tooltip.excompressum.baitNearbyBait");
+    public static final EnvironmentalConditionResult NearbyAnimal = new EnvironmentalConditionResult("tooltip.excompressum.baitNearbyAnimal");
+    public static final EnvironmentalConditionResult NoWater = new EnvironmentalConditionResult("tooltip.excompressum.baitNoWater");
 
     public static EnvironmentalConditionResult wrongEnv(String listOfBlocks) {
-        return new EnvironmentalConditionResult("excompressum.tooltip.baitWrongEnv", listOfBlocks);
+        return new EnvironmentalConditionResult("tooltip.excompressum.baitWrongEnv", listOfBlocks);
     }
 
     public final String langKey;

@@ -10,10 +10,10 @@ public class AutoHammerDataProvider implements IBlockComponentProvider {
     public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
         if(accessor.getBlockEntity() instanceof AutoHammerBlockEntity autoHammer) {
             if(autoHammer.getEffectiveLuck() > 1) {
-                tooltip.addLine(Component.translatable("excompressum.tooltip.luckBonus", autoHammer.getEffectiveLuck() - 1));
+                tooltip.addLine(Component.translatable("tooltip.excompressum.luckBonus", autoHammer.getEffectiveLuck() - 1));
             }
 
-            tooltip.addLine(Component.translatable("excompressum.tooltip.energyStoredOfMax", autoHammer.getEnergyStored(), autoHammer.getMaxEnergyStored()));
+            tooltip.addLine(Component.translatable("tooltip.excompressum.energyStoredOfMax", autoHammer.getEnergyStored(), autoHammer.getMaxEnergyStored()));
         }
     }
 

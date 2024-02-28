@@ -179,7 +179,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     }
 
     protected Component getSkinTooltip(String name) {
-        return Component.translatable("excompressum.tooltip.auto_sieve", name).withStyle(ChatFormatting.GRAY);
+        return Component.translatable("tooltip.excompressum.auto_sieve", name).withStyle(ChatFormatting.GRAY);
     }
 
     @Override
