@@ -1,4 +1,45 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    {
+      "id": "exnihilosequentia:acacia_sieve",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:birch_sieve",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:dark_oak_sieve",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:jungle_sieve",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:oak_sieve",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:spruce_sieve",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:cherry_sieve",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:mangrove_sieve",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:warped_sieve",
+      "required": false
+    },
+    {
+      "id": "exnihilosequentia:crimson_sieve",
+      "required": false
+    }
+  ]
 }

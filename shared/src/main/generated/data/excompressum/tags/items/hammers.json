@@ -1,4 +1,11 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    "#excompressum:wooden_hammers",
+    "#excompressum:stone_hammers",
+    "#excompressum:iron_hammers",
+    "#excompressum:golden_hammers",
+    "#excompressum:diamond_hammers",
+    "#excompressum:netherite_hammers"
+  ]
 }
