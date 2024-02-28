@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_crimson_stem": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:crimson_stem"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "excompressum:crimson_heavy_sieve"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_crimson_stem",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "excompressum:crimson_heavy_sieve"
+    ]
+  },
+  "sends_telemetry_event": false
+}

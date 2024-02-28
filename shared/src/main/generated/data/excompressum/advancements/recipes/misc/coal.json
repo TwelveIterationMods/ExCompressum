@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:coal"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_uncompressed_coal": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "excompressum:uncompressed_coal"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_uncompressed_coal",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:coal"
+    ]
+  },
+  "sends_telemetry_event": false
+}

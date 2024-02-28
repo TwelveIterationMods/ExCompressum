@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "minecraft:mangrove_log"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "P P",
+    "PPP",
+    "S S"
+  ],
+  "result": {
+    "item": "excompressum:mangrove_heavy_sieve"
+  },
+  "show_notification": true
+}

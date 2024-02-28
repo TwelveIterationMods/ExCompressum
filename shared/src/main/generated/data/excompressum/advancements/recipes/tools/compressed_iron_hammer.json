@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_iron_hammer": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "excompressum:iron_hammers"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "excompressum:compressed_iron_hammer"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_iron_hammer",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "excompressum:compressed_iron_hammer"
+    ]
+  },
+  "sends_telemetry_event": false
+}

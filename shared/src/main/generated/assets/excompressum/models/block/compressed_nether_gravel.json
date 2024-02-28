@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "excompressum:block/compressed_nether_gravel"
-  }
-}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "minecraft:crimson_stem"
+    },
+    "S": {
+      "item": "minecraft:crimson_slab"
+    }
+  },
+  "pattern": [
+    "P P",
+    "P P",
+    "PSP"
+  ],
+  "result": {
+    "item": "excompressum:crimson_crucible"
+  },
+  "show_notification": true
+}

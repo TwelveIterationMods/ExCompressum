@@ -12,7 +12,11 @@ public enum WoodenCrucibleType implements StringRepresentable {
     BIRCH(Blocks.BIRCH_LOG),
     JUNGLE(Blocks.JUNGLE_LOG),
     ACACIA(Blocks.ACACIA_LOG),
-    DARK_OAK(Blocks.DARK_OAK_LOG);
+    DARK_OAK(Blocks.DARK_OAK_LOG),
+    CHERRY(Blocks.CHERRY_LOG),
+    MANGROVE(Blocks.MANGROVE_LOG),
+    WARPED(Blocks.WARPED_STEM),
+    CRIMSON(Blocks.CRIMSON_STEM);
 
     public static WoodenCrucibleType[] values = values();
 

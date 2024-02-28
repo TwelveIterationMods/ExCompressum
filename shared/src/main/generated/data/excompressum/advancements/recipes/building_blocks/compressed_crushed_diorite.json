@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_crushed_diorite": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "excompressum:crushed_diorites"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "excompressum:compressed_crushed_diorite"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_crushed_diorite",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "excompressum:compressed_crushed_diorite"
+    ]
+  },
+  "sends_telemetry_event": false
+}

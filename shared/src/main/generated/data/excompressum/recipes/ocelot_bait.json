@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "tag": "minecraft:fishes"
+    }
+  ],
+  "result": {
+    "item": "excompressum:ocelot_bait"
+  }
+}

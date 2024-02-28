@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "minecraft:acacia_log"
+    },
+    "S": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "pattern": [
+    "P P",
+    "P P",
+    "PSP"
+  ],
+  "result": {
+    "item": "excompressum:acacia_crucible"
+  },
+  "show_notification": true
+}

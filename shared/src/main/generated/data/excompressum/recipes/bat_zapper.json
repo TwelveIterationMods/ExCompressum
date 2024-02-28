@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": {
+      "item": "minecraft:glowstone_dust"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    " RG",
+    " SR",
+    "S  "
+  ],
+  "result": {
+    "item": "excompressum:bat_zapper"
+  },
+  "show_notification": true
+}

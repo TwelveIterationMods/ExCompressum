@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "minecraft:jungle_log"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "P P",
+    "PPP",
+    "S S"
+  ],
+  "result": {
+    "item": "excompressum:jungle_heavy_sieve"
+  },
+  "show_notification": true
+}

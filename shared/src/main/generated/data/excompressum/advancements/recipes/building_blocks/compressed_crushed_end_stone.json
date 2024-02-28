@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_ender_gravel": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "excompressum:crushed_end_stones"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "excompressum:compressed_crushed_end_stone"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_ender_gravel",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "excompressum:compressed_crushed_end_stone"
+    ]
+  },
+  "sends_telemetry_event": false
+}

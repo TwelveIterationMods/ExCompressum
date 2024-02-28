@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minecraft:soul_sand"
+    },
+    {
+      "item": "minecraft:soul_sand"
+    },
+    {
+      "item": "minecraft:soul_sand"
+    },
+    {
+      "item": "minecraft:soul_sand"
+    },
+    {
+      "item": "minecraft:soul_sand"
+    },
+    {
+      "item": "minecraft:soul_sand"
+    },
+    {
+      "item": "minecraft:soul_sand"
+    },
+    {
+      "item": "minecraft:soul_sand"
+    },
+    {
+      "item": "minecraft:soul_sand"
+    }
+  ],
+  "result": {
+    "item": "excompressum:compressed_soul_sand"
+  }
+}

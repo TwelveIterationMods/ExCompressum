@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "excompressum:crushed_end_stones"
+    },
+    {
+      "tag": "excompressum:crushed_end_stones"
+    },
+    {
+      "tag": "excompressum:crushed_end_stones"
+    },
+    {
+      "tag": "excompressum:crushed_end_stones"
+    },
+    {
+      "tag": "excompressum:crushed_end_stones"
+    },
+    {
+      "tag": "excompressum:crushed_end_stones"
+    },
+    {
+      "tag": "excompressum:crushed_end_stones"
+    },
+    {
+      "tag": "excompressum:crushed_end_stones"
+    },
+    {
+      "tag": "excompressum:crushed_end_stones"
+    }
+  ],
+  "result": {
+    "item": "excompressum:compressed_crushed_end_stone"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "item": "minecraft:diorite"
+    }
+  ],
+  "result": {
+    "item": "excompressum:compressed_diorite"
+  }
+}

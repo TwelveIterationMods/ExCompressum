@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "excompressum:dusts"
+    },
+    {
+      "tag": "excompressum:dusts"
+    },
+    {
+      "tag": "excompressum:dusts"
+    },
+    {
+      "tag": "excompressum:dusts"
+    },
+    {
+      "tag": "excompressum:dusts"
+    },
+    {
+      "tag": "excompressum:dusts"
+    },
+    {
+      "tag": "excompressum:dusts"
+    },
+    {
+      "tag": "excompressum:dusts"
+    },
+    {
+      "tag": "excompressum:dusts"
+    }
+  ],
+  "result": {
+    "item": "excompressum:compressed_dust"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_compressed_diamond_hammer": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "excompressum:compressed_diamond_hammer"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "excompressum:auto_compressed_hammer"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_compressed_diamond_hammer",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "excompressum:auto_compressed_hammer"
+    ]
+  },
+  "sends_telemetry_event": false
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "excompressum:compressed_crook"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wooden_crook": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "excompressum:wooden_crooks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_wooden_crook",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "excompressum:compressed_crook"
+    ]
+  },
+  "sends_telemetry_event": false
+}

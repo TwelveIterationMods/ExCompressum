@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_block"
+    },
+    "C": {
+      "item": "minecraft:crafting_table"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "CIC",
+    "IBI",
+    "CIC"
+  ],
+  "result": {
+    "item": "excompressum:auto_compressor"
+  },
+  "show_notification": true
+}

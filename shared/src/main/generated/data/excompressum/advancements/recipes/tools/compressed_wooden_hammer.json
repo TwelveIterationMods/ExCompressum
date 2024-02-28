@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "excompressum:compressed_wooden_hammer"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wooden_hammer": {
+      "conditions": {
+        "items": [
+          {
+            "tag": "excompressum:wooden_hammers"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_wooden_hammer",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "excompressum:compressed_wooden_hammer"
+    ]
+  },
+  "sends_telemetry_event": false
+}

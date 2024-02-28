@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_auto_compressor": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "excompressum:auto_compressor"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "excompressum:rationing_auto_compressor"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_auto_compressor",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "excompressum:rationing_auto_compressor"
+    ]
+  },
+  "sends_telemetry_event": false
+}

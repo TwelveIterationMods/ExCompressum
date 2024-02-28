@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "excompressum:auto_compressor"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "pattern": [
+    " G ",
+    "GCG",
+    " G "
+  ],
+  "result": {
+    "item": "excompressum:rationing_auto_compressor"
+  },
+  "show_notification": true
+}

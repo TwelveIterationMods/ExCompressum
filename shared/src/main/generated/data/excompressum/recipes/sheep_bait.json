@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "item": "minecraft:wheat_seeds"
+    },
+    {
+      "item": "minecraft:wheat_seeds"
+    }
+  ],
+  "result": {
+    "item": "excompressum:sheep_bait"
+  }
+}

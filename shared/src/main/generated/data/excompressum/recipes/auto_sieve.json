@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_block"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "tag": "excompressum:sieves"
+    }
+  },
+  "pattern": [
+    "BGB",
+    "GSG",
+    "IGI"
+  ],
+  "result": {
+    "item": "excompressum:auto_sieve"
+  },
+  "show_notification": true
+}

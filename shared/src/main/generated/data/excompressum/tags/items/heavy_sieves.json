@@ -6,6 +6,10 @@
     "excompressum:birch_heavy_sieve",
     "excompressum:jungle_heavy_sieve",
     "excompressum:acacia_heavy_sieve",
-    "excompressum:dark_oak_heavy_sieve"
+    "excompressum:dark_oak_heavy_sieve",
+    "excompressum:cherry_heavy_sieve",
+    "excompressum:mangrove_heavy_sieve",
+    "excompressum:warped_heavy_sieve",
+    "excompressum:crimson_heavy_sieve"
   ]
 }

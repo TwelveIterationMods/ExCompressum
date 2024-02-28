@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "P": {
+      "item": "minecraft:potato"
+    }
+  },
+  "pattern": [
+    " I ",
+    "IPI",
+    " I "
+  ],
+  "result": {
+    "item": "excompressum:ugly_steel_plating"
+  },
+  "show_notification": true
+}

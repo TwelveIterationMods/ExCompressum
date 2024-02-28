@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:crafting_table"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    " CD",
+    " SC",
+    "S  "
+  ],
+  "result": {
+    "item": "excompressum:ore_smasher"
+  },
+  "show_notification": true
+}

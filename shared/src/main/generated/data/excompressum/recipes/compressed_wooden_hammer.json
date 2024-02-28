@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "tag": "excompressum:wooden_hammers"
+    }
+  },
+  "pattern": [
+    "HHH",
+    "HHH",
+    "HHH"
+  ],
+  "result": {
+    "item": "excompressum:compressed_wooden_hammer"
+  },
+  "show_notification": true
+}
