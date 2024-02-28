@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "excompressum:compressed_wooden_hammer",
+    "excompressum:compressed_stone_hammer",
+    "excompressum:compressed_iron_hammer",
+    "excompressum:compressed_diamond_hammer",
+    "excompressum:compressed_netherite_hammer"
+  ]
+}

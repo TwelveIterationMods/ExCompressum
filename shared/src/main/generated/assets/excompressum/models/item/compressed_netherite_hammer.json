@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "excompressum:item/compressed_netherite_hammer"
+  }
+}

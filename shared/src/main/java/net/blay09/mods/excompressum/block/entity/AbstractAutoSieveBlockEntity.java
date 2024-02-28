@@ -12,6 +12,7 @@ import net.blay09.mods.balm.api.menu.BalmMenuProvider;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.AutoSieveBaseBlock;
+import net.blay09.mods.excompressum.block.ModBlockStateProperties;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.menu.AutoSieveMenu;
 import net.blay09.mods.excompressum.menu.ModMenus;
@@ -40,7 +41,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Random;
 
@@ -467,8 +468,8 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
 
     public boolean isUgly() {
         BlockState state = getBlockState();
-        if (state.hasProperty(AutoSieveBaseBlock.UGLY)) {
-            return state.getValue(AutoSieveBaseBlock.UGLY);
+        if (state.hasProperty(ModBlockStateProperties.UGLY)) {
+            return state.getValue(ModBlockStateProperties.UGLY);
         }
         return false;
     }

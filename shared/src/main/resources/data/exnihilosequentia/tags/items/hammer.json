@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    {
-      "id": "excompressum:hammer_mana",
-      "required": false
-    }
-  ]
-}

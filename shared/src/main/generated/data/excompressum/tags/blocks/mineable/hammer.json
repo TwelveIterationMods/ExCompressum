@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#minecraft:logs",
+      "required": false
+    },
+    "minecraft:andesite",
+    "minecraft:cobblestone",
+    "minecraft:diorite",
+    "minecraft:end_stone",
+    "minecraft:granite",
+    "minecraft:gravel",
+    "minecraft:netherrack",
+    "minecraft:sand",
+    "excompressum:compressed_andesite",
+    "excompressum:compressed_cobblestone",
+    "excompressum:compressed_diorite",
+    "excompressum:compressed_end_stone",
+    "excompressum:compressed_granite",
+    "excompressum:compressed_gravel",
+    "excompressum:compressed_netherrack",
+    "excompressum:compressed_sand"
+  ]
+}

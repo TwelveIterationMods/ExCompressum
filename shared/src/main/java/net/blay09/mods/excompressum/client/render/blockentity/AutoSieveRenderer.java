@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 public class AutoSieveRenderer implements BlockEntityRenderer<AbstractAutoSieveBlockEntity> {

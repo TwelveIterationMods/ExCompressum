@@ -1,6 +1,6 @@
 {
     "parent": "excompressum:block/auto_sieve",
     "textures": {
-        "texture_glass": "excompressum:blocks/auto_frame_glass_ugly"
+        "texture_glass": "excompressum:block/auto_frame_glass_ugly"
     }
 }

@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "excompressum:wolf_bait",
+    "excompressum:ocelot_bait",
+    "excompressum:cow_bait",
+    "excompressum:pig_bait",
+    "excompressum:chicken_bait",
+    "excompressum:sheep_bait",
+    "excompressum:squid_bait",
+    "excompressum:rabbit_bait",
+    "excompressum:horse_bait",
+    "excompressum:donkey_bait",
+    "excompressum:polar_bear_bait",
+    "excompressum:llama_bait",
+    "excompressum:parrot_bait",
+    "excompressum:cat_bait",
+    "excompressum:fox_bait",
+    "excompressum:turtle_bait",
+    "excompressum:mooshroom_bait"
+  ]
+}

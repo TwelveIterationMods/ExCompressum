@@ -10,6 +10,7 @@ import net.blay09.mods.balm.api.menu.BalmMenuProvider;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.block.AutoHammerBlock;
+import net.blay09.mods.excompressum.block.ModBlockStateProperties;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.loot.LootTableUtils;
@@ -42,7 +43,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements BalmMenuProvider, BalmContainerProvider, BalmEnergyStorageProvider {
@@ -463,8 +464,8 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
 
     public boolean isUgly() {
         BlockState state = getBlockState();
-        if (state.hasProperty(AutoHammerBlock.UGLY)) {
-            return state.getValue(AutoHammerBlock.UGLY);
+        if (state.hasProperty(ModBlockStateProperties.UGLY)) {
+            return state.getValue(ModBlockStateProperties.UGLY);
         }
         return false;
     }

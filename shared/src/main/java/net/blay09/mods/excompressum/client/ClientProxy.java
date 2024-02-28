@@ -17,10 +17,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootDataResolver;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 
 public class ClientProxy extends CommonProxy {
@@ -63,7 +61,6 @@ public class ClientProxy extends CommonProxy {
         spawnSieveParticles(level, pos, particleState, particleCount, new Vec3(offsetX, 0.2f, offsetZ), 0.5f);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void spawnHeavySieveParticles(Level level, BlockPos pos, BlockState particleState, int particleCount) {
         spawnSieveParticles(level, pos, particleState, particleCount, new Vec3(0f, 0.4f, 0f), 1f);
     }

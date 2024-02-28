@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "excompressum:auto_hammer",
+    "excompressum:auto_compressed_hammer",
+    "excompressum:auto_sieve",
+    "excompressum:auto_heavy_sieve",
+    "excompressum:auto_compressor",
+    "excompressum:rationing_auto_compressor"
+  ]
+}

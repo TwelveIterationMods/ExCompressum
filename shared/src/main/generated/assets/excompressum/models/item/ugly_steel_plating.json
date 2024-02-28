@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "excompressum:item/ugly_steel_plating"
+  }
+}

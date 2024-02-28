@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,ugly=false": {
+      "model": "excompressum:block/auto_compressed_hammer",
+      "y": 90
+    },
+    "facing=east,ugly=true": {
+      "model": "excompressum:block/auto_compressed_hammer_ugly",
+      "y": 90
+    },
+    "facing=north,ugly=false": {
+      "model": "excompressum:block/auto_compressed_hammer"
+    },
+    "facing=north,ugly=true": {
+      "model": "excompressum:block/auto_compressed_hammer_ugly"
+    },
+    "facing=south,ugly=false": {
+      "model": "excompressum:block/auto_compressed_hammer",
+      "y": 180
+    },
+    "facing=south,ugly=true": {
+      "model": "excompressum:block/auto_compressed_hammer_ugly",
+      "y": 180
+    },
+    "facing=west,ugly=false": {
+      "model": "excompressum:block/auto_compressed_hammer",
+      "y": 270
+    },
+    "facing=west,ugly=true": {
+      "model": "excompressum:block/auto_compressed_hammer_ugly",
+      "y": 270
+    }
+  }
+}

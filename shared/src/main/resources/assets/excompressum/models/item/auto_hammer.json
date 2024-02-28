@@ -2,10 +2,10 @@
   "parent": "minecraft:block/block",
   "__comment": "Designed by Blay09 with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
   "textures": {
-    "texture_top": "excompressum:blocks/auto_frame_top",
-    "texture_glass": "excompressum:blocks/auto_frame_glass",
-    "texture_side": "excompressum:blocks/auto_frame_side",
-    "hammer": "excompressum:items/hammer_diamond"
+    "texture_top": "excompressum:block/auto_frame_top",
+    "texture_glass": "excompressum:block/auto_frame_glass",
+    "texture_side": "excompressum:block/auto_frame_side",
+    "hammer": "excompressum:item/diamond_hammer"
   },
   "elements": [
     {

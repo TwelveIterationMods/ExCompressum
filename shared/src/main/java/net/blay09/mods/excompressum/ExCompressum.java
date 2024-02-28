@@ -35,7 +35,7 @@ public class ExCompressum {
         ModTags.initialize(Balm.getRegistries());
         ModLoot.initialize(Balm.getLootTables());
 
-        Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.compat.exnihilosequentia.ExNihiloSequentiaAddon");
+        Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.forge.compat.exnihilosequentia.ExNihiloSequentiaAddon");
 
         AutoSieveSkinRegistry.load();
     }

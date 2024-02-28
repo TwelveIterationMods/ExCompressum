@@ -89,7 +89,6 @@ public class WoodenCrucibleBlock extends BaseEntityBlock {
         return BOUNDING_BOX;
     }
 
-    @javax.annotation.Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return !level.isClientSide ? createTickerHelper(type, ModBlockEntities.woodenCrucible.get(), WoodenCrucibleBlockEntity::serverTick) : null;

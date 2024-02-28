@@ -47,14 +47,14 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
 public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUglyfiable {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty UGLY = BooleanProperty.create("ugly");
+    public static final BooleanProperty UGLY = ModBlockStateProperties.UGLY;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private ItemStack lastHoverStack = ItemStack.EMPTY;

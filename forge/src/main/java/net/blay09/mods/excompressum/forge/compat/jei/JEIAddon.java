@@ -146,12 +146,12 @@ public class JEIAddon implements IModPlugin {
             registry.addRecipeCatalyst(new ItemStack(woodenCrucible), WoodenCrucibleRecipeCategory.TYPE);
         }
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.autoCompressedHammer), CompressedHammerRecipeCategory.TYPE);
-        registry.addRecipeCatalyst(new ItemStack(ModItems.netheriteCompressedHammer), CompressedHammerRecipeCategory.TYPE);
-        registry.addRecipeCatalyst(new ItemStack(ModItems.diamondCompressedHammer), CompressedHammerRecipeCategory.TYPE);
-        registry.addRecipeCatalyst(new ItemStack(ModItems.goldenCompressedHammer), CompressedHammerRecipeCategory.TYPE);
-        registry.addRecipeCatalyst(new ItemStack(ModItems.ironCompressedHammer), CompressedHammerRecipeCategory.TYPE);
-        registry.addRecipeCatalyst(new ItemStack(ModItems.stoneCompressedHammer), CompressedHammerRecipeCategory.TYPE);
-        registry.addRecipeCatalyst(new ItemStack(ModItems.woodenCompressedHammer), CompressedHammerRecipeCategory.TYPE);
+        registry.addRecipeCatalyst(new ItemStack(ModItems.compressedNetheriteHammer), CompressedHammerRecipeCategory.TYPE);
+        registry.addRecipeCatalyst(new ItemStack(ModItems.compressedDiamondHammer), CompressedHammerRecipeCategory.TYPE);
+        registry.addRecipeCatalyst(new ItemStack(ModItems.compressedGoldenHammer), CompressedHammerRecipeCategory.TYPE);
+        registry.addRecipeCatalyst(new ItemStack(ModItems.compressedIronHammer), CompressedHammerRecipeCategory.TYPE);
+        registry.addRecipeCatalyst(new ItemStack(ModItems.compressedStoneHammer), CompressedHammerRecipeCategory.TYPE);
+        registry.addRecipeCatalyst(new ItemStack(ModItems.compressedWoodenHammer), CompressedHammerRecipeCategory.TYPE);
         registry.addRecipeCatalyst(new ItemStack(ModItems.chickenStick), ChickenStickRecipeCategory.TYPE);
 
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.autoHammer), HammerRecipeCategory.TYPE);

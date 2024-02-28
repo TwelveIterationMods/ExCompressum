@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/block",
 	"textures": {
-		"texture": "excompressum:blocks/auto_frame_top",
-		"texture_side": "excompressum:blocks/auto_frame_side",
-		"texture_glass": "excompressum:blocks/auto_frame_glass",
+		"texture": "excompressum:block/auto_frame_top",
+		"texture_side": "excompressum:block/auto_frame_side",
+		"texture_glass": "excompressum:block/auto_frame_glass",
 		"particle": "#texture",
 		"sieve": "minecraft:block/oak_planks"
 	},

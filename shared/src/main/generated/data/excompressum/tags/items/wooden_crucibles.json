@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "excompressum:oak_crucible",
+    "excompressum:spruce_crucible",
+    "excompressum:birch_crucible",
+    "excompressum:jungle_crucible",
+    "excompressum:acacia_crucible",
+    "excompressum:dark_oak_crucible"
+  ]
+}

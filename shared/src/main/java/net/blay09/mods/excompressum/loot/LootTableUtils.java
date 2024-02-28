@@ -8,13 +8,10 @@ import net.blay09.mods.excompressum.api.ILootTableProvider;
 import net.blay09.mods.excompressum.mixin.*;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -26,13 +23,12 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class LootTableUtils {
@@ -63,7 +59,7 @@ public class LootTableUtils {
         }
 
         List<LootTableEntry> result = new ArrayList<>();
-        List<LootPool> pools = ((LootTableAccessor) lootTable).getPools();
+        LootPool[] pools = new LootPool[0]; // TODO ((LootTableAccessor) lootTable).balm_getLootPools();
         for (LootPool pool : pools) {
             float poolBaseChance = getBaseChance(pool);
             LootPoolEntryContainer[] entries = ((LootPoolAccessor) pool).getEntries();

@@ -51,7 +51,7 @@ public class AutoCompressedHammerBlockEntity extends AutoHammerBlockEntity {
 
     @Override
     public boolean isHammerUpgrade(ItemStack itemStack) {
-        if (itemStack.getItem() == ModItems.diamondCompressedHammer) {
+        if (itemStack.getItem() == ModItems.compressedDiamondHammer) {
             return true;
         }
         if (itemStack.getItem() == Compat.TCONSTRUCT_HAMMER) {

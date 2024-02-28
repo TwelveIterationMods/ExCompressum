@@ -38,7 +38,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
 
@@ -46,7 +46,7 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty UGLY = BooleanProperty.create("ugly");
+    public static final BooleanProperty UGLY = ModBlockStateProperties.UGLY;
 
     public AutoHammerBlock() {
         super(Properties.of()

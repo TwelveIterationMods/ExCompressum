@@ -28,7 +28,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Random;
 
@@ -102,7 +102,7 @@ public class BaitBlock extends BaseEntityBlock {
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag flagIn) {
         if (baitType == BaitType.SQUID) {
-            tooltip.add(Component.translatable("tooltip.baitPlaceInWater"));
+            tooltip.add(Component.translatable("tooltip.excompressum.baitPlaceInWater"));
         }
     }
 

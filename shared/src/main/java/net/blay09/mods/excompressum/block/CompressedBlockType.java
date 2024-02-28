@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import net.minecraft.util.StringRepresentable;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 
 public enum CompressedBlockType implements StringRepresentable {

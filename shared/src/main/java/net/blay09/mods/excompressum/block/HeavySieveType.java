@@ -1,21 +1,33 @@
 package net.blay09.mods.excompressum.block;
 
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.Locale;
 
 public enum HeavySieveType implements StringRepresentable {
-    OAK,
-    SPRUCE,
-    BIRCH,
-    JUNGLE,
-    ACACIA,
-    DARK_OAK;
+    OAK(Blocks.OAK_LOG),
+    SPRUCE(Blocks.SPRUCE_LOG),
+    BIRCH(Blocks.BIRCH_LOG),
+    JUNGLE(Blocks.JUNGLE_LOG),
+    ACACIA(Blocks.ACACIA_LOG),
+    DARK_OAK(Blocks.DARK_OAK_LOG);
 
     public static HeavySieveType[] values = values();
+
+    private final Block baseBlock;
+
+    HeavySieveType(Block baseBlock) {
+        this.baseBlock = baseBlock;
+    }
 
     @Override
     public String getSerializedName() {
         return name().toLowerCase(Locale.ENGLISH);
+    }
+
+    public Block getBaseBlock() {
+        return baseBlock;
     }
 }

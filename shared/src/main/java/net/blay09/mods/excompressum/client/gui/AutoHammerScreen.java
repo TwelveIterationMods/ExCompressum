@@ -56,8 +56,8 @@ public class AutoHammerScreen extends AbstractContainerScreen<AutoHammerMenu> {
         if (mouseX >= leftPos + 152 && mouseX <= leftPos + 167 && mouseY >= topPos + 8 && mouseY <= topPos + 77) {
             AutoHammerBlockEntity blockEntity = menu.getAutoHammer();
             List<Component> tooltip = new ArrayList<>();
-            tooltip.add(Component.translatable("excompressum.tooltip.energyStored", blockEntity.getEnergyStorage().getEnergy()));
-            tooltip.add(Component.translatable("excompressum.tooltip.consumingEnergy", blockEntity.getEffectiveEnergy()));
+            tooltip.add(Component.translatable("tooltip.excompressum.energyStored", blockEntity.getEnergyStorage().getEnergy()));
+            tooltip.add(Component.translatable("tooltip.excompressum.consumingEnergy", blockEntity.getEffectiveEnergy()));
             guiGraphics.renderComponentTooltip(Minecraft.getInstance().font, tooltip, mouseX - leftPos, mouseY - topPos);
         }
     }

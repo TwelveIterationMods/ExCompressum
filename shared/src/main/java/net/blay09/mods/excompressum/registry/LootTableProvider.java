@@ -5,7 +5,7 @@ import net.blay09.mods.excompressum.api.ILootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.*;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Type;
 
 public class LootTableProvider implements ILootTableProvider {

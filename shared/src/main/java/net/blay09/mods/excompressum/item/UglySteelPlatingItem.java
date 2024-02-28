@@ -14,7 +14,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class UglySteelPlatingItem extends Item {
@@ -28,7 +28,7 @@ public class UglySteelPlatingItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(Component.translatable("tooltip.ugly_steel_plating"));
+        tooltip.add(Component.translatable("tooltip.excompressum.ugly_steel_plating"));
     }
 
     @Override

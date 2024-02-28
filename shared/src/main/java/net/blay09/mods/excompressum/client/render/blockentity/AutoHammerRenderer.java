@@ -44,7 +44,7 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
 
         if (hammerItemStack.isEmpty()) {
             if (isCompressed) {
-                hammerItemStack = new ItemStack(ModItems.diamondCompressedHammer);
+                hammerItemStack = new ItemStack(ModItems.compressedDiamondHammer);
             } else {
                 hammerItemStack = ExNihilo.getInstance().getNihiloItem(ExNihiloProvider.NihiloItems.HAMMER_DIAMOND);
                 if (hammerItemStack.isEmpty()) {

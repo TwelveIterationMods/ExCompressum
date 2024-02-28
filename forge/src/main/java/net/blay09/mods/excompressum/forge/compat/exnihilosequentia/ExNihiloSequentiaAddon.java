@@ -40,7 +40,7 @@ import novamachina.exnihilosequentia.world.item.MeshType;
 import novamachina.exnihilosequentia.world.item.crafting.*;
 import novamachina.exnihilosequentia.world.level.block.InfestedLeavesBlock;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class ExNihiloSequentiaAddon implements ExNihiloProvider {
