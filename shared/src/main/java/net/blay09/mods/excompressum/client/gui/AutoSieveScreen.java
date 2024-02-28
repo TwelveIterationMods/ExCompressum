@@ -57,13 +57,13 @@ public class AutoSieveScreen extends AbstractContainerScreen<AutoSieveMenu> {
             poseStack.pushPose();
             poseStack.translate(0, 0, 300);
             guiGraphics.fill(58, 16, 144, 71, 0x99000000);
-            guiGraphics.drawCenteredString(font, I18n.get("gui.excompressum.autoSieve.noMesh"), 101, 43 - font.lineHeight / 2, 0xFFFFFFFF);
+            guiGraphics.drawCenteredString(font, I18n.get("gui.excompressum.auto_sieve.no_mesh"), 101, 43 - font.lineHeight / 2, 0xFFFFFFFF);
             poseStack.popPose();
         } else if (!blockEntity.isCorrectSieveMesh()) {
             poseStack.pushPose();
             poseStack.translate(0, 0, 300);
             guiGraphics.fill(58, 16, 144, 71, 0x99000000);
-            guiGraphics.drawCenteredString(font, I18n.get("gui.excompressum.autoSieve.incorrectMesh"), 101, 43 - font.lineHeight / 2, 0xFFFFFFFF);
+            guiGraphics.drawCenteredString(font, I18n.get("gui.excompressum.auto_sieve.incorrect_mesh"), 101, 43 - font.lineHeight / 2, 0xFFFFFFFF);
             poseStack.popPose();
         }
 
