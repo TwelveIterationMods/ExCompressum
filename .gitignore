@@ -22,3 +22,5 @@ eclipse
 run
 classes
 logs
+
+shared/src/main/generated/.cache
