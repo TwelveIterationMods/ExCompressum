@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "excompressum:oak_heavy_sieve",
+    "excompressum:spruce_heavy_sieve",
+    "excompressum:birch_heavy_sieve",
+    "excompressum:jungle_heavy_sieve",
+    "excompressum:acacia_heavy_sieve",
+    "excompressum:dark_oak_heavy_sieve",
+    "excompressum:cherry_heavy_sieve",
+    "excompressum:mangrove_heavy_sieve",
+    "excompressum:warped_heavy_sieve",
+    "excompressum:crimson_heavy_sieve",
+    "excompressum:oak_crucible",
+    "excompressum:spruce_crucible",
+    "excompressum:birch_crucible",
+    "excompressum:jungle_crucible",
+    "excompressum:acacia_crucible",
+    "excompressum:dark_oak_crucible",
+    "excompressum:cherry_crucible",
+    "excompressum:mangrove_crucible",
+    "excompressum:warped_crucible",
+    "excompressum:crimson_crucible"
+  ]
+}

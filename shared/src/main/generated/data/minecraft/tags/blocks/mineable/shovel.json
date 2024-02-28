@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "excompressum:compressed_dirt",
+    "excompressum:compressed_gravel",
+    "excompressum:compressed_sand",
+    "excompressum:compressed_crushed_andesite",
+    "excompressum:compressed_crushed_diorite",
+    "excompressum:compressed_crushed_end_stone",
+    "excompressum:compressed_crushed_granite",
+    "excompressum:compressed_crushed_netherrack",
+    "excompressum:compressed_dust",
+    "excompressum:compressed_soul_sand"
+  ]
+}

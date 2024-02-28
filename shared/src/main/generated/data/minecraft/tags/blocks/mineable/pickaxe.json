@@ -6,6 +6,14 @@
     "excompressum:auto_sieve",
     "excompressum:auto_heavy_sieve",
     "excompressum:auto_compressor",
-    "excompressum:rationing_auto_compressor"
+    "excompressum:rationing_auto_compressor",
+    "excompressum:compressed_andesite",
+    "excompressum:compressed_cobblestone",
+    "excompressum:compressed_diorite",
+    "excompressum:compressed_end_stone",
+    "excompressum:compressed_granite",
+    "excompressum:compressed_flint",
+    "excompressum:compressed_netherrack",
+    "excompressum:compressed_netherrack"
   ]
 }
