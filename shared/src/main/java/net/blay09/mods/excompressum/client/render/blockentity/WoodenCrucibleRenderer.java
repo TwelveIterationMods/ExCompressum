@@ -45,7 +45,7 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
         }
 
         final var fluidTank = blockEntity.getFluidTank();
-        if (!fluidTank.getFluid().isSame(Fluids.EMPTY)) { // TODO fluidTank.isEmpty()
+        if (!fluidTank.isEmpty()) {
             poseStack.pushPose();
             float fillLevel = (float) fluidTank.getAmount() / (float) blockEntity.getFluidTank().getCapacity();
             poseStack.translate(0f, fillLevel * 11 / 16f, 0f);

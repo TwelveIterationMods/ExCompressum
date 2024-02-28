@@ -11,7 +11,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "excompressum:compressed_nether_gravel"
+      "item": "excompressum:compressed_crushed_netherrack"
     }
   ],
   "conditions": [

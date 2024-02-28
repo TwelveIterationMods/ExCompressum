@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.tag.ModBlockTags;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -16,7 +17,7 @@ import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class CompressedCrookItem extends DiggerItem implements ICompressedCrook {
+public class CompressedCrookItem extends DiggerItem {
 
     public static final String name = "compressed_crook";
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
@@ -54,18 +55,9 @@ public class CompressedCrookItem extends DiggerItem implements ICompressedCrook 
     }
 
     @Override
-    public boolean isCorrectToolForDrops(BlockState block) {
-        return block.is(BlockTags.LEAVES);
-    }
-
-    @Override
-    public float getDestroySpeed(ItemStack item, BlockState block) {
-        return block.is(BlockTags.LEAVES) ? (float) (getTier().getSpeed() * ExCompressumConfig.getActive().tools.compressedCrookSpeedMultiplier) : 0f;
-    }
-
-    @Override
-    public boolean canCrook(ItemStack itemStack, Level level, BlockState state, Player player) {
-        return true;
+    public float getDestroySpeed(ItemStack itemStack, BlockState state) {
+        final var speed = ExCompressumConfig.getActive().tools.compressedCrookSpeedMultiplier;
+        return state.is(ModBlockTags.MINEABLE_WITH_CROOK) ? (float) (getTier().getSpeed() * speed) : 0f;
     }
 
 }

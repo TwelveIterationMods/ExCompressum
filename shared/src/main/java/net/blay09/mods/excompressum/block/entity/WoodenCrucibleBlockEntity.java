@@ -38,7 +38,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
         public int fill(Fluid fluid, int maxFill, boolean simulate) {
             int result = super.fill(fluid, maxFill, simulate);
             if (getAmount() > 1000) {
-                // TODO setAmount(1000);
+                setAmount(1000);
             }
             return result;
         }
@@ -90,7 +90,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
         // Otherwise, try to add it as a recipe
         WoodenCrucibleRecipe recipe = ExRegistries.getWoodenCrucibleRegistry().getRecipe(level, itemStack);
         if (recipe != null) {
-            if (/*fluidTank.isEmpty() ||*/ recipe.matchesFluid(fluidTank.getFluid())) { // TODO isEmpty
+            if (fluidTank.isEmpty() || recipe.matchesFluid(fluidTank.getFluid())) {
                 int capacityLeft = fluidTank.getCapacity() - fluidTank.getAmount() - solidVolume;
                 if ((isAutomated && capacityLeft >= recipe.getAmount()) || (!isAutomated && capacityLeft > 0)) {
                     if (!simulate) {

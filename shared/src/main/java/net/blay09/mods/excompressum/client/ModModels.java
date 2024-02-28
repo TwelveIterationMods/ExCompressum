@@ -35,13 +35,4 @@ public class ModModels {
         return new ResourceLocation(ExCompressum.MOD_ID, path);
     }
 
-    // TODO
-    /*@SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onBake(ModelBakeEvent event) {
-        HeavySieveType[] sieveTypes = HeavySieveType.values;
-        for (HeavySieveType sieveType : sieveTypes) {
-            UnbakedModel model = event.getModelLoader().getModel(location("block/" + sieveType.getSerializedName() + "_sieve"));
-            model.getMaterials(event.getModelLoader()::getModel, Collections.emptySet());
-        }
-    }*/
 }

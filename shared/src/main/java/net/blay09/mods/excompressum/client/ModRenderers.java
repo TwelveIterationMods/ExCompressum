@@ -32,7 +32,6 @@ public class ModRenderers {
         renderers.registerBlockEntityRenderer(ModBlockEntities.autoCompressedHammer::get, AutoHammerRenderer::compressed);
         renderers.registerBlockEntityRenderer(ModBlockEntities.woodenCrucible::get, WoodenCrucibleRenderer::new);
         renderers.registerBlockEntityRenderer(ModBlockEntities.bait::get, BaitRenderer::new);
-//      TODO  renderers.registerBlockEntityRenderer(ModBlockEntities.manaSieve::get, AutoSieveRenderer::normal);
 
         renderers.registerEntityRenderer(ModEntities.angryChicken::get, context -> new AngryChickenRenderer(context, new ChickenModel<>(context.bakeLayer(ModelLayers.CHICKEN)), 0.3f));
 

@@ -653,36 +653,6 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .requires(ModBlocks.compressedBlocks[CompressedBlockType.SOUL_SAND.ordinal()])
                 .unlockedBy("has_compressed_soul_sand", has(ModBlocks.compressedBlocks[CompressedBlockType.SOUL_SAND.ordinal()]))
                 .save(exporter);
-
-        // TODO shapeless(RecipeCategory.BUILDING_BLOCKS, ModItems.crushedAndesite, 9)
-        // TODO         .requires(ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_ANDESITE.ordinal()])
-        // TODO         .unlockedBy("has_compressed_crushed_andesite", has(ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_ANDESITE.ordinal()]))
-        // TODO         .save(exporter);
-
-        // TODO shapeless(RecipeCategory.BUILDING_BLOCKS, ModItems.crushedDiorite, 9)
-        // TODO         .requires(ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_DIORITE.ordinal()])
-        // TODO         .unlockedBy("has_compressed_crushed_diorite", has(ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_DIORITE.ordinal()]))
-        // TODO         .save(exporter);
-
-        // TODO shapeless(RecipeCategory.BUILDING_BLOCKS, ModItems.crushedGranite, 9)
-        // TODO         .requires(ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_GRANITE.ordinal()])
-        // TODO         .unlockedBy("has_compressed_crushed_granite", has(ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_GRANITE.ordinal()]))
-        // TODO         .save(exporter);
-
-        // TODO shapeless(RecipeCategory.BUILDING_BLOCKS, ModItems.dust, 9)
-        // TODO         .requires(ModBlocks.compressedBlocks[CompressedBlockType.DUST.ordinal()])
-        // TODO         .unlockedBy("has_compressed_dust", has(ModBlocks.compressedBlocks[CompressedBlockType.DUST.ordinal()]))
-        // TODO         .save(exporter);
-
-        // TODO shapeless(RecipeCategory.BUILDING_BLOCKS, ModItems.enderGravel, 9)
-        // TODO         .requires(ModBlocks.compressedBlocks[CompressedBlockType.ENDER_GRAVEL.ordinal()])
-        // TODO         .unlockedBy("has_compressed_ender_gravel", has(ModBlocks.compressedBlocks[CompressedBlockType.ENDER_GRAVEL.ordinal()]))
-        // TODO         .save(exporter);
-
-        // TODO shapeless(RecipeCategory.BUILDING_BLOCKS, ModItems.netherGravel, 9)
-        // TODO         .requires(ModBlocks.compressedBlocks[CompressedBlockType.NETHER_GRAVEL.ordinal()])
-        // TODO         .unlockedBy("has_compressed_nether_gravel", has(ModBlocks.compressedBlocks[CompressedBlockType.NETHER_GRAVEL.ordinal()]))
-        // TODO         .save(exporter);
     }
 
 }
