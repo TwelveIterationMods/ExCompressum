@@ -26,9 +26,35 @@ public class ModBlockTagProvider extends FabricTagProvider<Block> {
                 ModBlocks.autoSieve,
                 ModBlocks.autoHeavySieve,
                 ModBlocks.autoCompressor,
-                ModBlocks.rationingAutoCompressor);
+                ModBlocks.rationingAutoCompressor,
+                ModBlocks.compressedBlocks[CompressedBlockType.ANDESITE.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.COBBLESTONE.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.DIORITE.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.END_STONE.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.GRANITE.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.FLINT.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.NETHERRACK.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.NETHERRACK.ordinal()]);
 
-// TODO other mineables
+        final var mineableShovel = getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL);
+        mineableShovel.add(ModBlocks.compressedBlocks[CompressedBlockType.DIRT.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.GRAVEL.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.SAND.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_ANDESITE.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_DIORITE.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_END_STONE.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_GRANITE.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_NETHERRACK.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.DUST.ordinal()],
+                ModBlocks.compressedBlocks[CompressedBlockType.SOUL_SAND.ordinal()]);
+
+        final var mineableAxe = getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE);
+        for (final var heavySieve : ModBlocks.heavySieves) {
+            mineableAxe.add(heavySieve);
+        }
+        for (final var woodenCrucible : ModBlocks.woodenCrucibles) {
+            mineableAxe.add(woodenCrucible);
+        }
 
         getOrCreateTagBuilder(ModBlockTags.MINEABLE_WITH_CROOK).addOptionalTag(BlockTags.LEAVES);
         getOrCreateTagBuilder(ModBlockTags.MINEABLE_WITH_HAMMER).addOptionalTag(BlockTags.LOGS).add(
