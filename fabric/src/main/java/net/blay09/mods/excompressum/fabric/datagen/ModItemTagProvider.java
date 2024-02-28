@@ -51,13 +51,11 @@ public class ModItemTagProvider extends FabricTagProvider<Item> {
         getOrCreateTagBuilder(ModItemTags.DIAMOND_HAMMERS).addOptional(sequentia("diamond_hammer"));
         getOrCreateTagBuilder(ModItemTags.NETHERITE_HAMMERS).addOptional(sequentia("netherite_hammer"));
 
-        getOrCreateTagBuilder(ModItemTags.CRUCIBLES).addTag(ModItemTags.WOODEN_CRUCIBLES);
         final var woodenCrucibles = getOrCreateTagBuilder(ModItemTags.WOODEN_CRUCIBLES);
         for (Block woodenCrucible : ModBlocks.woodenCrucibles) {
             woodenCrucibles.add(woodenCrucible.asItem());
         }
 
-        getOrCreateTagBuilder(ModItemTags.CROOKS).addTag(ModItemTags.WOODEN_CROOKS);
         getOrCreateTagBuilder(ModItemTags.WOODEN_CROOKS).addOptional(sequentia("wooden_crook"));
 
         getOrCreateTagBuilder(ModItemTags.COMPRESSED_HAMMERS).add(ModItems.compressedWoodenHammer,
@@ -66,7 +64,6 @@ public class ModItemTagProvider extends FabricTagProvider<Item> {
                 ModItems.compressedDiamondHammer,
                 ModItems.compressedNetheriteHammer);
 
-        getOrCreateTagBuilder(ModItemTags.COMPRESSED_CROOKS).addTag(ModItemTags.WOODEN_COMPRESSED_CROOKS);
         getOrCreateTagBuilder(ModItemTags.WOODEN_COMPRESSED_CROOKS).add(ModItems.compressedCrook);
 
         getOrCreateTagBuilder(ModItemTags.CHICKEN_STICKS).add(ModItems.chickenStick);

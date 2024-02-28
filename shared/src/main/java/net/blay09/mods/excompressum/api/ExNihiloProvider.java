@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 public interface ExNihiloProvider {
 
@@ -43,8 +42,8 @@ public interface ExNihiloProvider {
         HAMMER_NETHERITE,
         SILK_WORM,
         DUST,
-        NETHER_GRAVEL,
-        ENDER_GRAVEL,
+        CRUSHED_NETHERRACK,
+        CRUSHED_END_STONE,
         INFESTED_LEAVES,
         SIEVE,
         ANDESITE_GRAVEL,

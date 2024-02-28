@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_nether_gravel": {
+    "has_crushed_netherrack": {
       "conditions": {
         "items": [
           {
@@ -20,7 +20,7 @@
   },
   "requirements": [
     [
-      "has_nether_gravel",
+      "has_crushed_netherrack",
       "has_the_recipe"
     ]
   ],

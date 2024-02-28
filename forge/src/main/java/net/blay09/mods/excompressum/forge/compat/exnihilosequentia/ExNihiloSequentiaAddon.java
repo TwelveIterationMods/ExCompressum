@@ -61,8 +61,8 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         itemMap.put(NihiloItems.SIEVE, findBlock("oak_sieve"));
         itemMap.put(NihiloItems.DUST, findBlock("dust"));
         itemMap.put(NihiloItems.INFESTED_LEAVES, findBlock("infested_leaves"));
-        itemMap.put(NihiloItems.NETHER_GRAVEL, findBlock("crushed_netherrack"));
-        itemMap.put(NihiloItems.ENDER_GRAVEL, findBlock("crushed_end_stone"));
+        itemMap.put(NihiloItems.CRUSHED_NETHERRACK, findBlock("crushed_netherrack"));
+        itemMap.put(NihiloItems.CRUSHED_END_STONE, findBlock("crushed_end_stone"));
         itemMap.put(NihiloItems.DIORITE_GRAVEL, findBlock("crushed_diorite"));
         itemMap.put(NihiloItems.ANDESITE_GRAVEL, findBlock("crushed_andesite"));
         itemMap.put(NihiloItems.GRANITE_GRAVEL, findBlock("crushed_granite"));

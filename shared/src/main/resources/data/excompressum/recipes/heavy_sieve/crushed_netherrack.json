@@ -1,13 +1,7 @@
 {
   "type": "excompressum:heavy_sieve_generated",
   "input": {
-    "item":"excompressum:compressed_nether_gravel"
+    "item":"excompressum:compressed_crushed_netherrack"
   },
-  "source": "exnihilosequentia:crushed_netherrack",
-  "conditions": [
-    {
-      "type": "forge:mod_loaded",
-      "modid": "exnihilosequentia"
-    }
-  ]
+  "source": "exnihilosequentia:crushed_netherrack"
 }

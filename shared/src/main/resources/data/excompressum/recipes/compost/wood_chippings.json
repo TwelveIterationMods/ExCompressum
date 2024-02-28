@@ -1,7 +1,7 @@
 {
   "type": "exnihilosequentia:compost",
   "input": {
-    "tag": "forge:dusts/wood"
+    "item": "excompressum:wood_chippings"
   },
   "amount": 125
 }

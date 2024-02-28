@@ -3,11 +3,5 @@
   "input": {
     "item":"excompressum:compressed_crushed_andesite"
   },
-  "source": "exnihilosequentia:crushed_andesite",
-  "conditions": [
-    {
-      "type": "forge:mod_loaded",
-      "modid": "exnihilosequentia"
-    }
-  ]
+  "source": "exnihilosequentia:crushed_andesite"
 }

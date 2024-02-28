@@ -10,8 +10,9 @@
         "rolls": 1,
         "entries": [
           {
-            "type": "minecraft:item",
-            "name": "exnihilosequentia:crushed_granite",
+            "type": "minecraft:tag",
+            "name": "excompressum:crushed_granites",
+            "expand": true,
             "functions": [
               {
                 "function": "minecraft:set_count",
@@ -23,11 +24,5 @@
         "conditions": []
       }
     ]
-  },
-  "conditions": [
-    {
-      "type": "forge:mod_loaded",
-      "modid": "exnihilosequentia"
-    }
-  ]
+  }
 }

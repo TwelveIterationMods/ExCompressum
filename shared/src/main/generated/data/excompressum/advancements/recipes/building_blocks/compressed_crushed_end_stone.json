@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_ender_gravel": {
+    "has_crushed_end_stone": {
       "conditions": {
         "items": [
           {
@@ -20,7 +20,7 @@
   },
   "requirements": [
     [
-      "has_ender_gravel",
+      "has_crushed_end_stone",
       "has_the_recipe"
     ]
   ],

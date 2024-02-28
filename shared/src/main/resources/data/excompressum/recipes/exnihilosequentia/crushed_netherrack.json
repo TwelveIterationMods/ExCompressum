@@ -1,9 +1,4 @@
 {
-  "result_soon": {
-    "type": "excompressum:nihilo_item",
-    "value": "NETHER_GRAVEL",
-    "count": 9
-  },
   "result": {
     "item": "exnihilosequentia:crushed_netherrack",
     "count": 9

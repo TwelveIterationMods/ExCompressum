@@ -10,8 +10,9 @@
         "rolls": 1,
         "entries": [
           {
-            "type": "minecraft:item",
-            "name": "exnihilosequentia:crushed_end_stone",
+            "type": "minecraft:tag",
+            "name": "excompressum:crushed_end_stones",
+            "expand": true,
             "functions": [
               {
                 "function": "minecraft:set_count",
@@ -23,11 +24,5 @@
         "conditions": []
       }
     ]
-  },
-  "conditions": [
-    {
-      "type": "forge:mod_loaded",
-      "modid": "exnihilosequentia"
-    }
-  ]
+  }
 }

@@ -3,11 +3,5 @@
   "input": {
     "item":"excompressum:compressed_dust"
   },
-  "source": "exnihilosequentia:dust",
-  "conditions": [
-    {
-      "type": "forge:mod_loaded",
-      "modid": "exnihilosequentia"
-    }
-  ]
+  "source": "exnihilosequentia:dust"
 }

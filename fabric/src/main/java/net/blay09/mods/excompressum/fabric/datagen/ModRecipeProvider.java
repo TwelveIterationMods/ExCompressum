@@ -583,7 +583,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .requires(ModItemTags.CRUSHED_END_STONES)
                 .requires(ModItemTags.CRUSHED_END_STONES)
                 .requires(ModItemTags.CRUSHED_END_STONES)
-                .unlockedBy("has_ender_gravel", has(ModItemTags.CRUSHED_END_STONES))
+                .unlockedBy("has_crushed_end_stone", has(ModItemTags.CRUSHED_END_STONES))
                 .save(exporter);
 
         shapeless(RecipeCategory.BUILDING_BLOCKS, ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_NETHERRACK.ordinal()])
@@ -596,7 +596,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                 .requires(ModItemTags.CRUSHED_NETHERRACKS)
                 .requires(ModItemTags.CRUSHED_NETHERRACKS)
                 .requires(ModItemTags.CRUSHED_NETHERRACKS)
-                .unlockedBy("has_nether_gravel", has(ModItemTags.CRUSHED_NETHERRACKS))
+                .unlockedBy("has_crushed_netherrack", has(ModItemTags.CRUSHED_NETHERRACKS))
                 .save(exporter);
 
         shapeless(RecipeCategory.BUILDING_BLOCKS, Blocks.ANDESITE, 9)

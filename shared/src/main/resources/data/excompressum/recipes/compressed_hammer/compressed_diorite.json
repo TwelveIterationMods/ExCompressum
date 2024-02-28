@@ -10,8 +10,9 @@
         "rolls": 1,
         "entries": [
           {
-            "type": "minecraft:item",
-            "name": "exnihilosequentia:crushed_diorite",
+            "type": "minecraft:tag",
+            "name": "excompressum:crushed_diorites",
+            "expand": true,
             "functions": [
               {
                 "function": "minecraft:set_count",

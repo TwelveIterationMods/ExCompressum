@@ -3,11 +3,5 @@
   "input": {
     "item":"excompressum:compressed_crushed_granite"
   },
-  "source": "exnihilosequentia:crushed_granite",
-  "conditions": [
-    {
-      "type": "forge:mod_loaded",
-      "modid": "exnihilosequentia"
-    }
-  ]
+  "source": "exnihilosequentia:crushed_granite"
 }
