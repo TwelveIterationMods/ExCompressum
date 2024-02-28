@@ -1,6 +1,0 @@
-{
-    "parent": "excompressum:block/mana_sieve",
-    "textures": {
-        "texture_glass": "excompressum:blocks/auto_frame_glass_ugly"
-    }
-}

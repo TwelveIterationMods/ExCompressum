@@ -4,13 +4,12 @@ import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
 import net.blay09.mods.excompressum.block.entity.EnvironmentalConditionResult;
-import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,7 +23,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -43,7 +41,7 @@ public class BaitBlock extends BaseEntityBlock {
     private final BaitType baitType;
 
     public BaitBlock(BaitType baitType) {
-        super(Properties.of(Material.CAKE).strength(0.1f));
+        super(Properties.of().strength(0.1f));
         this.baitType = baitType;
     }
 
@@ -67,9 +65,9 @@ public class BaitBlock extends BaseEntityBlock {
         if (level.getBlockEntity(pos) instanceof BaitBlockEntity bait) {
             EnvironmentalConditionResult environmentStatus = bait.checkSpawnConditions(true);
             if (!level.isClientSide) {
-                TranslatableComponent chatComponent = new TranslatableComponent(environmentStatus.langKey, environmentStatus.params);
+                final var chatComponent = Component.translatable(environmentStatus.langKey, environmentStatus.params);
                 chatComponent.withStyle(environmentStatus != EnvironmentalConditionResult.CanSpawn ? ChatFormatting.RED : ChatFormatting.GREEN);
-                player.sendMessage(chatComponent, Util.NIL_UUID);
+                player.sendSystemMessage(chatComponent);
             }
         }
 
@@ -82,16 +80,16 @@ public class BaitBlock extends BaseEntityBlock {
             if (level.getBlockEntity(pos) instanceof BaitBlockEntity bait) {
                 EnvironmentalConditionResult environmentStatus = bait.checkSpawnConditions(true);
                 if (!level.isClientSide) {
-                    TranslatableComponent chatComponent = new TranslatableComponent(environmentStatus.langKey, environmentStatus.params);
+                    final var chatComponent = Component.translatable(environmentStatus.langKey, environmentStatus.params);
                     chatComponent.withStyle(environmentStatus != EnvironmentalConditionResult.CanSpawn ? ChatFormatting.RED : ChatFormatting.GREEN);
-                    placer.sendMessage(chatComponent, Util.NIL_UUID);
+                    placer.sendSystemMessage(chatComponent);
                 }
             }
         }
     }
 
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, Random rand) {
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource rand) {
         if (!ExCompressumConfig.getActive().client.disableParticles) {
             if (level.getBlockEntity(pos) instanceof BaitBlockEntity bait && bait.checkSpawnConditions(false) == EnvironmentalConditionResult.CanSpawn) {
                 if (rand.nextFloat() <= 0.2f) {
@@ -104,7 +102,7 @@ public class BaitBlock extends BaseEntityBlock {
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable BlockGetter world, List<Component> tooltip, TooltipFlag flagIn) {
         if (baitType == BaitType.SQUID) {
-            tooltip.add(Messages.lang("tooltip.baitPlaceInWater"));
+            tooltip.add(Component.translatable("tooltip.baitPlaceInWater"));
         }
     }
 

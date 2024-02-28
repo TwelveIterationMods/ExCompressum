@@ -1,37 +1,31 @@
 package net.blay09.mods.excompressum.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
-import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
-import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 public class HeavySieveRecipeCategory implements IRecipeCategory<JeiHeavySieveRecipe> {
 
     public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve");
+    public static final RecipeType<JeiHeavySieveRecipe> TYPE = new RecipeType<>(UID, JeiHeavySieveRecipe.class);
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_heavy_sieve.png");
 
     private final IDrawable background;
     private final IDrawable slotHighlight;
     private final IDrawable icon;
-    private final IDrawable water;
+    // TODO private final IDrawable water;
     private final IJeiHelpers jeiHelpers;
     private boolean hasHighlight;
     private int highlightX;
@@ -42,25 +36,19 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<JeiHeavySieveRe
         final IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
         this.background = guiHelper.createDrawable(texture, 0, 0, 166, 129);
         this.slotHighlight = guiHelper.createDrawable(texture, 166, 0, 18, 18);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.heavySieves[0]));
-        water = jeiHelpers.getGuiHelper().createDrawableIngredient(new FluidStack(Fluids.WATER, 1000));
-    }
-
-    @Nonnull
-    @Override
-    public ResourceLocation getUid() {
-        return UID;
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.heavySieves[0]));
+        // TODO water = jeiHelpers.getGuiHelper().createDrawableIngredient(VanillaTypes.FLUID_STACK, new FluidStack(Fluids.WATER, 1000));
     }
 
     @Override
-    public Class<? extends JeiHeavySieveRecipe> getRecipeClass() {
-        return JeiHeavySieveRecipe.class;
+    public RecipeType<JeiHeavySieveRecipe> getRecipeType() {
+        return TYPE;
     }
 
     @Nonnull
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(UID.toString());
+        return Component.translatable(UID.toString());
     }
 
     @Nonnull
@@ -75,6 +63,11 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<JeiHeavySieveRe
     }
 
     @Override
+    public void setRecipe(IRecipeLayoutBuilder iRecipeLayoutBuilder, JeiHeavySieveRecipe jeiHeavySieveRecipe, IFocusGroup iFocusGroup) {
+        // TODO
+    }
+
+    /*@Override
     public void draw(JeiHeavySieveRecipe recipe, PoseStack poseStack, double mouseX, double mouseY) {
         if (hasHighlight) {
             slotHighlight.draw(poseStack, highlightX, highlightY);
@@ -128,5 +121,5 @@ public class HeavySieveRecipeCategory implements IRecipeCategory<JeiHeavySieveRe
     public void setIngredients(JeiHeavySieveRecipe heavySieveRecipe, IIngredients ingredients) {
         ingredients.setInputLists(VanillaTypes.ITEM, heavySieveRecipe.getInputs());
         ingredients.setOutputs(VanillaTypes.ITEM, heavySieveRecipe.getOutputItems());
-    }
+    }*/
 }

@@ -1,30 +1,25 @@
 package net.blay09.mods.excompressum.compat.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
-import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRecipe;
-import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Objects;
 
 public class WoodenCrucibleRecipeCategory implements IRecipeCategory<JeiWoodenCrucibleRecipe> {
 
     public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "wooden_crucible");
+    public static final RecipeType<JeiWoodenCrucibleRecipe> TYPE = new RecipeType<>(UID, JeiWoodenCrucibleRecipe.class);
+
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_wooden_crucible.png");
 
     private final IDrawable background;
@@ -37,24 +32,18 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<JeiWoodenCr
     public WoodenCrucibleRecipeCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createDrawable(texture, 0, 0, 166, 129);
         this.slotHighlight = guiHelper.createDrawable(texture, 166, 0, 18, 18);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.woodenCrucibles[0]));
-    }
-
-    @Nonnull
-    @Override
-    public ResourceLocation getUid() {
-        return UID;
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.woodenCrucibles[0]));
     }
 
     @Override
-    public Class<? extends JeiWoodenCrucibleRecipe> getRecipeClass() {
-        return JeiWoodenCrucibleRecipe.class;
+    public RecipeType<JeiWoodenCrucibleRecipe> getRecipeType() {
+        return TYPE;
     }
 
     @Nonnull
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(UID.toString());
+        return Component.translatable(UID.toString());
     }
 
     @Nonnull
@@ -69,6 +58,11 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<JeiWoodenCr
     }
 
     @Override
+    public void setRecipe(IRecipeLayoutBuilder iRecipeLayoutBuilder, JeiWoodenCrucibleRecipe jeiWoodenCrucibleRecipe, IFocusGroup iFocusGroup) {
+        // TODO
+    }
+
+    /*@Override
     public void draw(JeiWoodenCrucibleRecipe recipe, PoseStack poseStack, double mouseX, double mouseY) {
         if (hasHighlight) {
             slotHighlight.draw(poseStack, highlightX, highlightY);
@@ -123,5 +117,5 @@ public class WoodenCrucibleRecipeCategory implements IRecipeCategory<JeiWoodenCr
     public void setIngredients(JeiWoodenCrucibleRecipe woodenCrucibleRecipe, IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.ITEM, woodenCrucibleRecipe.getInputs());
         ingredients.setOutput(VanillaTypes.FLUID, woodenCrucibleRecipe.getFluidStack());
-    }
+    }*/
 }

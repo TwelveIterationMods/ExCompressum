@@ -1,11 +1,11 @@
 {
   "replace": false,
   "values": [
-    "excompressum:compressed_hammer_wood",
-    "excompressum:compressed_hammer_stone",
-    "excompressum:compressed_hammer_iron",
-    "excompressum:compressed_hammer_gold",
-    "excompressum:compressed_hammer_diamond",
-    "excompressum:compressed_hammer_netherite"
+    "excompressum:wooden_compressed_hammer",
+    "excompressum:stone_compressed_hammer",
+    "excompressum:iron_compressed_hammer",
+    "excompressum:golden_compressed_hammer",
+    "excompressum:diamond_compressed_hammer",
+    "excompressum:netherite_compressed_hammer"
   ]
 }

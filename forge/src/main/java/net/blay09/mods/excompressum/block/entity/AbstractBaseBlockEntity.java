@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.block.entity;
 
 
-import net.blay09.mods.balm.api.block.entity.BalmBlockEntity;
+import net.blay09.mods.balm.common.BalmBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;

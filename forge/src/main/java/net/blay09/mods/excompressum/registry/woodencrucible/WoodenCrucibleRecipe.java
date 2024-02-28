@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.registry.woodencrucible;
 
+import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.registry.ExCompressumRecipe;
 import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +19,7 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe {
     private int amount;
 
     public WoodenCrucibleRecipe(ResourceLocation id, Ingredient input, ResourceLocation fluid, int amount) {
-        super(id, ModRecipeTypes.WOODEN_CRUCIBLE);
+        super(id, ModRecipeTypes.woodenCrucibleRecipeType);
         this.input = input;
         this.fluid = fluid;
         this.amount = amount;
@@ -50,11 +51,12 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeTypes.woodenCrucibleRecipe;
+        return ModRecipeTypes.woodenCrucibleRecipeSerializer;
     }
 
     public boolean matchesFluid(FluidStack fluid) {
-        return Objects.equals(fluid.getFluid().getRegistryName(), this.fluid);
+        final var fluidId = Balm.getRegistries().getKey(fluid.getFluid());
+        return Objects.equals(fluidId, this.fluid);
     }
 
     public FluidStack getFluidStack() {

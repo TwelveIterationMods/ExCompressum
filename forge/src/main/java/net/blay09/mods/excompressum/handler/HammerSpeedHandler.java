@@ -13,9 +13,13 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID)
 public class HammerSpeedHandler {
 
+    public static void initialize() {
+        // TODO Balm.getEvents().onEvent(BreakSpeedEvent.class, HammerSpeedHandler::onBreakSpeed);
+    }
+
     @SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        ItemStack heldItem = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
+        ItemStack heldItem = event.getEntity().getItemInHand(InteractionHand.MAIN_HAND);
         if (heldItem.is(ModTags.HAMMERS) && event.getState().is(BlockTags.LOGS)) {
             float newSpeed = 2f;
             if (heldItem.getItem() instanceof DiggerItem) {

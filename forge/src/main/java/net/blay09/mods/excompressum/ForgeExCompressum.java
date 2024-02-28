@@ -22,7 +22,7 @@ public class ForgeExCompressum {
     }
 
     private void imc(InterModEnqueueEvent event) {
-        if(ModList.get().isLoaded("theoneprobe")) {
+        if (ModList.get().isLoaded("theoneprobe")) {
             TheOneProbeAddon.register();
         }
     }

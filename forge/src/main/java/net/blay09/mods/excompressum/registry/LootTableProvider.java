@@ -3,10 +3,7 @@ package net.blay09.mods.excompressum.registry;
 import com.google.gson.*;
 import net.blay09.mods.excompressum.api.ILootTableProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.Deserializers;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.*;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
@@ -34,27 +31,27 @@ public class LootTableProvider implements ILootTableProvider {
     }
 
     @Nullable
-    public LootTable getLootTable(@Nullable ResourceLocation resourceLocation, LootTables lootTableManager) {
+    public LootTable getLootTable(@Nullable ResourceLocation resourceLocation, LootDataResolver lootDataResolver) {
         if (inlineLootTableJson != null || inlineLootTable != null) {
             if (inlineLootTable == null) {
-                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, resourceLocation, inlineLootTableJson, true, lootTableManager);
+                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, resourceLocation, inlineLootTableJson, true);
             }
             return inlineLootTable;
         }
 
-        return lootTableManager.get(lootTableLocation);
+        return lootDataResolver.getLootTable(lootTableLocation);
     }
 
     @Nullable
     public LootTable getLootTable(ResourceLocation resourceLocation, LootContext context) {
         if (inlineLootTableJson != null || inlineLootTable != null) {
             if (inlineLootTable == null) {
-                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, resourceLocation, inlineLootTableJson, true, context.getLevel().getServer().getLootTables());
+                inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, resourceLocation, inlineLootTableJson, true);
             }
             return inlineLootTable;
         }
 
-        return context.getLootTable(lootTableLocation);
+        return context.getResolver().getLootTable(lootTableLocation);
     }
 
     public static class Serializer implements JsonDeserializer<LootTableProvider>, JsonSerializer<LootTableProvider> {

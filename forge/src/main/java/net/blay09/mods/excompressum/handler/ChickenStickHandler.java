@@ -1,6 +1,8 @@
 package net.blay09.mods.excompressum.handler;
 
-import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.api.event.BreakBlockEvent;
+import net.blay09.mods.balm.api.event.PlayerAttackEvent;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.AngryChickenEntity;
 import net.blay09.mods.excompressum.entity.ModEntities;
@@ -16,16 +18,15 @@ import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID)
 public class ChickenStickHandler {
 
-    @SubscribeEvent
-    public static void onAttack(AttackEntityEvent event) {
+    public static void initialize() {
+        Balm.getEvents().onEvent(PlayerAttackEvent.class, ChickenStickHandler::onPlayerAttack);
+        Balm.getEvents().onEvent(BreakBlockEvent.class, ChickenStickHandler::onBlockBreak);
+    }
+
+    public static void onPlayerAttack(PlayerAttackEvent event) {
         if (!ExCompressumConfig.getActive().tools.allowChickenStickCreation) {
             return;
         }
@@ -35,7 +36,7 @@ public class ChickenStickHandler {
             if (!heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
                 chicken.remove(Entity.RemovalReason.DISCARDED);
 
-                Level level = chicken.level;
+                Level level = chicken.level();
                 if (!level.isClientSide) {
                     if (!event.getPlayer().getAbilities().instabuild) {
                         heldItem.shrink(1);
@@ -52,23 +53,31 @@ public class ChickenStickHandler {
                     level.addFreshEntity(angryChicken);
                     level.playSound(null, angryChicken.blockPosition(), SoundEvents.CHICKEN_HURT, SoundSource.HOSTILE, 1f, 0.5f);
                     level.playSound(null, angryChicken.blockPosition(), SoundEvents.WITHER_SPAWN, SoundSource.HOSTILE, 1f, 0.5f);
-                    ((ServerLevel) level).sendParticles(ParticleTypes.ANGRY_VILLAGER, angryChicken.getX(), angryChicken.getY(), angryChicken.getZ(), 200, 0.25f, 0.1f, 0.25f, 1f);
+                    ((ServerLevel) level).sendParticles(ParticleTypes.ANGRY_VILLAGER,
+                            angryChicken.getX(),
+                            angryChicken.getY(),
+                            angryChicken.getZ(),
+                            200,
+                            0.25f,
+                            0.1f,
+                            0.25f,
+                            1f);
                 }
                 event.setCanceled(true);
             }
         }
     }
 
-    @SubscribeEvent
-    public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        ItemStack heldItem = event.getPlayer().getMainHandItem();
-        if(heldItem.getItem() instanceof ChickenStickItem chickenStickItem) {
-            chickenStickItem.tryPlayChickenSound(event.getWorld(), event.getPos());
+    public static void onBlockBreak(BreakBlockEvent event) {
+        final var heldItem = event.getPlayer().getMainHandItem();
+        if (heldItem.getItem() instanceof ChickenStickItem chickenStickItem) {
+            final var level = event.getLevel();
+            chickenStickItem.tryPlayChickenSound(level, event.getPos());
 
-            if (event.getWorld().getRandom().nextFloat() <= ExCompressumConfig.getActive().tools.chickenStickSpawnChance) {
-                Chicken chicken = new Chicken(EntityType.CHICKEN, ((Level) event.getWorld()));
+            if (level.getRandom().nextFloat() <= ExCompressumConfig.getActive().tools.chickenStickSpawnChance) {
+                final var chicken = new Chicken(EntityType.CHICKEN, level);
                 chicken.setPos(event.getPos().getX() + 0.5, event.getPos().getY() + 0.5, event.getPos().getZ() + 0.5);
-                event.getWorld().addFreshEntity(chicken);
+                level.addFreshEntity(chicken);
             }
         }
     }

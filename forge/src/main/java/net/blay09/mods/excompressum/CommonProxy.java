@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.LootDataResolver;
 import javax.annotation.Nullable;
 
 public class CommonProxy {
@@ -22,8 +22,8 @@ public class CommonProxy {
     public void spawnHeavySieveParticles(Level level, BlockPos pos, BlockState particleState, int particleCount) {
     }
 
-    public LootTables getLootTableManager() {
-        return Balm.getHooks().getServer().getLootTables();
+    public LootDataResolver getLootTableManager() {
+        return Balm.getHooks().getServer().getLootData();
     }
 
     public RecipeManager getRecipeManager(@Nullable Level level) {

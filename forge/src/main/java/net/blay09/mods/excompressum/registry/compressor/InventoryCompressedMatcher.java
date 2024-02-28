@@ -3,22 +3,18 @@ package net.blay09.mods.excompressum.registry.compressor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
 
-public class InventoryCompressedMatcher extends CraftingContainer {
+public class InventoryCompressedMatcher extends TransientCraftingContainer {
 
     private final ItemStack[] itemStacks;
     private final boolean isStupid;
 
-    public InventoryCompressedMatcher(int width, int height, boolean isStupid) {
-        super(new AbstractContainerMenu(null, 0) {
-            @Override
-            public boolean stillValid(Player player) {
-                return false;
-            }
-        }, width, height);
+    public InventoryCompressedMatcher(AbstractContainerMenu menu, int width, int height, boolean isStupid) {
+        super(menu, width, height);
         this.itemStacks = new ItemStack[getContainerSize()];
         this.isStupid = isStupid;
     }

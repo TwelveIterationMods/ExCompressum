@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.api.block.entity.BalmBlockEntity;
+import net.blay09.mods.balm.common.BalmBlockEntity;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
@@ -122,7 +122,7 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
             if (!level.isClientSide) {
                 SieveMeshRegistryEntry sieveMesh = getSieveMesh();
                 if (sieveMesh != null) {
-                    LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), currentStack, level.random);
+                    LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), currentStack);
                     Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(lootContext, getBlockState(), sieveMesh, currentStack);
                     for (ItemStack itemStack : rewards) {
                         level.addFreshEntity(new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, itemStack));

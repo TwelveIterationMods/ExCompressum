@@ -10,10 +10,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class WoodenCrucibleRecipeSerializer extends ExCompressumRecipeSerializer<WoodenCrucibleRecipe> {
 
-    public WoodenCrucibleRecipeSerializer() {
-        setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "wooden_crucible"));
-    }
-
     @Override
     public WoodenCrucibleRecipe readFromJson(ResourceLocation id, JsonObject json) {
         Ingredient input = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "input"));

@@ -5,6 +5,7 @@ import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -44,7 +45,7 @@ public abstract class ExNihilo {
         return state != null && instance.isSiftableWithMesh(sieveState, state, sieveMesh);
     }
 
-    public static Collection<ItemStack> rollSieveRewards(BlockState sieveState, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+    public static Collection<ItemStack> rollSieveRewards(BlockState sieveState, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, RandomSource rand) {
         BlockState state = StupidUtils.getStateFromItemStack(itemStack);
         if (state != null) {
             return instance.rollSieveRewards(sieveState, state, sieveMesh, luck, rand);

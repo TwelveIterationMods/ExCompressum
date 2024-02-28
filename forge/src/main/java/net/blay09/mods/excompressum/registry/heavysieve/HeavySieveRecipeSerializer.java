@@ -21,10 +21,6 @@ import java.util.stream.Collectors;
 
 public class HeavySieveRecipeSerializer extends ExCompressumRecipeSerializer<HeavySieveRecipe> {
 
-    public HeavySieveRecipeSerializer() {
-        setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve"));
-    }
-
     @Override
     public HeavySieveRecipe readFromJson(ResourceLocation id, JsonObject json) {
         Ingredient input = Ingredient.fromJson(json.get("input"));

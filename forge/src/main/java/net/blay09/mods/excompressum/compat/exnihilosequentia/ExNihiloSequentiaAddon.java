@@ -7,7 +7,6 @@ import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.IHammerRecipe;
 import net.blay09.mods.excompressum.api.sievemesh.CommonMeshType;
-import net.blay09.mods.excompressum.item.ModTags;
 import net.blay09.mods.excompressum.loot.LootTableUtils;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
@@ -18,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,15 +34,11 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import novamachina.exnihilosequentia.common.block.InfestedLeavesBlock;
-import novamachina.exnihilosequentia.common.crafting.ItemStackWithChance;
-import novamachina.exnihilosequentia.common.crafting.crook.CrookRecipe;
-import novamachina.exnihilosequentia.common.crafting.hammer.HammerRecipe;
-import novamachina.exnihilosequentia.common.crafting.sieve.MeshWithChance;
-import novamachina.exnihilosequentia.common.crafting.sieve.SieveRecipe;
-import novamachina.exnihilosequentia.common.item.mesh.MeshType;
+import novamachina.exnihilosequentia.common.Config;
 import novamachina.exnihilosequentia.common.registries.ExNihiloRegistries;
-import novamachina.exnihilosequentia.common.utility.Config;
+import novamachina.exnihilosequentia.world.item.MeshType;
+import novamachina.exnihilosequentia.world.item.crafting.*;
+import novamachina.exnihilosequentia.world.level.block.InfestedLeavesBlock;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -149,7 +145,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public List<ItemStack> rollHammerRewards(BlockState state, ItemStack toolItem, Random rand) {
+    public List<ItemStack> rollHammerRewards(BlockState state, ItemStack toolItem, RandomSource rand) {
         List<ItemStackWithChance> possibleDrops = ExNihiloRegistries.HAMMER_REGISTRY.getResult(state.getBlock());
         List<ItemStack> drops = new ArrayList<>();
         for (ItemStackWithChance itemStackWithChance : possibleDrops) {
@@ -169,12 +165,12 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public Collection<ItemStack> rollSieveRewards(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+    public Collection<ItemStack> rollSieveRewards(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, RandomSource rand) {
         boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.getValue(BlockStateProperties.WATERLOGGED);
-        List<SieveRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(state.getBlock(), ((MeshType) sieveMesh.getBackingMesh()), waterlogged);
+        List<SiftingRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(state.getBlock(), ((MeshType) sieveMesh.getBackingMesh()), waterlogged);
         if (recipes != null) {
             List<ItemStack> list = new ArrayList<>();
-            for (SieveRecipe recipe : recipes) {
+            for (SiftingRecipe recipe : recipes) {
                 int tries = rand.nextInt((int) luck + 1) + 1;
                 for (int i = 0; i < tries; i++) {
                     for (MeshWithChance roll : recipe.getRolls()) {
@@ -192,7 +188,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, Random rand) {
+    public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, RandomSource rand) {
         final float luck = getLuckFromTool(tool);
         if (state.getBlock() instanceof InfestedLeavesBlock) {
             List<ItemStack> list = new ArrayList<>();
@@ -205,7 +201,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             return Collections.emptyList();
         }
 
-        List<CrookRecipe> recipes = ExNihiloRegistries.CROOK_REGISTRY.getDrops(state.getBlock());
+        List<HarvestRecipe> recipes = ExNihiloRegistries.CROOK_REGISTRY.getDrops(state.getBlock());
         if (recipes != null) {
             List<ItemStack> list = new ArrayList<>();
 
@@ -214,8 +210,8 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
                 list.addAll(items);
             }
 
-            for (CrookRecipe recipe : recipes) {
-                for (ItemStackWithChance drop : recipe.getOutput()) {
+            for (final var recipe : recipes) {
+                for (ItemStackWithChance drop : recipe.getDrops()) {
                     float fortuneChanceBonus = 0.1f;
                     if (rand.nextFloat() <= drop.getChance() + fortuneChanceBonus * luck) {
                         list.add(drop.getStack().copy());
@@ -239,8 +235,8 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
         boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.getValue(BlockStateProperties.WATERLOGGED);
         LootTable.Builder tableBuilder = LootTable.lootTable();
-        List<SieveRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(source, ((MeshType) mesh.getBackingMesh()), waterlogged);
-        for (SieveRecipe recipe : recipes) {
+        List<SiftingRecipe> recipes = ExNihiloRegistries.SIEVE_REGISTRY.getDrops(source, ((MeshType) mesh.getBackingMesh()), waterlogged);
+        for (final var recipe : recipes) {
             ItemStack itemStack = recipe.getDrop();
             for (MeshWithChance roll : recipe.getRolls()) {
                 LootPool.Builder poolBuilder = LootPool.lootPool();
@@ -287,16 +283,16 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
     @Override
     public List<IHammerRecipe> getHammerRecipes() {
-        ArrayListMultimap<IntList, HammerRecipe> groupedRecipes = ArrayListMultimap.create();
-        for (HammerRecipe hammerRecipe : ExNihiloRegistries.HAMMER_REGISTRY.getRecipeList()) {
+        ArrayListMultimap<IntList, CrushingRecipe> groupedRecipes = ArrayListMultimap.create();
+        for (final var hammerRecipe : ExNihiloRegistries.HAMMER_REGISTRY.getRecipeList()) {
             groupedRecipes.put(hammerRecipe.getInput().getStackingIds(), hammerRecipe);
         }
 
         List<IHammerRecipe> result = new ArrayList<>();
         for (IntList packedStacks : groupedRecipes.keySet()) {
             LootTable.Builder tableBuilder = LootTable.lootTable();
-            for (HammerRecipe hammerRecipe : groupedRecipes.get(packedStacks)) {
-                for (ItemStackWithChance itemStackWithChance : hammerRecipe.getOutput()) {
+            for (final var hammerRecipe : groupedRecipes.get(packedStacks)) {
+                for (ItemStackWithChance itemStackWithChance : hammerRecipe.getDrops()) {
                     LootPool.Builder poolBuilder = LootPool.lootPool();
                     LootPoolSingletonContainer.Builder<?> entryBuilder = buildLootEntry(itemStackWithChance);
                     poolBuilder.add(entryBuilder);
@@ -304,7 +300,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
                 }
             }
 
-            HammerRecipe firstRecipe = groupedRecipes.get(packedStacks).get(0);
+            final var firstRecipe = groupedRecipes.get(packedStacks).get(0);
             Ingredient input = firstRecipe.getInput();
             LootTableProvider lootTableProvider = new LootTableProvider(tableBuilder.build());
             result.add(new net.blay09.mods.excompressum.registry.hammer.HammerRecipe(firstRecipe.getId(), input, lootTableProvider));

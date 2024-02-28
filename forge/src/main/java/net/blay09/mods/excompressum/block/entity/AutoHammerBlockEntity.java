@@ -24,8 +24,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -41,13 +41,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Random;
 
 public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements BalmMenuProvider, BalmContainerProvider, BalmEnergyStorageProvider {
 
@@ -281,7 +277,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
                     firstEmptySlot = i;
                 }
             } else {
-                if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && slotStack.sameItem(itemStack) && ItemStack.isSameItemSameTags(slotStack, itemStack)) {
+                if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && ItemStack.isSameItemSameTags(slotStack, itemStack)) {
                     slotStack.grow(itemStack.getCount());
                     return true;
                 }
@@ -441,10 +437,10 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
         return ExNihilo.isHammerable(itemStack) || ExRegistries.getHammerRegistry().isHammerable(recipeManager, itemStack);
     }
 
-    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, Random rand) {
+    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, RandomSource rand) {
         RecipeManager recipeManager = ExCompressum.proxy.getRecipeManager(level);
         if (ExRegistries.getHammerRegistry().isHammerable(recipeManager, itemStack)) {
-            LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), itemStack, rand);
+            LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), itemStack);
             return HammerRegistry.rollHammerRewards(lootContext, itemStack);
         }
 
@@ -493,7 +489,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("block.excompressum.auto_hammer");
+        return Component.translatable("block.excompressum.auto_hammer");
     }
 
     @Override

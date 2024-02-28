@@ -24,9 +24,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -270,7 +270,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
                     firstEmptySlot = i;
                 }
             } else {
-                if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && slotStack.sameItem(itemStack) && ItemStack.isSameItemSameTags(slotStack, itemStack)) {
+                if (slotStack.getCount() + itemStack.getCount() <= slotStack.getMaxStackSize() && ItemStack.isSameItemSameTags(slotStack, itemStack)) {
                     slotStack.grow(itemStack.getCount());
                     return true;
                 }
@@ -307,7 +307,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
         return SieveMeshRegistry.getEntry(itemStack) != null;
     }
 
-    public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+    public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, RandomSource rand) {
         return ExNihilo.rollSieveRewards(getBlockState(), itemStack, sieveMesh, luck, rand);
     }
 
@@ -498,7 +498,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("block.excompressum.auto_sieve");
+        return Component.translatable("block.excompressum.auto_sieve");
     }
 
     @Override

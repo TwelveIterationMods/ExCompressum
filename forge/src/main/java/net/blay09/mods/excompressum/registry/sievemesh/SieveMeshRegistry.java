@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.registry.sievemesh;
 
+import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.api.sievemesh.CommonMeshType;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.item.ModItems;
@@ -29,12 +30,14 @@ public class SieveMeshRegistry {
 
     @Nullable
     public static SieveMeshRegistryEntry getEntry(ItemStack itemStack) {
-        return entriesByItem.get(itemStack.getItem().getRegistryName());
+        final var itemId = Balm.getRegistries().getKey(itemStack.getItem());
+        return entriesByItem.get(itemId);
     }
 
     public static void add(SieveMeshRegistryEntry sieveMesh) {
         entriesByType.put(sieveMesh.getMeshType(), sieveMesh);
-        entriesByItem.put(sieveMesh.getItemStack().getItem().getRegistryName(), sieveMesh);
+        final var itemId = Balm.getRegistries().getKey(sieveMesh.getItemStack().getItem());
+        entriesByItem.put(itemId, sieveMesh);
     }
 
     public static SieveMeshRegistryEntry getEntry(CommonMeshType type) {

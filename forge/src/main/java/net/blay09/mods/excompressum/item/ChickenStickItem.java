@@ -34,13 +34,13 @@ public class ChickenStickItem extends DiggerItem {
 
     @Override
     public boolean hurtEnemy(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
-        tryPlayChickenSound(attacker.level, new BlockPos(attacker.getX(), attacker.getY(), attacker.getZ()));
+        tryPlayChickenSound(attacker.level(), attacker.blockPosition());
         return super.hurtEnemy(itemStack, attacker, target);
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        tryPlayChickenSound(level, new BlockPos(player.getX(), player.getY(), player.getZ()));
+        tryPlayChickenSound(level, player.blockPosition());
         player.swing(hand);
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
     }

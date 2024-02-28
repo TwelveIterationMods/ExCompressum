@@ -2,17 +2,17 @@ package net.blay09.mods.excompressum.compat.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -23,6 +23,7 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<JeiCompre
 
     private static final ResourceLocation texture = new ResourceLocation(ExCompressum.MOD_ID, "textures/gui/jei_hammer.png");
     public static final ResourceLocation UID = new ResourceLocation(ExCompressum.MOD_ID, "compressed_hammer");
+    public static final RecipeType<JeiCompressedHammerRecipe> TYPE = new RecipeType<>(UID, JeiCompressedHammerRecipe.class);
 
     private final IDrawable background;
     private final IDrawable slotHighlight;
@@ -34,24 +35,18 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<JeiCompre
     public CompressedHammerRecipeCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createDrawable(texture, 0, 0, 166, 63);
         this.slotHighlight = guiHelper.createDrawable(texture, 166, 0, 18, 18);
-        this.icon = guiHelper.createDrawableIngredient(new ItemStack(ModBlocks.autoCompressedHammer));
-    }
-
-    @Nonnull
-    @Override
-    public ResourceLocation getUid() {
-        return UID;
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.autoCompressedHammer));
     }
 
     @Override
-    public Class<? extends JeiCompressedHammerRecipe> getRecipeClass() {
-        return JeiCompressedHammerRecipe.class;
+    public RecipeType<JeiCompressedHammerRecipe> getRecipeType() {
+        return TYPE;
     }
 
     @Nonnull
     @Override
     public Component getTitle() {
-        return new TranslatableComponent(UID.toString());
+        return Component.translatable(UID.toString());
     }
 
     @Override
@@ -65,6 +60,11 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<JeiCompre
     }
 
     @Override
+    public void setRecipe(IRecipeLayoutBuilder iRecipeLayoutBuilder, JeiCompressedHammerRecipe jeiCompressedHammerRecipe, IFocusGroup iFocusGroup) {
+        // TODO
+    }
+
+    /*  @Override
     public void setIngredients(JeiCompressedHammerRecipe compressedHammerRecipe, IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.ITEM, compressedHammerRecipe.getInputs());
         ingredients.setOutputs(VanillaTypes.ITEM, compressedHammerRecipe.getOutputItems());
@@ -111,5 +111,5 @@ public class CompressedHammerRecipeCategory implements IRecipeCategory<JeiCompre
                 JeiUtils.addLootTableEntryTooltips(entry, tooltip);
             }
         });
-    }
+    }*/
 }

@@ -1,0 +1,9 @@
+{
+  "sources": [
+    {
+      "type": "directory",
+      "source": "excompressum_icons",
+      "prefix": "excompressum_icons/"
+    }
+  ]
+}

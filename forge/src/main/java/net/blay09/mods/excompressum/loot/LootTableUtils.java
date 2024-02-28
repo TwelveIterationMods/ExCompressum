@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.loot;
 
 import com.google.common.collect.ArrayListMultimap;
+import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.ILootTableProvider;
@@ -8,15 +9,18 @@ import net.blay09.mods.excompressum.mixin.*;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -27,7 +31,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -49,7 +52,7 @@ public class LootTableUtils {
             return Collections.emptyList();
         }
 
-        LootTables lootTableManager = ExCompressum.proxy.getLootTableManager();
+        final var lootTableManager = ExCompressum.proxy.getLootTableManager();
         LootTable lootTable = lootTableProvider.getLootTable(id, lootTableManager);
         return getLootTableEntries(lootTable);
     }
@@ -74,8 +77,8 @@ public class LootTableUtils {
                     result.add(new LootTableEntry(itemStack, countRange, baseChance));
                 } else if (entry instanceof TagEntryAccessor tagEntry) {
                     TagKey<Item> tag = tagEntry.getTag();
-                    Registry.ITEM.getTagOrEmpty(tag).forEach(item -> {
-                        ItemStack itemStack = new ItemStack(item);
+                    BuiltInRegistries.ITEM.getOrCreateTag(tag).forEach(itemHolder -> {
+                        ItemStack itemStack = new ItemStack(itemHolder.get());
                         itemStack.setCount(getMaxCount(countRange));
                         result.add(new LootTableEntry(itemStack, countRange, baseChance));
                     });
@@ -147,11 +150,10 @@ public class LootTableUtils {
         return 1;
     }
 
-    public static LootContext buildLootContext(ServerLevel world, ItemStack itemStack, Random random) {
-        return new LootContext.Builder(world)
-                .withRandom(random)
-                .withParameter(SOURCE_STACK, itemStack)
-                .create(new LootContextParamSet.Builder().required(SOURCE_STACK).build());
+    public static LootContext buildLootContext(ServerLevel level, ItemStack itemStack) {
+        final var params = new HashMap<LootContextParam<?>, Object>();
+        params.put(SOURCE_STACK, itemStack);
+        return new LootContext.Builder(new LootParams(level, params, Collections.emptyMap(), 0f)).create(null);
     }
 
     public static List<MergedLootTableEntry> mergeLootTableEntries(List<LootTableEntry> entries) {
@@ -161,7 +163,8 @@ public class LootTableUtils {
             if (entry.getItemStack().hasTag()) {
                 result.add(new MergedLootTableEntry(entry));
             } else {
-                entryMap.put(entry.getItemStack().getItem().getRegistryName(), entry);
+                final var itemId = Balm.getRegistries().getKey(entry.getItemStack().getItem());
+                entryMap.put(itemId, entry);
             }
         }
 

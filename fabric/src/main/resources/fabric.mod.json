@@ -9,9 +9,9 @@
     "BlayTheNinth"
   ],
   "contact": {
-    "homepage": "https://blay09.net/mods/excompressum",
-    "sources": "https://github.com/ModdingForBlockheads/ExCompressum",
-    "issues": "https://github.com/ModdingForBlockheads/ExCompressum/issues"
+    "homepage": "https://mods.twelveiterations.com/",
+    "sources": "https://github.com/TwelveIterationMods/ExCompressum",
+    "issues": "https://github.com/TwelveIterationMods/ExCompressum/issues"
   },
 
   "license": "All Rights Reserved",
@@ -20,10 +20,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.blay09.mods.excompressum.FabricCookingForBlockheads"
+      "net.blay09.mods.excompressum.FabricExCompressum"
     ],
     "client": [
-      "net.blay09.mods.excompressum.client.FabricCookingForBlockheadsClient"
+      "net.blay09.mods.excompressum.client.FabricExCompressum"
     ],
     "modmenu": [
       "net.blay09.mods.excompressum.compat.ModMenuIntegration"
@@ -35,11 +35,10 @@
   "mixins": [
   ],
   "depends": {
-    "cloth-config2": ">=5.0.34",
-    "balm-fabric": ">=3.1.0",
-    "fabricloader": ">=0.11.3",
+    "balm-fabric": ">=7.0.0",
+    "fabricloader": ">=0.14.21",
     "fabric": "*",
-    "minecraft": "1.18.x",
+    "minecraft": ">=1.20",
     "java": ">=17"
   },
   "suggests": {
@@ -48,8 +47,12 @@
   "custom": {
     "modmenu": {
       "links": {
-        "modmenu.discord": "https://discord.gg/scGAfXC"
+        "modmenu.discord": "https://discord.gg/VAfZ2Nau6j"
       }
+    },
+    "waila:plugins": {
+      "id": "excompressum:wthit",
+      "initializer": "net.blay09.mods.excompressum.compat.WTHITIntegration"
     }
   }
 }

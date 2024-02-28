@@ -17,30 +17,23 @@ public class ModMenus {
     public static DeferredObject<MenuType<AutoCompressorMenu>> autoCompressor;
     public static DeferredObject<MenuType<AutoHammerMenu>> autoHammer;
     public static DeferredObject<MenuType<AutoSieveMenu>> autoSieve;
-    public static DeferredObject<MenuType<AutoSieveMenu>> manaSieve;
 
     public static void initialize(BalmMenus menus) {
         autoCompressor = menus.registerMenu(id("auto_compressor"), ((windowId, inv, data) -> {
             BlockPos pos = data.readBlockPos();
-            BlockEntity blockEntity = inv.player.level.getBlockEntity(pos);
+            BlockEntity blockEntity = inv.player.level().getBlockEntity(pos);
             return new AutoCompressorMenu(windowId, inv, (AutoCompressorBlockEntity) Objects.requireNonNull(blockEntity));
         }));
 
         autoHammer = menus.registerMenu(id("auto_hammer"), ((windowId, inv, data) -> {
             BlockPos pos = data.readBlockPos();
-            BlockEntity blockEntity = inv.player.level.getBlockEntity(pos);
+            BlockEntity blockEntity = inv.player.level().getBlockEntity(pos);
             return new AutoHammerMenu(windowId, inv, (AutoHammerBlockEntity) Objects.requireNonNull(blockEntity));
         }));
 
         autoSieve = menus.registerMenu(id("auto_sieve"), ((windowId, inv, data) -> {
             BlockPos pos = data.readBlockPos();
-            BlockEntity blockEntity = inv.player.level.getBlockEntity(pos);
-            return new AutoSieveMenu(autoSieve.get(), windowId, inv, (AbstractAutoSieveBlockEntity) Objects.requireNonNull(blockEntity));
-        }));
-
-        manaSieve = menus.registerMenu(id("mana_sieve"), ((windowId, inv, data) -> {
-            BlockPos pos = data.readBlockPos();
-            BlockEntity blockEntity = inv.player.level.getBlockEntity(pos);
+            BlockEntity blockEntity = inv.player.level().getBlockEntity(pos);
             return new AutoSieveMenu(autoSieve.get(), windowId, inv, (AbstractAutoSieveBlockEntity) Objects.requireNonNull(blockEntity));
         }));
     }

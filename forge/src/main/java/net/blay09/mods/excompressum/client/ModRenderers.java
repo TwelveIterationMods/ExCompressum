@@ -6,7 +6,7 @@ import net.blay09.mods.excompressum.block.BaitBlock;
 import net.blay09.mods.excompressum.block.BaitType;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.client.render.entity.AngryChickenRenderer;
-import net.blay09.mods.excompressum.client.render.tile.*;
+import net.blay09.mods.excompressum.client.render.blockentity.*;
 import net.blay09.mods.excompressum.entity.ModEntities;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.minecraft.client.Minecraft;
@@ -29,8 +29,6 @@ public class ModRenderers {
         renderers.setBlockRenderType(() -> ModBlocks.autoHeavySieve, RenderType.cutout());
         renderers.setBlockRenderType(() -> ModBlocks.autoHammer, RenderType.cutout());
         renderers.setBlockRenderType(() -> ModBlocks.autoCompressedHammer, RenderType.cutout());
-        renderers.setBlockRenderType(() -> ModBlocks.manaSieve, RenderType.cutout());
-        renderers.setBlockRenderType(() -> ModBlocks.evolvedOrechid, RenderType.cutout());
 
         renderers.registerBlockEntityRenderer(ModBlockEntities.heavySieve::get, HeavySieveRenderer::new);
         renderers.registerBlockEntityRenderer(ModBlockEntities.autoSieve::get, AutoSieveRenderer::normal);

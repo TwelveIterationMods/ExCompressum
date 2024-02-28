@@ -4,7 +4,7 @@ import mcp.mobius.waila.api.*;
 import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
 import net.blay09.mods.excompressum.block.entity.EnvironmentalConditionResult;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 
 public class BaitDataProvider implements IBlockComponentProvider {
 
@@ -13,12 +13,12 @@ public class BaitDataProvider implements IBlockComponentProvider {
         if (accessor.getBlockEntity() instanceof BaitBlockEntity bait) {
             EnvironmentalConditionResult environmentalStatus = bait.checkSpawnConditions(true);
             if (environmentalStatus == EnvironmentalConditionResult.CanSpawn) {
-                tooltip.add(new TranslatableComponent("excompressum.tooltip.baitTooClose"));
-                tooltip.add(new TranslatableComponent("excompressum.tooltip.baitTooClose2"));
+                tooltip.addLine(Component.translatable("excompressum.tooltip.baitTooClose"));
+                tooltip.addLine(Component.translatable("excompressum.tooltip.baitTooClose2"));
             } else {
-                TranslatableComponent statusText = new TranslatableComponent(environmentalStatus.langKey, environmentalStatus.params);
+                final var statusText = Component.translatable(environmentalStatus.langKey, environmentalStatus.params);
                 statusText.withStyle(ChatFormatting.RED);
-                tooltip.add(statusText);
+                tooltip.addLine(statusText);
             }
         }
     }

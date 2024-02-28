@@ -1,6 +1,8 @@
 package net.blay09.mods.excompressum.registry.compressor;
 
+import net.blay09.mods.balm.api.Balm;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -23,11 +25,13 @@ public class CompressedRecipeRegistry implements ResourceManagerReloadListener {
 
     private final Map<ResourceLocation, CompressedRecipe> cachedResults = new HashMap<>();
     private final RecipeManager recipeManager;
+    private final RegistryAccess registryAccess;
 
     private boolean recipesLoaded;
 
-    public CompressedRecipeRegistry(RecipeManager recipeManager) {
+    public CompressedRecipeRegistry(RecipeManager recipeManager, RegistryAccess registryAccess) {
         this.recipeManager = recipeManager;
+        this.registryAccess = registryAccess;
     }
 
     @Override
@@ -62,11 +66,11 @@ public class CompressedRecipeRegistry implements ResourceManagerReloadListener {
                 }
                 if (count == 4 && recipe.canCraftInDimensions(2, 2)) {
                     if (passes) {
-                        recipesSmall.add(new CompressedRecipe(first, 4, recipe.getResultItem().copy()));
+                        recipesSmall.add(new CompressedRecipe(first, 4, recipe.getResultItem(registryAccess).copy()));
                     }
                 } else if (count == 9 && recipe.canCraftInDimensions(3, 3)) {
                     if (passes) {
-                        recipes.add(new CompressedRecipe(first, 9, recipe.getResultItem().copy()));
+                        recipes.add(new CompressedRecipe(first, 9, recipe.getResultItem(registryAccess).copy()));
                     }
                 }
             }
@@ -85,7 +89,7 @@ public class CompressedRecipeRegistry implements ResourceManagerReloadListener {
             return null;
         }
 
-        final ResourceLocation registryName = itemStack.getItem().getRegistryName();
+        final ResourceLocation registryName = Balm.getRegistries().getKey(itemStack.getItem());
         CompressedRecipe foundRecipe = cachedResults.get(registryName);
         if (foundRecipe != null) {
             return foundRecipe;

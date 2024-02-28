@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.api;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -57,13 +58,13 @@ public interface ExNihiloProvider {
 
     boolean isHammerable(BlockState state);
 
-    List<ItemStack> rollHammerRewards(BlockState state, ItemStack tool, Random rand);
+    List<ItemStack> rollHammerRewards(BlockState state, ItemStack tool, RandomSource rand);
 
     boolean isSiftableWithMesh(BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh);
 
-    Collection<ItemStack> rollSieveRewards(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand);
+    Collection<ItemStack> rollSieveRewards(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, RandomSource rand);
 
-    List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, Random rand);
+    List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, RandomSource rand);
 
     LootTable generateHeavySieveLootTable(BlockState sieveState, ItemLike source, int count, SieveMeshRegistryEntry mesh);
 

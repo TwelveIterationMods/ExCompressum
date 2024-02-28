@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.api.block.entity.BalmBlockEntity;
+import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.common.BalmBlockEntity;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.ExNihilo;
@@ -9,8 +10,6 @@ import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRecipe
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -19,12 +18,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -51,7 +49,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity {
         }
     };
 
-    private final FluidTank fluidTank = new FluidTank(1999, it -> itemHandler.getStackInSlot(0).isEmpty() && it.getFluid().getAttributes().getTemperature(it) <= 300) {
+    private final FluidTank fluidTank = new FluidTank(1999, it -> itemHandler.getStackInSlot(0).isEmpty() && isValidFluid(it.getFluid())) {
 
         @Override
         public int fill(FluidStack resource, FluidAction action) {
@@ -73,6 +71,11 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity {
             isDirty = true;
         }
     };
+
+    private boolean isValidFluid(Fluid fluid) {
+        // TODO return fluid.getTemperature(it) <= 300
+        return true;
+    }
 
     private final LazyOptional<FluidTank> fluidTankCap = LazyOptional.of(() -> fluidTank);
     private final LazyOptional<IItemHandler> itemHandlerCap = LazyOptional.of(() -> itemHandler);
@@ -123,7 +126,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity {
 
     public void serverTick() {
         // Fill the crucible from rain
-        if (level.getLevelData().isRaining() && level.canSeeSkyFromBelowWater(worldPosition) && level.getBiome(worldPosition).value().getDownfall() > 0f) {
+        if (level.getLevelData().isRaining() && level.canSeeSkyFromBelowWater(worldPosition) && level.getBiome(worldPosition).value().hasPrecipitation()) {
             ticksSinceRain++;
             if (ticksSinceRain >= RAIN_FILL_INTERVAL) {
                 fluidTank.fill(new FluidStack(Fluids.WATER, RAIN_FILL_SPEED), IFluidHandler.FluidAction.EXECUTE);
@@ -169,7 +172,8 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity {
     public void saveAdditional(CompoundTag tagCompound) {
         super.saveAdditional(tagCompound);
         if (currentTargetFluid != null) {
-            tagCompound.putString("TargetFluid", Objects.toString(currentTargetFluid.getRegistryName()));
+            final var fluidId = Balm.getRegistries().getKey(currentTargetFluid);
+            tagCompound.putString("TargetFluid", Objects.toString(fluidId));
         }
         tagCompound.putInt("SolidVolume", solidVolume);
         tagCompound.put("FluidTank", fluidTank.writeToNBT(new CompoundTag()));
@@ -184,9 +188,9 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity {
     @Override
     @SuppressWarnings("unchecked")
     public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
-        if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+        if (cap == ForgeCapabilities.FLUID_HANDLER) {
             return (LazyOptional<T>) fluidTankCap;
-        } else if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        } else if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return (LazyOptional<T>) itemHandlerCap;
         }
         return super.getCapability(cap, side);

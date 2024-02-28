@@ -9,6 +9,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -32,7 +34,9 @@ import java.util.Random;
 
 public class AngryChickenEntity extends PathfinderMob {
 
-    private final ServerBossEvent bossInfo = (ServerBossEvent) (new ServerBossEvent(getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
+    private final ServerBossEvent bossInfo = (ServerBossEvent) (new ServerBossEvent(getDisplayName(),
+            BossEvent.BossBarColor.RED,
+            BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
 
     public AngryChickenEntity(EntityType<? extends AngryChickenEntity> type, Level level) {
         super(type, level);
@@ -113,7 +117,7 @@ public class AngryChickenEntity extends PathfinderMob {
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
     }
 
     @Override
@@ -121,11 +125,11 @@ public class AngryChickenEntity extends PathfinderMob {
         super.tickDeath();
 
         if (deathTime == 18) {
-            LightningBolt lightningBolt = EntityType.LIGHTNING_BOLT.create(level);
+            LightningBolt lightningBolt = EntityType.LIGHTNING_BOLT.create(level());
             if (lightningBolt != null) {
                 lightningBolt.setVisualOnly(true);
                 lightningBolt.moveTo(Vec3.atBottomCenterOf(blockPosition()));
-                level.addFreshEntity(lightningBolt);
+                level().addFreshEntity(lightningBolt);
             }
 
             Random random = new Random();
@@ -134,10 +138,10 @@ public class AngryChickenEntity extends PathfinderMob {
                 int offZ = random.nextInt(3) - 2;
                 for (int y = 0; y <= 1; y++) {
                     BlockPos pos = blockPosition().offset(offX, y, offZ);
-                    BlockState state = level.getBlockState(pos);
-                    if (state.isAir() || state.getMaterial().isReplaceable()) {
-                        BlockState fireState = BaseFireBlock.getState(level, pos);
-                        level.setBlock(pos, fireState, 11);
+                    BlockState state = level().getBlockState(pos);
+                    if (state.isAir() || state.is(BlockTags.REPLACEABLE)) {
+                        BlockState fireState = BaseFireBlock.getState(level(), pos);
+                        level().setBlock(pos, fireState, 11);
                         break;
                     }
                 }
@@ -173,7 +177,7 @@ public class AngryChickenEntity extends PathfinderMob {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    public int getExperienceReward() {
         return 25;
     }
 
@@ -183,9 +187,10 @@ public class AngryChickenEntity extends PathfinderMob {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.isProjectile()) {
+        if (source.isIndirect()) {
             Entity arrow = source.getDirectEntity();
             Entity attacker = source.getEntity();
+            final var level = level();
             if (!level.isClientSide && arrow != null && !(attacker instanceof AngryChickenEntity)) {
                 ((ServerLevel) level).sendParticles(ParticleTypes.CLOUD, getX(), getY() + 1f, getZ(), 50, 0.25f, 0.25f, 0.25f, 0.2f);
                 if (arrow instanceof Arrow && attacker instanceof LivingEntity) {

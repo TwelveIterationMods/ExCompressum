@@ -11,10 +11,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class ChickenStickRecipeSerializer extends ExCompressumRecipeSerializer<ChickenStickRecipe> {
 
-    public ChickenStickRecipeSerializer() {
-        setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "chicken_stick"));
-    }
-
     @Override
     public ChickenStickRecipe readFromJson(ResourceLocation id, JsonObject json) {
         Ingredient input = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "input"));

@@ -10,11 +10,7 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.ModEntities;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.item.ModTags;
-import net.blay09.mods.excompressum.loot.ModLoot;
 import net.blay09.mods.excompressum.menu.ModMenus;
-import net.blay09.mods.excompressum.registry.ExNihilo;
-import net.blay09.mods.excompressum.registry.ModRecipeTypes;
-import net.blay09.mods.excompressum.registry.NihilisticNihiloProvider;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
 import net.minecraftforge.fml.DistExecutor;
 import org.apache.logging.log4j.LogManager;
@@ -38,13 +34,7 @@ public class ExCompressum {
         ModMenus.initialize(Balm.getMenus());
         ModTags.initialize(Balm.getRegistries());
 
-        Balm.initializeIfLoaded(Compat.EXNIHILO_OMNIA, "net.blay09.mods.excompressum.compat.exnihiloomnia.ExNihiloOmniaAddon");
-        Balm.initializeIfLoaded(Compat.EXNIHILO_ADSCENSIO, "net.blay09.mods.excompressum.compat.exnihiloadscensio.ExNihiloAdscensioAddon");
-        Balm.initializeIfLoaded(Compat.EXNIHILO_CREATIO, "net.blay09.mods.excompressum.compat.exnihilocreatio.ExNihiloCreatioAddon");
         Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.compat.exnihilosequentia.ExNihiloSequentiaAddon");
-
-        //Balm.initializeIfLoaded(Compat.TCONSTRUCT, "net.blay09.mods.excompressum.compat.tconstruct.TConstructAddon");
-        Balm.initializeIfLoaded(Compat.PATCHOULI, "net.blay09.mods.excompressum.compat.patchouli.PatchouliAddon");
 
         AutoSieveSkinRegistry.load();
     }

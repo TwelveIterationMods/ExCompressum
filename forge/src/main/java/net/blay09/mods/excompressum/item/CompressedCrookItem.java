@@ -15,9 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-
-import java.util.HashSet;
 
 public class CompressedCrookItem extends DiggerItem implements ICompressedCrook {
 
@@ -42,7 +39,7 @@ public class CompressedCrookItem extends DiggerItem implements ICompressedCrook 
     }
 
     private void pushEntity(ItemStack itemStack, Player player, Entity entity) {
-        if (!player.level.isClientSide) {
+        if (!player.level().isClientSide) {
             double distance = Math.sqrt(Math.pow(player.getX() - entity.getX(), 2) + Math.pow(player.getZ() - entity.getZ(), 2));
             double scalarX = (player.getX() - entity.getX()) / distance;
             double scalarZ = (player.getZ() - entity.getZ()) / distance;
@@ -58,12 +55,12 @@ public class CompressedCrookItem extends DiggerItem implements ICompressedCrook 
 
     @Override
     public boolean isCorrectToolForDrops(BlockState block) {
-        return block.getMaterial() == Material.LEAVES;
+        return block.is(BlockTags.LEAVES);
     }
 
     @Override
     public float getDestroySpeed(ItemStack item, BlockState block) {
-        return block.getMaterial() == Material.LEAVES ? (float) (getTier().getSpeed() * ExCompressumConfig.getActive().tools.compressedCrookSpeedMultiplier) : 0f;
+        return block.is(BlockTags.LEAVES) ? (float) (getTier().getSpeed() * ExCompressumConfig.getActive().tools.compressedCrookSpeedMultiplier) : 0f;
     }
 
     @Override

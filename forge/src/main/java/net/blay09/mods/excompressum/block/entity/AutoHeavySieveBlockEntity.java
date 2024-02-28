@@ -7,15 +7,14 @@ import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.Random;
 
 public class AutoHeavySieveBlockEntity extends AutoSieveBlockEntity {
 
@@ -29,8 +28,8 @@ public class AutoHeavySieveBlockEntity extends AutoSieveBlockEntity {
     }
 
     @Override
-    public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
-        LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), itemStack, rand);
+    public Collection<ItemStack> rollSieveRewards(ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, RandomSource rand) {
+        LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), itemStack);
         return HeavySieveRegistry.rollSieveRewards(lootContext, getBlockState(), sieveMesh, itemStack);
     }
 
@@ -45,6 +44,6 @@ public class AutoHeavySieveBlockEntity extends AutoSieveBlockEntity {
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("block.excompressum.auto_heavy_sieve");
+        return Component.translatable("block.excompressum.auto_heavy_sieve");
     }
 }

@@ -11,10 +11,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class CompressedHammerRecipeSerializer extends ExCompressumRecipeSerializer<CompressedHammerRecipe> {
 
-    public CompressedHammerRecipeSerializer() {
-        setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "compressed_hammer"));
-    }
-
     @Override
     public CompressedHammerRecipe readFromJson(ResourceLocation id, JsonObject json) {
         Ingredient input = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "input"));

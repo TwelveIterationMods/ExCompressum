@@ -15,8 +15,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.storage.loot.LootTables;
-import net.minecraft.world.level.storage.loot.PredicateManager;
+import net.minecraft.world.level.storage.loot.LootDataResolver;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,8 +26,6 @@ import java.util.Set;
 public class ClientProxy extends CommonProxy {
 
     private final Set<GameProfile> skinRequested = Sets.newHashSet();
-
-    private final LootTables lootTableManager = new LootTables(new PredicateManager());
 
     @Override
     public void preloadSkin(GameProfile customSkin) {
@@ -78,7 +75,7 @@ public class ClientProxy extends CommonProxy {
         }
 
         // Do not render sieve particles if minimal particles are configured.
-        ParticleStatus particleStatus = Minecraft.getInstance().options.particles;
+        ParticleStatus particleStatus = Minecraft.getInstance().options.particles().get();
         if (particleStatus == ParticleStatus.MINIMAL) {
             return;
         }
@@ -106,12 +103,13 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public LootTables getLootTableManager() {
+    @Deprecated
+    public LootDataResolver getLootTableManager() {
         if (Balm.getHooks().getServer() != null) {
-            return Balm.getHooks().getServer().getLootTables();
+            return Balm.getHooks().getServer().getLootData();
         }
 
-        return lootTableManager;
+        return null; // TODO
     }
 
     @Override

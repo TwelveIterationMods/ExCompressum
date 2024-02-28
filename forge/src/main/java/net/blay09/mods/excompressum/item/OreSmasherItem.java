@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Collection;
-import java.util.HashSet;
 
 public class OreSmasherItem extends DiggerItem {
 
@@ -30,8 +29,7 @@ public class OreSmasherItem extends DiggerItem {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public OreSmasherItem(Item.Properties properties) {
-        //noinspection ConstantConditions - hide ore smasher for now, there's no useful function for it in current ex nihilo
-        super(0f, 0f, Tiers.DIAMOND, BlockTags.MINEABLE_WITH_SHOVEL, properties.tab(null));
+        super(0f, 0f, Tiers.DIAMOND, BlockTags.MINEABLE_WITH_SHOVEL, properties);
     }
 
     @Override

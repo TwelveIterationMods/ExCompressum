@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
@@ -36,7 +35,7 @@ public class AutoCompressorBlock extends BaseEntityBlock {
     public static final ResourceLocation registryName = new ResourceLocation(ExCompressum.MOD_ID, name);
 
     public AutoCompressorBlock() {
-        super(Properties.of(Material.METAL).strength(2f));
+        super(Properties.of().strength(2f));
     }
 
     @org.jetbrains.annotations.Nullable

@@ -24,12 +24,12 @@ public class ExRegistries {
 
     @SubscribeEvent
     public static void addReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(compressedRecipeRegistry = new CompressedRecipeRegistry(event.getServerResources().getRecipeManager()));
+        event.addListener(compressedRecipeRegistry = new CompressedRecipeRegistry(event.getServerResources().getRecipeManager(), event.getRegistryAccess()));
     }
 
     @SubscribeEvent
     public static void onRecipesUpdated(RecipesUpdatedEvent event) {
-        compressedRecipeRegistry = new CompressedRecipeRegistry(event.getRecipeManager());
+        compressedRecipeRegistry = new CompressedRecipeRegistry(event.getRecipeManager(), null); // TODO
         compressedRecipeRegistry.reloadRecipes();
     }
 

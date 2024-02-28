@@ -11,10 +11,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class HammerRecipeSerializer extends ExCompressumRecipeSerializer<HammerRecipe> {
 
-    public HammerRecipeSerializer() {
-        setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "hammer"));
-    }
-
     @Override
     public HammerRecipe readFromJson(ResourceLocation id, JsonObject json) {
         Ingredient input = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "input"));

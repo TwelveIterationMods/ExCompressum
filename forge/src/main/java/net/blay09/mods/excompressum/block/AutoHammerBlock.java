@@ -32,7 +32,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -50,7 +49,7 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
     public static final BooleanProperty UGLY = BooleanProperty.create("ugly");
 
     public AutoHammerBlock() {
-        super(Properties.of(Material.METAL)
+        super(Properties.of()
                 .strength(2f)
                 .noOcclusion()
                 .isValidSpawn((a, b, c, d) -> false)

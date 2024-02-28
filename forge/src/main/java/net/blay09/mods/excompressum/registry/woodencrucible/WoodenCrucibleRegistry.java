@@ -13,7 +13,7 @@ public class WoodenCrucibleRegistry {
     @Nullable
     public WoodenCrucibleRecipe getRecipe(Level level, ItemStack itemStack) {
         RecipeManager recipeManager = level.getRecipeManager();
-        List<WoodenCrucibleRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.WOODEN_CRUCIBLE);
+        List<WoodenCrucibleRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.woodenCrucibleRecipeType);
         for (WoodenCrucibleRecipe recipe : recipes) {
             if (recipe.getInput().test(itemStack)) {
                 return recipe;

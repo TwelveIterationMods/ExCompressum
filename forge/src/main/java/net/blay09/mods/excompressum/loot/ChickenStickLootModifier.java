@@ -1,47 +1,37 @@
 package net.blay09.mods.excompressum.loot;
 
-import com.google.gson.JsonObject;
+import net.blay09.mods.balm.api.loot.BalmLootModifier;
 import net.blay09.mods.excompressum.item.ModTags;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.ExRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
-import net.minecraftforge.common.loot.LootModifier;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChickenStickLootModifier extends LootModifier {
+public class ChickenStickLootModifier implements BalmLootModifier {
 
     private static final List<LootContext> activeContexts = new ArrayList<>();
 
-    public ChickenStickLootModifier(LootItemCondition[] conditionsIn) {
-        super(conditionsIn);
-    }
-
-    @Nonnull
     @Override
-    protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
+    public void apply(LootContext context, List<ItemStack> list) {
         synchronized (activeContexts) {
             if (activeContexts.contains(context)) {
-                return generatedLoot;
+                return;
             }
         }
 
         BlockState state = context.getParamOrNull(LootContextParams.BLOCK_STATE);
         if (state == null) {
-            return generatedLoot;
+            return;
         }
 
         ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
         if(tool == null || !tool.is(ModTags.CHICKEN_STICKS)) {
-            return generatedLoot;
+            return;
         }
 
         ItemStack itemStack = new ItemStack(state.getBlock());
@@ -53,21 +43,8 @@ public class ChickenStickLootModifier extends LootModifier {
             synchronized (activeContexts) {
                 activeContexts.remove(context);
             }
-            return loot;
-        }
-
-        return generatedLoot;
-    }
-
-    public static class Serializer extends GlobalLootModifierSerializer<ChickenStickLootModifier> {
-        @Override
-        public ChickenStickLootModifier read(ResourceLocation name, JsonObject object, LootItemCondition[] conditionsIn) {
-            return new ChickenStickLootModifier(conditionsIn);
-        }
-
-        @Override
-        public JsonObject write(ChickenStickLootModifier instance) {
-            return new JsonObject();
+            list.clear();
+            list.addAll(loot);
         }
     }
 

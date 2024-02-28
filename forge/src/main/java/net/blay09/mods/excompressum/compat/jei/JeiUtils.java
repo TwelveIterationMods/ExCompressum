@@ -6,12 +6,7 @@ import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
 import net.blay09.mods.excompressum.mixin.BinomialDistributionGeneratorAccessor;
 import net.blay09.mods.excompressum.mixin.ConstantValueAccessor;
 import net.blay09.mods.excompressum.mixin.UniformGeneratorAccessor;
-import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -22,15 +17,15 @@ public class JeiUtils {
 
     public static void addLootTableEntryTooltips(MergedLootTableEntry entry, List<Component> tooltip) {
         LootTableEntry mainEntry = entry.getEntries().get(0);
-        tooltip.add(Messages.lang("tooltip.jei.main_roll", getCountTextComponent(mainEntry), formatChance(mainEntry)));
+        tooltip.add(Component.translatable("tooltip.jei.main_roll", getCountTextComponent(mainEntry), formatChance(mainEntry)));
         for (int i = 1; i < entry.getEntries().size(); i++) {
             LootTableEntry bonusEntry = entry.getEntries().get(i);
-            tooltip.add(Messages.lang("tooltip.jei.bonus_roll", getCountTextComponent(bonusEntry), formatChance(bonusEntry)));
+            tooltip.add(Component.translatable("tooltip.jei.bonus_roll", getCountTextComponent(bonusEntry), formatChance(bonusEntry)));
         }
     }
 
     public static void addLootTableEntryTooltips(LootTableEntry entry, List<Component> tooltip) {
-        tooltip.add(Messages.lang("tooltip.jei.main_roll", getCountTextComponent(entry), formatChance(entry)));
+        tooltip.add(Component.translatable("tooltip.jei.main_roll", getCountTextComponent(entry), formatChance(entry)));
     }
 
     private static String formatChance(LootTableEntry entry) {
@@ -42,15 +37,15 @@ public class JeiUtils {
         if (entry.getCountRange() instanceof UniformGeneratorAccessor uniform) {
             int min = LootTableUtils.getMinCount(uniform.getMin());
             int max = LootTableUtils.getMaxCount(uniform.getMax());
-            return Messages.lang("tooltip.jei.drop_count.random_range", min, max);
+            return Component.translatable("tooltip.jei.drop_count.random_range", min, max);
         } else if (entry.getCountRange() instanceof BinomialDistributionGeneratorAccessor binomial) {
             int n = LootTableUtils.getMinCount(binomial.getN());
             int p = LootTableUtils.getMinCount(binomial.getP());
-            return Messages.lang("tooltip.jei.drop_count.binomial_range", n * p);
+            return Component.translatable("tooltip.jei.drop_count.binomial_range", n * p);
         } else if (entry.getCountRange() instanceof ConstantValueAccessor constant) {
-            return Messages.lang("tooltip.jei.drop_count.constant", (int) constant.getValue());
+            return Component.translatable("tooltip.jei.drop_count.constant", (int) constant.getValue());
         } else {
-            return new TextComponent("");
+            return Component.empty();
         }
     }
 }

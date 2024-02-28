@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.api.block.entity.BalmBlockEntity;
+import net.blay09.mods.balm.common.BalmBlockEntity;
 import net.blay09.mods.excompressum.block.BaitBlock;
 import net.blay09.mods.excompressum.block.BaitType;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;

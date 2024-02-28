@@ -46,25 +46,25 @@ public class HeavySieveRegistry {
     public static List<ItemStack> rollSieveRewards(LootContext context, BlockState sieve, SieveMeshRegistryEntry mesh, ItemStack itemStack) {
         boolean waterlogged = sieve.hasProperty(BlockStateProperties.WATERLOGGED) && sieve.getValue(BlockStateProperties.WATERLOGGED);
         RecipeManager recipeManager = context.getLevel().getRecipeManager();
-        List<HeavySieveRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.HEAVY_SIEVE);
+        List<HeavySieveRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.heavySieveRecipeType);
         List<ItemStack> results = new ArrayList<>();
         for (HeavySieveRecipe recipe : recipes) {
             if (testRecipe(mesh, itemStack, waterlogged, recipe)) {
                 LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId(), context);
                 if (lootTable != null) {
-                    results.addAll(lootTable.getRandomItems(context));
+                    lootTable.getRandomItems(context, results::add);
                 }
             }
         }
 
-        List<GeneratedHeavySieveRecipe> generatedRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.GENERATED_HEAVY_SIEVE);
+        List<GeneratedHeavySieveRecipe> generatedRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.generatedHeavySieveRecipeType);
         for (GeneratedHeavySieveRecipe generatedRecipe : generatedRecipes) {
             if (testGeneratedRecipe(itemStack, generatedRecipe, sieve, mesh)) {
                 int rolls = getGeneratedRollCount(generatedRecipe);
                 ItemLike source = ForgeRegistries.ITEMS.getValue(generatedRecipe.getSource());
                 LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(sieve, source, rolls, mesh);
                 if (lootTable != null) {
-                    results.addAll(lootTable.getRandomItems(context));
+                    lootTable.getRandomItems(context, results::add);
                 }
             }
         }
@@ -79,14 +79,14 @@ public class HeavySieveRegistry {
     public boolean isSiftable(Level level, BlockState sieve, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
         boolean waterlogged = sieve.hasProperty(BlockStateProperties.WATERLOGGED) && sieve.getValue(BlockStateProperties.WATERLOGGED);
         RecipeManager recipeManager = level.getRecipeManager();
-        List<HeavySieveRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.HEAVY_SIEVE);
+        List<HeavySieveRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.heavySieveRecipeType);
         for (HeavySieveRecipe recipe : recipes) {
             if (testRecipe(sieveMesh, itemStack, waterlogged, recipe)) {
                 return true;
             }
         }
 
-        List<GeneratedHeavySieveRecipe> generatedRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.GENERATED_HEAVY_SIEVE);
+        List<GeneratedHeavySieveRecipe> generatedRecipes = recipeManager.getAllRecipesFor(ModRecipeTypes.generatedHeavySieveRecipeType);
         for (GeneratedHeavySieveRecipe recipe : generatedRecipes) {
             if (testGeneratedRecipe(itemStack, recipe, sieve, sieveMesh)) {
                 return true;

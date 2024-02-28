@@ -31,7 +31,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -60,7 +59,7 @@ public class HeavySieveBlock extends BaseEntityBlock {
     private final HeavySieveType type;
 
     public HeavySieveBlock(HeavySieveType type) {
-        super(Properties.of(Material.WOOD).strength(2f));
+        super(Properties.of().strength(2f));
         registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
         this.type = type;
     }

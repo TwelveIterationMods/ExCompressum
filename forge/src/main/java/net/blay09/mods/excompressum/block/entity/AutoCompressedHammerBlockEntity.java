@@ -12,15 +12,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 
 import java.util.Collection;
-import java.util.Random;
 
 public class AutoCompressedHammerBlockEntity extends AutoHammerBlockEntity {
 
@@ -45,14 +44,14 @@ public class AutoCompressedHammerBlockEntity extends AutoHammerBlockEntity {
     }
 
     @Override
-    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, Random rand) {
-        LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), itemStack, rand);
+    public Collection<ItemStack> rollHammerRewards(ItemStack itemStack, ItemStack toolItem, RandomSource rand) {
+        LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), itemStack);
         return CompressedHammerRegistry.rollHammerRewards(level, lootContext, itemStack);
     }
 
     @Override
     public boolean isHammerUpgrade(ItemStack itemStack) {
-        if (itemStack.getItem() == ModItems.compressedHammerDiamond) {
+        if (itemStack.getItem() == ModItems.diamondCompressedHammer) {
             return true;
         }
         if (itemStack.getItem() == Compat.TCONSTRUCT_HAMMER) {
@@ -71,6 +70,6 @@ public class AutoCompressedHammerBlockEntity extends AutoHammerBlockEntity {
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("block.excompressum.auto_compressed_hammer");
+        return Component.translatable("block.excompressum.auto_compressed_hammer");
     }
 }

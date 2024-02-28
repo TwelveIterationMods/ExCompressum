@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -41,7 +40,7 @@ public class WoodenCrucibleBlock extends BaseEntityBlock {
     private final WoodenCrucibleType type;
 
     public WoodenCrucibleBlock(WoodenCrucibleType type) {
-        super(Properties.of(Material.WOOD).strength(2f));
+        super(Properties.of().strength(2f));
         this.type = type;
     }
 

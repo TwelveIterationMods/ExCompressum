@@ -13,7 +13,7 @@ import net.blay09.mods.excompressum.block.entity.*;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -80,29 +80,29 @@ public class TheOneProbeAddon  {
 
         private void addAutoSieveInfo(AbstractAutoSieveBlockEntity tileEntity, ProbeMode mode, IProbeInfo info) {
             if (tileEntity.getCustomSkin() != null) {
-                info.text(new TranslatableComponent("excompressum.tooltip.sieveSkin", tileEntity.getCustomSkin().getName()));
+                info.text(Component.translatable("excompressum.tooltip.sieveSkin", tileEntity.getCustomSkin().getName()));
             }
             if (tileEntity.getFoodBoost() > 1f) {
-                info.text(new TranslatableComponent("excompressum.tooltip.speedBoost", tileEntity.getFoodBoost()));
+                info.text(Component.translatable("excompressum.tooltip.speedBoost", tileEntity.getFoodBoost()));
             }
             if (tileEntity.getEffectiveLuck() > 1) {
-                info.text(new TranslatableComponent("excompressum.tooltip.luckBonus", tileEntity.getEffectiveLuck() - 1));
+                info.text(Component.translatable("excompressum.tooltip.luckBonus", tileEntity.getEffectiveLuck() - 1));
             }
         }
 
         private void addAutoHammerInfo(AutoHammerBlockEntity tileEntity, ProbeMode mode, IProbeInfo info) {
             if (tileEntity.getEffectiveLuck() > 1) {
-                info.text(new TranslatableComponent("excompressum.tooltip.luckBonus", tileEntity.getEffectiveLuck() - 1));
+                info.text(Component.translatable("excompressum.tooltip.luckBonus", tileEntity.getEffectiveLuck() - 1));
             }
         }
 
         private void addBaitInfo(BaitBlockEntity tileEntity, ProbeMode mode, IProbeInfo info) {
             EnvironmentalConditionResult environmentalStatus = tileEntity.checkSpawnConditions(true);
             if (environmentalStatus == EnvironmentalConditionResult.CanSpawn) {
-                info.text(new TranslatableComponent("excompressum.tooltip.baitTooClose"));
-                info.text(new TranslatableComponent("excompressum.tooltip.baitTooClose2"));
+                info.text(Component.translatable("excompressum.tooltip.baitTooClose"));
+                info.text(Component.translatable("excompressum.tooltip.baitTooClose2"));
             } else {
-                TranslatableComponent statusText = new TranslatableComponent(environmentalStatus.langKey, environmentalStatus.params);
+                final var statusText = Component.translatable(environmentalStatus.langKey, environmentalStatus.params);
                 statusText.withStyle(ChatFormatting.RED);
                 info.text(statusText);
             }
@@ -110,26 +110,26 @@ public class TheOneProbeAddon  {
 
         private void addWoodenCrucibleInfo(WoodenCrucibleBlockEntity tileEntity, ProbeMode mode, IProbeInfo info) {
             if (tileEntity.getSolidVolume() > 0f) {
-                info.text(new TranslatableComponent("excompressum.tooltip.solidVolume", tileEntity.getSolidVolume()));
+                info.text(Component.translatable("excompressum.tooltip.solidVolume", tileEntity.getSolidVolume()));
             }
             if (tileEntity.getFluidTank().getFluidAmount() > 0f) {
-                info.text(new TranslatableComponent("excompressum.tooltip.fluidVolume", tileEntity.getFluidTank().getFluidAmount()));
+                info.text(Component.translatable("excompressum.tooltip.fluidVolume", tileEntity.getFluidTank().getFluidAmount()));
             }
         }
 
         private void addHeavySieveInfo(HeavySieveBlockEntity tileEntity, ProbeMode mode, IProbeInfo info) {
             if(tileEntity.getProgress() > 0f) {
-                info.text(new TranslatableComponent("excompressum.tooltip.sieveProgress", (int) (tileEntity.getProgress() * 100) + "%"));
+                info.text(Component.translatable("excompressum.tooltip.sieveProgress", (int) (tileEntity.getProgress() * 100) + "%"));
             }
             ItemStack meshStack = tileEntity.getMeshStack();
             if (!meshStack.isEmpty()) {
                 if(ExNihilo.getInstance().doMeshesHaveDurability()) {
-                    info.text(new TranslatableComponent("excompressum.tooltip.sieveMesh", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getDamageValue(), meshStack.getMaxDamage()));
+                    info.text(Component.translatable("excompressum.tooltip.sieveMesh", meshStack.getDisplayName(), meshStack.getMaxDamage() - meshStack.getDamageValue(), meshStack.getMaxDamage()));
                 } else {
                     info.text(meshStack.getDisplayName());
                 }
             } else {
-                info.text(new TranslatableComponent("excompressum.tooltip.sieveNoMesh"));
+                info.text(Component.translatable("excompressum.tooltip.sieveNoMesh"));
             }
         }
     }

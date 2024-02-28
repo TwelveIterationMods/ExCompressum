@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.registry;
 
+import net.blay09.mods.balm.api.recipe.BalmRecipes;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRecipe;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRecipeSerializer;
@@ -13,49 +14,70 @@ import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRecipe;
 import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRecipeSerializer;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRecipe;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRecipeSerializer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = ExCompressum.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModRecipeTypes {
 
-    public static RecipeType<CompressedHammerRecipe> COMPRESSED_HAMMER;
-    public static RecipeType<ChickenStickRecipe> CHICKEN_STICK;
-    public static RecipeType<HammerRecipe> HAMMER;
-    public static RecipeType<GeneratedHeavySieveRecipe> GENERATED_HEAVY_SIEVE;
-    public static RecipeType<HeavySieveRecipe> HEAVY_SIEVE;
-    public static RecipeType<WoodenCrucibleRecipe> WOODEN_CRUCIBLE;
+    public static final ResourceLocation COMPRESSED_HAMMER = new ResourceLocation(ExCompressum.MOD_ID, "compressed_hammer");
+    public static final ResourceLocation CHICKEN_STICK = new ResourceLocation(ExCompressum.MOD_ID, "chicken_stick");
+    public static final ResourceLocation HAMMER = new ResourceLocation(ExCompressum.MOD_ID, "hammer");
+    public static final ResourceLocation HEAVY_SIEVE_GENERATED = new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve_generated");
+    public static final ResourceLocation HEAVY_SIEVE = new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve");
+    public static final ResourceLocation WOODEN_CRUCIBLE = new ResourceLocation(ExCompressum.MOD_ID, "wooden_crucible");
 
-    public static RecipeSerializer<HeavySieveRecipe> heavySieveRecipe;
-    public static RecipeSerializer<GeneratedHeavySieveRecipe> generatedHeavySieveRecipe;
-    public static RecipeSerializer<CompressedHammerRecipe> compressedHammerRecipe;
-    public static RecipeSerializer<HammerRecipe> hammerRecipe;
-    public static RecipeSerializer<ChickenStickRecipe> chickenStickRecipe;
-    public static RecipeSerializer<WoodenCrucibleRecipe> woodenCrucibleRecipe;
+    public static RecipeType<CompressedHammerRecipe> compressedHammerRecipeType;
+    public static RecipeType<ChickenStickRecipe> chickenStickRecipeType;
+    public static RecipeType<HammerRecipe> hammerRecipeType;
+    public static RecipeType<GeneratedHeavySieveRecipe> generatedHeavySieveRecipeType;
+    public static RecipeType<HeavySieveRecipe> heavySieveRecipeType;
+    public static RecipeType<WoodenCrucibleRecipe> woodenCrucibleRecipeType;
 
-    public static void registerRecipeTypes() {
-        COMPRESSED_HAMMER = RecipeType.register(ExCompressum.MOD_ID + ":compressed_hammer");
-        CHICKEN_STICK = RecipeType.register(ExCompressum.MOD_ID + ":chicken_stick");
-        HAMMER = RecipeType.register(ExCompressum.MOD_ID + ":hammer");
-        GENERATED_HEAVY_SIEVE = RecipeType.register(ExCompressum.MOD_ID + ":heavy_sieve_generated");
-        HEAVY_SIEVE = RecipeType.register(ExCompressum.MOD_ID + ":heavy_sieve");
-        WOODEN_CRUCIBLE = RecipeType.register(ExCompressum.MOD_ID + ":wooden_crucible");
-    }
+    public static RecipeSerializer<HeavySieveRecipe> heavySieveRecipeSerializer;
+    public static RecipeSerializer<GeneratedHeavySieveRecipe> generatedHeavySieveRecipeSerializer;
+    public static RecipeSerializer<CompressedHammerRecipe> compressedHammerRecipeSerializer;
+    public static RecipeSerializer<HammerRecipe> hammerRecipeSerializer;
+    public static RecipeSerializer<ChickenStickRecipe> chickenStickRecipeSerializer;
+    public static RecipeSerializer<WoodenCrucibleRecipe> woodenCrucibleRecipeSerializer;
 
-    @SubscribeEvent
-    public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
-        registerRecipeTypes();
+    public static void initialize(BalmRecipes recipes) {
+        recipes.registerRecipeType(() -> compressedHammerRecipeType = new RecipeType<>() {
+            @Override
+            public String toString() {
+                return COMPRESSED_HAMMER.getPath();
+            }
+        }, () -> compressedHammerRecipeSerializer = new CompressedHammerRecipeSerializer(), COMPRESSED_HAMMER);
+        recipes.registerRecipeType(() -> chickenStickRecipeType = new RecipeType<>() {
+            @Override
+            public String toString() {
+                return CHICKEN_STICK.getPath();
+            }
+        }, () -> chickenStickRecipeSerializer = new ChickenStickRecipeSerializer(), CHICKEN_STICK);
+        recipes.registerRecipeType(() -> hammerRecipeType = new RecipeType<>() {
+            @Override
+            public String toString() {
+                return HAMMER.getPath();
+            }
+        }, () -> hammerRecipeSerializer = new HammerRecipeSerializer(), HAMMER);
+        recipes.registerRecipeType(() -> generatedHeavySieveRecipeType = new RecipeType<>() {
+            @Override
+            public String toString() {
+                return HEAVY_SIEVE_GENERATED.getPath();
+            }
+        }, () -> generatedHeavySieveRecipeSerializer = new GeneratedHeavySieveRecipeSerializer(), HEAVY_SIEVE_GENERATED);
+        recipes.registerRecipeType(() -> heavySieveRecipeType = new RecipeType<>() {
+            @Override
+            public String toString() {
+                return HEAVY_SIEVE.getPath();
+            }
+        }, () -> heavySieveRecipeSerializer = new HeavySieveRecipeSerializer(), HEAVY_SIEVE);
+        recipes.registerRecipeType(() -> woodenCrucibleRecipeType = new RecipeType<>() {
+            @Override
+            public String toString() {
+                return WOODEN_CRUCIBLE.getPath();
+            }
+        }, () -> woodenCrucibleRecipeSerializer = new WoodenCrucibleRecipeSerializer(), WOODEN_CRUCIBLE);
 
-        event.getRegistry().registerAll(
-                heavySieveRecipe = new HeavySieveRecipeSerializer(),
-                generatedHeavySieveRecipe = new GeneratedHeavySieveRecipeSerializer(),
-                compressedHammerRecipe = new CompressedHammerRecipeSerializer(),
-                hammerRecipe = new HammerRecipeSerializer(),
-                chickenStickRecipe = new ChickenStickRecipeSerializer(),
-                woodenCrucibleRecipe = new WoodenCrucibleRecipeSerializer()
-        );
     }
 }

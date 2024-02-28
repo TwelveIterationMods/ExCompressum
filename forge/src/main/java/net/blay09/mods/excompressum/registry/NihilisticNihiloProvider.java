@@ -6,6 +6,7 @@ import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -16,7 +17,6 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class NihilisticNihiloProvider implements ExNihiloProvider {
 	@Override
@@ -30,7 +30,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public List<ItemStack> rollHammerRewards(BlockState state, ItemStack itemStack, Random rand) {
+	public List<ItemStack> rollHammerRewards(BlockState state, ItemStack itemStack, RandomSource rand) {
 		return Collections.emptyList();
 	}
 
@@ -40,12 +40,12 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public Collection<ItemStack> rollSieveRewards(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, Random rand) {
+	public Collection<ItemStack> rollSieveRewards(BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, RandomSource rand) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, Random rand) {
+	public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, RandomSource rand) {
 		return Collections.emptyList();
 	}
 

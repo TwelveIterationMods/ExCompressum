@@ -1,10 +1,10 @@
 package net.blay09.mods.excompressum.block.entity;
 
+import net.blay09.mods.balm.api.Balm;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraftforge.fluids.FluidStack;
 
 public class BaitFluidCondition implements BaitEnvironmentCondition {
     private final Fluid fluid;
@@ -19,6 +19,7 @@ public class BaitFluidCondition implements BaitEnvironmentCondition {
 
     @Override
     public Component getDisplayName() {
-        return fluid.getAttributes().getDisplayName(new FluidStack(fluid, 1000));
+        final var registryName = Balm.getRegistries().getKey(fluid);
+        return Component.translatable("fluid_type." + registryName.toString().replace(':', '.'));
     }
 }

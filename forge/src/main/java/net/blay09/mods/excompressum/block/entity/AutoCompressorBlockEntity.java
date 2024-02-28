@@ -17,7 +17,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -207,8 +206,8 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
     }
 
     private boolean isItemEqualWildcard(ItemStack itemStack, ItemStack otherStack) {
-        return ItemStack.isSameItemSameTags(itemStack, otherStack) && (itemStack.sameItem(otherStack)
-                || itemStack.getItem() == otherStack.getItem());
+        return ItemStack.isSameItemSameTags(itemStack, otherStack) &&
+                (ItemStack.isSameItem(itemStack, otherStack) || itemStack.getItem() == otherStack.getItem());
     }
 
     private boolean addItemToOutput(ItemStack itemStack) {
@@ -317,7 +316,7 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
 
     @Override
     public Component getDisplayName() {
-        return new TranslatableComponent("block.excompressum.auto_compressor");
+        return Component.translatable("block.excompressum.auto_compressor");
     }
 
     @Override

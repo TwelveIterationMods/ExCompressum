@@ -1,13 +1,11 @@
 package net.blay09.mods.excompressum.registry.chickenstick;
 
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.blay09.mods.excompressum.registry.ExCompressumRecipe;
 import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 
 public class ChickenStickRecipe extends ExCompressumRecipe {
 
@@ -15,14 +13,14 @@ public class ChickenStickRecipe extends ExCompressumRecipe {
     private LootTableProvider lootTable;
 
     public ChickenStickRecipe(ResourceLocation id, Ingredient input, LootTableProvider lootTable) {
-        super(id, ModRecipeTypes.CHICKEN_STICK);
+        super(id, ModRecipeTypes.chickenStickRecipeType);
         this.input = input;
         this.lootTable = lootTable;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeTypes.chickenStickRecipe;
+        return ModRecipeTypes.chickenStickRecipeSerializer;
     }
 
     public Ingredient getInput() {

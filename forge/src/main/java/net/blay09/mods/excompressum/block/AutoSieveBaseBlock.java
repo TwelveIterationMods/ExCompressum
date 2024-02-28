@@ -2,12 +2,9 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.authlib.GameProfile;
 import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
-import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.registry.autosieveskin.WhitelistEntry;
 import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
-import net.blay09.mods.excompressum.utils.Messages;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -182,20 +180,24 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
         return 0;
     }
 
+    protected Component getSkinTooltip(String name) {
+        return Component.translatable("excompressum.tooltip.auto_sieve", name).withStyle(ChatFormatting.GRAY);
+    }
+
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter blockGetter, List<Component> tooltip, TooltipFlag flag) {
         CompoundTag tagCompound = stack.getTag();
         if (tagCompound != null && tagCompound.contains("CustomSkin")) {
             GameProfile customSkin = NbtUtils.readGameProfile(tagCompound.getCompound("CustomSkin"));
             if (customSkin != null) {
-                tooltip.add(Messages.styledLang("tooltip." + getRegistryName().getPath(), ChatFormatting.GRAY, customSkin.getName()));
+                tooltip.add(getSkinTooltip(customSkin.getName()));
             }
         } else {
             if (currentRandomName == null) {
                 updateRandomSkinName();
             }
 
-            tooltip.add(Messages.styledLang("tooltip." + getRegistryName().getPath(), ChatFormatting.GRAY, currentRandomName));
+            tooltip.add(getSkinTooltip(currentRandomName));
         }
 
         if (lastHoverStack != stack) {
@@ -244,7 +246,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     }
 
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, Random rand) {
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource rand) {
         super.animateTick(state, level, pos, rand);
 
         if (!state.getValue(UGLY) && state.getValue(WATERLOGGED)) {

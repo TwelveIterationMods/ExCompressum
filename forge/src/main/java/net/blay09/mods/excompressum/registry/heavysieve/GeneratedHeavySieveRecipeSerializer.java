@@ -10,10 +10,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class GeneratedHeavySieveRecipeSerializer extends ExCompressumRecipeSerializer<GeneratedHeavySieveRecipe> {
 
-    public GeneratedHeavySieveRecipeSerializer() {
-        setRegistryName(new ResourceLocation(ExCompressum.MOD_ID, "heavy_sieve_generated"));
-    }
-
     @Override
     public GeneratedHeavySieveRecipe readFromJson(ResourceLocation id, JsonObject json) {
         Ingredient input = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "input"));

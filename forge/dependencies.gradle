@@ -1,0 +1,14 @@
+repositories {
+    maven {
+        url = "https://dl.cloudsmith.io/public/novamachina-mods/release/maven/"
+        content {
+            includeGroup "novamachina.novacore"
+            includeGroup "novamachina.exnihilosequentia"
+        }
+    }
+}
+
+dependencies {
+    implementation(fg.deobf("novamachina.novacore:novacore:${novacore_version}"))
+    implementation(fg.deobf("novamachina.exnihilosequentia:exnihilosequentia:${exnihilosequentia_version}"))
+}

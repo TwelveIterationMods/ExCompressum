@@ -13,13 +13,13 @@ public class CompressedHammerRegistry {
 
     public static List<ItemStack> rollHammerRewards(Level level, LootContext context, ItemStack itemStack) {
         RecipeManager recipeManager = level.getRecipeManager();
-        List<CompressedHammerRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.COMPRESSED_HAMMER);
+        List<CompressedHammerRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.compressedHammerRecipeType);
         List<ItemStack> results = new ArrayList<>();
         for (CompressedHammerRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {
                 LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId(), context);
                 if (lootTable != null) {
-                    results.addAll(lootTable.getRandomItems(context));
+                    lootTable.getRandomItems(context, results::add);
                 }
             }
         }
@@ -36,7 +36,7 @@ public class CompressedHammerRegistry {
     }
 
     public boolean isHammerable(RecipeManager recipeManager, ItemStack itemStack) {
-        List<CompressedHammerRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.COMPRESSED_HAMMER);
+        List<CompressedHammerRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.compressedHammerRecipeType);
         for (CompressedHammerRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {
                 return true;

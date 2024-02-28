@@ -13,10 +13,10 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.EmptyModelData;
 
 import java.util.List;
 import java.util.Random;
@@ -26,7 +26,7 @@ import java.util.Random;
 public class BlockRenderUtils {
 
     private static final RenderType RENDER_TYPE_BREAK = RenderType.crumbling(InventoryMenu.BLOCK_ATLAS);
-    private static final Random random = new Random();
+    private static final RandomSource random = RandomSource.create();
 
     /**
      * Renders the break effect for a block state.
@@ -53,14 +53,14 @@ public class BlockRenderUtils {
 
             for(Direction direction : Direction.values()) {
                 random.setSeed(positionRandom);
-                List<BakedQuad> list = model.getQuads(state, direction, random, EmptyModelData.INSTANCE);
+                List<BakedQuad> list = model.getQuads(state, direction, random);
                 if (!list.isEmpty()) {
                     renderBlockBreakQuad(poseStack.last(), vertex, list, light, overlay, sprite);
                 }
             }
 
             random.setSeed(positionRandom);
-            List<BakedQuad> list = model.getQuads(state, null, random, EmptyModelData.INSTANCE);
+            List<BakedQuad> list = model.getQuads(state, null, random);
             if (!list.isEmpty()) {
                 renderBlockBreakQuad(poseStack.last(), vertex, list, light, overlay, sprite);
             }
@@ -79,8 +79,8 @@ public class BlockRenderUtils {
         int[] newData = new int[data.length];
         System.arraycopy(data, 0, newData, 0, data.length);
         for (int off = 0; off + 7 < newData.length; off += DefaultVertexFormat.BLOCK.getIntegerSize()) {
-            newData[off + 4] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + 4]) - oldSprite.getU0()) * newSprite.getWidth() / oldSprite.getWidth()) + newSprite.getU0());
-            newData[off + 5] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + 5]) - oldSprite.getV0()) * newSprite.getHeight() / oldSprite.getHeight()) + newSprite.getV0());
+            newData[off + 4] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + 4]) - oldSprite.getU0()) * newSprite.contents().width() / oldSprite.contents().width()) + newSprite.getU0());
+            newData[off + 5] = Float.floatToRawIntBits(((Float.intBitsToFloat(data[off + 5]) - oldSprite.getV0()) * newSprite.contents().height() / oldSprite.contents().height()) + newSprite.getV0());
         }
         return newData;
     }

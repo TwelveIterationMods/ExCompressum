@@ -13,13 +13,13 @@ public class HammerRegistry {
 
     public static List<ItemStack> rollHammerRewards(LootContext context, ItemStack itemStack) {
         RecipeManager recipeManager = context.getLevel().getRecipeManager();
-        List<HammerRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.HAMMER);
+        List<HammerRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.hammerRecipeType);
         List<ItemStack> results = new ArrayList<>();
         for (HammerRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {
                 LootTable lootTable = recipe.getLootTable().getLootTable(recipe.getId(), context);
                 if (lootTable != null) {
-                    results.addAll(lootTable.getRandomItems(context));
+                    lootTable.getRandomItems(context, results::add);
                 }
             }
         }
@@ -36,7 +36,7 @@ public class HammerRegistry {
     }
 
     public boolean isHammerable(RecipeManager recipeManager, ItemStack itemStack) {
-        List<HammerRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.HAMMER);
+        List<HammerRecipe> recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.hammerRecipeType);
         for (HammerRecipe recipe : recipes) {
             if (testRecipe(itemStack, recipe)) {
                 return true;
