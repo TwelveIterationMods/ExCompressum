@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.item;
 
+import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.DeferredObject;
 import net.blay09.mods.balm.api.item.BalmItems;
 import net.blay09.mods.excompressum.ExCompressum;
@@ -34,11 +35,16 @@ public class ModItems {
         items.registerItem(() -> compressedIronHammer = new CompressedHammerItem(Tiers.IRON, items.itemProperties()), id("compressed_iron_hammer"));
         items.registerItem(() -> compressedGoldenHammer = new CompressedHammerItem(Tiers.GOLD, items.itemProperties()), id("compressed_golden_hammer"));
         items.registerItem(() -> compressedDiamondHammer = new CompressedHammerItem(Tiers.DIAMOND, items.itemProperties()), id("compressed_diamond_hammer"));
-        items.registerItem(() -> compressedNetheriteHammer = new CompressedHammerItem(Tiers.NETHERITE, items.itemProperties()), id("compressed_netherite_hammer"));
+        items.registerItem(() -> compressedNetheriteHammer = new CompressedHammerItem(Tiers.NETHERITE, items.itemProperties()),
+                id("compressed_netherite_hammer"));
         items.registerItem(() -> compressedCrook = new CompressedCrookItem(items.itemProperties()), id("compressed_crook"));
         items.registerItem(() -> ironMesh = new IronMeshItem(items.itemProperties()), id("iron_mesh"));
         items.registerItem(() -> woodChippings = new WoodChippingItem(items.itemProperties()), id("wood_chippings"));
-        items.registerItem(() -> uncompressedCoal = new UncompressedCoalItem(items.itemProperties()), id("uncompressed_coal"));
+        items.registerItem(() -> {
+            uncompressedCoal = new UncompressedCoalItem(items.itemProperties());
+            Balm.getHooks().setBurnTime(uncompressedCoal, 200);
+            return uncompressedCoal;
+        }, id("uncompressed_coal"));
         items.registerItem(() -> batZapper = new BatZapperItem(items.itemProperties()), id("bat_zapper"));
         items.registerItem(() -> oreSmasher = new OreSmasherItem(items.itemProperties()), id("ore_smasher"));
         items.registerItem(() -> uglySteelPlating = new UglySteelPlatingItem(items.itemProperties()), id("ugly_steel_plating"));

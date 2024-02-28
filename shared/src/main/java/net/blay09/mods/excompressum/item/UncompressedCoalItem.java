@@ -3,9 +3,6 @@ package net.blay09.mods.excompressum.item;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
-import org.jetbrains.annotations.Nullable;
 
 public class UncompressedCoalItem extends Item {
 
@@ -14,10 +11,5 @@ public class UncompressedCoalItem extends Item {
 
     public UncompressedCoalItem(Properties properties) {
         super(properties);
-    }
-
-    @Deprecated // TODO not yet supported in Balm?
-    public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
-        return 200;
     }
 }

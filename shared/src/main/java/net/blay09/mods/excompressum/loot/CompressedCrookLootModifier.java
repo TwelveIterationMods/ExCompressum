@@ -47,7 +47,7 @@ public class CompressedCrookLootModifier implements BalmLootModifier {
             return;
         }
 
-        BlockPos pos = new BlockPos((int) Math.floor(origin.x), (int) Math.floor(origin.y), (int) Math.floor(origin.z)); // TODO huh?
+        BlockPos pos = BlockPos.containing(origin);
 
         if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, tool) > 0) {
             return;

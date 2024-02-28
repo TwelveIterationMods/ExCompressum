@@ -110,6 +110,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
+    @Deprecated
     public RecipeManager getRecipeManager(@Nullable Level level) {
         if (level == null) {
             level = Minecraft.getInstance().level;

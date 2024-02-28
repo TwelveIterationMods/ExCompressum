@@ -37,8 +37,6 @@ public class HeavySieveRecipeSerializer extends ExCompressumRecipeSerializer<Hea
             }
         }
 
-        // TODO replace? if false, don't override existing, else override existing (aka same-id)
-
         return new HeavySieveRecipe(id, input, lootTable, waterlogged, minimumMesh, meshes);
     }
 

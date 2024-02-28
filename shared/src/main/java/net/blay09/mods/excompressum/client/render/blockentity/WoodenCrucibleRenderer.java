@@ -49,11 +49,20 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
             poseStack.pushPose();
             float fillLevel = (float) fluidTank.getAmount() / (float) blockEntity.getFluidTank().getCapacity();
             poseStack.translate(0f, fillLevel * 11 / 16f, 0f);
-            int color = 0xFFFFFFFF; // TODO fluidStack.getFluid().getAttributes().getColor(level, blockEntity.getBlockPos());
-            float red = (float)(color >> 16 & 255) / 255.0F;
-            float green = (float)(color >> 8 & 255) / 255.0F;
-            float blue = (float)(color & 255) / 255.0F;
-            dispatcher.getModelRenderer().renderModel(poseStack.last(), buffers.getBuffer(RenderType.translucent()), null, ModModels.woodenCrucibleLiquid.get(), red, green, blue, combinedLight, combinedOverlay);
+            final var color = level.getBiome(blockEntity.getBlockPos()).value().getWaterColor();
+            float red = (float) (color >> 16 & 255) / 255.0F;
+            float green = (float) (color >> 8 & 255) / 255.0F;
+            float blue = (float) (color & 255) / 255.0F;
+            dispatcher.getModelRenderer()
+                    .renderModel(poseStack.last(),
+                            buffers.getBuffer(RenderType.translucent()),
+                            null,
+                            ModModels.woodenCrucibleLiquid.get(),
+                            red,
+                            green,
+                            blue,
+                            combinedLight,
+                            combinedOverlay);
             poseStack.popPose();
         }
 
@@ -63,7 +72,13 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
             poseStack.translate(0.0625f, 0.251f, 0.0625f);
             poseStack.scale(0.875f, (float) (0.71 * (float) solidVolume / (float) blockEntity.getSolidCapacity()), 0.875f);
             BlockState solidState = Blocks.DARK_OAK_LEAVES.defaultBlockState();
-            dispatcher.renderBatched(solidState, blockEntity.getBlockPos(), blockEntity.getLevel(), poseStack, buffers.getBuffer(RenderType.translucent()), false, random);
+            dispatcher.renderBatched(solidState,
+                    blockEntity.getBlockPos(),
+                    blockEntity.getLevel(),
+                    poseStack,
+                    buffers.getBuffer(RenderType.translucent()),
+                    false,
+                    random);
             poseStack.popPose();
         }
     }

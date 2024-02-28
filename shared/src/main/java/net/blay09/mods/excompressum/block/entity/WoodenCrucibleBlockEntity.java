@@ -61,8 +61,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
     };
 
     private boolean isValidFluid(Fluid fluid) {
-        // TODO return fluid.getTemperature(it) <= 300
-        return true;
+        return fluid.isSame(Fluids.WATER);
     }
 
     private int ticksSinceSync;
