@@ -3,10 +3,8 @@ package net.blay09.mods.excompressum.loot;
 import com.google.common.collect.ArrayListMultimap;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.ILootTableProvider;
 import net.blay09.mods.excompressum.mixin.*;
-import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.LootTableProvider;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -78,11 +76,6 @@ public class LootTableUtils {
                         itemStack.setCount(getMaxCount(countRange));
                         result.add(new LootTableEntry(itemStack, countRange, baseChance));
                     });
-                } else if (entry instanceof NihiloLootEntry nihiloLootEntry) {
-                    ExNihiloProvider.NihiloItems nihiloItem = nihiloLootEntry.getNihiloItem();
-                    ItemStack itemStack = ExNihilo.getInstance().getNihiloItem(nihiloItem);
-                    itemStack.setCount(getMaxCount(countRange));
-                    result.add(new LootTableEntry(itemStack, countRange, baseChance));
                 } else if (entry instanceof LootTableReferenceAccessor tableLootEntry) {
                     ResourceLocation lootTableLocation = tableLootEntry.getName();
                     LootTableProvider provider = new LootTableProvider(lootTableLocation);

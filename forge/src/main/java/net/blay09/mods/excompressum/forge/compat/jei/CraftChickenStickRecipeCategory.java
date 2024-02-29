@@ -5,6 +5,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
@@ -52,21 +53,9 @@ public class CraftChickenStickRecipeCategory implements IRecipeCategory<CraftChi
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder iRecipeLayoutBuilder, CraftChickenStickRecipe craftChickenStickRecipe, IFocusGroup iFocusGroup) {
-        // TODO
+    public void setRecipe(IRecipeLayoutBuilder recipeLayoutBuilder, CraftChickenStickRecipe recipe, IFocusGroup focusGroup) {
+        recipeLayoutBuilder.addSlot(RecipeIngredientRole.INPUT, 74, 9);
+        recipeLayoutBuilder.addSlot(RecipeIngredientRole.OUTPUT, 130, 20);
     }
-
-    /*@Override
-    public void setIngredients(CraftChickenStickRecipe chickenStickRecipe, IIngredients ingredients) {
-        ingredients.setInput(VanillaTypes.ITEM, chickenStickRecipe.getInput());
-        ingredients.setOutput(VanillaTypes.ITEM, chickenStickRecipe.getOutput());
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, CraftChickenStickRecipe recipeWrapper, IIngredients ingredients) {
-        recipeLayout.getItemStacks().init(0, true, 16, 20);
-        recipeLayout.getItemStacks().init(1, false, 130, 20);
-        recipeLayout.getItemStacks().set(ingredients);
-    }*/
 
 }

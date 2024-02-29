@@ -8,7 +8,9 @@ import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.ModEntities;
+import net.blay09.mods.excompressum.handler.ChickenStickHandler;
 import net.blay09.mods.excompressum.handler.CompressedEnemyHandler;
+import net.blay09.mods.excompressum.handler.CrookPushHandler;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.item.ModTags;
 import net.blay09.mods.excompressum.loot.ModLoot;
@@ -40,6 +42,8 @@ public class ExCompressum {
 
         AutoSieveSkinRegistry.load();
         CompressedEnemyHandler.initialize();
+        CrookPushHandler.initialize();
+        ChickenStickHandler.initialize();
     }
 
 }

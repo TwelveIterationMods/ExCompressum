@@ -27,19 +27,13 @@ public class CompressedCrookItem extends DiggerItem {
                 .durability((int) (Tiers.WOOD.getUses() * 2 * ExCompressumConfig.getActive().tools.compressedCrookDurabilityMultiplier)));
     }
 
-    /*@Override // TODO
-    public boolean onLeftClickEntity(ItemStack itemStack, Player player, Entity entity) {
-        pushEntity(itemStack, player, entity);
-        return true;
-    }*/
-
     @Override
     public InteractionResult interactLivingEntity(ItemStack itemStack, Player player, LivingEntity entity, InteractionHand hand) {
         pushEntity(itemStack, player, entity);
         return InteractionResult.SUCCESS;
     }
 
-    private void pushEntity(ItemStack itemStack, Player player, Entity entity) {
+    public static void pushEntity(ItemStack itemStack, Player player, Entity entity) {
         if (!player.level().isClientSide) {
             double distance = Math.sqrt(Math.pow(player.getX() - entity.getX(), 2) + Math.pow(player.getZ() - entity.getZ(), 2));
             double scalarX = (player.getX() - entity.getX()) / distance;

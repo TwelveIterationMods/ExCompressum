@@ -33,7 +33,7 @@ public class LootTableProvider implements ILootTableProvider {
     public LootTable getLootTable(@Nullable ResourceLocation resourceLocation, LootDataResolver lootDataResolver) {
         if (inlineLootTableJson != null || inlineLootTable != null) {
             if (inlineLootTable == null) {
-                // TODO inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, resourceLocation, inlineLootTableJson, true);
+                inlineLootTable = GSON_INSTANCE.fromJson(inlineLootTableJson, LootTable.class);
             }
             return inlineLootTable;
         }
@@ -45,7 +45,7 @@ public class LootTableProvider implements ILootTableProvider {
     public LootTable getLootTable(ResourceLocation resourceLocation, LootContext context) {
         if (inlineLootTableJson != null || inlineLootTable != null) {
             if (inlineLootTable == null) {
-                // TODO inlineLootTable = ForgeHooks.loadLootTable(GSON_INSTANCE, resourceLocation, inlineLootTableJson, true);
+                inlineLootTable = GSON_INSTANCE.fromJson(inlineLootTableJson, LootTable.class);
             }
             return inlineLootTable;
         }
