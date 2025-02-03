@@ -6,7 +6,7 @@ dependencies {
     compileOnly "curse.maven:jade-324717:$jade_neoforge_version"
     compileOnly "curse.maven:the-one-probe-245211:$theoneprobe_version"
 
-    implementation("novamachina.novacore:novacore:1.21.0-3.0.0-build.2")
-    implementation("novamachina.exnihilosequentia:exnihilosequentia:1.21-7.0.0-build.1-beta")
+    compileOnly("novamachina.novacore:novacore:1.21.0-3.0.0-build.2")
+    compileOnly("novamachina.exnihilosequentia:exnihilosequentia:1.21-7.0.0-build.1-beta")
     compileOnly("curse.maven:ex-deorum-901420:5586119")
 }
