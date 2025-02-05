@@ -197,7 +197,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        final Direction facing = context.getHorizontalDirection();
+        final Direction facing = context.getHorizontalDirection().getOpposite();
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
         return this.defaultBlockState().setValue(FACING, facing).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
     }
