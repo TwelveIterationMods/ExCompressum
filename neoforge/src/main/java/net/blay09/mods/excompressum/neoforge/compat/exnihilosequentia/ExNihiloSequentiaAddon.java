@@ -46,6 +46,7 @@ import novamachina.exnihilosequentia.world.item.crafting.*;
 import novamachina.exnihilosequentia.world.level.block.InfestedLeavesBlock;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 public class ExNihiloSequentiaAddon implements ExNihiloProvider {
@@ -133,6 +134,10 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
     @Override
     public boolean isSiftableWithMesh(Level level, BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh) {
+        if (state.isEmpty()) {
+            return false;
+        }
+
         boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.getValue(BlockStateProperties.WATERLOGGED);
         MeshType mesh = sieveMesh != null ? (MeshType) sieveMesh.getBackingMesh() : MeshType.NONE;
         return ExNihiloRegistries.SIEVE_REGISTRY.isBlockSiftable(state.getBlock(), mesh, waterlogged);
@@ -225,7 +230,10 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             ItemStack itemStack = recipe.getDrop();
             for (MeshWithChance roll : recipe.getRolls()) {
                 LootPool.Builder poolBuilder = LootPool.lootPool();
-                poolBuilder.name("excompressum-heavysieve-" + Balm.getRegistries().getKey(source.asItem()).toString().replace(':', '-') + "-" + UUID.randomUUID());
+                poolBuilder.name("excompressum-heavysieve-" + Balm.getRegistries()
+                        .getKey(source.asItem())
+                        .toString()
+                        .replace(':', '-') + "-" + UUID.randomUUID());
                 poolBuilder.setRolls(ConstantValue.exactly(times));
                 LootPoolSingletonContainer.Builder<?> entryBuilder = buildLootEntry(itemStack);
                 entryBuilder.when(LootItemRandomChanceCondition.randomChance(roll.getChance()));
