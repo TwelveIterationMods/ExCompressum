@@ -46,7 +46,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
     public AutoSieveRenderer(BlockEntityRendererProvider.Context context, boolean isHeavy) {
         tinyHumanModel = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER), false);
-        tinyHumanModelSlim = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER), true);
+        tinyHumanModelSlim = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER_SLIM), true);
         this.isHeavy = isHeavy;
     }
 
@@ -73,12 +73,12 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         poseStack.pushPose();
         poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(-90), 0f, 0f, 1f)));
         poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(90), 0, 1f, 0)));
-        poseStack.translate(0f, -1.2f, 0.25f);
-        poseStack.scale(0.75f, 0.75f, 0.75f);
+        poseStack.translate(0f, -0.65f, 0.25f);
+        poseStack.scale(0.4f, 0.4f, 0.4f);
         final var skin = getPlayerSkin(blockEntity.getSkinProfile());
         TinyHumanModel playerModel = getPlayerModel(skin);
         playerModel.animate(blockEntity, partialTicks);
-        playerModel.renderToBuffer(poseStack, buffer.getBuffer(RenderType.entitySolid(skin.texture())), combinedLight, combinedOverlay, 0xFFFFFFFF);
+        playerModel.renderToBuffer(poseStack, buffer.getBuffer(RenderType.entityCutout(skin.texture())), combinedLight, combinedOverlay, 0xFFFFFFFF);
         poseStack.popPose();
 
         // Render the glass around player head if underwater
