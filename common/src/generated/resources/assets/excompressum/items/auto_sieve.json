@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "excompressum:block/auto_sieve"
+    "model": "excompressum:item/auto_sieve"
   }
 }

@@ -31,6 +31,10 @@ public class ModModelProvider extends FabricModelProvider {
         generators.createNonTemplateModelBlock(ModBlocks.autoCompressor);
         generators.createNonTemplateModelBlock(ModBlocks.rationingAutoCompressor);
         createUglifyableHorizontalFacingModel(generators, ModBlocks.autoHammer);
+        generators.registerSimpleItemModel(ModBlocks.autoHammer, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_hammer"));
+        generators.registerSimpleItemModel(ModBlocks.autoCompressedHammer, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_compressed_hammer"));
+        generators.registerSimpleItemModel(ModBlocks.autoSieve, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_sieve"));
+        generators.registerSimpleItemModel(ModBlocks.autoHeavySieve, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_heavy_sieve"));
         createUglifyableHorizontalFacingModel(generators, ModBlocks.autoCompressedHammer);
         createUglifyableHorizontalFacingModel(generators, ModBlocks.autoSieve);
         createUglifyableHorizontalFacingModel(generators, ModBlocks.autoHeavySieve);

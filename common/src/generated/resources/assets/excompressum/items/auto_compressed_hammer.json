@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "excompressum:block/auto_compressed_hammer"
+    "model": "excompressum:item/auto_compressed_hammer"
   }
 }
