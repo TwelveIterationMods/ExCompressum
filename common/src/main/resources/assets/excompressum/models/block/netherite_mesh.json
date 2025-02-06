@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/block",
 	"textures": {
-		"mesh": "excompressum:block/netherite_mesh"
+		"mesh": "excompressum:block/netherite_mesh",
+		"particle": "#mesh"
 	},
 	"elements": [
 		{

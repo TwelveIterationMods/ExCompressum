@@ -5,6 +5,7 @@
     "texture_top": "excompressum:block/auto_heavy_frame_top",
     "texture_glass": "excompressum:block/auto_frame_glass",
     "texture_side": "excompressum:block/auto_heavy_frame_side",
+    "particle": "#texture_side",
     "hammer": "excompressum:item/compressed_diamond_hammer"
   },
   "elements": [

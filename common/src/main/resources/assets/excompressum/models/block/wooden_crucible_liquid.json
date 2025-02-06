@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/block",
 	"textures": {
-		"texture": "minecraft:block/water_still"
+		"texture": "minecraft:block/water_still",
+		"particle": "#texture"
 	},
 	"elements": [
 		{
