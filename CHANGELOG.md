@@ -1,1 +1,2 @@
-- Fix machines not being registered as item handlers on NeoForge
+- Fixed dupe bug and other container issues with the machines
+- Fixed silk worm chance with compressed crook in Ex Deorum not matching regular crooks 
