@@ -31,6 +31,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,39 +50,30 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
 
 
     private final Multiset<CompressedRecipe> inputItems = HashMultiset.create();
-    private final DefaultContainer backingContainer = new DefaultContainer(24) {
-        @Override
-        public boolean canPlaceItem(int slot, ItemStack itemStack) {
-            return slot >= 12 || ExRegistries.getCompressedRecipeRegistry().getRecipe(itemStack) != null;
-        }
-    };
+    private final DefaultContainer backingContainer = new DefaultContainer(24);
     private final SubContainer inputSlots = new SubContainer(backingContainer, 0, 12);
     private final SubContainer outputSlots = new SubContainer(backingContainer, 12, 24);
-    private final List<ItemStack> overflowBuffer = new ArrayList<>();
-    private final DelegateContainer container = new DelegateContainer(backingContainer) {
-        @Override
-        public ItemStack removeItem(int slot, int count) {
-            if (slot < 12) {
-                return ItemStack.EMPTY;
-            }
-
-            return super.removeItem(slot, count);
-        }
-
-        @Override
-        public ItemStack removeItemNoUpdate(int slot) {
-            if (slot < 12) {
-                return ItemStack.EMPTY;
-            }
-
-            return super.removeItemNoUpdate(slot);
-        }
-
+    private final Container container = new DelegateContainer(backingContainer) {
         @Override
         public boolean canPlaceItem(int slot, ItemStack itemStack) {
-            return slot < 12 && ExRegistries.getCompressedRecipeRegistry().getRecipe(itemStack) != null;
+            return inputSlots.containsOuterSlot(slot) && ExRegistries.getCompressedRecipeRegistry().getRecipe(itemStack) != null;
+        }
+
+        @Override
+        public int[] getSlotsForFace(Direction direction) {
+            if (direction == Direction.DOWN) {
+                return outputSlots.getSlotsForFace(direction);
+            }
+            return inputSlots.getSlotsForFace(direction);
+        }
+
+        @Override
+        public boolean canTakeItemThroughFace(int slot, ItemStack itemStack, Direction direction) {
+            return outputSlots.containsOuterSlot(slot);
         }
     };
+
+    private final List<ItemStack> overflowBuffer = new ArrayList<>();
 
     private final ContainerData containerData = new ContainerData() {
         public int get(int id) {
