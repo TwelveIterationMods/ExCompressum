@@ -1,73 +1,15 @@
+plugins {
+    id 'fabric-loom' version '1.9-SNAPSHOT' apply(false)
+    id 'net.neoforged.moddev.legacyforge' version '2.0.77' apply(false)
+    id 'net.darkhax.curseforgegradle' version '1.1.18' apply(false)
+    id "com.modrinth.minotaur" version "2.+" apply(false)
+}
+
 subprojects {
-    apply plugin: 'java'
-
-    java.toolchain.languageVersion = JavaLanguageVersion.of(java_version)
-    java.withSourcesJar()
-    java.withJavadocJar()
-
-    tasks.withType(GenerateModuleMetadata).tap {
-        configureEach {
-            enabled = false // Do not publish dependencies in pom
-        }
-    }
-
-    configurations {
-        testImplementation.extendsFrom compileOnly
-    }
-
-    jar {
-        manifest {
-            attributes([
-                    "Specification-Title"     : mod_id,
-                    "Specification-Vendor"    : "BlayTheNinth",
-                    "Specification-Version"   : "1",
-                    "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : project.jar.archiveVersion,
-                    "Implementation-Vendor"   : "BlayTheNinth",
-                    "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-            ])
-            if (forge_mixins.toBoolean()) {
-                attributes([
-                        "MixinConfigs": mod_id + ".mixins.json"
-                ])
-            }
-        }
-    }
-
-    repositories {
-        mavenCentral()
-
-        maven {
-            url "https://www.cursemaven.com"
-
-            content {
-                includeGroup 'curse.maven'
-            }
-        }
-
-        maven { url "https://maven.twelveiterations.com/repository/maven-public/" }
-
-        // For Cloth Config and REI
-        maven { url "https://maven.shedaniel.me/" }
-
-        // For JEI
-        maven { url "https://maven.blamejared.com/" }
-    }
-
-    tasks.withType(JavaCompile).configureEach {
-        it.options.encoding = 'UTF-8'
-        it.options.release = java_version as int
-    }
-
-    tasks.withType(Javadoc).tap {
-        configureEach {
-            failOnError false
-        }
-    }
-
-    if (balm_version.endsWith("SNAPSHOT")) {
-        configurations.configureEach {
-            resolutionStrategy.cacheChangingModulesFor 1, 'minutes'
+    configurations.all {
+        resolutionStrategy {
+            cacheChangingModulesFor 60, 'seconds'
+            cacheDynamicVersionsFor 60, 'seconds'
         }
     }
 }

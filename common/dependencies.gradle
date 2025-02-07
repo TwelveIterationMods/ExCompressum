@@ -1,0 +1,15 @@
+dependencies {
+    compileOnly("net.blay09.mods:balm-common:$balm_version") {
+        exclude(group: "net.blay09.mods", module: "shared-bridge")
+        changing = balm_version.endsWith("SNAPSHOT")
+    }
+
+    modCompileOnly "mezz.jei:jei-$jei_minecraft_version-common-api:$jei_version"
+    if (jei_minecraft_version == minecraft_version) {
+        modRuntimeOnly "mezz.jei:jei-$jei_minecraft_version-common:$jei_version"
+    }
+
+    compileOnly("me.shedaniel.cloth:cloth-config-fabric:$cloth_config_version") {
+        transitive = false
+    }
+}

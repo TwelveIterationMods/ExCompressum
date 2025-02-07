@@ -1,5 +1,17 @@
 dependencies {
-    implementation(fg.deobf("novamachina.novacore:novacore:${novacore_version}"))
-    implementation(fg.deobf("novamachina.exnihilosequentia:exnihilosequentia:${exnihilosequentia_version}"))
-    implementation(fg.deobf("curse.maven:ex-deorum-901420:5421677"))
+    modImplementation("net.blay09.mods:balm-forge:${balm_version}") {
+        changing = balm_version.endsWith("SNAPSHOT")
+    }
+
+    modCompileOnly "mezz.jei:jei-$jei_minecraft_version-common-api:$jei_version"
+    if (jei_minecraft_version == minecraft_version) {
+        modRuntimeOnly "mezz.jei:jei-$jei_minecraft_version-forge:$jei_version"
+    }
+
+    modCompileOnly "curse.maven:jade-324717:$jade_forge_version"
+    modCompileOnly "curse.maven:the-one-probe-245211:$theoneprobe_version"
+
+    modImplementation("novamachina.novacore:novacore:${novacore_version}")
+    modImplementation("novamachina.exnihilosequentia:exnihilosequentia:${exnihilosequentia_version}")
+    modImplementation("curse.maven:ex-deorum-901420:5421677")
 }

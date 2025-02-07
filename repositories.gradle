@@ -10,6 +10,7 @@ repositories {
         url = "https://maven.shedaniel.me/"
         content {
             includeGroup "me.shedaniel"
+            includeGroup "me.shedaniel.cloth"
         }
     }
 
