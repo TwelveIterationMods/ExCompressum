@@ -112,26 +112,24 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
 
     private final DelegateContainer container = new DelegateContainer(backingContainer) {
         @Override
-        public ItemStack removeItem(int slot, int count) {
-            if (!outputSlots.containsOuterSlot(slot)) {
-                return ItemStack.EMPTY;
-            }
-
-            return super.removeItem(slot, count);
-        }
-
-        @Override
-        public ItemStack removeItemNoUpdate(int slot) {
-            if (!outputSlots.containsOuterSlot(slot)) {
-                return ItemStack.EMPTY;
-            }
-
-            return super.removeItemNoUpdate(slot);
-        }
-
-        @Override
         public boolean canPlaceItem(int slot, ItemStack itemStack) {
             return super.canPlaceItem(slot, itemStack) && (inputSlots.containsOuterSlot(slot) || meshSlots.containsOuterSlot(slot));
+        }
+
+        @Override
+        public int[] getSlotsForFace(Direction direction) {
+            if (direction == Direction.DOWN) {
+                return outputSlots.getSlotsForFace(direction);
+            } else if (direction == Direction.UP) {
+                return inputSlots.getSlotsForFace(direction);
+            } else {
+                return meshSlots.getSlotsForFace(direction);
+            }
+        }
+
+        @Override
+        public boolean canTakeItemThroughFace(int slot, ItemStack itemStack, Direction direction) {
+            return outputSlots.containsOuterSlot(slot);
         }
 
         @Override

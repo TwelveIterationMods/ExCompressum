@@ -109,6 +109,22 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
         }
 
         @Override
+        public int[] getSlotsForFace(Direction direction) {
+            if (direction == Direction.DOWN) {
+                return outputSlots.getSlotsForFace(direction);
+            } else if (direction == Direction.UP) {
+                return inputSlots.getSlotsForFace(direction);
+            } else {
+                return hammerSlots.getSlotsForFace(direction);
+            }
+        }
+
+        @Override
+        public boolean canTakeItemThroughFace(int slot, ItemStack itemStack, Direction direction) {
+            return outputSlots.containsOuterSlot(slot);
+        }
+
+        @Override
         public void slotChanged(int slot) {
             super.slotChanged(slot);
             // Make sure the hammer slots are always synced.
@@ -122,24 +138,6 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
     private final SubContainer hammerSlots = new SubContainer(backingContainer, 21, 23);
     private final List<ItemStack> overflowBuffer = new ArrayList<>();
     private final DelegateContainer container = new DelegateContainer(backingContainer) {
-        @Override
-        public ItemStack removeItem(int slot, int count) {
-            if (!outputSlots.containsOuterSlot(slot)) {
-                return ItemStack.EMPTY;
-            }
-
-            return super.removeItem(slot, count);
-        }
-
-        @Override
-        public ItemStack removeItemNoUpdate(int slot) {
-            if (!outputSlots.containsOuterSlot(slot)) {
-                return ItemStack.EMPTY;
-            }
-
-            return super.removeItemNoUpdate(slot);
-        }
-
         @Override
         public boolean canPlaceItem(int slot, ItemStack itemStack) {
             return super.canPlaceItem(slot, itemStack)
