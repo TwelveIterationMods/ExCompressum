@@ -24,6 +24,7 @@ import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
@@ -204,13 +205,15 @@ public class ExDeorumAddon implements ExNihiloProvider {
 
     @Override
     public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, RandomSource rand) {
-        final float luck = getLuckFromTool(tool);
+        final float fortune = getLuckFromTool(tool);
         final var recipes = RecipeUtil.getCrookRecipes(state);
         List<ItemStack> list = new ArrayList<>();
         for (final var recipe : recipes) {
-            float fortuneChanceBonus = 0.1f;
-            if (rand.nextFloat() <= recipe.chance() + fortuneChanceBonus * luck) {
-                list.add(recipe.getResultItem(level.registryAccess()));
+            int rolls = Math.max(1, Mth.ceil(fortune / 3f));
+            for (int i = 0; i < rolls; i++) {
+                if (rand.nextFloat() < recipe.chance()) {
+                    list.add(recipe.getResultItem(level.registryAccess()));
+                }
             }
         }
         return list;
