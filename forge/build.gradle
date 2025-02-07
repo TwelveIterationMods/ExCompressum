@@ -20,7 +20,6 @@ apply plugin: "org.spongepowered.mixin"
 
 group = mod_group
 archivesBaseName = "${mod_id}-forge-${minecraft_version}"
-version = mod_version
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
@@ -187,7 +186,7 @@ def replaceProperties = [
         minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
         forge_version: forge_version, forge_version_range: forge_version_range,
         forge_loader_version_range: forge_loader_version_range,
-        mod_id: mod_id, mod_version: mod_version, balm_version_range: balm_version_range,
+        mod_id: mod_id, version: version, balm_version_range: balm_version_range,
 ]
 processResources {
     from project(":common").sourceSets.main.resources
