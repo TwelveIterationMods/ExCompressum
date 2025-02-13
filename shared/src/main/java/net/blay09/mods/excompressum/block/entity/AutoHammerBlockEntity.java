@@ -102,22 +102,6 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
         }
 
         @Override
-        public int[] getSlotsForFace(Direction direction) {
-            if (direction == Direction.DOWN) {
-                return outputSlots.getSlotsForFace(direction);
-            } else if (direction == Direction.UP) {
-                return inputSlots.getSlotsForFace(direction);
-            } else {
-                return hammerSlots.getSlotsForFace(direction);
-            }
-        }
-
-        @Override
-        public boolean canTakeItemThroughFace(int slot, ItemStack itemStack, Direction direction) {
-            return outputSlots.containsOuterSlot(slot);
-        }
-
-        @Override
         public void slotChanged(int slot) {
             super.slotChanged(slot);
             // Make sure the hammer slots are always synced.
@@ -139,6 +123,22 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
 
         @Override
         public boolean canExtractItem(int slot) {
+            return outputSlots.containsOuterSlot(slot);
+        }
+
+        @Override
+        public int[] getSlotsForFace(Direction direction) {
+            if (direction == Direction.DOWN) {
+                return outputSlots.getSlotsForFace(direction);
+            } else if (direction == Direction.UP) {
+                return inputSlots.getSlotsForFace(direction);
+            } else {
+                return hammerSlots.getSlotsForFace(direction);
+            }
+        }
+
+        @Override
+        public boolean canTakeItemThroughFace(int slot, ItemStack itemStack, Direction direction) {
             return outputSlots.containsOuterSlot(slot);
         }
     };
