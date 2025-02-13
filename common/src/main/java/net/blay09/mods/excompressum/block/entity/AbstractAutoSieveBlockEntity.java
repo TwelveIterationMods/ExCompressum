@@ -126,11 +126,11 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
         @Override
         public int[] getSlotsForFace(Direction direction) {
             if (direction == Direction.DOWN) {
-                return outputSlots.getSlotsForFace(direction);
+                return outputSlots.getOuterSlotsForFace(direction);
             } else if (direction == Direction.UP) {
-                return inputSlots.getSlotsForFace(direction);
+                return inputSlots.getOuterSlotsForFace(direction);
             } else {
-                return meshSlots.getSlotsForFace(direction);
+                return meshSlots.getOuterSlotsForFace(direction);
             }
         }
 
