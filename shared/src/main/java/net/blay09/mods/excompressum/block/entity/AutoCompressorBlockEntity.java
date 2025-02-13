@@ -62,9 +62,9 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
         @Override
         public int[] getSlotsForFace(Direction direction) {
             if (direction == Direction.DOWN) {
-                return outputSlots.getSlotsForFace(direction);
+                return outputSlots.getOuterSlotsForFace(direction);
             }
-            return inputSlots.getSlotsForFace(direction);
+            return inputSlots.getOuterSlotsForFace(direction);
         }
 
         @Override
