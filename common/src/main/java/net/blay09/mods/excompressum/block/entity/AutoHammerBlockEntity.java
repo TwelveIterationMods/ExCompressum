@@ -136,11 +136,11 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
         @Override
         public int[] getSlotsForFace(Direction direction) {
             if (direction == Direction.DOWN) {
-                return outputSlots.getSlotsForFace(direction);
+                return outputSlots.getOuterSlotsForFace(direction);
             } else if (direction == Direction.UP) {
-                return inputSlots.getSlotsForFace(direction);
+                return inputSlots.getOuterSlotsForFace(direction);
             } else {
-                return hammerSlots.getSlotsForFace(direction);
+                return hammerSlots.getOuterSlotsForFace(direction);
             }
         }
 
