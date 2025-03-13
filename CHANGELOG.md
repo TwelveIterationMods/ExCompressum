@@ -1,1 +1,1 @@
-- Fixed crash when extracting from Auto Hammer on latest Balm
+- Updated to Minecraft 1.21.5

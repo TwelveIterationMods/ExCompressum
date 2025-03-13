@@ -6,6 +6,7 @@ import net.blay09.mods.balm.api.event.LivingDeathEvent;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.utils.StupidUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -28,13 +29,15 @@ public class CompressedEnemyHandler {
     public static void onEntityAdded(EntityAddedEvent event) {
         final var level = event.getLevel();
         final var entity = event.getEntity();
-        if (!level.isClientSide && (entity instanceof Mob || entity instanceof Ghast)) {
+        if (!level.isClientSide && entity instanceof Mob) {
             final var persistentData = Balm.getHooks().getPersistentData(entity);
-            final var registryName = Balm.getRegistries().getKey(entity.getType());
+            final var registryName = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
             final var isWhitelist = !ExCompressumConfig.getActive().compressedMobs.compressedMobAllowedMobsIsBlacklist;
-            if (registryName != null && ExCompressumConfig.getActive().compressedMobs.compressedMobAllowedMobs.contains(registryName.toString()) == isWhitelist) {
-                final var baseTag = persistentData.getCompound(ExCompressum.MOD_ID);
-                if (baseTag.contains(NOCOMPRESS) || baseTag.contains(COMPRESSED)) {
+            if (ExCompressumConfig.getActive().compressedMobs.compressedMobAllowedMobs.contains(registryName.toString()) == isWhitelist) {
+                final var modData = persistentData.getCompound(ExCompressum.MOD_ID);
+                final var noCompress = modData.flatMap(it -> it.getBoolean(NOCOMPRESS)).orElse(false);
+                final var compressed = modData.flatMap(it -> it.getBoolean(COMPRESSED)).orElse(false);
+                if (noCompress || compressed) {
                     return;
                 }
 
@@ -58,8 +61,8 @@ public class CompressedEnemyHandler {
         final var level = entity.level();
         final var damageSource = event.getDamageSource();
         final var persistentData = Balm.getHooks().getPersistentData(entity);
-        if (!level.isClientSide && persistentData.getCompound(ExCompressum.MOD_ID).contains(COMPRESSED)) {
-            if (entity instanceof Mob || entity instanceof Ghast) {
+        if (!level.isClientSide && persistentData.getCompound(ExCompressum.MOD_ID).flatMap(it -> it.getBoolean(COMPRESSED)).orElse(false)) {
+            if (entity instanceof Mob) {
                 if (damageSource.getEntity() instanceof Player player && !Balm.getHooks().isFakePlayer(player)) {
                     if (StupidUtils.hasSilkTouchModifier((LivingEntity) damageSource.getEntity())) {
                         return;
@@ -81,18 +84,18 @@ public class CompressedEnemyHandler {
                             }
                         }
 
-                        if (newEntity instanceof ZombifiedPiglin) {
-                            newEntity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
-                        } else if (newEntity instanceof Skeleton) {
-                            newEntity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-                        } else if (newEntity instanceof WitherSkeleton) {
-                            newEntity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                        switch (newEntity) {
+                            case ZombifiedPiglin ignored -> newEntity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.GOLDEN_SWORD));
+                            case Skeleton ignored -> newEntity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+                            case WitherSkeleton ignored -> newEntity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+                            default -> {
+                            }
                         }
 
                         final var tagCompound = new CompoundTag();
                         tagCompound.putBoolean(NOCOMPRESS, true);
                         Balm.getHooks().getPersistentData(newEntity).put(ExCompressum.MOD_ID, tagCompound);
-                        newEntity.moveTo(entity.getX(), entity.getY() + 1, entity.getZ(), (float) Math.random(), (float) Math.random());
+                        newEntity.snapTo(entity.getX(), entity.getY() + 1, entity.getZ(), (float) Math.random(), (float) Math.random());
                         final var motion = 0.01;
                         newEntity.setDeltaMovement((level.random.nextGaussian() - 0.5) * motion, 0, (level.random.nextGaussian() - 0.5) * motion);
                         level.addFreshEntity(newEntity);

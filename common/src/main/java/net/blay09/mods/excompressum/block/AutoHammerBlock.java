@@ -75,31 +75,11 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
         if (!player.isShiftKeyDown() && !level.isClientSide) {
             final BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof MenuProvider menuProvider) {
-                Balm.getNetworking().openGui(player, menuProvider);
+                Balm.getNetworking().openMenu(player, menuProvider);
             }
         }
 
         return InteractionResult.SUCCESS;
-    }
-
-    @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof AutoHammerBlockEntity autoHammer && state.getBlock() != newState.getBlock()) {
-            Container itemHandler = autoHammer.getBackingContainer();
-            for (int i = 0; i < itemHandler.getContainerSize(); i++) {
-                ItemStack itemStack = itemHandler.getItem(i);
-                if (!itemStack.isEmpty()) {
-                    level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), itemStack));
-                }
-            }
-            ItemStack currentStack = autoHammer.getCurrentStack();
-            if (!currentStack.isEmpty()) {
-                level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), currentStack));
-            }
-        }
-
-        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Override

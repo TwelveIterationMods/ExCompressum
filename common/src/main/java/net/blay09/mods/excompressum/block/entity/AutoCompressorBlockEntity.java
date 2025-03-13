@@ -18,16 +18,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -37,7 +38,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -248,17 +248,20 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
 
     @Override
     public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        if (tagCompound.contains("CurrentRecipe")) {
-            currentRecipe = ExRegistries.getCompressedRecipeRegistry().getRecipeById(ResourceLocation.parse(tagCompound.getString("CurrentRecipe")));
-        }
-        isDisabledByRedstone = tagCompound.getBoolean("IsDisabledByRedstone");
-        progress = tagCompound.getFloat("Progress");
-        backingContainer.deserialize(tagCompound.getCompound("ItemHandler"), provider);
+        currentRecipe = tagCompound.getString("CurrentRecipe")
+                .map(ResourceLocation::parse)
+                .map(ExRegistries.getCompressedRecipeRegistry()::getRecipeById)
+                .orElse(currentRecipe);
+        isDisabledByRedstone = tagCompound.getBooleanOr("IsDisabledByRedstone", false);
+        progress = tagCompound.getFloatOr("Progress", 0);
+        tagCompound.getCompound("ItemHandler").ifPresent(it -> backingContainer.deserialize(it, provider));
         energyStorage.deserialize(tagCompound.get("EnergyStorage"));
         overflowBuffer.clear();
-        for (final var overflowItem : tagCompound.getList("OverflowBuffer", Tag.TAG_COMPOUND)) {
-            ItemStack.parse(provider, overflowItem).ifPresent(overflowBuffer::add);
-        }
+        tagCompound.getList("OverflowBuffer").ifPresent(overflowItems -> {
+            for (final var overflowItem : overflowItems) {
+                ItemStack.parse(provider, overflowItem).ifPresent(overflowBuffer::add);
+            }
+        });
     }
 
     @Override
@@ -353,7 +356,7 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
+    protected void applyImplicitComponents(DataComponentGetter input) {
         final var energyComponent = input.get(ModComponents.energy.get());
         if (energyComponent != null) {
             energyStorage.setEnergy(energyComponent);
@@ -368,5 +371,17 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
     @Override
     public StreamCodec<RegistryFriendlyByteBuf, BlockPos> getScreenStreamCodec() {
         return BlockPos.STREAM_CODEC.cast();
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level != null) {
+            for (final var currentStack : getCurrentBuffer()) {
+                if (!currentStack.isEmpty()) {
+                    level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), currentStack));
+                }
+            }
+        }
     }
 }

@@ -18,7 +18,8 @@
     "UniformGeneratorAccessor",
     "RecipeManagerAccessor",
     "ShapedRecipeAccessor",
-    "ShapelessRecipeAccessor"
+    "ShapelessRecipeAccessor",
+    "LlamaAccessor"
   ],
   "client": [
   ],

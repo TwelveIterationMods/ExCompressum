@@ -3,21 +3,16 @@ package net.blay09.mods.excompressum.item;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.component.ModComponents;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
-import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.tag.ModBlockTags;
 import net.blay09.mods.excompressum.tag.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
@@ -26,7 +21,7 @@ import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
-public class ChickenStickItem extends DiggerItem {
+public class ChickenStickItem extends Item {
 
     public static final ToolMaterial CHICKEN_STICK_TIER = new ToolMaterial(ModBlockTags.INCORRECT_FOR_CHICKEN_STICK,
             0,
@@ -36,13 +31,13 @@ public class ChickenStickItem extends DiggerItem {
             ModItemTags.CHICKEN_STICK_TOOL_MATERIALS);
 
     public ChickenStickItem(Item.Properties properties) {
-        super(CHICKEN_STICK_TIER, ModBlockTags.MINEABLE_WITH_CHICKEN_STICK, 6f, -3.2f, properties.fireResistant());
+        super(properties.fireResistant());
     }
 
     @Override
-    public boolean hurtEnemy(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
+    public void hurtEnemy(ItemStack itemStack, LivingEntity target, LivingEntity attacker) {
         tryPlayChickenSound(attacker.level(), attacker.blockPosition());
-        return super.hurtEnemy(itemStack, attacker, target);
+        super.hurtEnemy(itemStack, attacker, target);
     }
 
     @Override

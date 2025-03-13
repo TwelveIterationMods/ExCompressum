@@ -48,8 +48,8 @@ public class ChickenStickHandler {
                     }
 
                     AngryChickenEntity angryChicken = ModEntities.angryChicken.get().create(level, EntitySpawnReason.CONVERSION);
-                    angryChicken.moveTo(chicken.getX(), chicken.getY(), chicken.getZ(), chicken.getYRot(), chicken.getXRot());
-                    angryChicken.absMoveTo(chicken.getX(), chicken.getY(), chicken.getZ(), chicken.getYRot(), chicken.getXRot());
+                    angryChicken.snapTo(chicken.getX(), chicken.getY(), chicken.getZ(), chicken.getYRot(), chicken.getXRot());
+                    angryChicken.absSnapTo(chicken.getX(), chicken.getY(), chicken.getZ(), chicken.getYRot(), chicken.getXRot());
                     angryChicken.setYHeadRot(chicken.yHeadRot);
                     level.addFreshEntity(angryChicken);
                     level.playSound(null, angryChicken.blockPosition(), SoundEvents.CHICKEN_HURT, SoundSource.HOSTILE, 1f, 0.5f);

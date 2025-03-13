@@ -20,6 +20,7 @@ import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.*;
@@ -32,6 +33,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -136,11 +138,6 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
 
         @Override
         public boolean canTakeItemThroughFace(int slot, ItemStack itemStack, Direction direction) {
-            return outputSlots.containsOuterSlot(slot);
-        }
-
-        @Override
-        public boolean canExtractItem(int slot) {
             return outputSlots.containsOuterSlot(slot);
         }
     };
@@ -255,7 +252,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
                                 ItemStack meshStack = meshSlots.getItem(0);
                                 if (!meshStack.isEmpty()) {
                                     meshStack.hurtAndBreak(1, (ServerLevel) level, null, it -> {
-                                        level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5f, 2.5f);
+                                        level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK.value(), SoundSource.BLOCKS, 0.5f, 2.5f);
                                         meshStack.shrink(1);
                                         meshSlots.setItem(0, ItemStack.EMPTY);
                                     });
@@ -332,32 +329,32 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
 
     @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        currentStack = ItemStack.parseOptional(provider, tag.getCompound("CurrentStack"));
-        progress = tag.getFloat("Progress");
+        currentStack = tag.read("CurrentStack", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+        progress = tag.getFloatOr("Progress", 0);
         ResolvableProfile.CODEC.parse(NbtOps.INSTANCE, tag.get("CustomSkin")).resultOrPartial(($$0x) -> {
             ExCompressum.logger.error("Failed to load profile from auto sieve: {}", $$0x);
         }).ifPresent(it -> {
             setSkinProfile(it);
         });
-        foodBoost = tag.getFloat("FoodBoost");
-        foodBoostTicks = tag.getInt("FoodBoostTicks");
-        particleTicks = tag.getInt("ParticleTicks");
-        particleCount = tag.getInt("ParticleCount");
-        backingContainer.deserialize(tag.getCompound("ItemHandler"), provider);
-        isDisabledByRedstone = tag.getBoolean("IsDisabledByRedstone");
+        foodBoost = tag.getFloatOr("FoodBoost", 0);
+        foodBoostTicks = tag.getIntOr("FoodBoostTicks", 0);
+        particleTicks = tag.getIntOr("ParticleTicks", 0);
+        particleCount = tag.getIntOr("ParticleCount", 0);
+        tag.getCompound("ItemHandler").ifPresent(it -> backingContainer.deserialize(it, provider));
+        isDisabledByRedstone = tag.getBooleanOr("IsDisabledByRedstone", false);
         overflowBuffer.clear();
-        for (final var overflowItem : tag.getList("OverflowBuffer", Tag.TAG_COMPOUND)) {
-            overflowBuffer.add(ItemStack.parseOptional(provider, ((CompoundTag) overflowItem)));
-        }
+        tag.getList("OverflowBuffer").ifPresent(overflowItems -> {
+            for (final var overflowItem : overflowItems) {
+                ItemStack.parse(provider, overflowItem).ifPresent(overflowBuffer::add);
+            }
+        });
 
-        if (tag.contains("MeshStack", Tag.TAG_COMPOUND)) {
-            meshSlots.setItem(0, ItemStack.parseOptional(provider, tag.getCompound("MeshStack")));
-        }
+        tag.read("MeshStack", ItemStack.CODEC).ifPresent(meshStack -> meshSlots.setItem(0, meshStack));
     }
 
     @Override
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        tag.put("CurrentStack", currentStack.saveOptional(provider));
+        tag.store("CurrentStack", ItemStack.OPTIONAL_CODEC, currentStack);
         tag.putFloat("Progress", progress);
         if (skinProfile != null) {
             final var customSkinTag = ResolvableProfile.CODEC.encodeStart(NbtOps.INSTANCE, this.skinProfile).getOrThrow();
@@ -381,7 +378,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
         final var provider = level.registryAccess();
         saveAdditional(tag, provider);
         ItemStack meshStack = meshSlots.getItem(0);
-        tag.put("MeshStack", meshStack.saveOptional(provider));
+        tag.store("MeshStack", ItemStack.OPTIONAL_CODEC, meshStack);
     }
 
     public float getEnergyPercentage() {
@@ -553,7 +550,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
+    protected void applyImplicitComponents(DataComponentGetter input) {
         var profile = input.get(DataComponents.PROFILE);
         if (profile == null) {
             final var randomSkin = AutoSieveSkinRegistry.getRandomSkin();
@@ -580,5 +577,19 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
     @Override
     public StreamCodec<RegistryFriendlyByteBuf, BlockPos> getScreenStreamCodec() {
         return BlockPos.STREAM_CODEC.cast();
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level != null) {
+            ItemStack currentStack = getCurrentStack();
+            if (!currentStack.isEmpty()) {
+                ItemEntity entityItem = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), currentStack);
+                double motion = 0.05;
+                entityItem.setDeltaMovement(level.random.nextGaussian() * motion, 0.2, level.random.nextGaussian() * motion);
+                level.addFreshEntity(entityItem);
+            }
+        }
     }
 }

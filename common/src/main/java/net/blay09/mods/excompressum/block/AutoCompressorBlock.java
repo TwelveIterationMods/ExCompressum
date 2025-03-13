@@ -49,7 +49,7 @@ public class AutoCompressorBlock extends BaseEntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
         if (!player.isShiftKeyDown() && !level.isClientSide) {
             if (level.getBlockEntity(pos) instanceof MenuProvider menuProvider) {
-                Balm.getNetworking().openGui(player, menuProvider);
+                Balm.getNetworking().openMenu(player, menuProvider);
             }
         }
 
@@ -57,33 +57,11 @@ public class AutoCompressorBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof AutoCompressorBlockEntity autoCompressor) {
-            Container container = autoCompressor.getBackingContainer();
-            for (int i = 0; i < container.getContainerSize(); i++) {
-                ItemStack itemStack = container.getItem(i);
-                if (!itemStack.isEmpty()) {
-                    level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), itemStack));
-                }
-            }
-            for (ItemStack currentStack : autoCompressor.getCurrentBuffer()) {
-                if (!currentStack.isEmpty()) {
-                    level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), currentStack));
-                }
-            }
-        }
-        super.onRemove(state, level, pos, newState, isMoving);
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
     public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null) {

@@ -10,7 +10,6 @@ import net.blay09.mods.balm.api.menu.BalmMenuProvider;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.AutoHammerBlock;
 import net.blay09.mods.excompressum.block.ModBlockStateProperties;
-import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.component.ModComponents;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.loot.LootTableUtils;
@@ -23,11 +22,11 @@ import net.blay09.mods.excompressum.utils.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -35,6 +34,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -43,6 +43,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -124,11 +125,6 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
         public boolean canPlaceItem(int slot, ItemStack itemStack) {
             return super.canPlaceItem(slot, itemStack)
                     && (inputSlots.containsOuterSlot(slot) || hammerSlots.containsOuterSlot(slot));
-        }
-
-        @Override
-        public boolean canExtractItem(int slot) {
-            return outputSlots.containsOuterSlot(slot);
         }
 
         @Override
@@ -341,44 +337,37 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
 
     @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        currentStack = ItemStack.parseOptional(provider, tag.getCompound("CurrentStack"));
-        progress = tag.getFloat("Progress");
+        currentStack = tag.getCompound("CurrentStack").flatMap(it -> ItemStack.parse(provider, it)).orElse(currentStack);
+        progress = tag.getFloatOr("Progress", 0);
         if (tag.contains("EnergyStorage")) {
             energyStorage.deserialize(tag.get("EnergyStorage"));
         }
 
-        backingContainer.deserialize(tag.getCompound("ItemHandler"), provider);
+        tag.getCompound("ItemHandler").ifPresent(it -> backingContainer.deserialize(it, provider));
 
-        isDisabledByRedstone = tag.getBoolean("IsDisabledByRedstone");
-        if (tag.contains("FinishedStack")) {
-            finishedStack = ItemStack.parseOptional(provider, tag.getCompound("FinishedStack"));
-        }
+        isDisabledByRedstone = tag.getBooleanOr("IsDisabledByRedstone", false);
+        finishedStack = tag.getCompound("FinishedStack").flatMap(it -> ItemStack.parse(provider, it)).orElse(finishedStack);
+        tag.getCompound("FirstHammer").flatMap(it -> ItemStack.parse(provider, it)).ifPresent(hammer -> hammerSlots.setItem(0, hammer));
+        tag.getCompound("SecondHammer").flatMap(it -> ItemStack.parse(provider, it)).ifPresent(hammer -> hammerSlots.setItem(1, hammer));
 
-        if (tag.contains("FirstHammer", Tag.TAG_COMPOUND)) {
-            hammerSlots.setItem(0, ItemStack.parseOptional(provider, tag.getCompound("FirstHammer")));
-        }
-        if (tag.contains("SecondHammer", Tag.TAG_COMPOUND)) {
-            hammerSlots.setItem(1, ItemStack.parseOptional(provider, tag.getCompound("SecondHammer")));
-        }
         overflowBuffer.clear();
-        for (final var overflowItem : tag.getList("OverflowBuffer", Tag.TAG_COMPOUND)) {
-            overflowBuffer.add(ItemStack.parseOptional(provider, ((CompoundTag) overflowItem)));
-        }
+        tag.getList("OverflowBuffer").ifPresent(overflowItems -> {
+            for (final var overflowItem : overflowItems) {
+                ItemStack.parse(provider, overflowItem).ifPresent(overflowBuffer::add);
+            }
+        });
     }
 
     @Override
     public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         tag.put("EnergyStorage", energyStorage.serialize());
 
-        tag.put("CurrentStack", currentStack.saveOptional(provider));
+        tag.store("CurrentStack", ItemStack.OPTIONAL_CODEC, currentStack);
+        tag.store("FinishedStack", ItemStack.OPTIONAL_CODEC, finishedStack);
         tag.putFloat("Progress", progress);
         tag.put("ItemHandler", backingContainer.serialize(provider));
 
         tag.putBoolean("IsDisabledByRedstone", isDisabledByRedstone);
-
-        if (!finishedStack.isEmpty()) {
-            tag.put("FinishedStack", finishedStack.saveOptional(provider));
-        }
 
         final var overflowList = new ListTag();
         for (ItemStack itemStack : overflowBuffer) {
@@ -391,10 +380,8 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
     public void writeUpdateTag(CompoundTag tag) {
         final var provider = level.registryAccess();
         saveAdditional(tag, provider);
-        ItemStack firstHammer = hammerSlots.getItem(0);
-        tag.put("FirstHammer", firstHammer.saveOptional(provider));
-        ItemStack secondHammer = hammerSlots.getItem(1);
-        tag.put("SecondHammer", secondHammer.saveOptional(provider));
+        tag.store("FirstHammer", ItemStack.OPTIONAL_CODEC, hammerSlots.getItem(0));
+        tag.store("SecondHammer", ItemStack.OPTIONAL_CODEC, hammerSlots.getItem(1));
     }
 
     public boolean isProcessing() {
@@ -518,7 +505,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
+    protected void applyImplicitComponents(DataComponentGetter input) {
         final var energyComponent = input.get(ModComponents.energy.get());
         if (energyComponent != null) {
             energyStorage.setEnergy(energyComponent);
@@ -533,5 +520,16 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
     @Override
     public StreamCodec<RegistryFriendlyByteBuf, BlockPos> getScreenStreamCodec() {
         return BlockPos.STREAM_CODEC.cast();
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level != null) {
+            ItemStack currentStack = getCurrentStack();
+            if (!currentStack.isEmpty()) {
+                level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), currentStack));
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ import net.blay09.mods.excompressum.menu.ModMenus;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,4 +55,7 @@ public class ExCompressum {
         ChickenStickHandler.initialize();
     }
 
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
 }

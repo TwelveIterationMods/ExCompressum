@@ -7,17 +7,15 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class CompressedCrookItem extends DiggerItem {
+public class CompressedCrookItem extends Item {
 
     public CompressedCrookItem(Item.Properties properties) {
-        super(ToolMaterial.WOOD, ModBlockTags.MINEABLE_WITH_CROOK, 6f, -3.2f, properties
-                .durability((int) (ToolMaterial.WOOD.durability() * 2 * ExCompressumConfig.getActive().tools.compressedCrookDurabilityMultiplier)));
+        super(properties);
     }
 
     @Override

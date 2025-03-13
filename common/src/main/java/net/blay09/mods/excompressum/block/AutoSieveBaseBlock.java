@@ -24,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ResolvableProfile;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -49,6 +50,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUglyfiable {
 
@@ -110,37 +112,11 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
         if (!player.isShiftKeyDown() && level.getBlockEntity(pos) instanceof MenuProvider menuProvider) {
-            Balm.getNetworking().openGui(player, menuProvider);
+            Balm.getNetworking().openMenu(player, menuProvider);
             return InteractionResult.SUCCESS;
         }
 
         return super.useWithoutItem(state, level, pos, player, blockHitResult);
-    }
-
-    @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof AbstractAutoSieveBlockEntity autoSieve && newState.getBlock() != state.getBlock()) {
-            Container container = autoSieve.getBackingContainer();
-            for (int i = 0; i < container.getContainerSize(); i++) {
-                ItemStack itemStack = container.getItem(i);
-                if (!itemStack.isEmpty()) {
-                    ItemEntity entityItem = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
-                    double motion = 0.05;
-                    entityItem.setDeltaMovement(level.random.nextGaussian() * motion, 0.2, level.random.nextGaussian() * motion);
-                    level.addFreshEntity(entityItem);
-                }
-            }
-            ItemStack currentStack = autoSieve.getCurrentStack();
-            if (!currentStack.isEmpty()) {
-                ItemEntity entityItem = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), currentStack);
-                double motion = 0.05;
-                entityItem.setDeltaMovement(level.random.nextGaussian() * motion, 0.2, level.random.nextGaussian() * motion);
-                level.addFreshEntity(entityItem);
-            }
-        }
-
-        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Override
@@ -165,17 +141,16 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
         return Component.translatable("tooltip.excompressum.auto_sieve", name).withStyle(ChatFormatting.GRAY);
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         final var profile = stack.get(DataComponents.PROFILE);
         if (profile != null) {
-            tooltip.add(getSkinTooltip(profile.gameProfile().getName()));
+            tooltip.accept(getSkinTooltip(profile.gameProfile().getName()));
         } else {
             if (currentRandomName == null) {
                 updateRandomSkinName();
             }
 
-            tooltip.add(getSkinTooltip(currentRandomName));
+            tooltip.accept(getSkinTooltip(currentRandomName));
         }
 
         if (lastHoverStack != stack) {

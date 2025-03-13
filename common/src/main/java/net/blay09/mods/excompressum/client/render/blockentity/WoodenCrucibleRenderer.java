@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.Vec3;
 
 public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibleBlockEntity> {
 
@@ -24,7 +24,7 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
     }
 
     @Override
-    public void render(WoodenCrucibleBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay) {
+    public void render(WoodenCrucibleBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay, Vec3 cameraPos) {
         Level level = blockEntity.getLevel();
         if (level == null) {
             return;
@@ -56,7 +56,6 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
             dispatcher.getModelRenderer()
                     .renderModel(poseStack.last(),
                             buffers.getBuffer(RenderType.translucent()),
-                            null,
                             ModModels.woodenCrucibleLiquid.get(),
                             red,
                             green,
@@ -78,7 +77,7 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
                     poseStack,
                     buffers.getBuffer(RenderType.translucent()),
                     false,
-                    random);
+                    dispatcher.getBlockModel(solidState).collectParts(random));
             poseStack.popPose();
         }
     }

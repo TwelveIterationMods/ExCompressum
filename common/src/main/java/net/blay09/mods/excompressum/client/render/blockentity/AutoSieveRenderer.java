@@ -13,17 +13,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.PlayerSkin;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.joml.AxisAngle4f;
 import org.joml.Math;
 import org.joml.Quaternionf;
@@ -42,7 +44,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
     public static int cacheKey;
     private int currentCacheKey;
-    private BakedModel sieveModel;
+    private BlockStateModel sieveModel;
 
     public AutoSieveRenderer(BlockEntityRendererProvider.Context context, boolean isHeavy) {
         tinyHumanModel = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER), false);
@@ -51,7 +53,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
     }
 
     @Override
-    public void render(T blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay) {
+    public void render(T blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay, Vec3 cameraPos) {
         Level level = blockEntity.getLevel();
         if (level == null || blockEntity.isUgly()) {
             return;
@@ -101,15 +103,15 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
         // Render the sieve
         poseStack.pushPose();
-        dispatcher.getModelRenderer().tesselateBlock(level, sieveModel, blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffer.getBuffer(RenderType.solid()), false, random, 0, Integer.MAX_VALUE);
+        dispatcher.getModelRenderer().tesselateBlock(level, sieveModel.collectParts(random), blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffer.getBuffer(RenderType.solid()), false, Integer.MAX_VALUE);
         poseStack.popPose();
 
         // Render the sieve mesh
         SieveMeshRegistryEntry mesh = blockEntity.getSieveMesh();
         if (mesh != null) {
-            BakedModel meshModel = ModModels.meshes.get(mesh.getModelName()).get();
+            final var meshModel = ModModels.meshes.get(mesh.getModelName()).get();
             if (meshModel != null) {
-                dispatcher.getModelRenderer().tesselateBlock(level, meshModel, blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffer.getBuffer(RenderType.translucent()), false, random, 0, Integer.MAX_VALUE);
+                dispatcher.getModelRenderer().tesselateBlock(level, meshModel.collectParts(random), blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffer.getBuffer(RenderType.translucent()), false, Integer.MAX_VALUE);
             }
         }
 

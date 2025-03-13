@@ -14,6 +14,7 @@ import net.blay09.mods.excompressum.tag.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -146,18 +147,17 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
 
     @Override
     public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        solidVolume = tagCompound.getInt("SolidVolume");
-        fluidTank.deserialize(tagCompound.getCompound("FluidTank"));
+        solidVolume = tagCompound.getIntOr("SolidVolume", 0);
+        tagCompound.getCompound("FluidTank").ifPresent(fluidTank::deserialize);
         ContainerHelper.loadAllItems(tagCompound, items, provider);
-        if (tagCompound.contains("TargetFluid")) {
-            currentTargetFluid = Balm.getRegistries().getFluid(ResourceLocation.parse(tagCompound.getString("TargetFluid")));
-        }
+        tagCompound.getString("TargetFluid").map(ResourceLocation::parse).flatMap(BuiltInRegistries.FLUID::getOptional)
+                .ifPresent(targetFluid -> currentTargetFluid = targetFluid);
     }
 
     @Override
     public void saveAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
         if (currentTargetFluid != null) {
-            final var fluidId = Balm.getRegistries().getKey(currentTargetFluid);
+            final var fluidId = BuiltInRegistries.FLUID.getKey(currentTargetFluid);
             tagCompound.putString("TargetFluid", Objects.toString(fluidId));
         }
         tagCompound.putInt("SolidVolume", solidVolume);

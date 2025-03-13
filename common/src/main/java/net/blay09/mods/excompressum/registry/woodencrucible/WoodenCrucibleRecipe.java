@@ -3,18 +3,16 @@ package net.blay09.mods.excompressum.registry.woodencrucible;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.registry.ExCompressumRecipe;
 import net.blay09.mods.excompressum.registry.ModRecipeTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.Objects;
 
@@ -63,13 +61,12 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe<RecipeInput> {
     }
 
     public boolean matchesFluid(Fluid fluid) {
-        final var fluidId = Balm.getRegistries().getKey(fluid);
+        final var fluidId = BuiltInRegistries.FLUID.getKey(fluid);
         return Objects.equals(fluidId, this.fluid);
     }
 
     public Fluid getFluid() {
-        final var fluid = Balm.getRegistries().getFluid(this.fluid);
-        return fluid != null ? fluid : Fluids.EMPTY;
+        return BuiltInRegistries.FLUID.getValue(this.fluid);
     }
 
     public static class Serializer implements RecipeSerializer<WoodenCrucibleRecipe> {

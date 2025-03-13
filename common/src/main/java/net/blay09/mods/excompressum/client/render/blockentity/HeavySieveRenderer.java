@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEntity> {
 
@@ -24,7 +24,7 @@ public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEn
     }
 
     @Override
-    public void render(HeavySieveBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay) {
+    public void render(HeavySieveBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay, Vec3 cameraPos) {
         Level level = blockEntity.getLevel();
         if (level == null) {
             return;
@@ -37,9 +37,9 @@ public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEn
         // Render mesh
         SieveMeshRegistryEntry mesh = blockEntity.getSieveMesh();
         if (mesh != null) {
-            BakedModel meshModel = ModModels.meshes.get(mesh.getModelName()).get();
+            final var meshModel = ModModels.meshes.get(mesh.getModelName()).get();
             if (meshModel != null) {
-                dispatcher.getModelRenderer().tesselateBlock(level, meshModel, blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffers.getBuffer(RenderType.translucent()), false, random, 0, Integer.MAX_VALUE);
+                dispatcher.getModelRenderer().tesselateBlock(level, meshModel.collectParts(random), blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffers.getBuffer(RenderType.translucent()), false, Integer.MAX_VALUE);
             }
         }
 

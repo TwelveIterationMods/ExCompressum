@@ -98,7 +98,7 @@ public class JEIAddon implements IModPlugin {
 
         List<ExpandedWoodenCrucibleRecipe> expandedWoodenCrucibleRecipes = new ArrayList<>();
         for (final var fluidName : fluidOutputMap.keySet()) {
-            final var fluid = Balm.getRegistries().getFluid(fluidName);
+            final var fluid = BuiltInRegistries.FLUID.getValue(fluidName);
             if (fluid == null) {
                 continue;
             }
@@ -129,7 +129,7 @@ public class JEIAddon implements IModPlugin {
         final var waterLoggedState = ModBlocks.heavySieves[0].defaultBlockState().setValue(HeavySieveBlock.WATERLOGGED, waterlogged);
         for (final var mesh : SieveMeshRegistry.getEntries().values()) {
             final var rolls = HeavySieveRegistry.getGeneratedRollCount(generatedRecipe);
-            final var source = Balm.getRegistries().getItem(generatedRecipe.getSourceItem());
+            final var source = BuiltInRegistries.ITEM.getValue(generatedRecipe.getSourceItem());
             final var lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(level, waterLoggedState, source, rolls, mesh);
             if (!LootTableUtils.isLootTableEmpty(lootTable)) {
                 final var recipe = new HeavySieveRecipeImpl(generatedRecipe.getIngredient(),

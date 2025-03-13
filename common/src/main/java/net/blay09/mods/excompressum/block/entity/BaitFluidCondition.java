@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.api.Balm;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
@@ -19,7 +19,7 @@ public class BaitFluidCondition implements BaitEnvironmentCondition {
 
     @Override
     public Component getDisplayName() {
-        final var registryName = Balm.getRegistries().getKey(fluid);
+        final var registryName = BuiltInRegistries.FLUID.getKey(fluid);
         return Component.translatable("fluid_type." + registryName.toString().replace(':', '.'));
     }
 }

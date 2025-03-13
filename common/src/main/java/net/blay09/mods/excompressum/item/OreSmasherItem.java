@@ -5,12 +5,12 @@ import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ToolMaterial;
@@ -21,10 +21,10 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Collection;
 
-public class OreSmasherItem extends DiggerItem {
+public class OreSmasherItem extends Item {
 
     public OreSmasherItem(Item.Properties properties) {
-        super(ToolMaterial.DIAMOND, BlockTags.MINEABLE_WITH_SHOVEL, 6f, -3.2f, properties);
+        super(properties);
     }
 
     @Override
@@ -54,8 +54,9 @@ public class OreSmasherItem extends DiggerItem {
             return ActionResultType.FAIL;
         }*/
 
-        for (int i = 0; i < player.getInventory().items.size(); i++) {
-            ItemStack inventoryStack = player.getInventory().items.get(i);
+        final var items = player.getInventory().getNonEquipmentItems();
+        for (int i = 0; i < items.size(); i++) {
+            ItemStack inventoryStack = items.get(i);
             if (!inventoryStack.isEmpty()) {
                 if (ExCompressumAPI.getExNihilo().isCompressableOre(inventoryStack)) {
                     CompressedRecipe recipe = ExRegistries.getCompressedRecipeRegistry().getRecipe(inventoryStack);
@@ -68,7 +69,7 @@ public class OreSmasherItem extends DiggerItem {
                             if (resultStack.isEmpty()) {
                                 inventoryStack.shrink(recipe.count());
                                 if (inventoryStack.isEmpty()) {
-                                    player.getInventory().items.remove(i);
+                                    items.remove(i);
                                 }
                                 player.swing(context.getHand());
                                 return InteractionResult.SUCCESS;
@@ -82,7 +83,7 @@ public class OreSmasherItem extends DiggerItem {
                     inventoryStack.getItem().useOn(new UseOnContext(player, context.getHand(), new BlockHitResult(context.getClickLocation(), context.getClickedFace(), context.getClickedPos(), context.isInside())));
                     level.sendBlockUpdated(pos, oldState, level.getBlockState(pos), 3);
                     if (inventoryStack.isEmpty()) {
-                        player.getInventory().items.remove(i);
+                        items.remove(i);
                     }
                     player.swing(context.getHand());
                     return InteractionResult.SUCCESS;

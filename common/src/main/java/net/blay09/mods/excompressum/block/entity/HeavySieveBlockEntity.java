@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 
 public class HeavySieveBlockEntity extends BalmBlockEntity {
@@ -53,7 +54,8 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
     }
 
     public boolean addSiftable(ServerLevel level, Player player, ItemStack itemStack) {
-        if (!currentStack.isEmpty() || meshStack.isEmpty() || !ExRegistries.getHeavySieveRegistry().isSiftable(level, getBlockState(), itemStack, getSieveMesh())) {
+        if (!currentStack.isEmpty() || meshStack.isEmpty() || !ExRegistries.getHeavySieveRegistry()
+                .isSiftable(level, getBlockState(), itemStack, getSieveMesh())) {
             return false;
         }
         currentStack = player.getAbilities().instabuild ? ContainerUtils.copyStackWithSize(itemStack, 1) : itemStack.split(1);
@@ -127,19 +129,27 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
                     LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), currentStack);
                     Collection<ItemStack> rewards = HeavySieveRegistry.rollSieveRewards(level, lootContext, getBlockState(), sieveMesh, currentStack);
                     for (ItemStack itemStack : rewards) {
-                        level.addFreshEntity(new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, itemStack));
+                        level.addFreshEntity(new ItemEntity(level,
+                                worldPosition.getX() + 0.5,
+                                worldPosition.getY() + 1.5,
+                                worldPosition.getZ() + 0.5,
+                                itemStack));
                     }
                 } else {
-                    level.addFreshEntity(new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5, currentStack));
+                    level.addFreshEntity(new ItemEntity(level,
+                            worldPosition.getX() + 0.5,
+                            worldPosition.getY() + 1.5,
+                            worldPosition.getZ() + 0.5,
+                            currentStack));
                 }
                 currentStack = ItemStack.EMPTY;
                 if (ExNihilo.getInstance().doMeshesHaveDurability() && sieveMesh != null) {
                     if (!sieveMesh.isHeavy()) {
-                        level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5f, 2.5f);
+                        level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK.value(), SoundSource.BLOCKS, 0.5f, 2.5f);
                         meshStack = ItemStack.EMPTY;
                     } else {
                         meshStack.hurtAndBreak(1, (ServerLevel) level, (ServerPlayer) player, it -> {
-                            level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5f, 2.5f);
+                            level.playSound(null, worldPosition, SoundEvents.ITEM_BREAK.value(), SoundSource.BLOCKS, 0.5f, 2.5f);
                             meshStack = ItemStack.EMPTY;
                         });
                     }
@@ -160,17 +170,25 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
 
     @Override
     public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        currentStack = ItemStack.parseOptional(provider, tagCompound.getCompound("Content"));
-        meshStack = ItemStack.parseOptional(provider, tagCompound.getCompound("Mesh"));
-        progress = tagCompound.getFloat("Progress");
-        particleTicks = tagCompound.getInt("ParticleTicks");
-        particleCount = tagCompound.getInt("ParticleCount");
+        currentStack = tagCompound.getCompound("Content").flatMap(it -> ItemStack.parse(provider, it)).orElse(ItemStack.EMPTY);
+        meshStack = tagCompound.getCompound("Mesh").flatMap(it -> ItemStack.parse(provider, it)).orElse(ItemStack.EMPTY);
+        progress = tagCompound.getFloatOr("Progress", 0);
+        particleTicks = tagCompound.getIntOr("ParticleTicks", 0);
+        particleCount = tagCompound.getIntOr("ParticleCount", 0);
     }
 
     @Override
     public void saveAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        tagCompound.put("Content", currentStack.saveOptional(provider));
-        tagCompound.put("Mesh", meshStack.saveOptional(provider));
+        if (currentStack.isEmpty()) {
+            tagCompound.remove("Content");
+        } else {
+            tagCompound.put("Content", currentStack.save(provider));
+        }
+        if (meshStack.isEmpty()) {
+            tagCompound.remove("Mesh");
+        } else {
+            tagCompound.put("Mesh", meshStack.save(provider));
+        }
         tagCompound.putFloat("Progress", progress);
         tagCompound.putInt("ParticleTicks", particleTicks);
         tagCompound.putInt("ParticleCount", particleCount);
@@ -205,5 +223,13 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
         this.meshStack = meshStack;
         setChanged();
         sync();
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level != null && !getMeshStack().isEmpty()) {
+            level.addFreshEntity(new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, getMeshStack()));
+        }
     }
 }

@@ -1,10 +1,10 @@
 package net.blay09.mods.excompressum.registry.compressor;
 
-import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.mixin.RecipeManagerAccessor;
 import net.blay09.mods.excompressum.mixin.ShapedRecipeAccessor;
 import net.blay09.mods.excompressum.mixin.ShapelessRecipeAccessor;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
@@ -119,7 +119,7 @@ public class CompressedRecipeRegistry {
             return null;
         }
 
-        final ResourceLocation registryName = Balm.getRegistries().getKey(itemStack.getItem());
+        final ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
         CompressedRecipe foundRecipe = cacheByItemId.get(registryName);
         if (foundRecipe != null) {
             return foundRecipe;

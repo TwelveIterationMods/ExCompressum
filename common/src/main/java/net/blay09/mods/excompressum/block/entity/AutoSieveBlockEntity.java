@@ -5,6 +5,7 @@ import net.blay09.mods.balm.api.energy.EnergyStorage;
 import net.blay09.mods.excompressum.component.ModComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -78,7 +79,7 @@ public class AutoSieveBlockEntity extends AbstractAutoSieveBlockEntity implement
     }
 
     @Override
-    protected void applyImplicitComponents(DataComponentInput input) {
+    protected void applyImplicitComponents(DataComponentGetter input) {
         super.applyImplicitComponents(input);
         final var energyComponent = input.get(ModComponents.energy.get());
         if (energyComponent != null) {

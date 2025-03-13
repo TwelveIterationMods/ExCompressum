@@ -4,6 +4,7 @@ import net.blay09.mods.balm.common.BalmBlockEntity;
 import net.blay09.mods.excompressum.block.BaitBlock;
 import net.blay09.mods.excompressum.block.BaitType;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.mixin.LlamaAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -72,7 +73,7 @@ public class BaitBlockEntity extends BalmBlockEntity {
                         }
                         if (entity instanceof Llama llama) {
                             final var candidates = Llama.Variant.values();
-                            llama.setVariant(candidates[level.random.nextInt(candidates.length)]);
+                            ((LlamaAccessor) llama).callSetVariant(candidates[level.random.nextInt(candidates.length)]);
                         }
                         entity.setPos(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
                         level.addFreshEntity(entity);

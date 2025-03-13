@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.loot;
 
 import com.google.common.collect.ArrayListMultimap;
-import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.mixin.*;
 import net.minecraft.core.component.TypedDataComponent;
@@ -142,7 +141,7 @@ public class LootTableUtils {
             if (!entry.getItemStack().getComponents().isEmpty()) {
                 result.add(new MergedLootTableEntry(entry));
             } else {
-                final var itemId = Balm.getRegistries().getKey(entry.getItemStack().getItem());
+                final var itemId = BuiltInRegistries.ITEM.getKey(entry.getItemStack().getItem());
                 entryMap.put(itemId, entry);
             }
         }
