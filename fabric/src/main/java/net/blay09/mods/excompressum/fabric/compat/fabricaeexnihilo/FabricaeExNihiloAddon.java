@@ -143,7 +143,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
 
     private ItemStack findItem(String name) {
         ResourceLocation location = ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, name);
-        Item item = Balm.getRegistries().getItem(location);
+        Item item = BuiltInRegistries.ITEM.getValue(location);
         return new ItemStack(item);
     }
 

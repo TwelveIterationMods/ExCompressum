@@ -11,12 +11,25 @@ import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
+import net.minecraft.client.renderer.block.model.VariantMutator;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.Optional;
 
+import static net.blay09.mods.excompressum.ExCompressum.id;
+import static net.minecraft.client.data.models.BlockModelGenerators.*;
+
 public class ModModelProvider extends FabricModelProvider {
+
+    private static final PropertyDispatch<VariantMutator> ROTATION_HORIZONTAL_FACING = PropertyDispatch.modify(BlockStateProperties.HORIZONTAL_FACING)
+            .select(Direction.EAST, Y_ROT_90)
+            .select(Direction.SOUTH, Y_ROT_180)
+            .select(Direction.WEST, Y_ROT_270)
+            .select(Direction.NORTH, NOP);
+
     public ModModelProvider(FabricDataOutput output) {
         super(output);
     }
@@ -27,7 +40,8 @@ public class ModModelProvider extends FabricModelProvider {
         generators.createNonTemplateModelBlock(ModBlocks.rationingAutoCompressor);
         createUglifyableHorizontalFacingModel(generators, ModBlocks.autoHammer);
         generators.registerSimpleItemModel(ModBlocks.autoHammer, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_hammer"));
-        generators.registerSimpleItemModel(ModBlocks.autoCompressedHammer, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_compressed_hammer"));
+        generators.registerSimpleItemModel(ModBlocks.autoCompressedHammer,
+                ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_compressed_hammer"));
         generators.registerSimpleItemModel(ModBlocks.autoSieve, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_sieve"));
         generators.registerSimpleItemModel(ModBlocks.autoHeavySieve, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_heavy_sieve"));
         createUglifyableHorizontalFacingModel(generators, ModBlocks.autoCompressedHammer);
@@ -36,17 +50,15 @@ public class ModModelProvider extends FabricModelProvider {
 
         for (final var woodenCrucibleType : WoodenCrucibleType.values()) {
             final var woodenCrucible = ModBlocks.woodenCrucibles[woodenCrucibleType.ordinal()];
-            final var model = createSimpleRetexturedModel(generators, woodenCrucible, woodenCrucibleType.getBaseBlock(),
-                    ResourceLocation.fromNamespaceAndPath("excompressum", "block/wooden_crucible"));
-            final var stateGenerator = BlockModelGenerators.createSimpleBlock(woodenCrucible, model);
+            final var model = createSimpleRetexturedModel(generators, woodenCrucible, woodenCrucibleType.getBaseBlock(), id("block/wooden_crucible"));
+            final var stateGenerator = BlockModelGenerators.createSimpleBlock(woodenCrucible, plainVariant(model));
             generators.blockStateOutput.accept(stateGenerator);
         }
 
         for (final var heavySieveType : HeavySieveType.values()) {
             final var woodenCrucible = ModBlocks.heavySieves[heavySieveType.ordinal()];
-            final var model = createSimpleRetexturedModel(generators, woodenCrucible, heavySieveType.getBaseBlock(),
-                    ResourceLocation.fromNamespaceAndPath("excompressum", "block/heavy_sieve"));
-            final var stateGenerator = BlockModelGenerators.createSimpleBlock(woodenCrucible, model);
+            final var model = createSimpleRetexturedModel(generators, woodenCrucible, heavySieveType.getBaseBlock(), id("block/heavy_sieve"));
+            final var stateGenerator = BlockModelGenerators.createSimpleBlock(woodenCrucible, plainVariant(model));
             generators.blockStateOutput.accept(stateGenerator);
         }
 
@@ -90,11 +102,11 @@ public class ModModelProvider extends FabricModelProvider {
     }
 
     private void createUglifyableHorizontalFacingModel(BlockModelGenerators generators, Block block) {
-        generators.blockStateOutput.accept(MultiVariantGenerator.multiVariant(block)
-                .with(PropertyDispatch.property(ModBlockStateProperties.UGLY)
-                        .select(true, Variant.variant().with(VariantProperties.MODEL, ModelLocationUtils.getModelLocation(block, "_ugly")))
-                        .select(false, Variant.variant().with(VariantProperties.MODEL, ModelLocationUtils.getModelLocation(block))))
-                .with(createHorizontalFacingDispatch()));
+        generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(block)
+                .with(PropertyDispatch.initial(ModBlockStateProperties.UGLY)
+                        .select(true, plainVariant(ModelLocationUtils.getModelLocation(block, "_ugly")))
+                        .select(false, plainVariant(ModelLocationUtils.getModelLocation(block))))
+                .with(ROTATION_HORIZONTAL_FACING));
     }
 
     private void createBait(BlockModelGenerators generators, BaitBlock block, BaitType baitType) {
