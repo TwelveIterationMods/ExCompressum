@@ -28,9 +28,6 @@
     "fabric-datagen": [
       "net.blay09.mods.excompressum.fabric.datagen.ModDataGenerator"
     ],
-    "modmenu": [
-      "net.blay09.mods.excompressum.fabric.compat.ModMenuIntegration"
-    ],
     "jade": [
       "net.blay09.mods.excompressum.fabric.compat.jade.FabricJadeExCompressumPlugin"
     ],
