@@ -86,48 +86,6 @@ public class ExCompressumConfig {
 
         @Comment("The amount of mobs that will spawn upon death of a compressed mob.")
         public int compressedMobSize = 9;
-
-        @Comment("Should the allowed mobs list be treated as a blacklist instead of a whitelist?")
-        public boolean compressedMobAllowedMobsIsBlacklist = false;
-
-        @NestedType(String.class)
-        @Comment("A list of entity registry names that can spawn as compressed entities.")
-        public List<String> compressedMobAllowedMobs = Lists.newArrayList(
-                "minecraft:zombie",
-                "minecraft:creeper",
-                "minecraft:skeleton",
-                "minecraft:spider",
-                "minecraft:cave_spider",
-                "minecraft:silverfish",
-                "minecraft:witch",
-                "minecraft:enderman",
-                "minecraft:pig_zombie",
-                "minecraft:blaze",
-                "minecraft:bee",
-                "minecraft:chicken",
-                "minecraft:sheep",
-                "minecraft:cow",
-                "minecraft:mooshroom",
-                "minecraft:pig",
-                "minecraft:ghast",
-                "minecraft:drowned",
-                "minecraft:elder_guardian",
-                "minecraft:endermite",
-                "minecraft:cat",
-                "minecraft:evoker",
-                "minecraft:husk",
-                "minecraft:hoglin",
-                "minecraft:guardian",
-                "minecraft:piglin",
-                "minecraft:piglin_brute",
-                "minecraft:pillager",
-                "minecraft:shulker",
-                "minecraft:stray",
-                "minecraft:vindicator",
-                "minecraft:wither_skeleton",
-                "minecraft:zoglin",
-                "minecraft:zombie_villager",
-                "minecraft:zombified_piglin");
     }
 
     public static class Tools {

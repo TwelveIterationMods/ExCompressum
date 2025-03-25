@@ -5,13 +5,16 @@ import net.blay09.mods.balm.api.event.EntityAddedEvent;
 import net.blay09.mods.balm.api.event.LivingDeathEvent;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
+import net.blay09.mods.excompressum.tag.ModEntityTags;
 import net.blay09.mods.excompressum.utils.StupidUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.WitherSkeleton;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -31,9 +34,7 @@ public class CompressedEnemyHandler {
         final var entity = event.getEntity();
         if (!level.isClientSide && entity instanceof Mob) {
             final var persistentData = Balm.getHooks().getPersistentData(entity);
-            final var registryName = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType());
-            final var isWhitelist = !ExCompressumConfig.getActive().compressedMobs.compressedMobAllowedMobsIsBlacklist;
-            if (ExCompressumConfig.getActive().compressedMobs.compressedMobAllowedMobs.contains(registryName.toString()) == isWhitelist) {
+            if (entity.getType().is(ModEntityTags.COMPRESSABLE)) {
                 final var modData = persistentData.getCompound(ExCompressum.MOD_ID);
                 final var noCompress = modData.flatMap(it -> it.getBoolean(NOCOMPRESS)).orElse(false);
                 final var compressed = modData.flatMap(it -> it.getBoolean(COMPRESSED)).orElse(false);
