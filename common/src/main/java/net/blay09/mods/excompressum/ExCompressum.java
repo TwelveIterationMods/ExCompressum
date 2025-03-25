@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum;
 
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.api.event.ConfigLoadedEvent;
 import net.blay09.mods.balm.api.proxy.SidedProxy;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.block.ModBlocks;
@@ -28,7 +29,8 @@ public class ExCompressum {
     public static final String MOD_ID = "excompressum";
     public static final Logger logger = LogManager.getLogger(MOD_ID);
 
-    public static SidedProxy<CommonProxy> proxy = Balm.sidedProxy("net.blay09.mods.excompressum.CommonProxy", "net.blay09.mods.excompressum.client.ClientProxy");
+    public static SidedProxy<CommonProxy> proxy = Balm.sidedProxy("net.blay09.mods.excompressum.CommonProxy",
+            "net.blay09.mods.excompressum.client.ClientProxy");
 
     public static void initialize() {
         ExCompressumAPI.__setupAPI(new InternalMethodsImpl());
@@ -48,7 +50,12 @@ public class ExCompressum {
         Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.neoforge.compat.exdeorum.ExDeorumAddon");
         Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
 
-        AutoSieveSkinRegistry.load();
+        final var commonConfigId = ResourceLocation.fromNamespaceAndPath(MOD_ID, "common");
+        Balm.getEvents().onEvent(ConfigLoadedEvent.class, event -> {
+            if (event.getSchema().identifier().equals(commonConfigId)) {
+                AutoSieveSkinRegistry.load();
+            }
+        });
         HammerSpeedHandler.initialize();
         CompressedEnemyHandler.initialize();
         CrookPushHandler.initialize();

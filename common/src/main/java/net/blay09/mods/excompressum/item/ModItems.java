@@ -4,7 +4,6 @@ import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.DeferredObject;
 import net.blay09.mods.balm.api.item.BalmItems;
 import net.blay09.mods.excompressum.ExCompressum;
-import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.tag.ModBlockTags;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -56,7 +55,7 @@ public class ModItems {
                 id("compressed_netherite_hammer"));
         items.registerItem((identifier) -> compressedCrook = new CompressedCrookItem(itemProperties(identifier)
                         .tool(ToolMaterial.WOOD, ModBlockTags.MINEABLE_WITH_CROOK, 6f, -3.2f, 0f)
-                        .durability((int) (ToolMaterial.WOOD.durability() * 2 * ExCompressumConfig.getActive().tools.compressedCrookDurabilityMultiplier))),
+                        .durability((int) (ToolMaterial.WOOD.durability() * 4f))),
                 id("compressed_crook"));
         items.registerItem((identifier) -> ironMesh = new IronMeshItem(itemProperties(identifier)), id("iron_mesh"));
         items.registerItem((identifier) -> woodChippings = new WoodChippingItem(itemProperties(identifier)), id("wood_chippings"));

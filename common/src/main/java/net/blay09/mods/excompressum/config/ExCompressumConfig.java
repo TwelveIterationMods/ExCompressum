@@ -148,9 +148,6 @@ public class ExCompressumConfig {
                 "entity.chicken.egg",
                 "entity.chicken.step");
 
-        @Comment("The multiplier applied to the Compressed Crook's durability (based on the normal wooden crook)")
-        public double compressedCrookDurabilityMultiplier = 2f;
-
         @Comment("The multiplier applied to the Compressed Crook's speed (based on the normal wooden crook)")
         public double compressedCrookSpeedMultiplier = 4f;
     }
