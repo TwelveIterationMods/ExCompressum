@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.block.entity;
 
 import net.blay09.mods.balm.api.energy.BalmEnergyStorageProvider;
+import net.blay09.mods.balm.api.energy.DefaultEnergyStorage;
 import net.blay09.mods.balm.api.energy.EnergyStorage;
 import net.blay09.mods.excompressum.component.ModComponents;
 import net.minecraft.core.BlockPos;
@@ -13,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class AutoSieveBlockEntity extends AbstractAutoSieveBlockEntity implements BalmEnergyStorageProvider {
 
-    private final EnergyStorage energyStorage = new EnergyStorage(32000) {
+    private final DefaultEnergyStorage energyStorage = new DefaultEnergyStorage(32000) {
         @Override
         public int fill(int maxReceive, boolean simulate) {
             if (!simulate) {

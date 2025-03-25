@@ -1,21 +1,21 @@
 package net.blay09.mods.excompressum.neoforge.compat.exnihilosequentia;
 
 import com.google.common.collect.ArrayListMultimap;
-import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.recipe.CompressedHammerRecipe;
 import net.blay09.mods.excompressum.api.recipe.HammerRecipe;
 import net.blay09.mods.excompressum.api.recipe.HeavySieveRecipe;
 import net.blay09.mods.excompressum.api.recipe.SieveRecipe;
 import net.blay09.mods.excompressum.api.sievemesh.CommonMeshType;
-import net.blay09.mods.excompressum.loot.LootTableUtils;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.loot.LootTableUtils;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.hammer.HammerRecipeImpl;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -44,7 +44,6 @@ import novamachina.exnihilosequentia.common.registries.ExNihiloRegistries;
 import novamachina.exnihilosequentia.world.item.MeshType;
 import novamachina.exnihilosequentia.world.item.crafting.*;
 import novamachina.exnihilosequentia.world.level.block.InfestedLeavesBlock;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -105,7 +104,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
 
     private ItemStack findItem(String name) {
         ResourceLocation location = ResourceLocation.fromNamespaceAndPath(Compat.EXNIHILO_SEQUENTIA, name);
-        Item item = Balm.getRegistries().getItem(location);
+        Item item = BuiltInRegistries.ITEM.getValue(location);
         return new ItemStack(item);
     }
 
@@ -230,8 +229,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
             ItemStack itemStack = recipe.getDrop();
             for (MeshWithChance roll : recipe.getRolls()) {
                 LootPool.Builder poolBuilder = LootPool.lootPool();
-                poolBuilder.name("excompressum-heavysieve-" + Balm.getRegistries()
-                        .getKey(source.asItem())
+                poolBuilder.name("excompressum-heavysieve-" + BuiltInRegistries.ITEM.getKey(source.asItem())
                         .toString()
                         .replace(':', '-') + "-" + UUID.randomUUID());
                 poolBuilder.setRolls(ConstantValue.exactly(times));

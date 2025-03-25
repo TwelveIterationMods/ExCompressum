@@ -7,6 +7,7 @@ import net.blay09.mods.balm.api.container.DefaultContainer;
 import net.blay09.mods.balm.api.container.DelegateContainer;
 import net.blay09.mods.balm.api.container.SubContainer;
 import net.blay09.mods.balm.api.energy.BalmEnergyStorageProvider;
+import net.blay09.mods.balm.api.energy.DefaultEnergyStorage;
 import net.blay09.mods.balm.api.energy.EnergyStorage;
 import net.blay09.mods.balm.api.menu.BalmMenuProvider;
 import net.blay09.mods.excompressum.component.ModComponents;
@@ -44,7 +45,7 @@ import java.util.List;
 
 public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implements BalmMenuProvider<BlockPos>, BalmEnergyStorageProvider, BalmContainerProvider {
 
-    private final EnergyStorage energyStorage = new EnergyStorage(32000) {
+    private final DefaultEnergyStorage energyStorage = new DefaultEnergyStorage(32000) {
         @Override
         public int fill(int maxReceive, boolean simulate) {
             if (!simulate) {

@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.serialization.MapCodec;
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.common.CommonCapabilities;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.entity.AutoCompressorBlockEntity;
 import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
@@ -65,7 +66,7 @@ public class AutoCompressorBlock extends BaseEntityBlock {
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null) {
-            Container container = Balm.getProviders().getProvider(blockEntity, Container.class);
+            Container container = Balm.getCapabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
             if (container != null) {
                 return AbstractContainerMenu.getRedstoneSignalFromContainer(container);
             }

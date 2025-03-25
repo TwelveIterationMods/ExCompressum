@@ -20,6 +20,7 @@ import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -106,7 +107,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
 
     private ItemStack findItem(String name) {
         ResourceLocation location = ResourceLocation.fromNamespaceAndPath(Compat.EX_DEORUM, name);
-        Item item = Balm.getRegistries().getItem(location);
+        Item item = BuiltInRegistries.ITEM.getValue(location);
         return new ItemStack(item);
     }
 

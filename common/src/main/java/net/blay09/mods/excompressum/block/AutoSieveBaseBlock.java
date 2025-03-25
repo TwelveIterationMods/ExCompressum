@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.block;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.PropertyMap;
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.common.CommonCapabilities;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.registry.autosieveskin.WhitelistEntry;
@@ -128,7 +129,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null) {
-            Container container = Balm.getProviders().getProvider(blockEntity, Container.class);
+            Container container = Balm.getCapabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
             if (container != null) {
                 return AbstractContainerMenu.getRedstoneSignalFromContainer(container);
             }

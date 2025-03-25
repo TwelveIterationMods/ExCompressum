@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.serialization.MapCodec;
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.common.CommonCapabilities;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
@@ -97,7 +98,7 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null) {
-            Container container = Balm.getProviders().getProvider(blockEntity, Container.class);
+            Container container = Balm.getCapabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
             if (container != null) {
                 return AbstractContainerMenu.getRedstoneSignalFromContainer(container);
             }

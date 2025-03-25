@@ -3,6 +3,7 @@ package net.blay09.mods.excompressum.block.entity;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.container.ImplementedContainer;
 import net.blay09.mods.balm.api.fluid.BalmFluidTankProvider;
+import net.blay09.mods.balm.api.fluid.DefaultFluidTank;
 import net.blay09.mods.balm.api.fluid.FluidTank;
 import net.blay09.mods.balm.common.BalmBlockEntity;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
@@ -37,7 +38,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
 
-    private final FluidTank fluidTank = new FluidTank(1999) {
+    private final DefaultFluidTank fluidTank = new DefaultFluidTank(1999) {
         @Override
         public int fill(Fluid fluid, int maxFill, boolean simulate) {
             int result = super.fill(fluid, maxFill, simulate);
