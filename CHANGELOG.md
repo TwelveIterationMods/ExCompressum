@@ -1,1 +1,1 @@
-- Fixed crash when extracting from Auto Hammer on latest Balm
+- Fixed configs being accessed too early, causing defaults to be used 
