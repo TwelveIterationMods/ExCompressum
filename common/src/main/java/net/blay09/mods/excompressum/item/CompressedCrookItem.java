@@ -17,7 +17,7 @@ public class CompressedCrookItem extends DiggerItem {
 
     public CompressedCrookItem(Item.Properties properties) {
         super(Tiers.WOOD, ModBlockTags.MINEABLE_WITH_CROOK, properties
-                .durability((int) (Tiers.WOOD.getUses() * 2 * ExCompressumConfig.getActive().tools.compressedCrookDurabilityMultiplier)));
+                .durability((int) (Tiers.WOOD.getUses() * 4)));
     }
 
     @Override

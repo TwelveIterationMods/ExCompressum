@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum;
 
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.api.event.ConfigLoadedEvent;
 import net.blay09.mods.balm.api.proxy.SidedProxy;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.block.ModBlocks;
@@ -19,6 +20,7 @@ import net.blay09.mods.excompressum.menu.ModMenus;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -47,7 +49,12 @@ public class ExCompressum {
         Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.forge.compat.exdeorum.ExDeorumAddon");
         Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
 
-        AutoSieveSkinRegistry.load();
+        final var commonConfigId = ResourceLocation.fromNamespaceAndPath(MOD_ID, "common");
+        Balm.getEvents().onEvent(ConfigLoadedEvent.class, event -> {
+            if (event.getSchema().identifier().equals(commonConfigId)) {
+                AutoSieveSkinRegistry.load();
+            }
+        });
         HammerSpeedHandler.initialize();
         CompressedEnemyHandler.initialize();
         CrookPushHandler.initialize();
