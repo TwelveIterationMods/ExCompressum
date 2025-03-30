@@ -1,3 +1,17 @@
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
+}
+
 dependencies {
     modImplementation("net.blay09.mods:balm-fabric:${balm_version}") {
         changing = balm_version.contains("SNAPSHOT")
@@ -8,6 +22,6 @@ dependencies {
     }
     modCompileOnly "com.terraformersmc:modmenu:$modmenu_version"
     modCompileOnly "curse.maven:jade-324717:$jade_fabric_version"
-    modCompileOnly "curse.maven:fabricae-ex-nihilo-596911:5298550"
+    modCompileOnly "maven.modrinth:fabricae-ex-nihilo:1.0.0+mc.1.20.1"
     // modRuntimeOnly("com.github.mattidragon:configtoolkit:1.0.0")
 }
