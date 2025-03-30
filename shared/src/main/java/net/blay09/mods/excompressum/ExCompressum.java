@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Function3;
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.api.event.ConfigLoadedEvent;
 import net.blay09.mods.balm.api.proxy.SidedProxy;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.block.ModBlocks;
@@ -51,7 +52,12 @@ public class ExCompressum {
         Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.forge.compat.exdeorum.ExDeorumAddon");
         Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
 
-        AutoSieveSkinRegistry.load();
+        final var commonConfigId = ResourceLocation.fromNamespaceAndPath(MOD_ID, "common");
+        Balm.getEvents().onEvent(ConfigLoadedEvent.class, event -> {
+            if (event.getSchema().identifier().equals(commonConfigId)) {
+                AutoSieveSkinRegistry.load();
+            }
+        });
         HammerSpeedHandler.initialize();
         CompressedEnemyHandler.initialize();
         CrookPushHandler.initialize();
