@@ -52,7 +52,7 @@ public class ExCompressum {
         Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.forge.compat.exdeorum.ExDeorumAddon");
         Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
 
-        final var commonConfigId = ResourceLocation.fromNamespaceAndPath(MOD_ID, "common");
+        final var commonConfigId = new ResourceLocation(MOD_ID, "common");
         Balm.getEvents().onEvent(ConfigLoadedEvent.class, event -> {
             if (event.getSchema().identifier().equals(commonConfigId)) {
                 AutoSieveSkinRegistry.load();
