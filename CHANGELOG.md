@@ -1,1 +1,1 @@
-- Fixed crash when extracting from Auto Hammer on latest Balm
+- Fixed crash on startup on Forge 
