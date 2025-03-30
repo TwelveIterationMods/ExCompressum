@@ -1,1 +1,1 @@
-- Fixed crash on startup on Forge 
+- Fixed configs being accessed too early, causing defaults to be used 
