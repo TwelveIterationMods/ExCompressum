@@ -22,10 +22,16 @@ import net.blay09.mods.excompressum.menu.ModMenus;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.List;
 
 public class ExCompressum {
 
@@ -53,11 +59,16 @@ public class ExCompressum {
         Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
 
         final var commonConfigId = new ResourceLocation(MOD_ID, "common");
+        final Runnable configLoadHandler = AutoSieveSkinRegistry::load;
         Balm.getEvents().onEvent(ConfigLoadedEvent.class, event -> {
             if (event.getSchema().identifier().equals(commonConfigId)) {
-                AutoSieveSkinRegistry.load();
+                configLoadHandler.run();
             }
         });
+        // TODO Workaround to load config even if load event already fired earlier - will have prettier solution in future Balm versions
+        if (Balm.getConfig().getActiveConfig(new ResourceLocation(ExCompressum.MOD_ID, "common")) != null) {
+            configLoadHandler.run();
+        }
         HammerSpeedHandler.initialize();
         CompressedEnemyHandler.initialize();
         CrookPushHandler.initialize();
