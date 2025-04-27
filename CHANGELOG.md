@@ -1,1 +1,1 @@
-- Fixed crash on startup on Forge 
+- Updated to Minecraft 1.21.5
