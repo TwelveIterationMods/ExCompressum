@@ -64,7 +64,7 @@ public class ExCompressum {
             }
         });
         // TODO Workaround to load config even if load event already fired earlier - will have prettier solution in future Balm versions
-        if (Balm.getConfig().getActiveConfig(new ResourceLocation(ExCompressum.MOD_ID, "common")) != null) {
+        if (Balm.getConfig().getActiveConfig(commonConfigId) != null) {
             configLoadHandler.run();
         }
         HammerSpeedHandler.initialize();
