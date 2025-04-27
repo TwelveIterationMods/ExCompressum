@@ -1,1 +1,1 @@
-- Fixed configs being accessed too early, causing defaults to be used 
+- Fixed auto sieve skins not loading on Fabric
