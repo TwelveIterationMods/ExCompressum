@@ -20,16 +20,9 @@ import net.blay09.mods.excompressum.menu.ModMenus;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BiomeTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
 
 public class ExCompressum {
 
@@ -65,7 +58,7 @@ public class ExCompressum {
             }
         });
         // TODO Workaround to load config even if load event already fired earlier - will have prettier solution in future Balm versions
-        if (Balm.getConfig().getActiveConfig(new ResourceLocation(ExCompressum.MOD_ID, "common")) != null) {
+        if (Balm.getConfig().getActiveConfig(commonConfigId) != null) {
             configLoadHandler.run();
         }
         HammerSpeedHandler.initialize();
