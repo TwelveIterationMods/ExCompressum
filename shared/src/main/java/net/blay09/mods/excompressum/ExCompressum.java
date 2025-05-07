@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Function3;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.ConfigLoadedEvent;
+import net.blay09.mods.balm.api.event.server.ServerStartedEvent;
 import net.blay09.mods.balm.api.proxy.SidedProxy;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.block.ModBlocks;
@@ -54,9 +55,11 @@ public class ExCompressum {
         ModLoot.initialize(Balm.getLootTables());
         ModRecipeTypes.initialize(Balm.getRecipes());
 
-        Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.forge.compat.exnihilosequentia.ExNihiloSequentiaAddon");
-        Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.forge.compat.exdeorum.ExDeorumAddon");
-        Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
+        Balm.getEvents().onEvent(ServerStartedEvent.class, event -> {
+            Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.forge.compat.exnihilosequentia.ExNihiloSequentiaAddon");
+            Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.forge.compat.exdeorum.ExDeorumAddon");
+            Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
+        });
 
         final var commonConfigId = new ResourceLocation(MOD_ID, "common");
         final Runnable configLoadHandler = AutoSieveSkinRegistry::load;
