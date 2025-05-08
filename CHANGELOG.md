@@ -1,1 +1,1 @@
-- Updated to Minecraft 1.21.5
+- Fixed Ex Nihilo support not loading correctly on latest Balm version
