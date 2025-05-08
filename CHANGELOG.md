@@ -1,1 +1,1 @@
-- Fixed auto sieve skins not loading on Fabric
+- Fixed Ex Nihilo support not loading correctly on latest Balm version
