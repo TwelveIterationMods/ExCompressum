@@ -35,6 +35,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -47,6 +48,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootContext;
 
 import org.jetbrains.annotations.Nullable;
@@ -337,52 +340,47 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        currentStack = tag.getCompound("CurrentStack").flatMap(it -> ItemStack.parse(provider, it)).orElse(currentStack);
-        progress = tag.getFloatOr("Progress", 0);
-        if (tag.contains("EnergyStorage")) {
-            energyStorage.deserialize(tag.get("EnergyStorage"));
-        }
+    public void loadAdditional(ValueInput input) {
+        currentStack = input.read("CurrentStack", ItemStack.OPTIONAL_CODEC).orElse(currentStack);
+        progress = input.getFloatOr("Progress", 0);
+        input.child("EnergyStorage").ifPresent(it -> energyStorage.deserialize(it));
+        input.child("ItemHandler").ifPresent(it -> ContainerHelper.loadAllItems(it, backingContainer.getItems()));
 
-        tag.getCompound("ItemHandler").ifPresent(it -> backingContainer.deserialize(it, provider));
-
-        isDisabledByRedstone = tag.getBooleanOr("IsDisabledByRedstone", false);
-        finishedStack = tag.getCompound("FinishedStack").flatMap(it -> ItemStack.parse(provider, it)).orElse(finishedStack);
-        tag.getCompound("FirstHammer").flatMap(it -> ItemStack.parse(provider, it)).ifPresent(hammer -> hammerSlots.setItem(0, hammer));
-        tag.getCompound("SecondHammer").flatMap(it -> ItemStack.parse(provider, it)).ifPresent(hammer -> hammerSlots.setItem(1, hammer));
+        isDisabledByRedstone = input.getBooleanOr("IsDisabledByRedstone", false);
+        finishedStack = input.read("FinishedStack", ItemStack.OPTIONAL_CODEC).orElse(finishedStack);
+        input.read("FirstHammer", ItemStack.OPTIONAL_CODEC).ifPresent(hammer -> hammerSlots.setItem(0, hammer));
+        input.read("SecondHammer", ItemStack.OPTIONAL_CODEC).ifPresent(hammer -> hammerSlots.setItem(1, hammer));
 
         overflowBuffer.clear();
-        tag.getList("OverflowBuffer").ifPresent(overflowItems -> {
+        input.list("OverflowBuffer", ItemStack.CODEC).ifPresent(overflowItems -> {
             for (final var overflowItem : overflowItems) {
-                ItemStack.parse(provider, overflowItem).ifPresent(overflowBuffer::add);
+                overflowBuffer.add(overflowItem);
             }
         });
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        tag.put("EnergyStorage", energyStorage.serialize());
+    public void saveAdditional(ValueOutput output) {
+        energyStorage.serialize(output.child("EnergyStorage"));
 
-        tag.store("CurrentStack", ItemStack.OPTIONAL_CODEC, currentStack);
-        tag.store("FinishedStack", ItemStack.OPTIONAL_CODEC, finishedStack);
-        tag.putFloat("Progress", progress);
-        tag.put("ItemHandler", backingContainer.serialize(provider));
+        output.store("CurrentStack", ItemStack.OPTIONAL_CODEC, currentStack);
+        output.store("FinishedStack", ItemStack.OPTIONAL_CODEC, finishedStack);
+        output.putFloat("Progress", progress);
+        ContainerHelper.saveAllItems(output.child("ItemHandler"), backingContainer.getItems());
 
-        tag.putBoolean("IsDisabledByRedstone", isDisabledByRedstone);
+        output.putBoolean("IsDisabledByRedstone", isDisabledByRedstone);
 
-        final var overflowList = new ListTag();
+        final var overflowList = output.list("OverflowBuffer", ItemStack.CODEC);
         for (ItemStack itemStack : overflowBuffer) {
-            overflowList.add(itemStack.save(provider));
+            overflowList.add(itemStack);
         }
-        tag.put("OverflowBuffer", overflowList);
     }
 
     @Override
-    public void writeUpdateTag(CompoundTag tag) {
-        final var provider = level.registryAccess();
-        saveAdditional(tag, provider);
-        tag.store("FirstHammer", ItemStack.OPTIONAL_CODEC, hammerSlots.getItem(0));
-        tag.store("SecondHammer", ItemStack.OPTIONAL_CODEC, hammerSlots.getItem(1));
+    public void writeUpdateTag(ValueOutput output) {
+        saveAdditional(output);
+        output.store("FirstHammer", ItemStack.OPTIONAL_CODEC, hammerSlots.getItem(0));
+        output.store("SecondHammer", ItemStack.OPTIONAL_CODEC, hammerSlots.getItem(1));
     }
 
     public boolean isProcessing() {

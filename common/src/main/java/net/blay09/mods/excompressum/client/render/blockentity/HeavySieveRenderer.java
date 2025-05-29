@@ -39,7 +39,7 @@ public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEn
         if (mesh != null) {
             final var meshModel = ModModels.meshes.get(mesh.getModelName()).get();
             if (meshModel != null) {
-                dispatcher.getModelRenderer().tesselateBlock(level, meshModel.collectParts(random), blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffers.getBuffer(RenderType.translucent()), false, Integer.MAX_VALUE);
+                dispatcher.getModelRenderer().tesselateBlock(level, meshModel.collectParts(random), blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffers.getBuffer(RenderType.translucentMovingBlock()), false, Integer.MAX_VALUE);
             }
         }
 

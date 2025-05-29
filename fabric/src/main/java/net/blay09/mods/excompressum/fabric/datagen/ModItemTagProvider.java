@@ -4,71 +4,72 @@ import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tag.ModItemTags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModItemTagProvider extends FabricTagProvider<Item> {
-    public ModItemTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, Registries.ITEM, registriesFuture);
+public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
+    public ModItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, Registries.ITEM, registriesFuture, (item) -> item.builtInRegistryHolder().key());
     }
 
     @Override
     protected void addTags(HolderLookup.Provider lookup) {
-        getOrCreateTagBuilder(ModItemTags.SIEVES).addOptional(sequentia("acacia_sieve"))
-                .addOptional(sequentia("birch_sieve"))
-                .addOptional(sequentia("dark_oak_sieve"))
-                .addOptional(sequentia("jungle_sieve"))
-                .addOptional(sequentia("oak_sieve"))
-                .addOptional(sequentia("spruce_sieve"))
-                .addOptional(sequentia("cherry_sieve"))
-                .addOptional(sequentia("mangrove_sieve"))
-                .addOptional(sequentia("warped_sieve"))
-                .addOptional(sequentia("crimson_sieve"))
-                .addOptional(deorum("acacia_sieve"))
-                .addOptional(deorum("birch_sieve"))
-                .addOptional(deorum("dark_oak_sieve"))
-                .addOptional(deorum("jungle_sieve"))
-                .addOptional(deorum("oak_sieve"))
-                .addOptional(deorum("spruce_sieve"))
-                .addOptional(deorum("cherry_sieve"))
-                .addOptional(deorum("mangrove_sieve"))
-                .addOptional(deorum("warped_sieve"))
-                .addOptional(deorum("crimson_sieve"))
-                .addOptional(fabricae("acacia_sieve"))
-                .addOptional(fabricae("birch_sieve"))
-                .addOptional(fabricae("dark_oak_sieve"))
-                .addOptional(fabricae("jungle_sieve"))
-                .addOptional(fabricae("oak_sieve"))
-                .addOptional(fabricae("spruce_sieve"))
-                .addOptional(fabricae("cherry_sieve"))
-                .addOptional(fabricae("mangrove_sieve"))
-                .addOptional(fabricae("warped_sieve"))
-                .addOptional(fabricae("crimson_sieve"))
-                .addOptional(fabricae("bamboo_sieve"));
+        getOrCreateRawBuilder(ModItemTags.SIEVES).addOptionalElement(sequentia("acacia_sieve"))
+                .addOptionalElement(sequentia("birch_sieve"))
+                .addOptionalElement(sequentia("dark_oak_sieve"))
+                .addOptionalElement(sequentia("jungle_sieve"))
+                .addOptionalElement(sequentia("oak_sieve"))
+                .addOptionalElement(sequentia("spruce_sieve"))
+                .addOptionalElement(sequentia("cherry_sieve"))
+                .addOptionalElement(sequentia("mangrove_sieve"))
+                .addOptionalElement(sequentia("warped_sieve"))
+                .addOptionalElement(sequentia("crimson_sieve"))
+                .addOptionalElement(deorum("acacia_sieve"))
+                .addOptionalElement(deorum("birch_sieve"))
+                .addOptionalElement(deorum("dark_oak_sieve"))
+                .addOptionalElement(deorum("jungle_sieve"))
+                .addOptionalElement(deorum("oak_sieve"))
+                .addOptionalElement(deorum("spruce_sieve"))
+                .addOptionalElement(deorum("cherry_sieve"))
+                .addOptionalElement(deorum("mangrove_sieve"))
+                .addOptionalElement(deorum("warped_sieve"))
+                .addOptionalElement(deorum("crimson_sieve"))
+                .addOptionalElement(fabricae("acacia_sieve"))
+                .addOptionalElement(fabricae("birch_sieve"))
+                .addOptionalElement(fabricae("dark_oak_sieve"))
+                .addOptionalElement(fabricae("jungle_sieve"))
+                .addOptionalElement(fabricae("oak_sieve"))
+                .addOptionalElement(fabricae("spruce_sieve"))
+                .addOptionalElement(fabricae("cherry_sieve"))
+                .addOptionalElement(fabricae("mangrove_sieve"))
+                .addOptionalElement(fabricae("warped_sieve"))
+                .addOptionalElement(fabricae("crimson_sieve"))
+                .addOptionalElement(fabricae("bamboo_sieve"));
 
-        final var heavySieves = getOrCreateTagBuilder(ModItemTags.HEAVY_SIEVES);
+        final var heavySieves = tag(ModItemTags.HEAVY_SIEVES);
         for (Block heavySieve : ModBlocks.heavySieves) {
             heavySieves.add(heavySieve.asItem());
         }
-        heavySieves.addOptional(deorum("acacia_compressed_sieve"))
-                .addOptional(deorum("birch_compressed_sieve"))
-                .addOptional(deorum("dark_oak_compressed_sieve"))
-                .addOptional(deorum("jungle_compressed_sieve"))
-                .addOptional(deorum("oak_compressed_sieve"))
-                .addOptional(deorum("spruce_compressed_sieve"))
-                .addOptional(deorum("cherry_compressed_sieve"))
-                .addOptional(deorum("mangrove_compressed_sieve"))
-                .addOptional(deorum("warped_compressed_sieve"))
-                .addOptional(deorum("crimson_compressed_sieve"));
+        final var rawHeavySieves = getOrCreateRawBuilder(ModItemTags.HEAVY_SIEVES);
+        rawHeavySieves.addOptionalElement(deorum("acacia_compressed_sieve"))
+                .addOptionalElement(deorum("birch_compressed_sieve"))
+                .addOptionalElement(deorum("dark_oak_compressed_sieve"))
+                .addOptionalElement(deorum("jungle_compressed_sieve"))
+                .addOptionalElement(deorum("oak_compressed_sieve"))
+                .addOptionalElement(deorum("spruce_compressed_sieve"))
+                .addOptionalElement(deorum("cherry_compressed_sieve"))
+                .addOptionalElement(deorum("mangrove_compressed_sieve"))
+                .addOptionalElement(deorum("warped_compressed_sieve"))
+                .addOptionalElement(deorum("crimson_compressed_sieve"));
 
-        getOrCreateTagBuilder(ModItemTags.HAMMERS).addTag(ModItemTags.WOODEN_HAMMERS)
+        tag(ModItemTags.HAMMERS).addTag(ModItemTags.WOODEN_HAMMERS)
                 .addTag(ModItemTags.STONE_HAMMERS)
                 .addTag(ModItemTags.IRON_HAMMERS)
                 .addTag(ModItemTags.COPPER_HAMMERS)
@@ -76,109 +77,111 @@ public class ModItemTagProvider extends FabricTagProvider<Item> {
                 .addTag(ModItemTags.DIAMOND_HAMMERS)
                 .addTag(ModItemTags.NETHERITE_HAMMERS)
                 .addTag(ModItemTags.EXOTIC_HAMMERS);
-        getOrCreateTagBuilder(ModItemTags.WOODEN_HAMMERS).addOptional(sequentia("wooden_hammer"))
-                .addOptional(deorum("wooden_hammer"))
-                .addOptional(fabricae("wooden_hammer"));
-        getOrCreateTagBuilder(ModItemTags.STONE_HAMMERS).addOptional(sequentia("stone_hammer"))
-                .addOptional(deorum("stone_hammer"))
-                .addOptional(fabricae("stone_hammer"));
-        getOrCreateTagBuilder(ModItemTags.IRON_HAMMERS).addOptional(sequentia("iron_hammer"))
-                .addOptional(deorum("iron_hammer"))
-                .addOptional(fabricae("iron_hammer"));
-        getOrCreateTagBuilder(ModItemTags.COPPER_HAMMERS).addOptional(sequentia("copper_hammer")).addOptional(deorum("copper_hammer"));
-        getOrCreateTagBuilder(ModItemTags.GOLDEN_HAMMERS).addOptional(sequentia("golden_hammer"))
-                .addOptional(deorum("golden_hammer"))
-                .addOptional(fabricae("golden_hammer"));
-        getOrCreateTagBuilder(ModItemTags.DIAMOND_HAMMERS).addOptional(sequentia("diamond_hammer"))
-                .addOptional(deorum("diamond_hammer"))
-                .addOptional(fabricae("diamond_hammer"));
-        getOrCreateTagBuilder(ModItemTags.NETHERITE_HAMMERS).addOptional(sequentia("netherite_hammer"))
-                .addOptional(deorum("netherite_hammer"))
-                .addOptional(fabricae("netherite_hammer"));
-        getOrCreateTagBuilder(ModItemTags.EXOTIC_HAMMERS).addOptional(sequentia("bamboo_hammer"))
-                .addOptional(sequentia("andesite_hammer"))
-                .addOptional(sequentia("basalt_hammer"))
-                .addOptional(sequentia("blackstone_hammer"))
-                .addOptional(sequentia("bone_hammer"))
-                .addOptional(sequentia("calcite_hammer"))
-                .addOptional(sequentia("cherry_hammer"))
-                .addOptional(sequentia("deepslate_hammer"))
-                .addOptional(sequentia("diorite_hammer"))
-                .addOptional(sequentia("dripstone_hammer"))
-                .addOptional(sequentia("granite_hammer"))
-                .addOptional(sequentia("nether_brick_hammer"))
-                .addOptional(sequentia("red_nether_brick_hammer"))
-                .addOptional(sequentia("terracotta_hammer"))
-                .addOptional(sequentia("tuff_hammer"));
+        getOrCreateRawBuilder(ModItemTags.WOODEN_HAMMERS).addOptionalElement(sequentia("wooden_hammer"))
+                .addOptionalElement(deorum("wooden_hammer"))
+                .addOptionalElement(fabricae("wooden_hammer"));
+        getOrCreateRawBuilder(ModItemTags.STONE_HAMMERS).addOptionalElement(sequentia("stone_hammer"))
+                .addOptionalElement(deorum("stone_hammer"))
+                .addOptionalElement(fabricae("stone_hammer"));
+        getOrCreateRawBuilder(ModItemTags.IRON_HAMMERS).addOptionalElement(sequentia("iron_hammer"))
+                .addOptionalElement(deorum("iron_hammer"))
+                .addOptionalElement(fabricae("iron_hammer"));
+        getOrCreateRawBuilder(ModItemTags.COPPER_HAMMERS).addOptionalElement(sequentia("copper_hammer")).addOptionalElement(deorum("copper_hammer"));
+        getOrCreateRawBuilder(ModItemTags.GOLDEN_HAMMERS).addOptionalElement(sequentia("golden_hammer"))
+                .addOptionalElement(deorum("golden_hammer"))
+                .addOptionalElement(fabricae("golden_hammer"));
+        getOrCreateRawBuilder(ModItemTags.DIAMOND_HAMMERS).addOptionalElement(sequentia("diamond_hammer"))
+                .addOptionalElement(deorum("diamond_hammer"))
+                .addOptionalElement(fabricae("diamond_hammer"));
+        getOrCreateRawBuilder(ModItemTags.NETHERITE_HAMMERS).addOptionalElement(sequentia("netherite_hammer"))
+                .addOptionalElement(deorum("netherite_hammer"))
+                .addOptionalElement(fabricae("netherite_hammer"));
+        getOrCreateRawBuilder(ModItemTags.EXOTIC_HAMMERS).addOptionalElement(sequentia("bamboo_hammer"))
+                .addOptionalElement(sequentia("andesite_hammer"))
+                .addOptionalElement(sequentia("basalt_hammer"))
+                .addOptionalElement(sequentia("blackstone_hammer"))
+                .addOptionalElement(sequentia("bone_hammer"))
+                .addOptionalElement(sequentia("calcite_hammer"))
+                .addOptionalElement(sequentia("cherry_hammer"))
+                .addOptionalElement(sequentia("deepslate_hammer"))
+                .addOptionalElement(sequentia("diorite_hammer"))
+                .addOptionalElement(sequentia("dripstone_hammer"))
+                .addOptionalElement(sequentia("granite_hammer"))
+                .addOptionalElement(sequentia("nether_brick_hammer"))
+                .addOptionalElement(sequentia("red_nether_brick_hammer"))
+                .addOptionalElement(sequentia("terracotta_hammer"))
+                .addOptionalElement(sequentia("tuff_hammer"));
 
-        final var woodenCrucibles = getOrCreateTagBuilder(ModItemTags.WOODEN_CRUCIBLES);
+        final var woodenCrucibles = tag(ModItemTags.WOODEN_CRUCIBLES);
         for (final var woodenCrucible : ModBlocks.woodenCrucibles) {
             woodenCrucibles.add(woodenCrucible.asItem());
         }
-        woodenCrucibles.addOptional(sequentia("acacia_crucible"))
-                .addOptional(sequentia("birch_crucible"))
-                .addOptional(sequentia("cherry_crucible"))
-                .addOptional(sequentia("dark_oak_crucible"))
-                .addOptional(sequentia("jungle_crucible"))
-                .addOptional(sequentia("mangrove_crucible"))
-                .addOptional(sequentia("oak_crucible"))
-                .addOptional(sequentia("spruce_crucible"))
-                .addOptional(sequentia("crimson_crucible"))
-                .addOptional(sequentia("warped_crucible"));
-        woodenCrucibles.addOptional(deorum("acacia_crucible"))
-                .addOptional(deorum("birch_crucible"))
-                .addOptional(deorum("cherry_crucible"))
-                .addOptional(deorum("dark_oak_crucible"))
-                .addOptional(deorum("jungle_crucible"))
-                .addOptional(deorum("mangrove_crucible"))
-                .addOptional(deorum("oak_crucible"))
-                .addOptional(deorum("spruce_crucible"))
-                .addOptional(deorum("crimson_crucible"))
-                .addOptional(deorum("warped_crucible"));
-        woodenCrucibles.addOptional(fabricae("acacia_crucible"))
-                .addOptional(fabricae("birch_crucible"))
-                .addOptional(fabricae("cherry_crucible"))
-                .addOptional(fabricae("dark_oak_crucible"))
-                .addOptional(fabricae("jungle_crucible"))
-                .addOptional(fabricae("mangrove_crucible"))
-                .addOptional(fabricae("oak_crucible"))
-                .addOptional(fabricae("spruce_crucible"))
-                .addOptional(fabricae("crimson_crucible"))
-                .addOptional(fabricae("warped_crucible"))
-                .addOptional(fabricae("bamboo_crucible"));
+        final var rawWoodenCrucibles = getOrCreateRawBuilder(ModItemTags.WOODEN_CRUCIBLES);
+        rawWoodenCrucibles.addOptionalElement(sequentia("acacia_crucible"))
+                .addOptionalElement(sequentia("birch_crucible"))
+                .addOptionalElement(sequentia("cherry_crucible"))
+                .addOptionalElement(sequentia("dark_oak_crucible"))
+                .addOptionalElement(sequentia("jungle_crucible"))
+                .addOptionalElement(sequentia("mangrove_crucible"))
+                .addOptionalElement(sequentia("oak_crucible"))
+                .addOptionalElement(sequentia("spruce_crucible"))
+                .addOptionalElement(sequentia("crimson_crucible"))
+                .addOptionalElement(sequentia("warped_crucible"));
+        rawWoodenCrucibles.addOptionalElement(deorum("acacia_crucible"))
+                .addOptionalElement(deorum("birch_crucible"))
+                .addOptionalElement(deorum("cherry_crucible"))
+                .addOptionalElement(deorum("dark_oak_crucible"))
+                .addOptionalElement(deorum("jungle_crucible"))
+                .addOptionalElement(deorum("mangrove_crucible"))
+                .addOptionalElement(deorum("oak_crucible"))
+                .addOptionalElement(deorum("spruce_crucible"))
+                .addOptionalElement(deorum("crimson_crucible"))
+                .addOptionalElement(deorum("warped_crucible"));
+        rawWoodenCrucibles.addOptionalElement(fabricae("acacia_crucible"))
+                .addOptionalElement(fabricae("birch_crucible"))
+                .addOptionalElement(fabricae("cherry_crucible"))
+                .addOptionalElement(fabricae("dark_oak_crucible"))
+                .addOptionalElement(fabricae("jungle_crucible"))
+                .addOptionalElement(fabricae("mangrove_crucible"))
+                .addOptionalElement(fabricae("oak_crucible"))
+                .addOptionalElement(fabricae("spruce_crucible"))
+                .addOptionalElement(fabricae("crimson_crucible"))
+                .addOptionalElement(fabricae("warped_crucible"))
+                .addOptionalElement(fabricae("bamboo_crucible"));
 
-        getOrCreateTagBuilder(ModItemTags.WOODEN_CROOKS).addOptional(sequentia("wooden_crook"))
-                .addOptional(deorum("crook"))
-                .addOptional(fabricae("wooden_crook"));
+        getOrCreateRawBuilder(ModItemTags.WOODEN_CROOKS).addOptionalElement(sequentia("wooden_crook"))
+                .addOptionalElement(deorum("crook"))
+                .addOptionalElement(fabricae("wooden_crook"));
 
-        getOrCreateTagBuilder(ModItemTags.COMPRESSED_HAMMERS).add(ModItems.compressedWoodenHammer,
+        tag(ModItemTags.COMPRESSED_HAMMERS).add(ModItems.compressedWoodenHammer,
                         ModItems.compressedStoneHammer,
                         ModItems.compressedIronHammer,
                         ModItems.compressedDiamondHammer,
-                        ModItems.compressedNetheriteHammer)
-                .addOptional(deorum("compressed_wooden_hammer"))
-                .addOptional(deorum("compressed_stone_hammer"))
-                .addOptional(deorum("compressed_iron_hammer"))
-                .addOptional(deorum("compressed_golden_hammer"))
-                .addOptional(deorum("compressed_diamond_hammer"))
-                .addOptional(deorum("compressed_netherite_hammer"));
+                        ModItems.compressedNetheriteHammer);
+        getOrCreateRawBuilder(ModItemTags.COMPRESSED_HAMMERS)
+                .addOptionalElement(deorum("compressed_wooden_hammer"))
+                .addOptionalElement(deorum("compressed_stone_hammer"))
+                .addOptionalElement(deorum("compressed_iron_hammer"))
+                .addOptionalElement(deorum("compressed_golden_hammer"))
+                .addOptionalElement(deorum("compressed_diamond_hammer"))
+                .addOptionalElement(deorum("compressed_netherite_hammer"));
 
-        getOrCreateTagBuilder(ModItemTags.COMPRESSED_CROOKS).addTag(ModItemTags.WOODEN_COMPRESSED_CROOKS);
-        getOrCreateTagBuilder(ModItemTags.WOODEN_COMPRESSED_CROOKS).add(ModItems.compressedCrook);
+        tag(ModItemTags.COMPRESSED_CROOKS).addTag(ModItemTags.WOODEN_COMPRESSED_CROOKS);
+        tag(ModItemTags.WOODEN_COMPRESSED_CROOKS).add(ModItems.compressedCrook);
 
-        getOrCreateTagBuilder(ModItemTags.CHICKEN_STICKS).add(ModItems.chickenStick);
+        tag(ModItemTags.CHICKEN_STICKS).add(ModItems.chickenStick);
 
-        final var baits = getOrCreateTagBuilder(ModItemTags.BAITS);
+        final var baits = tag(ModItemTags.BAITS);
         for (Block bait : ModBlocks.baits) {
             baits.add(bait.asItem());
         }
 
-        getOrCreateTagBuilder(ModItemTags.CRUSHED_ANDESITES).addOptional(sequentia("crushed_andesite")).addOptional(fabricae("crushed_andesite"));
-        getOrCreateTagBuilder(ModItemTags.CRUSHED_DIORITES).addOptional(sequentia("crushed_diorite")).addOptional(fabricae("crushed_diorite"));
-        getOrCreateTagBuilder(ModItemTags.CRUSHED_GRANITES).addOptional(sequentia("crushed_granite")).addOptional(fabricae("crushed_granite"));
-        getOrCreateTagBuilder(ModItemTags.CRUSHED_NETHERRACKS).addOptional(sequentia("crushed_netherrack")).addOptional(deorum("crushed_netherrack")).addOptional(fabricae("crushed_netherrack"));
-        getOrCreateTagBuilder(ModItemTags.CRUSHED_END_STONES).addOptional(sequentia("crushed_end_stone")).addOptional(deorum("crushed_end_stone")).addOptional(fabricae("crushed_endstone"));
-        getOrCreateTagBuilder(ModItemTags.DUSTS).addOptional(sequentia("dust")).addOptional(deorum("dust")).addOptional(fabricae("dust"));
+        getOrCreateRawBuilder(ModItemTags.CRUSHED_ANDESITES).addOptionalElement(sequentia("crushed_andesite")).addOptionalElement(fabricae("crushed_andesite"));
+        getOrCreateRawBuilder(ModItemTags.CRUSHED_DIORITES).addOptionalElement(sequentia("crushed_diorite")).addOptionalElement(fabricae("crushed_diorite"));
+        getOrCreateRawBuilder(ModItemTags.CRUSHED_GRANITES).addOptionalElement(sequentia("crushed_granite")).addOptionalElement(fabricae("crushed_granite"));
+        getOrCreateRawBuilder(ModItemTags.CRUSHED_NETHERRACKS).addOptionalElement(sequentia("crushed_netherrack")).addOptionalElement(deorum("crushed_netherrack")).addOptionalElement(fabricae("crushed_netherrack"));
+        getOrCreateRawBuilder(ModItemTags.CRUSHED_END_STONES).addOptionalElement(sequentia("crushed_end_stone")).addOptionalElement(deorum("crushed_end_stone")).addOptionalElement(fabricae("crushed_endstone"));
+        getOrCreateRawBuilder(ModItemTags.DUSTS).addOptionalElement(sequentia("dust")).addOptionalElement(deorum("dust")).addOptionalElement(fabricae("dust"));
     }
 
     private static ResourceLocation sequentia(String name) {

@@ -26,6 +26,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.Objects;
 
@@ -147,28 +149,28 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
     }
 
     @Override
-    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        solidVolume = tagCompound.getIntOr("SolidVolume", 0);
-        tagCompound.getCompound("FluidTank").ifPresent(fluidTank::deserialize);
-        ContainerHelper.loadAllItems(tagCompound, items, provider);
-        tagCompound.getString("TargetFluid").map(ResourceLocation::parse).flatMap(BuiltInRegistries.FLUID::getOptional)
+    public void loadAdditional(ValueInput input) {
+        solidVolume = input.getIntOr("SolidVolume", 0);
+        input.child("FluidTank").ifPresent(fluidTank::deserialize);
+        ContainerHelper.loadAllItems(input, items);
+        input.getString("TargetFluid").map(ResourceLocation::parse).flatMap(BuiltInRegistries.FLUID::getOptional)
                 .ifPresent(targetFluid -> currentTargetFluid = targetFluid);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
+    public void saveAdditional(ValueOutput output) {
         if (currentTargetFluid != null) {
             final var fluidId = BuiltInRegistries.FLUID.getKey(currentTargetFluid);
-            tagCompound.putString("TargetFluid", Objects.toString(fluidId));
+            output.putString("TargetFluid", Objects.toString(fluidId));
         }
-        tagCompound.putInt("SolidVolume", solidVolume);
-        tagCompound.put("FluidTank", fluidTank.serialize());
-        ContainerHelper.saveAllItems(tagCompound, items, provider);
+        output.putInt("SolidVolume", solidVolume);
+        fluidTank.serialize(output.child("FluidTank"));
+        ContainerHelper.saveAllItems(output, items);
     }
 
     @Override
-    public void writeUpdateTag(CompoundTag tag) {
-        saveAdditional(tag, level.registryAccess());
+    public void writeUpdateTag(ValueOutput output) {
+        saveAdditional(output);
     }
 
     @Override

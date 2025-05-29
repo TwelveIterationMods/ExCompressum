@@ -8,6 +8,6 @@ import net.fabricmc.api.ModInitializer;
 public class FabricExCompressum implements ModInitializer {
     @Override
     public void onInitialize() {
-        Balm.initialize(ExCompressum.MOD_ID, EmptyLoadContext.INSTANCE, ExCompressum::initialize);
+        Balm.initializeMod(ExCompressum.MOD_ID, EmptyLoadContext.INSTANCE, ExCompressum::initialize);
     }
 }

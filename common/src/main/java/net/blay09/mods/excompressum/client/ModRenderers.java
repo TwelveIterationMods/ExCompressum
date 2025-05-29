@@ -9,7 +9,7 @@ import net.blay09.mods.excompressum.client.render.entity.AngryChickenRenderer;
 import net.blay09.mods.excompressum.entity.ModEntities;
 import net.minecraft.client.model.ChickenModel;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 
 import static net.blay09.mods.excompressum.ExCompressum.id;
@@ -17,10 +17,10 @@ import static net.blay09.mods.excompressum.ExCompressum.id;
 public class ModRenderers {
 
     public static void initialize(BalmRenderers renderers) {
-        renderers.setBlockRenderType(() -> ModBlocks.autoSieve, RenderType.cutout());
-        renderers.setBlockRenderType(() -> ModBlocks.autoHeavySieve, RenderType.cutout());
-        renderers.setBlockRenderType(() -> ModBlocks.autoHammer, RenderType.cutout());
-        renderers.setBlockRenderType(() -> ModBlocks.autoCompressedHammer, RenderType.cutout());
+        renderers.setBlockRenderType(() -> ModBlocks.autoSieve, ChunkSectionLayer.CUTOUT);
+        renderers.setBlockRenderType(() -> ModBlocks.autoHeavySieve, ChunkSectionLayer.CUTOUT);
+        renderers.setBlockRenderType(() -> ModBlocks.autoHammer, ChunkSectionLayer.CUTOUT);
+        renderers.setBlockRenderType(() -> ModBlocks.autoCompressedHammer, ChunkSectionLayer.CUTOUT);
 
         renderers.registerBlockEntityRenderer(id("heavy_sieve"), ModBlockEntities.heavySieve::get, HeavySieveRenderer::new);
         renderers.registerBlockEntityRenderer(id("auto_sieve"), ModBlockEntities.autoSieve::get, AutoSieveRenderer::normal);

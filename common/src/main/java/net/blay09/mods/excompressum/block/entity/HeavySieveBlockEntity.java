@@ -12,8 +12,6 @@ import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -23,6 +21,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.LootContext;
 
 import org.jetbrains.annotations.Nullable;
@@ -169,34 +169,26 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
     }
 
     @Override
-    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        currentStack = tagCompound.getCompound("Content").flatMap(it -> ItemStack.parse(provider, it)).orElse(ItemStack.EMPTY);
-        meshStack = tagCompound.getCompound("Mesh").flatMap(it -> ItemStack.parse(provider, it)).orElse(ItemStack.EMPTY);
-        progress = tagCompound.getFloatOr("Progress", 0);
-        particleTicks = tagCompound.getIntOr("ParticleTicks", 0);
-        particleCount = tagCompound.getIntOr("ParticleCount", 0);
+    public void loadAdditional(ValueInput input) {
+        currentStack = input.read("Content", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+        meshStack = input.read("Mesh", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+        progress = input.getFloatOr("Progress", 0);
+        particleTicks = input.getIntOr("ParticleTicks", 0);
+        particleCount = input.getIntOr("ParticleCount", 0);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        if (currentStack.isEmpty()) {
-            tagCompound.remove("Content");
-        } else {
-            tagCompound.put("Content", currentStack.save(provider));
-        }
-        if (meshStack.isEmpty()) {
-            tagCompound.remove("Mesh");
-        } else {
-            tagCompound.put("Mesh", meshStack.save(provider));
-        }
-        tagCompound.putFloat("Progress", progress);
-        tagCompound.putInt("ParticleTicks", particleTicks);
-        tagCompound.putInt("ParticleCount", particleCount);
+    public void saveAdditional(ValueOutput output) {
+        output.store("Content", ItemStack.OPTIONAL_CODEC, currentStack);
+        output.store("Mesh", ItemStack.OPTIONAL_CODEC, meshStack);
+        output.putFloat("Progress", progress);
+        output.putInt("ParticleTicks", particleTicks);
+        output.putInt("ParticleCount", particleCount);
     }
 
     @Override
-    public void writeUpdateTag(CompoundTag tag) {
-        saveAdditional(tag, level.registryAccess());
+    public void writeUpdateTag(ValueOutput output) {
+        saveAdditional(output);
     }
 
     public ItemStack getCurrentStack() {

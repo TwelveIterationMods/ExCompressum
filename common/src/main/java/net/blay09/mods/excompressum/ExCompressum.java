@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.ConfigLoadedEvent;
 import net.blay09.mods.balm.api.event.server.ServerStartedEvent;
-import net.blay09.mods.balm.api.proxy.SidedProxy;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
@@ -25,13 +24,15 @@ import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.function.Supplier;
+
 public class ExCompressum {
 
     public static final String MOD_ID = "excompressum";
     public static final Logger logger = LogManager.getLogger(MOD_ID);
 
-    public static SidedProxy<CommonProxy> proxy = Balm.sidedProxy("net.blay09.mods.excompressum.CommonProxy",
-            "net.blay09.mods.excompressum.client.ClientProxy");
+    public static Supplier<CommonProxy> proxy = Balm.<CommonProxy>sidedProxy("net.blay09.mods.excompressum.CommonProxy",
+            "net.blay09.mods.excompressum.client.ClientProxy").buildLazily();
 
     public static void initialize() {
         ExCompressumAPI.__setupAPI(new InternalMethodsImpl());

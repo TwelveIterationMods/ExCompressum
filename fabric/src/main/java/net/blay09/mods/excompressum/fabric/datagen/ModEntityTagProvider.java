@@ -2,21 +2,20 @@ package net.blay09.mods.excompressum.fabric.datagen;
 
 import net.blay09.mods.excompressum.tag.ModEntityTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.world.entity.EntityType;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModEntityTagProvider extends FabricTagProvider<EntityType<?>> {
+public class ModEntityTagProvider extends EntityTypeTagsProvider {
     public ModEntityTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, Registries.ENTITY_TYPE, registriesFuture);
+        super(output, registriesFuture);
     }
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
-        getOrCreateTagBuilder(ModEntityTags.COMPRESSABLE).add(
+        tag(ModEntityTags.COMPRESSABLE).add(
                 EntityType.ZOMBIE,
                 EntityType.CREEPER,
                 EntityType.SKELETON,

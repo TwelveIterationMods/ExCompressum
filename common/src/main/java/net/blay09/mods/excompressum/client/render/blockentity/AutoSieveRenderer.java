@@ -111,7 +111,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         if (mesh != null) {
             final var meshModel = ModModels.meshes.get(mesh.getModelName()).get();
             if (meshModel != null) {
-                dispatcher.getModelRenderer().tesselateBlock(level, meshModel.collectParts(random), blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffer.getBuffer(RenderType.translucent()), false, Integer.MAX_VALUE);
+                dispatcher.getModelRenderer().tesselateBlock(level, meshModel.collectParts(random), blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffer.getBuffer(RenderType.translucentMovingBlock()), false, Integer.MAX_VALUE);
             }
         }
 

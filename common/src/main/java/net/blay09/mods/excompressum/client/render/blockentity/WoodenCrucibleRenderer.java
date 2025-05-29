@@ -55,7 +55,7 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
             float blue = (float) (color & 255) / 255.0F;
             dispatcher.getModelRenderer()
                     .renderModel(poseStack.last(),
-                            buffers.getBuffer(RenderType.translucent()),
+                            buffers.getBuffer(RenderType.translucentMovingBlock()),
                             ModModels.woodenCrucibleLiquid.get(),
                             red,
                             green,
@@ -75,7 +75,7 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
                     blockEntity.getBlockPos(),
                     blockEntity.getLevel(),
                     poseStack,
-                    buffers.getBuffer(RenderType.translucent()),
+                    buffers.getBuffer(RenderType.translucentMovingBlock()),
                     false,
                     dispatcher.getBlockModel(solidState).collectParts(random));
             poseStack.popPose();

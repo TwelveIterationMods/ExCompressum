@@ -11,6 +11,8 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class AutoSieveBlockEntity extends AbstractAutoSieveBlockEntity implements BalmEnergyStorageProvider {
 
@@ -33,15 +35,15 @@ public class AutoSieveBlockEntity extends AbstractAutoSieveBlockEntity implement
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.loadAdditional(tag, provider);
-        energyStorage.deserialize(tag.get("EnergyStorage"));
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        input.child("EnergyStorage").ifPresent(it -> energyStorage.deserialize(it));
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        super.saveAdditional(tag, provider);
-        tag.put("EnergyStorage", energyStorage.serialize());
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        energyStorage.serialize(output.child("EnergyStorage"));
     }
 
     @Override

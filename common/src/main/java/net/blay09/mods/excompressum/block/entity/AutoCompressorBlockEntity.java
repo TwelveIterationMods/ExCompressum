@@ -29,6 +29,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -39,6 +40,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -248,42 +251,41 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
     }
 
     @Override
-    public void loadAdditional(CompoundTag tagCompound, HolderLookup.Provider provider) {
-        currentRecipe = tagCompound.getString("CurrentRecipe")
+    public void loadAdditional(ValueInput input) {
+        currentRecipe = input.getString("CurrentRecipe")
                 .map(ResourceLocation::parse)
                 .map(ExRegistries.getCompressedRecipeRegistry()::getRecipeById)
                 .orElse(currentRecipe);
-        isDisabledByRedstone = tagCompound.getBooleanOr("IsDisabledByRedstone", false);
-        progress = tagCompound.getFloatOr("Progress", 0);
-        tagCompound.getCompound("ItemHandler").ifPresent(it -> backingContainer.deserialize(it, provider));
-        energyStorage.deserialize(tagCompound.get("EnergyStorage"));
+        isDisabledByRedstone = input.getBooleanOr("IsDisabledByRedstone", false);
+        progress = input.getFloatOr("Progress", 0);
+        input.child("ItemHandler").ifPresent(it -> ContainerHelper.loadAllItems(it, backingContainer.getItems()));
+        input.child("EnergyStorage").ifPresent(it -> energyStorage.deserialize(it));
         overflowBuffer.clear();
-        tagCompound.getList("OverflowBuffer").ifPresent(overflowItems -> {
+        input.list("OverflowBuffer", ItemStack.CODEC).ifPresent(overflowItems -> {
             for (final var overflowItem : overflowItems) {
-                ItemStack.parse(provider, overflowItem).ifPresent(overflowBuffer::add);
+                overflowBuffer.add(overflowItem);
             }
         });
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
+    public void saveAdditional(ValueOutput output) {
         if (currentRecipe != null) {
-            tag.putString("CurrentRecipe", currentRecipe.id().toString());
+            output.putString("CurrentRecipe", currentRecipe.id().toString());
         }
-        tag.putBoolean("IsDisabledByRedstone", isDisabledByRedstone);
-        tag.putFloat("Progress", progress);
-        tag.put("ItemHandler", backingContainer.serialize(provider));
-        tag.put("EnergyStorage", energyStorage.serialize());
-        final var overflowList = new ListTag();
+        output.putBoolean("IsDisabledByRedstone", isDisabledByRedstone);
+        output.putFloat("Progress", progress);
+        ContainerHelper.saveAllItems(output.child("ItemHandler"), backingContainer.getItems());
+        energyStorage.serialize(output.child("EnergyStorage"));
+        final var overflowList = output.list("OverflowBuffer", ItemStack.CODEC);
         for (ItemStack itemStack : overflowBuffer) {
-            overflowList.add(itemStack.save(provider));
+            overflowList.add(itemStack);
         }
-        tag.put("OverflowBuffer", overflowList);
     }
 
     @Override
-    public void writeUpdateTag(CompoundTag tag) {
-        saveAdditional(tag, level.registryAccess());
+    public void writeUpdateTag(ValueOutput output) {
+        saveAdditional(output);
     }
 
     public boolean isProcessing() {

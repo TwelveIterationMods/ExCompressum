@@ -19,11 +19,9 @@ import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -33,6 +31,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -45,6 +44,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -328,57 +329,48 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
     }
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        currentStack = tag.read("CurrentStack", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
-        progress = tag.getFloatOr("Progress", 0);
-        ResolvableProfile.CODEC.parse(NbtOps.INSTANCE, tag.get("CustomSkin")).resultOrPartial(($$0x) -> {
-            ExCompressum.logger.error("Failed to load profile from auto sieve: {}", $$0x);
-        }).ifPresent(it -> {
-            setSkinProfile(it);
-        });
-        foodBoost = tag.getFloatOr("FoodBoost", 0);
-        foodBoostTicks = tag.getIntOr("FoodBoostTicks", 0);
-        particleTicks = tag.getIntOr("ParticleTicks", 0);
-        particleCount = tag.getIntOr("ParticleCount", 0);
-        tag.getCompound("ItemHandler").ifPresent(it -> backingContainer.deserialize(it, provider));
-        isDisabledByRedstone = tag.getBooleanOr("IsDisabledByRedstone", false);
+    public void loadAdditional(ValueInput input) {
+        currentStack = input.read("CurrentStack", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+        progress = input.getFloatOr("Progress", 0);
+        input.read("CustomSkin", ResolvableProfile.CODEC).ifPresent(this::setSkinProfile);
+        foodBoost = input.getFloatOr("FoodBoost", 0);
+        foodBoostTicks = input.getIntOr("FoodBoostTicks", 0);
+        particleTicks = input.getIntOr("ParticleTicks", 0);
+        particleCount = input.getIntOr("ParticleCount", 0);
+        input.child("ItemHandler").ifPresent(it -> ContainerHelper.loadAllItems(it, backingContainer.getItems()));
+        isDisabledByRedstone = input.getBooleanOr("IsDisabledByRedstone", false);
         overflowBuffer.clear();
-        tag.getList("OverflowBuffer").ifPresent(overflowItems -> {
+        input.list("OverflowBuffer", ItemStack.CODEC).ifPresent(overflowItems -> {
             for (final var overflowItem : overflowItems) {
-                ItemStack.parse(provider, overflowItem).ifPresent(overflowBuffer::add);
+                overflowBuffer.add(overflowItem);
             }
         });
 
-        tag.read("MeshStack", ItemStack.CODEC).ifPresent(meshStack -> meshSlots.setItem(0, meshStack));
+        input.read("MeshStack", ItemStack.OPTIONAL_CODEC).ifPresent(meshStack -> meshSlots.setItem(0, meshStack));
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        tag.store("CurrentStack", ItemStack.OPTIONAL_CODEC, currentStack);
-        tag.putFloat("Progress", progress);
-        if (skinProfile != null) {
-            final var customSkinTag = ResolvableProfile.CODEC.encodeStart(NbtOps.INSTANCE, this.skinProfile).getOrThrow();
-            tag.put("CustomSkin", customSkinTag);
-        }
-        tag.putFloat("FoodBoost", foodBoost);
-        tag.putInt("FoodBoostTicks", foodBoostTicks);
-        tag.putInt("ParticleTicks", particleTicks);
-        tag.putInt("ParticleCount", particleCount);
-        tag.put("ItemHandler", backingContainer.serialize(provider));
-        tag.putBoolean("IsDisabledByRedstone", isDisabledByRedstone());
-        final var overflowList = new ListTag();
+    public void saveAdditional(ValueOutput output) {
+        output.store("CurrentStack", ItemStack.OPTIONAL_CODEC, currentStack);
+        output.putFloat("Progress", progress);
+        output.storeNullable("CustomSkin", ResolvableProfile.CODEC, skinProfile);
+        output.putFloat("FoodBoost", foodBoost);
+        output.putInt("FoodBoostTicks", foodBoostTicks);
+        output.putInt("ParticleTicks", particleTicks);
+        output.putInt("ParticleCount", particleCount);
+        ContainerHelper.saveAllItems(output.child("ItemHandler"), backingContainer.getItems());
+        output.putBoolean("IsDisabledByRedstone", isDisabledByRedstone());
+        final var overflowList = output.list("OverflowBuffer", ItemStack.CODEC);
         for (ItemStack itemStack : overflowBuffer) {
-            overflowList.add(itemStack.save(provider));
+            overflowList.add(itemStack);
         }
-        tag.put("OverflowBuffer", overflowList);
     }
 
     @Override
-    public void writeUpdateTag(CompoundTag tag) {
-        final var provider = level.registryAccess();
-        saveAdditional(tag, provider);
+    public void writeUpdateTag(ValueOutput output) {
+        saveAdditional(output);
         ItemStack meshStack = meshSlots.getItem(0);
-        tag.store("MeshStack", ItemStack.OPTIONAL_CODEC, meshStack);
+        output.store("MeshStack", ItemStack.OPTIONAL_CODEC, meshStack);
     }
 
     public float getEnergyPercentage() {

@@ -3,24 +3,24 @@ package net.blay09.mods.excompressum.fabric.datagen;
 import net.blay09.mods.excompressum.block.CompressedBlockType;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.tag.ModBlockTags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModBlockTagProvider extends FabricTagProvider<Block> {
-    public ModBlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, Registries.BLOCK, registriesFuture);
+public class ModBlockTagProvider extends IntrinsicHolderTagsProvider<Block> {
+    public ModBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, Registries.BLOCK, registriesFuture, (block) -> block.builtInRegistryHolder().key());
     }
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
-        final var mineablePickaxe = getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE);
+        final var mineablePickaxe = tag(BlockTags.MINEABLE_WITH_PICKAXE);
         mineablePickaxe.add(ModBlocks.autoHammer,
                 ModBlocks.autoCompressedHammer,
                 ModBlocks.autoSieve,
@@ -36,7 +36,7 @@ public class ModBlockTagProvider extends FabricTagProvider<Block> {
                 ModBlocks.compressedBlocks[CompressedBlockType.NETHERRACK.ordinal()],
                 ModBlocks.compressedBlocks[CompressedBlockType.NETHERRACK.ordinal()]);
 
-        final var mineableShovel = getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL);
+        final var mineableShovel = tag(BlockTags.MINEABLE_WITH_SHOVEL);
         mineableShovel.add(ModBlocks.compressedBlocks[CompressedBlockType.DIRT.ordinal()],
                 ModBlocks.compressedBlocks[CompressedBlockType.GRAVEL.ordinal()],
                 ModBlocks.compressedBlocks[CompressedBlockType.SAND.ordinal()],
@@ -48,7 +48,7 @@ public class ModBlockTagProvider extends FabricTagProvider<Block> {
                 ModBlocks.compressedBlocks[CompressedBlockType.DUST.ordinal()],
                 ModBlocks.compressedBlocks[CompressedBlockType.SOUL_SAND.ordinal()]);
 
-        final var mineableAxe = getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE);
+        final var mineableAxe = tag(BlockTags.MINEABLE_WITH_AXE);
         for (final var heavySieve : ModBlocks.heavySieves) {
             mineableAxe.add(heavySieve);
         }
@@ -56,8 +56,8 @@ public class ModBlockTagProvider extends FabricTagProvider<Block> {
             mineableAxe.add(woodenCrucible);
         }
 
-        getOrCreateTagBuilder(ModBlockTags.MINEABLE_WITH_CROOK).addOptionalTag(BlockTags.LEAVES);
-        getOrCreateTagBuilder(ModBlockTags.MINEABLE_WITH_HAMMER).addOptionalTag(BlockTags.LOGS).add(
+        tag(ModBlockTags.MINEABLE_WITH_CROOK).addOptionalTag(BlockTags.LEAVES);
+        tag(ModBlockTags.MINEABLE_WITH_HAMMER).addOptionalTag(BlockTags.LOGS).add(
                 Blocks.ANDESITE,
                 Blocks.COBBLESTONE,
                 Blocks.DIORITE,
@@ -75,9 +75,9 @@ public class ModBlockTagProvider extends FabricTagProvider<Block> {
                 ModBlocks.compressedBlocks[CompressedBlockType.NETHERRACK.ordinal()],
                 ModBlocks.compressedBlocks[CompressedBlockType.SAND.ordinal()]);
 
-        getOrCreateTagBuilder(ModBlockTags.MINEABLE_WITH_CHICKEN_STICK).addTag(ModBlockTags.MINEABLE_WITH_HAMMER);
+        tag(ModBlockTags.MINEABLE_WITH_CHICKEN_STICK).addTag(ModBlockTags.MINEABLE_WITH_HAMMER);
 
-        getOrCreateTagBuilder(ModBlockTags.INCORRECT_FOR_CHICKEN_STICK);
+        tag(ModBlockTags.INCORRECT_FOR_CHICKEN_STICK);
     }
 
 }

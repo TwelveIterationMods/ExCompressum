@@ -9,6 +9,6 @@ import net.fabricmc.api.ClientModInitializer;
 public class FabricExCompressumClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        BalmClient.initialize(ExCompressum.MOD_ID, EmptyLoadContext.INSTANCE, ExCompressumClient::initialize);
+        BalmClient.initializeMod(ExCompressum.MOD_ID, EmptyLoadContext.INSTANCE, ExCompressumClient::initialize);
     }
 }
