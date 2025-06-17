@@ -6,6 +6,6 @@ import net.blay09.mods.balm.api.client.BalmClient;
 //
 //    @Override
 //    public void onInitializeClient() {
-//        BalmClient.initialize(ExCompressum.MOD_ID, ExCompressumClient::initialize);
+//        BalmClient.initializeMod(ExCompressum.MOD_ID, ExCompressumClient::initialize);
 //    }
 //}
