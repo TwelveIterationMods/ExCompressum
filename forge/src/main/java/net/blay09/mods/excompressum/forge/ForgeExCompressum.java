@@ -19,7 +19,7 @@ public class ForgeExCompressum {
 
     public ForgeExCompressum(FMLJavaModLoadingContext context) {
         final var loadContext = new ForgeLoadContext(context.getModEventBus());
-        Balm.initialize(ExCompressum.MOD_ID, loadContext, ExCompressum::initialize);
+        Balm.initializeMod(ExCompressum.MOD_ID, loadContext, ExCompressum::initialize);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> BalmClient.initialize(ExCompressum.MOD_ID, loadContext, ExCompressumClient::initialize));
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::imc);

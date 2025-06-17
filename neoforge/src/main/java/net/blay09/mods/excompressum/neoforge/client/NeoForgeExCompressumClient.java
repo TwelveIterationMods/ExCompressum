@@ -13,6 +13,6 @@ public class NeoForgeExCompressumClient {
 
     public NeoForgeExCompressumClient(IEventBus modEventBus) {
         final var context = new NeoForgeLoadContext(modEventBus);
-        BalmClient.initialize(ExCompressum.MOD_ID, context, ExCompressumClient::initialize);
+        BalmClient.initializeMod(ExCompressum.MOD_ID, context, ExCompressumClient::initialize);
     }
 }

@@ -18,7 +18,7 @@ public class NeoForgeExCompressum {
 
     public NeoForgeExCompressum(IEventBus modEventBus) {
         final var context = new NeoForgeLoadContext(modEventBus);
-        Balm.initialize(ExCompressum.MOD_ID, context, ExCompressum::initialize);
+        Balm.initializeMod(ExCompressum.MOD_ID, context, ExCompressum::initialize);
 
         modEventBus.addListener(this::imc);
     }
