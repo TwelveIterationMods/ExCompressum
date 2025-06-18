@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.forge;
 
 import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.EmptyLoadContext;
 import net.blay09.mods.balm.api.client.BalmClient;
 import net.blay09.mods.balm.forge.ForgeLoadContext;
 import net.blay09.mods.excompressum.ExCompressum;
@@ -22,7 +21,7 @@ public class ForgeExCompressum {
         Balm.initializeMod(ExCompressum.MOD_ID, loadContext, ExCompressum::initialize);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> BalmClient.initializeMod(ExCompressum.MOD_ID, loadContext, ExCompressumClient::initialize));
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::imc);
+        InterModEnqueueEvent.getBus(context.getModBusGroup()).addListener(this::imc);
     }
 
     private void imc(InterModEnqueueEvent event) {
