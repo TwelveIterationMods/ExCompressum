@@ -8,6 +8,7 @@ import net.blay09.mods.excompressum.block.entity.AutoCompressorBlockEntity;
 import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -48,7 +49,7 @@ public class AutoCompressorBlock extends BaseEntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
-        if (!player.isShiftKeyDown() && !level.isClientSide) {
+        if (!player.isShiftKeyDown() && !level.isClientSide()) {
             if (level.getBlockEntity(pos) instanceof MenuProvider menuProvider) {
                 Balm.getNetworking().openMenu(player, menuProvider);
             }
@@ -63,7 +64,7 @@ public class AutoCompressorBlock extends BaseEntityBlock {
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null) {
             Container container = Balm.getCapabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
@@ -100,7 +101,7 @@ public class AutoCompressorBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide ? createTickerHelper(type, ModBlockEntities.autoCompressor.get(), AutoCompressorBlockEntity::serverTick) : null;
+        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.autoCompressor.get(), AutoCompressorBlockEntity::serverTick) : null;
     }
 
     @Override

@@ -194,7 +194,7 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
                 energyStorage.drain(effectiveEnergy, false);
                 progress = Math.min(1f, progress + getEffectiveSpeed());
                 if (progress >= 1) {
-                    if (!level.isClientSide) {
+                    if (!level.isClientSide()) {
                         CompressedRecipe compressedRecipe = currentRecipe;
                         if (compressedRecipe != null) {
                             ItemStack resultStack = compressedRecipe.resultStack().copy();

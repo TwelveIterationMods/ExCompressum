@@ -25,7 +25,7 @@ public class CompressedCrookItem extends Item {
     }
 
     public static void pushEntity(ItemStack itemStack, Player player, Entity entity, InteractionHand hand) {
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide()) {
             double distance = Math.sqrt(Math.pow(player.getX() - entity.getX(), 2) + Math.pow(player.getZ() - entity.getZ(), 2));
             double scalarX = (player.getX() - entity.getX()) / distance;
             double scalarZ = (player.getZ() - entity.getZ()) / distance;
@@ -35,7 +35,7 @@ public class CompressedCrookItem extends Item {
             double velZ = 0.0 - scalarZ * strength;
             entity.push(velX, velY, velZ);
         }
-        itemStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+        itemStack.hurtAndBreak(1, player, hand.asEquipmentSlot());
     }
 
     @Override

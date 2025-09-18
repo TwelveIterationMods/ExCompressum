@@ -123,7 +123,7 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
         if (progress >= 1f) {
             particleCount = 0;
 
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 SieveMeshRegistryEntry sieveMesh = getSieveMesh();
                 if (sieveMesh != null) {
                     LootContext lootContext = LootTableUtils.buildLootContext(((ServerLevel) level), currentStack);

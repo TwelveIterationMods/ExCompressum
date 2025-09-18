@@ -101,9 +101,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
             }
             return InteractionResult.SUCCESS;
         } else if (heldItem == Items.NAME_TAG && itemStack.has(DataComponents.CUSTOM_NAME)) {
-            autoSieve.setSkinProfile(new ResolvableProfile(Optional.of(itemStack.get(DataComponents.CUSTOM_NAME).getString()),
-                    Optional.empty(),
-                    new PropertyMap()));
+            autoSieve.setSkinProfile(ResolvableProfile.createUnresolved(itemStack.get(DataComponents.CUSTOM_NAME).getString()));
             return InteractionResult.CONSUME;
         }
 
@@ -126,7 +124,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null) {
             Container container = Balm.getCapabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
@@ -145,7 +143,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         final var profile = stack.get(DataComponents.PROFILE);
         if (profile != null) {
-            tooltip.accept(getSkinTooltip(profile.gameProfile().getName()));
+            tooltip.accept(getSkinTooltip(profile.partialProfile().name()));
         } else {
             if (currentRandomName == null) {
                 updateRandomSkinName();
@@ -220,7 +218,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide
+        return level.isClientSide()
                 ? createTickerHelper(type, (BlockEntityType<AbstractAutoSieveBlockEntity>) getBlockEntityType(), AbstractAutoSieveBlockEntity::clientTick)
                 : createTickerHelper(type, (BlockEntityType<AbstractAutoSieveBlockEntity>) getBlockEntityType(), AbstractAutoSieveBlockEntity::serverTick);
     }

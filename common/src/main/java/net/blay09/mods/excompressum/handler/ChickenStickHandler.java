@@ -38,7 +38,7 @@ public class ChickenStickHandler {
                 chicken.remove(Entity.RemovalReason.DISCARDED);
 
                 Level level = chicken.level();
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                     if (!event.getPlayer().getAbilities().instabuild) {
                         heldItem.shrink(1);
                     }

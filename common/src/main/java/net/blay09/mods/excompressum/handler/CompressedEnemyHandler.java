@@ -32,7 +32,7 @@ public class CompressedEnemyHandler {
     public static void onEntityAdded(EntityAddedEvent event) {
         final var level = event.getLevel();
         final var entity = event.getEntity();
-        if (!level.isClientSide && entity instanceof Mob) {
+        if (!level.isClientSide() && entity instanceof Mob) {
             final var persistentData = Balm.getHooks().getPersistentData(entity);
             if (entity.getType().is(ModEntityTags.COMPRESSABLE)) {
                 final var modData = persistentData.getCompound(ExCompressum.MOD_ID);
@@ -62,7 +62,7 @@ public class CompressedEnemyHandler {
         final var level = entity.level();
         final var damageSource = event.getDamageSource();
         final var persistentData = Balm.getHooks().getPersistentData(entity);
-        if (!level.isClientSide && persistentData.getCompound(ExCompressum.MOD_ID).flatMap(it -> it.getBoolean(COMPRESSED)).orElse(false)) {
+        if (!level.isClientSide() && persistentData.getCompound(ExCompressum.MOD_ID).flatMap(it -> it.getBoolean(COMPRESSED)).orElse(false)) {
             if (entity instanceof Mob) {
                 if (damageSource.getEntity() instanceof Player player && !Balm.getHooks().isFakePlayer(player)) {
                     if (StupidUtils.hasSilkTouchModifier((LivingEntity) damageSource.getEntity())) {

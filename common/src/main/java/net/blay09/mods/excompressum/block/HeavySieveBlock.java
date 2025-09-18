@@ -116,7 +116,7 @@ public class HeavySieveBlock extends BaseEntityBlock {
             return InteractionResult.FAIL;
         }
 
-        if (!level.isClientSide && player.isShiftKeyDown()) {
+        if (!level.isClientSide() && player.isShiftKeyDown()) {
             ItemStack meshStack = heavySieve.getMeshStack();
             if (!meshStack.isEmpty() && heavySieve.getCurrentStack().isEmpty()) {
                 if (player.getInventory().add(meshStack)) {
@@ -164,7 +164,7 @@ public class HeavySieveBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide
+        return level.isClientSide()
                 ? createTickerHelper(type, ModBlockEntities.heavySieve.get(), HeavySieveBlockEntity::clientTick)
                 : createTickerHelper(type, ModBlockEntities.heavySieve.get(), HeavySieveBlockEntity::serverTick);
     }

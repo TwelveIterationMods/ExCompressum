@@ -54,7 +54,7 @@ public class BaitBlockEntity extends BalmBlockEntity {
 
         ticksSinceSpawnCheck++;
         if (ticksSinceSpawnCheck >= SPAWN_CHECK_INTERVAL) {
-            if (!level.isClientSide && level.random.nextFloat() <= baitType.getChance()) {
+            if (!level.isClientSide() && level.random.nextFloat() <= baitType.getChance()) {
                 if (checkSpawnConditions(true) == EnvironmentalConditionResult.CanSpawn) {
                     final float range = MIN_DISTANCE_NO_PLAYERS;
                     if (level.getEntitiesOfClass(Player.class,

@@ -73,7 +73,7 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
-        if (!player.isShiftKeyDown() && !level.isClientSide) {
+        if (!player.isShiftKeyDown() && !level.isClientSide()) {
             final BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof MenuProvider menuProvider) {
                 Balm.getNetworking().openMenu(player, menuProvider);
@@ -95,7 +95,7 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null) {
             Container container = Balm.getCapabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
@@ -151,7 +151,7 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide ? createTickerHelper(type, ModBlockEntities.autoHammer.get(), AutoHammerBlockEntity::serverTick) : createTickerHelper(type,
+        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.autoHammer.get(), AutoHammerBlockEntity::serverTick) : createTickerHelper(type,
                 ModBlockEntities.autoHammer.get(),
                 AutoHammerBlockEntity::clientTick);
     }

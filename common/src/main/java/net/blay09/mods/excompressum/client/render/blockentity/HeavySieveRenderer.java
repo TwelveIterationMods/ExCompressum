@@ -1,22 +1,29 @@
 package net.blay09.mods.excompressum.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
-import net.blay09.mods.excompressum.client.ModModels;
 import net.blay09.mods.excompressum.block.entity.HeavySieveBlockEntity;
-import net.blay09.mods.excompressum.utils.StupidUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.blay09.mods.excompressum.client.ModModels;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
-public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEntity> {
+public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEntity, HeavySieveRenderer.HeavySieveRenderState> {
+
+    public static class HeavySieveRenderState extends BlockEntityRenderState {
+        public String meshModelName;
+        public float progress;
+        public ItemStackRenderState item;
+    }
 
     private static final RandomSource random = RandomSource.create();
 
@@ -24,37 +31,34 @@ public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEn
     }
 
     @Override
-    public void render(HeavySieveBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay, Vec3 cameraPos) {
-        Level level = blockEntity.getLevel();
-        if (level == null) {
-            return;
-        }
+    public HeavySieveRenderState createRenderState() {
+        return new HeavySieveRenderState();
+    }
 
-        BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+    @Override
+    public void extractRenderState(HeavySieveBlockEntity blockEntity, HeavySieveRenderState renderState, float delta, Vec3 vec, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
+        BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
 
+        renderState.meshModelName = blockEntity.getSieveMesh() != null ? blockEntity.getSieveMesh().getModelName() : null;
+        renderState.progress = blockEntity.getProgress();
+
+    }
+
+    @Override
+    public void submit(HeavySieveRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         poseStack.pushPose();
-
-        // Render mesh
-        SieveMeshRegistryEntry mesh = blockEntity.getSieveMesh();
-        if (mesh != null) {
-            final var meshModel = ModModels.meshes.get(mesh.getModelName()).get();
-            if (meshModel != null) {
-                dispatcher.getModelRenderer().tesselateBlock(level, meshModel.collectParts(random), blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffers.getBuffer(RenderType.translucentMovingBlock()), false, Integer.MAX_VALUE);
-            }
+        final var meshModel = renderState.meshModelName != null ? ModModels.meshes.get(renderState.meshModelName).get() : null;
+        if (meshModel != null) {
+            submitNodeCollector.submitBlockModel(poseStack, RenderType.entitySolid(TextureAtlas.LOCATION_BLOCKS), meshModel, 0f, 0f, 0f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         }
 
-        ItemStack currentStack = blockEntity.getCurrentStack();
-        if (!currentStack.isEmpty()) {
-            BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
-            if (contentState != null) {
-                float progress = blockEntity.getProgress();
-                poseStack.pushPose();
-                poseStack.translate(0.0625f, 0.5625f, 0.0625f);
-                float tt = 0.42f;
-                poseStack.scale(0.88f, tt - progress * tt, 0.88f);
-                dispatcher.renderSingleBlock(contentState, poseStack, buffers, combinedLight, combinedOverlay);
-                poseStack.popPose();
-            }
+        if (!renderState.item.isEmpty()) {
+            poseStack.pushPose();
+            poseStack.translate(0.0625f, 0.5625f, 0.0625f);
+            float tt = 0.42f;
+            poseStack.scale(0.88f, tt - renderState.progress * tt, 0.88f);
+            renderState.item.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            poseStack.popPose();
         }
 
         poseStack.popPose();

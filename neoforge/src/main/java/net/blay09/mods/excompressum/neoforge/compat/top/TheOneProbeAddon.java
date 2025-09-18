@@ -80,7 +80,7 @@ public class TheOneProbeAddon  {
 
         private void addAutoSieveInfo(AbstractAutoSieveBlockEntity tileEntity, ProbeMode mode, IProbeInfo info) {
             if (tileEntity.getSkinProfile() != null) {
-                info.text(Component.translatable("tooltip.excompressum.sieveSkin", tileEntity.getSkinProfile().gameProfile().getName()));
+                info.text(Component.translatable("tooltip.excompressum.sieveSkin", tileEntity.getSkinProfile().partialProfile().name()));
             }
             if (tileEntity.getFoodBoost() > 1f) {
                 info.text(Component.translatable("tooltip.excompressum.speedBoost", tileEntity.getFoodBoost()));

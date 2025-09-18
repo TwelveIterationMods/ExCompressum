@@ -218,7 +218,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
                 progress += getEffectiveSpeed();
                 isDirty = true;
                 if (progress >= 1) {
-                    if (!level.isClientSide) {
+                    if (!level.isClientSide()) {
                         if (level.random.nextFloat() <= ExCompressumConfig.getActive().automation.autoHammerDecay) {
                             ItemStack firstHammer = hammerSlots.getItem(0);
                             if (!firstHammer.isEmpty()) {

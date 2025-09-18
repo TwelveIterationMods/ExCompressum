@@ -3,81 +3,79 @@ package net.blay09.mods.excompressum.client.render.blockentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.blay09.mods.excompressum.client.ModModels;
 import net.blay09.mods.excompressum.block.entity.WoodenCrucibleBlockEntity;
-import net.blay09.mods.excompressum.utils.StupidUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
-public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibleBlockEntity> {
+public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibleBlockEntity, WoodenCrucibleRenderer.WoodenCrucibleRenderState> {
 
-    private final RandomSource random = RandomSource.create();
+    public static class WoodenCrucibleRenderState extends BlockEntityRenderState {
+        public ItemStackRenderState item;
+        public int waterColor;
+        public float fluidLevel;
+        public float solidLevel;
+    }
+
+    private final ItemModelResolver itemModelResolver;
 
     public WoodenCrucibleRenderer(BlockEntityRendererProvider.Context context) {
+        itemModelResolver = context.itemModelResolver();
     }
 
     @Override
-    public void render(WoodenCrucibleBlockEntity blockEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay, Vec3 cameraPos) {
-        Level level = blockEntity.getLevel();
-        if (level == null) {
-            return;
-        }
+    public void extractRenderState(WoodenCrucibleBlockEntity blockEntity, WoodenCrucibleRenderState renderState, float delta, Vec3 vec, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
+        BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
+        final var level = blockEntity.getLevel();
+        itemModelResolver.updateForTopItem(renderState.item, blockEntity.getItem(0), ItemDisplayContext.FIXED, level, null, 0);
+        renderState.fluidLevel = (float) blockEntity.getFluidTank().getAmount() / (float) blockEntity.getFluidTank().getCapacity();
+        renderState.waterColor = level != null ? level.getBiome(blockEntity.getBlockPos()).value().getWaterColor() : 0xFFFFFFFF;
+        renderState.solidLevel = (float) blockEntity.getSolidVolume() / (float) blockEntity.getSolidCapacity();
+    }
 
-        BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+    @Override
+    public WoodenCrucibleRenderState createRenderState() {
+        return new WoodenCrucibleRenderState();
+    }
 
-        ItemStack outputStack = blockEntity.getItem(0);
-        if (!outputStack.isEmpty()) {
-            BlockState outputState = StupidUtils.getStateFromItemStack(outputStack);
-            if (outputState != null) {
-                poseStack.pushPose();
-                poseStack.translate(0.0625f, 0.2f, 0.0625f);
-                poseStack.scale(0.875f, 0.75f, 0.875f);
-                dispatcher.renderSingleBlock(outputState, poseStack, buffers, combinedLight, combinedOverlay);
-                poseStack.popPose();
-            }
-        }
-
-        final var fluidTank = blockEntity.getFluidTank();
-        if (!fluidTank.isEmpty()) {
+    @Override
+    public void submit(WoodenCrucibleRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
+        if (!renderState.item.isEmpty()) {
             poseStack.pushPose();
-            float fillLevel = (float) fluidTank.getAmount() / (float) blockEntity.getFluidTank().getCapacity();
-            poseStack.translate(0f, fillLevel * 11 / 16f, 0f);
-            final var color = level.getBiome(blockEntity.getBlockPos()).value().getWaterColor();
-            float red = (float) (color >> 16 & 255) / 255.0F;
-            float green = (float) (color >> 8 & 255) / 255.0F;
-            float blue = (float) (color & 255) / 255.0F;
-            dispatcher.getModelRenderer()
-                    .renderModel(poseStack.last(),
-                            buffers.getBuffer(RenderType.translucentMovingBlock()),
-                            ModModels.woodenCrucibleLiquid.get(),
-                            red,
-                            green,
-                            blue,
-                            combinedLight,
-                            combinedOverlay);
+            poseStack.translate(0.0625f, 0.2f, 0.0625f);
+            poseStack.scale(0.875f, 0.75f, 0.875f);
+            renderState.item.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
 
-        int solidVolume = blockEntity.getSolidVolume();
-        if (solidVolume > 0) {
+        if (renderState.fluidLevel > 0f) {
+            poseStack.pushPose();
+            poseStack.translate(0f, renderState.fluidLevel * 11 / 16f, 0f);
+            final var color = renderState.waterColor;
+            float red = (float) (color >> 16 & 255) / 255f;
+            float green = (float) (color >> 8 & 255) / 255f;
+            float blue = (float) (color & 255) / 255f;
+            final var model = ModModels.woodenCrucibleLiquid.get();
+            submitNodeCollector.submitBlockModel(poseStack, RenderType.translucentMovingBlock(), model, red, green, blue, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            poseStack.popPose();
+        }
+
+        if (renderState.solidLevel > 0) {
             poseStack.pushPose();
             poseStack.translate(0.0625f, 0.251f, 0.0625f);
-            poseStack.scale(0.875f, (float) (0.71 * (float) solidVolume / (float) blockEntity.getSolidCapacity()), 0.875f);
+            poseStack.scale(0.875f, (float) 0.71 * renderState.solidLevel, 0.875f);
             BlockState solidState = Blocks.DARK_OAK_LEAVES.defaultBlockState();
-            dispatcher.renderBatched(solidState,
-                    blockEntity.getBlockPos(),
-                    blockEntity.getLevel(),
-                    poseStack,
-                    buffers.getBuffer(RenderType.translucentMovingBlock()),
-                    false,
-                    dispatcher.getBlockModel(solidState).collectParts(random));
+            submitNodeCollector.submitBlock(poseStack, solidState, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
     }

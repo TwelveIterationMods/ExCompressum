@@ -2,46 +2,65 @@ package net.blay09.mods.excompressum.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
-import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
+import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tag.ModItemTags;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import org.joml.AxisAngle4f;
 import org.joml.Math;
 import org.joml.Quaternionf;
 
-public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEntity> {
+public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEntity, AutoHammerRenderer.AutoHammerRenderState> {
 
+    public static class AutoHammerRenderState extends BlockEntityRenderState {
+        public boolean skip;
+        public Direction facing;
+        public float hammerAngle;
+        public ItemStackRenderState hammerItem;
+        public ItemStackRenderState firstHammerItem;
+        public ItemStackRenderState secondHammerItem;
+        public ItemStackRenderState item;
+        public float progress;
+    }
+
+    private final ItemModelResolver itemModelResolver;
     private final boolean isCompressed;
 
     private ItemStack hammerItemStack = ItemStack.EMPTY;
 
     public AutoHammerRenderer(BlockEntityRendererProvider.Context context, boolean isCompressed) {
+        this.itemModelResolver = context.itemModelResolver();
         this.isCompressed = isCompressed;
     }
 
     @Override
-    public void render(AutoHammerBlockEntity tileEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay, Vec3 cameraPos) {
-        final var level = tileEntity.getLevel();
-        if (level == null) {
-            return;
-        }
+    public void extractRenderState(AutoHammerBlockEntity blockEntity, AutoHammerRenderState renderState, float delta, Vec3 vec, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
+        BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
 
-        if (tileEntity.isUgly()) {
-            return;
+        renderState.skip = blockEntity.isUgly();
+        if (blockEntity.shouldAnimate()) {
+            blockEntity.hammerAngle += 0.4f * delta;
+            renderState.hammerAngle = blockEntity.hammerAngle;
         }
 
         if (hammerItemStack.isEmpty()) {
@@ -58,84 +77,90 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
             }
         }
 
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+        itemModelResolver.updateForTopItem(renderState.hammerItem, hammerItemStack, ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
+        itemModelResolver.updateForTopItem(renderState.firstHammerItem, blockEntity.getUpgradeStack(0), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
+        itemModelResolver.updateForTopItem(renderState.secondHammerItem, blockEntity.getUpgradeStack(1), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
+        itemModelResolver.updateForTopItem(renderState.item, blockEntity.getCurrentStack(), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
+
+        renderState.progress = blockEntity.getProgress();
+    }
+
+    @Override
+    public AutoHammerRenderState createRenderState() {
+        return new AutoHammerRenderState();
+    }
+
+    @Override
+    public void submit(AutoHammerRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
+        if (renderState.skip) {
+            return;
+        }
 
         poseStack.pushPose();
         poseStack.translate(0.5f, 0f, 0.5f);
-        poseStack.mulPose(tileEntity.getFacing().getRotation());
+        poseStack.mulPose(renderState.facing.getRotation());
         poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(-90), 0f, 1f, 0f)));
 
-        if (tileEntity.shouldAnimate()) {
-            tileEntity.hammerAngle += 0.4f * partialTicks;
-        }
-
-        // Render the hammers
         poseStack.pushPose();
         poseStack.scale(0.5f, 0.5f, 0.5f);
         poseStack.pushPose();
         poseStack.translate(-0.7f, -0.3f, 0f);
-        poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(Math.sin(tileEntity.hammerAngle) * 30), 0, 0, 1f)));
+        poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(Math.sin(renderState.hammerAngle) * 30), 0, 0, 1f)));
         poseStack.translate(-0.4f, 0.2f, 0f);
-        itemRenderer.renderStatic(hammerItemStack, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, buffers, level, 0);
+        renderState.hammerItem.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
 
-        ItemStack firstHammer = tileEntity.getUpgradeStack(0);
-        if (!firstHammer.isEmpty()) {
+        if (!renderState.firstHammerItem.isEmpty()) {
             poseStack.pushPose();
             poseStack.translate(-0.7f, -0.3f, 0f);
             poseStack.translate(0f, 0.1f, 0.33f);
             poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(10f), 0f, 1, 0)));
-            poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(Math.sin(tileEntity.hammerAngle - 8f) * 30), 0, 0, 1f)));
+            poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(Math.sin(renderState.hammerAngle - 8f) * 30), 0, 0, 1f)));
             poseStack.translate(-0.4f, 0.2f, 0f);
-            itemRenderer.renderStatic(firstHammer, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, buffers, level, 0);
+            renderState.firstHammerItem.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
 
-        ItemStack secondHammer = tileEntity.getUpgradeStack(1);
-        if (!secondHammer.isEmpty()) {
+        if (!renderState.secondHammerItem.isEmpty()) {
             poseStack.pushPose();
             poseStack.translate(-0.7f, -0.3f, 0f);
             poseStack.translate(0f, 0.1f, -0.33f);
             poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(-10), 0f, 1f, 0)));
-            poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(Math.sin(tileEntity.hammerAngle + 8f) * 30), 0, 0, 1f)));
+            poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(Math.sin(renderState.hammerAngle + 8f) * 30), 0, 0, 1f)));
             poseStack.translate(-0.4f, 0.2f, 0f);
-            itemRenderer.renderStatic(secondHammer, ItemDisplayContext.FIXED, combinedLight, combinedOverlay, poseStack, buffers, level, 0);
+            renderState.secondHammerItem.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
 
         poseStack.popPose();
 
-        ItemStack currentStack = tileEntity.getCurrentStack();
-        if (!currentStack.isEmpty()) {
-            BlockState contentState = StupidUtils.getStateFromItemStack(currentStack);
-            if (!contentState.isAir()) {
-                poseStack.pushPose();
-                poseStack.translate(-0.4625f, -0.04f, -0.2);
-                poseStack.scale(0.4f, 0.4f, 0.4f);
-                BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-                dispatcher.renderSingleBlock(contentState, poseStack, buffers, combinedLight, combinedOverlay);
+        if (!renderState.item.isEmpty()) {
+            poseStack.pushPose();
+            poseStack.translate(-0.4625f, -0.04f, -0.2);
+            poseStack.scale(0.4f, 0.4f, 0.4f);
+            BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+            // TODO dispatcher.renderSingleBlock(contentState, poseStack, buffers, combinedLight, combinedOverlay);
 
-                if (tileEntity.getProgress() > 0f) {
-                    int blockDamage = Math.min(9, (int) (tileEntity.getProgress() * 9f));
-                    final var crumblingBufferSource = Minecraft.getInstance().renderBuffers().crumblingBufferSource();
-                    final var crumblingBuffer = crumblingBufferSource.getBuffer(ModelBakery.DESTROY_TYPES.get(blockDamage));
-                    final var vertexConsumer = new SheetedDecalTextureGenerator(crumblingBuffer, poseStack.last(), 1f);
-                    dispatcher.renderBreakingTexture(contentState, tileEntity.getBlockPos(), level, poseStack, vertexConsumer);
-                }
-
-                poseStack.popPose();
+            if (renderState.progress > 0f) {
+                int blockDamage = Math.min(9, (int) (renderState.progress * 9f));
+                final var crumblingBufferSource = Minecraft.getInstance().renderBuffers().crumblingBufferSource();
+                final var crumblingBuffer = crumblingBufferSource.getBuffer(ModelBakery.DESTROY_TYPES.get(blockDamage));
+                final var vertexConsumer = new SheetedDecalTextureGenerator(crumblingBuffer, poseStack.last(), 1f);
+                // TODO dispatcher.renderBreakingTexture(contentState, tileEntity.getBlockPos(), level, poseStack, vertexConsumer);
             }
+
+            poseStack.popPose();
         }
 
         poseStack.popPose();
     }
 
-    public static <T extends AutoHammerBlockEntity> BlockEntityRenderer<T> normal(BlockEntityRendererProvider.Context context) {
-        return (BlockEntityRenderer<T>) new AutoHammerRenderer(context, false);
+    public static <T extends AutoHammerBlockEntity> BlockEntityRenderer<T, AutoHammerRenderState> normal(BlockEntityRendererProvider.Context context) {
+        return (BlockEntityRenderer<T, AutoHammerRenderState>) new AutoHammerRenderer(context, false);
     }
 
-    public static <T extends AutoHammerBlockEntity> BlockEntityRenderer<T> compressed(BlockEntityRendererProvider.Context context) {
-        return (BlockEntityRenderer<T>) new AutoHammerRenderer(context, true);
+    public static <T extends AutoHammerBlockEntity> BlockEntityRenderer<T, AutoHammerRenderState> compressed(BlockEntityRendererProvider.Context context) {
+        return (BlockEntityRenderer<T, AutoHammerRenderState>) new AutoHammerRenderer(context, true);
     }
 
 }

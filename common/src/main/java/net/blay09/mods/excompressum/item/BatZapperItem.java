@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.item;
 
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.energy.BalmEnergyStorageProvider;
-import net.blay09.mods.balm.api.energy.EnergyStorage;
 import net.blay09.mods.balm.common.CommonCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,7 +10,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -58,7 +56,7 @@ public class BatZapperItem extends Item {
         level.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 1f, level.random.nextFloat() * 0.1f + 0.9f);
         player.swing(hand);
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             final int range = 5;
             for (Bat entity : level.getEntitiesOfClass(Bat.class,
                     new AABB(pos.getX() - range, pos.getY() - range, pos.getZ() - range, pos.getX() + range, pos.getY() + range, pos.getZ() + range))) {
@@ -67,7 +65,7 @@ public class BatZapperItem extends Item {
             }
         }
 
-        itemStack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+        itemStack.hurtAndBreak(1, player, hand.asEquipmentSlot());
         return InteractionResult.SUCCESS;
     }
 

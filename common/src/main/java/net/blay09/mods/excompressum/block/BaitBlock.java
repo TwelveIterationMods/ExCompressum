@@ -73,7 +73,7 @@ public class BaitBlock extends BaseEntityBlock {
         }
 
         final var environmentStatus = bait.checkSpawnConditions(true);
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             final var chatComponent = Component.translatable(environmentStatus.langKey, environmentStatus.params);
             chatComponent.withStyle(environmentStatus != EnvironmentalConditionResult.CanSpawn ? ChatFormatting.RED : ChatFormatting.GREEN);
             player.displayClientMessage(chatComponent, false);
@@ -86,7 +86,7 @@ public class BaitBlock extends BaseEntityBlock {
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         if (placer instanceof Player player && level.getBlockEntity(pos) instanceof BaitBlockEntity bait) {
             final var environmentStatus = bait.checkSpawnConditions(true);
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 final var chatComponent = Component.translatable(environmentStatus.langKey, environmentStatus.params);
                 chatComponent.withStyle(environmentStatus != EnvironmentalConditionResult.CanSpawn ? ChatFormatting.RED : ChatFormatting.GREEN);
                 player.displayClientMessage(chatComponent, false);
@@ -124,7 +124,7 @@ public class BaitBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide ? createTickerHelper(type, ModBlockEntities.bait.get(), BaitBlockEntity::serverTick) : null;
+        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.bait.get(), BaitBlockEntity::serverTick) : null;
     }
 
     @Override

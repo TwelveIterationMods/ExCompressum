@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import com.mojang.authlib.properties.PropertyMap;
 import net.blay09.mods.balm.api.container.BalmContainerProvider;
 import net.blay09.mods.balm.api.container.DefaultContainer;
 import net.blay09.mods.balm.api.container.DelegateContainer;
@@ -51,9 +50,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-
-import static net.minecraft.world.level.block.entity.SkullBlockEntity.CHECKED_MAIN_THREAD_EXECUTOR;
 
 public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEntity implements BalmMenuProvider<BlockPos>, BalmContainerProvider {
 
@@ -240,7 +236,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
                 isDirty = true;
 
                 if (progress >= 1) {
-                    if (!level.isClientSide) {
+                    if (!level.isClientSide()) {
                         SieveMeshRegistryEntry sieveMesh = getSieveMesh();
                         if (sieveMesh != null) {
                             Collection<ItemStack> rewards = rollSieveRewards((ServerLevel) level, currentStack, sieveMesh, getEffectiveLuck(), level.random);
@@ -397,7 +393,6 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
 
     public void setSkinProfile(@Nullable ResolvableProfile skinProfile) {
         this.skinProfile = skinProfile;
-        updateSkinProfile();
         isDirty = true;
         setChanged();
     }
@@ -405,17 +400,6 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
     @Nullable
     public ResolvableProfile getSkinProfile() {
         return skinProfile;
-    }
-
-    private void updateSkinProfile() {
-        if (skinProfile != null && !this.skinProfile.isResolved()) {
-            skinProfile.resolve().thenAcceptAsync((result) -> {
-                skinProfile = result;
-                setChanged();
-            }, CHECKED_MAIN_THREAD_EXECUTOR);
-        } else {
-            setChanged();
-        }
     }
 
     public float getSpeedMultiplier() {
@@ -489,11 +473,6 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
         return false;
     }
 
-    public Direction getFacing() {
-        BlockState state = getBlockState();
-        return state.hasProperty(AutoSieveBaseBlock.FACING) ? state.getValue(AutoSieveBaseBlock.FACING) : Direction.NORTH;
-    }
-
     public boolean isDisabledByRedstone() {
         return isDisabledByRedstone;
     }
@@ -547,7 +526,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
         if (profile == null) {
             final var randomSkin = AutoSieveSkinRegistry.getRandomSkin();
             if (randomSkin != null) {
-                setSkinProfile(new ResolvableProfile(Optional.of(randomSkin.getName()), Optional.of(randomSkin.getUuid()), new PropertyMap()));
+                setSkinProfile(ResolvableProfile.createUnresolved(randomSkin.getUuid()));
             }
         } else {
             setSkinProfile(profile);
