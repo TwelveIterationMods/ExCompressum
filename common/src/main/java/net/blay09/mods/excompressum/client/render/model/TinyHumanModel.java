@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
 import net.blay09.mods.excompressum.block.entity.SieveAnimationType;
+import net.blay09.mods.excompressum.client.render.blockentity.AutoSieveRenderer;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 
@@ -13,23 +14,13 @@ public class TinyHumanModel extends PlayerModel {
         super(modelPart, smallArms);
     }
 
-    public void animate(AbstractAutoSieveBlockEntity tileEntity, float partialTicks) {
-        if (tileEntity.getAnimationType() == SieveAnimationType.MAGIC) {
-            if (tileEntity.shouldAnimate()) {
-                tileEntity.armAngle += partialTicks * 0.05f;
-
-                float base = (float) Math.toRadians(280);
-                rightArm.xRot = (float) (base + Math.sin(tileEntity.armAngle) * 0.1f);
-                leftArm.xRot = (float) (base + Math.cos(tileEntity.armAngle) * 0.1f);
-            } else {
-                rightArm.xRot = 0;
-                leftArm.xRot = 0;
-            }
+    public void animate(AutoSieveRenderer.AutoSieveRenderState renderState) {
+        if (renderState.animationType == SieveAnimationType.MAGIC) {
+            float base = (float) Math.toRadians(280);
+            rightArm.xRot = (float) (base + Math.sin(renderState.armAngle) * 0.1f);
+            leftArm.xRot = (float) (base + Math.cos(renderState.armAngle) * 0.1f);
         } else {
-            if (tileEntity.shouldAnimate()) {
-                tileEntity.armAngle += 0.5f * (Math.max(1f, tileEntity.getSpeedMultiplier() / 4f)) * partialTicks;
-                rightArm.xRot = tileEntity.armAngle;
-            }
+            rightArm.xRot = renderState.armAngle;
         }
     }
 

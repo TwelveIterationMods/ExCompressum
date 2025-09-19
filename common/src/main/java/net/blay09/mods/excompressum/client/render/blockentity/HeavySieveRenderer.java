@@ -9,25 +9,28 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEntity, HeavySieveRenderer.HeavySieveRenderState> {
 
     public static class HeavySieveRenderState extends BlockEntityRenderState {
+        @Nullable
         public String meshModelName;
         public float progress;
-        public ItemStackRenderState item;
+        public final ItemStackRenderState item = new ItemStackRenderState();
     }
 
-    private static final RandomSource random = RandomSource.create();
+    private final ItemModelResolver itemModelResolver;
 
     public HeavySieveRenderer(BlockEntityRendererProvider.Context context) {
+        itemModelResolver = context.itemModelResolver();
     }
 
     @Override
@@ -42,6 +45,7 @@ public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEn
         renderState.meshModelName = blockEntity.getSieveMesh() != null ? blockEntity.getSieveMesh().getModelName() : null;
         renderState.progress = blockEntity.getProgress();
 
+        itemModelResolver.updateForTopItem(renderState.item, blockEntity.getCurrentStack(), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
     }
 
     @Override
@@ -49,7 +53,7 @@ public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEn
         poseStack.pushPose();
         final var meshModel = renderState.meshModelName != null ? ModModels.meshes.get(renderState.meshModelName).get() : null;
         if (meshModel != null) {
-            submitNodeCollector.submitBlockModel(poseStack, RenderType.entitySolid(TextureAtlas.LOCATION_BLOCKS), meshModel, 0f, 0f, 0f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            submitNodeCollector.submitBlockModel(poseStack, RenderType.entitySolid(TextureAtlas.LOCATION_BLOCKS), meshModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         }
 
         if (!renderState.item.isEmpty()) {

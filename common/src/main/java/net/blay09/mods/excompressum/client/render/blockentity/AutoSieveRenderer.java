@@ -1,29 +1,36 @@
 package net.blay09.mods.excompressum.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.blay09.mods.excompressum.block.AutoSieveBlock;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
 import net.blay09.mods.excompressum.block.entity.AutoHeavySieveBlockEntity;
 import net.blay09.mods.excompressum.block.entity.AutoSieveBlockEntity;
+import net.blay09.mods.excompressum.block.entity.SieveAnimationType;
 import net.blay09.mods.excompressum.client.ModModels;
 import net.blay09.mods.excompressum.client.render.model.TinyHumanModel;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.PlayerSkin;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.component.ResolvableProfile;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.AxisAngle4f;
@@ -36,11 +43,17 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
     public static class AutoSieveRenderState extends BlockEntityRenderState {
         public boolean skip;
-        public Direction facing;
+        public Direction facing = Direction.NORTH;
         public boolean waterlogged;
+        @Nullable
         public String meshModelName;
-        public ItemStackRenderState item;
+        public final ItemStackRenderState item = new ItemStackRenderState();
         public float progress;
+        @Nullable
+        public ResolvableProfile profile;
+        public SieveAnimationType animationType;
+        public float armAngle;
+        public final AvatarRenderState avatar = new AvatarRenderState();
     }
 
     private final BlockRenderDispatcher blockRenderDispatcher;
@@ -70,6 +83,20 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
             currentCacheKey = cacheKey;
         }
 
+        if (blockEntity.shouldAnimate()) {
+            final var animationSpeed = blockEntity.getAnimationType() == SieveAnimationType.MAGIC ? 0.05f : 0.5f;
+            blockEntity.armAngle += animationSpeed * delta;
+            blockEntity.armAngle += animationSpeed * (Math.max(1f, blockEntity.getSpeedMultiplier() / 4f)) * delta;
+        }
+
+        renderState.skip = blockEntity.isUgly();
+        renderState.progress = blockEntity.getProgress();
+        renderState.meshModelName = blockEntity.getSieveMesh() != null ? blockEntity.getSieveMesh().getModelName() : null;
+        renderState.facing = renderState.blockState.getValue(AutoSieveBlock.FACING);
+        renderState.waterlogged = renderState.blockState.getValue(AutoSieveBlock.WATERLOGGED);
+        renderState.profile = blockEntity.getSkinProfile();
+        renderState.armAngle = blockEntity.armAngle;
+
         itemModelResolver.updateForTopItem(renderState.item, blockEntity.getCurrentStack(), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
     }
 
@@ -94,10 +121,10 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(90), 0, 1f, 0)));
         poseStack.translate(0f, -0.65f, 0.25f);
         poseStack.scale(0.4f, 0.4f, 0.4f);
-        // TODO final var skin = getPlayerSkin(blockEntity.getSkinProfile());
-        // TODO TinyHumanModel playerModel = getPlayerModel(skin);
-        // TODO playerModel.animate(blockEntity, partialTicks);
-        // TODO playerModel.renderToBuffer(poseStack, buffer.getBuffer(RenderType.entityCutout(skin.texture())), combinedLight, combinedOverlay, 0xFFFFFFFF);
+        final var skin = getPlayerSkin(renderState.profile);
+        final var playerModel = getPlayerModel(skin);
+        playerModel.animate(renderState);
+        submitNodeCollector.submitModel(playerModel, renderState.avatar, poseStack, RenderType.entityCutout(skin.body().texturePath()), renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, renderState.breakProgress);
         poseStack.popPose();
 
         // Render the glass around player head if underwater
@@ -106,7 +133,8 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
             poseStack.translate(-0.95f, -0.42f, -0.175f);
             float glassScale = 0.35f;
             poseStack.scale(glassScale, glassScale, glassScale);
-            // TODO dispatcher.renderSingleBlock(Blocks.GLASS.defaultBlockState(), poseStack, buffer, combinedLight, combinedOverlay);
+            final var glassModel = blockRenderDispatcher.getBlockModel(Blocks.GLASS.defaultBlockState());
+            submitNodeCollector.submitBlockModel(poseStack, RenderType.entityCutout(TextureAtlas.LOCATION_BLOCKS), glassModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
 
@@ -120,13 +148,13 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
         // Render the sieve
         poseStack.pushPose();
-        // TODO dispatcher.getModelRenderer().tesselateBlock(level, sieveModel.collectParts(random), blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffer.getBuffer(RenderType.solid()), false, Integer.MAX_VALUE);
+        submitNodeCollector.submitBlockModel(poseStack, RenderType.entitySolid(TextureAtlas.LOCATION_BLOCKS), sieveModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
 
         // Render the sieve mesh
         final var meshModel = renderState.meshModelName != null ? ModModels.meshes.get(renderState.meshModelName).get() : null;
         if (meshModel != null) {
-            // TODO dispatcher.getModelRenderer().tesselateBlock(level, meshModel.collectParts(random), blockEntity.getBlockState(), blockEntity.getBlockPos(), poseStack, buffer.getBuffer(RenderType.translucentMovingBlock()), false, Integer.MAX_VALUE);
+            submitNodeCollector.submitBlockModel(poseStack, RenderType.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), meshModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         }
 
         // Render the content
@@ -138,7 +166,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
             final var contentBaseScaleY = 0.5f;
             poseStack.translate(contentOffset, meshY, contentOffset);
             poseStack.scale(contentScaleXZ, contentBaseScaleY - renderState.progress * contentBaseScaleY, contentScaleXZ);
-            // TODO dispatcher.renderSingleBlock(contentState, poseStack, buffer, combinedLight, combinedOverlay);
+            renderState.item.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
         poseStack.popPose();
@@ -148,7 +176,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
     private PlayerSkin getPlayerSkin(@Nullable ResolvableProfile profile) {
         if (profile != null) {
-            // TODO return Minecraft.getInstance().getSkinManager().getInsecureSkin(profile.gameProfile());
+            return Minecraft.getInstance().playerSkinRenderCache().getOrDefault(profile).playerSkin();
         }
         return DefaultPlayerSkin.get(UUID.randomUUID());
     }

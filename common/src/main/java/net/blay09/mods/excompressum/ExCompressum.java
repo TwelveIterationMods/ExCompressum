@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum;
 
 import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.ConfigLoadedEvent;
 import net.blay09.mods.balm.api.event.server.ServerStartedEvent;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.block.ModBlocks;
@@ -54,17 +53,8 @@ public class ExCompressum {
             Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
         });
 
-        final var commonConfigId = ResourceLocation.fromNamespaceAndPath(MOD_ID, "common");
-        final Runnable configLoadHandler = AutoSieveSkinRegistry::load;
-        Balm.getEvents().onEvent(ConfigLoadedEvent.class, event -> {
-            if (event.getSchema().identifier().equals(commonConfigId)) {
-                configLoadHandler.run();
-            }
-        });
-        // TODO Workaround to load config even if load event already fired earlier - will have prettier solution in future Balm versions
-        if (Balm.getConfig().getActiveConfig(commonConfigId) != null) {
-            configLoadHandler.run();
-        }
+        Balm.getConfig().onConfigAvailable(ExCompressumConfig.class, config -> AutoSieveSkinRegistry.load());
+
         HammerSpeedHandler.initialize();
         CompressedEnemyHandler.initialize();
         CrookPushHandler.initialize();

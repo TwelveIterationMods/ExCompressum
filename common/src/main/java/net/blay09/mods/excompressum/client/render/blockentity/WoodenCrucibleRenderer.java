@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibleBlockEntity, WoodenCrucibleRenderer.WoodenCrucibleRenderState> {
 
     public static class WoodenCrucibleRenderState extends BlockEntityRenderState {
-        public ItemStackRenderState item;
+        public final ItemStackRenderState item = new ItemStackRenderState();
         public int waterColor;
         public float fluidLevel;
         public float solidLevel;

@@ -21,8 +21,8 @@ import org.joml.Quaternionf;
 public class BaitRenderer implements BlockEntityRenderer<BaitBlockEntity, BaitRenderer.BaitRenderState> {
 
     public static class BaitRenderState extends BlockEntityRenderState {
-        public ItemStackRenderState firstItem;
-        public ItemStackRenderState secondItem;
+        public final ItemStackRenderState firstItem = new ItemStackRenderState();
+        public final ItemStackRenderState secondItem = new ItemStackRenderState();
     }
 
     private final ItemModelResolver itemModelResolver;

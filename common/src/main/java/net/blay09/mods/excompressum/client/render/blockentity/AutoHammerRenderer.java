@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
+import net.blay09.mods.excompressum.block.AutoHammerBlock;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tag.ModItemTags;
@@ -24,6 +25,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.AxisAngle4f;
@@ -34,12 +36,12 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
 
     public static class AutoHammerRenderState extends BlockEntityRenderState {
         public boolean skip;
-        public Direction facing;
+        public Direction facing = Direction.NORTH;
         public float hammerAngle;
-        public ItemStackRenderState hammerItem;
-        public ItemStackRenderState firstHammerItem;
-        public ItemStackRenderState secondHammerItem;
-        public ItemStackRenderState item;
+        public final ItemStackRenderState hammerItem = new ItemStackRenderState();
+        public final ItemStackRenderState firstHammerItem = new ItemStackRenderState();
+        public final ItemStackRenderState secondHammerItem = new ItemStackRenderState();
+        public final ItemStackRenderState item = new ItemStackRenderState();
         public float progress;
     }
 
@@ -57,11 +59,14 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
     public void extractRenderState(AutoHammerBlockEntity blockEntity, AutoHammerRenderState renderState, float delta, Vec3 vec, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
 
-        renderState.skip = blockEntity.isUgly();
         if (blockEntity.shouldAnimate()) {
             blockEntity.hammerAngle += 0.4f * delta;
-            renderState.hammerAngle = blockEntity.hammerAngle;
         }
+
+        renderState.skip = blockEntity.isUgly();
+        renderState.facing = renderState.blockState.getValue(AutoHammerBlock.FACING);
+        renderState.progress = blockEntity.getProgress();
+        renderState.hammerAngle = blockEntity.hammerAngle;
 
         if (hammerItemStack.isEmpty()) {
             if (isCompressed) {
@@ -72,7 +77,7 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
                     break;
                 }
                 if (hammerItemStack.isEmpty()) {
-                    hammerItemStack = new ItemStack(Items.COD); // This should never happen
+                    hammerItemStack = new ItemStack(Items.DIAMOND_PICKAXE);
                 }
             }
         }
@@ -81,8 +86,6 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
         itemModelResolver.updateForTopItem(renderState.firstHammerItem, blockEntity.getUpgradeStack(0), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
         itemModelResolver.updateForTopItem(renderState.secondHammerItem, blockEntity.getUpgradeStack(1), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
         itemModelResolver.updateForTopItem(renderState.item, blockEntity.getCurrentStack(), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
-
-        renderState.progress = blockEntity.getProgress();
     }
 
     @Override
@@ -138,14 +141,13 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
             poseStack.pushPose();
             poseStack.translate(-0.4625f, -0.04f, -0.2);
             poseStack.scale(0.4f, 0.4f, 0.4f);
-            BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
-            // TODO dispatcher.renderSingleBlock(contentState, poseStack, buffers, combinedLight, combinedOverlay);
+            renderState.item.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 
             if (renderState.progress > 0f) {
-                int blockDamage = Math.min(9, (int) (renderState.progress * 9f));
-                final var crumblingBufferSource = Minecraft.getInstance().renderBuffers().crumblingBufferSource();
-                final var crumblingBuffer = crumblingBufferSource.getBuffer(ModelBakery.DESTROY_TYPES.get(blockDamage));
-                final var vertexConsumer = new SheetedDecalTextureGenerator(crumblingBuffer, poseStack.last(), 1f);
+                // TODO int blockDamage = Math.min(9, (int) (renderState.progress * 9f));
+                // TODO final var crumblingBufferSource = Minecraft.getInstance().renderBuffers().crumblingBufferSource();
+                // TODO final var crumblingBuffer = crumblingBufferSource.getBuffer(ModelBakery.DESTROY_TYPES.get(blockDamage));
+                // TODO final var vertexConsumer = new SheetedDecalTextureGenerator(crumblingBuffer, poseStack.last(), 1f);
                 // TODO dispatcher.renderBreakingTexture(contentState, tileEntity.getBlockPos(), level, poseStack, vertexConsumer);
             }
 
