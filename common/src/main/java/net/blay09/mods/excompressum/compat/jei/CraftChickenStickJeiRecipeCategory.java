@@ -11,22 +11,22 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class CraftChickenStickJeiRecipeCategory implements IRecipeCategory<CraftChickenStickRecipe> {
 
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "craft_chicken_stick");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "craft_chicken_stick");
     public static final RecipeType<CraftChickenStickRecipe> TYPE = new RecipeType<>(UID, CraftChickenStickRecipe.class);
-    private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_chicken_stick.png");
+    private static final Identifier texture = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_chicken_stick.png");
 
     private final IDrawable background;
     private final IDrawable icon;
 
     public CraftChickenStickJeiRecipeCategory(IGuiHelper guiHelper) {
         background = guiHelper.createDrawable(texture, 0, 0, 166, 58);
-        icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModItems.chickenStick));
+        icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ModItems.chickenStick.createStack());
     }
 
     @Override
@@ -56,7 +56,7 @@ public class CraftChickenStickJeiRecipeCategory implements IRecipeCategory<Craft
     }
 
     @Override
-    public @Nullable ResourceLocation getRegistryName(CraftChickenStickRecipe recipe) {
+    public @Nullable Identifier getRegistryName(CraftChickenStickRecipe recipe) {
         return UID;
     }
 }

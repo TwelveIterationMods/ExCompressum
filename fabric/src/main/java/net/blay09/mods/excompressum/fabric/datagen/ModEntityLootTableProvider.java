@@ -10,7 +10,7 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -38,7 +38,7 @@ public class ModEntityLootTableProvider extends SimpleFabricLootTableProvider {
     @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> builder) {
         final var provider = providerFuture.resultNow();
-        builder.accept(ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "entities/angry_chicken")),
+        builder.accept(ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "entities/angry_chicken")),
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))

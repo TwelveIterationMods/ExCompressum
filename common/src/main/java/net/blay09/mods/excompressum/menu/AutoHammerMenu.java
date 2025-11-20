@@ -14,7 +14,7 @@ public class AutoHammerMenu extends AbstractContainerMenu {
     private final AutoHammerBlockEntity autoHammer;
 
     public AutoHammerMenu(int windowId, Inventory inventory, AutoHammerBlockEntity autoHammer) {
-        super(ModMenus.autoHammer.get(), windowId);
+        super(ModMenus.autoHammer.value(), windowId);
         this.autoHammer = autoHammer;
 
         Container container = autoHammer.getBackingContainer();

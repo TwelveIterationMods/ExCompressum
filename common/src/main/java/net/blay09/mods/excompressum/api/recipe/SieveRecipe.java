@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.api.recipe;
 
 import net.blay09.mods.excompressum.api.sievemesh.CommonMeshType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.LootTable;
 

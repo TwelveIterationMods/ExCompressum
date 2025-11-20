@@ -14,7 +14,7 @@ import net.blay09.mods.excompressum.block.entity.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -44,8 +44,8 @@ public class TheOneProbeAddon  {
     public static class ProbeInfoProvider implements IProbeInfoProvider {
 
         @Override
-        public ResourceLocation getID() {
-            return ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, ExCompressum.MOD_ID);
+        public Identifier getID() {
+            return Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, ExCompressum.MOD_ID);
         }
 
         @Override

@@ -1,13 +1,10 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.api.container.BalmContainerProvider;
-import net.blay09.mods.balm.api.container.DefaultContainer;
-import net.blay09.mods.balm.api.container.DelegateContainer;
-import net.blay09.mods.balm.api.container.SubContainer;
-import net.blay09.mods.balm.api.energy.BalmEnergyStorageProvider;
-import net.blay09.mods.balm.api.energy.DefaultEnergyStorage;
-import net.blay09.mods.balm.api.energy.EnergyStorage;
-import net.blay09.mods.balm.api.menu.BalmMenuProvider;
+import net.blay09.mods.balm.platform.energy.BalmEnergyStorageProvider;
+import net.blay09.mods.balm.platform.energy.DefaultEnergyStorage;
+import net.blay09.mods.balm.platform.energy.EnergyStorage;
+import net.blay09.mods.balm.world.*;
+import net.blay09.mods.balm.world.level.block.entity.BalmBlockEntityUtils;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.AutoHammerBlock;
 import net.blay09.mods.excompressum.block.ModBlockStateProperties;
@@ -27,7 +24,6 @@ import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -45,7 +41,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -161,7 +156,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
     private boolean isDisabledByRedstone;
 
     public AutoHammerBlockEntity(BlockPos pos, BlockState state) {
-        this(ModBlockEntities.autoHammer.get(), pos, state);
+        this(ModBlockEntities.autoHammer.value(), pos, state);
     }
 
     public AutoHammerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -257,7 +252,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
         ticksSinceUpdate++;
         if (ticksSinceUpdate > UPDATE_INTERVAL) {
             if (isDirty) {
-                sync();
+                BalmBlockEntityUtils.sync(this);
                 finishedStack = ItemStack.EMPTY;
                 isDirty = false;
             }
@@ -377,10 +372,12 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
     }
 
     @Override
-    public void writeUpdateTag(ValueOutput output) {
-        saveAdditional(output);
-        output.store("FirstHammer", ItemStack.OPTIONAL_CODEC, hammerSlots.getItem(0));
-        output.store("SecondHammer", ItemStack.OPTIONAL_CODEC, hammerSlots.getItem(1));
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return BalmBlockEntityUtils.createUpdateTag(registries, output -> {
+            saveAdditional(output);
+            output.store("FirstHammer", ItemStack.OPTIONAL_CODEC, hammerSlots.getItem(0));
+            output.store("SecondHammer", ItemStack.OPTIONAL_CODEC, hammerSlots.getItem(1));
+        });
     }
 
     public boolean isProcessing() {
@@ -500,12 +497,12 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
-        builder.set(ModComponents.energy.get(), energyStorage.getEnergy());
+        builder.set(ModComponents.energy.value(), energyStorage.getEnergy());
     }
 
     @Override
     protected void applyImplicitComponents(DataComponentGetter input) {
-        final var energyComponent = input.get(ModComponents.energy.get());
+        final var energyComponent = input.get(ModComponents.energy.value());
         if (energyComponent != null) {
             energyStorage.setEnergy(energyComponent);
         }

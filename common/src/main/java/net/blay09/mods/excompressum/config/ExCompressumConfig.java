@@ -1,10 +1,10 @@
 package net.blay09.mods.excompressum.config;
 
 import com.google.common.collect.Lists;
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.config.reflection.Comment;
-import net.blay09.mods.balm.api.config.reflection.Config;
-import net.blay09.mods.balm.api.config.reflection.NestedType;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.config.reflection.Comment;
+import net.blay09.mods.balm.platform.config.reflection.Config;
+import net.blay09.mods.balm.platform.config.reflection.NestedType;
 import net.blay09.mods.excompressum.ExCompressum;
 
 import java.util.List;
@@ -166,10 +166,10 @@ public class ExCompressumConfig {
     }
 
     public static void initialize() {
-        Balm.getConfig().registerConfig(ExCompressumConfig.class);
+        Balm.config().registerConfig(ExCompressumConfig.class);
     }
 
     public static ExCompressumConfig getActive() {
-        return Balm.getConfig().getActiveConfig(ExCompressumConfig.class);
+        return Balm.config().getActiveConfig(ExCompressumConfig.class);
     }
 }

@@ -25,7 +25,7 @@ public class AutoHeavySieveBlock extends AutoSieveBlock {
 
     @Override
     public BlockEntityType<?> getBlockEntityType() {
-        return ModBlockEntities.autoHeavySieve.get();
+        return ModBlockEntities.autoHeavySieve.value();
     }
 
     @Override

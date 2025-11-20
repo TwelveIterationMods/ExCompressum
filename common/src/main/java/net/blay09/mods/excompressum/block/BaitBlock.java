@@ -124,7 +124,7 @@ public class BaitBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.bait.get(), BaitBlockEntity::serverTick) : null;
+        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.bait.value(), BaitBlockEntity::serverTick) : null;
     }
 
     @Override

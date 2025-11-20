@@ -3,7 +3,6 @@ package net.blay09.mods.excompressum.client.render.blockentity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.blay09.mods.excompressum.block.entity.HeavySieveBlockEntity;
 import net.blay09.mods.excompressum.client.ModModels;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -11,6 +10,7 @@ import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -51,9 +51,9 @@ public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEn
     @Override
     public void submit(HeavySieveRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState cameraRenderState) {
         poseStack.pushPose();
-        final var meshModel = renderState.meshModelName != null ? ModModels.meshes.get(renderState.meshModelName).get() : null;
+        final var meshModel = renderState.meshModelName != null ? ModModels.meshes.get(renderState.meshModelName).asBlockStateModel() : null;
         if (meshModel != null) {
-            submitNodeCollector.submitBlockModel(poseStack, RenderType.entitySolid(TextureAtlas.LOCATION_BLOCKS), meshModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            submitNodeCollector.submitBlockModel(poseStack, RenderTypes.entitySolid(TextureAtlas.LOCATION_BLOCKS), meshModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         }
 
         if (!renderState.item.isEmpty()) {

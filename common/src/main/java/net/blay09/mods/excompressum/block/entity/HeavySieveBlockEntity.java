@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.api.container.ContainerUtils;
-import net.blay09.mods.balm.common.BalmBlockEntity;
+import net.blay09.mods.balm.world.ContainerUtils;
+import net.blay09.mods.balm.world.level.block.entity.BalmBlockEntityUtils;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
@@ -12,6 +12,8 @@ import net.blay09.mods.excompressum.registry.heavysieve.HeavySieveRegistry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -20,6 +22,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -29,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class HeavySieveBlockEntity extends BalmBlockEntity {
+public class HeavySieveBlockEntity extends BlockEntity {
 
     private static final float PROCESSING_INTERVAL = 0.075f;
     private static final int UPDATE_INTERVAL = 5;
@@ -50,7 +53,7 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
     private int particleCount;
 
     public HeavySieveBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.heavySieve.get(), pos, state);
+        super(ModBlockEntities.heavySieve.value(), pos, state);
     }
 
     public boolean addSiftable(ServerLevel level, Player player, ItemStack itemStack) {
@@ -60,7 +63,7 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
         }
         currentStack = player.getAbilities().instabuild ? ContainerUtils.copyStackWithSize(itemStack, 1) : itemStack.split(1);
         progress = 0f;
-        sync();
+        BalmBlockEntityUtils.sync(this);
         return true;
     }
 
@@ -94,7 +97,7 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
             ticksSinceSync = 0;
 
             if (isDirty) {
-                sync();
+                BalmBlockEntityUtils.sync(this);
                 isDirty = false;
             }
         }
@@ -155,7 +158,7 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
                     }
                 }
                 progress = 0f;
-                sync();
+                BalmBlockEntityUtils.sync(this);
             }
         }
 
@@ -187,8 +190,8 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
     }
 
     @Override
-    public void writeUpdateTag(ValueOutput output) {
-        saveAdditional(output);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return BalmBlockEntityUtils.createUpdateTag(registries, this::saveAdditional);
     }
 
     public ItemStack getCurrentStack() {
@@ -214,7 +217,7 @@ public class HeavySieveBlockEntity extends BalmBlockEntity {
     public void setMeshStack(ItemStack meshStack) {
         this.meshStack = meshStack;
         setChanged();
-        sync();
+        BalmBlockEntityUtils.sync(this);
     }
 
     @Override

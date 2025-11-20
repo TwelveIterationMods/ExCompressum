@@ -2,14 +2,11 @@ package net.blay09.mods.excompressum.block.entity;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import net.blay09.mods.balm.api.container.BalmContainerProvider;
-import net.blay09.mods.balm.api.container.DefaultContainer;
-import net.blay09.mods.balm.api.container.DelegateContainer;
-import net.blay09.mods.balm.api.container.SubContainer;
-import net.blay09.mods.balm.api.energy.BalmEnergyStorageProvider;
-import net.blay09.mods.balm.api.energy.DefaultEnergyStorage;
-import net.blay09.mods.balm.api.energy.EnergyStorage;
-import net.blay09.mods.balm.api.menu.BalmMenuProvider;
+import net.blay09.mods.balm.platform.energy.BalmEnergyStorageProvider;
+import net.blay09.mods.balm.platform.energy.DefaultEnergyStorage;
+import net.blay09.mods.balm.platform.energy.EnergyStorage;
+import net.blay09.mods.balm.world.*;
+import net.blay09.mods.balm.world.level.block.entity.BalmBlockEntityUtils;
 import net.blay09.mods.excompressum.component.ModComponents;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.menu.AutoCompressorMenu;
@@ -26,7 +23,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
@@ -118,7 +115,7 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
     private boolean isDisabledByRedstone;
 
     public AutoCompressorBlockEntity(BlockPos pos, BlockState state) {
-        this(ModBlockEntities.autoCompressor.get(), pos, state);
+        this(ModBlockEntities.autoCompressor.value(), pos, state);
     }
 
     public AutoCompressorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -253,7 +250,7 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
     @Override
     public void loadAdditional(ValueInput input) {
         currentRecipe = input.getString("CurrentRecipe")
-                .map(ResourceLocation::parse)
+                .map(Identifier::parse)
                 .map(ExRegistries.getCompressedRecipeRegistry()::getRecipeById)
                 .orElse(currentRecipe);
         isDisabledByRedstone = input.getBooleanOr("IsDisabledByRedstone", false);
@@ -284,8 +281,8 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
     }
 
     @Override
-    public void writeUpdateTag(ValueOutput output) {
-        saveAdditional(output);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return BalmBlockEntityUtils.createUpdateTag(registries, this::saveAdditional);
     }
 
     public boolean isProcessing() {
@@ -355,12 +352,12 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
-        builder.set(ModComponents.energy.get(), energyStorage.getEnergy());
+        builder.set(ModComponents.energy.value(), energyStorage.getEnergy());
     }
 
     @Override
     protected void applyImplicitComponents(DataComponentGetter input) {
-        final var energyComponent = input.get(ModComponents.energy.get());
+        final var energyComponent = input.get(ModComponents.energy.value());
         if (energyComponent != null) {
             energyStorage.setEnergy(energyComponent);
         }

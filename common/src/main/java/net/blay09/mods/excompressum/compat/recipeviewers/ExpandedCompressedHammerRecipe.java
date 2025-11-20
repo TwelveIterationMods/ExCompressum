@@ -4,7 +4,7 @@ import net.blay09.mods.excompressum.api.recipe.CompressedHammerRecipe;
 import net.blay09.mods.excompressum.loot.LootTableEntry;
 import net.blay09.mods.excompressum.loot.LootTableUtils;
 import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 
 public class ExpandedCompressedHammerRecipe {
 
-    private final ResourceLocation id;
+    private final Identifier id;
     private final Ingredient ingredient;
     private final List<MergedLootTableEntry> outputs;
     private final List<ItemStack> outputItems;
 
-    public ExpandedCompressedHammerRecipe(ResourceLocation id, CompressedHammerRecipe recipe) {
+    public ExpandedCompressedHammerRecipe(Identifier id, CompressedHammerRecipe recipe) {
         this.id = id;
         ingredient = recipe.getIngredient();
         List<LootTableEntry> entries = LootTableUtils.getLootTableEntries(recipe.getLootTable());
@@ -38,7 +38,7 @@ public class ExpandedCompressedHammerRecipe {
         return outputItems;
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 }

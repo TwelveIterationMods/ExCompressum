@@ -2,8 +2,8 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.container.ContainerUtils;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.world.ContainerUtils;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
@@ -127,7 +127,7 @@ public class HeavySieveBlock extends BaseEntityBlock {
             }
         }
 
-        if (ExCompressumConfig.getActive().automation.allowHeavySieveAutomation || !Balm.getHooks().isFakePlayer(player)) {
+        if (ExCompressumConfig.getActive().automation.allowHeavySieveAutomation || !Balm.hooks().isFakePlayer(player)) {
             if (heavySieve.processContents(player)) {
                 level.playSound(null, pos, SoundEvents.SAND_STEP, SoundSource.BLOCKS, 0.3f, 0.6f);
                 return InteractionResult.SUCCESS;
@@ -165,8 +165,8 @@ public class HeavySieveBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return level.isClientSide()
-                ? createTickerHelper(type, ModBlockEntities.heavySieve.get(), HeavySieveBlockEntity::clientTick)
-                : createTickerHelper(type, ModBlockEntities.heavySieve.get(), HeavySieveBlockEntity::serverTick);
+                ? createTickerHelper(type, ModBlockEntities.heavySieve.value(), HeavySieveBlockEntity::clientTick)
+                : createTickerHelper(type, ModBlockEntities.heavySieve.value(), HeavySieveBlockEntity::serverTick);
     }
 
     @Override

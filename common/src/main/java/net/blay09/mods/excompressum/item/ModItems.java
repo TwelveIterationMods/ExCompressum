@@ -1,87 +1,90 @@
 package net.blay09.mods.excompressum.item;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.DeferredObject;
-import net.blay09.mods.balm.api.item.BalmItems;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.world.item.BalmCreativeModeTabRegistrar;
+import net.blay09.mods.balm.world.item.BalmItemRegistrar;
+import net.blay09.mods.balm.world.item.DeferredItem;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.tag.ModBlockTags;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ToolMaterial;
 
 public class ModItems {
-    public static DeferredObject<CreativeModeTab> creativeModeTab;
+    public static DeferredItem chickenStick;
+    public static DeferredItem compressedWoodenHammer;
+    public static DeferredItem compressedStoneHammer;
+    public static DeferredItem compressedIronHammer;
+    public static DeferredItem compressedGoldenHammer;
+    public static DeferredItem compressedDiamondHammer;
+    public static DeferredItem compressedNetheriteHammer;
+    public static DeferredItem compressedCrook;
+    public static DeferredItem ironMesh;
+    public static DeferredItem woodChippings;
+    public static DeferredItem uncompressedCoal;
+    public static DeferredItem batZapper;
+    public static DeferredItem oreSmasher;
+    public static DeferredItem uglySteelPlating;
 
-    public static Item chickenStick;
-    public static Item compressedWoodenHammer;
-    public static Item compressedStoneHammer;
-    public static Item compressedIronHammer;
-    public static Item compressedGoldenHammer;
-    public static Item compressedDiamondHammer;
-    public static Item compressedNetheriteHammer;
-    public static Item compressedCrook;
-    public static Item ironMesh;
-    public static Item woodChippings;
-    public static Item uncompressedCoal;
-    public static Item batZapper;
-    public static Item oreSmasher;
-    public static Item uglySteelPlating;
-
-    public static void initialize(BalmItems items) {
-        items.registerItem((identifier) -> chickenStick = new ChickenStickItem(itemProperties(identifier)
-                        .tool(ChickenStickItem.CHICKEN_STICK_TIER, ModBlockTags.MINEABLE_WITH_CHICKEN_STICK, 6f, -3.2f, 0f)),
-                id("chicken_stick"));
-        items.registerItem((identifier) -> compressedWoodenHammer = new CompressedHammerItem(itemProperties(identifier)
-                        .tool(ToolMaterial.WOOD, ModBlockTags.MINEABLE_WITH_HAMMER, 6f, -3.2f, 0f)),
-                id("compressed_wooden_hammer"));
-        items.registerItem((identifier) -> compressedStoneHammer = new CompressedHammerItem(itemProperties(identifier)
-                        .tool(ToolMaterial.STONE, ModBlockTags.MINEABLE_WITH_HAMMER, 7f, -3.2f, 0f)),
-                id("compressed_stone_hammer"));
-        items.registerItem((identifier) -> compressedIronHammer = new CompressedHammerItem(itemProperties(identifier)
-                        .tool(ToolMaterial.IRON, ModBlockTags.MINEABLE_WITH_HAMMER, 6f, -3.1f, 0f)),
-                id("compressed_iron_hammer"));
-        items.registerItem((identifier) -> compressedGoldenHammer = new CompressedHammerItem(itemProperties(identifier)
-                        .tool(ToolMaterial.GOLD, ModBlockTags.MINEABLE_WITH_HAMMER, 6f, -3f, 0f)),
-                id("compressed_golden_hammer"));
-        items.registerItem((identifier) -> compressedDiamondHammer = new CompressedHammerItem(itemProperties(identifier)
-                        .tool(ToolMaterial.DIAMOND, ModBlockTags.MINEABLE_WITH_HAMMER, 5f, -3f, 0f)),
-                id("compressed_diamond_hammer"));
-        items.registerItem((identifier) -> compressedNetheriteHammer = new CompressedHammerItem(itemProperties(identifier)
-                        .tool(ToolMaterial.NETHERITE, ModBlockTags.MINEABLE_WITH_HAMMER, 5f, -3f, 0f)),
-                id("compressed_netherite_hammer"));
-        items.registerItem((identifier) -> compressedCrook = new CompressedCrookItem(itemProperties(identifier)
-                        .tool(ToolMaterial.WOOD, ModBlockTags.MINEABLE_WITH_CROOK, 6f, -3.2f, 0f)
-                        .durability((int) (ToolMaterial.WOOD.durability() * 4f))),
-                id("compressed_crook"));
-        items.registerItem((identifier) -> ironMesh = new IronMeshItem(itemProperties(identifier)), id("iron_mesh"));
-        items.registerItem((identifier) -> woodChippings = new WoodChippingItem(itemProperties(identifier)), id("wood_chippings"));
-        items.registerItem((identifier) -> {
-            uncompressedCoal = new UncompressedCoalItem(itemProperties(identifier));
-            Balm.getHooks().setBurnTime(uncompressedCoal, 200);
-            return uncompressedCoal;
-        }, id("uncompressed_coal"));
-        items.registerItem((identifier) -> batZapper = new BatZapperItem(itemProperties(identifier)), id("bat_zapper"));
-        items.registerItem((identifier) -> oreSmasher = new OreSmasherItem(itemProperties(identifier)
-                .shovel(ToolMaterial.DIAMOND, 6f, -3.2f)), id("ore_smasher"));
-        items.registerItem((identifier) -> uglySteelPlating = new UglySteelPlatingItem(itemProperties(identifier)), id("ugly_steel_plating"));
-
-        creativeModeTab = items.registerCreativeModeTab(() -> new ItemStack(ModItems.compressedDiamondHammer), id("excompressum"));
+    public static void initialize(BalmItemRegistrar items) {
+        chickenStick = items.register("chicken_stick", ChickenStickItem::new,
+                it -> it.tool(ChickenStickItem.CHICKEN_STICK_TIER, ModBlockTags.MINEABLE_WITH_CHICKEN_STICK, 6f, -3.2f, 0f)
+        ).asDeferredItem();
+        compressedWoodenHammer = items.register("compressed_wooden_hammer", CompressedHammerItem::new,
+                it -> it.tool(ToolMaterial.WOOD, ModBlockTags.MINEABLE_WITH_HAMMER, 6f, -3.2f, 0f)
+        ).asDeferredItem();
+        compressedStoneHammer = items.register("compressed_stone_hammer", CompressedHammerItem::new,
+                it -> it.tool(ToolMaterial.STONE, ModBlockTags.MINEABLE_WITH_HAMMER, 7f, -3.2f, 0f)
+        ).asDeferredItem();
+        compressedIronHammer = items.register("compressed_iron_hammer", CompressedHammerItem::new,
+                it -> it.tool(ToolMaterial.IRON, ModBlockTags.MINEABLE_WITH_HAMMER, 6f, -3.1f, 0f)
+        ).asDeferredItem();
+        compressedGoldenHammer = items.register("compressed_golden_hammer", CompressedHammerItem::new,
+                it -> it.tool(ToolMaterial.GOLD, ModBlockTags.MINEABLE_WITH_HAMMER, 6f, -3f, 0f)
+        ).asDeferredItem();
+        compressedDiamondHammer = items.register("compressed_diamond_hammer", CompressedHammerItem::new,
+                it -> it.tool(ToolMaterial.DIAMOND, ModBlockTags.MINEABLE_WITH_HAMMER, 5f, -3f, 0f)
+        ).asDeferredItem();
+        compressedNetheriteHammer = items.register("compressed_netherite_hammer", CompressedHammerItem::new,
+                it -> it.tool(ToolMaterial.NETHERITE, ModBlockTags.MINEABLE_WITH_HAMMER, 5f, -3f, 0f)
+        ).asDeferredItem();
+        compressedCrook = items.register("compressed_crook", CompressedCrookItem::new,
+                it -> it.tool(ToolMaterial.WOOD, ModBlockTags.MINEABLE_WITH_CROOK, 6f, -3.2f, 0f)
+                        .durability((int) (ToolMaterial.WOOD.durability() * 4f))
+        ).asDeferredItem();
+        ironMesh = items.register("iron_mesh", IronMeshItem::new, it -> it).asDeferredItem();
+        woodChippings = items.register("wood_chippings", WoodChippingItem::new, it -> it).asDeferredItem();
+        uncompressedCoal = items.register("uncompressed_coal", (properties) -> {
+            final var item = new UncompressedCoalItem(properties);
+            Balm.hooks().setBurnTime(item, 200);
+            return item;
+        }, it -> it).asDeferredItem();
+        batZapper = items.register("bat_zapper", BatZapperItem::new).asDeferredItem();
+        oreSmasher = items.register("ore_smasher", OreSmasherItem::new,
+                        it -> it.shovel(ToolMaterial.DIAMOND, 6f, -3.2f))
+                .asDeferredItem();
+        uglySteelPlating = items.register("ugly_steel_plating", UglySteelPlatingItem::new, it -> it).asDeferredItem();
     }
 
-    private static Item.Properties itemProperties(ResourceLocation identifier) {
-        return new Item.Properties().setId(itemId(identifier));
-    }
-
-    private static ResourceKey<Item> itemId(ResourceLocation identifier) {
-        return ResourceKey.create(Registries.ITEM, identifier);
-    }
-
-    private static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, path);
+    public static void initialize(BalmCreativeModeTabRegistrar creativeModeTabs) {
+        creativeModeTabs.register(ExCompressum.MOD_ID, (id, builder) ->
+                builder.title(Component.translatable(id.toLanguageKey("itemGroup")))
+                        .icon(() -> ModItems.compressedDiamondHammer.createStack())
+                        .displayItems((displayParameters, output) -> {
+                            output.accept(ModItems.compressedWoodenHammer);
+                            output.accept(ModItems.compressedStoneHammer);
+                            output.accept(ModItems.compressedIronHammer);
+                            output.accept(ModItems.compressedGoldenHammer);
+                            output.accept(ModItems.compressedDiamondHammer);
+                            output.accept(ModItems.compressedNetheriteHammer);
+                            output.accept(ModItems.compressedCrook);
+                            output.accept(ModItems.ironMesh);
+                            output.accept(ModItems.woodChippings);
+                            output.accept(ModItems.uncompressedCoal);
+                            output.accept(ModItems.batZapper);
+                            output.accept(ModItems.oreSmasher);
+                            output.accept(ModItems.uglySteelPlating);
+                            output.accept(ModItems.chickenStick);
+                        }));
     }
 
 }

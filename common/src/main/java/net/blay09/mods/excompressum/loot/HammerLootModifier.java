@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.loot;
 
-import net.blay09.mods.balm.api.loot.BalmLootModifier;
+import net.blay09.mods.balm.world.level.storage.loot.BalmLootModifier;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.hammer.HammerRegistry;

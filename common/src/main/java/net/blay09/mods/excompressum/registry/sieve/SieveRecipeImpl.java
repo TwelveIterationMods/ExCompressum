@@ -26,12 +26,12 @@ public class SieveRecipeImpl extends ExCompressumRecipe implements SieveRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeTypes.heavySieveRecipeSerializer;
+        return ModRecipeTypes.heavySieve.serializer();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipeTypes.heavySieveRecipeType;
+        return ModRecipeTypes.heavySieve.type();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class SieveRecipeImpl extends ExCompressumRecipe implements SieveRecipe {
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return ModRecipeTypes.heavySieveRecipeBookCategory;
+        return ModRecipeTypes.heavySieve.bookCategory();
     }
 
     @Override

@@ -4,7 +4,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.entity.HeavySieveBlockEntity;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -33,8 +33,8 @@ public class HeavySieveDataProvider implements IBlockComponentProvider {
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "heavy_sieve");
+    public Identifier getUid() {
+        return Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "heavy_sieve");
     }
 
 }

@@ -1,6 +1,6 @@
 dependencies {
-    implementation("net.blay09.mods:balm-common:${balm_version}") {
-        changing = balm_version.endsWith("SNAPSHOT")
+    implementation(libs.balmCommon) {
+        changing = libs.versions.balm.get().endsWith("SNAPSHOT")
     }
     compileOnly "mezz.jei:jei-$jei_minecraft_version-common-api:$jei_version"
     compileOnly "curse.maven:jade-324717:$jade_fabric_version"

@@ -8,7 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -184,15 +184,15 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
         getOrCreateRawBuilder(ModItemTags.DUSTS).addOptionalElement(sequentia("dust")).addOptionalElement(deorum("dust")).addOptionalElement(fabricae("dust"));
     }
 
-    private static ResourceLocation sequentia(String name) {
-        return ResourceLocation.fromNamespaceAndPath(Compat.EXNIHILO_SEQUENTIA, name);
+    private static Identifier sequentia(String name) {
+        return Identifier.fromNamespaceAndPath(Compat.EXNIHILO_SEQUENTIA, name);
     }
 
-    private static ResourceLocation deorum(String name) {
-        return ResourceLocation.fromNamespaceAndPath(Compat.EX_DEORUM, name);
+    private static Identifier deorum(String name) {
+        return Identifier.fromNamespaceAndPath(Compat.EX_DEORUM, name);
     }
 
-    private static ResourceLocation fabricae(String name) {
-        return ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, name);
+    private static Identifier fabricae(String name) {
+        return Identifier.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, name);
     }
 }

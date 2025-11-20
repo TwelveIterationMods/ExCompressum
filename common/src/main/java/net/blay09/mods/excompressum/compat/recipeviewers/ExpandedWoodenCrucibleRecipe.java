@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.compat.recipeviewers;
 
 import com.mojang.datafixers.util.Pair;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRecipe;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 
@@ -11,12 +11,12 @@ import java.util.List;
 
 public class ExpandedWoodenCrucibleRecipe {
 
-    private final ResourceLocation id;
+    private final Identifier id;
     private final Fluid fluid;
     private final List<Pair<WoodenCrucibleRecipe, ItemStack>> entries;
     private final List<ItemStack> inputs;
 
-    public ExpandedWoodenCrucibleRecipe(ResourceLocation id, Fluid fluid, List<Pair<WoodenCrucibleRecipe, ItemStack>> entries) {
+    public ExpandedWoodenCrucibleRecipe(Identifier id, Fluid fluid, List<Pair<WoodenCrucibleRecipe, ItemStack>> entries) {
         this.id = id;
         this.fluid = fluid;
         this.entries = entries;
@@ -43,7 +43,7 @@ public class ExpandedWoodenCrucibleRecipe {
         return entries.get(index).getFirst();
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 

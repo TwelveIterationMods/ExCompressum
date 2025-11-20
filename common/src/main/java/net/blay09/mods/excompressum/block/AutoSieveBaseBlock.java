@@ -1,9 +1,7 @@
 package net.blay09.mods.excompressum.block;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.PropertyMap;
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.common.CommonCapabilities;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.capabilities.CommonCapabilities;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.registry.autosieveskin.AutoSieveSkinRegistry;
 import net.blay09.mods.excompressum.registry.autosieveskin.WhitelistEntry;
@@ -16,8 +14,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.*;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
@@ -28,7 +24,6 @@ import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -49,8 +44,6 @@ import net.minecraft.world.phys.Vec3;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUglyfiable {
@@ -111,7 +104,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
         if (!player.isShiftKeyDown() && level.getBlockEntity(pos) instanceof MenuProvider menuProvider) {
-            Balm.getNetworking().openMenu(player, menuProvider);
+            Balm.networking().openMenu(player, menuProvider);
             return InteractionResult.SUCCESS;
         }
 
@@ -127,7 +120,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null) {
-            Container container = Balm.getCapabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
+            Container container = Balm.capabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
             if (container != null) {
                 return AbstractContainerMenu.getRedstoneSignalFromContainer(container);
             }

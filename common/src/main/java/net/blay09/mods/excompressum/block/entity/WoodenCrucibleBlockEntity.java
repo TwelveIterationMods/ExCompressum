@@ -1,14 +1,11 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.container.ImplementedContainer;
-import net.blay09.mods.balm.api.fluid.BalmFluidTankProvider;
-import net.blay09.mods.balm.api.fluid.DefaultFluidTank;
-import net.blay09.mods.balm.api.fluid.FluidTank;
-import net.blay09.mods.balm.common.BalmBlockEntity;
-import net.blay09.mods.excompressum.api.ExNihiloProvider;
+import net.blay09.mods.balm.platform.fluid.BalmFluidTankProvider;
+import net.blay09.mods.balm.platform.fluid.DefaultFluidTank;
+import net.blay09.mods.balm.platform.fluid.FluidTank;
+import net.blay09.mods.balm.world.ImplementedContainer;
+import net.blay09.mods.balm.world.level.block.entity.BalmBlockEntityUtils;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
-import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.woodencrucible.WoodenCrucibleRecipe;
 import net.blay09.mods.excompressum.tag.ModItemTags;
@@ -17,12 +14,13 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -31,7 +29,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.Objects;
 
-public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFluidTankProvider, ImplementedContainer {
+public class WoodenCrucibleBlockEntity extends BlockEntity implements BalmFluidTankProvider, ImplementedContainer {
 
     private static final int RAIN_FILL_INTERVAL = 20;
     private static final int MELT_INTERVAL = 20;
@@ -79,7 +77,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
     private int solidVolume;
 
     public WoodenCrucibleBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.woodenCrucible.get(), pos, state);
+        super(ModBlockEntities.woodenCrucible.value(), pos, state);
     }
 
     public boolean addItem(ServerLevel level, ItemStack itemStack, boolean isAutomated, boolean simulate) {
@@ -88,7 +86,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
             if (!simulate) {
                 items.set(0, new ItemStack(Blocks.CLAY));
                 fluidTank.setFluid(Fluids.EMPTY, 0);
-                sync();
+                BalmBlockEntityUtils.sync(this);
             }
             return true;
         }
@@ -102,7 +100,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
                     if (!simulate) {
                         currentTargetFluid = recipe.getFluid();
                         solidVolume += Math.min(capacityLeft, recipe.getAmount());
-                        sync();
+                        BalmBlockEntityUtils.sync(this);
                     }
                     return true;
                 }
@@ -142,7 +140,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
         if (ticksSinceSync >= SYNC_INTERVAL) {
             ticksSinceSync = 0;
             if (isDirty) {
-                sync();
+                BalmBlockEntityUtils.sync(this);
                 isDirty = false;
             }
         }
@@ -153,7 +151,7 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
         solidVolume = input.getIntOr("SolidVolume", 0);
         input.child("FluidTank").ifPresent(fluidTank::deserialize);
         ContainerHelper.loadAllItems(input, items);
-        input.getString("TargetFluid").map(ResourceLocation::parse).flatMap(BuiltInRegistries.FLUID::getOptional)
+        input.getString("TargetFluid").map(Identifier::parse).flatMap(BuiltInRegistries.FLUID::getOptional)
                 .ifPresent(targetFluid -> currentTargetFluid = targetFluid);
     }
 
@@ -169,8 +167,8 @@ public class WoodenCrucibleBlockEntity extends BalmBlockEntity implements BalmFl
     }
 
     @Override
-    public void writeUpdateTag(ValueOutput output) {
-        saveAdditional(output);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return BalmBlockEntityUtils.createUpdateTag(registries, this::saveAdditional);
     }
 
     @Override

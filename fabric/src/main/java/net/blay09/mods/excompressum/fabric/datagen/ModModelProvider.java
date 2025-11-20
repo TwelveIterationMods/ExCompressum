@@ -13,7 +13,7 @@ import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.model.VariantMutator;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
@@ -39,11 +39,11 @@ public class ModModelProvider extends FabricModelProvider {
         generators.createNonTemplateModelBlock(ModBlocks.autoCompressor);
         generators.createNonTemplateModelBlock(ModBlocks.rationingAutoCompressor);
         createUglifyableHorizontalFacingModel(generators, ModBlocks.autoHammer);
-        generators.registerSimpleItemModel(ModBlocks.autoHammer, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_hammer"));
+        generators.registerSimpleItemModel(ModBlocks.autoHammer, Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_hammer"));
         generators.registerSimpleItemModel(ModBlocks.autoCompressedHammer,
-                ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_compressed_hammer"));
-        generators.registerSimpleItemModel(ModBlocks.autoSieve, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_sieve"));
-        generators.registerSimpleItemModel(ModBlocks.autoHeavySieve, ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_heavy_sieve"));
+                Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_compressed_hammer"));
+        generators.registerSimpleItemModel(ModBlocks.autoSieve, Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_sieve"));
+        generators.registerSimpleItemModel(ModBlocks.autoHeavySieve, Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_heavy_sieve"));
         createUglifyableHorizontalFacingModel(generators, ModBlocks.autoCompressedHammer);
         createUglifyableHorizontalFacingModel(generators, ModBlocks.autoSieve);
         createUglifyableHorizontalFacingModel(generators, ModBlocks.autoHeavySieve);
@@ -89,12 +89,12 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.generateFlatItem(ModItems.uncompressedCoal, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.uglySteelPlating, ModelTemplates.FLAT_ITEM);
 
-        final var baitTexture = ResourceLocation.fromNamespaceAndPath("excompressum", "item/bait");
-        final var baitOverlayTexture = ResourceLocation.fromNamespaceAndPath("excompressum", "item/bait_overlay");
-        itemModelGenerator.generateLayeredItem(ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/bait"), baitTexture, baitOverlayTexture);
+        final var baitTexture = Identifier.fromNamespaceAndPath("excompressum", "item/bait");
+        final var baitOverlayTexture = Identifier.fromNamespaceAndPath("excompressum", "item/bait_overlay");
+        itemModelGenerator.generateLayeredItem(Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/bait"), baitTexture, baitOverlayTexture);
     }
 
-    private ResourceLocation createSimpleRetexturedModel(BlockModelGenerators generators, Block block, Block baseBlock, ResourceLocation template) {
+    private Identifier createSimpleRetexturedModel(BlockModelGenerators generators, Block block, Block baseBlock, Identifier template) {
         final var modelTemplate = new ModelTemplate(Optional.of(template), Optional.empty(), TextureSlot.TEXTURE);
         final var textureMapping = new TextureMapping();
         textureMapping.put(TextureSlot.TEXTURE, TextureMapping.getBlockTexture(baseBlock));
@@ -111,7 +111,7 @@ public class ModModelProvider extends FabricModelProvider {
 
     private void createBait(BlockModelGenerators generators, BaitBlock block, BaitType baitType) {
         generators.createAirLikeBlock(block, baitType.getDisplayItemFirst().getItem());
-        final var itemModelLocation = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/bait");
+        final var itemModelLocation = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/bait");
         generators.itemModelOutput.accept(block.asItem(),
                 ItemModelUtils.tintedModel(itemModelLocation,
                         new Constant(block.getBaitType().getItemColor(0)),

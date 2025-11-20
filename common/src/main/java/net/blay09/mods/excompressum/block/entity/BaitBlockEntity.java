@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.common.BalmBlockEntity;
 import net.blay09.mods.excompressum.block.BaitBlock;
 import net.blay09.mods.excompressum.block.BaitType;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
@@ -14,10 +13,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Turtle;
-import net.minecraft.world.entity.animal.horse.Llama;
+import net.minecraft.world.entity.animal.equine.Llama;
+import net.minecraft.world.entity.animal.turtle.Turtle;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -26,7 +26,7 @@ import net.minecraft.world.phys.AABB;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class BaitBlockEntity extends BalmBlockEntity {
+public class BaitBlockEntity extends BlockEntity {
 
     private static final int ENVIRONMENTAL_CHECK_INTERVAL = 20 * 10;
     private static final int MAX_BAITS_IN_AREA = 2;
@@ -36,7 +36,7 @@ public class BaitBlockEntity extends BalmBlockEntity {
     private static final int MIN_DISTANCE_NO_PLAYERS = 6;
 
     public BaitBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.bait.get(), pos, state);
+        super(ModBlockEntities.bait.value(), pos, state);
     }
 
     private EnvironmentalConditionResult environmentStatus;

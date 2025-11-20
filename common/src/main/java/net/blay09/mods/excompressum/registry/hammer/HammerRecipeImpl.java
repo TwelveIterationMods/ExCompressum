@@ -6,10 +6,8 @@ import net.blay09.mods.excompressum.api.recipe.HammerRecipe;
 import net.blay09.mods.excompressum.registry.ExCompressumRecipe;
 import net.blay09.mods.excompressum.registry.ExCompressumSerializers;
 import net.blay09.mods.excompressum.registry.ModRecipeTypes;
-import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRecipe;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.storage.loot.LootTable;
 
@@ -25,12 +23,12 @@ public class HammerRecipeImpl extends ExCompressumRecipe<RecipeInput> implements
 
     @Override
     public RecipeSerializer<HammerRecipeImpl> getSerializer() {
-        return ModRecipeTypes.hammerRecipeSerializer;
+        return ModRecipeTypes.hammer.serializer();
     }
 
     @Override
     public RecipeType<HammerRecipeImpl> getType() {
-        return ModRecipeTypes.hammerRecipeType;
+        return ModRecipeTypes.hammer.type();
     }
 
     @Override
@@ -40,7 +38,7 @@ public class HammerRecipeImpl extends ExCompressumRecipe<RecipeInput> implements
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return ModRecipeTypes.hammerRecipeBookCategory;
+        return ModRecipeTypes.hammer.bookCategory();
     }
 
     @Override

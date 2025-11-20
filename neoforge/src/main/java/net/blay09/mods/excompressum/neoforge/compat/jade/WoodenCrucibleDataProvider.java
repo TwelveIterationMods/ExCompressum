@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.neoforge.compat.jade;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.entity.WoodenCrucibleBlockEntity;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -24,8 +24,8 @@ public class WoodenCrucibleDataProvider implements IBlockComponentProvider {
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "wooden_crucible");
+    public Identifier getUid() {
+        return Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "wooden_crucible");
     }
 
 }

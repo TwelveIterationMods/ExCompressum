@@ -17,7 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -103,7 +103,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     private ItemStack findItem(String name) {
-        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(Compat.EXNIHILO_SEQUENTIA, name);
+        Identifier location = Identifier.fromNamespaceAndPath(Compat.EXNIHILO_SEQUENTIA, name);
         Item item = BuiltInRegistries.ITEM.getValue(location);
         return new ItemStack(item);
     }

@@ -37,7 +37,7 @@ public class AutoCompressedHammerBlock extends AutoHammerBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.autoCompressedHammer.get(), AutoHammerBlockEntity::serverTick) : createTickerHelper(type, ModBlockEntities.autoCompressedHammer.get(), AutoHammerBlockEntity::clientTick);
+        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.autoCompressedHammer.value(), AutoHammerBlockEntity::serverTick) : createTickerHelper(type, ModBlockEntities.autoCompressedHammer.value(), AutoHammerBlockEntity::clientTick);
     }
 
     @Override

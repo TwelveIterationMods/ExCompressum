@@ -1,25 +1,17 @@
 package net.blay09.mods.excompressum.block;
 
 import com.mojang.serialization.MapCodec;
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.common.CommonCapabilities;
-import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.capabilities.CommonCapabilities;
 import net.blay09.mods.excompressum.block.entity.AutoCompressorBlockEntity;
-import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -51,7 +43,7 @@ public class AutoCompressorBlock extends BaseEntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult blockHitResult) {
         if (!player.isShiftKeyDown() && !level.isClientSide()) {
             if (level.getBlockEntity(pos) instanceof MenuProvider menuProvider) {
-                Balm.getNetworking().openMenu(player, menuProvider);
+                Balm.networking().openMenu(player, menuProvider);
             }
         }
 
@@ -67,7 +59,7 @@ public class AutoCompressorBlock extends BaseEntityBlock {
     protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null) {
-            Container container = Balm.getCapabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
+            Container container = Balm.capabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
             if (container != null) {
                 return AbstractContainerMenu.getRedstoneSignalFromContainer(container);
             }
@@ -101,7 +93,7 @@ public class AutoCompressorBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.autoCompressor.get(), AutoCompressorBlockEntity::serverTick) : null;
+        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.autoCompressor.value(), AutoCompressorBlockEntity::serverTick) : null;
     }
 
     @Override

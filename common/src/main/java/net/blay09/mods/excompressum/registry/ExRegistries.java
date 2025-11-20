@@ -1,8 +1,6 @@
 package net.blay09.mods.excompressum.registry;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.server.ServerReloadFinishedEvent;
-import net.blay09.mods.balm.api.event.server.ServerStartedEvent;
+import net.blay09.mods.balm.platform.event.callback.ServerLifecycleCallback;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRegistry;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipeRegistry;
@@ -20,12 +18,8 @@ public class ExRegistries {
     private static final HeavySieveRegistry heavySieveRegistry = new HeavySieveRegistry();
 
     public static void initialize() {
-        Balm.getEvents()
-                .onEvent(ServerStartedEvent.class,
-                        it -> compressedRecipeRegistry.reloadRecipes(it.getServer().getRecipeManager(), it.getServer().registryAccess()));
-        Balm.getEvents()
-                .onEvent(ServerReloadFinishedEvent.class,
-                        it -> compressedRecipeRegistry.reloadRecipes(it.getServer().getRecipeManager(), it.getServer().registryAccess()));
+        ServerLifecycleCallback.Started.EVENT.register(server -> compressedRecipeRegistry.reloadRecipes(server.getRecipeManager(), server.registryAccess()));
+        ServerLifecycleCallback.Reloaded.EVENT.register(server -> compressedRecipeRegistry.reloadRecipes(server.getRecipeManager(), server.registryAccess()));
     }
 
     public static CompressedRecipeRegistry getCompressedRecipeRegistry() {

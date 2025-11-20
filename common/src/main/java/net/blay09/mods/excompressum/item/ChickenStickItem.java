@@ -7,7 +7,7 @@ import net.blay09.mods.excompressum.tag.ModBlockTags;
 import net.blay09.mods.excompressum.tag.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -49,10 +49,10 @@ public class ChickenStickItem extends Item {
 
     public void tryPlayChickenSound(LevelAccessor level, BlockPos pos) {
         if (level.getRandom().nextFloat() <= ExCompressumConfig.getActive().tools.chickenStickSoundChance) {
-            ResourceLocation location = null;
+            Identifier location = null;
             final List<? extends String> chickenStickSounds = ExCompressumConfig.getActive().tools.chickenStickSounds;
             if (!chickenStickSounds.isEmpty()) {
-                location = ResourceLocation.parse(chickenStickSounds.get(level.getRandom().nextInt(chickenStickSounds.size())));
+                location = Identifier.parse(chickenStickSounds.get(level.getRandom().nextInt(chickenStickSounds.size())));
             }
             if (location != null) {
                 final var soundEvent = BuiltInRegistries.SOUND_EVENT.getValue(location);
@@ -71,7 +71,7 @@ public class ChickenStickItem extends Item {
     }
 
     public boolean isAngry(ItemStack itemStack) {
-        return itemStack.has(ModComponents.angry.get());
+        return itemStack.has(ModComponents.angry.value());
     }
 
 }

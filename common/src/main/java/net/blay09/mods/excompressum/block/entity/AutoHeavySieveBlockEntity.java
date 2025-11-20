@@ -20,7 +20,7 @@ import java.util.Collection;
 public class AutoHeavySieveBlockEntity extends AutoSieveBlockEntity {
 
     public AutoHeavySieveBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.autoHeavySieve.get(), pos, state);
+        super(ModBlockEntities.autoHeavySieve.value(), pos, state);
     }
 
     @Override

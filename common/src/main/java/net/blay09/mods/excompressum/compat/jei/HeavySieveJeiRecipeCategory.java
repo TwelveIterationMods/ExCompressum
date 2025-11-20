@@ -10,19 +10,20 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.block.HeavySieveType;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.recipeviewers.ExpandedHeavySieveRecipe;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 
 public class HeavySieveJeiRecipeCategory implements IRecipeCategory<ExpandedHeavySieveRecipe> {
 
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "heavy_sieve");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "heavy_sieve");
     public static final RecipeType<ExpandedHeavySieveRecipe> TYPE = new RecipeType<>(UID, ExpandedHeavySieveRecipe.class);
-    private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_heavy_sieve.png");
+    private static final Identifier texture = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_heavy_sieve.png");
 
     private final IDrawable background;
     private final IDrawable icon;
@@ -30,7 +31,7 @@ public class HeavySieveJeiRecipeCategory implements IRecipeCategory<ExpandedHeav
     public HeavySieveJeiRecipeCategory(IJeiHelpers jeiHelpers) {
         final IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
         this.background = guiHelper.createDrawable(texture, 0, 0, 166, 129);
-        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.heavySieves[0]));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.heavySieves.get(HeavySieveType.OAK)));
     }
 
     @Override
@@ -66,7 +67,7 @@ public class HeavySieveJeiRecipeCategory implements IRecipeCategory<ExpandedHeav
     }
 
     @Override
-    public @Nullable ResourceLocation getRegistryName(ExpandedHeavySieveRecipe recipe) {
+    public @Nullable Identifier getRegistryName(ExpandedHeavySieveRecipe recipe) {
         return recipe.getId();
     }
 

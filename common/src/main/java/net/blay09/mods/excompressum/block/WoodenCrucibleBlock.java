@@ -2,8 +2,8 @@ package net.blay09.mods.excompressum.block;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.container.ContainerUtils;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.world.ContainerUtils;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.block.entity.WoodenCrucibleBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -85,7 +85,7 @@ public class WoodenCrucibleBlock extends BaseEntityBlock {
             }
         }
 
-        Balm.getHooks().useFluidTank(state, level, pos, player, hand, blockHitResult);
+        Balm.hooks().useFluidTank(state, level, pos, player, hand, blockHitResult);
 
         return super.useItemOn(itemStack, state, level, pos, player, hand, blockHitResult);
     }
@@ -120,7 +120,7 @@ public class WoodenCrucibleBlock extends BaseEntityBlock {
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.woodenCrucible.get(), WoodenCrucibleBlockEntity::serverTick) : null;
+        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.woodenCrucible.value(), WoodenCrucibleBlockEntity::serverTick) : null;
     }
 
     @Override

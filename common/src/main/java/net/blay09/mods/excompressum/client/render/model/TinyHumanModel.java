@@ -2,11 +2,10 @@ package net.blay09.mods.excompressum.client.render.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
 import net.blay09.mods.excompressum.block.entity.SieveAnimationType;
 import net.blay09.mods.excompressum.client.render.blockentity.AutoSieveRenderer;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.player.PlayerModel;
 
 public class TinyHumanModel extends PlayerModel {
 

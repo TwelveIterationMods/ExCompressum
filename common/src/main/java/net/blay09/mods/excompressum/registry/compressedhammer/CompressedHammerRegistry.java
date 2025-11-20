@@ -16,7 +16,7 @@ public class CompressedHammerRegistry {
     public static List<ItemStack> rollHammerRewards(ServerLevel level, LootContext context, ItemStack itemStack) {
         final var recipeManager = level.getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.compressedHammerRecipeType);
+        final var recipes = recipeMap.byType(ModRecipeTypes.compressedHammer.type());
         List<ItemStack> results = new ArrayList<>();
         for (final var recipeHolder : recipes) {
             final var recipe = recipeHolder.value();
@@ -43,7 +43,7 @@ public class CompressedHammerRegistry {
 
     public boolean isHammerable(RecipeManager recipeManager, ItemStack itemStack) {
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.compressedHammerRecipeType);
+        final var recipes = recipeMap.byType(ModRecipeTypes.compressedHammer.type());
         for (final var recipeHolder : recipes) {
             final var recipe = recipeHolder.value();
             if (testRecipe(itemStack, recipe)) {

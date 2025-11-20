@@ -1,8 +1,9 @@
 package net.blay09.mods.excompressum.handler;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.EntityAddedEvent;
-import net.blay09.mods.balm.api.event.LivingDeathEvent;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.event.EventHandling;
+import net.blay09.mods.balm.platform.event.callback.EntityCallback;
+import net.blay09.mods.balm.platform.event.callback.LivingEntityCallback;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.tag.ModEntityTags;
@@ -10,14 +11,16 @@ import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.WitherSkeleton;
-import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.monster.skeleton.Skeleton;
+import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
+import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.entity.monster.zombie.ZombifiedPiglin;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 
 public class CompressedEnemyHandler {
 
@@ -25,15 +28,13 @@ public class CompressedEnemyHandler {
     private static final String NOCOMPRESS = "NoCompress";
 
     public static void initialize() {
-        Balm.getEvents().onEvent(EntityAddedEvent.class, CompressedEnemyHandler::onEntityAdded);
-        Balm.getEvents().onEvent(LivingDeathEvent.class, CompressedEnemyHandler::onLivingDeath);
+        EntityCallback.Add.EVENT.register(CompressedEnemyHandler::onEntityAdded);
+        LivingEntityCallback.Death.AFTER.register(CompressedEnemyHandler::onLivingDeath);
     }
 
-    public static void onEntityAdded(EntityAddedEvent event) {
-        final var level = event.getLevel();
-        final var entity = event.getEntity();
+    public static void onEntityAdded(Level level, Entity entity) {
         if (!level.isClientSide() && entity instanceof Mob) {
-            final var persistentData = Balm.getHooks().getPersistentData(entity);
+            final var persistentData = Balm.hooks().getPersistentData(entity);
             if (entity.getType().is(ModEntityTags.COMPRESSABLE)) {
                 final var modData = persistentData.getCompound(ExCompressum.MOD_ID);
                 final var noCompress = modData.flatMap(it -> it.getBoolean(NOCOMPRESS)).orElse(false);
@@ -57,16 +58,14 @@ public class CompressedEnemyHandler {
         }
     }
 
-    public static void onLivingDeath(LivingDeathEvent event) {
-        final var entity = event.getEntity();
+    public static EventHandling onLivingDeath(LivingEntity entity, DamageSource damageSource) {
         final var level = entity.level();
-        final var damageSource = event.getDamageSource();
-        final var persistentData = Balm.getHooks().getPersistentData(entity);
+        final var persistentData = Balm.hooks().getPersistentData(entity);
         if (!level.isClientSide() && persistentData.getCompound(ExCompressum.MOD_ID).flatMap(it -> it.getBoolean(COMPRESSED)).orElse(false)) {
             if (entity instanceof Mob) {
-                if (damageSource.getEntity() instanceof Player player && !Balm.getHooks().isFakePlayer(player)) {
+                if (damageSource.getEntity() instanceof Player player && !Balm.hooks().isFakePlayer(player)) {
                     if (StupidUtils.hasSilkTouchModifier((LivingEntity) damageSource.getEntity())) {
-                        return;
+                        return EventHandling.RESUME;
                     }
 
                     @SuppressWarnings("unchecked") final EntityType<? extends LivingEntity> entityType = (EntityType<? extends LivingEntity>) entity.getType();
@@ -74,7 +73,7 @@ public class CompressedEnemyHandler {
                     for (int i = 0; i < ExCompressumConfig.getActive().compressedMobs.compressedMobSize; i++) {
                         final var newEntity = entityType.create((ServerLevel) level, null, entity.blockPosition(), EntitySpawnReason.CONVERSION, false, false);
                         if (newEntity == null) {
-                            return;
+                            return EventHandling.RESUME;
                         }
 
                         if (entity.isBaby()) {
@@ -95,7 +94,7 @@ public class CompressedEnemyHandler {
 
                         final var tagCompound = new CompoundTag();
                         tagCompound.putBoolean(NOCOMPRESS, true);
-                        Balm.getHooks().getPersistentData(newEntity).put(ExCompressum.MOD_ID, tagCompound);
+                        Balm.hooks().getPersistentData(newEntity).put(ExCompressum.MOD_ID, tagCompound);
                         newEntity.snapTo(entity.getX(), entity.getY() + 1, entity.getZ(), (float) Math.random(), (float) Math.random());
                         final var motion = 0.01;
                         newEntity.setDeltaMovement((level.random.nextGaussian() - 0.5) * motion, 0, (level.random.nextGaussian() - 0.5) * motion);
@@ -104,6 +103,8 @@ public class CompressedEnemyHandler {
                 }
             }
         }
+
+        return EventHandling.RESUME;
     }
 
 }

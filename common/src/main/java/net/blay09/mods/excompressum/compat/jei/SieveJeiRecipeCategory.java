@@ -13,16 +13,16 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.recipeviewers.ExpandedSieveRecipe;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 
 public class SieveJeiRecipeCategory implements IRecipeCategory<ExpandedSieveRecipe> {
 
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "sieve");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "sieve");
     public static final RecipeType<ExpandedSieveRecipe> TYPE = new RecipeType<>(UID, ExpandedSieveRecipe.class);
-    private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_heavy_sieve.png");
+    private static final Identifier texture = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_heavy_sieve.png");
 
     private final IDrawable background;
     private final IDrawable icon;
@@ -66,7 +66,7 @@ public class SieveJeiRecipeCategory implements IRecipeCategory<ExpandedSieveReci
     }
 
     @Override
-    public @Nullable ResourceLocation getRegistryName(ExpandedSieveRecipe recipe) {
+    public @Nullable Identifier getRegistryName(ExpandedSieveRecipe recipe) {
         return recipe.getId();
     }
 

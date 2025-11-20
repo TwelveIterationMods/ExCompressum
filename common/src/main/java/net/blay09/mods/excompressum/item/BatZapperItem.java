@@ -1,8 +1,8 @@
 package net.blay09.mods.excompressum.item;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.energy.BalmEnergyStorageProvider;
-import net.blay09.mods.balm.common.CommonCapabilities;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.capabilities.CommonCapabilities;
+import net.blay09.mods.balm.platform.energy.BalmEnergyStorageProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -36,7 +36,7 @@ public class BatZapperItem extends Item {
                         energyStorage.setEnergy(energyStorage.getCapacity());
                     }
                 } else {
-                    final var energyStorage = Balm.getCapabilities().getCapability(blockEntity, CommonCapabilities.ENERGY_STORAGE);
+                    final var energyStorage = Balm.capabilities().getCapability(blockEntity, CommonCapabilities.ENERGY_STORAGE);
                     if (energyStorage != null) {
                         energyStorage.setEnergy(energyStorage.getCapacity());
                     }

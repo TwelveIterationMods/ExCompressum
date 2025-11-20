@@ -2,6 +2,7 @@ package net.blay09.mods.excompressum.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.blay09.mods.excompressum.block.AutoSieveBlock;
+import net.blay09.mods.excompressum.block.HeavySieveType;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
 import net.blay09.mods.excompressum.block.entity.AutoHeavySieveBlockEntity;
@@ -11,7 +12,6 @@ import net.blay09.mods.excompressum.client.ModModels;
 import net.blay09.mods.excompressum.client.render.model.TinyHumanModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -79,7 +80,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
 
         if (sieveModel == null || currentCacheKey != cacheKey) {
-            sieveModel = isHeavy ? blockRenderDispatcher.getBlockModel(ModBlocks.heavySieves[0].defaultBlockState()) : ModModels.sieves.get(0).get();
+            sieveModel = isHeavy ? blockRenderDispatcher.getBlockModel(ModBlocks.heavySieves.get(HeavySieveType.OAK).defaultBlockState()) : ModModels.sieves.get(0).value();
             currentCacheKey = cacheKey;
         }
 
@@ -124,7 +125,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         final var skin = getPlayerSkin(renderState.profile);
         final var playerModel = getPlayerModel(skin);
         playerModel.animate(renderState);
-        submitNodeCollector.submitModel(playerModel, renderState.avatar, poseStack, RenderType.entityCutout(skin.body().texturePath()), renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, renderState.breakProgress);
+        submitNodeCollector.submitModel(playerModel, renderState.avatar, poseStack, RenderTypes.entityCutout(skin.body().texturePath()), renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, renderState.breakProgress);
         poseStack.popPose();
 
         // Render the glass around player head if underwater
@@ -134,7 +135,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
             float glassScale = 0.35f;
             poseStack.scale(glassScale, glassScale, glassScale);
             final var glassModel = blockRenderDispatcher.getBlockModel(Blocks.GLASS.defaultBlockState());
-            submitNodeCollector.submitBlockModel(poseStack, RenderType.entityCutout(TextureAtlas.LOCATION_BLOCKS), glassModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            submitNodeCollector.submitBlockModel(poseStack, RenderTypes.entityCutout(TextureAtlas.LOCATION_BLOCKS), glassModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
 
@@ -148,13 +149,13 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
         // Render the sieve
         poseStack.pushPose();
-        submitNodeCollector.submitBlockModel(poseStack, RenderType.entitySolid(TextureAtlas.LOCATION_BLOCKS), sieveModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+        submitNodeCollector.submitBlockModel(poseStack, RenderTypes.entitySolid(TextureAtlas.LOCATION_BLOCKS), sieveModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
 
         // Render the sieve mesh
-        final var meshModel = renderState.meshModelName != null ? ModModels.meshes.get(renderState.meshModelName).get() : null;
+        final var meshModel = renderState.meshModelName != null ? ModModels.meshes.get(renderState.meshModelName).value() : null;
         if (meshModel != null) {
-            submitNodeCollector.submitBlockModel(poseStack, RenderType.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), meshModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            submitNodeCollector.submitBlockModel(poseStack, RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), meshModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         }
 
         // Render the content

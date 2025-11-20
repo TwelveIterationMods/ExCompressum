@@ -21,7 +21,7 @@ import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -47,15 +47,15 @@ import java.util.*;
 
 public class FabricaeExNihiloAddon implements ExNihiloProvider {
 
-    private final Map<CommonMeshType, ResourceLocation> meshTypeToMeshId = new HashMap<>();
-    private final Map<ResourceLocation, CommonMeshType> meshIdToMeshType = new HashMap<>();
+    private final Map<CommonMeshType, Identifier> meshTypeToMeshId = new HashMap<>();
+    private final Map<Identifier, CommonMeshType> meshIdToMeshType = new HashMap<>();
 
     public FabricaeExNihiloAddon() {
         ExNihilo.setInstance(this);
 
         final var stringMeshItem = findItem("string_mesh");
         if (!stringMeshItem.isEmpty()) {
-            final var backingMesh = ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "string_mesh");
+            final var backingMesh = Identifier.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "string_mesh");
             final var mesh = new SieveMeshRegistryEntry(CommonMeshType.STRING, stringMeshItem, backingMesh);
             mesh.setModelName("string");
             SieveMeshRegistry.add(mesh);
@@ -65,7 +65,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
 
         final var flintMeshItem = findItem("flint_mesh");
         if (!flintMeshItem.isEmpty()) {
-            final var backingMesh = ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "flint_mesh");
+            final var backingMesh = Identifier.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "flint_mesh");
             final var mesh = new SieveMeshRegistryEntry(CommonMeshType.FLINT, flintMeshItem, backingMesh);
             mesh.setModelName("flint");
             SieveMeshRegistry.add(mesh);
@@ -75,7 +75,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
 
         final var ironMeshItem = findItem("iron_mesh");
         if (!ironMeshItem.isEmpty()) {
-            ResourceLocation backingMesh = ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "iron_mesh");
+            Identifier backingMesh = Identifier.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "iron_mesh");
             final var mesh = new SieveMeshRegistryEntry(CommonMeshType.IRON, ironMeshItem, backingMesh);
             mesh.setHeavy(true);
             mesh.setModelName("iron");
@@ -87,7 +87,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
 
         final var copperMeshItem = findItem("copper_mesh");
         if (!copperMeshItem.isEmpty()) {
-            final var backingMesh = ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "copper_mesh");
+            final var backingMesh = Identifier.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "copper_mesh");
             final var mesh = new SieveMeshRegistryEntry(CommonMeshType.COPPER, copperMeshItem, backingMesh);
             mesh.setHeavy(true);
             mesh.setModelName("copper");
@@ -98,7 +98,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
 
         final var goldMeshItem = findItem("gold_mesh");
         if (!goldMeshItem.isEmpty()) {
-            final var backingMesh = ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "gold_mesh");
+            final var backingMesh = Identifier.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "gold_mesh");
             final var mesh = new SieveMeshRegistryEntry(CommonMeshType.GOLD, goldMeshItem, backingMesh);
             mesh.setHeavy(true);
             mesh.setModelName("gold");
@@ -109,7 +109,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
 
         final var diamondMeshItem = findItem("diamond_mesh");
         if (!diamondMeshItem.isEmpty()) {
-            final var backingMesh = ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "diamond_mesh");
+            final var backingMesh = Identifier.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "diamond_mesh");
             final var mesh = new SieveMeshRegistryEntry(CommonMeshType.DIAMOND, diamondMeshItem, backingMesh);
             mesh.setHeavy(true);
             mesh.setModelName("diamond");
@@ -120,7 +120,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
 
         final var emeraldMeshItem = findItem("emerald_mesh");
         if (!emeraldMeshItem.isEmpty()) {
-            final var backingMesh = ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "emerald_mesh");
+            final var backingMesh = Identifier.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "emerald_mesh");
             final var mesh = new SieveMeshRegistryEntry(CommonMeshType.EMERALD, emeraldMeshItem, backingMesh);
             mesh.setHeavy(true);
             mesh.setModelName("emerald");
@@ -131,7 +131,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
 
         final var netheriteMeshItem = findItem("netherite_mesh");
         if (!netheriteMeshItem.isEmpty()) {
-            final var backingMesh = ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "netherite_mesh");
+            final var backingMesh = Identifier.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, "netherite_mesh");
             final var mesh = new SieveMeshRegistryEntry(CommonMeshType.NETHERITE, netheriteMeshItem, backingMesh);
             mesh.setHeavy(true);
             mesh.setModelName("netherite");
@@ -142,7 +142,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
     }
 
     private ItemStack findItem(String name) {
-        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, name);
+        Identifier location = Identifier.fromNamespaceAndPath(Compat.FABRICAE_EX_NIHILO, name);
         Item item = BuiltInRegistries.ITEM.getValue(location);
         return new ItemStack(item);
     }
@@ -179,7 +179,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
         boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.getValue(BlockStateProperties.WATERLOGGED);
         final var recipes = wraith.fabricaeexnihilo.recipe.SieveRecipe.find(itemStack.getItem(),
                 waterlogged,
-                (ResourceLocation) sieveMesh.getBackingMesh(),
+                (Identifier) sieveMesh.getBackingMesh(),
                 level);
         return !recipes.isEmpty();
     }
@@ -195,7 +195,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
         boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.getValue(BlockStateProperties.WATERLOGGED);
         final var recipes = wraith.fabricaeexnihilo.recipe.SieveRecipe.find(sourceStack.getItem(),
                 waterlogged,
-                (ResourceLocation) sieveMesh.getBackingMesh(),
+                (Identifier) sieveMesh.getBackingMesh(),
                 level);
         List<ItemStack> list = new ArrayList<>();
         for (final var recipe : recipes) {
@@ -226,13 +226,13 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
 
     @Override
     public LootTable generateHeavySieveLootTable(Level level, BlockState sieveState, ItemLike source, int count, SieveMeshRegistryEntry mesh) {
-        if (!(mesh.getBackingMesh() instanceof ResourceLocation)) {
+        if (!(mesh.getBackingMesh() instanceof Identifier)) {
             return LootTable.EMPTY;
         }
 
         LootTable.Builder tableBuilder = LootTable.lootTable();
         boolean waterlogged = sieveState.hasProperty(BlockStateProperties.WATERLOGGED) && sieveState.getValue(BlockStateProperties.WATERLOGGED);
-        final var recipes = wraith.fabricaeexnihilo.recipe.SieveRecipe.find(source.asItem(), waterlogged, (ResourceLocation) mesh.getBackingMesh(), level);
+        final var recipes = wraith.fabricaeexnihilo.recipe.SieveRecipe.find(source.asItem(), waterlogged, (Identifier) mesh.getBackingMesh(), level);
         for (final var recipe : recipes) {
             tableBuilder.withPool(buildLootPool(recipe).setRolls(ConstantValue.exactly(count)));
         }

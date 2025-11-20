@@ -1,14 +1,12 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.api.energy.BalmEnergyStorageProvider;
-import net.blay09.mods.balm.api.energy.DefaultEnergyStorage;
-import net.blay09.mods.balm.api.energy.EnergyStorage;
+import net.blay09.mods.balm.platform.energy.BalmEnergyStorageProvider;
+import net.blay09.mods.balm.platform.energy.DefaultEnergyStorage;
+import net.blay09.mods.balm.platform.energy.EnergyStorage;
 import net.blay09.mods.excompressum.component.ModComponents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -31,7 +29,7 @@ public class AutoSieveBlockEntity extends AbstractAutoSieveBlockEntity implement
     }
 
     public AutoSieveBlockEntity(BlockPos pos, BlockState state) {
-        this(ModBlockEntities.autoSieve.get(), pos, state);
+        this(ModBlockEntities.autoSieve.value(), pos, state);
     }
 
     @Override
@@ -78,13 +76,13 @@ public class AutoSieveBlockEntity extends AbstractAutoSieveBlockEntity implement
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder builder) {
         super.collectImplicitComponents(builder);
-        builder.set(ModComponents.energy.get(), energyStorage.getEnergy());
+        builder.set(ModComponents.energy.value(), energyStorage.getEnergy());
     }
 
     @Override
     protected void applyImplicitComponents(DataComponentGetter input) {
         super.applyImplicitComponents(input);
-        final var energyComponent = input.get(ModComponents.energy.get());
+        final var energyComponent = input.get(ModComponents.energy.value());
         if (energyComponent != null) {
             energyStorage.setEnergy(energyComponent);
         }

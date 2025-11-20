@@ -8,7 +8,7 @@ import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -42,7 +42,7 @@ public class AutoSieveBlock extends AutoSieveBaseBlock {
 
     @Override
     public BlockEntityType<?> getBlockEntityType() {
-        return ModBlockEntities.autoSieve.get();
+        return ModBlockEntities.autoSieve.value();
     }
 
     @Override

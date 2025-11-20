@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class RationingAutoCompressorBlockEntity extends AutoCompressorBlockEntity {
     public RationingAutoCompressorBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.rationingAutoCompressor.get(), pos, state);
+        super(ModBlockEntities.rationingAutoCompressor.value(), pos, state);
     }
 
     @Override

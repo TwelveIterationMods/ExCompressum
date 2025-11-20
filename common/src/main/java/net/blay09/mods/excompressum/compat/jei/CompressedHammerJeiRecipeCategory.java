@@ -12,14 +12,14 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.recipeviewers.ExpandedCompressedHammerRecipe;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class CompressedHammerJeiRecipeCategory implements IRecipeCategory<ExpandedCompressedHammerRecipe> {
 
-    private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_hammer.png");
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "compressed_hammer");
+    private static final Identifier texture = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_hammer.png");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "compressed_hammer");
     public static final RecipeType<ExpandedCompressedHammerRecipe> TYPE = new RecipeType<>(UID, ExpandedCompressedHammerRecipe.class);
 
     private final IDrawable background;
@@ -62,7 +62,7 @@ public class CompressedHammerJeiRecipeCategory implements IRecipeCategory<Expand
     }
 
     @Override
-    public @Nullable ResourceLocation getRegistryName(ExpandedCompressedHammerRecipe recipe) {
+    public @Nullable Identifier getRegistryName(ExpandedCompressedHammerRecipe recipe) {
         return recipe.getId();
     }
 }

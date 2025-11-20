@@ -1,12 +1,13 @@
 package net.blay09.mods.excompressum.handler;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.BreakBlockEvent;
-import net.blay09.mods.balm.api.event.PlayerAttackEvent;
+import net.blay09.mods.balm.platform.event.EventHandling;
+import net.blay09.mods.balm.platform.event.callback.BlockCallback;
+import net.blay09.mods.balm.platform.event.callback.PlayerCallback;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.AngryChickenEntity;
 import net.blay09.mods.excompressum.entity.ModEntities;
 import net.blay09.mods.excompressum.item.ChickenStickItem;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -15,39 +16,44 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.animal.chicken.Chicken;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public class ChickenStickHandler {
 
     public static void initialize() {
-        Balm.getEvents().onEvent(PlayerAttackEvent.class, ChickenStickHandler::onPlayerAttack);
-        Balm.getEvents().onEvent(BreakBlockEvent.class, ChickenStickHandler::onBlockBreak);
+        PlayerCallback.Attack.EVENT.register(ChickenStickHandler::onPlayerAttack);
+        BlockCallback.Break.EVENT.register(ChickenStickHandler::onBlockBreak);
     }
 
-    public static void onPlayerAttack(PlayerAttackEvent event) {
+    public static EventHandling onPlayerAttack(Player player, Entity target) {
         if (!ExCompressumConfig.getActive().tools.allowChickenStickCreation) {
-            return;
+            return EventHandling.RESUME;
         }
 
-        if (event.getTarget() instanceof Chicken chicken && !chicken.isBaby()) {
-            ItemStack heldItem = event.getPlayer().getItemInHand(InteractionHand.MAIN_HAND);
+        if (target instanceof Chicken chicken && !chicken.isBaby()) {
+            ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
             if (!heldItem.isEmpty() && heldItem.getItem() == Items.STICK) {
                 chicken.remove(Entity.RemovalReason.DISCARDED);
 
                 Level level = chicken.level();
                 if (!level.isClientSide()) {
-                    if (!event.getPlayer().getAbilities().instabuild) {
+                    if (!player.getAbilities().instabuild) {
                         heldItem.shrink(1);
                     }
 
                     if (heldItem.isEmpty()) {
-                        event.getPlayer().setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                        player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                     }
 
-                    AngryChickenEntity angryChicken = ModEntities.angryChicken.get().create(level, EntitySpawnReason.CONVERSION);
+                    AngryChickenEntity angryChicken = ModEntities.angryChicken.value().create(level, EntitySpawnReason.CONVERSION);
                     angryChicken.snapTo(chicken.getX(), chicken.getY(), chicken.getZ(), chicken.getYRot(), chicken.getXRot());
                     angryChicken.absSnapTo(chicken.getX(), chicken.getY(), chicken.getZ(), chicken.getYRot(), chicken.getXRot());
                     angryChicken.setYHeadRot(chicken.yHeadRot);
@@ -64,23 +70,26 @@ public class ChickenStickHandler {
                             0.25f,
                             1f);
                 }
-                event.setCanceled(true);
+                return EventHandling.CANCEL;
             }
         }
+
+        return EventHandling.RESUME;
     }
 
-    public static void onBlockBreak(BreakBlockEvent event) {
-        final var heldItem = event.getPlayer().getMainHandItem();
-        if (heldItem.getItem() instanceof ChickenStickItem chickenStickItem) {
-            final var level = event.getLevel();
-            chickenStickItem.tryPlayChickenSound(level, event.getPos());
+    public static EventHandling onBlockBreak(LevelAccessor levelAccessor, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, @Nullable Player player) {
+        final var heldItem = player.getMainHandItem();
+        if (heldItem.getItem() instanceof ChickenStickItem chickenStickItem && levelAccessor instanceof Level level) {
+            chickenStickItem.tryPlayChickenSound(levelAccessor, pos);
 
-            if (level.getRandom().nextFloat() <= ExCompressumConfig.getActive().tools.chickenStickSpawnChance) {
+            if (levelAccessor.getRandom().nextFloat() <= ExCompressumConfig.getActive().tools.chickenStickSpawnChance) {
                 final var chicken = new Chicken(EntityType.CHICKEN, level);
-                chicken.setPos(event.getPos().getX() + 0.5, event.getPos().getY() + 0.5, event.getPos().getZ() + 0.5);
-                level.addFreshEntity(chicken);
+                chicken.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                levelAccessor.addFreshEntity(chicken);
             }
         }
+
+        return EventHandling.RESUME;
     }
 
 }

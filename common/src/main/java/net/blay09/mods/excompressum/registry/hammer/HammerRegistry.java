@@ -6,7 +6,6 @@ import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 
@@ -17,7 +16,7 @@ public class HammerRegistry {
     public static List<ItemStack> rollHammerRewards(LootContext context, ItemStack itemStack) {
         final var recipeManager = context.getLevel().getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.hammerRecipeType);
+        final var recipes = recipeMap.byType(ModRecipeTypes.hammer.type());
         final var results = new ArrayList<ItemStack>();
         for (final var recipeHolder : recipes) {
             final var recipe = recipeHolder.value();
@@ -42,7 +41,7 @@ public class HammerRegistry {
 
     public boolean isHammerable(RecipeManager recipeManager, ItemStack itemStack) {
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.hammerRecipeType);
+        final var recipes = recipeMap.byType(ModRecipeTypes.hammer.type());
         for (final var recipeHolder : recipes) {
             if (testRecipe(itemStack, recipeHolder.value())) {
                 return true;

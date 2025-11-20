@@ -18,7 +18,7 @@ import java.util.Collection;
 public class AutoCompressedHammerBlockEntity extends AutoHammerBlockEntity {
 
     public AutoCompressedHammerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.autoCompressedHammer.get(), pos, state);
+        super(ModBlockEntities.autoCompressedHammer.value(), pos, state);
     }
 
     @Override

@@ -35,12 +35,12 @@ public class HeavySieveRecipeImpl extends ExCompressumRecipe<RecipeInput> implem
 
     @Override
     public RecipeSerializer<HeavySieveRecipeImpl> getSerializer() {
-        return ModRecipeTypes.heavySieveRecipeSerializer;
+        return ModRecipeTypes.heavySieve.serializer();
     }
 
     @Override
     public RecipeType<HeavySieveRecipeImpl> getType() {
-        return ModRecipeTypes.heavySieveRecipeType;
+        return ModRecipeTypes.heavySieve.type();
     }
 
     @Override
@@ -50,7 +50,7 @@ public class HeavySieveRecipeImpl extends ExCompressumRecipe<RecipeInput> implem
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return ModRecipeTypes.heavySieveRecipeBookCategory;
+        return ModRecipeTypes.heavySieve.bookCategory();
     }
 
     @Override

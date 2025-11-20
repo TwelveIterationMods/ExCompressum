@@ -1,38 +1,31 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.api.DeferredObject;
-import net.blay09.mods.balm.api.block.BalmBlockEntities;
-import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.balm.world.level.block.entity.BalmBlockEntityTypeRegistrar;
 import net.blay09.mods.excompressum.block.*;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class ModBlockEntities {
-    public static DeferredObject<BlockEntityType<AutoHammerBlockEntity>> autoHammer;
-    public static DeferredObject<BlockEntityType<AutoCompressedHammerBlockEntity>> autoCompressedHammer;
-    public static DeferredObject<BlockEntityType<AutoCompressorBlockEntity>> autoCompressor;
-    public static DeferredObject<BlockEntityType<RationingAutoCompressorBlockEntity>> rationingAutoCompressor;
-    public static DeferredObject<BlockEntityType<AutoSieveBlockEntity>> autoSieve;
-    public static DeferredObject<BlockEntityType<HeavySieveBlockEntity>> heavySieve;
-    public static DeferredObject<BlockEntityType<AutoHeavySieveBlockEntity>> autoHeavySieve;
-    public static DeferredObject<BlockEntityType<WoodenCrucibleBlockEntity>> woodenCrucible;
-    public static DeferredObject<BlockEntityType<BaitBlockEntity>> bait;
+    public static Holder<BlockEntityType<AutoHammerBlockEntity>> autoHammer;
+    public static Holder<BlockEntityType<AutoCompressedHammerBlockEntity>> autoCompressedHammer;
+    public static Holder<BlockEntityType<AutoCompressorBlockEntity>> autoCompressor;
+    public static Holder<BlockEntityType<RationingAutoCompressorBlockEntity>> rationingAutoCompressor;
+    public static Holder<BlockEntityType<AutoSieveBlockEntity>> autoSieve;
+    public static Holder<BlockEntityType<HeavySieveBlockEntity>> heavySieve;
+    public static Holder<BlockEntityType<AutoHeavySieveBlockEntity>> autoHeavySieve;
+    public static Holder<BlockEntityType<WoodenCrucibleBlockEntity>> woodenCrucible;
+    public static Holder<BlockEntityType<BaitBlockEntity>> bait;
 
-    public static void initialize(BalmBlockEntities blockEntities) {
-        autoHammer = blockEntities.registerBlockEntity(id("auto_hammer"), AutoHammerBlockEntity::new, () -> new Block[]{ModBlocks.autoHammer});
-        autoCompressedHammer = blockEntities.registerBlockEntity(id("auto_compressed_hammer"), AutoCompressedHammerBlockEntity::new, () -> new Block[]{ModBlocks.autoCompressedHammer});
-        autoCompressor = blockEntities.registerBlockEntity(id("auto_compressor"), AutoCompressorBlockEntity::new, () -> new Block[]{ModBlocks.autoCompressor});
-        rationingAutoCompressor = blockEntities.registerBlockEntity(id("rationing_auto_compressor"), RationingAutoCompressorBlockEntity::new, () -> new Block[]{ModBlocks.rationingAutoCompressor});
-        autoSieve = blockEntities.registerBlockEntity(id("auto_sieve"), AutoSieveBlockEntity::new, () -> new Block[]{ModBlocks.autoSieve});
-        heavySieve = blockEntities.registerBlockEntity(id("heavy_sieve"), HeavySieveBlockEntity::new, () -> ModBlocks.heavySieves);
-        autoHeavySieve = blockEntities.registerBlockEntity(id("auto_heavy_sieve"), AutoHeavySieveBlockEntity::new, () -> new Block[]{ModBlocks.autoHeavySieve});
-        woodenCrucible = blockEntities.registerBlockEntity(id("wooden_crucible"), WoodenCrucibleBlockEntity::new, () -> ModBlocks.woodenCrucibles);
-        bait = blockEntities.registerBlockEntity(id("bait"), BaitBlockEntity::new, () -> ModBlocks.baits);
-    }
-
-    private static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, path);
+    public static void initialize(BalmBlockEntityTypeRegistrar blockEntities) {
+        autoHammer = blockEntities.register("auto_hammer", AutoHammerBlockEntity::new, ModBlocks.autoHammer).asHolder();
+        autoCompressedHammer = blockEntities.register("auto_compressed_hammer", AutoCompressedHammerBlockEntity::new, ModBlocks.autoCompressedHammer).asHolder();
+        autoCompressor = blockEntities.register("auto_compressor", AutoCompressorBlockEntity::new, ModBlocks.autoCompressor).asHolder();
+        rationingAutoCompressor = blockEntities.register("rationing_auto_compressor", RationingAutoCompressorBlockEntity::new, ModBlocks.rationingAutoCompressor).asHolder();
+        autoSieve = blockEntities.register("auto_sieve", AutoSieveBlockEntity::new, ModBlocks.autoSieve).asHolder();
+        heavySieve = blockEntities.register("heavy_sieve", HeavySieveBlockEntity::new, ModBlocks.heavySieves.values()).asHolder();
+        autoHeavySieve = blockEntities.register("auto_heavy_sieve", AutoHeavySieveBlockEntity::new, ModBlocks.autoHeavySieve).asHolder();
+        woodenCrucible = blockEntities.register("wooden_crucible", WoodenCrucibleBlockEntity::new,  ModBlocks.woodenCrucibles.values()).asHolder();
+        bait = blockEntities.register("bait", BaitBlockEntity::new, ModBlocks.baits.values()).asHolder();
     }
 
 }

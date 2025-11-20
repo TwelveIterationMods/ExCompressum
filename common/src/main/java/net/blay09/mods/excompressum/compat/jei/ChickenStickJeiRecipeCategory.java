@@ -12,14 +12,14 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.compat.recipeviewers.ExpandedChickenStickRecipe;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class ChickenStickJeiRecipeCategory implements IRecipeCategory<ExpandedChickenStickRecipe> {
 
-    private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_hammer.png");
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "chicken_stick");
+    private static final Identifier texture = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_hammer.png");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "chicken_stick");
     public static final RecipeType<ExpandedChickenStickRecipe> TYPE = new RecipeType<>(UID, ExpandedChickenStickRecipe.class);
 
     private final IDrawable background;
@@ -27,7 +27,7 @@ public class ChickenStickJeiRecipeCategory implements IRecipeCategory<ExpandedCh
 
     public ChickenStickJeiRecipeCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createDrawable(texture, 0, 0, 166, 63);
-        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModItems.chickenStick));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, ModItems.chickenStick.createStack());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ChickenStickJeiRecipeCategory implements IRecipeCategory<ExpandedCh
     }
 
     @Override
-    public @Nullable ResourceLocation getRegistryName(ExpandedChickenStickRecipe recipe) {
+    public @Nullable Identifier getRegistryName(ExpandedChickenStickRecipe recipe) {
         return recipe.getId();
     }
 }

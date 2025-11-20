@@ -13,7 +13,7 @@ public class AutoCompressorMenu extends AbstractContainerMenu {
     private final AutoCompressorBlockEntity autoCompressor;
 
     public AutoCompressorMenu(int windowId, Inventory inventoryPlayer, AutoCompressorBlockEntity autoCompressor) {
-        super(ModMenus.autoCompressor.get(), windowId);
+        super(ModMenus.autoCompressor.value(), windowId);
         this.autoCompressor = autoCompressor;
 
         Container container = autoCompressor.getBackingContainer();

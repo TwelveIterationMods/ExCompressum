@@ -22,7 +22,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -106,7 +106,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
     }
 
     private ItemStack findItem(String name) {
-        ResourceLocation location = ResourceLocation.fromNamespaceAndPath(Compat.EX_DEORUM, name);
+        Identifier location = Identifier.fromNamespaceAndPath(Compat.EX_DEORUM, name);
         Item item = BuiltInRegistries.ITEM.getValue(location);
         return new ItemStack(item);
     }

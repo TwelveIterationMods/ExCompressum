@@ -70,7 +70,7 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
 
         if (hammerItemStack.isEmpty()) {
             if (isCompressed) {
-                hammerItemStack = new ItemStack(ModItems.compressedDiamondHammer);
+                hammerItemStack = ModItems.compressedDiamondHammer.createStack();
             } else {
                 for (final var itemHolder : BuiltInRegistries.ITEM.getTagOrEmpty(ModItemTags.DIAMOND_HAMMERS)) {
                     hammerItemStack = new ItemStack(itemHolder.value());

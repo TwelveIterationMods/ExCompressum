@@ -5,7 +5,7 @@ import net.blay09.mods.excompressum.mixin.ShapedRecipeAccessor;
 import net.blay09.mods.excompressum.mixin.ShapelessRecipeAccessor;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 
@@ -18,11 +18,11 @@ import java.util.Map;
 
 public class CompressedRecipeRegistry {
 
-    private final Map<ResourceLocation, CompressedRecipe> recipesById = new HashMap<>();
+    private final Map<Identifier, CompressedRecipe> recipesById = new HashMap<>();
     private final List<CompressedRecipe> recipesSmall = new ArrayList<>();
     private final List<CompressedRecipe> recipes = new ArrayList<>();
 
-    private final Map<ResourceLocation, CompressedRecipe> cacheByItemId = new HashMap<>();
+    private final Map<Identifier, CompressedRecipe> cacheByItemId = new HashMap<>();
 
     public CompressedRecipeRegistry() {
     }
@@ -69,11 +69,11 @@ public class CompressedRecipeRegistry {
                     final var result = ((ShapedRecipeAccessor) shapedRecipe).getResult();
                     if (count == 4 && shapedRecipe.getWidth() == 2 && shapedRecipe.getHeight() == 2) {
                         if (passes) {
-                            recipesSmall.add(new CompressedRecipe(recipeHolder.id().location(), first, 4, result.copy()));
+                            recipesSmall.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 4, result.copy()));
                         }
                     } else if (count == 9 && shapedRecipe.getWidth() == 3 && shapedRecipe.getHeight() == 3) {
                         if (passes) {
-                            recipes.add(new CompressedRecipe(recipeHolder.id().location(), first, 9, result.copy()));
+                            recipes.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 9, result.copy()));
                         }
                     }
                 }
@@ -101,11 +101,11 @@ public class CompressedRecipeRegistry {
                     final var result = ((ShapelessRecipeAccessor) shapelessRecipe).getResult();
                     if (count == 4) {
                         if (passes) {
-                            recipesSmall.add(new CompressedRecipe(recipeHolder.id().location(), first, 4, result.copy()));
+                            recipesSmall.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 4, result.copy()));
                         }
                     } else {
                         if (passes) {
-                            recipes.add(new CompressedRecipe(recipeHolder.id().location(), first, 9, result.copy()));
+                            recipes.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 9, result.copy()));
                         }
                     }
                 }
@@ -119,7 +119,7 @@ public class CompressedRecipeRegistry {
             return null;
         }
 
-        final ResourceLocation registryName = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
+        final Identifier registryName = BuiltInRegistries.ITEM.getKey(itemStack.getItem());
         CompressedRecipe foundRecipe = cacheByItemId.get(registryName);
         if (foundRecipe != null) {
             return foundRecipe;
@@ -143,7 +143,7 @@ public class CompressedRecipeRegistry {
         return null;
     }
 
-    public CompressedRecipe getRecipeById(ResourceLocation id) {
+    public CompressedRecipe getRecipeById(Identifier id) {
         return recipesById.get(id);
     }
 }

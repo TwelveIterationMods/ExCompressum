@@ -23,12 +23,12 @@ public class ChickenStickRecipe extends ExCompressumRecipe<RecipeInput> {
 
     @Override
     public RecipeSerializer<ChickenStickRecipe> getSerializer() {
-        return ModRecipeTypes.chickenStickRecipeSerializer;
+        return ModRecipeTypes.chickenStick.serializer();
     }
 
     @Override
     public RecipeType<ChickenStickRecipe> getType() {
-        return ModRecipeTypes.chickenStickRecipeType;
+        return ModRecipeTypes.chickenStick.type();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ChickenStickRecipe extends ExCompressumRecipe<RecipeInput> {
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return ModRecipeTypes.chickenStickRecipeBookCategory;
+        return ModRecipeTypes.chickenStick.bookCategory();
     }
 
     public Ingredient getIngredient() {

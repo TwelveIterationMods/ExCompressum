@@ -1,6 +1,6 @@
 package net.blay09.mods.excompressum.client;
 
-import net.blay09.mods.balm.api.client.BalmClient;
+import net.blay09.mods.balm.client.BalmClient;
 
 //public class FabricExCompressumClient implements ClientModInitializer {
 //

@@ -8,16 +8,16 @@ import net.blay09.mods.excompressum.registry.ModRecipeTypes;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.*;
 
 public class GeneratedHeavySieveRecipe extends ExCompressumRecipe<RecipeInput> {
 
     private final Ingredient ingredient;
-    private final ResourceLocation sourceItem;
+    private final Identifier sourceItem;
     private final int rolls;
 
-    public GeneratedHeavySieveRecipe(Ingredient ingredient, ResourceLocation sourceItem, int rolls) {
+    public GeneratedHeavySieveRecipe(Ingredient ingredient, Identifier sourceItem, int rolls) {
         this.ingredient = ingredient;
         this.sourceItem = sourceItem;
         this.rolls = rolls;
@@ -27,7 +27,7 @@ public class GeneratedHeavySieveRecipe extends ExCompressumRecipe<RecipeInput> {
         return ingredient;
     }
 
-    public ResourceLocation getSourceItem() {
+    public Identifier getSourceItem() {
         return sourceItem;
     }
 
@@ -37,12 +37,12 @@ public class GeneratedHeavySieveRecipe extends ExCompressumRecipe<RecipeInput> {
 
     @Override
     public RecipeSerializer<GeneratedHeavySieveRecipe> getSerializer() {
-        return ModRecipeTypes.generatedHeavySieveRecipeSerializer;
+        return ModRecipeTypes.generatedHeavySieve.serializer();
     }
 
     @Override
     public RecipeType<GeneratedHeavySieveRecipe> getType() {
-        return ModRecipeTypes.generatedHeavySieveRecipeType;
+        return ModRecipeTypes.generatedHeavySieve.type();
     }
 
     @Override
@@ -52,19 +52,19 @@ public class GeneratedHeavySieveRecipe extends ExCompressumRecipe<RecipeInput> {
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return ModRecipeTypes.heavySieveRecipeBookCategory;
+        return ModRecipeTypes.heavySieve.bookCategory();
     }
 
     public static class Serializer implements RecipeSerializer<GeneratedHeavySieveRecipe> {
         private static final MapCodec<GeneratedHeavySieveRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.ingredient),
-                ResourceLocation.CODEC.fieldOf("source").forGetter(recipe -> recipe.sourceItem),
+                Identifier.CODEC.fieldOf("source").forGetter(recipe -> recipe.sourceItem),
                 Codec.INT.fieldOf("rolls").orElse(-1).forGetter(recipe -> recipe.rolls)
         ).apply(instance, GeneratedHeavySieveRecipe::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, GeneratedHeavySieveRecipe> STREAM_CODEC = StreamCodec.composite(
                 Ingredient.CONTENTS_STREAM_CODEC, GeneratedHeavySieveRecipe::getIngredient,
-                ResourceLocation.STREAM_CODEC, GeneratedHeavySieveRecipe::getSourceItem,
+                Identifier.STREAM_CODEC, GeneratedHeavySieveRecipe::getSourceItem,
                 ByteBufCodecs.INT, GeneratedHeavySieveRecipe::getRolls,
                 GeneratedHeavySieveRecipe::new);
 

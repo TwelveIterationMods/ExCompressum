@@ -30,7 +30,7 @@ public class RationingAutoCompressorBlock extends AutoCompressorBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.rationingAutoCompressor.get(), AutoCompressorBlockEntity::serverTick) : null;
+        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.rationingAutoCompressor.value(), AutoCompressorBlockEntity::serverTick) : null;
     }
 
     @Override

@@ -5,7 +5,7 @@ import net.blay09.mods.excompressum.loot.LootTableEntry;
 import net.blay09.mods.excompressum.loot.LootTableUtils;
 import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class ExpandedSieveRecipe {
 
-    private final ResourceLocation id;
+    private final Identifier id;
     private final SieveRecipe recipe;
     private final Ingredient ingredient;
     private final List<ItemStack> meshItems;
@@ -23,7 +23,7 @@ public class ExpandedSieveRecipe {
     private final List<ItemStack> outputItems;
     private final boolean waterlogged;
 
-    public ExpandedSieveRecipe(ResourceLocation id, SieveRecipe recipe) {
+    public ExpandedSieveRecipe(Identifier id, SieveRecipe recipe) {
         this.id = id;
         this.recipe = recipe;
         meshItems = new ArrayList<>();
@@ -65,7 +65,7 @@ public class ExpandedSieveRecipe {
         return waterlogged;
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 }

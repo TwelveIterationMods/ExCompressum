@@ -9,7 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -19,10 +19,10 @@ import java.util.Objects;
 public class WoodenCrucibleRecipe extends ExCompressumRecipe<RecipeInput> {
 
     private final Ingredient ingredient;
-    private final ResourceLocation fluid;
+    private final Identifier fluid;
     private final int amount;
 
-    public WoodenCrucibleRecipe(Ingredient ingredient, ResourceLocation fluid, Integer amount) {
+    public WoodenCrucibleRecipe(Ingredient ingredient, Identifier fluid, Integer amount) {
         this.ingredient = ingredient;
         this.fluid = fluid;
         this.amount = amount;
@@ -32,7 +32,7 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe<RecipeInput> {
         return ingredient;
     }
 
-    public ResourceLocation getFluidId() {
+    public Identifier getFluidId() {
         return fluid;
     }
 
@@ -42,12 +42,12 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe<RecipeInput> {
 
     @Override
     public RecipeSerializer<WoodenCrucibleRecipe> getSerializer() {
-        return ModRecipeTypes.woodenCrucibleRecipeSerializer;
+        return ModRecipeTypes.woodenCrucible.serializer();
     }
 
     @Override
     public RecipeType<WoodenCrucibleRecipe> getType() {
-        return ModRecipeTypes.woodenCrucibleRecipeType;
+        return ModRecipeTypes.woodenCrucible.type();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe<RecipeInput> {
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return ModRecipeTypes.woodenCrucibleRecipeBookCategory;
+        return ModRecipeTypes.woodenCrucible.bookCategory();
     }
 
     public boolean matchesFluid(Fluid fluid) {
@@ -72,7 +72,7 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe<RecipeInput> {
     public static class Serializer implements RecipeSerializer<WoodenCrucibleRecipe> {
         private static final MapCodec<WoodenCrucibleRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.ingredient),
-                ResourceLocation.CODEC.fieldOf("fluid").forGetter(recipe -> recipe.fluid),
+                Identifier.CODEC.fieldOf("fluid").forGetter(recipe -> recipe.fluid),
                 Codec.INT.fieldOf("amount").forGetter(recipe -> recipe.amount)
         ).apply(instance, WoodenCrucibleRecipe::new));
 
@@ -80,7 +80,7 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe<RecipeInput> {
 
         // public static final StreamCodec<RegistryFriendlyByteBuf, WoodenCrucibleRecipe> STREAM_CODEC = StreamCodec.composite(
         //         Ingredient.CONTENTS_STREAM_CODEC.cast(), WoodenCrucibleRecipe::getIngredient,
-        //         ResourceLocation.STREAM_CODEC.cast(), WoodenCrucibleRecipe::getFluid,
+        //         Identifier.STREAM_CODEC.cast(), WoodenCrucibleRecipe::getFluid,
         //         ByteBufCodecs.INT.cast(), WoodenCrucibleRecipe::getAmount,
         //         WoodenCrucibleRecipe::new);
 
@@ -96,14 +96,14 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe<RecipeInput> {
 
         private static WoodenCrucibleRecipe decode(RegistryFriendlyByteBuf buf) {
             final var ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
-            final var fluidId = ResourceLocation.STREAM_CODEC.decode(buf);
+            final var fluidId = Identifier.STREAM_CODEC.decode(buf);
             final var amount = ByteBufCodecs.INT.decode(buf);
             return new WoodenCrucibleRecipe(ingredient, fluidId, amount);
         }
 
         private static void encode(RegistryFriendlyByteBuf buf, WoodenCrucibleRecipe recipe) {
             Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.getIngredient());
-            ResourceLocation.STREAM_CODEC.encode(buf, recipe.getFluidId());
+            Identifier.STREAM_CODEC.encode(buf, recipe.getFluidId());
             ByteBufCodecs.INT.encode(buf, recipe.getAmount());
         }
     }

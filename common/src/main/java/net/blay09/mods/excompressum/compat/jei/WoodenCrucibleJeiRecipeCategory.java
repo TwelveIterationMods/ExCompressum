@@ -10,25 +10,26 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
+import net.blay09.mods.excompressum.block.WoodenCrucibleType;
 import net.blay09.mods.excompressum.compat.recipeviewers.ExpandedWoodenCrucibleRecipe;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class WoodenCrucibleJeiRecipeCategory implements IRecipeCategory<ExpandedWoodenCrucibleRecipe> {
 
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "wooden_crucible");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "wooden_crucible");
     public static final RecipeType<ExpandedWoodenCrucibleRecipe> TYPE = new RecipeType<>(UID, ExpandedWoodenCrucibleRecipe.class);
 
-    private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_wooden_crucible.png");
+    private static final Identifier texture = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "textures/gui/jei_wooden_crucible.png");
 
     private final IDrawable background;
     private final IDrawable icon;
 
     public WoodenCrucibleJeiRecipeCategory(IGuiHelper guiHelper) {
         this.background = guiHelper.createDrawable(texture, 0, 0, 166, 129);
-        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.woodenCrucibles[0]));
+        this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.woodenCrucibles.get(WoodenCrucibleType.OAK)));
     }
 
     @Override
@@ -64,7 +65,7 @@ public class WoodenCrucibleJeiRecipeCategory implements IRecipeCategory<Expanded
     }
 
     @Override
-    public @Nullable ResourceLocation getRegistryName(ExpandedWoodenCrucibleRecipe recipe) {
+    public @Nullable Identifier getRegistryName(ExpandedWoodenCrucibleRecipe recipe) {
         return recipe.getId();
     }
 

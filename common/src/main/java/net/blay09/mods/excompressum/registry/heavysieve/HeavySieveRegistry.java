@@ -42,7 +42,7 @@ public class HeavySieveRegistry {
         boolean waterlogged = sieve.hasProperty(BlockStateProperties.WATERLOGGED) && sieve.getValue(BlockStateProperties.WATERLOGGED);
         final var recipeManager = context.getLevel().getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.heavySieveRecipeType);
+        final var recipes = recipeMap.byType(ModRecipeTypes.heavySieve.type());
         List<ItemStack> results = new ArrayList<>();
         for (final var recipeHolder : recipes) {
             final var recipe = recipeHolder.value();
@@ -54,7 +54,7 @@ public class HeavySieveRegistry {
             }
         }
 
-        final var generatedRecipes = recipeMap.byType(ModRecipeTypes.generatedHeavySieveRecipeType);
+        final var generatedRecipes = recipeMap.byType(ModRecipeTypes.generatedHeavySieve.type());
         for (final var recipeHolder : generatedRecipes) {
             final var recipe = recipeHolder.value();
             if (testGeneratedRecipe(level, itemStack, recipe, sieve, mesh)) {
@@ -81,7 +81,7 @@ public class HeavySieveRegistry {
         boolean waterlogged = sieve.hasProperty(BlockStateProperties.WATERLOGGED) && sieve.getValue(BlockStateProperties.WATERLOGGED);
         final var recipeManager = level.getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.heavySieveRecipeType);
+        final var recipes = recipeMap.byType(ModRecipeTypes.heavySieve.type());
         for (final var recipeHolder : recipes) {
             final var recipe = recipeHolder.value();
             if (testRecipe(sieveMesh, itemStack, waterlogged, recipe)) {
@@ -89,7 +89,7 @@ public class HeavySieveRegistry {
             }
         }
 
-        final var generatedRecipes = recipeMap.byType(ModRecipeTypes.generatedHeavySieveRecipeType);
+        final var generatedRecipes = recipeMap.byType(ModRecipeTypes.generatedHeavySieve.type());
         for (final var recipeHolder : generatedRecipes) {
             final var recipe = recipeHolder.value();
             if (testGeneratedRecipe(level, itemStack, recipe, sieve, sieveMesh)) {

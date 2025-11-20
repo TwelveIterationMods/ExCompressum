@@ -5,7 +5,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.mixin.*;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.context.ContextKey;
@@ -30,7 +30,7 @@ import java.util.*;
 
 public class LootTableUtils {
 
-    private static final ContextKey<ItemStack> SOURCE_STACK = new ContextKey<>(ResourceLocation.fromNamespaceAndPath(ExCompressum.MOD_ID,
+    private static final ContextKey<ItemStack> SOURCE_STACK = new ContextKey<>(Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID,
             "source_stack"));
 
     private static final ContextKeySet CONTEXT_KEY_SET = new ContextKeySet.Builder().required(SOURCE_STACK).build();
@@ -136,7 +136,7 @@ public class LootTableUtils {
 
     public static List<MergedLootTableEntry> mergeLootTableEntries(List<LootTableEntry> entries) {
         List<MergedLootTableEntry> result = new ArrayList<>();
-        ArrayListMultimap<ResourceLocation, LootTableEntry> entryMap = ArrayListMultimap.create();
+        ArrayListMultimap<Identifier, LootTableEntry> entryMap = ArrayListMultimap.create();
         for (LootTableEntry entry : entries) {
             if (!entry.getItemStack().getComponents().isEmpty()) {
                 result.add(new MergedLootTableEntry(entry));
@@ -146,7 +146,7 @@ public class LootTableUtils {
             }
         }
 
-        for (ResourceLocation key : entryMap.keySet()) {
+        for (Identifier key : entryMap.keySet()) {
             List<LootTableEntry> mergableEntries = entryMap.get(key);
             LootTableEntry firstEntry = mergableEntries.getFirst();
             // TODO mergableEntries.sort(Comparator.comparing(LootTableEntry::getBaseChance).reversed());

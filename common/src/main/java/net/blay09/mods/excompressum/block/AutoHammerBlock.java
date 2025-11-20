@@ -1,26 +1,18 @@
 package net.blay09.mods.excompressum.block;
 
 import com.mojang.serialization.MapCodec;
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.common.CommonCapabilities;
-import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.capabilities.CommonCapabilities;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
-import net.blay09.mods.excompressum.block.entity.WoodenCrucibleBlockEntity;
-import net.blay09.mods.excompressum.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -76,7 +68,7 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
         if (!player.isShiftKeyDown() && !level.isClientSide()) {
             final BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof MenuProvider menuProvider) {
-                Balm.getNetworking().openMenu(player, menuProvider);
+                Balm.networking().openMenu(player, menuProvider);
             }
         }
 
@@ -98,7 +90,7 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null) {
-            Container container = Balm.getCapabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
+            Container container = Balm.capabilities().getCapability(blockEntity, CommonCapabilities.CONTAINER);
             if (container != null) {
                 return AbstractContainerMenu.getRedstoneSignalFromContainer(container);
             }
@@ -151,8 +143,8 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.autoHammer.get(), AutoHammerBlockEntity::serverTick) : createTickerHelper(type,
-                ModBlockEntities.autoHammer.get(),
+        return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.autoHammer.value(), AutoHammerBlockEntity::serverTick) : createTickerHelper(type,
+                ModBlockEntities.autoHammer.value(),
                 AutoHammerBlockEntity::clientTick);
     }
 

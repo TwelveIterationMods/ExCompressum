@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -65,8 +66,8 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
             float red = (float) (color >> 16 & 255) / 255f;
             float green = (float) (color >> 8 & 255) / 255f;
             float blue = (float) (color & 255) / 255f;
-            final var model = ModModels.woodenCrucibleLiquid.get();
-            submitNodeCollector.submitBlockModel(poseStack, RenderType.translucentMovingBlock(), model, red, green, blue, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            final var model = ModModels.woodenCrucibleLiquid.asBlockStateModel();
+            submitNodeCollector.submitBlockModel(poseStack, RenderTypes.translucentMovingBlock(), model, red, green, blue, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
 

@@ -1,10 +1,7 @@
 package net.blay09.mods.excompressum.block.entity;
 
-import net.blay09.mods.balm.api.container.BalmContainerProvider;
-import net.blay09.mods.balm.api.container.DefaultContainer;
-import net.blay09.mods.balm.api.container.DelegateContainer;
-import net.blay09.mods.balm.api.container.SubContainer;
-import net.blay09.mods.balm.api.menu.BalmMenuProvider;
+import net.blay09.mods.balm.world.*;
+import net.blay09.mods.balm.world.level.block.entity.BalmBlockEntityUtils;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.sievemesh.SieveMeshRegistryEntry;
 import net.blay09.mods.excompressum.block.AutoSieveBaseBlock;
@@ -18,9 +15,11 @@ import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -197,7 +196,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
         if (ticksSinceSync > UPDATE_INTERVAL) {
             if (isDirty) {
                 setChanged();
-                sync();
+                BalmBlockEntityUtils.sync(this);
                 isDirty = false;
             }
             ticksSinceSync = 0;
@@ -223,7 +222,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
                         inputSlots.setItem(0, ItemStack.EMPTY);
                     }
                     drainEnergy(effectiveEnergy, false);
-                    sync();
+                    BalmBlockEntityUtils.sync(this);
                     progress = 0f;
                 }
             } else {
@@ -363,10 +362,12 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
     }
 
     @Override
-    public void writeUpdateTag(ValueOutput output) {
-        saveAdditional(output);
-        ItemStack meshStack = meshSlots.getItem(0);
-        output.store("MeshStack", ItemStack.OPTIONAL_CODEC, meshStack);
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        return BalmBlockEntityUtils.createUpdateTag(registries, output -> {
+            saveAdditional(output);
+            ItemStack meshStack = meshSlots.getItem(0);
+            output.store("MeshStack", ItemStack.OPTIONAL_CODEC, meshStack);
+        });
     }
 
     public float getEnergyPercentage() {
@@ -490,7 +491,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
 
     @Override
     public AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player) {
-        return new AutoSieveMenu(ModMenus.autoSieve.get(), windowId, inventory, this);
+        return new AutoSieveMenu(ModMenus.autoSieve.value(), windowId, inventory, this);
     }
 
     public SieveAnimationType getAnimationType() {

@@ -1,12 +1,11 @@
 dependencies {
-    modImplementation("net.blay09.mods:balm-fabric:${balm_version}") {
-        changing = balm_version.contains("SNAPSHOT")
+    modImplementation(libs.balmFabric) {
+        changing = libs.versions.balm.get().endsWith("SNAPSHOT")
     }
     modCompileOnly "mezz.jei:jei-$jei_minecraft_version-common-api:$jei_version"
     if (jei_minecraft_version == minecraft_version) {
         modRuntimeOnly "mezz.jei:jei-$jei_minecraft_version-fabric:$jei_version"
     }
-    modCompileOnly "com.terraformersmc:modmenu:$modmenu_version"
     modCompileOnly "curse.maven:jade-324717:$jade_fabric_version"
     modCompileOnly "curse.maven:fabricae-ex-nihilo-596911:5298550"
     // modRuntimeOnly("com.github.mattidragon:configtoolkit:1.0.0")
