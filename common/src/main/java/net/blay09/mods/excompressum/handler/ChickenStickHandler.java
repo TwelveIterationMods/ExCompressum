@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.handler;
 
-import net.blay09.mods.balm.platform.event.EventHandling;
 import net.blay09.mods.balm.platform.event.callback.BlockCallback;
 import net.blay09.mods.balm.platform.event.callback.PlayerCallback;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
@@ -29,13 +28,13 @@ import org.jetbrains.annotations.Nullable;
 public class ChickenStickHandler {
 
     public static void initialize() {
-        PlayerCallback.Attack.EVENT.register(ChickenStickHandler::onPlayerAttack);
-        BlockCallback.Break.EVENT.register(ChickenStickHandler::onBlockBreak);
+        PlayerCallback.Attack.Before.EVENT.register(ChickenStickHandler::onPlayerAttack);
+        BlockCallback.Break.Before.EVENT.register(ChickenStickHandler::onBlockBreak);
     }
 
-    public static EventHandling onPlayerAttack(Player player, Entity target) {
+    public static boolean onPlayerAttack(Player player, Entity target) {
         if (!ExCompressumConfig.getActive().tools.allowChickenStickCreation) {
-            return EventHandling.RESUME;
+            return true;
         }
 
         if (target instanceof Chicken chicken && !chicken.isBaby()) {
@@ -70,14 +69,14 @@ public class ChickenStickHandler {
                             0.25f,
                             1f);
                 }
-                return EventHandling.CANCEL;
+                return false;
             }
         }
 
-        return EventHandling.RESUME;
+        return true;
     }
 
-    public static EventHandling onBlockBreak(LevelAccessor levelAccessor, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, @Nullable Player player) {
+    public static boolean onBlockBreak(LevelAccessor levelAccessor, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, @Nullable Player player) {
         final var heldItem = player.getMainHandItem();
         if (heldItem.getItem() instanceof ChickenStickItem chickenStickItem && levelAccessor instanceof Level level) {
             chickenStickItem.tryPlayChickenSound(levelAccessor, pos);
@@ -89,7 +88,7 @@ public class ChickenStickHandler {
             }
         }
 
-        return EventHandling.RESUME;
+        return true;
     }
 
 }

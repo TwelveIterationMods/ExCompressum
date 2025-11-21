@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.handler;
 
 import net.blay09.mods.balm.Balm;
-import net.blay09.mods.balm.platform.event.EventHandling;
 import net.blay09.mods.balm.platform.event.callback.EntityCallback;
 import net.blay09.mods.balm.platform.event.callback.LivingEntityCallback;
 import net.blay09.mods.excompressum.ExCompressum;
@@ -28,8 +27,8 @@ public class CompressedEnemyHandler {
     private static final String NOCOMPRESS = "NoCompress";
 
     public static void initialize() {
-        EntityCallback.Add.EVENT.register(CompressedEnemyHandler::onEntityAdded);
-        LivingEntityCallback.Death.AFTER.register(CompressedEnemyHandler::onLivingDeath);
+        EntityCallback.AddedToLevel.EVENT.register(CompressedEnemyHandler::onEntityAdded);
+        LivingEntityCallback.Death.Before.EVENT.register(CompressedEnemyHandler::onLivingDeath);
     }
 
     public static void onEntityAdded(Level level, Entity entity) {
@@ -58,14 +57,14 @@ public class CompressedEnemyHandler {
         }
     }
 
-    public static EventHandling onLivingDeath(LivingEntity entity, DamageSource damageSource) {
+    public static boolean onLivingDeath(LivingEntity entity, DamageSource damageSource) {
         final var level = entity.level();
         final var persistentData = Balm.hooks().getPersistentData(entity);
         if (!level.isClientSide() && persistentData.getCompound(ExCompressum.MOD_ID).flatMap(it -> it.getBoolean(COMPRESSED)).orElse(false)) {
             if (entity instanceof Mob) {
                 if (damageSource.getEntity() instanceof Player player && !Balm.hooks().isFakePlayer(player)) {
                     if (StupidUtils.hasSilkTouchModifier((LivingEntity) damageSource.getEntity())) {
-                        return EventHandling.RESUME;
+                        return true;
                     }
 
                     @SuppressWarnings("unchecked") final EntityType<? extends LivingEntity> entityType = (EntityType<? extends LivingEntity>) entity.getType();
@@ -73,7 +72,7 @@ public class CompressedEnemyHandler {
                     for (int i = 0; i < ExCompressumConfig.getActive().compressedMobs.compressedMobSize; i++) {
                         final var newEntity = entityType.create((ServerLevel) level, null, entity.blockPosition(), EntitySpawnReason.CONVERSION, false, false);
                         if (newEntity == null) {
-                            return EventHandling.RESUME;
+                            return true;
                         }
 
                         if (entity.isBaby()) {
@@ -104,7 +103,7 @@ public class CompressedEnemyHandler {
             }
         }
 
-        return EventHandling.RESUME;
+        return true;
     }
 
 }
