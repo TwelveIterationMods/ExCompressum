@@ -80,7 +80,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
 
         if (sieveModel == null || currentCacheKey != cacheKey) {
-            sieveModel = isHeavy ? blockRenderDispatcher.getBlockModel(ModBlocks.heavySieves.get(HeavySieveType.OAK).defaultBlockState()) : ModModels.sieves.get(0).value();
+            sieveModel = isHeavy ? blockRenderDispatcher.getBlockModel(ModBlocks.heavySieves.get(HeavySieveType.OAK).defaultBlockState()) : ModModels.sieves.get(HeavySieveType.OAK).asBlockStateModel();
             currentCacheKey = cacheKey;
         }
 
@@ -153,7 +153,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         poseStack.popPose();
 
         // Render the sieve mesh
-        final var meshModel = renderState.meshModelName != null ? ModModels.meshes.get(renderState.meshModelName).value() : null;
+        final var meshModel = renderState.meshModelName != null ? ModModels.meshes.get(renderState.meshModelName).asBlockStateModel() : null;
         if (meshModel != null) {
             submitNodeCollector.submitBlockModel(poseStack, RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), meshModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         }
