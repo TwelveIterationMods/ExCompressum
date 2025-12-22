@@ -1,10 +1,8 @@
 package net.blay09.mods.excompressum.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.blay09.mods.excompressum.api.ExNihiloProvider;
-import net.blay09.mods.excompressum.client.render.BlockRenderUtils;
+import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
 import net.blay09.mods.excompressum.tag.ModItemTags;
 import net.blay09.mods.excompressum.utils.StupidUtils;
@@ -14,9 +12,8 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.core.Holder;
+import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -38,6 +35,7 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
     @Override
     public void render(AutoHammerBlockEntity tileEntity, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int combinedLight, int combinedOverlay) {
         final var level = tileEntity.getLevel();
+        final var pos = tileEntity.getBlockPos();
         if (level == null) {
             return;
         }
@@ -119,7 +117,8 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
 
                 if (tileEntity.getProgress() > 0f) {
                     int blockDamage = Math.min(9, (int) (tileEntity.getProgress() * 9f));
-                    BlockRenderUtils.renderBlockBreak(contentState, poseStack, buffers, combinedLight, combinedOverlay, blockDamage + 1);
+                    final var sheetedDecalTextureGenerator = new SheetedDecalTextureGenerator(buffers.getBuffer(ModelBakery.DESTROY_TYPES.get(blockDamage)), poseStack.last(), 1f);
+                    Minecraft.getInstance().getBlockRenderer().renderBreakingTexture(level.getBlockState(pos), pos, level, poseStack, sheetedDecalTextureGenerator);
                 }
 
                 poseStack.popPose();
