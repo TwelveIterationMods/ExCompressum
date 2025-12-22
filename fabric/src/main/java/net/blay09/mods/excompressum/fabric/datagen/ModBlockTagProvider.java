@@ -7,6 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -57,8 +58,10 @@ public class ModBlockTagProvider extends IntrinsicHolderTagsProvider<Block> {
         }
 
         tag(ModBlockTags.MINEABLE_WITH_CROOK).addOptionalTag(BlockTags.LEAVES);
-        tag(ModBlockTags.MINEABLE_WITH_HAMMER).addOptionalTag(BlockTags.LOGS).add(
-                Blocks.ANDESITE,
+        tag(ModBlockTags.MINEABLE_WITH_HAMMER)
+                .addOptionalTag(BlockTags.LOGS)
+                .addOptionalTag(Identifier.fromNamespaceAndPath("exdeorum","mineable/hammer"))
+                .add(Blocks.ANDESITE,
                 Blocks.COBBLESTONE,
                 Blocks.DIORITE,
                 Blocks.END_STONE,
