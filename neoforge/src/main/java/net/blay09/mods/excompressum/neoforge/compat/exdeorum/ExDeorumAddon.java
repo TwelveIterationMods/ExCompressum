@@ -123,13 +123,17 @@ public class ExDeorumAddon implements ExNihiloProvider {
 
     @Override
     public List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemStack toolItem, RandomSource rand) {
-        List<ItemStack> drops = new ArrayList<>();
         final var recipe = RecipeUtil.getHammerRecipe(StupidUtils.getItemStackFromState(state).getItem());
         if (recipe != null) {
-            drops.add(recipe.getResultItem(level.registryAccess()));
+            List<ItemStack> list = new ArrayList<>();
+            LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, toolItem);
+            final var amount = recipe.resultAmount.getInt(lootContext);
+            if (amount > 0) {
+                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
+            }
+            return list;
         }
-
-        return drops;
+        return Collections.emptyList();
     }
 
     @Override
@@ -159,7 +163,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, sourceStack);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()));
+                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
             }
         }
         return list;
@@ -174,7 +178,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, sourceStack);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()));
+                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
             }
         }
         return list;
@@ -188,7 +192,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, itemStack);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()));
+                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
             }
             return list;
         }
@@ -204,7 +208,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             int rolls = Math.max(1, Mth.ceil(fortune / 3f));
             for (int i = 0; i < rolls; i++) {
                 if (rand.nextFloat() < recipe.chance()) {
-                    list.add(recipe.getResultItem(level.registryAccess()));
+                    list.add(recipe.getResultItem(level.registryAccess()).copy());
                 }
             }
         }
