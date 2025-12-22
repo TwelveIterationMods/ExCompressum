@@ -54,8 +54,8 @@ public class ExCompressum {
         ModRecipeTypes.initialize(Balm.getRecipes());
 
         Balm.getEvents().onEvent(ServerStartedEvent.class, event -> {
-            Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.forge.compat.exnihilosequentia.ExNihiloSequentiaAddon");
-            Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.forge.compat.exdeorum.ExDeorumAddon");
+            Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.neoforge.compat.exnihilosequentia.ExNihiloSequentiaAddon");
+            Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.neoforge.compat.exdeorum.ExDeorumAddon");
             Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
         });
 
