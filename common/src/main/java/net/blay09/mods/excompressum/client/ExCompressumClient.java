@@ -1,12 +1,17 @@
 package net.blay09.mods.excompressum.client;
 
-import net.blay09.mods.balm.client.BalmClient;
 import net.blay09.mods.balm.client.BalmClientRegistrars;
+import net.blay09.mods.balm.client.platform.event.callback.ClientLifecycleCallback;
+import net.blay09.mods.excompressum.ExCompressum;
 
 public class ExCompressumClient {
     public static void initialize(BalmClientRegistrars registrars) {
         registrars.menuScreens(ModScreens::initialize);
         registrars.entityRenderers(ModRenderers::initialize);
         registrars.blockStateModels(ModModels::initialize);
+
+        ClientLifecycleCallback.ConnectedToServer.EVENT.register(client -> {
+            ExCompressum.initializeAddons();
+        });
     }
 }

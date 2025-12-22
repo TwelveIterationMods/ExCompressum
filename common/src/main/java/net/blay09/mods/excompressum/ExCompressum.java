@@ -49,9 +49,7 @@ public class ExCompressum {
         registrars.recipeTypes(ModRecipeTypes::initialize);
 
         ServerLifecycleCallback.Started.EVENT.register(server -> {
-            Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.neoforge.compat.exnihilosequentia.ExNihiloSequentiaAddon");
-            Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.neoforge.compat.exdeorum.ExDeorumAddon");
-            Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
+            initializeAddons();
         });
 
         Balm.config().onConfigAvailable(ExCompressumConfig.class, config -> AutoSieveSkinRegistry.load());
@@ -64,5 +62,11 @@ public class ExCompressum {
 
     public static Identifier id(String path) {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
+    }
+
+    public static void  initializeAddons() {
+        Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.neoforge.compat.exnihilosequentia.ExNihiloSequentiaAddon");
+        Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.neoforge.compat.exdeorum.ExDeorumAddon");
+        Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
     }
 }
