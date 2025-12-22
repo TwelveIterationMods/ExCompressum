@@ -82,7 +82,7 @@ dependencies {
     def mcVersion = libs.minecraft.get().version
     def forgeVersion = libs.forge.get().version
     minecraft "net.minecraftforge:forge:${mcVersion}-${forgeVersion}"
-    def mixinVersion = libs.mixinLib.get().version
+    def mixinVersion = libs.mixin.get().version
     annotationProcessor "org.spongepowered:mixin:${mixinVersion}:processor"
 }
 
@@ -109,7 +109,7 @@ tasks.register('curseforge', TaskPublishCurseForge) {
         projectId != null
     }
     if (projectId) {
-        def mainFile = upload(findProperty("curseforge_project_id"), file("${project.buildDir}/libs/${base.archivesName}-${version}.jar"))
+        def mainFile = upload(findProperty("curseforge_project_id"), jar.archiveFile.get().asFile)
         mainFile.changelog = rootProject.file('CHANGELOG.md').text
         mainFile.addRequirement("balm")
         mainFile.addGameVersion(libs.minecraft.get().version)

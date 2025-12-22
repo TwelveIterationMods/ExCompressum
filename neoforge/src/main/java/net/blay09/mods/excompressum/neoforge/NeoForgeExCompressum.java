@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.neoforge;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.neoforge.NeoForgeLoadContext;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.neoforge.platform.runtime.NeoForgeLoadContext;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.neoforge.compat.top.TheOneProbeAddon;
 import net.neoforged.bus.api.IEventBus;

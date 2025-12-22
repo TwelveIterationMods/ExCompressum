@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.neoforge.compat.exdeorum;
 
 import com.google.common.collect.ArrayListMultimap;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.Balm;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.recipe.CompressedHammerRecipe;
 import net.blay09.mods.excompressum.api.recipe.HammerRecipe;

@@ -3,7 +3,7 @@ package net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo;
 import com.google.common.collect.ArrayListMultimap;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.Balm;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.recipe.CompressedHammerRecipe;

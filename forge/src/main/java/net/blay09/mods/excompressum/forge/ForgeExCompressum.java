@@ -1,8 +1,8 @@
 package net.blay09.mods.excompressum.forge;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.client.BalmClient;
-import net.blay09.mods.balm.forge.ForgeLoadContext;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.client.BalmClient;
+import net.blay09.mods.balm.forge.platform.runtime.ForgeLoadContext;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.client.ExCompressumClient;
 import net.blay09.mods.excompressum.forge.compat.top.TheOneProbeAddon;
