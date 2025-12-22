@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -57,7 +58,11 @@ public class ModBlockTagProvider extends FabricTagProvider<Block> {
         }
 
         getOrCreateTagBuilder(ModBlockTags.MINEABLE_WITH_CROOK).addOptionalTag(BlockTags.LEAVES);
-        getOrCreateTagBuilder(ModBlockTags.MINEABLE_WITH_HAMMER).addOptionalTag(BlockTags.LOGS).add(
+        getOrCreateTagBuilder(ModBlockTags.MINEABLE_WITH_HAMMER)
+                .addOptionalTag(BlockTags.LOGS)
+
+                .addOptionalTag(ResourceLocation.fromNamespaceAndPath("exdeorum","mineable/hammer"))
+                .add(
                 Blocks.ANDESITE,
                 Blocks.COBBLESTONE,
                 Blocks.DIORITE,
