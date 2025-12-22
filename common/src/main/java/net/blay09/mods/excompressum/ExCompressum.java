@@ -4,6 +4,7 @@ import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.ConfigLoadedEvent;
 import net.blay09.mods.balm.api.event.server.ServerStartedEvent;
 import net.blay09.mods.balm.api.proxy.SidedProxy;
+import net.blay09.mods.balm.common.config.ConfigLocalization;
 import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
@@ -41,7 +42,7 @@ public class ExCompressum {
 
     public static void initialize() {
         ExCompressumAPI.__setupAPI(new InternalMethodsImpl());
-
+        ConfigLocalization.enableModernTranslationKeys(MOD_ID);
         ExCompressumConfig.initialize();
         ExRegistries.initialize();
         ModComponents.initialize(Balm.getComponents());
@@ -54,9 +55,7 @@ public class ExCompressum {
         ModRecipeTypes.initialize(Balm.getRecipes());
 
         Balm.getEvents().onEvent(ServerStartedEvent.class, event -> {
-            Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.neoforge.compat.exnihilosequentia.ExNihiloSequentiaAddon");
-            Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.neoforge.compat.exdeorum.ExDeorumAddon");
-            Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
+            initializeAddons();
         });
 
         final var commonConfigId = ResourceLocation.fromNamespaceAndPath(MOD_ID, "common");
@@ -76,4 +75,9 @@ public class ExCompressum {
         ChickenStickHandler.initialize();
     }
 
+    public static void  initializeAddons() {
+        Balm.initializeIfLoaded(Compat.EXNIHILO_SEQUENTIA, "net.blay09.mods.excompressum.neoforge.compat.exnihilosequentia.ExNihiloSequentiaAddon");
+        Balm.initializeIfLoaded(Compat.EX_DEORUM, "net.blay09.mods.excompressum.neoforge.compat.exdeorum.ExDeorumAddon");
+        Balm.initializeIfLoaded(Compat.FABRICAE_EX_NIHILO, "net.blay09.mods.excompressum.fabric.compat.fabricaeexnihilo.FabricaeExNihiloAddon");
+    }
 }
