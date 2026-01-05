@@ -9,7 +9,7 @@ Minecraft Mod. Attempts to reduce grind by adding pre-automation tools like comp
 
 ## Contributing
 
-If you're interested in contributing to the mod, you can check out [issues labelled as "help wanted"](https://github.com/TwelveIterationMods/Waystones/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
+If you're interested in contributing to the mod, you can check out [issues labelled as "help wanted"](https://github.com/TwelveIterations/Waystones/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
 
 When it comes to new features, it's best to confer with me first to ensure we share the same vision. You can join us on [Discord](https://discord.gg/VAfZ2Nau6j) if you'd like to talk.
 
