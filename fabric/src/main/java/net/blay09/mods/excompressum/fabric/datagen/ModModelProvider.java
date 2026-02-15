@@ -36,58 +36,58 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockModelGenerators generators) {
-        generators.createNonTemplateModelBlock(ModBlocks.autoCompressor);
-        generators.createNonTemplateModelBlock(ModBlocks.rationingAutoCompressor);
-        createUglifyableHorizontalFacingModel(generators, ModBlocks.autoHammer);
-        generators.registerSimpleItemModel(ModBlocks.autoHammer, Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_hammer"));
-        generators.registerSimpleItemModel(ModBlocks.autoCompressedHammer,
+        generators.createNonTemplateModelBlock(ModBlocks.autoCompressor.asBlock());
+        generators.createNonTemplateModelBlock(ModBlocks.rationingAutoCompressor.asBlock());
+        createUglifyableHorizontalFacingModel(generators, ModBlocks.autoHammer.asBlock());
+        generators.registerSimpleItemModel(ModBlocks.autoHammer.asBlock(), Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_hammer"));
+        generators.registerSimpleItemModel(ModBlocks.autoCompressedHammer.asBlock(),
                 Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_compressed_hammer"));
-        generators.registerSimpleItemModel(ModBlocks.autoSieve, Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_sieve"));
-        generators.registerSimpleItemModel(ModBlocks.autoHeavySieve, Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_heavy_sieve"));
-        createUglifyableHorizontalFacingModel(generators, ModBlocks.autoCompressedHammer);
-        createUglifyableHorizontalFacingModel(generators, ModBlocks.autoSieve);
-        createUglifyableHorizontalFacingModel(generators, ModBlocks.autoHeavySieve);
+        generators.registerSimpleItemModel(ModBlocks.autoSieve.asBlock(), Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_sieve"));
+        generators.registerSimpleItemModel(ModBlocks.autoHeavySieve.asBlock(), Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/auto_heavy_sieve"));
+        createUglifyableHorizontalFacingModel(generators, ModBlocks.autoCompressedHammer.asBlock());
+        createUglifyableHorizontalFacingModel(generators, ModBlocks.autoSieve.asBlock());
+        createUglifyableHorizontalFacingModel(generators, ModBlocks.autoHeavySieve.asBlock());
 
-        for (final var woodenCrucibleType : WoodenCrucibleType.values()) {
-            final var woodenCrucible = ModBlocks.woodenCrucibles[woodenCrucibleType.ordinal()];
-            final var model = createSimpleRetexturedModel(generators, woodenCrucible, woodenCrucibleType.getBaseBlock(), id("block/wooden_crucible"));
-            final var stateGenerator = BlockModelGenerators.createSimpleBlock(woodenCrucible, plainVariant(model));
+        for (final var entry : ModBlocks.woodenCrucibles.entrySet()) {
+            assert entry.getKey() != null;
+            final var model = createSimpleRetexturedModel(generators, entry.getValue().asBlock(), entry.getKey().getBaseBlock(), id("block/wooden_crucible"));
+            final var stateGenerator = BlockModelGenerators.createSimpleBlock(entry.getValue().asBlock(), plainVariant(model));
             generators.blockStateOutput.accept(stateGenerator);
         }
 
-        for (final var heavySieveType : HeavySieveType.values()) {
-            final var woodenCrucible = ModBlocks.heavySieves[heavySieveType.ordinal()];
-            final var model = createSimpleRetexturedModel(generators, woodenCrucible, heavySieveType.getBaseBlock(), id("block/heavy_sieve"));
-            final var stateGenerator = BlockModelGenerators.createSimpleBlock(woodenCrucible, plainVariant(model));
+        for (final var entry : ModBlocks.heavySieves.entrySet()) {
+            assert entry.getKey() != null;
+            final var model = createSimpleRetexturedModel(generators, entry.getValue().asBlock(), entry.getKey().getBaseBlock(), id("block/heavy_sieve"));
+            final var stateGenerator = BlockModelGenerators.createSimpleBlock(entry.getValue().asBlock(), plainVariant(model));
             generators.blockStateOutput.accept(stateGenerator);
         }
 
-        for (Block compressedBlock : ModBlocks.compressedBlocks) {
-            generators.createTrivialCube(compressedBlock);
+        for (final var compressedBlock : ModBlocks.compressedBlocks.values()) {
+            generators.createTrivialCube(compressedBlock.asBlock());
         }
 
-        for (final var baitType : BaitType.values()) {
-            final var bait = ModBlocks.baits[baitType.ordinal()];
-            createBait(generators, (BaitBlock) bait, baitType);
+        for (final var entry : ModBlocks.baits.entrySet()) {
+            assert entry.getKey() != null;
+            createBait(generators, (BaitBlock) entry.getValue().asBlock(), entry.getKey());
         }
     }
 
     @Override
     public void generateItemModels(ItemModelGenerators itemModelGenerator) {
-        itemModelGenerator.generateFlatItem(ModItems.chickenStick, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.compressedWoodenHammer, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.compressedStoneHammer, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.compressedIronHammer, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.compressedGoldenHammer, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.compressedDiamondHammer, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.compressedNetheriteHammer, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.compressedCrook, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.batZapper, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.oreSmasher, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.ironMesh, ModelTemplates.FLAT_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.woodChippings, ModelTemplates.FLAT_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.uncompressedCoal, ModelTemplates.FLAT_ITEM);
-        itemModelGenerator.generateFlatItem(ModItems.uglySteelPlating, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.chickenStick.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.compressedWoodenHammer.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.compressedStoneHammer.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.compressedIronHammer.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.compressedGoldenHammer.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.compressedDiamondHammer.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.compressedNetheriteHammer.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.compressedCrook.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.batZapper.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.oreSmasher.asItem(), ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.ironMesh.asItem(), ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.woodChippings.asItem(), ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.uncompressedCoal.asItem(), ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(ModItems.uglySteelPlating.asItem(), ModelTemplates.FLAT_ITEM);
 
         final var baitTexture = Identifier.fromNamespaceAndPath("excompressum", "item/bait");
         final var baitOverlayTexture = Identifier.fromNamespaceAndPath("excompressum", "item/bait_overlay");

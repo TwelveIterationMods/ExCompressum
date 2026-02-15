@@ -10,7 +10,6 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -54,7 +53,7 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(fabricae("bamboo_sieve"));
 
         final var heavySieves = tag(ModItemTags.HEAVY_SIEVES);
-        for (Block heavySieve : ModBlocks.heavySieves) {
+        for (final var heavySieve : ModBlocks.heavySieves.values()) {
             heavySieves.add(heavySieve.asItem());
         }
         final var rawHeavySieves = getOrCreateRawBuilder(ModItemTags.HEAVY_SIEVES);
@@ -113,7 +112,7 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(sequentia("tuff_hammer"));
 
         final var woodenCrucibles = tag(ModItemTags.WOODEN_CRUCIBLES);
-        for (final var woodenCrucible : ModBlocks.woodenCrucibles) {
+        for (final var woodenCrucible : ModBlocks.woodenCrucibles.values()) {
             woodenCrucibles.add(woodenCrucible.asItem());
         }
         final var rawWoodenCrucibles = getOrCreateRawBuilder(ModItemTags.WOODEN_CRUCIBLES);
@@ -153,11 +152,11 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(deorum("crook"))
                 .addOptionalElement(fabricae("wooden_crook"));
 
-        tag(ModItemTags.COMPRESSED_HAMMERS).add(ModItems.compressedWoodenHammer,
-                        ModItems.compressedStoneHammer,
-                        ModItems.compressedIronHammer,
-                        ModItems.compressedDiamondHammer,
-                        ModItems.compressedNetheriteHammer);
+        tag(ModItemTags.COMPRESSED_HAMMERS).add(ModItems.compressedWoodenHammer.asItem(),
+                        ModItems.compressedStoneHammer.asItem(),
+                        ModItems.compressedIronHammer.asItem(),
+                        ModItems.compressedDiamondHammer.asItem(),
+                        ModItems.compressedNetheriteHammer.asItem());
         getOrCreateRawBuilder(ModItemTags.COMPRESSED_HAMMERS)
                 .addOptionalElement(deorum("compressed_wooden_hammer"))
                 .addOptionalElement(deorum("compressed_stone_hammer"))
@@ -167,12 +166,12 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(deorum("compressed_netherite_hammer"));
 
         tag(ModItemTags.COMPRESSED_CROOKS).addTag(ModItemTags.WOODEN_COMPRESSED_CROOKS);
-        tag(ModItemTags.WOODEN_COMPRESSED_CROOKS).add(ModItems.compressedCrook);
+        tag(ModItemTags.WOODEN_COMPRESSED_CROOKS).add(ModItems.compressedCrook.asItem());
 
-        tag(ModItemTags.CHICKEN_STICKS).add(ModItems.chickenStick);
+        tag(ModItemTags.CHICKEN_STICKS).add(ModItems.chickenStick.asItem());
 
         final var baits = tag(ModItemTags.BAITS);
-        for (Block bait : ModBlocks.baits) {
+        for (final var bait : ModBlocks.baits.values()) {
             baits.add(bait.asItem());
         }
 

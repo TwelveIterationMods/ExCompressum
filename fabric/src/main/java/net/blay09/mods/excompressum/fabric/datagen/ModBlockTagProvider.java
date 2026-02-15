@@ -9,6 +9,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -22,61 +23,61 @@ public class ModBlockTagProvider extends IntrinsicHolderTagsProvider<Block> {
     @Override
     protected void addTags(HolderLookup.Provider arg) {
         final var mineablePickaxe = tag(BlockTags.MINEABLE_WITH_PICKAXE);
-        mineablePickaxe.add(ModBlocks.autoHammer,
-                ModBlocks.autoCompressedHammer,
-                ModBlocks.autoSieve,
-                ModBlocks.autoHeavySieve,
-                ModBlocks.autoCompressor,
-                ModBlocks.rationingAutoCompressor,
-                ModBlocks.compressedBlocks[CompressedBlockType.ANDESITE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.COBBLESTONE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.DIORITE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.END_STONE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.GRANITE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.FLINT.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.NETHERRACK.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.NETHERRACK.ordinal()]);
+        mineablePickaxe.add(ModBlocks.autoHammer.asBlock(),
+                ModBlocks.autoCompressedHammer.asBlock(),
+                ModBlocks.autoSieve.asBlock(),
+                ModBlocks.autoHeavySieve.asBlock(),
+                ModBlocks.autoCompressor.asBlock(),
+                ModBlocks.rationingAutoCompressor.asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.ANDESITE).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.COBBLESTONE).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.DIORITE).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.END_STONE).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.GRANITE).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.FLINT).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.NETHERRACK).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.NETHERRACK).asBlock());
 
         final var mineableShovel = tag(BlockTags.MINEABLE_WITH_SHOVEL);
-        mineableShovel.add(ModBlocks.compressedBlocks[CompressedBlockType.DIRT.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.GRAVEL.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.SAND.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_ANDESITE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_DIORITE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_END_STONE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_GRANITE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.CRUSHED_NETHERRACK.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.DUST.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.SOUL_SAND.ordinal()]);
+        mineableShovel.add(ModBlocks.compressedBlocks.get(CompressedBlockType.DIRT).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.GRAVEL).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.SAND).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.CRUSHED_ANDESITE).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.CRUSHED_DIORITE).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.CRUSHED_END_STONE).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.CRUSHED_GRANITE).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.CRUSHED_NETHERRACK).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.DUST).asBlock(),
+                ModBlocks.compressedBlocks.get(CompressedBlockType.SOUL_SAND).asBlock());
 
         final var mineableAxe = tag(BlockTags.MINEABLE_WITH_AXE);
-        for (final var heavySieve : ModBlocks.heavySieves) {
-            mineableAxe.add(heavySieve);
+        for (final var heavySieve : ModBlocks.heavySieves.values()) {
+            mineableAxe.add(heavySieve.asBlock());
         }
-        for (final var woodenCrucible : ModBlocks.woodenCrucibles) {
-            mineableAxe.add(woodenCrucible);
+        for (final var woodenCrucible : ModBlocks.woodenCrucibles.values()) {
+            mineableAxe.add(woodenCrucible.asBlock());
         }
 
         tag(ModBlockTags.MINEABLE_WITH_CROOK).addOptionalTag(BlockTags.LEAVES);
         tag(ModBlockTags.MINEABLE_WITH_HAMMER)
                 .addOptionalTag(BlockTags.LOGS)
-                .addOptionalTag(Identifier.fromNamespaceAndPath("exdeorum","mineable/hammer"))
+                .addOptionalTag(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("exdeorum", "mineable/hammer")))
                 .add(Blocks.ANDESITE,
-                Blocks.COBBLESTONE,
-                Blocks.DIORITE,
-                Blocks.END_STONE,
-                Blocks.GRANITE,
-                Blocks.GRAVEL,
-                Blocks.NETHERRACK,
-                Blocks.SAND,
-                ModBlocks.compressedBlocks[CompressedBlockType.ANDESITE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.COBBLESTONE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.DIORITE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.END_STONE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.GRANITE.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.GRAVEL.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.NETHERRACK.ordinal()],
-                ModBlocks.compressedBlocks[CompressedBlockType.SAND.ordinal()]);
+                        Blocks.COBBLESTONE,
+                        Blocks.DIORITE,
+                        Blocks.END_STONE,
+                        Blocks.GRANITE,
+                        Blocks.GRAVEL,
+                        Blocks.NETHERRACK,
+                        Blocks.SAND,
+                        ModBlocks.compressedBlocks.get(CompressedBlockType.ANDESITE).asBlock(),
+                        ModBlocks.compressedBlocks.get(CompressedBlockType.COBBLESTONE).asBlock(),
+                        ModBlocks.compressedBlocks.get(CompressedBlockType.DIORITE).asBlock(),
+                        ModBlocks.compressedBlocks.get(CompressedBlockType.END_STONE).asBlock(),
+                        ModBlocks.compressedBlocks.get(CompressedBlockType.GRANITE).asBlock(),
+                        ModBlocks.compressedBlocks.get(CompressedBlockType.GRAVEL).asBlock(),
+                        ModBlocks.compressedBlocks.get(CompressedBlockType.NETHERRACK).asBlock(),
+                        ModBlocks.compressedBlocks.get(CompressedBlockType.SAND).asBlock());
 
         tag(ModBlockTags.MINEABLE_WITH_CHICKEN_STICK).addTag(ModBlockTags.MINEABLE_WITH_HAMMER);
 
