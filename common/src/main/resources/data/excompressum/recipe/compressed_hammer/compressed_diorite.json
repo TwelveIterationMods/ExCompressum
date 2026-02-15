@@ -1,8 +1,6 @@
 {
   "type": "excompressum:compressed_hammer",
-  "input": {
-    "item":"excompressum:compressed_diorite"
-  },
+  "input": "excompressum:compressed_diorite",
   "lootTable": {
     "type": "minecraft:block",
     "pools": [

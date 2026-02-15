@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "result": {
-    "item": "exnihilosequentia:dust",
+    "id": "exnihilosequentia:dust",
     "count": 9
   },
   "ingredients": [

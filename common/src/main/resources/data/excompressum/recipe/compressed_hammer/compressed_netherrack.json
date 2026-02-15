@@ -1,8 +1,6 @@
 {
   "type": "excompressum:compressed_hammer",
-  "input": {
-    "item":"excompressum:compressed_netherrack"
-  },
+  "input": "excompressum:compressed_netherrack",
   "lootTable": {
     "type": "minecraft:block",
     "pools": [

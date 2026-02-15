@@ -1,7 +1,5 @@
 {
   "type": "exnihilosequentia:compost",
-  "input": {
-    "item": "excompressum:wood_chippings"
-  },
+  "input": "excompressum:wood_chippings",
   "amount": 125
 }

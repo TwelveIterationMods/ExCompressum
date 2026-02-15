@@ -1,8 +1,6 @@
 {
   "type": "excompressum:hammer",
-  "input": {
-    "tag": "minecraft:logs"
-  },
+  "input": "#minecraft:logs",
   "lootTable": {
     "type": "minecraft:block",
     "pools": [

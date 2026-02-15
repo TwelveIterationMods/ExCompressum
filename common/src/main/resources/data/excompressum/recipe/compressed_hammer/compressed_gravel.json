@@ -1,8 +1,6 @@
 {
   "type": "excompressum:compressed_hammer",
-  "input": {
-    "item":"excompressum:compressed_gravel"
-  },
+  "input": "excompressum:compressed_gravel",
   "lootTable": {
     "type": "minecraft:block",
     "pools": [

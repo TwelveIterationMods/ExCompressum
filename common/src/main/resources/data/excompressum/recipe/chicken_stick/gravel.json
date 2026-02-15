@@ -1,8 +1,6 @@
 {
   "type": "excompressum:chicken_stick",
-  "input": {
-    "item": "minecraft:gravel"
-  },
+  "input": "minecraft:gravel",
   "lootTable": {
     "type": "minecraft:block",
     "pools": [

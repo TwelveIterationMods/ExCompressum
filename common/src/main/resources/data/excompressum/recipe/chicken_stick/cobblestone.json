@@ -1,8 +1,6 @@
 {
   "type": "excompressum:chicken_stick",
-  "input": {
-    "item": "minecraft:cobblestone"
-  },
+  "input": "minecraft:cobblestone",
   "lootTable": {
     "type": "minecraft:block",
     "pools": [

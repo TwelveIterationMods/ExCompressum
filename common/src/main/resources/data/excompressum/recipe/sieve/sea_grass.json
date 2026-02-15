@@ -6,9 +6,7 @@
       "mesh": "iron"
     }
   ],
-  "input": {
-    "tag": "minecraft:sand"
-  },
+  "input": "#minecraft:sand",
   "result": {
     "item": "minecraft:seagrass"
   },

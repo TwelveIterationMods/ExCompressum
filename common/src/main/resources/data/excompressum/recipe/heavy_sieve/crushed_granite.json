@@ -1,7 +1,5 @@
 {
-  "type": "excompressum:heavy_sieve_generated",
-  "input": {
-    "item":"excompressum:compressed_crushed_granite"
-  },
+  "type": "excompressum:generated_heavy_sieve",
+  "input": "excompressum:compressed_crushed_granite",
   "source": "exnihilosequentia:crushed_granite"
 }

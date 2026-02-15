@@ -1,8 +1,6 @@
 {
   "type": "excompressum:wooden_crucible",
-  "input": {
-    "tag": "minecraft:leaves"
-  },
+  "input": "#minecraft:leaves",
   "fluid": "minecraft:water",
   "amount": 250
 }

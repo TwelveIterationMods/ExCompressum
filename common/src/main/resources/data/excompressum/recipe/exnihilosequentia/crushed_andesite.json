@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "result": {
-    "item": "exnihilosequentia:crushed_andesite",
+    "id": "exnihilosequentia:crushed_andesite",
     "count": 9
   },
   "ingredients": [

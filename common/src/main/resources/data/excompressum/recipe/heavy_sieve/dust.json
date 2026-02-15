@@ -1,7 +1,5 @@
 {
-  "type": "excompressum:heavy_sieve_generated",
-  "input": {
-    "item":"excompressum:compressed_dust"
-  },
+  "type": "excompressum:generated_heavy_sieve",
+  "input": "excompressum:compressed_dust",
   "source": "exnihilosequentia:dust"
 }

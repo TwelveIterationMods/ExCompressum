@@ -1,7 +1,5 @@
 {
-  "type": "excompressum:heavy_sieve_generated",
-  "input": {
-    "item":"excompressum:compressed_crushed_diorite"
-  },
+  "type": "excompressum:generated_heavy_sieve",
+  "input": "excompressum:compressed_crushed_diorite",
   "source": "exnihilosequentia:crushed_diorite"
 }

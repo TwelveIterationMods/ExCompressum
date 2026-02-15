@@ -1,8 +1,6 @@
 {
   "type": "excompressum:wooden_crucible",
-  "input": {
-    "item": "minecraft:cactus"
-  },
+  "input": "minecraft:cactus",
   "fluid": "minecraft:water",
   "amount": 250
 }

@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "result": {
-    "item": "exnihilosequentia:crushed_diorite",
+    "id": "exnihilosequentia:crushed_diorite",
     "count": 9
   },
   "ingredients": [

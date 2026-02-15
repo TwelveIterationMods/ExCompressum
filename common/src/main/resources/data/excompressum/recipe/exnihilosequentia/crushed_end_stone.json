@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "result": {
-    "item": "exnihilosequentia:crushed_end_stone",
+    "id": "exnihilosequentia:crushed_end_stone",
     "count": 9
   },
   "ingredients": [
