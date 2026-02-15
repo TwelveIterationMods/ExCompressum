@@ -6,7 +6,7 @@
     "texture_glass": "excompressum:block/auto_frame_glass",
     "texture_side": "excompressum:block/auto_frame_side",
     "particle": "#texture_side",
-    "hammer": "excompressum:item/diamond_hammer"
+    "hammer": "excompressum:block/diamond_hammer"
   },
   "elements": [
     {
