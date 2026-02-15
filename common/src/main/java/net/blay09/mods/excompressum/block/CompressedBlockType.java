@@ -36,4 +36,9 @@ public enum CompressedBlockType implements StringRepresentable {
     public static CompressedBlockType fromId(int id) {
         return id >= 0 && id < values.length ? values[id] : null;
     }
+
+    @Override
+    public String toString() {
+        return getSerializedName();
+    }
 }

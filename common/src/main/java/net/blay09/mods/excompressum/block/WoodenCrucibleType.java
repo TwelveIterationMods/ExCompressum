@@ -36,4 +36,9 @@ public enum WoodenCrucibleType implements StringRepresentable {
     public Block getBaseBlock() {
         return baseBlock;
     }
+
+    @Override
+    public String toString() {
+        return getSerializedName();
+    }
 }

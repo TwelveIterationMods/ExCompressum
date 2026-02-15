@@ -31,4 +31,9 @@ public enum CommonMeshType implements StringRepresentable {
     public String getSerializedName() {
         return name().toLowerCase(Locale.ROOT);
     }
+
+    @Override
+    public String toString() {
+        return getSerializedName();
+    }
 }

@@ -33,7 +33,7 @@ public class ModBlocks {
 
         compressedBlocks = blocks.registerDiscriminated(
                 CompressedBlockType.values(),
-                it -> DiscriminatedBlocks.suffix("compressed_", it),
+                it -> DiscriminatedBlocks.suffix("compressed", it),
                 CompressedBlock::new, it -> it).asDiscriminatedBlocks();
         heavySieves = blocks.registerDiscriminated(
                 HeavySieveType.values(),

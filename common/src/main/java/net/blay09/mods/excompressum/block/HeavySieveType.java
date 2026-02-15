@@ -35,4 +35,9 @@ public enum HeavySieveType implements StringRepresentable {
     public Block getBaseBlock() {
         return baseBlock;
     }
+
+    @Override
+    public String toString() {
+        return getSerializedName();
+    }
 }

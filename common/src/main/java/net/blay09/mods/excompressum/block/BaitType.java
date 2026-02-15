@@ -122,4 +122,9 @@ public enum BaitType implements StringRepresentable {
     public int getItemColor(int tintIndex) {
         return tintIndex == 0 ? primaryColor : secondaryColor;
     }
+
+    @Override
+    public String toString() {
+        return getSerializedName();
+    }
 }
