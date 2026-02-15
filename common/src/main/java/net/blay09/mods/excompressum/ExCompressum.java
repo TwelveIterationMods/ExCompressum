@@ -45,6 +45,7 @@ public class ExCompressum {
         registrars.blockEntityTypes(ModBlockEntities::initialize);
         registrars.entityTypes(ModEntities::initialize);
         registrars.items(ModItems::initialize);
+        registrars.creativeModeTabs(ModItems::initialize);
         registrars.menuTypes(ModMenus::initialize);
         ModLoot.initialize(Balm.lootModifiers());
         registrars.recipeTypes(ModRecipeTypes::initialize);
