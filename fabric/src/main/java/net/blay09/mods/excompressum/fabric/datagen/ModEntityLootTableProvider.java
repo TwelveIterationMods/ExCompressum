@@ -5,8 +5,8 @@ import net.blay09.mods.excompressum.component.ModComponents;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
-import net.minecraft.advancements.critereon.EntityFlagsPredicate;
-import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.criterion.EntityFlagsPredicate;
+import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -43,7 +43,7 @@ public class ModEntityLootTableProvider extends SimpleFabricLootTableProvider {
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))
                                 .add(LootItem.lootTableItem(ModItems.chickenStick)
-                                        .apply(SetComponentsFunction.setComponent(ModComponents.angry.get(), Unit.INSTANCE)))
+                                        .apply(SetComponentsFunction.setComponent(ModComponents.angry.value(), Unit.INSTANCE)))
                         )
                         .withPool(LootPool.lootPool()
                                 .setRolls(ConstantValue.exactly(1))

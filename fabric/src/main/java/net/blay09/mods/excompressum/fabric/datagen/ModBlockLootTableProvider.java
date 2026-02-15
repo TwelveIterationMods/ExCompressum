@@ -5,7 +5,7 @@ import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -23,24 +23,24 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
 
     @Override
     public void generate() {
-        dropWithUglySteelPlating(ModBlocks.autoHammer);
-        dropWithUglySteelPlating(ModBlocks.autoCompressedHammer);
-        dropWithUglySteelPlating(ModBlocks.autoSieve);
-        dropWithUglySteelPlating(ModBlocks.autoHeavySieve);
+        dropWithUglySteelPlating(ModBlocks.autoHammer.asBlock());
+        dropWithUglySteelPlating(ModBlocks.autoCompressedHammer.asBlock());
+        dropWithUglySteelPlating(ModBlocks.autoSieve.asBlock());
+        dropWithUglySteelPlating(ModBlocks.autoHeavySieve.asBlock());
 
-        dropSelf(ModBlocks.autoCompressor);
-        dropSelf(ModBlocks.rationingAutoCompressor);
-        for (Block bait : ModBlocks.baits) {
-            dropSelf(bait);
+        dropSelf(ModBlocks.autoCompressor.asBlock());
+        dropSelf(ModBlocks.rationingAutoCompressor.asBlock());
+        for (final var bait : ModBlocks.baits.values()) {
+            dropSelf(bait.asBlock());
         }
-        for (Block compressedBlock : ModBlocks.compressedBlocks) {
-            dropSelf(compressedBlock);
+        for (final var compressedBlock : ModBlocks.compressedBlocks.values()) {
+            dropSelf(compressedBlock.asBlock());
         }
-        for (Block heavySieve : ModBlocks.heavySieves) {
-            dropSelf(heavySieve);
+        for (final var heavySieve : ModBlocks.heavySieves.values()) {
+            dropSelf(heavySieve.asBlock());
         }
-        for (Block woodenCrucible : ModBlocks.woodenCrucibles) {
-            dropSelf(woodenCrucible);
+        for (final var woodenCrucible : ModBlocks.woodenCrucibles.values()) {
+            dropSelf(woodenCrucible.asBlock());
         }
     }
 
