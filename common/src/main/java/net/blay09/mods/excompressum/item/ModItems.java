@@ -5,6 +5,7 @@ import net.blay09.mods.balm.world.item.BalmCreativeModeTabRegistrar;
 import net.blay09.mods.balm.world.item.BalmItemRegistrar;
 import net.blay09.mods.balm.world.item.DeferredItem;
 import net.blay09.mods.excompressum.ExCompressum;
+import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.tag.ModBlockTags;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ToolMaterial;
@@ -84,6 +85,16 @@ public class ModItems {
                             output.accept(ModItems.oreSmasher);
                             output.accept(ModItems.uglySteelPlating);
                             output.accept(ModItems.chickenStick);
+                            output.accept(ModBlocks.autoHammer);
+                            output.accept(ModBlocks.autoSieve);
+                            output.accept(ModBlocks.autoCompressedHammer);
+                            output.accept(ModBlocks.autoHeavySieve);
+                            output.accept(ModBlocks.autoCompressor);
+                            output.accept(ModBlocks.rationingAutoCompressor);
+                            ModBlocks.heavySieves.forEach((type, block) -> output.accept(block));
+                            ModBlocks.woodenCrucibles.forEach((type, block) -> output.accept(block));
+                            ModBlocks.baits.forEach((type, block) -> output.accept(block));
+                            ModBlocks.compressedBlocks.forEach((type, block) -> output.accept(block));
                         }));
     }
 
