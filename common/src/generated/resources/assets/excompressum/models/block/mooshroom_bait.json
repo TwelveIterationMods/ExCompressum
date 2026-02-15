@@ -1,5 +1,5 @@
 {
   "textures": {
-    "particle": "minecraft:block/red_mushroom_block"
+    "particle": "minecraft:item/red_mushroom"
   }
 }

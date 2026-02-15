@@ -4,6 +4,10 @@
       "id": "#minecraft:logs",
       "required": false
     },
+    {
+      "id": "#exdeorum:mineable/hammer",
+      "required": false
+    },
     "minecraft:andesite",
     "minecraft:cobblestone",
     "minecraft:diorite",
