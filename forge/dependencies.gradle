@@ -2,6 +2,4 @@ dependencies {
     implementation(libs.balmForge) {
         changing = libs.versions.balm.get().endsWith("SNAPSHOT")
     }
-    compileOnly("mezz.jei:jei-$jei_minecraft_version-common-api:$jei_version")
-    compileOnly("curse.maven:the-one-probe-245211:$theoneprobe_version")
 }
