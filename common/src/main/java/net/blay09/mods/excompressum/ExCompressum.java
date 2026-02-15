@@ -7,6 +7,7 @@ import net.blay09.mods.excompressum.api.ExCompressumAPI;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.compat.Compat;
+import net.blay09.mods.excompressum.compat.hudinfo.ModHudInfo;
 import net.blay09.mods.excompressum.component.ModComponents;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.entity.ModEntities;
@@ -58,6 +59,8 @@ public class ExCompressum {
         CompressedEnemyHandler.initialize();
         CrookPushHandler.initialize();
         ChickenStickHandler.initialize();
+
+        ModHudInfo.initialize(Balm.modSupport().hudInfo());
     }
 
     public static Identifier id(String path) {
