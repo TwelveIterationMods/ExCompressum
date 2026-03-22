@@ -1,7 +1,7 @@
 dependencies {
-    modImplementation(libs.balmFabric) {
+    implementation(libs.balmFabric) {
         changing = libs.versions.balm.get().endsWith("SNAPSHOT")
     }
-    modCompileOnly "curse.maven:fabricae-ex-nihilo-596911:5298550"
-    // modRuntimeOnly("com.github.mattidragon:configtoolkit:1.0.0")
+    compileOnly "curse.maven:fabricae-ex-nihilo-596911:5298550"
+    // runtimeOnly("com.github.mattidragon:configtoolkit:1.0.0")
 }

@@ -1,7 +1,7 @@
 package net.blay09.mods.excompressum.fabric.datagen;
 
 import net.blay09.mods.excompressum.tag.ModEntityTags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.world.entity.EntityType;
@@ -9,7 +9,7 @@ import net.minecraft.world.entity.EntityType;
 import java.util.concurrent.CompletableFuture;
 
 public class ModEntityTagProvider extends EntityTypeTagsProvider {
-    public ModEntityTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    public ModEntityTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 

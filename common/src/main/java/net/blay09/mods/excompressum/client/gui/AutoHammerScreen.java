@@ -4,7 +4,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.menu.AutoHammerMenu;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -25,14 +25,14 @@ public class AutoHammerScreen extends AbstractContainerScreen<AutoHammerMenu> {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
         renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(GuiGraphicsExtractor guiGraphics, float partialTicks, int mouseX, int mouseY) {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
 
         AutoHammerBlockEntity blockEntity = menu.getAutoHammer();
@@ -50,7 +50,7 @@ public class AutoHammerScreen extends AbstractContainerScreen<AutoHammerMenu> {
 
 
     @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         if (mouseX >= leftPos + 152 && mouseX <= leftPos + 167 && mouseY >= topPos + 8 && mouseY <= topPos + 77) {
             AutoHammerBlockEntity blockEntity = menu.getAutoHammer();
             List<Component> tooltip = new ArrayList<>();

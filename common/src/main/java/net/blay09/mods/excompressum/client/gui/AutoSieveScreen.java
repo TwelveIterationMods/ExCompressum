@@ -4,7 +4,7 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.menu.AutoSieveMenu;
 import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.language.I18n;
@@ -26,14 +26,14 @@ public class AutoSieveScreen extends AbstractContainerScreen<AutoSieveMenu> {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
         renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
         super.render(guiGraphics, mouseX, mouseY, partialTicks);
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(GuiGraphicsExtractor guiGraphics, float partialTicks, int mouseX, int mouseY) {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
 
         AbstractAutoSieveBlockEntity tileEntity = menu.getAutoSieve();
@@ -48,7 +48,7 @@ public class AutoSieveScreen extends AbstractContainerScreen<AutoSieveMenu> {
     }
 
     @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    protected void renderLabels(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         final var poseStack = guiGraphics.pose();
         // Render No Mesh / Incorrect Mesh overlay
         AbstractAutoSieveBlockEntity blockEntity = menu.getAutoSieve();
@@ -69,13 +69,13 @@ public class AutoSieveScreen extends AbstractContainerScreen<AutoSieveMenu> {
         renderPowerTooltip(guiGraphics, mouseX, mouseY);
     }
 
-    protected void renderEnergyBar(GuiGraphics guiGraphics) {
+    protected void renderEnergyBar(GuiGraphicsExtractor guiGraphics) {
         AbstractAutoSieveBlockEntity tileEntity = menu.getAutoSieve();
         float energyPercentage = tileEntity.getEnergyPercentage();
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 152, topPos + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70), 256, 256);
     }
 
-    protected void renderPowerTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    protected void renderPowerTooltip(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         if (mouseX >= leftPos + 152 && mouseX <= leftPos + 167 && mouseY >= topPos + 8 && mouseY <= topPos + 77) {
             AbstractAutoSieveBlockEntity blockEntity = menu.getAutoSieve();
             List<Component> tooltip = new ArrayList<>();

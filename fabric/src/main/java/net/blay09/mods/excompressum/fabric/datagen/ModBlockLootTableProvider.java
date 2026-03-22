@@ -3,8 +3,8 @@ package net.blay09.mods.excompressum.fabric.datagen;
 import net.blay09.mods.excompressum.block.ModBlockStateProperties;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
@@ -16,8 +16,8 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
-    protected ModBlockLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> provider) {
+public class ModBlockLootTableProvider extends FabricBlockLootSubProvider {
+    protected ModBlockLootTableProvider(FabricPackOutput dataOutput, CompletableFuture<HolderLookup.Provider> provider) {
         super(dataOutput, provider);
     }
 

@@ -3,8 +3,8 @@ package net.blay09.mods.excompressum.fabric.datagen;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.component.ModComponents;
 import net.blay09.mods.excompressum.item.ModItems;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableSubProvider;
 import net.minecraft.advancements.criterion.EntityFlagsPredicate;
 import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.core.HolderLookup;
@@ -26,11 +26,11 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-public class ModEntityLootTableProvider extends SimpleFabricLootTableProvider {
+public class ModEntityLootTableProvider extends SimpleFabricLootTableSubProvider {
 
     private final CompletableFuture<HolderLookup.Provider> providerFuture;
 
-    public ModEntityLootTableProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> provider) {
+    public ModEntityLootTableProvider(FabricPackOutput dataOutput, CompletableFuture<HolderLookup.Provider> provider) {
         super(dataOutput, provider, LootContextParamSets.ENTITY);
         this.providerFuture = provider;
     }
