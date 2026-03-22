@@ -88,8 +88,8 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
             blockModelResolver.update(renderState.sieve, sieveState, SIEVE_BLOCK_DISPLAY_CONTEXT);
         } else {
             final var sieveModel = ModModels.sieves.get(HeavySieveType.OAK).asBlockStateModel();
-            final var sieveParts = renderState.mesh.setupModel(new Matrix4f(), false);
-            sieveModel.collectParts(renderState.mesh.scratchRandomSource(42), sieveParts);
+            final var sieveParts = renderState.sieve.setupModel(new Matrix4f(), false);
+            sieveModel.collectParts(renderState.sieve.scratchRandomSource(42), sieveParts);
         }
 
         if (blockEntity.shouldAnimate()) {
