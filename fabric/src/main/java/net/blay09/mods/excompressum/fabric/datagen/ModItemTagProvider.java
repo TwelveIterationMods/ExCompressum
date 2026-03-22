@@ -10,6 +10,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -53,9 +54,7 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(fabricae("bamboo_sieve"));
 
         final var heavySieves = tag(ModItemTags.HEAVY_SIEVES);
-        for (final var heavySieve : ModBlocks.heavySieves.values()) {
-            heavySieves.add(heavySieve.asItem());
-        }
+        ModBlocks.heavySieves.sortedValues().map(ItemLike::asItem).forEach(heavySieves::add);
         final var rawHeavySieves = getOrCreateRawBuilder(ModItemTags.HEAVY_SIEVES);
         rawHeavySieves.addOptionalElement(deorum("acacia_compressed_sieve"))
                 .addOptionalElement(deorum("birch_compressed_sieve"))
@@ -112,9 +111,7 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(sequentia("tuff_hammer"));
 
         final var woodenCrucibles = tag(ModItemTags.WOODEN_CRUCIBLES);
-        for (final var woodenCrucible : ModBlocks.woodenCrucibles.values()) {
-            woodenCrucibles.add(woodenCrucible.asItem());
-        }
+        ModBlocks.woodenCrucibles.sortedValues().map(ItemLike::asItem).forEach(woodenCrucibles::add);
         final var rawWoodenCrucibles = getOrCreateRawBuilder(ModItemTags.WOODEN_CRUCIBLES);
         rawWoodenCrucibles.addOptionalElement(sequentia("acacia_crucible"))
                 .addOptionalElement(sequentia("birch_crucible"))
@@ -171,9 +168,7 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
         tag(ModItemTags.CHICKEN_STICKS).add(ModItems.chickenStick.asItem());
 
         final var baits = tag(ModItemTags.BAITS);
-        for (final var bait : ModBlocks.baits.values()) {
-            baits.add(bait.asItem());
-        }
+        ModBlocks.baits.sortedValues().map(ItemLike::asItem).forEach(baits::add);
 
         getOrCreateRawBuilder(ModItemTags.CRUSHED_ANDESITES).addOptionalElement(sequentia("crushed_andesite")).addOptionalElement(fabricae("crushed_andesite"));
         getOrCreateRawBuilder(ModItemTags.CRUSHED_DIORITES).addOptionalElement(sequentia("crushed_diorite")).addOptionalElement(fabricae("crushed_diorite"));
