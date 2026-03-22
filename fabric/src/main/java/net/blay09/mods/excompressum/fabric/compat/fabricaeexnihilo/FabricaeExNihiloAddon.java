@@ -26,6 +26,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -159,7 +160,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
     }
 
     @Override
-    public List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemStack toolItem, RandomSource rand) {
+    public List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemInstance toolItem, RandomSource rand) {
         List<ItemStack> drops = new ArrayList<>();
         final var recipes = ToolRecipe.find(ToolRecipe.ToolType.HAMMER, state, level);
         for (final var recipe : recipes) {
@@ -215,7 +216,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
     }
 
     @Override
-    public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, RandomSource rand) {
+    public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemInstance tool, RandomSource rand) {
         final var recipes = ToolRecipe.find(ToolRecipe.ToolType.CROOK, state, level);
         List<ItemStack> list = new ArrayList<>();
         for (final var recipe : recipes) {

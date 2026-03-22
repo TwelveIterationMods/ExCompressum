@@ -13,6 +13,9 @@ import net.blay09.mods.excompressum.client.render.model.TinyHumanModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.BlockModelRenderState;
+import net.minecraft.client.renderer.block.BlockModelResolver;
+import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
@@ -34,6 +37,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.AxisAngle4f;
 import org.joml.Math;
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
 import java.util.UUID;
@@ -41,11 +45,12 @@ import java.util.UUID;
 public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implements BlockEntityRenderer<T, AutoSieveRenderer.AutoSieveRenderState> {
 
     public static class AutoSieveRenderState extends BlockEntityRenderState {
+        public final BlockModelRenderState glass = new BlockModelRenderState();
+        public final BlockModelRenderState mesh = new BlockModelRenderState();
+        public final BlockModelRenderState sieve = new BlockModelRenderState();
         public boolean skip;
         public Direction facing = Direction.NORTH;
         public boolean waterlogged;
-        @Nullable
-        public String meshModelName;
         public final ItemStackRenderState item = new ItemStackRenderState();
         public float progress;
         @Nullable
@@ -55,18 +60,17 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         public final AvatarRenderState avatar = new AvatarRenderState();
     }
 
-    private final BlockRenderDispatcher blockRenderDispatcher;
+    private static final BlockDisplayContext GLASS_BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
+    private static final BlockDisplayContext SIEVE_BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
+
+    private final BlockModelResolver blockModelResolver;
     private final ItemModelResolver itemModelResolver;
     private final TinyHumanModel tinyHumanModel;
     private final TinyHumanModel tinyHumanModelSlim;
     private final boolean isHeavy;
 
-    public static int cacheKey;
-    private int currentCacheKey;
-    private BlockStateModel sieveModel;
-
     public AutoSieveRenderer(BlockEntityRendererProvider.Context context, boolean isHeavy) {
-        blockRenderDispatcher = context.blockRenderDispatcher();
+        blockModelResolver = context.blockModelResolver();
         itemModelResolver = context.itemModelResolver();
         tinyHumanModel = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER), false);
         tinyHumanModelSlim = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER_SLIM), true);
@@ -77,9 +81,15 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
     public void extractRenderState(T blockEntity, AutoSieveRenderState renderState, float delta, Vec3 vec, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
 
-        if (sieveModel == null || currentCacheKey != cacheKey) {
-            sieveModel = isHeavy ? blockRenderDispatcher.getBlockModel(ModBlocks.heavySieves.get(HeavySieveType.OAK).defaultBlockState()) : ModModels.sieves.get(HeavySieveType.OAK).asBlockStateModel();
-            currentCacheKey = cacheKey;
+        blockModelResolver.update(renderState.glass, Blocks.GLASS.defaultBlockState(), GLASS_BLOCK_DISPLAY_CONTEXT);
+
+        if (isHeavy) {
+            final var sieveState = ModBlocks.heavySieves.get(HeavySieveType.OAK).defaultBlockState();
+            blockModelResolver.update(renderState.sieve, sieveState, SIEVE_BLOCK_DISPLAY_CONTEXT);
+        } else {
+            final var sieveModel = ModModels.sieves.get(HeavySieveType.OAK).asBlockStateModel();
+            final var sieveParts = renderState.mesh.setupModel(new Matrix4f(), false);
+            sieveModel.collectParts(renderState.mesh.scratchRandomSource(42), sieveParts);
         }
 
         if (blockEntity.shouldAnimate()) {
@@ -90,9 +100,19 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
         renderState.skip = blockEntity.isUgly();
         renderState.progress = blockEntity.getProgress();
-        renderState.meshModelName = blockEntity.getSieveMesh() != null ? blockEntity.getSieveMesh().getModelName() : null;
-        renderState.facing = renderState.blockState.getValue(AutoSieveBlock.FACING);
-        renderState.waterlogged = renderState.blockState.getValue(AutoSieveBlock.WATERLOGGED);
+
+        final var meshModelName = blockEntity.getSieveMesh() != null ? blockEntity.getSieveMesh().getModelName() : null;
+        final var meshModel = meshModelName != null ? ModModels.meshes.get(meshModelName).asBlockStateModel() : null;
+        if (meshModel != null) {
+            final var meshParts = renderState.mesh.setupModel(new Matrix4f(), false);
+            meshModel.collectParts(renderState.mesh.scratchRandomSource(42), meshParts);
+        } else {
+            renderState.mesh.clear();
+        }
+
+        final var blockState = blockEntity.getBlockState();
+        renderState.facing = blockState.getValue(AutoSieveBlock.FACING);
+        renderState.waterlogged = blockState.getValue(AutoSieveBlock.WATERLOGGED);
         renderState.profile = blockEntity.getSkinProfile();
         renderState.armAngle = blockEntity.armAngle;
 
@@ -132,8 +152,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
             poseStack.translate(-0.95f, -0.42f, -0.175f);
             float glassScale = 0.35f;
             poseStack.scale(glassScale, glassScale, glassScale);
-            final var glassModel = blockRenderDispatcher.getBlockModel(Blocks.GLASS.defaultBlockState());
-            submitNodeCollector.submitBlockModel(poseStack, RenderTypes.entityCutout(TextureAtlas.LOCATION_BLOCKS), glassModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            renderState.glass.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
 
@@ -147,14 +166,11 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
         // Render the sieve
         poseStack.pushPose();
-        submitNodeCollector.submitBlockModel(poseStack, RenderTypes.entitySolid(TextureAtlas.LOCATION_BLOCKS), sieveModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+        renderState.sieve.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
 
         // Render the sieve mesh
-        final var meshModel = renderState.meshModelName != null ? ModModels.meshes.get(renderState.meshModelName).asBlockStateModel() : null;
-        if (meshModel != null) {
-            submitNodeCollector.submitBlockModel(poseStack, RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), meshModel, 1f, 1f, 1f, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
-        }
+        renderState.mesh.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 
         // Render the content
         if (!renderState.item.isEmpty()) {

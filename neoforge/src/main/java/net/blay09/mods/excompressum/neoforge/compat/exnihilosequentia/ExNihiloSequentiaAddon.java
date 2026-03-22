@@ -23,6 +23,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -119,7 +120,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemStack toolItem, RandomSource rand) {
+    public List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemInstance toolItem, RandomSource rand) {
         List<ItemStackWithChance> possibleDrops = ExNihiloRegistries.HAMMER_REGISTRY.getResult(state.getBlock());
         List<ItemStack> drops = new ArrayList<>();
         for (ItemStackWithChance itemStackWithChance : possibleDrops) {
@@ -176,7 +177,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
     }
 
     @Override
-    public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, RandomSource rand) {
+    public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemInstance tool, RandomSource rand) {
         final float luck = getLuckFromTool(level, tool);
         if (state.getBlock() instanceof InfestedLeavesBlock) {
             List<ItemStack> list = new ArrayList<>();
@@ -211,7 +212,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
         return Collections.emptyList();
     }
 
-    private float getLuckFromTool(Level level, ItemStack tool) {
+    private float getLuckFromTool(Level level, ItemInstance tool) {
         final var fortuneEnchantment = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE);
         return EnchantmentHelper.getItemEnchantmentLevel(fortuneEnchantment, tool);
     }

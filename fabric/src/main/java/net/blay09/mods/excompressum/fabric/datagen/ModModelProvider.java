@@ -12,6 +12,7 @@ import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.client.renderer.block.dispatch.VariantMutator;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
@@ -89,9 +90,9 @@ public class ModModelProvider extends FabricModelProvider {
         itemModelGenerator.generateFlatItem(ModItems.uncompressedCoal.asItem(), ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(ModItems.uglySteelPlating.asItem(), ModelTemplates.FLAT_ITEM);
 
-        final var baitTexture = Identifier.fromNamespaceAndPath("excompressum", "item/bait");
-        final var baitOverlayTexture = Identifier.fromNamespaceAndPath("excompressum", "item/bait_overlay");
-        itemModelGenerator.generateLayeredItem(Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/bait"), baitTexture, baitOverlayTexture);
+        final var baitTexture = new Material(id("item/bait"));
+        final var baitOverlayTexture = new Material(id( "item/bait_overlay"));
+        itemModelGenerator.generateLayeredItem(id( "item/bait"), baitTexture, baitOverlayTexture);
     }
 
     private Identifier createSimpleRetexturedModel(BlockModelGenerators generators, Block block, Block baseBlock, Identifier template) {

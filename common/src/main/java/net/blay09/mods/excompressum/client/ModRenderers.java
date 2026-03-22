@@ -30,7 +30,4 @@ public class ModRenderers {
         renderers.register(ModEntities.angryChicken, context -> new AngryChickenRenderer(context, new AdultChickenModel(context.bakeLayer(ModelLayers.CHICKEN)), 0.3f));
     }
 
-    public static void initialize(BalmClientResourceReloadListenerRegistrar renderers) {
-        renderers.register("cache_invalidation", (ResourceManagerReloadListener) manager -> AutoSieveRenderer.cacheKey++);
-    }
 }

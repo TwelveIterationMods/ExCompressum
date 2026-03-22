@@ -28,6 +28,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -122,7 +123,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
     }
 
     @Override
-    public List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemStack toolItem, RandomSource rand) {
+    public List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemInstance toolItem, RandomSource rand) {
         final var recipe = RecipeUtil.getHammerRecipe(StupidUtils.getItemStackFromState(state).getItem());
         if (recipe != null) {
             List<ItemStack> list = new ArrayList<>();
@@ -200,7 +201,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
     }
 
     @Override
-    public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, RandomSource rand) {
+    public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemInstance tool, RandomSource rand) {
         final float fortune = getLuckFromTool(level, tool);
         final var recipes = RecipeUtil.getCrookRecipes(state);
         List<ItemStack> list = new ArrayList<>();
@@ -215,7 +216,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
         return list;
     }
 
-    private float getLuckFromTool(Level level, ItemStack tool) {
+    private float getLuckFromTool(Level level, ItemInstance tool) {
         final var fortuneEnchantment = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE);
         return EnchantmentHelper.getItemEnchantmentLevel(fortuneEnchantment, tool);
     }

@@ -69,11 +69,11 @@ public class CompressedRecipeRegistry {
                     final var result = ((ShapedRecipeAccessor) shapedRecipe).getResult();
                     if (count == 4 && shapedRecipe.getWidth() == 2 && shapedRecipe.getHeight() == 2) {
                         if (passes) {
-                            recipesSmall.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 4, result.copy()));
+                            recipesSmall.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 4, result.create()));
                         }
                     } else if (count == 9 && shapedRecipe.getWidth() == 3 && shapedRecipe.getHeight() == 3) {
                         if (passes) {
-                            recipes.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 9, result.copy()));
+                            recipes.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 9, result.create()));
                         }
                     }
                 }
@@ -101,11 +101,11 @@ public class CompressedRecipeRegistry {
                     final var result = ((ShapelessRecipeAccessor) shapelessRecipe).getResult();
                     if (count == 4) {
                         if (passes) {
-                            recipesSmall.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 4, result.copy()));
+                            recipesSmall.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 4, result.create()));
                         }
                     } else {
                         if (passes) {
-                            recipes.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 9, result.copy()));
+                            recipes.add(new CompressedRecipe(recipeHolder.id().identifier(), first, 9, result.create()));
                         }
                     }
                 }

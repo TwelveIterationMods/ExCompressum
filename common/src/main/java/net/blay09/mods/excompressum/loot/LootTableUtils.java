@@ -12,6 +12,7 @@ import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -30,7 +31,7 @@ import java.util.*;
 
 public class LootTableUtils {
 
-    private static final ContextKey<ItemStack> SOURCE_STACK = new ContextKey<>(Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID,
+    private static final ContextKey<ItemInstance> SOURCE_STACK = new ContextKey<>(Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID,
             "source_stack"));
 
     private static final ContextKeySet CONTEXT_KEY_SET = new ContextKeySet.Builder().required(SOURCE_STACK).build();
@@ -96,7 +97,7 @@ public class LootTableUtils {
         if (entry instanceof LootPoolSingletonContainerAccessor lootPoolSingletonContainer) {
             for (LootItemFunction function : lootPoolSingletonContainer.getFunctions()) {
                 if (function instanceof SetItemCountFunctionAccessor setItemCountFunction) {
-                    return setItemCountFunction.getValue();
+                    return setItemCountFunction.getCount();
                 }
             }
         }
@@ -128,7 +129,7 @@ public class LootTableUtils {
         return 1;
     }
 
-    public static LootContext buildLootContext(ServerLevel level, ItemStack itemStack) {
+    public static LootContext buildLootContext(ServerLevel level, ItemInstance itemStack) {
         final var params = new ContextMap.Builder();
         params.withParameter(SOURCE_STACK, itemStack);
         return new LootContext.Builder(new LootParams(level, params.create(CONTEXT_KEY_SET), Collections.emptyMap(), 0f)).create(Optional.empty());
