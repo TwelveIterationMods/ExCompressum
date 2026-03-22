@@ -24,9 +24,9 @@ public class ClientProxy extends CommonProxy {
                         pos.getX() + 0.7f,
                         pos.getY() + 0.3f,
                         pos.getZ() + 0.5f,
-                        (-level.random.nextDouble() + 0.2f) / 9,
+                        (-level.getRandom().nextDouble() + 0.2f) / 9,
                         0.2f,
-                        (level.random.nextDouble() - 0.5) / 9,
+                        (level.getRandom().nextDouble() - 0.5) / 9,
                         particleState));
             }
         }
@@ -81,9 +81,9 @@ public class ClientProxy extends CommonProxy {
             double spread = 0.8 * scale;
             double min = 0.4 * scale;
             float particleScale = 0.25f * scale;
-            double particleX = 0.5f + particleOffset.x() + level.random.nextFloat() * spread - min;
+            double particleX = 0.5f + particleOffset.x() + level.getRandom().nextFloat() * spread - min;
             double particleY = particleOffset.y();
-            double particleZ = 0.5f + particleOffset.z() + level.random.nextFloat() * spread - min;
+            double particleZ = 0.5f + particleOffset.z() + level.getRandom().nextFloat() * spread - min;
             Minecraft.getInstance().particleEngine.add(new SievingParticle((ClientLevel) level,
                     pos,
                     particleX,

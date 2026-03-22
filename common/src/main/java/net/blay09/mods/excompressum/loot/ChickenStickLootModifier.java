@@ -29,7 +29,7 @@ public class ChickenStickLootModifier implements BalmLootModifier {
             return;
         }
 
-        ItemStack tool = context.getOptionalParameter(LootContextParams.TOOL);
+        final var tool = context.getOptionalParameter(LootContextParams.TOOL);
         if(tool == null || !tool.is(ModItemTags.CHICKEN_STICKS)) {
             return;
         }

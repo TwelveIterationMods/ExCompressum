@@ -1,14 +1,15 @@
 package net.blay09.mods.excompressum.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.DifficultyInstance;
@@ -18,6 +19,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.chicken.ChickenSoundVariant;
+import net.minecraft.world.entity.animal.chicken.ChickenSoundVariants;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.level.Level;
@@ -25,19 +28,24 @@ import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.phys.Vec3;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
 public class AngryChickenEntity extends PathfinderMob {
 
-    private final ServerBossEvent bossInfo = (ServerBossEvent) (new ServerBossEvent(getDisplayName(),
+    private final ServerBossEvent bossInfo = (ServerBossEvent) (new ServerBossEvent(
+            Mth.createInsecureUUID(random),
+            getDisplayName(),
             BossEvent.BossBarColor.RED,
-            BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
+            BossEvent.BossBarOverlay.PROGRESS)
+    ).setDarkenScreen(true);
+
+    private final Holder<ChickenSoundVariant> soundVariant;
 
     public AngryChickenEntity(EntityType<? extends AngryChickenEntity> type, Level level) {
         super(type, level);
+        soundVariant = ChickenSoundVariants.pickRandomSoundVariant(registryAccess(), random);
     }
 
     public static AttributeSupplier.Builder createEntityAttributes() {
@@ -71,20 +79,28 @@ public class AngryChickenEntity extends PathfinderMob {
         bossInfo.setProgress(getHealth() / getMaxHealth());
     }
 
-    @Nullable
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return SoundEvents.CHICKEN_AMBIENT;
+    private ChickenSoundVariant.ChickenSoundSet getSoundSet() {
+        return soundVariant.value().adultSounds();
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SoundEvents.CHICKEN_HURT;
+    protected SoundEvent getAmbientSound() {
+        return this.getSoundSet().ambientSound().value();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return (SoundEvent) this.getSoundSet().hurtSound().value();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.CHICKEN_HURT;
+        return this.getSoundSet().deathSound().value();
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState blockState) {
+        this.playSound(this.getSoundSet().stepSound().value(), 0.15F, 1.0F);
     }
 
     @Override
@@ -106,12 +122,6 @@ public class AngryChickenEntity extends PathfinderMob {
     public void stopSeenByPlayer(ServerPlayer player) {
         super.stopSeenByPlayer(player);
         bossInfo.removePlayer(player);
-    }
-
-    @Override
-    protected void playStepSound(BlockPos pos, BlockState state) {
-        super.playStepSound(pos, state);
-        playSound(SoundEvents.CHICKEN_STEP, 0.15f, 1.0f);
     }
 
     @Override

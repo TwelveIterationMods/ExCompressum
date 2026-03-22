@@ -55,27 +55,19 @@ public class GeneratedHeavySieveRecipe extends ExCompressumRecipe<RecipeInput> {
         return ModRecipeTypes.heavySieve.bookCategory();
     }
 
-    public static class Serializer implements RecipeSerializer<GeneratedHeavySieveRecipe> {
-        private static final MapCodec<GeneratedHeavySieveRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.ingredient),
-                Identifier.CODEC.fieldOf("source").forGetter(recipe -> recipe.sourceItem),
-                Codec.INT.fieldOf("rolls").orElse(-1).forGetter(recipe -> recipe.rolls)
-        ).apply(instance, GeneratedHeavySieveRecipe::new));
+    private static final MapCodec<GeneratedHeavySieveRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.ingredient),
+            Identifier.CODEC.fieldOf("source").forGetter(recipe -> recipe.sourceItem),
+            Codec.INT.fieldOf("rolls").orElse(-1).forGetter(recipe -> recipe.rolls)
+    ).apply(instance, GeneratedHeavySieveRecipe::new));
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, GeneratedHeavySieveRecipe> STREAM_CODEC = StreamCodec.composite(
-                Ingredient.CONTENTS_STREAM_CODEC, GeneratedHeavySieveRecipe::getIngredient,
-                Identifier.STREAM_CODEC, GeneratedHeavySieveRecipe::getSourceItem,
-                ByteBufCodecs.INT, GeneratedHeavySieveRecipe::getRolls,
-                GeneratedHeavySieveRecipe::new);
+    public static final StreamCodec<RegistryFriendlyByteBuf, GeneratedHeavySieveRecipe> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC, GeneratedHeavySieveRecipe::getIngredient,
+            Identifier.STREAM_CODEC, GeneratedHeavySieveRecipe::getSourceItem,
+            ByteBufCodecs.INT, GeneratedHeavySieveRecipe::getRolls,
+            GeneratedHeavySieveRecipe::new);
 
-        @Override
-        public MapCodec<GeneratedHeavySieveRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, GeneratedHeavySieveRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
+    public static RecipeSerializer<GeneratedHeavySieveRecipe> serializer() {
+        return new RecipeSerializer<>(CODEC, STREAM_CODEC);
     }
 }

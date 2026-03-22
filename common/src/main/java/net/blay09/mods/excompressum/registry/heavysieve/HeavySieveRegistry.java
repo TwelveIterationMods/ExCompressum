@@ -68,7 +68,7 @@ public class HeavySieveRegistry {
         }
 
         final var inputState = StupidUtils.getStateFromItemStack(itemStack);
-        results.addAll(ExNihilo.getInstance().rollHeavySieveRewards(level, sieve, inputState, mesh, context.getLuck(), level.random));
+        results.addAll(ExNihilo.getInstance().rollHeavySieveRewards(level, sieve, inputState, mesh, context.getLuck(), level.getRandom()));
 
         return results;
     }

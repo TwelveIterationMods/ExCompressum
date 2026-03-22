@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -27,7 +28,7 @@ public interface ExNihiloProvider {
 
     boolean isHammerable(Level level, BlockState state);
 
-    List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemStack tool, RandomSource rand);
+    List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemInstance tool, RandomSource rand);
 
     boolean isSiftableWithMesh(Level level, BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh);
 
@@ -39,7 +40,7 @@ public interface ExNihiloProvider {
 
     Collection<ItemStack> rollCompressedHammerRewards(Level level, LootContext context, ItemStack itemStack);
 
-    List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, RandomSource rand);
+    List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemInstance tool, RandomSource rand);
 
     LootTable generateHeavySieveLootTable(Level level, BlockState sieveState, ItemLike source, int count, SieveMeshRegistryEntry mesh);
 

@@ -31,7 +31,7 @@ public class HammerLootModifier implements BalmLootModifier {
             return;
         }
 
-        ItemStack tool = context.getOptionalParameter(LootContextParams.TOOL);
+        final var tool = context.getOptionalParameter(LootContextParams.TOOL);
         if (tool == null || !tool.is(ModItemTags.HAMMERS)) {
             return;
         }

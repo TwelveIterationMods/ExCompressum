@@ -115,7 +115,7 @@ public class WoodenCrucibleBlockEntity extends BlockEntity implements BalmFluidT
 
     public void serverTick() {
         // Fill the crucible from rain
-        if (level.getLevelData().isRaining() && level.canSeeSkyFromBelowWater(worldPosition) && level.getBiome(worldPosition).value().hasPrecipitation()) {
+        if (level.isRaining() && level.canSeeSkyFromBelowWater(worldPosition) && level.getBiome(worldPosition).value().hasPrecipitation()) {
             ticksSinceRain++;
             if (ticksSinceRain >= RAIN_FILL_INTERVAL) {
                 fluidTank.fill(Fluids.WATER, RAIN_FILL_SPEED, false);

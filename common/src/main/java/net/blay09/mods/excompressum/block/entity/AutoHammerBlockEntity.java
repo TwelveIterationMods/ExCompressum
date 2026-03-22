@@ -214,7 +214,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
                 isDirty = true;
                 if (progress >= 1) {
                     if (!level.isClientSide()) {
-                        if (level.random.nextFloat() <= ExCompressumConfig.getActive().automation.autoHammerDecay) {
+                        if (level.getRandom().nextFloat() <= ExCompressumConfig.getActive().automation.autoHammerDecay) {
                             ItemStack firstHammer = hammerSlots.getItem(0);
                             if (!firstHammer.isEmpty()) {
                                 firstHammer.hurtAndBreak(1, (ServerLevel) level, null, it -> {
@@ -228,7 +228,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
                                 });
                             }
                         }
-                        Collection<ItemStack> rewards = rollHammerRewards((ServerLevel) level, currentStack, getEffectiveTool(), level.random);
+                        Collection<ItemStack> rewards = rollHammerRewards((ServerLevel) level, currentStack, getEffectiveTool(), level.getRandom());
                         for (ItemStack itemStack : rewards) {
                             if (!addItemToOutput(itemStack)) {
                                 overflowBuffer.add(itemStack);

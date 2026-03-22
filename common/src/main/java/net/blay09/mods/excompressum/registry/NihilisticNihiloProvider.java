@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -35,7 +36,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemStack itemStack, RandomSource rand) {
+	public List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemInstance itemStack, RandomSource rand) {
 		return Collections.emptyList();
 	}
 
@@ -65,7 +66,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, RandomSource rand) {
+	public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemInstance tool, RandomSource rand) {
 		return Collections.emptyList();
 	}
 

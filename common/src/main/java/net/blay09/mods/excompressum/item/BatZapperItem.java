@@ -53,7 +53,7 @@ public class BatZapperItem extends Item {
     }
 
     private InteractionResult zapBatter(Level level, Player player, ItemStack itemStack, BlockPos pos, InteractionHand hand) {
-        level.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 1f, level.random.nextFloat() * 0.1f + 0.9f);
+        level.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.PLAYERS, 1f, level.getRandom().nextFloat() * 0.1f + 0.9f);
         player.swing(hand);
 
         if (!level.isClientSide()) {

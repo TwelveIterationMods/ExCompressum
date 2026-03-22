@@ -42,7 +42,6 @@ public class CompressedHammerRecipeImpl extends ExCompressumRecipe<RecipeInput> 
     }
 
 
-
     @Override
     public Ingredient getIngredient() {
         return ingredient;
@@ -53,25 +52,17 @@ public class CompressedHammerRecipeImpl extends ExCompressumRecipe<RecipeInput> 
         return lootTable;
     }
 
-    public static class Serializer implements RecipeSerializer<CompressedHammerRecipeImpl> {
-        private static final MapCodec<CompressedHammerRecipeImpl> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.ingredient),
-                LootTable.DIRECT_CODEC.fieldOf("lootTable").forGetter(recipe -> recipe.lootTable)
-        ).apply(instance, CompressedHammerRecipeImpl::new));
+    private static final MapCodec<CompressedHammerRecipeImpl> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.ingredient),
+            LootTable.DIRECT_CODEC.fieldOf("lootTable").forGetter(recipe -> recipe.lootTable)
+    ).apply(instance, CompressedHammerRecipeImpl::new));
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, CompressedHammerRecipeImpl> STREAM_CODEC = StreamCodec.composite(
-                Ingredient.CONTENTS_STREAM_CODEC, CompressedHammerRecipeImpl::getIngredient,
-                ExCompressumSerializers.LOOT_TABLE_STREAM_CODEC, CompressedHammerRecipeImpl::getLootTable,
-                CompressedHammerRecipeImpl::new);
+    public static final StreamCodec<RegistryFriendlyByteBuf, CompressedHammerRecipeImpl> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC, CompressedHammerRecipeImpl::getIngredient,
+            ExCompressumSerializers.LOOT_TABLE_STREAM_CODEC, CompressedHammerRecipeImpl::getLootTable,
+            CompressedHammerRecipeImpl::new);
 
-        @Override
-        public MapCodec<CompressedHammerRecipeImpl> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, CompressedHammerRecipeImpl> streamCodec() {
-            return STREAM_CODEC;
-        }
+    public static RecipeSerializer<CompressedHammerRecipeImpl> serializer() {
+        return new RecipeSerializer<>(CODEC, STREAM_CODEC);
     }
 }

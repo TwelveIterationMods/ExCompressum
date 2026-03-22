@@ -11,11 +11,11 @@ public class SievingParticle extends TerrainParticle {
 		super(level, pos.getX() + x, pos.getY() + y, pos.getZ() + z, 0f, 0f, 0f, state);
 
 		quadSize = 0.2f * scale;
-		lifetime = level.random.nextInt(30) + 10;
-		gravity = level.random.nextFloat() * 0.25f;
+		lifetime = level.getRandom().nextInt(30) + 10;
+		gravity = level.getRandom().nextFloat() * 0.25f;
 
-		xd = (level.random.nextFloat() - 0.5f) * 0.025f * scale;
+		xd = (level.getRandom().nextFloat() - 0.5f) * 0.025f * scale;
 		yd = 0f;
-		zd = (level.random.nextFloat() - 0.5f) * 0.025f * scale;
+		zd = (level.getRandom().nextFloat() - 0.5f) * 0.025f * scale;
 	}
 }

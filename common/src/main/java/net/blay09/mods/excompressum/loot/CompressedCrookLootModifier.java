@@ -36,7 +36,7 @@ public class CompressedCrookLootModifier implements BalmLootModifier {
 
         ServerLevel level = context.getLevel();
         Entity entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
-        ItemStack tool = context.getOptionalParameter(LootContextParams.TOOL);
+        final var tool = context.getOptionalParameter(LootContextParams.TOOL);
         if (tool == null || !tool.is(ModItemTags.COMPRESSED_CROOKS)) {
             return;
         }

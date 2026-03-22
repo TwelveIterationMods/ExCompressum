@@ -51,25 +51,17 @@ public class HammerRecipeImpl extends ExCompressumRecipe<RecipeInput> implements
         return lootTable;
     }
 
-    public static class Serializer implements RecipeSerializer<HammerRecipeImpl> {
-        private static final MapCodec<HammerRecipeImpl> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.ingredient),
-                LootTable.DIRECT_CODEC.fieldOf("lootTable").forGetter(recipe -> recipe.lootTable)
-        ).apply(instance, HammerRecipeImpl::new));
+    private static final MapCodec<HammerRecipeImpl> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.ingredient),
+            LootTable.DIRECT_CODEC.fieldOf("lootTable").forGetter(recipe -> recipe.lootTable)
+    ).apply(instance, HammerRecipeImpl::new));
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, HammerRecipeImpl> STREAM_CODEC = StreamCodec.composite(
-                Ingredient.CONTENTS_STREAM_CODEC, HammerRecipeImpl::getIngredient,
-                ExCompressumSerializers.LOOT_TABLE_STREAM_CODEC, HammerRecipeImpl::getLootTable,
-                HammerRecipeImpl::new);
+    public static final StreamCodec<RegistryFriendlyByteBuf, HammerRecipeImpl> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC, HammerRecipeImpl::getIngredient,
+            ExCompressumSerializers.LOOT_TABLE_STREAM_CODEC, HammerRecipeImpl::getLootTable,
+            HammerRecipeImpl::new);
 
-        @Override
-        public MapCodec<HammerRecipeImpl> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, HammerRecipeImpl> streamCodec() {
-            return STREAM_CODEC;
-        }
+    public static RecipeSerializer<HammerRecipeImpl> serializer() {
+        return new RecipeSerializer<>(CODEC, STREAM_CODEC);
     }
 }

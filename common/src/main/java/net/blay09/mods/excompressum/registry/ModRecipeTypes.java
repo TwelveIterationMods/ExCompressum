@@ -21,32 +21,32 @@ public class ModRecipeTypes {
 
     public static void initialize(BalmRecipeTypeRegistrar recipes) {
         compressedHammer = recipes.register("compressed_hammer", CompressedHammerRecipeImpl.class)
-                .withSerializer(CompressedHammerRecipeImpl.Serializer::new)
+                .withSerializer(CompressedHammerRecipeImpl::serializer)
                 .withRecipeBookCategory()
                 .asDeferredRecipeType();
 
         chickenStick = recipes.register("chicken_stick", ChickenStickRecipe.class)
-                .withSerializer(ChickenStickRecipe.Serializer::new)
+                .withSerializer(ChickenStickRecipe::serializer)
                 .withRecipeBookCategory()
                 .asDeferredRecipeType();
 
         hammer = recipes.register("hammer", HammerRecipeImpl.class)
-                .withSerializer(HammerRecipeImpl.Serializer::new)
+                .withSerializer(HammerRecipeImpl::serializer)
                 .withRecipeBookCategory()
                 .asDeferredRecipeType();
 
         generatedHeavySieve = recipes.register("generated_heavy_sieve", GeneratedHeavySieveRecipe.class)
-                .withSerializer(GeneratedHeavySieveRecipe.Serializer::new)
+                .withSerializer(GeneratedHeavySieveRecipe::serializer)
                 .withRecipeBookCategory()
                 .asDeferredRecipeType();
 
         heavySieve = recipes.register("heavy_sieve", HeavySieveRecipeImpl.class)
-                .withSerializer(HeavySieveRecipeImpl.Serializer::new)
+                .withSerializer(HeavySieveRecipeImpl::serializer)
                 .withRecipeBookCategory()
                 .asDeferredRecipeType();
 
         woodenCrucible = recipes.register("wooden_crucible", WoodenCrucibleRecipe.class)
-                .withSerializer(WoodenCrucibleRecipe.Serializer::new)
+                .withSerializer(WoodenCrucibleRecipe::serializer)
                 .withRecipeBookCategory()
                 .asDeferredRecipeType();
     }

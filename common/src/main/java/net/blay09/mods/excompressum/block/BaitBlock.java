@@ -76,7 +76,7 @@ public class BaitBlock extends BaseEntityBlock {
         if (!level.isClientSide()) {
             final var chatComponent = Component.translatable(environmentStatus.langKey, environmentStatus.params);
             chatComponent.withStyle(environmentStatus != EnvironmentalConditionResult.CanSpawn ? ChatFormatting.RED : ChatFormatting.GREEN);
-            player.displayClientMessage(chatComponent, false);
+            player.sendSystemMessage(chatComponent);
         }
 
         return InteractionResult.SUCCESS;
@@ -89,7 +89,7 @@ public class BaitBlock extends BaseEntityBlock {
             if (!level.isClientSide()) {
                 final var chatComponent = Component.translatable(environmentStatus.langKey, environmentStatus.params);
                 chatComponent.withStyle(environmentStatus != EnvironmentalConditionResult.CanSpawn ? ChatFormatting.RED : ChatFormatting.GREEN);
-                player.displayClientMessage(chatComponent, false);
+                player.sendSystemMessage(chatComponent);
             }
         }
     }

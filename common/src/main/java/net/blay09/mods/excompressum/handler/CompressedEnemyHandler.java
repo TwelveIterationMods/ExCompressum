@@ -34,7 +34,7 @@ public class CompressedEnemyHandler {
     public static void onEntityAdded(Level level, Entity entity) {
         if (!level.isClientSide() && entity instanceof Mob) {
             final var persistentData = Balm.hooks().getPersistentData(entity);
-            if (entity.getType().is(ModEntityTags.COMPRESSABLE)) {
+            if (entity.is(ModEntityTags.COMPRESSABLE)) {
                 final var modData = persistentData.getCompound(ExCompressum.MOD_ID);
                 final var noCompress = modData.flatMap(it -> it.getBoolean(NOCOMPRESS)).orElse(false);
                 final var compressed = modData.flatMap(it -> it.getBoolean(COMPRESSED)).orElse(false);
@@ -42,7 +42,7 @@ public class CompressedEnemyHandler {
                     return;
                 }
 
-                if (level.random.nextFloat() < ExCompressumConfig.getActive().compressedMobs.compressedMobChance) {
+                if (level.getRandom().nextFloat() < ExCompressumConfig.getActive().compressedMobs.compressedMobChance) {
                     entity.setCustomNameVisible(true);
                     entity.setCustomName(Component.translatable("tooltip.excompressum.compressed_mob", entity.getName()));
                     final var tagCompound = new CompoundTag();
@@ -96,7 +96,7 @@ public class CompressedEnemyHandler {
                         Balm.hooks().getPersistentData(newEntity).put(ExCompressum.MOD_ID, tagCompound);
                         newEntity.snapTo(entity.getX(), entity.getY() + 1, entity.getZ(), (float) Math.random(), (float) Math.random());
                         final var motion = 0.01;
-                        newEntity.setDeltaMovement((level.random.nextGaussian() - 0.5) * motion, 0, (level.random.nextGaussian() - 0.5) * motion);
+                        newEntity.setDeltaMovement((level.getRandom().nextGaussian() - 0.5) * motion, 0, (level.getRandom().nextGaussian() - 0.5) * motion);
                         level.addFreshEntity(newEntity);
                     }
                 }

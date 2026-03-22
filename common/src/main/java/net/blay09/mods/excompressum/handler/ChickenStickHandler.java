@@ -57,7 +57,7 @@ public class ChickenStickHandler {
                     angryChicken.absSnapTo(chicken.getX(), chicken.getY(), chicken.getZ(), chicken.getYRot(), chicken.getXRot());
                     angryChicken.setYHeadRot(chicken.yHeadRot);
                     level.addFreshEntity(angryChicken);
-                    level.playSound(null, angryChicken.blockPosition(), SoundEvents.CHICKEN_HURT, SoundSource.HOSTILE, 1f, 0.5f);
+                    level.playSound(null, angryChicken.blockPosition(), SoundEvents.CHICKEN_HURT_BABY.value(), SoundSource.HOSTILE, 1f, 0.5f);
                     level.playSound(null, angryChicken.blockPosition(), SoundEvents.WITHER_SPAWN, SoundSource.HOSTILE, 1f, 0.5f);
                     ((ServerLevel) level).sendParticles(ParticleTypes.ANGRY_VILLAGER,
                             angryChicken.getX(),

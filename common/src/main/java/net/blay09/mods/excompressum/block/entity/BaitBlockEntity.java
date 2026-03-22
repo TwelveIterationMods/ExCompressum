@@ -54,7 +54,7 @@ public class BaitBlockEntity extends BlockEntity {
 
         ticksSinceSpawnCheck++;
         if (ticksSinceSpawnCheck >= SPAWN_CHECK_INTERVAL) {
-            if (!level.isClientSide() && level.random.nextFloat() <= baitType.getChance()) {
+            if (!level.isClientSide() && level.getRandom().nextFloat() <= baitType.getChance()) {
                 if (checkSpawnConditions(true) == EnvironmentalConditionResult.CanSpawn) {
                     final float range = MIN_DISTANCE_NO_PLAYERS;
                     if (level.getEntitiesOfClass(Player.class,
@@ -65,7 +65,7 @@ public class BaitBlockEntity extends BlockEntity {
                                     worldPosition.getY() + range,
                                     worldPosition.getZ() + range)).isEmpty()) {
                         Entity entity = baitType.createEntity(level);
-                        if (entity instanceof AgeableMob mob && level.random.nextFloat() <= ExCompressumConfig.getActive().baits.childBaitChance) {
+                        if (entity instanceof AgeableMob mob && level.getRandom().nextFloat() <= ExCompressumConfig.getActive().baits.childBaitChance) {
                             mob.setAge(-24000);
                         }
                         if (entity instanceof Turtle turtle) {
@@ -73,7 +73,7 @@ public class BaitBlockEntity extends BlockEntity {
                         }
                         if (entity instanceof Llama llama) {
                             final var candidates = Llama.Variant.values();
-                            ((LlamaAccessor) llama).callSetVariant(candidates[level.random.nextInt(candidates.length)]);
+                            ((LlamaAccessor) llama).callSetVariant(candidates[level.getRandom().nextInt(candidates.length)]);
                         }
                         entity.setPos(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5);
                         level.addFreshEntity(entity);

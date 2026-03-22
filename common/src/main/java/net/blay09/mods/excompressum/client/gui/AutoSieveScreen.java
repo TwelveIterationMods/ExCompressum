@@ -21,34 +21,32 @@ public class AutoSieveScreen extends AbstractContainerScreen<AutoSieveMenu> {
 
     public AutoSieveScreen(AutoSieveMenu container, Inventory inv, Component title) {
         super(container, inv, title);
-        imageWidth = 176;
-        imageHeight = 166;
     }
 
     @Override
-    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
-        super.render(guiGraphics, mouseX, mouseY, partialTicks);
-        renderTooltip(guiGraphics, mouseX, mouseY);
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTicks);
+        extractTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphicsExtractor guiGraphics, float partialTicks, int mouseX, int mouseY) {
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
 
         AbstractAutoSieveBlockEntity tileEntity = menu.getAutoSieve();
         if (tileEntity.isProcessing()) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 32, topPos + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 14, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 32, topPos + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 14, 256, 256);
         }
         if (tileEntity.isDisabledByRedstone()) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 34, topPos + 52, 176, 14, 15, 16, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 34, topPos + 52, 176, 14, 15, 16, 256, 256);
         }
 
-        renderEnergyBar(guiGraphics);
+        renderEnergyBar(graphics);
     }
 
     @Override
-    protected void renderLabels(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
+    protected void extractLabels(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         final var poseStack = guiGraphics.pose();
         // Render No Mesh / Incorrect Mesh overlay
         AbstractAutoSieveBlockEntity blockEntity = menu.getAutoSieve();
@@ -56,13 +54,13 @@ public class AutoSieveScreen extends AbstractContainerScreen<AutoSieveMenu> {
             poseStack.pushMatrix();
             // TODO z 300
             guiGraphics.fill(58, 16, 144, 71, 0x99000000);
-            guiGraphics.drawCenteredString(font, I18n.get("gui.excompressum.auto_sieve.no_mesh"), 101, 43 - font.lineHeight / 2, 0xFFFFFFFF);
+            guiGraphics.centeredText(font, I18n.get("gui.excompressum.auto_sieve.no_mesh"), 101, 43 - font.lineHeight / 2, 0xFFFFFFFF);
             poseStack.popMatrix();
         } else if (!blockEntity.isCorrectSieveMesh()) {
             poseStack.pushMatrix();
             // TODO z 300
             guiGraphics.fill(58, 16, 144, 71, 0x99000000);
-            guiGraphics.drawCenteredString(font, I18n.get("gui.excompressum.auto_sieve.incorrect_mesh"), 101, 43 - font.lineHeight / 2, 0xFFFFFFFF);
+            guiGraphics.centeredText(font, I18n.get("gui.excompressum.auto_sieve.incorrect_mesh"), 101, 43 - font.lineHeight / 2, 0xFFFFFFFF);
             poseStack.popMatrix();
         }
 

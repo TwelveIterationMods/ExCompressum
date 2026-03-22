@@ -20,37 +20,29 @@ public class AutoCompressorScreen extends AbstractContainerScreen<AutoCompressor
 
     public AutoCompressorScreen(AutoCompressorMenu container, Inventory inventory, Component title) {
         super(container, inventory, title);
-        imageWidth = 176;
-        imageHeight = 166;
     }
 
     @Override
-    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTicks);
-        super.render(guiGraphics, mouseX, mouseY, partialTicks);
-        renderTooltip(guiGraphics, mouseX, mouseY);
-    }
-
-    @Override
-    protected void renderBg(GuiGraphicsExtractor guiGraphics, float partialTicks, int mouseX, int mouseY) {
+    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractBackground(graphics, mouseX, mouseY, a);
         AutoCompressorBlockEntity tileEntity = menu.getAutoCompressor();
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
 
         if (tileEntity.isProcessing()) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 69, topPos + 9, 176, 0, (int) (tileEntity.getProgress() * 15f), 14, 256, 256);
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 69, topPos + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 14, 256, 256);
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 69, topPos + 63, 176, 0, (int) (tileEntity.getProgress() * 15f), 14, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 69, topPos + 9, 176, 0, (int) (tileEntity.getProgress() * 15f), 14, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 69, topPos + 36, 176, 0, (int) (tileEntity.getProgress() * 15f), 14, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 69, topPos + 63, 176, 0, (int) (tileEntity.getProgress() * 15f), 14, 256, 256);
         }
         if (tileEntity.isDisabledByRedstone()) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 72, topPos + 24, 176, 14, 15, 16, 256, 256);
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 72, topPos + 51, 176, 14, 15, 16, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 72, topPos + 24, 176, 14, 15, 16, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 72, topPos + 51, 176, 14, 15, 16, 256, 256);
         }
         float energyPercentage = tileEntity.getEnergyPercentage();
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 152, topPos + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70), 256, 256);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos + 152, topPos + 8 + (70 - (int) (energyPercentage * 70)), 176 + 15, 0, 16, (int) (energyPercentage * 70), 256, 256);
     }
 
     @Override
-    protected void renderLabels(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
+    protected void extractLabels(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         if (mouseX >= leftPos + 152 && mouseX <= leftPos + 167 && mouseY >= topPos + 8 && mouseY <= topPos + 77) {
             AutoCompressorBlockEntity blockEntity = menu.getAutoCompressor();
             List<Component> tooltip = new ArrayList<>();

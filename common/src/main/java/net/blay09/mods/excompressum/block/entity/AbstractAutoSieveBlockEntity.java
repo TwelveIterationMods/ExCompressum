@@ -238,7 +238,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
                     if (!level.isClientSide()) {
                         SieveMeshRegistryEntry sieveMesh = getSieveMesh();
                         if (sieveMesh != null) {
-                            Collection<ItemStack> rewards = rollSieveRewards((ServerLevel) level, currentStack, sieveMesh, getEffectiveLuck(), level.random);
+                            Collection<ItemStack> rewards = rollSieveRewards((ServerLevel) level, currentStack, sieveMesh, getEffectiveLuck(), level.getRandom());
                             for (ItemStack itemStack : rewards) {
                                 if (!addItemToOutput(itemStack)) {
                                     overflowBuffer.add(itemStack);
@@ -559,7 +559,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
             if (!currentStack.isEmpty()) {
                 ItemEntity entityItem = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), currentStack);
                 double motion = 0.05;
-                entityItem.setDeltaMovement(level.random.nextGaussian() * motion, 0.2, level.random.nextGaussian() * motion);
+                entityItem.setDeltaMovement(level.getRandom().nextGaussian() * motion, 0.2, level.getRandom().nextGaussian() * motion);
                 level.addFreshEntity(entityItem);
             }
         }

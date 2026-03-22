@@ -12,7 +12,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 
 import java.util.Objects;
 
@@ -69,42 +68,28 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe<RecipeInput> {
         return BuiltInRegistries.FLUID.getValue(this.fluid);
     }
 
-    public static class Serializer implements RecipeSerializer<WoodenCrucibleRecipe> {
-        private static final MapCodec<WoodenCrucibleRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.ingredient),
-                Identifier.CODEC.fieldOf("fluid").forGetter(recipe -> recipe.fluid),
-                Codec.INT.fieldOf("amount").forGetter(recipe -> recipe.amount)
-        ).apply(instance, WoodenCrucibleRecipe::new));
+    private static final MapCodec<WoodenCrucibleRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Ingredient.CODEC.fieldOf("input").forGetter(recipe -> recipe.ingredient),
+            Identifier.CODEC.fieldOf("fluid").forGetter(recipe -> recipe.fluid),
+            Codec.INT.fieldOf("amount").forGetter(recipe -> recipe.amount)
+    ).apply(instance, WoodenCrucibleRecipe::new));
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, WoodenCrucibleRecipe> STREAM_CODEC = StreamCodec.of(Serializer::encode, Serializer::decode);
+    public static final StreamCodec<RegistryFriendlyByteBuf, WoodenCrucibleRecipe> STREAM_CODEC = StreamCodec.of(WoodenCrucibleRecipe::encode, WoodenCrucibleRecipe::decode);
 
-        // public static final StreamCodec<RegistryFriendlyByteBuf, WoodenCrucibleRecipe> STREAM_CODEC = StreamCodec.composite(
-        //         Ingredient.CONTENTS_STREAM_CODEC.cast(), WoodenCrucibleRecipe::getIngredient,
-        //         Identifier.STREAM_CODEC.cast(), WoodenCrucibleRecipe::getFluid,
-        //         ByteBufCodecs.INT.cast(), WoodenCrucibleRecipe::getAmount,
-        //         WoodenCrucibleRecipe::new);
+    private static WoodenCrucibleRecipe decode(RegistryFriendlyByteBuf buf) {
+        final var ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
+        final var fluidId = Identifier.STREAM_CODEC.decode(buf);
+        final var amount = ByteBufCodecs.INT.decode(buf);
+        return new WoodenCrucibleRecipe(ingredient, fluidId, amount);
+    }
 
-        @Override
-        public MapCodec<WoodenCrucibleRecipe> codec() {
-            return CODEC;
-        }
+    private static void encode(RegistryFriendlyByteBuf buf, WoodenCrucibleRecipe recipe) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.getIngredient());
+        Identifier.STREAM_CODEC.encode(buf, recipe.getFluidId());
+        ByteBufCodecs.INT.encode(buf, recipe.getAmount());
+    }
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, WoodenCrucibleRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-
-        private static WoodenCrucibleRecipe decode(RegistryFriendlyByteBuf buf) {
-            final var ingredient = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
-            final var fluidId = Identifier.STREAM_CODEC.decode(buf);
-            final var amount = ByteBufCodecs.INT.decode(buf);
-            return new WoodenCrucibleRecipe(ingredient, fluidId, amount);
-        }
-
-        private static void encode(RegistryFriendlyByteBuf buf, WoodenCrucibleRecipe recipe) {
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.getIngredient());
-            Identifier.STREAM_CODEC.encode(buf, recipe.getFluidId());
-            ByteBufCodecs.INT.encode(buf, recipe.getAmount());
-        }
+    public static RecipeSerializer<WoodenCrucibleRecipe> serializer() {
+        return new RecipeSerializer<>(CODEC, STREAM_CODEC);
     }
 }
