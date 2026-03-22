@@ -50,6 +50,6 @@ public class AutoCompressedHammerBlockEntity extends AutoHammerBlockEntity {
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.excompressum.auto_compressed_hammer");
+        return Component.translatable("item.excompressum.auto_compressed_hammer");
     }
 }

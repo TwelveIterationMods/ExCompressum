@@ -483,7 +483,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.excompressum.auto_hammer");
+        return Component.translatable("item.excompressum.auto_hammer");
     }
 
     @Override

@@ -45,6 +45,6 @@ public class AutoHeavySieveBlockEntity extends AutoSieveBlockEntity {
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("block.excompressum.auto_heavy_sieve");
+        return Component.translatable("item.excompressum.auto_heavy_sieve");
     }
 }
