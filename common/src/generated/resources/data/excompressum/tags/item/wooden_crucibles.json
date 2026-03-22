@@ -1,15 +1,15 @@
 {
   "values": [
-    "excompressum:crimson_crucible",
+    "excompressum:jungle_crucible",
+    "excompressum:birch_crucible",
+    "excompressum:oak_crucible",
     "excompressum:acacia_crucible",
     "excompressum:cherry_crucible",
-    "excompressum:oak_crucible",
-    "excompressum:warped_crucible",
     "excompressum:mangrove_crucible",
+    "excompressum:warped_crucible",
     "excompressum:spruce_crucible",
+    "excompressum:crimson_crucible",
     "excompressum:dark_oak_crucible",
-    "excompressum:birch_crucible",
-    "excompressum:jungle_crucible",
     {
       "id": "exnihilosequentia:acacia_crucible",
       "required": false
