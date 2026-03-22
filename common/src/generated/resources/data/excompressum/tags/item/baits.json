@@ -1,21 +1,21 @@
 {
   "values": [
-    "excompressum:pig_bait",
-    "excompressum:ocelot_bait",
-    "excompressum:horse_bait",
-    "excompressum:fox_bait",
-    "excompressum:turtle_bait",
-    "excompressum:llama_bait",
-    "excompressum:parrot_bait",
-    "excompressum:wolf_bait",
-    "excompressum:squid_bait",
-    "excompressum:polar_bear_bait",
-    "excompressum:chicken_bait",
-    "excompressum:sheep_bait",
-    "excompressum:cow_bait",
     "excompressum:cat_bait",
     "excompressum:donkey_bait",
+    "excompressum:squid_bait",
+    "excompressum:horse_bait",
+    "excompressum:polar_bear_bait",
+    "excompressum:rabbit_bait",
+    "excompressum:llama_bait",
+    "excompressum:chicken_bait",
+    "excompressum:ocelot_bait",
+    "excompressum:parrot_bait",
+    "excompressum:sheep_bait",
+    "excompressum:turtle_bait",
+    "excompressum:wolf_bait",
     "excompressum:mooshroom_bait",
-    "excompressum:rabbit_bait"
+    "excompressum:pig_bait",
+    "excompressum:fox_bait",
+    "excompressum:cow_bait"
   ]
 }
