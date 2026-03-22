@@ -111,7 +111,7 @@ public class ModModelProvider extends FabricModelProvider {
     }
 
     private void createBait(BlockModelGenerators generators, BaitBlock block, BaitType baitType) {
-        generators.createAirLikeBlock(block, baitType.getDisplayItemFirst().getItem());
+        generators.createAirLikeBlock(block, baitType.getDisplayItemFirst().item().value());
         final var itemModelLocation = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/bait");
         generators.itemModelOutput.accept(block.asItem(),
                 ItemModelUtils.tintedModel(itemModelLocation,
