@@ -23,12 +23,6 @@ public class AutoHammerScreen extends AbstractContainerScreen<AutoHammerMenu> {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTicks) {
-        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTicks);
-        extractTooltip(guiGraphics, mouseX, mouseY);
-    }
-
-    @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);
         graphics.blit(RenderPipelines.GUI_TEXTURED, texture, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
