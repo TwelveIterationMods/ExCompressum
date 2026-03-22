@@ -11,6 +11,7 @@ import static net.blay09.mods.excompressum.ExCompressum.id;
 public class ExCompressumClient {
     public static void initialize(BalmClientRegistrars registrars) {
         registrars.menuScreens(ModScreens::initialize);
+        registrars.blockEntityRenderers(ModRenderers::initialize);
         registrars.entityRenderers(ModRenderers::initialize);
         registrars.blockStateModels(ModModels::initialize);
         Balm.modSupport().recipeViewers().register(id("recipes"), new ExCompressumRecipeViewerProvider());
