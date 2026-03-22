@@ -164,7 +164,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
         List<ItemStack> drops = new ArrayList<>();
         final var recipes = ToolRecipe.find(ToolRecipe.ToolType.HAMMER, state, level);
         for (final var recipe : recipes) {
-            drops.add(recipe.getResult().createStack(level.random));
+            drops.add(recipe.getResult().createStack(level.getRandom()));
         }
 
         return drops;
@@ -200,7 +200,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
                 level);
         List<ItemStack> list = new ArrayList<>();
         for (final var recipe : recipes) {
-            list.add(recipe.createStack(level.random));
+            list.add(recipe.createStack(level.getRandom()));
         }
         return list;
     }
@@ -220,7 +220,7 @@ public class FabricaeExNihiloAddon implements ExNihiloProvider {
         final var recipes = ToolRecipe.find(ToolRecipe.ToolType.CROOK, state, level);
         List<ItemStack> list = new ArrayList<>();
         for (final var recipe : recipes) {
-            list.add(recipe.getResult().createStack(level.random));
+            list.add(recipe.getResult().createStack(level.getRandom()));
         }
         return list;
     }
