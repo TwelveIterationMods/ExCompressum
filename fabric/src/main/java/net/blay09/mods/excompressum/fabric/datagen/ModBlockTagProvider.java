@@ -1,5 +1,6 @@
 package net.blay09.mods.excompressum.fabric.datagen;
 
+import net.blay09.mods.balm.world.level.block.BlockLike;
 import net.blay09.mods.excompressum.block.CompressedBlockType;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.tag.ModBlockTags;
@@ -51,12 +52,8 @@ public class ModBlockTagProvider extends IntrinsicHolderTagsProvider<Block> {
                 ModBlocks.compressedBlocks.get(CompressedBlockType.SOUL_SAND).asBlock());
 
         final var mineableAxe = tag(BlockTags.MINEABLE_WITH_AXE);
-        for (final var heavySieve : ModBlocks.heavySieves.values()) {
-            mineableAxe.add(heavySieve.asBlock());
-        }
-        for (final var woodenCrucible : ModBlocks.woodenCrucibles.values()) {
-            mineableAxe.add(woodenCrucible.asBlock());
-        }
+        ModBlocks.heavySieves.sortedValues().map(BlockLike::asBlock).forEach(mineableAxe::add);
+        ModBlocks.woodenCrucibles.sortedValues().map(BlockLike::asBlock).forEach(mineableAxe::add);
 
         tag(ModBlockTags.MINEABLE_WITH_CROOK).addOptionalTag(BlockTags.LEAVES);
         tag(ModBlockTags.MINEABLE_WITH_HAMMER)
