@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class AutoCompressorBlock extends BaseEntityBlock {
 
@@ -33,7 +33,7 @@ public class AutoCompressorBlock extends BaseEntityBlock {
         super(properties.strength(2f));
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new AutoCompressorBlockEntity(pos, state);

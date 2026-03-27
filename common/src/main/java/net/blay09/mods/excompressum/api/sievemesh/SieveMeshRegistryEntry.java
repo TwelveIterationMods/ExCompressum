@@ -2,7 +2,7 @@ package net.blay09.mods.excompressum.api.sievemesh;
 
 import net.minecraft.world.item.ItemStack;
 
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class SieveMeshRegistryEntry {
 	private final CommonMeshType meshType;

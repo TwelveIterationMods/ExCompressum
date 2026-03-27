@@ -19,7 +19,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.joml.Matrix4f;
 
 public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibleBlockEntity, WoodenCrucibleRenderer.WoodenCrucibleRenderState> {
