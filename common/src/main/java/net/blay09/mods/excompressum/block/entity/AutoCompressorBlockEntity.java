@@ -19,7 +19,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -39,6 +38,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,8 +109,8 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
         }
     };
 
-    private NonNullList<ItemStack> currentBuffer = NonNullList.create();
-    private CompressedRecipe currentRecipe = null;
+    private final NonNullList<ItemStack> currentBuffer = NonNullList.create();
+    private @Nullable CompressedRecipe currentRecipe;
     private float progress;
     private boolean isDisabledByRedstone;
 
@@ -206,8 +206,8 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
                 }
             }
         } else if (!overflowBuffer.isEmpty()) {
-            if (addItemToOutput(overflowBuffer.get(0))) {
-                overflowBuffer.remove(0);
+            if (addItemToOutput(overflowBuffer.getFirst())) {
+                overflowBuffer.removeFirst();
             }
         }
     }
@@ -256,7 +256,7 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
         isDisabledByRedstone = input.getBooleanOr("IsDisabledByRedstone", false);
         progress = input.getFloatOr("Progress", 0);
         input.child("ItemHandler").ifPresent(it -> ContainerHelper.loadAllItems(it, backingContainer.getItems()));
-        input.child("EnergyStorage").ifPresent(it -> energyStorage.deserialize(it));
+        input.child("EnergyStorage").ifPresent(energyStorage::deserialize);
         overflowBuffer.clear();
         input.list("OverflowBuffer", ItemStack.CODEC).ifPresent(overflowItems -> {
             for (final var overflowItem : overflowItems) {
@@ -315,7 +315,7 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
     }
 
     @Override
-    public Container getContainer(Direction side) {
+    public @Nullable Container getContainer(Direction side) {
         if (side == Direction.DOWN) {
             return outputSlots;
         }

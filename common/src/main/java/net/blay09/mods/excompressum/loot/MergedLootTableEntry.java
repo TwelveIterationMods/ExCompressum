@@ -10,7 +10,7 @@ public class MergedLootTableEntry {
     private final List<LootTableEntry> entries;
 
     public MergedLootTableEntry(LootTableEntry entry) {
-        itemStack = entry.getItemStack();
+        itemStack = entry.itemStack();
         entries = Collections.singletonList(entry);
     }
 

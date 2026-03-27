@@ -38,7 +38,7 @@ public class HeavySieveRenderer implements BlockEntityRenderer<HeavySieveBlockEn
     }
 
     @Override
-    public void extractRenderState(HeavySieveBlockEntity blockEntity, HeavySieveRenderState renderState, float delta, Vec3 vec, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(HeavySieveBlockEntity blockEntity, HeavySieveRenderState renderState, float delta, Vec3 vec, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
 
         final var meshModelName = blockEntity.getSieveMesh() != null ? blockEntity.getSieveMesh().getModelName() : null;

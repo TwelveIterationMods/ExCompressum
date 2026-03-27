@@ -5,10 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.excompressum.registry.ExCompressumRecipe;
 import net.blay09.mods.excompressum.registry.ExCompressumSerializers;
 import net.blay09.mods.excompressum.registry.ModRecipeTypes;
-import net.blay09.mods.excompressum.registry.compressedhammer.CompressedHammerRecipeImpl;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.storage.loot.LootTable;
 

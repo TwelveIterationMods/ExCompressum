@@ -26,7 +26,6 @@ import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.PlayerSkin;
@@ -55,7 +54,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         public float progress;
         @Nullable
         public ResolvableProfile profile;
-        public SieveAnimationType animationType;
+        public SieveAnimationType animationType = SieveAnimationType.DEFAULT;
         public float armAngle;
         public final AvatarRenderState avatar = new AvatarRenderState();
     }
@@ -78,7 +77,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
     }
 
     @Override
-    public void extractRenderState(T blockEntity, AutoSieveRenderState renderState, float delta, Vec3 vec, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(T blockEntity, AutoSieveRenderState renderState, float delta, Vec3 vec, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
 
         blockModelResolver.update(renderState.glass, Blocks.GLASS.defaultBlockState(), GLASS_BLOCK_DISPLAY_CONTEXT);

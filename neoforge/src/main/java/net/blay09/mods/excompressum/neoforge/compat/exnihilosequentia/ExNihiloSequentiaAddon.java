@@ -287,7 +287,7 @@ public class ExNihiloSequentiaAddon implements ExNihiloProvider {
                 }
             }
 
-            final var firstRecipe = groupedRecipes.get(packedStacks).get(0);
+            final var firstRecipe = groupedRecipes.get(packedStacks).getFirst();
             Ingredient input = firstRecipe.getInput();
             final var lootTable = tableBuilder.build();
             result.add(new HammerRecipeImpl(input, lootTable));

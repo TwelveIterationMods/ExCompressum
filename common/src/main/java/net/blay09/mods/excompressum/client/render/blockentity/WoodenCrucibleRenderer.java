@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -44,7 +43,7 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
     }
 
     @Override
-    public void extractRenderState(WoodenCrucibleBlockEntity blockEntity, WoodenCrucibleRenderState renderState, float delta, Vec3 vec, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(WoodenCrucibleBlockEntity blockEntity, WoodenCrucibleRenderState renderState, float delta, Vec3 vec, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
 
         blockModelResolver.update(renderState.content, Blocks.DARK_OAK_LEAVES.defaultBlockState(), BLOCK_DISPLAY_CONTEXT);

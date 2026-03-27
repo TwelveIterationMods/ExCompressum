@@ -106,27 +106,25 @@ public class LootTableUtils {
     }
 
     public static float getMinCount(NumberProvider range) {
-        if (range instanceof UniformGeneratorAccessor uniform) {
-            return getMinCount(uniform.getMin());
-        } else if (range instanceof BinomialDistributionGeneratorAccessor binomial) {
-            return getMinCount(binomial.getN()) * getMaxCount(binomial.getP());
-        } else if (range instanceof ConstantValueAccessor constant) {
-            return constant.getValue();
-        }
+        return switch (range) {
+            case UniformGeneratorAccessor uniform -> getMinCount(uniform.getMin());
+            case BinomialDistributionGeneratorAccessor binomial ->
+                    getMinCount(binomial.getN()) * getMaxCount(binomial.getP());
+            case ConstantValueAccessor constant -> constant.getValue();
+            default -> 1;
+        };
 
-        return 1;
     }
 
     public static float getMaxCount(NumberProvider range) {
-        if (range instanceof UniformGeneratorAccessor uniform) {
-            return getMaxCount(uniform.getMax());
-        } else if (range instanceof BinomialDistributionGeneratorAccessor binomial) {
-            return getMaxCount(binomial.getN()) * getMaxCount(binomial.getP());
-        } else if (range instanceof ConstantValueAccessor constant) {
-            return constant.getValue();
-        }
+        return switch (range) {
+            case UniformGeneratorAccessor uniform -> getMaxCount(uniform.getMax());
+            case BinomialDistributionGeneratorAccessor binomial ->
+                    getMaxCount(binomial.getN()) * getMaxCount(binomial.getP());
+            case ConstantValueAccessor constant -> constant.getValue();
+            default -> 1;
+        };
 
-        return 1;
     }
 
     public static LootContext buildLootContext(ServerLevel level, ItemInstance itemStack) {
@@ -139,10 +137,10 @@ public class LootTableUtils {
         List<MergedLootTableEntry> result = new ArrayList<>();
         ArrayListMultimap<Identifier, LootTableEntry> entryMap = ArrayListMultimap.create();
         for (LootTableEntry entry : entries) {
-            if (!entry.getItemStack().getComponents().isEmpty()) {
+            if (!entry.itemStack().getComponents().isEmpty()) {
                 result.add(new MergedLootTableEntry(entry));
             } else {
-                final var itemId = BuiltInRegistries.ITEM.getKey(entry.getItemStack().getItem());
+                final var itemId = BuiltInRegistries.ITEM.getKey(entry.itemStack().getItem());
                 entryMap.put(itemId, entry);
             }
         }
@@ -151,7 +149,7 @@ public class LootTableUtils {
             List<LootTableEntry> mergableEntries = entryMap.get(key);
             LootTableEntry firstEntry = mergableEntries.getFirst();
             // TODO mergableEntries.sort(Comparator.comparing(LootTableEntry::getBaseChance).reversed());
-            result.add(new MergedLootTableEntry(firstEntry.getItemStack(), mergableEntries));
+            result.add(new MergedLootTableEntry(firstEntry.itemStack(), mergableEntries));
         }
         return result;
     }

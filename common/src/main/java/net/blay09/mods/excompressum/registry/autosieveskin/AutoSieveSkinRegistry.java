@@ -9,7 +9,7 @@ import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import org.jspecify.annotations.Nullable;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +24,7 @@ public class AutoSieveSkinRegistry {
             availableSkins.clear();
             Thread loadAutoSieveSkins = new Thread(() -> {
                 try {
-                    URL remoteURL = new URL("https://whitelist.blay09.net/api/whitelists/BlayTheNinth");
+                    final var remoteURL = new URI("https://whitelist.blay09.net/api/whitelists/BlayTheNinth").toURL();
                     InputStream in = remoteURL.openStream();
                     Gson gson = new Gson();
                     JsonReader reader = new JsonReader(new InputStreamReader(in));

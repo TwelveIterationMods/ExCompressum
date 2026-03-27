@@ -53,7 +53,7 @@ public abstract class AutoSieveBaseBlock extends BaseEntityBlock implements IUgl
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private ItemStack lastHoverStack = ItemStack.EMPTY;
-    private String currentRandomName;
+    private @Nullable String currentRandomName;
 
     protected AutoSieveBaseBlock(Properties properties) {
         super(properties.strength(2f));

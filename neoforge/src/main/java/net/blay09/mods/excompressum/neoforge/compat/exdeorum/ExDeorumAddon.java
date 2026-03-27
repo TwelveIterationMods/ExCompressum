@@ -1,8 +1,6 @@
 package net.blay09.mods.excompressum.neoforge.compat.exdeorum;
 
 import com.google.common.collect.ArrayListMultimap;
-import it.unimi.dsi.fastutil.ints.IntList;
-import net.blay09.mods.balm.Balm;
 import net.blay09.mods.excompressum.api.ExNihiloProvider;
 import net.blay09.mods.excompressum.api.recipe.CompressedHammerRecipe;
 import net.blay09.mods.excompressum.api.recipe.HammerRecipe;
@@ -18,7 +16,6 @@ import net.blay09.mods.excompressum.registry.hammer.HammerRecipeImpl;
 import net.blay09.mods.excompressum.registry.sievemesh.SieveMeshRegistry;
 import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;

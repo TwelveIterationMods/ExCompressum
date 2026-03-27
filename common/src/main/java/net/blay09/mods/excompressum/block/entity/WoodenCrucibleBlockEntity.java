@@ -26,6 +26,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -50,7 +51,7 @@ public class WoodenCrucibleBlockEntity extends BlockEntity implements BalmFluidT
 
         @Override
         public boolean canFill(Fluid fluid) {
-            return items.get(0).isEmpty() && isValidFluid(fluid);
+            return items.getFirst().isEmpty() && isValidFluid(fluid);
         }
 
         @Override
@@ -73,7 +74,7 @@ public class WoodenCrucibleBlockEntity extends BlockEntity implements BalmFluidT
     private boolean isDirty;
     private int ticksSinceRain;
     private int ticksSinceMelt;
-    private Fluid currentTargetFluid;
+    private @Nullable Fluid currentTargetFluid;
     private int solidVolume;
 
     public WoodenCrucibleBlockEntity(BlockPos pos, BlockState state) {

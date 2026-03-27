@@ -4,26 +4,25 @@ import net.blay09.mods.balm.world.level.block.BlockLike;
 import net.blay09.mods.excompressum.block.CompressedBlockType;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.tag.ModBlockTags;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModBlockTagProvider extends IntrinsicHolderTagsProvider<Block> {
-    public ModBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, Registries.BLOCK, registriesFuture, (block) -> block.builtInRegistryHolder().key());
+public class ModBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
+    public ModBlockTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture);
     }
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
-        final var mineablePickaxe = tag(BlockTags.MINEABLE_WITH_PICKAXE);
+        final var mineablePickaxe = valueLookupBuilder(BlockTags.MINEABLE_WITH_PICKAXE);
         mineablePickaxe.add(ModBlocks.autoHammer.asBlock(),
                 ModBlocks.autoCompressedHammer.asBlock(),
                 ModBlocks.autoSieve.asBlock(),
@@ -39,7 +38,7 @@ public class ModBlockTagProvider extends IntrinsicHolderTagsProvider<Block> {
                 ModBlocks.compressedBlocks.get(CompressedBlockType.NETHERRACK).asBlock(),
                 ModBlocks.compressedBlocks.get(CompressedBlockType.NETHERRACK).asBlock());
 
-        final var mineableShovel = tag(BlockTags.MINEABLE_WITH_SHOVEL);
+        final var mineableShovel = valueLookupBuilder(BlockTags.MINEABLE_WITH_SHOVEL);
         mineableShovel.add(ModBlocks.compressedBlocks.get(CompressedBlockType.DIRT).asBlock(),
                 ModBlocks.compressedBlocks.get(CompressedBlockType.GRAVEL).asBlock(),
                 ModBlocks.compressedBlocks.get(CompressedBlockType.SAND).asBlock(),
@@ -51,12 +50,12 @@ public class ModBlockTagProvider extends IntrinsicHolderTagsProvider<Block> {
                 ModBlocks.compressedBlocks.get(CompressedBlockType.DUST).asBlock(),
                 ModBlocks.compressedBlocks.get(CompressedBlockType.SOUL_SAND).asBlock());
 
-        final var mineableAxe = tag(BlockTags.MINEABLE_WITH_AXE);
+        final var mineableAxe = valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE);
         ModBlocks.heavySieves.sortedValues().map(BlockLike::asBlock).forEach(mineableAxe::add);
         ModBlocks.woodenCrucibles.sortedValues().map(BlockLike::asBlock).forEach(mineableAxe::add);
 
-        tag(ModBlockTags.MINEABLE_WITH_CROOK).addOptionalTag(BlockTags.LEAVES);
-        tag(ModBlockTags.MINEABLE_WITH_HAMMER)
+        valueLookupBuilder(ModBlockTags.MINEABLE_WITH_CROOK).addOptionalTag(BlockTags.LEAVES);
+        valueLookupBuilder(ModBlockTags.MINEABLE_WITH_HAMMER)
                 .addOptionalTag(BlockTags.LOGS)
                 .addOptionalTag(TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("exdeorum", "mineable/hammer")))
                 .add(Blocks.ANDESITE,
@@ -76,9 +75,9 @@ public class ModBlockTagProvider extends IntrinsicHolderTagsProvider<Block> {
                         ModBlocks.compressedBlocks.get(CompressedBlockType.NETHERRACK).asBlock(),
                         ModBlocks.compressedBlocks.get(CompressedBlockType.SAND).asBlock());
 
-        tag(ModBlockTags.MINEABLE_WITH_CHICKEN_STICK).addTag(ModBlockTags.MINEABLE_WITH_HAMMER);
+        valueLookupBuilder(ModBlockTags.MINEABLE_WITH_CHICKEN_STICK).addTag(ModBlockTags.MINEABLE_WITH_HAMMER);
 
-        tag(ModBlockTags.INCORRECT_FOR_CHICKEN_STICK);
+        valueLookupBuilder(ModBlockTags.INCORRECT_FOR_CHICKEN_STICK);
     }
 
 }

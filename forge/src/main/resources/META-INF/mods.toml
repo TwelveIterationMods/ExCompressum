@@ -4,33 +4,33 @@ license="${license}"
 issueTrackerURL="${issues}"
 
 [[mods]]
-modId="${mod_id}"
+modId="excompressum"
 version="${version}"
 displayName="${mod_name}"
 displayURL="${homepage}"
-logoFile="${mod_id}.png"
+logoFile="excompressum.png"
 credits="BlayTheNinth"
 authors="BlayTheNinth"
 description='''${description}'''
 
 [[mixins]]
-config = "${mod_id}.mixins.json"
+config = "excompressum.mixins.json"
 [[mixins]]
-config = "${mod_id}.forge.mixins.json"
+config = "excompressum.forge.mixins.json"
 
-[[dependencies.${mod_id}]]
+[[dependencies.excompressum]]
 modId="forge"
 mandatory=true
 versionRange="[${forge_version},)"
 ordering="NONE"
 side="BOTH"
-[[dependencies.${mod_id}]]
+[[dependencies.excompressum]]
 modId="minecraft"
 mandatory=true
 versionRange="[${minecraft_version},)"
 ordering="NONE"
 side="BOTH"
-[[dependencies.${mod_id}]]
+[[dependencies.excompressum]]
 modId="balm"
 mandatory=true
 versionRange="[${balm_version},)"

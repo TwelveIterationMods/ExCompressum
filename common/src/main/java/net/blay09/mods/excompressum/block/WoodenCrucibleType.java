@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.block;
 
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 

@@ -16,7 +16,7 @@ import java.util.Collections;
 
 public abstract class ExNihilo {
 
-    private static ExNihiloProvider instance;
+    private static @Nullable ExNihiloProvider instance;
 
     public static void setInstance(ExNihiloProvider instance) {
         ExNihilo.instance = instance;
@@ -32,20 +32,17 @@ public abstract class ExNihilo {
 
     public static boolean isHammerable(Level level, ItemStack itemStack) {
         BlockState state = StupidUtils.getStateFromItemStack(itemStack);
-        return state != null && getInstance().isHammerable(level, state);
+        return getInstance().isHammerable(level, state);
     }
 
     public static boolean isSiftableWithMesh(Level level, BlockState sieveState, ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
         BlockState state = StupidUtils.getStateFromItemStack(itemStack);
-        return state != null && getInstance().isSiftableWithMesh(level, sieveState, state, sieveMesh);
+        return getInstance().isSiftableWithMesh(level, sieveState, state, sieveMesh);
     }
 
     public static Collection<ItemStack> rollSieveRewards(Level level, BlockState sieveState, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh, float luck, RandomSource rand) {
         BlockState state = StupidUtils.getStateFromItemStack(itemStack);
-        if (state != null) {
-            return getInstance().rollSieveRewards(level, sieveState, state, sieveMesh, luck, rand);
-        }
-        return Collections.emptyList();
+        return getInstance().rollSieveRewards(level, sieveState, state, sieveMesh, luck, rand);
     }
 
     public static boolean hasNihiloMod() {

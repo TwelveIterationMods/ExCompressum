@@ -22,7 +22,7 @@ public class CompressedRecipeRegistry {
     private final List<CompressedRecipe> recipesSmall = new ArrayList<>();
     private final List<CompressedRecipe> recipes = new ArrayList<>();
 
-    private final Map<Identifier, CompressedRecipe> cacheByItemId = new HashMap<>();
+    private final Map<Identifier, @Nullable CompressedRecipe> cacheByItemId = new HashMap<>();
 
     public CompressedRecipeRegistry() {
     }

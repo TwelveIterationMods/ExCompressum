@@ -32,7 +32,7 @@ public class ExCompressum {
     public static final String MOD_ID = "excompressum";
     public static final Logger logger = LogManager.getLogger(MOD_ID);
 
-    public static Supplier<CommonProxy> proxy = Balm.<CommonProxy>sidedProxy("net.blay09.mods.excompressum.CommonProxy",
+    public static final Supplier<CommonProxy> proxy = Balm.<CommonProxy>sidedProxy("net.blay09.mods.excompressum.CommonProxy",
             "net.blay09.mods.excompressum.client.ClientProxy").buildLazily();
 
     public static void initialize(BalmRegistrars registrars) {
@@ -50,11 +50,9 @@ public class ExCompressum {
         ModLoot.initialize(Balm.lootModifiers());
         registrars.recipeTypes(ModRecipeTypes::initialize);
 
-        ServerLifecycleCallback.Started.EVENT.register(server -> {
-            initializeAddons();
-        });
+        ServerLifecycleCallback.Started.EVENT.register(_ -> initializeAddons());
 
-        Balm.config().onConfigAvailable(ExCompressumConfig.class, config -> AutoSieveSkinRegistry.load());
+        Balm.config().onConfigAvailable(ExCompressumConfig.class, _ -> AutoSieveSkinRegistry.load());
 
         HammerSpeedHandler.initialize();
         CompressedEnemyHandler.initialize();

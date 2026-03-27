@@ -3,8 +3,7 @@
     "textures": {
         "particle": "#texture"
     },
-"__comment": "Designed by Blay09 with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
-"elements": [ 
+"elements": [
 {
     "__comment": "LegNW",
     "from": [ 1, 0, 1 ],

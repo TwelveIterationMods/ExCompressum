@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "__comment": "Designed by Blay09 with BDcraft Cubik PRO 0.96 Beta - http://bdcraft.net",
   "textures": {
     "texture_top": "excompressum:block/auto_frame_top",
     "texture_glass": "excompressum:block/auto_frame_glass",

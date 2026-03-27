@@ -2,7 +2,6 @@ package net.blay09.mods.excompressum.compat.recipeviewers;
 
 import net.blay09.mods.balm.platform.compatibility.recipeviewer.RecipeViewerInfoProvider;
 import net.blay09.mods.balm.platform.compatibility.recipeviewer.RecipeViewerRegistrar;
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.HeavySieveType;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.block.WoodenCrucibleType;
@@ -214,7 +213,7 @@ public class ExCompressumRecipeViewerProvider implements RecipeViewerInfoProvide
                 .background(WOODEN_CRUCIBLE_TEXTURE)
                 .slots((recipe, slots) -> {
                     final var fluid = recipe.getFluid();
-                    if (fluid != null && fluid.getBucket() != Items.AIR) {
+                    if (fluid.getBucket() != Items.AIR) {
                         slots.outputSlot(75, 10).add(fluid.getBucket());
                     }
 

@@ -139,7 +139,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
     };
 
     private ItemStack currentStack = ItemStack.EMPTY;
-    private ResolvableProfile skinProfile;
+    private @Nullable ResolvableProfile skinProfile;
 
     private int ticksSinceSync;
     protected boolean isDirty;
@@ -265,8 +265,8 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
                 }
             }
         } else if (!overflowBuffer.isEmpty()) {
-            if (addItemToOutput(overflowBuffer.get(0))) {
-                overflowBuffer.remove(0);
+            if (addItemToOutput(overflowBuffer.getFirst())) {
+                overflowBuffer.removeFirst();
             }
         }
     }
@@ -311,7 +311,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
         return 0f;
     }
 
-    public boolean isSiftableWithMesh(ServerLevel level, ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
+    public boolean isSiftableWithMesh(ServerLevel level, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
         return ExNihilo.isSiftableWithMesh(level, getBlockState(), itemStack, sieveMesh);
     }
 

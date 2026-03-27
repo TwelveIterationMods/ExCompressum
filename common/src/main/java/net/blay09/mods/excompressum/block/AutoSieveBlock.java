@@ -1,22 +1,16 @@
 package net.blay09.mods.excompressum.block;
 
 import com.mojang.serialization.MapCodec;
-import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.entity.AutoSieveBlockEntity;
 import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
 
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.redstone.Orientation;
 import org.jspecify.annotations.Nullable;

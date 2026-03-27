@@ -14,7 +14,6 @@ public class AutoHammerUpgradeSlot extends Slot {
         noItemIcon = Identifier.withDefaultNamespace(isCompressed ? "container/slot/compressed_hammer" : "container/slot/hammer");
     }
 
-    @Nullable
     @Override
     public Identifier getNoItemIcon() {
         return noItemIcon;

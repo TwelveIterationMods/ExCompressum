@@ -7,12 +7,12 @@ import org.jspecify.annotations.Nullable;
 public class SieveMeshRegistryEntry {
 	private final CommonMeshType meshType;
 	private final ItemStack itemStack;
-	private final Object backingMesh;
+	private final @Nullable Object backingMesh;
 
 	private boolean isHeavy;
-	private String modelName;
+	private @Nullable String modelName;
 
-	public SieveMeshRegistryEntry(CommonMeshType meshType, ItemStack itemStack, Object backingMesh) {
+	public SieveMeshRegistryEntry(CommonMeshType meshType, ItemStack itemStack, @Nullable Object backingMesh) {
 		this.meshType = meshType;
 		this.itemStack = itemStack;
 		this.backingMesh = backingMesh;
@@ -30,8 +30,7 @@ public class SieveMeshRegistryEntry {
 		isHeavy = heavy;
 	}
 
-	@Nullable
-	public String getModelName() {
+	public @Nullable String getModelName() {
 		return modelName;
 	}
 
@@ -43,7 +42,7 @@ public class SieveMeshRegistryEntry {
 		return meshType;
 	}
 
-	public Object getBackingMesh() {
+	public @Nullable Object getBackingMesh() {
 		return backingMesh;
 	}
 }

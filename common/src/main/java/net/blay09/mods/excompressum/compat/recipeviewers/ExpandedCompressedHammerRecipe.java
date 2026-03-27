@@ -7,18 +7,19 @@ import net.blay09.mods.excompressum.loot.MergedLootTableEntry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExpandedCompressedHammerRecipe {
 
-    private final Identifier id;
+    private final @Nullable Identifier id;
     private final Ingredient ingredient;
     private final List<MergedLootTableEntry> outputs;
     private final List<ItemStack> outputItems;
 
-    public ExpandedCompressedHammerRecipe(Identifier id, CompressedHammerRecipe recipe) {
+    public ExpandedCompressedHammerRecipe(@Nullable Identifier id, CompressedHammerRecipe recipe) {
         this.id = id;
         ingredient = recipe.getIngredient();
         List<LootTableEntry> entries = LootTableUtils.getLootTableEntries(recipe.getLootTable());
@@ -38,7 +39,7 @@ public class ExpandedCompressedHammerRecipe {
         return outputItems;
     }
 
-    public Identifier getId() {
+    public @Nullable Identifier getId() {
         return id;
     }
 }

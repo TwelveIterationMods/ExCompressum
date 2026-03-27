@@ -37,7 +37,7 @@ public class BaitRenderer implements BlockEntityRenderer<BaitBlockEntity, BaitRe
     }
 
     @Override
-    public void extractRenderState(BaitBlockEntity blockEntity, BaitRenderState renderState, float delta, Vec3 vec, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(BaitBlockEntity blockEntity, BaitRenderState renderState, float delta, Vec3 vec, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderState.extractBase(blockEntity, renderState, crumblingOverlay);
         final var baitType = blockEntity.getBaitType();
         itemModelResolver.updateForTopItem(renderState.firstItem, baitType.getDisplayItemFirst().create(), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);

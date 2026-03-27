@@ -9,7 +9,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 
 public abstract class ExCompressumSerializers {
 
-    public static StreamCodec<RegistryFriendlyByteBuf, LootTable> LOOT_TABLE_STREAM_CODEC = StreamCodec.of(ExCompressumSerializers::writeLootTable,
+    public static final StreamCodec<RegistryFriendlyByteBuf, LootTable> LOOT_TABLE_STREAM_CODEC = StreamCodec.of(ExCompressumSerializers::writeLootTable,
             ExCompressumSerializers::readLootTable);
 
     public static LootTable readLootTable(RegistryFriendlyByteBuf buf) {

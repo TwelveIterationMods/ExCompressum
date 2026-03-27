@@ -22,9 +22,7 @@ public class CompressedHammerRegistry {
             final var recipe = recipeHolder.value();
             if (testRecipe(itemStack, recipe)) {
                 final var lootTable = recipe.getLootTable();
-                if (lootTable != null) {
-                    lootTable.getRandomItems(context, results::add);
-                }
+                lootTable.getRandomItems(context, results::add);
             }
         }
 

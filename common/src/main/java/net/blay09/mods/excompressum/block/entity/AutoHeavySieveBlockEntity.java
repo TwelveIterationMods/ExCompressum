@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 
@@ -24,7 +23,7 @@ public class AutoHeavySieveBlockEntity extends AutoSieveBlockEntity {
     }
 
     @Override
-    public boolean isSiftableWithMesh(ServerLevel level, ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
+    public boolean isSiftableWithMesh(ServerLevel level, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
         return ExRegistries.getHeavySieveRegistry().isSiftable(level, getBlockState(), itemStack, sieveMesh);
     }
 

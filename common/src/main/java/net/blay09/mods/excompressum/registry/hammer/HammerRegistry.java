@@ -22,9 +22,7 @@ public class HammerRegistry {
             final var recipe = recipeHolder.value();
             if (testRecipe(itemStack, recipe)) {
                 LootTable lootTable = recipe.getLootTable();
-                if (lootTable != null) {
-                    lootTable.getRandomItems(context, results::add);
-                }
+                lootTable.getRandomItems(context, results::add);
             }
         }
 

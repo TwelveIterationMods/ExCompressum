@@ -1,7 +1,6 @@
 package net.blay09.mods.excompressum.api.sievemesh;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;

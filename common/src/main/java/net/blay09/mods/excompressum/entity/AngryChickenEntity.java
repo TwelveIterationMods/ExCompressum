@@ -90,7 +90,7 @@ public class AngryChickenEntity extends PathfinderMob {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return (SoundEvent) this.getSoundSet().hurtSound().value();
+        return this.getSoundSet().hurtSound().value();
     }
 
     @Override

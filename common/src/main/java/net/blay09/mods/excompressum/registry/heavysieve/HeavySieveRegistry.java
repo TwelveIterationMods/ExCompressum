@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -48,9 +49,7 @@ public class HeavySieveRegistry {
             final var recipe = recipeHolder.value();
             if (testRecipe(mesh, itemStack, waterlogged, recipe)) {
                 LootTable lootTable = recipe.getLootTable();
-                if (lootTable != null) {
-                    lootTable.getRandomItems(context, results::add);
-                }
+                lootTable.getRandomItems(context, results::add);
             }
         }
 
@@ -61,9 +60,7 @@ public class HeavySieveRegistry {
                 int rolls = getGeneratedRollCount(recipe);
                 ItemLike source = BuiltInRegistries.ITEM.getValue(recipe.getSourceItem());
                 LootTable lootTable = ExNihilo.getInstance().generateHeavySieveLootTable(level, sieve, source, rolls, mesh);
-                if (lootTable != null) {
-                    lootTable.getRandomItems(context, results::add);
-                }
+                lootTable.getRandomItems(context, results::add);
             }
         }
 
@@ -77,7 +74,7 @@ public class HeavySieveRegistry {
         return generatedRecipe.getRolls() > 0 ? generatedRecipe.getRolls() : ExCompressumConfig.getActive().general.heavySieveDefaultRolls;
     }
 
-    public boolean isSiftable(ServerLevel level, BlockState sieve, ItemStack itemStack, SieveMeshRegistryEntry sieveMesh) {
+    public boolean isSiftable(ServerLevel level, BlockState sieve, ItemStack itemStack, @Nullable SieveMeshRegistryEntry sieveMesh) {
         boolean waterlogged = sieve.hasProperty(BlockStateProperties.WATERLOGGED) && sieve.getValue(BlockStateProperties.WATERLOGGED);
         final var recipeManager = level.getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();

@@ -5,8 +5,6 @@ import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.registry.ExNihilo;
 import net.blay09.mods.excompressum.registry.compressor.CompressedRecipe;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;

@@ -39,7 +39,7 @@ public class BaitBlockEntity extends BlockEntity {
         super(ModBlockEntities.bait.value(), pos, state);
     }
 
-    private EnvironmentalConditionResult environmentStatus;
+    private EnvironmentalConditionResult environmentStatus = EnvironmentalConditionResult.CanSpawn;
     private int ticksSinceEnvironmentalCheck;
     private int ticksSinceSpawnCheck;
 

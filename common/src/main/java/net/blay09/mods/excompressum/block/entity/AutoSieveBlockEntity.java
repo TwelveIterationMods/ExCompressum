@@ -35,7 +35,7 @@ public class AutoSieveBlockEntity extends AbstractAutoSieveBlockEntity implement
     @Override
     public void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        input.child("EnergyStorage").ifPresent(it -> energyStorage.deserialize(it));
+        input.child("EnergyStorage").ifPresent(energyStorage::deserialize);
     }
 
     @Override

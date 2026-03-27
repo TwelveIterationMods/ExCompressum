@@ -49,7 +49,7 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
     }
 
     @Override
-    public void extractRenderState(AutoHammerBlockEntity blockEntity, AutoHammerRenderState renderState, float delta, Vec3 vec, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(AutoHammerBlockEntity blockEntity, AutoHammerRenderState renderState, float delta, Vec3 vec, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, renderState, delta, vec, crumblingOverlay);
 
         if (blockEntity.shouldAnimate()) {

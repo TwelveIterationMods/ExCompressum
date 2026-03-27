@@ -12,7 +12,6 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -52,7 +51,7 @@ public enum BaitType implements StringRepresentable {
     private final Supplier<Double> chanceSupplier;
     private final int primaryColor;
     private final int secondaryColor;
-    private List<BaitEnvironmentCondition> environmentConditions;
+    private @Nullable List<BaitEnvironmentCondition> environmentConditions;
 
     BaitType(ItemStackTemplate displayItemFirst, ItemStackTemplate displayItemSecond, EntityType<?> entityType, Supplier<Double> chanceSupplier, int primaryColor, int secondaryColor) {
         this.displayItemFirst = displayItemFirst;

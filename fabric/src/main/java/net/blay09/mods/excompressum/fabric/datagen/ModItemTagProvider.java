@@ -4,19 +4,17 @@ import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.compat.Compat;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tag.ModItemTags;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
-    public ModItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, Registries.ITEM, registriesFuture, (item) -> item.builtInRegistryHolder().key());
+public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
+    public ModItemTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(fabricae("crimson_sieve"))
                 .addOptionalElement(fabricae("bamboo_sieve"));
 
-        final var heavySieves = tag(ModItemTags.HEAVY_SIEVES);
+        final var heavySieves = valueLookupBuilder(ModItemTags.HEAVY_SIEVES);
         ModBlocks.heavySieves.sortedValues().map(ItemLike::asItem).forEach(heavySieves::add);
         final var rawHeavySieves = getOrCreateRawBuilder(ModItemTags.HEAVY_SIEVES);
         rawHeavySieves.addOptionalElement(deorum("acacia_compressed_sieve"))
@@ -67,7 +65,7 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(deorum("warped_compressed_sieve"))
                 .addOptionalElement(deorum("crimson_compressed_sieve"));
 
-        tag(ModItemTags.HAMMERS).addTag(ModItemTags.WOODEN_HAMMERS)
+        valueLookupBuilder(ModItemTags.HAMMERS).addTag(ModItemTags.WOODEN_HAMMERS)
                 .addTag(ModItemTags.STONE_HAMMERS)
                 .addTag(ModItemTags.IRON_HAMMERS)
                 .addTag(ModItemTags.COPPER_HAMMERS)
@@ -110,7 +108,7 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(sequentia("terracotta_hammer"))
                 .addOptionalElement(sequentia("tuff_hammer"));
 
-        final var woodenCrucibles = tag(ModItemTags.WOODEN_CRUCIBLES);
+        final var woodenCrucibles = valueLookupBuilder(ModItemTags.WOODEN_CRUCIBLES);
         ModBlocks.woodenCrucibles.sortedValues().map(ItemLike::asItem).forEach(woodenCrucibles::add);
         final var rawWoodenCrucibles = getOrCreateRawBuilder(ModItemTags.WOODEN_CRUCIBLES);
         rawWoodenCrucibles.addOptionalElement(sequentia("acacia_crucible"))
@@ -149,7 +147,7 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(deorum("crook"))
                 .addOptionalElement(fabricae("wooden_crook"));
 
-        tag(ModItemTags.COMPRESSED_HAMMERS).add(ModItems.compressedWoodenHammer.asItem(),
+        valueLookupBuilder(ModItemTags.COMPRESSED_HAMMERS).add(ModItems.compressedWoodenHammer.asItem(),
                         ModItems.compressedStoneHammer.asItem(),
                         ModItems.compressedIronHammer.asItem(),
                         ModItems.compressedDiamondHammer.asItem(),
@@ -162,12 +160,12 @@ public class ModItemTagProvider extends IntrinsicHolderTagsProvider<Item> {
                 .addOptionalElement(deorum("compressed_diamond_hammer"))
                 .addOptionalElement(deorum("compressed_netherite_hammer"));
 
-        tag(ModItemTags.COMPRESSED_CROOKS).addTag(ModItemTags.WOODEN_COMPRESSED_CROOKS);
-        tag(ModItemTags.WOODEN_COMPRESSED_CROOKS).add(ModItems.compressedCrook.asItem());
+        valueLookupBuilder(ModItemTags.COMPRESSED_CROOKS).addTag(ModItemTags.WOODEN_COMPRESSED_CROOKS);
+        valueLookupBuilder(ModItemTags.WOODEN_COMPRESSED_CROOKS).add(ModItems.compressedCrook.asItem());
 
-        tag(ModItemTags.CHICKEN_STICKS).add(ModItems.chickenStick.asItem());
+        valueLookupBuilder(ModItemTags.CHICKEN_STICKS).add(ModItems.chickenStick.asItem());
 
-        final var baits = tag(ModItemTags.BAITS);
+        final var baits = valueLookupBuilder(ModItemTags.BAITS);
         ModBlocks.baits.sortedValues().map(ItemLike::asItem).forEach(baits::add);
 
         getOrCreateRawBuilder(ModItemTags.CRUSHED_ANDESITES).addOptionalElement(sequentia("crushed_andesite")).addOptionalElement(fabricae("crushed_andesite"));

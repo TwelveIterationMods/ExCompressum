@@ -16,8 +16,6 @@ public class ExCompressumClient {
         registrars.blockStateModels(ModModels::initialize);
         Balm.modSupport().recipeViewers().register(id("recipes"), new ExCompressumRecipeViewerProvider());
 
-        ClientLifecycleCallback.ConnectedToServer.EVENT.register(client -> {
-            ExCompressum.initializeAddons();
-        });
+        ClientLifecycleCallback.ConnectedToServer.EVENT.register(_ -> ExCompressum.initializeAddons());
     }
 }

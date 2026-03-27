@@ -217,15 +217,11 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
                         if (level.getRandom().nextFloat() <= ExCompressumConfig.getActive().automation.autoHammerDecay) {
                             ItemStack firstHammer = hammerSlots.getItem(0);
                             if (!firstHammer.isEmpty()) {
-                                firstHammer.hurtAndBreak(1, (ServerLevel) level, null, it -> {
-                                    hammerSlots.setItem(0, ItemStack.EMPTY);
-                                });
+                                firstHammer.hurtAndBreak(1, (ServerLevel) level, null, _ -> hammerSlots.setItem(0, ItemStack.EMPTY));
                             }
                             ItemStack secondHammer = hammerSlots.getItem(1);
                             if (!secondHammer.isEmpty()) {
-                                secondHammer.hurtAndBreak(1, (ServerLevel) level, null, it -> {
-                                    hammerSlots.setItem(1, ItemStack.EMPTY);
-                                });
+                                secondHammer.hurtAndBreak(1, (ServerLevel) level, null, _ -> hammerSlots.setItem(1, ItemStack.EMPTY));
                             }
                         }
                         Collection<ItemStack> rewards = rollHammerRewards((ServerLevel) level, currentStack, getEffectiveTool(), level.getRandom());
@@ -338,7 +334,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
     public void loadAdditional(ValueInput input) {
         currentStack = input.read("CurrentStack", ItemStack.OPTIONAL_CODEC).orElse(currentStack);
         progress = input.getFloatOr("Progress", 0);
-        input.child("EnergyStorage").ifPresent(it -> energyStorage.deserialize(it));
+        input.child("EnergyStorage").ifPresent(energyStorage::deserialize);
         input.child("ItemHandler").ifPresent(it -> ContainerHelper.loadAllItems(it, backingContainer.getItems()));
 
         isDisabledByRedstone = input.getBooleanOr("IsDisabledByRedstone", false);

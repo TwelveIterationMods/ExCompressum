@@ -8,6 +8,7 @@ import net.blay09.mods.balm.platform.config.reflection.NestedType;
 import net.blay09.mods.excompressum.ExCompressum;
 
 import java.util.List;
+import java.util.Objects;
 
 @Config(ExCompressum.MOD_ID)
 public class ExCompressumConfig {
@@ -170,6 +171,6 @@ public class ExCompressumConfig {
     }
 
     public static ExCompressumConfig getActive() {
-        return Balm.config().getActiveConfig(ExCompressumConfig.class);
+        return Objects.requireNonNull(Balm.config().getActiveConfig(ExCompressumConfig.class));
     }
 }
