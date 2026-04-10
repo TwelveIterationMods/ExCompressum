@@ -27,7 +27,7 @@ side="BOTH"
 [[dependencies.excompressum]]
 modId="minecraft"
 mandatory=true
-versionRange="[${minecraft_version},)"
+versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
 [[dependencies.excompressum]]
