@@ -46,7 +46,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
     public AutoSieveRenderer(BlockEntityRendererProvider.Context context, boolean isHeavy) {
         tinyHumanModel = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER), false);
-        tinyHumanModelSlim = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER), true);
+        tinyHumanModelSlim = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER_SLIM), true);
         this.isHeavy = isHeavy;
     }
 
