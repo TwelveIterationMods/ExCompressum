@@ -1,6 +1,3 @@
-- Fixed inbuilt Ex Compressum data not being loaded
-- Fixed Ex Deorum support not being loaded
-- Fixed Ex Nihilo support not being loaded when joining multiplayer only
-- Fixed Ex Deorum blocks not being mineable with Ex Compressum hammers
-- Fixed option labels in config screens
-- Fixed auto hammer rendering break progress wrongly
+- Fixed possible crash when checking if empty state is siftable on Ex Nihilo: Sequentia
+- Fixed auto sieve not using slim model for slim skins
+- Fixed auto sieves being placed with wrong facing
