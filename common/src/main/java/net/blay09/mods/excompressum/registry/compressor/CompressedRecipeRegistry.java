@@ -13,21 +13,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CompressedRecipeRegistry {
 
-    private final List<CompressedRecipe> recipesSmall = new ArrayList<>();
-    private final List<CompressedRecipe> recipes = new ArrayList<>();
+    private List<CompressedRecipe> recipesSmall = new ArrayList<>();
+    private List<CompressedRecipe> recipes = new ArrayList<>();
 
-    private final Map<ResourceLocation, CompressedRecipe> cachedResults = new HashMap<>();
+    private final Map<ResourceLocation, CompressedRecipe> cachedResults = new ConcurrentHashMap<>();
 
     public CompressedRecipeRegistry() {
     }
 
     public void reloadRecipes(RecipeManager recipeManager, RegistryAccess registryAccess) {
-        cachedResults.clear();
-        recipesSmall.clear();
-        recipes.clear();
+        final var recipesSmall = new ArrayList<CompressedRecipe>();
+        final var recipes = new ArrayList<CompressedRecipe>();
 
         for (final var recipeHolder : recipeManager.getAllRecipesFor(RecipeType.CRAFTING)) {
             final var recipe = recipeHolder.value();
@@ -61,6 +61,10 @@ public class CompressedRecipeRegistry {
                 }
             }
         }
+
+        this.recipesSmall = recipesSmall;
+        this.recipes = recipes;
+        cachedResults.clear();
     }
 
     @Nullable
