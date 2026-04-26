@@ -1,3 +1,1 @@
-- Fixed possible crash when checking if empty state is siftable on Ex Nihilo: Sequentia
-- Fixed auto sieve not using slim model for slim skins
-- Fixed auto sieves being placed with wrong facing
+- Fixed potential crashes with multi-threading performance mods when using the Auto Compressor
