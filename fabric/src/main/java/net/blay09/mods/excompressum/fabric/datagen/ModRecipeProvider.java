@@ -406,9 +406,9 @@ public class ModRecipeProvider extends FabricRecipeProvider {
                         .save(exporter);
 
                 shapeless(RecipeCategory.MISC, ModBlocks.baits.get(BaitType.PARROT))
-                        .requires(Items.GREEN_DYE)
-                        .requires(Items.RED_DYE)
-                        .unlockedBy("has_green_dye", has(Items.GREEN_DYE))
+                        .requires(Items.DYE.green())
+                        .requires(Items.DYE.red())
+                        .unlockedBy("has_green_dye", has(Items.DYE.green()))
                         .save(exporter);
 
                 shapeless(RecipeCategory.MISC, ModBlocks.baits.get(BaitType.OCELOT))

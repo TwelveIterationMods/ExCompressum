@@ -133,7 +133,7 @@ public class AngryChickenEntity extends PathfinderMob {
         super.tickDeath();
 
         if (deathTime == 18) {
-            LightningBolt lightningBolt = EntityType.LIGHTNING_BOLT.create(level(), EntitySpawnReason.EVENT);
+            LightningBolt lightningBolt = EntityTypes.LIGHTNING_BOLT.create(level(), EntitySpawnReason.EVENT);
             if (lightningBolt != null) {
                 lightningBolt.setVisualOnly(true);
                 lightningBolt.snapTo(Vec3.atBottomCenterOf(blockPosition()));

@@ -14,7 +14,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.chicken.Chicken;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -82,7 +82,7 @@ public class ChickenStickHandler {
             chickenStickItem.tryPlayChickenSound(levelAccessor, pos);
 
             if (levelAccessor.getRandom().nextFloat() <= ExCompressumConfig.getActive().tools.chickenStickSpawnChance) {
-                final var chicken = new Chicken(EntityType.CHICKEN, level);
+                final var chicken = new Chicken(EntityTypes.CHICKEN, level);
                 chicken.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 levelAccessor.addFreshEntity(chicken);
             }

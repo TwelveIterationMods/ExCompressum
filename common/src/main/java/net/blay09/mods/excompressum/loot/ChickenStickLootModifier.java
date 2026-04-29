@@ -4,10 +4,13 @@ import net.blay09.mods.balm.world.level.storage.loot.BalmLootModifier;
 import net.blay09.mods.excompressum.registry.chickenstick.ChickenStickRegistry;
 import net.blay09.mods.excompressum.registry.ExRegistries;
 import net.blay09.mods.excompressum.tag.ModItemTags;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,7 @@ public class ChickenStickLootModifier implements BalmLootModifier {
     private static final List<LootContext> activeContexts = new ArrayList<>();
 
     @Override
-    public void apply(LootContext context, List<ItemStack> list) {
+    public void apply(LootContext context, List<ItemStack> list, @Nullable ResourceKey<LootTable> lootTableId) {
         synchronized (activeContexts) {
             if (activeContexts.contains(context)) {
                 return;

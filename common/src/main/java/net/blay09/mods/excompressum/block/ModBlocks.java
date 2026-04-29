@@ -33,19 +33,19 @@ public class ModBlocks {
 
         compressedBlocks = blocks.registerDiscriminated(
                 CompressedBlockType.values(),
-                it -> DiscriminatedBlocks.suffix("compressed", it),
+                DiscriminatedBlocks.prefixWith("compressed"),
                 CompressedBlock::new, it -> it).withDefaultItems().asDiscriminatedBlocks();
         heavySieves = blocks.registerDiscriminated(
                 HeavySieveType.values(),
-                it -> DiscriminatedBlocks.prefix(it, "heavy_sieve"),
+                DiscriminatedBlocks.suffixWith("heavy_sieve"),
                 HeavySieveBlock::new, it -> it).withDefaultItems().asDiscriminatedBlocks();
         woodenCrucibles = blocks.registerDiscriminated(
                 WoodenCrucibleType.values(),
-                it -> DiscriminatedBlocks.prefix(it, "crucible"),
+                DiscriminatedBlocks.suffixWith("crucible"),
                 WoodenCrucibleBlock::new, it -> it).withDefaultItems().asDiscriminatedBlocks();
         baits = blocks.registerDiscriminated(
                 BaitType.values(),
-                it -> DiscriminatedBlocks.prefix(it, "bait"),
+                DiscriminatedBlocks.suffixWith("bait"),
                 BaitBlock::new, it -> it).withDefaultItems().asDiscriminatedBlocks();
     }
 

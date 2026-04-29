@@ -9,7 +9,7 @@ public class CrookPushHandler {
     public static void initialize() {
         PlayerCallback.Attack.Before.EVENT.register((player, target) -> {
             final var itemStack = player.getMainHandItem();
-            if (itemStack.is(ModItems.compressedCrook)) {
+            if (itemStack.is(ModItems.compressedCrook.asItem())) {
                 CompressedCrookItem.pushEntity(itemStack, player, target, InteractionHand.MAIN_HAND);
                 return false;
             }
