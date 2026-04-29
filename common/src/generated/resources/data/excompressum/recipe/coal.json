@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
     "excompressum:uncompressed_coal",
     "excompressum:uncompressed_coal",

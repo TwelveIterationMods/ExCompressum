@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "H": "#excompressum:diamond_hammers",
     "I": "minecraft:iron_ingot",

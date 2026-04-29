@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
     "C": "excompressum:auto_compressor",
     "G": "minecraft:gold_ingot"
