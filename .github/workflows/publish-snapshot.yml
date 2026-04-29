@@ -54,7 +54,7 @@ jobs:
         uses: TwelveIterations/bump-version@86901cde5897b550e2e98fbe8962afc401c23c8f
         with:
           version: ${{ steps.extract-version.outputs.version }}
-          bump: revision
+          bump: patch
         id: bump-version
       - name: Workaround for FG7
         run: ./gradlew
