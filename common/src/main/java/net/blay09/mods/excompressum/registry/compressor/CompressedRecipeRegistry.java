@@ -9,18 +9,15 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 
 import org.jetbrains.annotations.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.*;
 
 public class CompressedRecipeRegistry {
 
     private List<CompressedRecipe> recipesSmall = new ArrayList<>();
     private List<CompressedRecipe> recipes = new ArrayList<>();
 
-    private final Map<ResourceLocation, CompressedRecipe> cachedResults = new ConcurrentHashMap<>();
+    private final Map<ResourceLocation, CompressedRecipe> cachedResults = Collections.synchronizedMap(new HashMap<>());
 
     public CompressedRecipeRegistry() {
     }
