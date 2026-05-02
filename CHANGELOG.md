@@ -1,1 +1,1 @@
-- Fixed potential crashes with multi-threading performance mods when using the Auto Compressor
+- Fixed crash in Auto Compressor due to explicit null value cache in unsupported map
