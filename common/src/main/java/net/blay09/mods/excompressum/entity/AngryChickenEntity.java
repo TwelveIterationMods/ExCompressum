@@ -158,8 +158,8 @@ public class AngryChickenEntity extends PathfinderMob {
     }
 
     @Override
-    public void knockback(double strength, double ratioX, double ratioZ) {
-        super.knockback(strength * 2f, ratioX, ratioZ);
+    public void knockback(double power, double xd, double zd, DamageSource source, float damage, boolean comesFromEffect) {
+        super.knockback(power * 2f, xd, zd, source, damage, comesFromEffect);
     }
 
     @Override

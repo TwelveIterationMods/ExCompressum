@@ -57,7 +57,7 @@ public class WoodenCrucibleRenderer implements BlockEntityRenderer<WoodenCrucibl
         renderState.fluid.tintLayers().add(0, waterColor);
 
         itemModelResolver.updateForTopItem(renderState.item, blockEntity.getItem(0), ItemDisplayContext.FIXED, level, null, 0);
-        renderState.fluidLevel = (float) blockEntity.getFluidTank().getAmount() / (float) blockEntity.getFluidTank().getCapacity();
+        renderState.fluidLevel = (float) blockEntity.getFluidTank().getAmount(0) / (float) blockEntity.getFluidTank().getCapacity(0);
         renderState.waterColor = level != null ? level.getBiome(blockEntity.getBlockPos()).value().getWaterColor() : 0xFFFFFFFF;
         renderState.solidLevel = (float) blockEntity.getSolidVolume() / (float) blockEntity.getSolidCapacity();
     }

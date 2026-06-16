@@ -13,8 +13,8 @@ public class WoodenCrucibleBlockInfoProvider implements BlockInfoProvider {
             if (woodenCrucible.getSolidVolume() > 0f) {
                 output.text(Component.translatable("tooltip.excompressum.solidVolume", woodenCrucible.getSolidVolume()));
             }
-            if (woodenCrucible.getFluidTank().getAmount() > 0f) {
-                output.text(Component.translatable("tooltip.excompressum.fluidVolume", woodenCrucible.getFluidTank().getAmount()));
+            if (woodenCrucible.getFluidTank().getAmount(0) > 0f) {
+                output.text(Component.translatable("tooltip.excompressum.fluidVolume", woodenCrucible.getFluidTank().getAmount(0)));
             }
         }
     }

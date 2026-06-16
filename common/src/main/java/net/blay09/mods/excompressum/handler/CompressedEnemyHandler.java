@@ -57,7 +57,7 @@ public class CompressedEnemyHandler {
         }
     }
 
-    public static boolean onLivingDeath(LivingEntity entity, DamageSource damageSource) {
+    public static boolean onLivingDeath(LivingEntity entity, DamageSource damageSource, float damage) {
         final var level = entity.level();
         final var persistentData = Balm.hooks().getPersistentData(entity);
         if (!level.isClientSide() && persistentData.getCompound(ExCompressum.MOD_ID).flatMap(it -> it.getBoolean(COMPRESSED)).orElse(false)) {

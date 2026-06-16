@@ -41,21 +41,21 @@ public class WoodenCrucibleBlockEntity extends BlockEntity implements BalmFluidT
 
     private final DefaultFluidTank fluidTank = new DefaultFluidTank(1999) {
         @Override
-        public int fill(Fluid fluid, int maxFill, boolean simulate) {
-            int result = super.fill(fluid, maxFill, simulate);
-            if (getAmount() > 1000) {
-                setAmount(1000);
+        public int fill(int slot, Fluid fluid, int maxFill, boolean simulate) {
+            int result = super.fill(slot ,fluid, maxFill, simulate);
+            if (getAmount(slot) > 1000) {
+                setAmount(slot, 1000);
             }
             return result;
         }
 
         @Override
-        public boolean canFill(Fluid fluid) {
+        public boolean canFill(int slot, Fluid fluid) {
             return items.getFirst().isEmpty() && isValidFluid(fluid);
         }
 
         @Override
-        public int getCapacity() {
+        public int getCapacity(int slot) {
             return 1000;
         }
 
@@ -83,10 +83,10 @@ public class WoodenCrucibleBlockEntity extends BlockEntity implements BalmFluidT
 
     public boolean addItem(ServerLevel level, ItemStack itemStack, boolean isAutomated, boolean simulate) {
         // When inserting dust, turn it into clay if we have enough liquid
-        if (fluidTank.getAmount() >= 1000 && itemStack.is(ModItemTags.DUSTS)) {
+        if (fluidTank.getAmount(0) >= 1000 && itemStack.is(ModItemTags.DUSTS)) {
             if (!simulate) {
                 items.set(0, new ItemStack(Blocks.CLAY));
-                fluidTank.setFluid(Fluids.EMPTY, 0);
+                fluidTank.setFluid(0, Fluids.EMPTY, 0);
                 BalmBlockEntityUtils.sync(this);
             }
             return true;
@@ -95,8 +95,8 @@ public class WoodenCrucibleBlockEntity extends BlockEntity implements BalmFluidT
         // Otherwise, try to add it as a recipe
         WoodenCrucibleRecipe recipe = ExRegistries.getWoodenCrucibleRegistry().getRecipe(level, itemStack);
         if (recipe != null) {
-            if (fluidTank.isEmpty() || recipe.matchesFluid(fluidTank.getFluid())) {
-                int capacityLeft = fluidTank.getCapacity() - fluidTank.getAmount() - solidVolume;
+            if (fluidTank.isEmpty(0) || recipe.matchesFluid(fluidTank.getFluid(0))) {
+                int capacityLeft = fluidTank.getCapacity(0) - fluidTank.getAmount(0) - solidVolume;
                 if ((isAutomated && capacityLeft >= recipe.getAmount()) || (!isAutomated && capacityLeft > 0)) {
                     if (!simulate) {
                         currentTargetFluid = recipe.getFluid();
@@ -119,7 +119,7 @@ public class WoodenCrucibleBlockEntity extends BlockEntity implements BalmFluidT
         if (level.isRaining() && level.canSeeSkyFromBelowWater(worldPosition) && level.getBiome(worldPosition).value().hasPrecipitation()) {
             ticksSinceRain++;
             if (ticksSinceRain >= RAIN_FILL_INTERVAL) {
-                fluidTank.fill(Fluids.WATER, RAIN_FILL_SPEED, false);
+                fluidTank.fill(0, Fluids.WATER, RAIN_FILL_SPEED, false);
                 ticksSinceRain = 0;
             }
         }
@@ -127,9 +127,9 @@ public class WoodenCrucibleBlockEntity extends BlockEntity implements BalmFluidT
         // Melt down content
         if (currentTargetFluid != null) {
             ticksSinceMelt++;
-            if (ticksSinceMelt >= MELT_INTERVAL && fluidTank.getAmount() < fluidTank.getCapacity()) {
+            if (ticksSinceMelt >= MELT_INTERVAL && fluidTank.getAmount(0) < fluidTank.getCapacity(0)) {
                 int amount = Math.min(ExCompressumConfig.getActive().automation.woodenCrucibleSpeed, solidVolume);
-                fluidTank.fill(currentTargetFluid, amount, false);
+                fluidTank.fill(0, currentTargetFluid, amount, false);
                 solidVolume = Math.max(0, solidVolume - amount);
                 ticksSinceMelt = 0;
                 isDirty = true;
@@ -182,7 +182,7 @@ public class WoodenCrucibleBlockEntity extends BlockEntity implements BalmFluidT
     }
 
     public int getSolidCapacity() {
-        return fluidTank.getCapacity();
+        return fluidTank.getCapacity(0);
     }
 
     @Override
