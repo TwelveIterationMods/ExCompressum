@@ -1,1 +1,1 @@
-- Fixed crash in Auto Compressor due to explicit null value cache in unsupported map
+- Fixed crash with newer versions of Ex Deorum
