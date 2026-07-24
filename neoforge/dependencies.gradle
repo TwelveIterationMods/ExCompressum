@@ -8,5 +8,5 @@ dependencies {
 
     compileOnly("novamachina.novacore:novacore:1.21.0-3.0.0-build.2")
     compileOnly("novamachina.exnihilosequentia:exnihilosequentia:1.21-7.0.0-build.1-beta")
-    compileOnly("curse.maven:ex-deorum-901420:5586119")
+    compileOnly("curse.maven:ex-deorum-901420:8384464")
 }
