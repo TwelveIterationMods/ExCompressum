@@ -94,7 +94,7 @@ public class HeavySieveRegistry {
         }
 
         final var state = StupidUtils.getStateFromItemStack(itemStack);
-        return ExNihilo.getInstance().isHeavySiftableWithMesh(sieve, state, sieveMesh);
+        return ExNihilo.getInstance().isHeavySiftableWithMesh(level, sieve, state, sieveMesh);
     }
 
 }

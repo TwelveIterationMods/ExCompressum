@@ -23,7 +23,7 @@ import java.util.List;
 
 public interface ExNihiloProvider {
 
-    boolean isHammerableCompressed(ItemStack itemStack);
+    boolean isHammerableCompressed(Level level, ItemStack itemStack);
 
     boolean isHammerable(Level level, BlockState state);
 
@@ -31,7 +31,7 @@ public interface ExNihiloProvider {
 
     boolean isSiftableWithMesh(Level level, BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh);
 
-    boolean isHeavySiftableWithMesh(BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh);
+    boolean isHeavySiftableWithMesh(Level level, BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh);
 
     Collection<ItemStack> rollSieveRewards(Level level, BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, RandomSource rand);
 

@@ -45,7 +45,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public boolean isHeavySiftableWithMesh(BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh) {
+	public boolean isHeavySiftableWithMesh(Level level, BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh) {
 		return false;
 	}
 
@@ -95,7 +95,7 @@ public class NihilisticNihiloProvider implements ExNihiloProvider {
 	}
 
 	@Override
-	public boolean isHammerableCompressed(ItemStack itemStack) {
+	public boolean isHammerableCompressed(Level level, ItemStack itemStack) {
 		return false;
 	}
 

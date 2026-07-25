@@ -33,8 +33,7 @@ public class AutoCompressedHammerBlockEntity extends AutoHammerBlockEntity {
 
     @Override
     public boolean isRegistered(ItemStack itemStack) {
-        final var recipeManager = level.getRecipeManager();
-        return ExRegistries.getCompressedHammerRegistry().isHammerable(recipeManager, itemStack);
+        return ExRegistries.getCompressedHammerRegistry().isHammerable(level, itemStack);
     }
 
     @Override

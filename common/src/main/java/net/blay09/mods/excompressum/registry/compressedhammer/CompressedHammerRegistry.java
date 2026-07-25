@@ -36,10 +36,10 @@ public class CompressedHammerRegistry {
     }
 
     public boolean isHammerable(Level level, ItemStack itemStack) {
-        return isHammerable(level.getRecipeManager(), itemStack);
+        return isHammerable(level, level.getRecipeManager(), itemStack);
     }
 
-    public boolean isHammerable(RecipeManager recipeManager, ItemStack itemStack) {
+    public boolean isHammerable(Level level, RecipeManager recipeManager, ItemStack itemStack) {
         final var recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.compressedHammerRecipeType);
         for (final var recipeHolder : recipes) {
             final var recipe = recipeHolder.value();
@@ -48,7 +48,7 @@ public class CompressedHammerRegistry {
             }
         }
 
-        return ExNihilo.getInstance().isHammerableCompressed(itemStack);
+        return ExNihilo.getInstance().isHammerableCompressed(level, itemStack);
     }
 
 }

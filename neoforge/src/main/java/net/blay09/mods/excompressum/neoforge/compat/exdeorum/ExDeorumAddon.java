@@ -109,23 +109,23 @@ public class ExDeorumAddon implements ExNihiloProvider {
         return new ItemStack(item);
     }
 
-    private RecipeCaches getRecipeCaches() {
-        return RecipeUtil.getServerRecipeCaches();
+    private RecipeCaches getRecipeCaches(Level level) {
+        return RecipeUtil.getCaches(level);
     }
 
     @Override
     public boolean isHammerable(Level level, BlockState state) {
-        return getRecipeCaches().getHammerRecipe(StupidUtils.getItemStackFromState(state).getItem()) != null;
+        return getRecipeCaches(level).getHammerRecipe(StupidUtils.getItemStackFromState(state).getItem()) != null;
     }
 
     @Override
-    public boolean isHammerableCompressed(ItemStack itemStack) {
-        return getRecipeCaches().getCompressedHammerRecipe(itemStack.getItem()) != null;
+    public boolean isHammerableCompressed(Level level, ItemStack itemStack) {
+        return getRecipeCaches(level).getCompressedHammerRecipe(itemStack.getItem()) != null;
     }
 
     @Override
     public List<ItemStack> rollHammerRewards(Level level, BlockState state, ItemStack toolItem, RandomSource rand) {
-        final var recipe = getRecipeCaches().getHammerRecipe(StupidUtils.getItemStackFromState(state).getItem());
+        final var recipe = getRecipeCaches(level).getHammerRecipe(StupidUtils.getItemStackFromState(state).getItem());
         if (recipe != null) {
             List<ItemStack> list = new ArrayList<>();
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, toolItem);
@@ -144,22 +144,22 @@ public class ExDeorumAddon implements ExNihiloProvider {
             return false;
         }
 
-        return !getRecipeCaches().getSieveRecipes((Item) sieveMesh.getBackingMesh(), StupidUtils.getItemStackFromState(state)).isEmpty();
+        return !getRecipeCaches(level).getSieveRecipes((Item) sieveMesh.getBackingMesh(), StupidUtils.getItemStackFromState(state)).isEmpty();
     }
 
     @Override
-    public boolean isHeavySiftableWithMesh(BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh) {
+    public boolean isHeavySiftableWithMesh(Level level, BlockState sieveState, BlockState state, @Nullable SieveMeshRegistryEntry sieveMesh) {
         if (sieveMesh == null) {
             return false;
         }
 
-        return !getRecipeCaches().getCompressedSieveRecipes((Item) sieveMesh.getBackingMesh(), StupidUtils.getItemStackFromState(state)).isEmpty();
+        return !getRecipeCaches(level).getCompressedSieveRecipes((Item) sieveMesh.getBackingMesh(), StupidUtils.getItemStackFromState(state)).isEmpty();
     }
 
     @Override
     public Collection<ItemStack> rollSieveRewards(Level level, BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, RandomSource rand) {
         final var sourceStack = StupidUtils.getItemStackFromState(state);
-        final var recipes = getRecipeCaches().getSieveRecipes((Item) sieveMesh.getBackingMesh(), sourceStack);
+        final var recipes = getRecipeCaches(level).getSieveRecipes((Item) sieveMesh.getBackingMesh(), sourceStack);
         List<ItemStack> list = new ArrayList<>();
         for (final var recipe : recipes) {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, sourceStack);
@@ -174,7 +174,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
     @Override
     public Collection<ItemStack> rollHeavySieveRewards(Level level, BlockState sieveState, BlockState state, SieveMeshRegistryEntry sieveMesh, float luck, RandomSource rand) {
         final var sourceStack = StupidUtils.getItemStackFromState(state);
-        final var recipes = getRecipeCaches().getCompressedSieveRecipes((Item) sieveMesh.getBackingMesh(), sourceStack);
+        final var recipes = getRecipeCaches(level).getCompressedSieveRecipes((Item) sieveMesh.getBackingMesh(), sourceStack);
         List<ItemStack> list = new ArrayList<>();
         for (final var recipe : recipes) {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, sourceStack);
@@ -188,7 +188,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
 
     @Override
     public Collection<ItemStack> rollCompressedHammerRewards(Level level, LootContext context, ItemStack itemStack) {
-        final var recipe = getRecipeCaches().getCompressedHammerRecipe(itemStack.getItem());
+        final var recipe = getRecipeCaches(level).getCompressedHammerRecipe(itemStack.getItem());
         if (recipe != null) {
             List<ItemStack> list = new ArrayList<>();
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, itemStack);
@@ -204,7 +204,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
     @Override
     public List<ItemStack> rollCrookRewards(ServerLevel level, BlockPos pos, BlockState state, @Nullable Entity entity, ItemStack tool, RandomSource rand) {
         final float fortune = getLuckFromTool(level, tool);
-        final var recipes = getRecipeCaches().getCrookRecipes(state);
+        final var recipes = getRecipeCaches(level).getCrookRecipes(state);
         List<ItemStack> list = new ArrayList<>();
         for (final var recipe : recipes) {
             int rolls = Math.max(1, Mth.ceil(fortune / 3f));
@@ -256,25 +256,25 @@ public class ExDeorumAddon implements ExNihiloProvider {
     public List<HammerRecipe> getHammerRecipes() {
         List<HammerRecipe> result = new ArrayList<>();
 
-        ArrayListMultimap<IntList, thedarkcolour.exdeorum.recipe.hammer.HammerRecipe> groupedRecipes = ArrayListMultimap.create();
-        for (final var hammerRecipe : getRecipeCaches().getCachedHammerRecipes()) {
-            groupedRecipes.put(hammerRecipe.value().ingredient().getStackingIds(), hammerRecipe.value());
-        }
-
-        for (final var packedStacks : groupedRecipes.keySet()) {
-            final var tableBuilder = LootTable.lootTable();
-            for (final var hammerRecipe : groupedRecipes.get(packedStacks)) {
-                final var poolBuilder = LootPool.lootPool();
-                final var entryBuilder = buildLootEntry(hammerRecipe.result(), hammerRecipe.resultAmount);
-                poolBuilder.add(entryBuilder);
-                tableBuilder.withPool(poolBuilder);
-            }
-
-            final var firstRecipe = groupedRecipes.get(packedStacks).getFirst();
-            final var input = firstRecipe.ingredient();
-            final var lootTableProvider = tableBuilder.build();
-            result.add(new HammerRecipeImpl(input, lootTableProvider));
-        }
+//        ArrayListMultimap<IntList, thedarkcolour.exdeorum.recipe.hammer.HammerRecipe> groupedRecipes = ArrayListMultimap.create();
+//        for (final var hammerRecipe : getRecipeCaches().getCachedHammerRecipes()) {
+//            groupedRecipes.put(hammerRecipe.value().ingredient().getStackingIds(), hammerRecipe.value());
+//        }
+//
+//        for (final var packedStacks : groupedRecipes.keySet()) {
+//            final var tableBuilder = LootTable.lootTable();
+//            for (final var hammerRecipe : groupedRecipes.get(packedStacks)) {
+//                final var poolBuilder = LootPool.lootPool();
+//                final var entryBuilder = buildLootEntry(hammerRecipe.result(), hammerRecipe.resultAmount);
+//                poolBuilder.add(entryBuilder);
+//                tableBuilder.withPool(poolBuilder);
+//            }
+//
+//            final var firstRecipe = groupedRecipes.get(packedStacks).getFirst();
+//            final var input = firstRecipe.ingredient();
+//            final var lootTableProvider = tableBuilder.build();
+//            result.add(new HammerRecipeImpl(input, lootTableProvider));
+//        }
 
         return result;
     }
@@ -287,25 +287,25 @@ public class ExDeorumAddon implements ExNihiloProvider {
     public List<CompressedHammerRecipe> getCompressedHammerRecipes() {
         List<CompressedHammerRecipe> result = new ArrayList<>();
 
-        ArrayListMultimap<IntList, thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe> groupedRecipes = ArrayListMultimap.create();
-        for (final var hammerRecipe : getRecipeCaches().getCachedCompressedHammerRecipes()) {
-            groupedRecipes.put(hammerRecipe.value().ingredient().getStackingIds(), hammerRecipe.value());
-        }
-
-        for (final var packedStacks : groupedRecipes.keySet()) {
-            final var tableBuilder = LootTable.lootTable();
-            for (final var hammerRecipe : groupedRecipes.get(packedStacks)) {
-                final var poolBuilder = LootPool.lootPool();
-                final var entryBuilder = buildLootEntry(hammerRecipe.result(), hammerRecipe.resultAmount);
-                poolBuilder.add(entryBuilder);
-                tableBuilder.withPool(poolBuilder);
-            }
-
-            final var firstRecipe = groupedRecipes.get(packedStacks).getFirst();
-            final var input = firstRecipe.ingredient();
-            final var lootTableProvider = tableBuilder.build();
-            result.add(new CompressedHammerRecipeImpl(input, lootTableProvider));
-        }
+//        ArrayListMultimap<IntList, thedarkcolour.exdeorum.recipe.hammer.CompressedHammerRecipe> groupedRecipes = ArrayListMultimap.create();
+//        for (final var hammerRecipe : getRecipeCaches().getCachedCompressedHammerRecipes()) {
+//            groupedRecipes.put(hammerRecipe.value().ingredient().getStackingIds(), hammerRecipe.value());
+//        }
+//
+//        for (final var packedStacks : groupedRecipes.keySet()) {
+//            final var tableBuilder = LootTable.lootTable();
+//            for (final var hammerRecipe : groupedRecipes.get(packedStacks)) {
+//                final var poolBuilder = LootPool.lootPool();
+//                final var entryBuilder = buildLootEntry(hammerRecipe.result(), hammerRecipe.resultAmount);
+//                poolBuilder.add(entryBuilder);
+//                tableBuilder.withPool(poolBuilder);
+//            }
+//
+//            final var firstRecipe = groupedRecipes.get(packedStacks).getFirst();
+//            final var input = firstRecipe.ingredient();
+//            final var lootTableProvider = tableBuilder.build();
+//            result.add(new CompressedHammerRecipeImpl(input, lootTableProvider));
+//        }
 
         return result;
     }
