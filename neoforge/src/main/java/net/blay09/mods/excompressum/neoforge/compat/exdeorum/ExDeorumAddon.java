@@ -127,7 +127,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, toolItem);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
+                list.add(recipe.result().create().copyWithCount(amount));
             }
             return list;
         }
@@ -161,7 +161,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, sourceStack);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
+                list.add(recipe.result().create().copyWithCount(amount));
             }
         }
         return list;
@@ -176,7 +176,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, sourceStack);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
+                list.add(recipe.result().create().copyWithCount(amount));
             }
         }
         return list;
@@ -190,7 +190,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, itemStack);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
+                list.add(recipe.result().create().copyWithCount(amount));
             }
             return list;
         }
@@ -206,7 +206,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             int rolls = Math.max(1, Mth.ceil(fortune / 3f));
             for (int i = 0; i < rolls; i++) {
                 if (rand.nextFloat() < recipe.chance()) {
-                    list.add(recipe.getResultItem(level.registryAccess()).copy());
+                    list.add(recipe.result().create().copy());
                 }
             }
         }
@@ -261,7 +261,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             final var tableBuilder = LootTable.lootTable();
             for (final var hammerRecipe : groupedRecipes.get(packedStacks)) {
                 final var poolBuilder = LootPool.lootPool();
-                final var entryBuilder = buildLootEntry(hammerRecipe.result(), hammerRecipe.resultAmount);
+                final var entryBuilder = buildLootEntry(hammerRecipe.result().create(), hammerRecipe.resultAmount);
                 poolBuilder.add(entryBuilder);
                 tableBuilder.withPool(poolBuilder);
             }
@@ -292,7 +292,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             final var tableBuilder = LootTable.lootTable();
             for (final var hammerRecipe : groupedRecipes.get(packedStacks)) {
                 final var poolBuilder = LootPool.lootPool();
-                final var entryBuilder = buildLootEntry(hammerRecipe.result(), hammerRecipe.resultAmount);
+                final var entryBuilder = buildLootEntry(hammerRecipe.result().create(), hammerRecipe.resultAmount);
                 poolBuilder.add(entryBuilder);
                 tableBuilder.withPool(poolBuilder);
             }
