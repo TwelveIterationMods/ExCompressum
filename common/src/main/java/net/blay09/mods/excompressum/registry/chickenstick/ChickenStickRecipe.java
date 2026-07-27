@@ -26,6 +26,11 @@ public class ChickenStickRecipe extends ExCompressumRecipe<RecipeInput> {
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public RecipeType<ChickenStickRecipe> getType() {
         return ModRecipeTypes.chickenStick.type();
     }

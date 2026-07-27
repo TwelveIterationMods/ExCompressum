@@ -27,6 +27,11 @@ public class HammerRecipeImpl extends ExCompressumRecipe<RecipeInput> implements
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public RecipeType<HammerRecipeImpl> getType() {
         return ModRecipeTypes.hammer.type();
     }

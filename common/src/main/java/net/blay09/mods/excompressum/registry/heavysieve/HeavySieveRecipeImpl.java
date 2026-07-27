@@ -37,6 +37,11 @@ public class HeavySieveRecipeImpl extends ExCompressumRecipe<RecipeInput> implem
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public RecipeType<HeavySieveRecipeImpl> getType() {
         return ModRecipeTypes.heavySieve.type();
     }

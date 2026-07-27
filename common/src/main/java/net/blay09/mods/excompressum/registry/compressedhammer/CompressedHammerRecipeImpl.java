@@ -41,6 +41,10 @@ public class CompressedHammerRecipeImpl extends ExCompressumRecipe<RecipeInput> 
         return ModRecipeTypes.compressedHammer.serializer();
     }
 
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
 
     @Override
     public Ingredient getIngredient() {
