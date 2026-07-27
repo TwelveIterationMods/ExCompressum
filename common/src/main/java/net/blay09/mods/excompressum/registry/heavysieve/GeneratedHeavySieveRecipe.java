@@ -41,6 +41,11 @@ public class GeneratedHeavySieveRecipe extends ExCompressumRecipe<RecipeInput> {
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public RecipeType<GeneratedHeavySieveRecipe> getType() {
         return ModRecipeTypes.generatedHeavySieve.type();
     }

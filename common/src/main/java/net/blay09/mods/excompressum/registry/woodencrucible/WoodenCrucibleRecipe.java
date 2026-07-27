@@ -45,6 +45,11 @@ public class WoodenCrucibleRecipe extends ExCompressumRecipe<RecipeInput> {
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public RecipeType<WoodenCrucibleRecipe> getType() {
         return ModRecipeTypes.woodenCrucible.type();
     }
