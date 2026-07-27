@@ -5,5 +5,5 @@ dependencies {
 
     compileOnly("novamachina.novacore:novacore:1.21.4-4.0.0-build.5")
     compileOnly("novamachina.exnihilosequentia:exnihilosequentia:1.21.4-7.0.2-build.3")
-    compileOnly("curse.maven:ex-deorum-901420:5586119")
+    compileOnly("curse.maven:ex-deorum-901420:8096345")
 }

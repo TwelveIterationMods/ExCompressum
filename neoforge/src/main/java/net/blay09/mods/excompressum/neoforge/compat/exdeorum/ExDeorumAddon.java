@@ -27,6 +27,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
@@ -127,7 +128,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, toolItem);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
+                list.add(recipe.result().create().copyWithCount(amount));
             }
             return list;
         }
@@ -161,7 +162,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, sourceStack);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
+                list.add(recipe.result().create().copyWithCount(amount));
             }
         }
         return list;
@@ -176,7 +177,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, sourceStack);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
+                list.add(recipe.result().create().copyWithCount(amount));
             }
         }
         return list;
@@ -190,7 +191,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             LootContext lootContext = LootTableUtils.buildLootContext((ServerLevel) level, itemStack);
             final var amount = recipe.resultAmount.getInt(lootContext);
             if (amount > 0) {
-                list.add(recipe.getResultItem(level.registryAccess()).copyWithCount(amount));
+                list.add(recipe.result().create().copyWithCount(amount));
             }
             return list;
         }
@@ -206,7 +207,7 @@ public class ExDeorumAddon implements ExNihiloProvider {
             int rolls = Math.max(1, Mth.ceil(fortune / 3f));
             for (int i = 0; i < rolls; i++) {
                 if (rand.nextFloat() < recipe.chance()) {
-                    list.add(recipe.getResultItem(level.registryAccess()).copy());
+                    list.add(recipe.result().create().copy());
                 }
             }
         }
@@ -275,8 +276,8 @@ public class ExDeorumAddon implements ExNihiloProvider {
         return result;
     }
 
-    private LootPoolSingletonContainer.Builder<?> buildLootEntry(ItemStack itemStack, NumberProvider amount) {
-        return LootTableUtils.buildLootEntry(itemStack, amount);
+    private LootPoolSingletonContainer.Builder<?> buildLootEntry(ItemStackTemplate itemStackTemplate, NumberProvider amount) {
+        return LootTableUtils.buildLootEntry(itemStackTemplate.create(), amount);
     }
 
     @Override
