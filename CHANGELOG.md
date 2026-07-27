@@ -1,1 +1,3 @@
-- Fixed crash with newer versions of Ex Deorum
+- Fixed log errors about missing empty `incorrect_for_chicken_stick` tag
+- Fixed recipe load error logs when Ex Nihilo Sequentia is not installed
+- Fixed crash when using with latest Ex Deorum on a multiplayer server
