@@ -1,5 +1,21 @@
 {
   "type": "excompressum:generated_heavy_sieve",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "exnihilosequentia:crushed_andesite"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "exnihilosequentia:crushed_andesite"
+      ]
+    }
+  ],
   "input": "excompressum:compressed_crushed_andesite",
   "source": "exnihilosequentia:crushed_andesite"
 }
