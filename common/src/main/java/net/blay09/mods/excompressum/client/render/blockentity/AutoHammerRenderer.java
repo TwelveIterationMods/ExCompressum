@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockModelRenderState;
 import net.minecraft.client.renderer.block.BlockModelResolver;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -31,6 +32,9 @@ import org.joml.AxisAngle4f;
 import org.joml.Math;
 import org.joml.Quaternionf;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEntity, AutoHammerRenderer.AutoHammerRenderState> {
 
     public static class AutoHammerRenderState extends BlockEntityRenderState {
@@ -41,6 +45,7 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
         public final ItemStackRenderState firstHammerItem = new ItemStackRenderState();
         public final ItemStackRenderState secondHammerItem = new ItemStackRenderState();
         public final BlockModelRenderState content = new BlockModelRenderState();
+        public final List<BlockStateModelPart> breakingContentParts = new ArrayList<>();
         public BlockState contentState;
         public float progress;
     }
@@ -92,8 +97,11 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
 
         final var contentState = StupidUtils.getStateFromItemStack(blockEntity.getCurrentStack());
         renderState.contentState = contentState;
+        renderState.breakingContentParts.clear();
         if (!contentState.isAir()) {
             blockModelResolver.update(renderState.content, contentState, CONTENT_BLOCK_DISPLAY_CONTEXT);
+            final var blockModel = Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(contentState);
+            blockModel.collectParts(renderState.content.scratchRandomSource(contentState.getSeed(blockEntity.getBlockPos())), renderState.breakingContentParts);
         } else {
             renderState.content.clear();
         }
@@ -156,8 +164,7 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
 
             if (renderState.progress > 0f && renderState.contentState != null) {
                 final var blockDamage = Math.min(9, (int) (renderState.progress * 10f));
-                final var blockModel = Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(renderState.contentState);
-                submitNodeCollector.submitBreakingBlockModel(poseStack, blockModel, renderState.contentState.getSeed(renderState.blockPos), blockDamage);
+                submitNodeCollector.submitBreakingBlockModel(poseStack, renderState.breakingContentParts, blockDamage);
             }
 
             poseStack.popPose();
