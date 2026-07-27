@@ -207,6 +207,7 @@ public class AutoHammerBlockEntity extends AbstractBaseBlockEntity implements Ba
                     energyStorage.drain(effectiveEnergy, false);
                     ticksSinceUpdate = UPDATE_INTERVAL;
                     progress = 0f;
+                    isDirty = true;
                 }
             } else {
                 energyStorage.drain(effectiveEnergy, false);
