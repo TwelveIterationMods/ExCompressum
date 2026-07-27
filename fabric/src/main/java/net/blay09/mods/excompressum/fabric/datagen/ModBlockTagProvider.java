@@ -79,6 +79,8 @@ public class ModBlockTagProvider extends FabricTagProvider<Block> {
                 ModBlocks.compressedBlocks[CompressedBlockType.GRAVEL.ordinal()],
                 ModBlocks.compressedBlocks[CompressedBlockType.NETHERRACK.ordinal()],
                 ModBlocks.compressedBlocks[CompressedBlockType.SAND.ordinal()]);
+
+        getOrCreateTagBuilder(ModBlockTags.INCORRECT_FOR_CHICKEN_STICK);
     }
 
 }
