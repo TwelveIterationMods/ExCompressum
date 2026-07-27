@@ -3,23 +3,36 @@ package net.blay09.mods.excompressum.client.render.model;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.blay09.mods.excompressum.block.entity.SieveAnimationType;
-import net.blay09.mods.excompressum.client.render.blockentity.AutoSieveRenderer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.player.PlayerModel;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 
 public class TinyHumanModel extends PlayerModel {
+
+    public static class TinyHumanRenderState extends AvatarRenderState {
+        public SieveAnimationType animationType = SieveAnimationType.DEFAULT;
+        public float armAngle;
+    }
 
     public TinyHumanModel(ModelPart modelPart, boolean smallArms) {
         super(modelPart, smallArms);
     }
 
-    public void animate(AutoSieveRenderer.AutoSieveRenderState renderState) {
-        if (renderState.animationType == SieveAnimationType.MAGIC) {
+    @Override
+    public void setupAnim(AvatarRenderState renderState) {
+        super.setupAnim(renderState);
+
+        if (!(renderState instanceof TinyHumanRenderState tinyHumanRenderState)) {
+            return;
+        }
+
+        if (tinyHumanRenderState.animationType == SieveAnimationType.MAGIC) {
             float base = (float) Math.toRadians(280);
-            rightArm.xRot = (float) (base + Math.sin(renderState.armAngle) * 0.1f);
-            leftArm.xRot = (float) (base + Math.cos(renderState.armAngle) * 0.1f);
+            rightArm.xRot = (float) (base + Math.sin(tinyHumanRenderState.armAngle) * 0.1f);
+            leftArm.xRot = (float) (base + Math.cos(tinyHumanRenderState.armAngle) * 0.1f);
         } else {
-            rightArm.xRot = renderState.armAngle;
+            rightArm.xRot = tinyHumanRenderState.armAngle;
+            leftArm.xRot = 0f;
         }
     }
 

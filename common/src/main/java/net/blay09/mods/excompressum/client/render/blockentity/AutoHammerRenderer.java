@@ -5,7 +5,12 @@ import net.blay09.mods.excompressum.block.AutoHammerBlock;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
 import net.blay09.mods.excompressum.item.ModItems;
 import net.blay09.mods.excompressum.tag.ModItemTags;
+import net.blay09.mods.excompressum.utils.StupidUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.BlockModelRenderState;
+import net.minecraft.client.renderer.block.BlockModelResolver;
+import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
@@ -19,6 +24,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 import org.joml.AxisAngle4f;
@@ -34,16 +40,21 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
         public final ItemStackRenderState hammerItem = new ItemStackRenderState();
         public final ItemStackRenderState firstHammerItem = new ItemStackRenderState();
         public final ItemStackRenderState secondHammerItem = new ItemStackRenderState();
-        public final ItemStackRenderState item = new ItemStackRenderState();
+        public final BlockModelRenderState content = new BlockModelRenderState();
+        public BlockState contentState;
         public float progress;
     }
 
+    private static final BlockDisplayContext CONTENT_BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
+
+    private final BlockModelResolver blockModelResolver;
     private final ItemModelResolver itemModelResolver;
     private final boolean isCompressed;
 
     private ItemStack hammerItemStack = ItemStack.EMPTY;
 
     public AutoHammerRenderer(BlockEntityRendererProvider.Context context, boolean isCompressed) {
+        this.blockModelResolver = context.blockModelResolver();
         this.itemModelResolver = context.itemModelResolver();
         this.isCompressed = isCompressed;
     }
@@ -78,7 +89,14 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
         itemModelResolver.updateForTopItem(renderState.hammerItem, hammerItemStack, ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
         itemModelResolver.updateForTopItem(renderState.firstHammerItem, blockEntity.getUpgradeStack(0), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
         itemModelResolver.updateForTopItem(renderState.secondHammerItem, blockEntity.getUpgradeStack(1), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
-        itemModelResolver.updateForTopItem(renderState.item, blockEntity.getCurrentStack(), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
+
+        final var contentState = StupidUtils.getStateFromItemStack(blockEntity.getCurrentStack());
+        renderState.contentState = contentState;
+        if (!contentState.isAir()) {
+            blockModelResolver.update(renderState.content, contentState, CONTENT_BLOCK_DISPLAY_CONTEXT);
+        } else {
+            renderState.content.clear();
+        }
     }
 
     @Override
@@ -130,18 +148,16 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
 
         poseStack.popPose();
 
-        if (!renderState.item.isEmpty()) {
+        if (!renderState.content.isEmpty()) {
             poseStack.pushPose();
             poseStack.translate(-0.4625f, -0.04f, -0.2);
             poseStack.scale(0.4f, 0.4f, 0.4f);
-            renderState.item.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            renderState.content.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 
-            if (renderState.progress > 0f) {
-                // TODO int blockDamage = Math.min(9, (int) (renderState.progress * 9f));
-                // TODO final var crumblingBufferSource = Minecraft.getInstance().renderBuffers().crumblingBufferSource();
-                // TODO final var crumblingBuffer = crumblingBufferSource.getBuffer(ModelBakery.DESTROY_TYPES.get(blockDamage));
-                // TODO final var vertexConsumer = new SheetedDecalTextureGenerator(crumblingBuffer, poseStack.last(), 1f);
-                // TODO dispatcher.renderBreakingTexture(contentState, tileEntity.getBlockPos(), level, poseStack, vertexConsumer);
+            if (renderState.progress > 0f && renderState.contentState != null) {
+                final var blockDamage = Math.min(9, (int) (renderState.progress * 10f));
+                final var blockModel = Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(renderState.contentState);
+                submitNodeCollector.submitBreakingBlockModel(poseStack, blockModel, renderState.contentState.getSeed(renderState.blockPos), blockDamage);
             }
 
             poseStack.popPose();

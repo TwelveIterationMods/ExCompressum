@@ -10,6 +10,7 @@ import net.blay09.mods.excompressum.block.entity.AutoSieveBlockEntity;
 import net.blay09.mods.excompressum.block.entity.SieveAnimationType;
 import net.blay09.mods.excompressum.client.ModModels;
 import net.blay09.mods.excompressum.client.render.model.TinyHumanModel;
+import net.blay09.mods.excompressum.utils.StupidUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -19,17 +20,13 @@ import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
-import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.item.ItemModelResolver;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.PlayerSkin;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -45,32 +42,29 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
     public static class AutoSieveRenderState extends BlockEntityRenderState {
         public final BlockModelRenderState glass = new BlockModelRenderState();
+        public final BlockModelRenderState content = new BlockModelRenderState();
         public final BlockModelRenderState mesh = new BlockModelRenderState();
         public final BlockModelRenderState sieve = new BlockModelRenderState();
         public boolean skip;
         public Direction facing = Direction.NORTH;
         public boolean waterlogged;
-        public final ItemStackRenderState item = new ItemStackRenderState();
         public float progress;
         @Nullable
         public ResolvableProfile profile;
-        public SieveAnimationType animationType = SieveAnimationType.DEFAULT;
-        public float armAngle;
-        public final AvatarRenderState avatar = new AvatarRenderState();
+        public final TinyHumanModel.TinyHumanRenderState avatar = new TinyHumanModel.TinyHumanRenderState();
     }
 
     private static final BlockDisplayContext GLASS_BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
+    private static final BlockDisplayContext CONTENT_BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
     private static final BlockDisplayContext SIEVE_BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
 
     private final BlockModelResolver blockModelResolver;
-    private final ItemModelResolver itemModelResolver;
     private final TinyHumanModel tinyHumanModel;
     private final TinyHumanModel tinyHumanModelSlim;
     private final boolean isHeavy;
 
     public AutoSieveRenderer(BlockEntityRendererProvider.Context context, boolean isHeavy) {
         blockModelResolver = context.blockModelResolver();
-        itemModelResolver = context.itemModelResolver();
         tinyHumanModel = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER), false);
         tinyHumanModelSlim = new TinyHumanModel(context.bakeLayer(ModelLayers.PLAYER_SLIM), true);
         this.isHeavy = isHeavy;
@@ -93,7 +87,6 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
         if (blockEntity.shouldAnimate()) {
             final var animationSpeed = blockEntity.getAnimationType() == SieveAnimationType.MAGIC ? 0.05f : 0.5f;
-            blockEntity.armAngle += animationSpeed * delta;
             blockEntity.armAngle += animationSpeed * (Math.max(1f, blockEntity.getSpeedMultiplier() / 4f)) * delta;
         }
 
@@ -113,9 +106,16 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         renderState.facing = blockState.getValue(AutoSieveBlock.FACING);
         renderState.waterlogged = blockState.getValue(AutoSieveBlock.WATERLOGGED);
         renderState.profile = blockEntity.getSkinProfile();
-        renderState.armAngle = blockEntity.armAngle;
+        renderState.avatar.animationType = blockEntity.getAnimationType();
+        renderState.avatar.armAngle = blockEntity.armAngle;
 
-        itemModelResolver.updateForTopItem(renderState.item, blockEntity.getCurrentStack(), ItemDisplayContext.FIXED, blockEntity.getLevel(), null, 0);
+        final var contentState = StupidUtils.getStateFromItemStack(blockEntity.getCurrentStack());
+        if (!contentState.isAir()) {
+            blockModelResolver.update(renderState.content, contentState, CONTENT_BLOCK_DISPLAY_CONTEXT);
+        } else {
+            renderState.content.clear();
+        }
+
     }
 
     @Override
@@ -141,7 +141,6 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         poseStack.scale(0.4f, 0.4f, 0.4f);
         final var skin = getPlayerSkin(renderState.profile);
         final var playerModel = getPlayerModel(skin);
-        playerModel.animate(renderState);
         submitNodeCollector.submitModel(playerModel, renderState.avatar, poseStack, RenderTypes.entityCutout(skin.body().texturePath()), renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, renderState.breakProgress);
         poseStack.popPose();
 
@@ -172,7 +171,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         renderState.mesh.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 
         // Render the content
-        if (!renderState.item.isEmpty()) {
+        if (!renderState.content.isEmpty()) {
             poseStack.pushPose();
             final var contentOffset = 0.0625f;
             final var meshY = 0.5625f;
@@ -180,7 +179,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
             final var contentBaseScaleY = 0.5f;
             poseStack.translate(contentOffset, meshY, contentOffset);
             poseStack.scale(contentScaleXZ, contentBaseScaleY - renderState.progress * contentBaseScaleY, contentScaleXZ);
-            renderState.item.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            renderState.content.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
         poseStack.popPose();
