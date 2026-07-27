@@ -1,4 +1,20 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "exnihilosequentia:crushed_netherrack"
+    }
+  ],
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:item",
+      "values": [
+        "exnihilosequentia:crushed_netherrack"
+      ]
+    }
+  ],
   "result": {
     "id": "exnihilosequentia:crushed_netherrack",
     "count": 9
@@ -7,12 +23,6 @@
   "ingredients": [
     {
       "item": "excompressum:compressed_crushed_netherrack"
-    }
-  ],
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "exnihilosequentia:crushed_netherrack"
     }
   ]
 }
