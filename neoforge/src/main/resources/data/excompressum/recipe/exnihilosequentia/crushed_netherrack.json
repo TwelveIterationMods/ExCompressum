@@ -1,17 +1,17 @@
 {
+  "type": "minecraft:crafting_shapeless",
   "result": {
-    "item": "exnihilosequentia:crushed_netherrack",
+    "id": "exnihilosequentia:crushed_netherrack",
     "count": 9
   },
-  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
       "item": "excompressum:compressed_crushed_netherrack"
     }
   ],
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:item_exists",
+      "type": "neoforge:item_exists",
       "item": "exnihilosequentia:crushed_netherrack"
     }
   ]

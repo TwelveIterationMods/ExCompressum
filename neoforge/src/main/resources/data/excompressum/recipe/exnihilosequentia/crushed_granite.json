@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "result": {
-    "item": "exnihilosequentia:crushed_granite",
+    "id": "exnihilosequentia:crushed_granite",
     "count": 9
   },
   "ingredients": [
@@ -9,9 +9,9 @@
       "item": "excompressum:compressed_crushed_granite"
     }
   ],
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:item_exists",
+      "type": "neoforge:item_exists",
       "item": "exnihilosequentia:crushed_granite"
     }
   ]

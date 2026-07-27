@@ -1,0 +1,23 @@
+{
+  "type": "exnihilosequentia:sifting",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "exnihilosequentia"
+    }
+  ],
+  "rolls": [
+    {
+      "chance": 0.05,
+      "mesh": "iron"
+    }
+  ],
+  "input": {
+    "tag": "minecraft:sand"
+  },
+  "result": {
+    "id": "minecraft:seagrass",
+    "count": 1
+  },
+  "waterlogged": true
+}

@@ -1,0 +1,13 @@
+{
+  "type": "exnihilosequentia:compost",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "exnihilosequentia"
+    }
+  ],
+  "input": {
+    "item": "excompressum:wood_chippings"
+  },
+  "amount": 125
+}

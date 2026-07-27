@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "result": {
-    "item": "exnihilosequentia:crushed_end_stone",
+    "id": "exnihilosequentia:crushed_end_stone",
     "count": 9
   },
   "ingredients": [
@@ -9,9 +9,9 @@
       "item": "excompressum:compressed_crushed_end_stone"
     }
   ],
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:item_exists",
+      "type": "neoforge:item_exists",
       "item": "exnihilosequentia:crushed_end_stone"
     }
   ]

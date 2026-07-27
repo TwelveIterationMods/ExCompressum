@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "result": {
-    "item": "exnihilosequentia:dust",
+    "id": "exnihilosequentia:dust",
     "count": 9
   },
   "ingredients": [
@@ -9,9 +9,9 @@
       "item": "excompressum:compressed_dust"
     }
   ],
-  "conditions": [
+  "neoforge:conditions": [
     {
-      "type": "forge:item_exists",
+      "type": "neoforge:item_exists",
       "item": "exnihilosequentia:dust"
     }
   ]
