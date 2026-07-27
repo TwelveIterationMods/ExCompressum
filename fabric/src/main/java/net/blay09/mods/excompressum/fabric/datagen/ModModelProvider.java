@@ -16,6 +16,7 @@ import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.Optional;
@@ -111,11 +112,19 @@ public class ModModelProvider extends FabricModelProvider {
     }
 
     private void createBait(BlockModelGenerators generators, BaitBlock block, BaitType baitType) {
-        generators.createAirLikeBlock(block, baitType.getDisplayItemFirst().item().value());
+        generators.createAirLikeBlock(block, getBaitParticleTexture(baitType));
         final var itemModelLocation = Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "item/bait");
         generators.itemModelOutput.accept(block.asItem(),
                 ItemModelUtils.tintedModel(itemModelLocation,
                         new Constant(block.getBaitType().getItemColor(0)),
                         new Constant(block.getBaitType().getItemColor(1))));
+    }
+
+    private Material getBaitParticleTexture(BaitType baitType) {
+        if (baitType == BaitType.MOOSHROOM) {
+            return TextureMapping.getBlockTexture(Blocks.RED_MUSHROOM);
+        }
+
+        return TextureMapping.getItemTexture(baitType.getDisplayItemFirst().item().value());
     }
 }
