@@ -140,7 +140,11 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         poseStack.scale(0.4f, 0.4f, 0.4f);
         final var skin = getPlayerSkin(renderState.profile);
         final var playerModel = getPlayerModel(skin);
-        submitNodeCollector.submitModel(playerModel, renderState.avatar, poseStack, RenderTypes.entityCutout(skin.body().texturePath()), renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, renderState.breakProgress);
+        final var renderType = RenderTypes.entityCutout(skin.body().texturePath());
+        submitNodeCollector.submitModel(playerModel, renderState.avatar, poseStack, renderType, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+        if (renderState.breakProgress != null) {
+            submitNodeCollector.submitCrumblingOverlay(playerModel, renderState.avatar, poseStack, renderType, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, renderState.breakProgress);
+        }
         poseStack.popPose();
 
         // Render the glass around player head if underwater

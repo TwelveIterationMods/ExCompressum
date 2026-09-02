@@ -21,7 +21,7 @@ public class AutoSieveBlock extends AutoSieveBaseBlock {
                 .isValidSpawn((a, b, c, d) -> false)
                 .isRedstoneConductor((a, b, c) -> false)
                 .isSuffocating((a, b, c) -> false)
-                .isViewBlocking((a, b, c) -> false));
+                .isViewBlocking((a, b, c, d) -> false));
     }
 
     @Nullable

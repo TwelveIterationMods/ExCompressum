@@ -46,7 +46,7 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
                 .isValidSpawn((a, b, c, d) -> false)
                 .isRedstoneConductor((a, b, c) -> a.getValue(UGLY))
                 .isSuffocating((a, b, c) -> false)
-                .isViewBlocking((a, b, c) -> false));
+                .isViewBlocking((a, b, c, d) -> false));
         registerDefaultState(defaultBlockState().setValue(UGLY, false));
     }
 

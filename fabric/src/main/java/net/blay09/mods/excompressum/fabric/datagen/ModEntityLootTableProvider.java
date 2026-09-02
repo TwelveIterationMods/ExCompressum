@@ -20,8 +20,10 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+
+import static net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.between;
+import static net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.exactly;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -38,28 +40,33 @@ public class ModEntityLootTableProvider extends SimpleFabricLootTableSubProvider
     @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> builder) {
         final var provider = providerFuture.resultNow();
+        final var enchantments = provider.lookupOrThrow(Registries.ENCHANTMENT);
         builder.accept(ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath(ExCompressum.MOD_ID, "entities/angry_chicken")),
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1))
+                                .setRolls(exactly(1))
                                 .add(LootItem.lootTableItem(ModItems.chickenStick)
                                         .apply(SetComponentsFunction.setComponent(ModComponents.angry.value(), Unit.INSTANCE)))
                         )
                         .withPool(LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1))
+                                .setRolls(exactly(1))
                                 .add(LootItem.lootTableItem(Items.FEATHER)
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2)))
-                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(provider, UniformGenerator.between(0, 1)))
+                                        .apply(SetItemCountFunction.setCount(between(0, 2)))
+                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(enchantments, ContextFloatProviders.between(0, 1)))
                                 ))
                         .withPool(LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(1))
+                                .setRolls(exactly(1))
                                 .add(LootItem.lootTableItem(Items.CHICKEN)
                                         .apply(SmeltItemFunction.smelted()
                                                 .when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
                                                         EntityPredicate.Builder.entity().flags(EntityFlagsPredicate.Builder.flags().setOnFire(true)))))
-                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(provider, UniformGenerator.between(0, 1))))
+                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(enchantments, ContextFloatProviders.between(0, 1))))
                         )
         );
+    }
+
+    @Override
+    public void run() {
     }
 
 }

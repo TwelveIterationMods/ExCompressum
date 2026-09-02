@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.item;
 
-import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.world.item.BalmCreativeModeTabRegistrar;
 import net.blay09.mods.balm.world.item.BalmItemRegistrar;
 import net.blay09.mods.balm.world.item.DeferredItem;
@@ -8,7 +7,11 @@ import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.block.ModBlocks;
 import net.blay09.mods.excompressum.tag.ModBlockTags;
 import net.minecraft.network.chat.Component;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.CookingFuel;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ResolvableFloat;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 
 public class ModItems {
     public static DeferredItem chickenStick;
@@ -54,11 +57,9 @@ public class ModItems {
         ).asDeferredItem();
         ironMesh = items.register("iron_mesh", IronMeshItem::new, it -> it).asDeferredItem();
         woodChippings = items.register("wood_chippings", WoodChippingItem::new, it -> it).asDeferredItem();
-        uncompressedCoal = items.register("uncompressed_coal", (properties) -> {
-            final var item = new UncompressedCoalItem(properties);
-            Balm.hooks().setBurnTime(item, 200);
-            return item;
-        }, it -> it).asDeferredItem();
+        uncompressedCoal = items.register("uncompressed_coal", UncompressedCoalItem::new,
+                it -> it.component(DataComponents.COOKING_FUEL,
+                        new CookingFuel(new ResolvableInt.Constant(200), new ResolvableFloat.Constant(1f)))).asDeferredItem();
         batZapper = items.register("bat_zapper", BatZapperItem::new).asDeferredItem();
         oreSmasher = items.register("ore_smasher", OreSmasherItem::new,
                         it -> it.shovel(ToolMaterial.DIAMOND, 6f, -3.2f))

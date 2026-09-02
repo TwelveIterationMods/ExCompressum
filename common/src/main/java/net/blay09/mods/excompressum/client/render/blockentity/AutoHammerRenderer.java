@@ -163,7 +163,7 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
 
             if (renderState.progress > 0f && renderState.contentState != null) {
                 final var blockDamage = Math.min(9, (int) (renderState.progress * 10f));
-                submitNodeCollector.submitBreakingBlockModel(poseStack, renderState.breakingContentParts, blockDamage);
+                submitNodeCollector.submitBreakingBlockModel(poseStack, renderState.breakingContentParts, blockDamage, false);
             }
 
             poseStack.popPose();

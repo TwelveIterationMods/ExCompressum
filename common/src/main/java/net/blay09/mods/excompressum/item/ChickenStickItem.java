@@ -43,7 +43,7 @@ public class ChickenStickItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         tryPlayChickenSound(level, player.blockPosition());
-        player.swing(hand);
+        player.swing(hand, player.getItemInHand(hand).getInteractAnimation(), true);
         return InteractionResult.SUCCESS;
     }
 

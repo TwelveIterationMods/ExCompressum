@@ -69,7 +69,7 @@ public class OreSmasherItem extends Item {
                                 if (inventoryStack.isEmpty()) {
                                     items.remove(i);
                                 }
-                                player.swing(context.getHand());
+                                player.swing(context.getHand(), context.getItemInHand().getInteractAnimation(), true);
                                 return InteractionResult.SUCCESS;
                             }
                         }
@@ -83,7 +83,7 @@ public class OreSmasherItem extends Item {
                     if (inventoryStack.isEmpty()) {
                         items.remove(i);
                     }
-                    player.swing(context.getHand());
+                    player.swing(context.getHand(), context.getItemInHand().getInteractAnimation(), true);
                     return InteractionResult.SUCCESS;
                 }
             }

@@ -11,10 +11,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.predicates.MatchBlock;
 
 import java.util.concurrent.CompletableFuture;
+
+import static net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders.exactly;
 
 public class ModBlockLootTableProvider extends FabricBlockLootSubProvider {
     protected ModBlockLootTableProvider(FabricPackOutput dataOutput, CompletableFuture<HolderLookup.Provider> provider) {
@@ -47,12 +48,12 @@ public class ModBlockLootTableProvider extends FabricBlockLootSubProvider {
     private void dropWithUglySteelPlating(Block block) {
         add(block, LootTable.lootTable()
                 .withPool(applyExplosionCondition(block, LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1f))
+                        .setRolls(exactly(1))
                         .add(LootItem.lootTableItem(block))))
                 .withPool(applyExplosionCondition(block, LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(1f))
+                        .setRolls(exactly(1))
                         .add(LootItem.lootTableItem(ModItems.uglySteelPlating))
-                        .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block)
-                                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(ModBlockStateProperties.UGLY, "true"))))));
+                        .when(MatchBlock.blockMatches(blocks, block,
+                                StatePropertiesPredicate.Builder.properties().hasProperty(ModBlockStateProperties.UGLY, "true"))))));
     }
 }

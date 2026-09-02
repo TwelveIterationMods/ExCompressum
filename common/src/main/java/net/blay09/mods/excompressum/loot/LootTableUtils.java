@@ -4,10 +4,10 @@ import com.google.common.collect.ArrayListMultimap;
 import net.blay09.mods.excompressum.ExCompressum;
 import net.blay09.mods.excompressum.mixin.*;
 import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.util.context.ContextMap;
@@ -22,8 +22,11 @@ import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.UniformGenerator;
 
 import org.jspecify.annotations.Nullable;
 
@@ -52,19 +55,18 @@ public class LootTableUtils {
         List<LootTableEntry> result = new ArrayList<>();
         final var pools = ((LootTableAccessor) lootTable).getPools();
         for (final var pool : pools) {
-            final var poolBaseChance = getBaseChance(pool);
+            final var poolBaseChance = getBaseChance(((LootPoolAccessor) pool).getCondition());
             final var entries = ((LootPoolAccessor) pool).getEntries();
             for (LootPoolEntryContainer entry : entries) {
-                final var entryBaseChance = getBaseChance(entry);
-                final var baseChance = entryBaseChance.orElse(poolBaseChance.orElseGet(() -> ConstantValue.exactly(1f)));
-                NumberProvider countRange = getCountRange(entry);
+                final var entryBaseChance = getBaseChance(((LootPoolEntryContainerAccessor) entry).getCondition());
+                final var baseChance = entryBaseChance.orElse(poolBaseChance.orElseGet(() -> new net.minecraft.world.level.storage.loot.providers.number.floats.ConstantValue(1f)));
+                ContextIntProvider countRange = getCountRange(entry);
                 if (entry instanceof LootItemAccessor lootItem) {
                     ItemStack itemStack = new ItemStack(lootItem.getItem());
                     itemStack.setCount(Math.max(1, (int) getMaxCount(countRange)));
                     result.add(new LootTableEntry(itemStack, countRange, baseChance));
                 } else if (entry instanceof TagEntryAccessor tagEntry) {
-                    TagKey<Item> tag = tagEntry.getTag();
-                    BuiltInRegistries.ITEM.getTagOrEmpty(tag).forEach(itemHolder -> {
+                    tagEntry.getTag().forEach(itemHolder -> {
                         ItemStack itemStack = new ItemStack(itemHolder.value());
                         itemStack.setCount(Math.max(1, (int) getMaxCount(countRange)));
                         result.add(new LootTableEntry(itemStack, countRange, baseChance));
@@ -75,62 +77,46 @@ public class LootTableUtils {
         return result;
     }
 
-    private static Optional<NumberProvider> getBaseChance(LootPool pool) {
-        return getBaseChance(((LootPoolAccessor) pool).getConditions());
-    }
-
-    private static Optional<NumberProvider> getBaseChance(LootPoolEntryContainer entry) {
-        return getBaseChance(((LootPoolEntryContainerAccessor) entry).getConditions());
-    }
-
-    private static Optional<NumberProvider> getBaseChance(List<LootItemCondition> conditions) {
-        for (final var condition : conditions) {
-            if (condition instanceof LootItemRandomChanceConditionAccessor chanceCondition) {
-                return Optional.of(chanceCondition.getChance());
-            }
+    private static Optional<ContextFloatProvider> getBaseChance(Optional<Holder<LootItemCondition>> condition) {
+        if (condition.isPresent() && condition.get().value() instanceof LootItemRandomChanceCondition chanceCondition) {
+            return Optional.of(chanceCondition.chance().value());
         }
 
         return Optional.empty();
     }
 
-    private static NumberProvider getCountRange(LootPoolEntryContainer entry) {
-        if (entry instanceof LootPoolSingletonContainerAccessor lootPoolSingletonContainer) {
-            for (LootItemFunction function : lootPoolSingletonContainer.getFunctions()) {
-                if (function instanceof SetItemCountFunctionAccessor setItemCountFunction) {
-                    return setItemCountFunction.getCount();
-                }
-            }
+    private static ContextIntProvider getCountRange(LootPoolEntryContainer entry) {
+        final var modifier = ((LootPoolEntryContainerAccessor) entry).getModifier();
+        if (modifier.isPresent() && modifier.get().value() instanceof SetItemCountFunctionAccessor setItemCountFunction) {
+            return setItemCountFunction.getCount().value();
         }
 
-        return ConstantValue.exactly(1);
+        return new ConstantValue(1);
     }
 
-    public static float getMinCount(NumberProvider range) {
+    public static float getMinCount(ContextIntProvider range) {
         return switch (range) {
-            case UniformGeneratorAccessor uniform -> getMinCount(uniform.getMin());
-            case BinomialDistributionGeneratorAccessor binomial ->
-                    getMinCount(binomial.getN()) * getMaxCount(binomial.getP());
-            case ConstantValueAccessor constant -> constant.getValue();
+            case UniformGenerator uniform -> getMinCount(uniform.min().value());
+            case BinomialDistributionGenerator binomial -> getMinCount(binomial.n().value()) * getMaxValue(binomial.p().value());
+            case ConstantValue constant -> constant.value();
             default -> 1;
         };
 
     }
 
-    public static float getMaxCount(NumberProvider range) {
+    public static float getMaxCount(ContextIntProvider range) {
         return switch (range) {
-            case UniformGeneratorAccessor uniform -> getMaxCount(uniform.getMax());
-            case BinomialDistributionGeneratorAccessor binomial ->
-                    getMaxCount(binomial.getN()) * getMaxCount(binomial.getP());
-            case ConstantValueAccessor constant -> constant.getValue();
+            case UniformGenerator uniform -> getMaxCount(uniform.max().value());
+            case BinomialDistributionGenerator binomial -> getMaxCount(binomial.n().value()) * getMaxValue(binomial.p().value());
+            case ConstantValue constant -> constant.value();
             default -> 1;
         };
 
     }
 
     public static LootContext buildLootContext(ServerLevel level, ItemInstance itemStack) {
-        final var params = new ContextMap.Builder();
-        params.withParameter(SOURCE_STACK, itemStack);
-        return new LootContext.Builder(new LootParams(level, params.create(CONTEXT_KEY_SET), Collections.emptyMap(), 0f)).create(Optional.empty());
+        final var params = ContextMap.builder().set(SOURCE_STACK, itemStack);
+        return new LootContext.Builder(new LootParams(level, params.buildAndValidate(CONTEXT_KEY_SET), Collections.emptyMap(), 0f)).create(Optional.empty());
     }
 
     public static List<MergedLootTableEntry> mergeLootTableEntries(List<LootTableEntry> entries) {
@@ -154,10 +140,10 @@ public class LootTableUtils {
         return result;
     }
 
-    public static LootPoolSingletonContainer.Builder<?> buildLootEntry(ItemStack outputItem, float chance) {
-        LootPoolSingletonContainer.Builder<?> entryBuilder = LootItem.lootTableItem(outputItem.getItem());
+    public static UniformContainerBase.Builder<?> buildLootEntry(ItemStack outputItem, float chance) {
+        UniformContainerBase.Builder<?> entryBuilder = LootItem.lootTableItem(outputItem.getItem());
         if (outputItem.getCount() > 0) {
-            entryBuilder.apply(SetItemCountFunction.setCount(ConstantValue.exactly(outputItem.getCount())));
+            entryBuilder.apply(SetItemCountFunction.setCount(Holder.direct(new ConstantValue(outputItem.getCount()))));
         }
         for (final var component : outputItem.getComponents()) {
             entryBuilder.apply(copyComponent(component));
@@ -168,15 +154,21 @@ public class LootTableUtils {
         return entryBuilder;
     }
 
-    public static LootPoolSingletonContainer.Builder<?> buildLootEntry(ItemStack itemStack, NumberProvider amount) {
-        LootPoolSingletonContainer.Builder<?> entryBuilder = LootItem.lootTableItem(itemStack.getItem());
+    public static UniformContainerBase.Builder<?> buildLootEntry(ItemStack itemStack, ContextIntProvider amount) {
+        UniformContainerBase.Builder<?> entryBuilder = LootItem.lootTableItem(itemStack.getItem());
         if (itemStack.getCount() > 0) {
-            entryBuilder.apply(SetItemCountFunction.setCount(amount));
+            entryBuilder.apply(SetItemCountFunction.setCount(Holder.direct(amount)));
         }
         for (final var component : itemStack.getComponents()) {
             entryBuilder.apply(copyComponent(component));
         }
         return entryBuilder;
+    }
+
+    private static float getMaxValue(ContextFloatProvider provider) {
+        return provider instanceof net.minecraft.world.level.storage.loot.providers.number.floats.ConstantValue(
+                float value
+        ) ? value : 1f;
     }
 
     private static <T> LootItemConditionalFunction.Builder<?> copyComponent(TypedDataComponent<T> component) {
