@@ -486,7 +486,7 @@ public abstract class AbstractAutoSieveBlockEntity extends AbstractBaseBlockEnti
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("item.excompressum.auto_sieve");
+        return Component.translatable("block.excompressum.auto_sieve");
     }
 
     @Override

@@ -338,7 +338,7 @@ public class AutoCompressorBlockEntity extends AbstractBaseBlockEntity implement
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("item.excompressum.auto_compressor");
+        return Component.translatable("block.excompressum.auto_compressor");
     }
 
     @Override
