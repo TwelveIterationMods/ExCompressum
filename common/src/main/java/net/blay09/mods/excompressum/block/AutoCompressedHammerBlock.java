@@ -1,12 +1,10 @@
 package net.blay09.mods.excompressum.block;
 
-import com.mojang.serialization.MapCodec;
 import net.blay09.mods.excompressum.block.entity.AutoCompressedHammerBlockEntity;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -17,8 +15,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import org.jspecify.annotations.Nullable;
 
 public class AutoCompressedHammerBlock extends AutoHammerBlock {
-
-    public static final MapCodec<AutoCompressedHammerBlock> CODEC = simpleCodec(AutoCompressedHammerBlock::new);
 
     public AutoCompressedHammerBlock(Properties properties) {
         super(properties);
@@ -40,8 +36,4 @@ public class AutoCompressedHammerBlock extends AutoHammerBlock {
         return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.autoCompressedHammer.value(), AutoHammerBlockEntity::serverTick) : createTickerHelper(type, ModBlockEntities.autoCompressedHammer.value(), AutoHammerBlockEntity::clientTick);
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

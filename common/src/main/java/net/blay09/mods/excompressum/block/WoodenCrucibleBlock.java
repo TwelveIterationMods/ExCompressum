@@ -1,7 +1,5 @@
 package net.blay09.mods.excompressum.block;
 
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.world.ContainerUtils;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
@@ -28,10 +26,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 public class WoodenCrucibleBlock extends BaseEntityBlock {
-
-    public static final MapCodec<WoodenCrucibleBlock> CODEC = RecordCodecBuilder.mapCodec((it) -> it.group(WoodenCrucibleType.CODEC.fieldOf("type").forGetter(
-                    WoodenCrucibleBlock::getType),
-            propertiesCodec()).apply(it, WoodenCrucibleBlock::new));
 
     private static final VoxelShape BOUNDING_BOX = Shapes.or(
             Shapes.box(0, 0.1875f, 0, 1, 1f, 1),
@@ -123,8 +117,4 @@ public class WoodenCrucibleBlock extends BaseEntityBlock {
         return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.woodenCrucible.value(), WoodenCrucibleBlockEntity::serverTick) : null;
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

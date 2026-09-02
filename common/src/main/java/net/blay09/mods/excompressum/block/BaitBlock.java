@@ -1,7 +1,5 @@
 package net.blay09.mods.excompressum.block;
 
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.config.ExCompressumConfig;
 import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
@@ -35,10 +33,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.function.Consumer;
 
 public class BaitBlock extends BaseEntityBlock {
-
-    public static final MapCodec<BaitBlock> CODEC = RecordCodecBuilder.mapCodec((it) -> it.group(BaitType.CODEC.fieldOf("type").forGetter(
-                    BaitBlock::getBaitType),
-            propertiesCodec()).apply(it, BaitBlock::new));
 
     private static final VoxelShape BOUNDING_BOX = Shapes.box(0.1, 0, 0.1, 0.9, 0.1, 0.9);
 
@@ -125,8 +119,4 @@ public class BaitBlock extends BaseEntityBlock {
         return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.bait.value(), BaitBlockEntity::serverTick) : null;
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.block;
 
-import com.mojang.serialization.MapCodec;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.capabilities.CommonCapabilities;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
@@ -37,8 +36,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
-
-    public static final MapCodec<AutoHammerBlock> CODEC = simpleCodec(AutoHammerBlock::new);
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty UGLY = ModBlockStateProperties.UGLY;
@@ -148,8 +145,4 @@ public class AutoHammerBlock extends BaseEntityBlock implements IUglyfiable {
                 AutoHammerBlockEntity::clientTick);
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

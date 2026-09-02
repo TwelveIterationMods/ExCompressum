@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.blay09.mods.excompressum.block.entity.BaitBlockEntity;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -14,9 +15,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
-import org.joml.AxisAngle4f;
-import org.joml.Math;
-import org.joml.Quaternionf;
 
 public class BaitRenderer implements BlockEntityRenderer<BaitBlockEntity, BaitRenderer.BaitRenderState> {
 
@@ -49,10 +47,10 @@ public class BaitRenderer implements BlockEntityRenderer<BaitBlockEntity, BaitRe
         poseStack.pushPose();
         poseStack.translate(0.45, 0.05f, 0.45);
         poseStack.scale(0.5f, 0.5f, 0.5f);
-        poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(90f), 1f, 0f, 0f)));
+        poseStack.rotateDegrees(Axis.XP, 90f);
         renderState.firstItem.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.translate(0.1f, 0f, -0.05f);
-        poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(5f), 1f, 0f, 0f)));
+        poseStack.rotateDegrees(Axis.XP, 5f);
         renderState.secondItem.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
     }

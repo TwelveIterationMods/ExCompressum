@@ -1,7 +1,5 @@
 package net.blay09.mods.excompressum.block;
 
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.world.ContainerUtils;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
@@ -40,10 +38,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
 
 public class HeavySieveBlock extends BaseEntityBlock {
-
-    public static final MapCodec<HeavySieveBlock> CODEC = RecordCodecBuilder.mapCodec((it) -> it.group(HeavySieveType.CODEC.fieldOf("type").forGetter(
-                    HeavySieveBlock::getType),
-            propertiesCodec()).apply(it, HeavySieveBlock::new));
 
     private static final VoxelShape BOUNDING_BOX = Shapes.or(
             Shapes.box(0, 0.5f, 0, 1, 0.75f, 1),
@@ -169,8 +163,4 @@ public class HeavySieveBlock extends BaseEntityBlock {
                 : createTickerHelper(type, ModBlockEntities.heavySieve.value(), HeavySieveBlockEntity::serverTick);
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

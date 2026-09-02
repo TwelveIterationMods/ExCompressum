@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.blay09.mods.excompressum.block.AutoHammerBlock;
 import net.blay09.mods.excompressum.block.entity.AutoHammerBlockEntity;
 import net.blay09.mods.excompressum.item.ModItems;
@@ -28,9 +29,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
-import org.joml.AxisAngle4f;
 import org.joml.Math;
-import org.joml.Quaternionf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,14 +119,14 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
 
         poseStack.pushPose();
         poseStack.translate(0.5f, 0f, 0.5f);
-        poseStack.mulPose(renderState.facing.getRotation());
-        poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(-90), 0f, 1f, 0f)));
+        poseStack.rotate(renderState.facing.getRotation());
+        poseStack.rotateDegrees(Axis.YP, -90);
 
         poseStack.pushPose();
         poseStack.scale(0.5f, 0.5f, 0.5f);
         poseStack.pushPose();
         poseStack.translate(-0.7f, -0.3f, 0f);
-        poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(Math.sin(renderState.hammerAngle) * 30), 0, 0, 1f)));
+        poseStack.rotateDegrees(Axis.ZP, Math.sin(renderState.hammerAngle) * 30);
         poseStack.translate(-0.4f, 0.2f, 0f);
         renderState.hammerItem.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
@@ -136,8 +135,8 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
             poseStack.pushPose();
             poseStack.translate(-0.7f, -0.3f, 0f);
             poseStack.translate(0f, 0.1f, 0.33f);
-            poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(10f), 0f, 1, 0)));
-            poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(Math.sin(renderState.hammerAngle - 8f) * 30), 0, 0, 1f)));
+            poseStack.rotateDegrees(Axis.YP, 10f);
+            poseStack.rotateDegrees(Axis.ZP, Math.sin(renderState.hammerAngle - 8f) * 30);
             poseStack.translate(-0.4f, 0.2f, 0f);
             renderState.firstHammerItem.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
@@ -147,8 +146,8 @@ public class AutoHammerRenderer implements BlockEntityRenderer<AutoHammerBlockEn
             poseStack.pushPose();
             poseStack.translate(-0.7f, -0.3f, 0f);
             poseStack.translate(0f, 0.1f, -0.33f);
-            poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(-10), 0f, 1f, 0)));
-            poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(Math.sin(renderState.hammerAngle + 8f) * 30), 0, 0, 1f)));
+            poseStack.rotateDegrees(Axis.YP, -10);
+            poseStack.rotateDegrees(Axis.ZP, Math.sin(renderState.hammerAngle + 8f) * 30);
             poseStack.translate(-0.4f, 0.2f, 0f);
             renderState.secondHammerItem.submit(poseStack, submitNodeCollector, renderState.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();

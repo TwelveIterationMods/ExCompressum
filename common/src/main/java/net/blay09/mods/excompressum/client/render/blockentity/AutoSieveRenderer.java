@@ -1,6 +1,7 @@
 package net.blay09.mods.excompressum.client.render.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.blay09.mods.excompressum.block.AutoSieveBlock;
 import net.blay09.mods.excompressum.block.HeavySieveType;
 import net.blay09.mods.excompressum.block.ModBlocks;
@@ -31,10 +32,8 @@ import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
-import org.joml.AxisAngle4f;
 import org.joml.Math;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
 import java.util.UUID;
 
@@ -131,12 +130,12 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
 
         poseStack.pushPose();
         poseStack.translate(0.5f, 0f, 0.5f);
-        poseStack.mulPose(renderState.facing.getRotation());
-        poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(-90), 0f, 1f, 0f)));
+        poseStack.rotate(renderState.facing.getRotation());
+        poseStack.rotateDegrees(Axis.YP, -90);
 
         poseStack.pushPose();
-        poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(-90), 0f, 0f, 1f)));
-        poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(90), 0, 1f, 0)));
+        poseStack.rotateDegrees(Axis.ZP, -90);
+        poseStack.rotateDegrees(Axis.YP, 90);
         poseStack.translate(0f, -0.65f, 0.25f);
         poseStack.scale(0.4f, 0.4f, 0.4f);
         final var skin = getPlayerSkin(renderState.profile);
@@ -159,7 +158,7 @@ public class AutoSieveRenderer<T extends AbstractAutoSieveBlockEntity> implement
         poseStack.scale(0.5f, 0.5f, 0.5f);
         poseStack.translate(-0.25f, 0f, -0.5f);
 
-        poseStack.mulPose(new Quaternionf(new AxisAngle4f(Math.toRadians(90), 0f, 0f, 1f)));
+        poseStack.rotateDegrees(Axis.ZP, 90);
         poseStack.translate(-0.2f, -0.1f, 0f);
 
         // Render the sieve

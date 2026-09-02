@@ -1,12 +1,10 @@
 package net.blay09.mods.excompressum.block;
 
-import com.mojang.serialization.MapCodec;
 import net.blay09.mods.excompressum.block.entity.AutoCompressorBlockEntity;
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.blay09.mods.excompressum.block.entity.RationingAutoCompressorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -15,8 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
 public class RationingAutoCompressorBlock extends AutoCompressorBlock {
-
-    public static final MapCodec<RationingAutoCompressorBlock> CODEC = simpleCodec(RationingAutoCompressorBlock::new);
 
     public RationingAutoCompressorBlock(Properties properties) {
         super(properties);
@@ -33,8 +29,4 @@ public class RationingAutoCompressorBlock extends AutoCompressorBlock {
         return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.rationingAutoCompressor.value(), AutoCompressorBlockEntity::serverTick) : null;
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

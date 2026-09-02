@@ -1,6 +1,5 @@
 package net.blay09.mods.excompressum.block;
 
-import com.mojang.serialization.MapCodec;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.capabilities.CommonCapabilities;
 import net.blay09.mods.excompressum.block.entity.AutoCompressorBlockEntity;
@@ -26,8 +25,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
 public class AutoCompressorBlock extends BaseEntityBlock {
-
-    public static final MapCodec<AutoCompressorBlock> CODEC = simpleCodec(AutoCompressorBlock::new);
 
     public AutoCompressorBlock(Properties properties) {
         super(properties.strength(2f));
@@ -96,8 +93,4 @@ public class AutoCompressorBlock extends BaseEntityBlock {
         return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.autoCompressor.value(), AutoCompressorBlockEntity::serverTick) : null;
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }

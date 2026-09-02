@@ -1,13 +1,11 @@
 package net.blay09.mods.excompressum.block;
 
-import com.mojang.serialization.MapCodec;
 import net.blay09.mods.excompressum.block.entity.AutoSieveBlockEntity;
 import net.blay09.mods.excompressum.block.entity.AbstractAutoSieveBlockEntity;
 
 import net.blay09.mods.excompressum.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -16,8 +14,6 @@ import net.minecraft.world.level.redstone.Orientation;
 import org.jspecify.annotations.Nullable;
 
 public class AutoSieveBlock extends AutoSieveBaseBlock {
-
-    public static final MapCodec<AutoSieveBlock> CODEC = simpleCodec(AutoSieveBlock::new);
 
     public AutoSieveBlock(Properties properties) {
         super(properties
@@ -55,8 +51,4 @@ public class AutoSieveBlock extends AutoSieveBaseBlock {
         }
     }
 
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
-    }
 }
