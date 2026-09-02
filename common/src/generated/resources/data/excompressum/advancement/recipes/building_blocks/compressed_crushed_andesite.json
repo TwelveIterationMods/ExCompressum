@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:compressed_crushed_andesite"
+        "recipes": "excompressum:compressed_crushed_andesite"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

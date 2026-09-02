@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:turtle_bait"
+        "recipes": "excompressum:turtle_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

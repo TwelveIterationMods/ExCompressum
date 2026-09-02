@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:compressed_dirt"
+        "recipes": "excompressum:compressed_dirt"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:cherry_heavy_sieve"
+        "recipes": "excompressum:cherry_heavy_sieve"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

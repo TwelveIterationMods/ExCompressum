@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:cherry_crucible"
+        "recipes": "excompressum:cherry_crucible"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

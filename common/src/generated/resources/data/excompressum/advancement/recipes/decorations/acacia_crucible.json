@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:acacia_crucible"
+        "recipes": "excompressum:acacia_crucible"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

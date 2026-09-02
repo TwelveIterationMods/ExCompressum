@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:compressed_crook"
+        "recipes": "excompressum:compressed_crook"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

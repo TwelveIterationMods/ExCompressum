@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:pig_bait"
+        "recipes": "excompressum:pig_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

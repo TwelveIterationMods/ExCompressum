@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:polar_bear_bait"
+        "recipes": "excompressum:polar_bear_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

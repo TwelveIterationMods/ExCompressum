@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:compressed_wooden_hammer"
+        "recipes": "excompressum:compressed_wooden_hammer"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

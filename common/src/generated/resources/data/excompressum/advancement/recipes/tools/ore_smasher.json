@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:ore_smasher"
+        "recipes": "excompressum:ore_smasher"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

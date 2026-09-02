@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:donkey_bait"
+        "recipes": "excompressum:donkey_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:compressed_soul_sand"
+        "recipes": "excompressum:compressed_soul_sand"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

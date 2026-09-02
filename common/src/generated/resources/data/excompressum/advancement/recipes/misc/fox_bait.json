@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:fox_bait"
+        "recipes": "excompressum:fox_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

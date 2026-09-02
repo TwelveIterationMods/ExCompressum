@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:wolf_bait"
+        "recipes": "excompressum:wolf_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

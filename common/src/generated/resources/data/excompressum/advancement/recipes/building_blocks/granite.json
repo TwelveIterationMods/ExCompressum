@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:granite"
+        "recipes": "excompressum:granite"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

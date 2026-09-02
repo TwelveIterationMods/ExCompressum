@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:ugly_steel_plating"
+        "recipes": "excompressum:ugly_steel_plating"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

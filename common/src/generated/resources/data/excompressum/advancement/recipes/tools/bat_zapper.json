@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:bat_zapper"
+        "recipes": "excompressum:bat_zapper"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

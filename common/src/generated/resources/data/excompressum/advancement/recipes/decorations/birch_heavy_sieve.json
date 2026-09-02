@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:birch_heavy_sieve"
+        "recipes": "excompressum:birch_heavy_sieve"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

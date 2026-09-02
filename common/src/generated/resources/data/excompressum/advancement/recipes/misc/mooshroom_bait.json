@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:mooshroom_bait"
+        "recipes": "excompressum:mooshroom_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

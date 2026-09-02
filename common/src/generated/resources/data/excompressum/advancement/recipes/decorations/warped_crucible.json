@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:warped_crucible"
+        "recipes": "excompressum:warped_crucible"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:auto_compressor"
+        "recipes": "excompressum:auto_compressor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

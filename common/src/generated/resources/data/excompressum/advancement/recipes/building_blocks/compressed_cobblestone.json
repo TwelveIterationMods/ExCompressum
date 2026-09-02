@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:compressed_cobblestone"
+        "recipes": "excompressum:compressed_cobblestone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

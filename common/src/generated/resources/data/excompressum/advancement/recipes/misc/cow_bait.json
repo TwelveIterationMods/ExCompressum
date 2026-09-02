@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:cow_bait"
+        "recipes": "excompressum:cow_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

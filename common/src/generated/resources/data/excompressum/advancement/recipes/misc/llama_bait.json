@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:llama_bait"
+        "recipes": "excompressum:llama_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

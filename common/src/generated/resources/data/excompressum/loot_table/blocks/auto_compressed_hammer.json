@@ -2,39 +2,40 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
       "entries": [
         {
           "type": "minecraft:item",
           "name": "excompressum:auto_compressed_hammer"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     },
     {
-      "conditions": [
-        {
-          "block": "excompressum:auto_compressed_hammer",
-          "condition": "minecraft:block_state_property",
-          "properties": {
-            "ugly": "true"
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:match_block",
+            "blocks": "excompressum:auto_compressed_hammer",
+            "state": {
+              "ugly": "true"
+            }
+          },
+          {
+            "type": "minecraft:survives_explosion"
           }
-        },
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+        ]
+      },
       "entries": [
         {
           "type": "minecraft:item",
           "name": "excompressum:ugly_steel_plating"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ]
 }

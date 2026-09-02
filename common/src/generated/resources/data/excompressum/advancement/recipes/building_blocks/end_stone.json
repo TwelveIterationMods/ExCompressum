@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:end_stone"
+        "recipes": "excompressum:end_stone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

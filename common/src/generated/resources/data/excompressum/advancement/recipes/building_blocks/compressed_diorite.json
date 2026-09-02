@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:compressed_diorite"
+        "recipes": "excompressum:compressed_diorite"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

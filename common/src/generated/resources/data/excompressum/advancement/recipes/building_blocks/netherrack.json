@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:netherrack"
+        "recipes": "excompressum:netherrack"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

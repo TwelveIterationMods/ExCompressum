@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:ocelot_bait"
+        "recipes": "excompressum:ocelot_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

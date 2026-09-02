@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:warped_heavy_sieve"
+        "recipes": "excompressum:warped_heavy_sieve"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

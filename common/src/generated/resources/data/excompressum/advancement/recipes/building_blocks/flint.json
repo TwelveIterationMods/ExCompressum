@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:flint"
+        "recipes": "excompressum:flint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

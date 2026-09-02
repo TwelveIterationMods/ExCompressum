@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:squid_bait"
+        "recipes": "excompressum:squid_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:parrot_bait"
+        "recipes": "excompressum:parrot_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

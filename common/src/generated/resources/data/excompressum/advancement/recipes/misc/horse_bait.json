@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "excompressum:horse_bait"
+        "recipes": "excompressum:horse_bait"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
