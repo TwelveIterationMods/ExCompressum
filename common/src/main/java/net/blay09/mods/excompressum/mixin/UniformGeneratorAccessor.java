@@ -1,14 +1,15 @@
 package net.blay09.mods.excompressum.mixin;
 
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.UniformGenerator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(UniformGenerator.class)
 public interface UniformGeneratorAccessor {
     @Accessor
-    NumberProvider getMin();
+    Holder<ContextIntProvider> getMin();
     @Accessor
-    NumberProvider getMax();
+    Holder<ContextIntProvider> getMax();
 }
