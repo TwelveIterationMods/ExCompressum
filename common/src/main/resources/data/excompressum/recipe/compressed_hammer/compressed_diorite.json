@@ -9,7 +9,7 @@
         "entries": [
           {
             "type": "minecraft:tag",
-            "name": "excompressum:crushed_diorites",
+            "items": "#excompressum:crushed_diorites",
             "expand": true
           }
         ],

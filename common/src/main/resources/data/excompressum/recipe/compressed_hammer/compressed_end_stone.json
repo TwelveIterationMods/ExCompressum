@@ -9,7 +9,7 @@
         "entries": [
           {
             "type": "minecraft:tag",
-            "name": "excompressum:crushed_end_stones",
+            "items": "#excompressum:crushed_end_stones",
             "expand": true
           }
         ],

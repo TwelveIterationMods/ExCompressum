@@ -9,7 +9,7 @@
         "entries": [
           {
             "type": "minecraft:tag",
-            "name": "excompressum:dusts",
+            "items": "#excompressum:dusts",
             "expand": true
           }
         ],

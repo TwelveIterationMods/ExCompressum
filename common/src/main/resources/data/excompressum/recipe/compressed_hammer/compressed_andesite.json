@@ -9,7 +9,7 @@
         "entries": [
           {
             "type": "minecraft:tag",
-            "name": "excompressum:crushed_andesites",
+            "items": "#excompressum:crushed_andesites",
             "expand": true
           }
         ],
