@@ -31,15 +31,15 @@ public class CompressedCrookLootModifier implements BalmLootModifier {
             }
         }
 
-        BlockState state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
-        Vec3 origin = context.getOptionalParameter(LootContextParams.ORIGIN);
+        BlockState state = context.getOptional(LootContextParams.BLOCK_STATE);
+        Vec3 origin = context.getOptional(LootContextParams.ORIGIN);
         if (state == null || origin == null) {
             return;
         }
 
         ServerLevel level = context.getLevel();
-        Entity entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
-        final var tool = context.getOptionalParameter(LootContextParams.TOOL);
+        Entity entity = context.getOptional(LootContextParams.THIS_ENTITY);
+        final var tool = context.getOptional(LootContextParams.TOOL);
         if (tool == null || !tool.is(ModItemTags.COMPRESSED_CROOKS)) {
             return;
         }

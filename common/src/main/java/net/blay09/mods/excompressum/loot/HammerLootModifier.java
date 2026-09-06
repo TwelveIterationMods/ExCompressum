@@ -29,12 +29,12 @@ public class HammerLootModifier implements BalmLootModifier {
             }
         }
 
-        BlockState state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
+        BlockState state = context.getOptional(LootContextParams.BLOCK_STATE);
         if (state == null) {
             return;
         }
 
-        final var tool = context.getOptionalParameter(LootContextParams.TOOL);
+        final var tool = context.getOptional(LootContextParams.TOOL);
         if (tool == null || !tool.is(ModItemTags.HAMMERS)) {
             return;
         }
